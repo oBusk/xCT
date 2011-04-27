@@ -47,7 +47,7 @@ if ct.myclass=="WARLOCK" then
 		ct.aoespam[20153]=true		-- Immolation (Infrenal)
 	end
 	if(ct.healing)then
-		ct.healfilter[96379]=true	-- Fel Armor
+		ct.healfilter[28176]=true	-- Fel Armor
 		ct.healfilter[63106]=true	-- Siphon Life
 		ct.healfilter[54181]=true	-- Fel Synergy
 		ct.healfilter[89653]=true	-- Drain Life
@@ -134,11 +134,6 @@ elseif ct.myclass=="SHAMAN"then
 		ct.aoespam[51490]=true 		-- Thunderstorm
 		ct.aoespam[8187]=true 		-- Magma Totem
 	end
-	if(ct.healing)then
-		ct.aoespam[73921]=true		-- Healing Rain
-		ct.aoespam[5394]=true		-- Healing Stream Totem
-		ct.aoespam[1064]=true		-- Chain Heal
-	end
 elseif ct.myclass=="MAGE"then
 	if(ct.mergeaoespam)then
 		ct.aoespam[44461]=true		-- Living Bomb Explosion
@@ -168,11 +163,6 @@ elseif ct.myclass=="WARRIOR"then
 elseif ct.myclass=="HUNTER"then
 	if(ct.mergeaoespam)then
 		ct.aoespam[2643]=true		-- Multi-Shot
-		ct.aoespam[83077]=true		-- instant part of Serpent Sting
-		ct.aoespam[88466]=true		-- Serpent Sting#1
-		ct.aoespam[1978]=true		-- Serpent Sting#2
-		ct.aoespam[13812]=true		-- Explosive Trap  
-		
 	end
 elseif ct.myclass=="DEATHKNIGHT"then
 	if(ct.mergeaoespam)then
@@ -932,10 +922,10 @@ if(ct.damage)then
 
 	local dmg=function(self,event,...) 
 		local msg,icon
-		local timestamp, eventType, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags = select(1,...)
+		local timestamp, eventType, dump1, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags = select(1,...)
 		if(sourceGUID==ct.pguid and destGUID~=ct.pguid)or(sourceGUID==UnitGUID"pet" and ct.petdamage)or(sourceFlags==gflags)then
 			if(eventType=="SWING_DAMAGE")then
-				local amount,_,_,_,_,_,critical=select(9,...)
+				local amount,_,_,_,_,_,critical=select(10,...)
 				if(amount>=ct.treshold)then
 					msg=amount
 					if (critical) then
@@ -955,7 +945,7 @@ if(ct.damage)then
 					xCT4:AddMessage(msg)
 				end
 			elseif(eventType=="RANGE_DAMAGE")then
-				local spellId,_,_,amount,_,_,_,_,_,critical=select(9,...)
+				local spellId,_,_,amount,_,_,_,_,_,critical=select(10,...)
 				if(amount>=ct.treshold)then
 					msg=amount
 					if (critical) then
@@ -971,7 +961,7 @@ if(ct.damage)then
 				end
 	
 			elseif(eventType=="SPELL_DAMAGE")or(eventType=="SPELL_PERIODIC_DAMAGE" and ct.dotdamage)then
-				local spellId,_,spellSchool,amount,_,_,_,_,_,critical=select(9,...)
+				local spellId,_,spellSchool,amount,_,_,_,_,_,critical=select(10,...)
 				if(amount>=ct.treshold)then
 					local color={}
 					local rawamount=amount
@@ -1019,7 +1009,7 @@ if(ct.damage)then
 				end
 	
 			elseif(eventType=="SWING_MISSED")then
-				local missType,_=select(9,...)
+				local missType,_=select(10,...)
 				if(ct.icons)then
 					if(sourceGUID==UnitGUID"pet") or (sourceFlags==gflags)then
 						icon=PET_ATTACK_TEXTURE
@@ -1034,7 +1024,7 @@ if(ct.damage)then
 				xCT4:AddMessage(missType)
 	
 			elseif(eventType=="SPELL_MISSED")or(eventType=="RANGE_MISSED")then
-				local spellId,_,_,missType,_ = select(9,...)
+				local spellId,_,_,missType,_ = select(10,...)
 				if(ct.icons)then
 				--	_,_,icon=GetSpellInfo(spellId)
 					icon=GetSpellTexture(spellId)
@@ -1043,7 +1033,7 @@ if(ct.damage)then
 				xCT4:AddMessage(missType)
 	
 			elseif(eventType=="SPELL_DISPEL")and ct.dispel then
-				local target,_, _, id, effect, _, etype = select(9,...)
+				local target,_, _, id, effect, _, etype = select(10,...)
 				local color
 				if(ct.icons)then
 					icon=GetSpellTexture(id)
@@ -1063,7 +1053,7 @@ if(ct.damage)then
 				xCT3:AddMessage(ACTION_SPELL_DISPEL..": "..effect..msg,unpack(color))
 			
 			elseif(eventType=="SPELL_INTERRUPT")and ct.interrupt then
-				local target,_, _, id, effect = select(9,...)
+				local target,_, _, id, effect = select(10,...)
 				local color={1,.5,0}
 				if(ct.icons)then
 					icon=GetSpellTexture(id)
@@ -1096,11 +1086,11 @@ if(ct.healing)then
 	end
 	local heal=function(self,event,...) 	
 		local msg,icon
-		local timestamp, eventType, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags = select(1,...)
-		if(sourceGUID==ct.pguid)or(sourceFlags==gflags)then
+		local timestamp, eventType, dump1, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags = select(1,...)
+		if(sourceGUID==ct.pguid)then
 			if(eventType=='SPELL_HEAL')or(eventType=='SPELL_PERIODIC_HEAL'and ct.showhots)then
 				if(ct.healing)then
-					local spellId,spellName,spellSchool,amount,overhealing,absorbed,critical = select(9,...)
+					local spellId,spellName,spellSchool,amount,overhealing,absorbed,critical = select(10,...)
 					if(ct.healfilter[spellId]) then
 						return
 					end
