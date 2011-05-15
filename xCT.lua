@@ -4,6 +4,8 @@ xCT by affli @ RU-Howling Fjord
 All rights reserved.
 Thanks ALZA and Shestak for making this mod possible. Thanks Tukz for his wonderful style of coding. Thanks Rostok for some fixes and healing code.
 
+Maintained by Dandruff for 4.1 and 4.2 PTR
+
 ]]--
 
 
@@ -1082,8 +1084,22 @@ if(ct.damage)then
 			
 		end
 	end
-	xCTd:RegisterEvent"COMBAT_LOG_EVENT_UNFILTERED"
-	xCTd:SetScript("OnEvent",dmg)
+	
+	-- Create a Proxy event to filter unwanted arguments
+	local dmg_proxy = function(self, event, timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, srcFlags2, destGUID, destName, destFlags, destFlags2, ...) 
+			-- Drop srcFlags2 and destFlags2 from the arguements
+			dmg(self, event, timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, ...)
+		end
+	
+	xCTd:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	
+	if tonumber((select(4, GetBuildInfo()))) >= 40200 then
+		-- this is version 4.2 or greater, call proxy
+		xCTd:SetScript("OnEvent",dmg_proxy)
+	else
+		-- this is pre 4.2, call normal
+		xCTd:SetScript("OnEvent",dmg)
+	end
 end
 
 -- healing
@@ -1142,6 +1158,19 @@ if(ct.healing)then
 			end
 		end
 	end
-	xCTh:RegisterEvent"COMBAT_LOG_EVENT_UNFILTERED"
-	xCTh:SetScript("OnEvent",heal)
+	-- Create a Proxy event to filter unwanted arguments
+	local heal_proxy = function(self, event, timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, srcFlags2, destGUID, destName, destFlags, destFlags2, ...) 
+			-- Drop srcFlags2 and destFlags2 from the arguements
+			heal(self, event, timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, ...)
+		end
+	
+	xCTh:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	
+	if tonumber((select(4, GetBuildInfo()))) >= 40200 then
+		-- this is version 4.2 or greater, call proxy
+		xCTh:SetScript("OnEvent",heal_proxy)
+	else
+		-- this is pre 4.2, call normal
+		xCTh:SetScript("OnEvent",heal)
+	end
 end
