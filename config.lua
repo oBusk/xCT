@@ -44,4 +44,13 @@ ns.config={
 	["killingblow"] = true,		-- tells you about your killingblows (works only with ["damage"] = true,)
 	["dispel"] = true,		-- tells you about your dispels (works only with ["damage"] = true,)
 	["interrupt"] = true,		-- tells you about your interrupts (works only with ["damage"] = true,)
+
+-- added by Dandruff
+-- Displaying looted items
+	["loot_money"] = false,					-- Display looted money
+	["loot_items"] = false,					-- Display looted Items
+	-- doesn't work yet
+	--["loot_threshold"] = "RARE",			-- Values: { "POOR", "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY" }
+	--["loot_questitems"] = true,				-- Always show quest items
+	--["loot_showtotal"] = true,				-- Shows total amount of items you have (slower) ("[Epic Item Name]x1 (x23)")
 }
