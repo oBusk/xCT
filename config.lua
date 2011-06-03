@@ -47,10 +47,11 @@ ns.config={
 
 -- added by Dandruff
 -- Displaying looted items
-	["loot_money"] = false,					-- Display looted money
-	["loot_items"] = false,					-- Display looted Items
-	-- doesn't work yet
-	--["loot_threshold"] = "RARE",			-- Values: { "POOR", "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY" }
-	--["loot_questitems"] = true,				-- Always show quest items
-	--["loot_showtotal"] = true,				-- Shows total amount of items you have (slower) ("[Epic Item Name]x1 (x23)")
+	["lootitems"] = false,					-- Display looted items
+    ["crafteditems"] = false,               -- Display crafted items (if lootitems=true)
+	["questitems"] = true,				    -- Show quest items (if lootitems=true)
+    ["itemsquality"] = 0,			    -- 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
+    -- doesn't work yet
+	--["lootmoney"] = false,				-- Display looted money
+	--["loot_showtotal"] = true,			-- Shows total amount of items you have (slower) ("[Epic Item Name]x1 (x23)")
 }

@@ -252,14 +252,18 @@ local function ScrollDirection()
     end
 end
 
--- money events
-local LOOT_M_PAT   = _G.YOU_LOOT_MONEY:gsub("%%s","")              -- You loot %s
-local LOOT_M_S_PAT = _G.LOOT_MONEY_SPLIT:gsub("%%s.","")           -- Your share of the loot is %s.
-local LOOT_I_X_PAT = _G.LOOT_ITEM_SELF_MULTIPLE:gsub("%%sx%%d","") -- You receive loot: %sx%d
-local LOOT_I_PAT   = _G.LOOT_ITEM_SELF:gsub("%%s","")              -- You receive loot: %s
-local LOOT_I_C_PAT = _G.LOOT_ITEM_CREATED_SELF:gsub("%%s.","")     -- You create: %s.
+-- regex string for loot items
+--  Example, "local pM, iQ, iI, iN, iA = select(3,string.find(msg, PAR_L_I))" returns:
+--      - pM = (String)Pre-Message (e.g. "You Looted: ")
+--      - iQ = (Int)Item Quality Color (e.g. FFFFFF = Common)
+--      - iI = (Int)Item ID
+--      - iN = (String)Item Name
+--      - iA = (Int)Amount Collected (Usually blank if one)
+local PAR_L_I="([^|]*)|?c?f?f?(%x*)|?H?[^:]*:?(%d+):[?(%d+):]+|?h?%[?([^%[%]]*)%]?|?h?|?r?%s?x?(%d*)%.?"
+-- loot events
 function ChatMsgMoney_Handler(msg)
-    local parse,valid
+    -- not working
+    --[[local parse,valid
     parse, valid = msg:gsub(LOOT_M_PAT, "") -- check if money
     if valid > 0 then
         xCT3:AddMessage(parse,1,1,0) -- yellow
@@ -269,24 +273,27 @@ function ChatMsgMoney_Handler(msg)
     if valid > 0 then
         xCT3:AddMessage(parse,1,1,0) -- yellow
         return
-    end
+    end]]--
 end
 function ChatMsgLoot_Handler(msg)
-    local parse,valid
-    parse, valid = msg:gsub(LOOT_I_X_PAT, "") -- check if multiple item
-    if valid > 0 then
-        xCT3:AddMessage(parse,1,1,1) -- white
-        return
-    end
-    parse, valid = msg:gsub(LOOT_I_PAT, "") -- check if single item
-    if valid > 0 then
-        xCT3:AddMessage(parse,1,1,1) -- white
-        return
-    end
-    parse, valid = msg:gsub(LOOT_I_C_PAT, "") -- check if crafted item
-    if valid > 0 then
-        xCT3:AddMessage(parse,1,1,1) -- white
-        return
+    local pM, iQ, iI, iN, iA = select(3,string.find(msg, PAR_L_I))
+    local quality, _, _, itemType, _, _, _, _, icon = select(3,GetItemInfo(iI))
+    local quest, crafted = (itemType == "Quest"), (pM == "You create: ")
+    if (ct.crafteditems and crafted) or (ct.questitems and quest) or (ct.itemsquality <= quality) then
+        local r, g, b = GetItemQualityColor(quality)
+        local texture = "\124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+        if pM == "You receive loot: " then
+            local msg = "Received: ["..iN.."] "..texture
+            if iA > 1 then msg = msg.."x"..iA end
+            xCT3:AddMessage(msg,r,g,b)
+            return
+        end
+        if ct.crafteditems and crafted then
+            local msg = "Crafted: ["..iN.."] "..texture
+            if iA > 1 then msg = msg.."x"..iA end
+            xCT3:AddMessage(msg,r,g,b)
+            return
+        end
     end
 end
 
