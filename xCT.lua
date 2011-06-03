@@ -285,12 +285,14 @@ function ChatMsgLoot_Handler(msg)
         if pM == "You receive loot: " then
             local msg = "Received: ["..iN.."] "..texture
             if iA > 1 then msg = msg.."x"..iA end
+            if ct.itemstotal then msg = msg .. " (" .. GetItemCount(iI) .. ")" end
             xCT3:AddMessage(msg,r,g,b)
             return
         end
         if ct.crafteditems and crafted then
             local msg = "Crafted: ["..iN.."] "..texture
             if iA > 1 then msg = msg.."x"..iA end
+            if ct.itemstotal then msg = msg .. " (" .. GetItemCount(iI) .. ")" end
             xCT3:AddMessage(msg,r,g,b)
             return
         end
