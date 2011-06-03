@@ -257,43 +257,70 @@ local PAR_L_I = "([^|]*)|?c?f?f?(%x*)|?H?[^:]*:?(-?%d+):[?(-?%d+):]+|?h?%[?([^%[
 
 -- loot events
 function ChatMsgMoney_Handler(msg)
-    -- not working
-    --[[local parse,valid
-    parse, valid = msg:gsub(LOOT_M_PAT, "") -- check if money
-    if valid > 0 then
-        xCT3:AddMessage(parse,1,1,0) -- yellow
-        return
+    local g, s, c = msg:match("(%d+) Gold"), msg:match("(%d+) Silver"), msg:match("(%d+) Copper")
+    local money = 0
+    if tonumber(g) then money = money + tonumber(g) * 10000 end
+    if tonumber(s) then money = money + tonumber(s) * 100 end
+    if tonumber(c) then money = money + tonumber(c) end
+	if msg:find("share") then  -- share money
+        if money ~= "" then
+            if ct.moneycolorblind then
+                local cb = ""
+                if g then cb = cb .. g .. " G  " end
+                if s then cb = cb .. s .. " S  " end
+                if c then cb = cb .. c .. " C  " end
+                xCT3:AddMessage("Money:   " .. cb .. "   (spilt)", 1, 1, 0) -- yellow
+            else
+                xCT3:AddMessage("Money:   " .. GetCoinTextureString(money) .. "   (spilt)", 1, 1, 0) -- yellow
+            end
+        end
+    else
+        if money ~= "" then
+            if ct.moneycolorblind then
+                local cb = ""
+                if g then cb = cb .. g .. " G  " end
+                if s then cb = cb .. s .. " S  " end
+                if c then cb = cb .. c .. " C  " end
+                xCT3:AddMessage("Money:   " .. cb, 1, 1, 0) -- yellow
+            else
+                xCT3:AddMessage("Money:   " .. GetCoinTextureString(money), 1, 1, 0) -- yellow
+            end
+        end
     end
-    parse, valid = msg:gsub(LOOT_M_S_PAT, "") -- check if money (party spilt)
-    if valid > 0 then
-        xCT3:AddMessage(parse,1,1,0) -- yellow
-        return
-    end]]--
 end
 
 function ChatMsgLoot_Handler(msg)
     local pM, iQ, iI, iN, iA = select(3, string.find(msg, PAR_L_I))
-    print("Message: ", msg:gsub('\124','\124\124'))
-    print("Debug: ",select(3, string.find(msg, PAR_L_I)))
-    local quality, _, _, itemType, _, _, _, _, icon = select(3, GetItemInfo(iI))
+    local quality, _, _, itemType, _, _, _, icon = select(3, GetItemInfo(iI))
     local quest, crafted = (itemType == "Quest"), (pM == "You create: ")
     if (ct.crafteditems and crafted) or (ct.questitems and quest) or (ct.itemsquality <= quality) then
         local r, g, b = GetItemQualityColor(quality)
-        --local texture = "\124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+        local texture = "\124T"..icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
         if pM == "You receive loot: " then
-            local s = "Received: ["..iN.."] "   --..texture
+            local s = "Received: ["..iN.."] "
+            if quest then s = "Quest Item: ["..iN.."] "end
+            if texture then s = s..texture end
             local amount = 1
             if tonumber(iA) and tonumber(iA) > 1 then
                 s = s.."x"..iA
                 amount = tonumber(iA)
+            else
+                s = s.."x1"
             end
             if ct.itemstotal then s = s .. "  (" .. (GetItemCount(iI) + amount) .. ")" end
             xCT3:AddMessage(s, r, g, b)
             return
         end
         if ct.crafteditems and crafted then
-            local s = "Crafted: ["..iN.."] "..texture
-            if type(iA)~="string" and iA > 1 then s = s.."x"..iA end
+            local s = "Crafted: ["..iN.."] "
+            if texture then s = s..texture end
+            local amount = 1
+            if tonumber(iA) and tonumber(iA) > 1 then
+                s = s.."x"..iA
+                amount = tonumber(iA)
+            else
+                s = s.."x1"
+            end
             if ct.itemstotal then s = s .. " (" .. GetItemCount(iI) .. ")" end
             xCT3:AddMessage(s, r, g, b)
             return
@@ -578,12 +605,11 @@ local function OnEvent(self, event, subevent, ...)
         end
     
     elseif event=="CHAT_MSG_LOOT" then
-        print("TEST2")
         ChatMsgLoot_Handler(subevent)
         
     elseif event=="CHAT_MSG_MONEY" then
-        print("TEST2")
         ChatMsgMoney_Handler(subevent)
+        
     end
 end
 
