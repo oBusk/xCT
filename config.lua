@@ -1,5 +1,5 @@
-local addon, ns=...
-ns.config={
+local addon, ns = ...
+ns.config = {
     ---------------------------------------------------------------------------------
     -- use ["option"] = true/false, to set options.
     -- options
@@ -47,12 +47,15 @@ ns.config={
         ["interrupt"]        = true,  -- tells you about your interrupts (works only with ["damage"] = true,)
 
 
-    -- display looted items
-        ["lootitems"]      = true,  -- Display looted items
-        ["crafteditems"]   = true,  -- Display crafted items (if lootitems=true)
-        ["questitems"]     = true,  -- Show quest items (if lootitems=true)
-        ["itemsquality"]   = 3,     -- 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
-        ["itemstotal"]     = true,  -- show the total amount of items ("[Epic Item Name]x1 (x23)")
-        -- doesn't work yet
-      --["lootmoney"]      = false, -- Display looted money
+    -- display looted items (set both to false to revert changes and go back to the original xCT)
+        ["lootitems"]       = true,  -- show all looted items
+        ["lootmoney"]       = true,  -- Display looted money
+        
+    -- fine tune loot options
+        ["looticonsize"]    = 20,    -- Icon size of looted, crafted and quest items
+        ["crafteditems"]    = false, -- always show crafted items (will still show if 'lootitems' = true)
+        ["questitems"]      = false, -- always show quest items (will still show if 'lootitems' = true)
+        ["itemsquality"]    = 0,     -- filter items shown by item quality: 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
+        ["itemstotal"]      = true,  -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)")
+        ["moneycolorblind"] = false, -- shows letters G, S, and C instead of textures
 }
