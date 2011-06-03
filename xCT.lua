@@ -242,6 +242,10 @@ local function ScrollDirection()
     end
 end
 
+
+-- test
+-- You receive loot: |cffffffff|Hitem:22644:0:0:0:0:0:-34534534:85:0|h[Crunchy Spider Leg]|h|r x10
+
 -- regex string for loot items
 --  Example, "local pM, iQ, iI, iN, iA = select(3,string.find(msg, PAR_L_I))" returns:
 --      - pM = (String)Pre-Message (e.g. "You Looted: ")
@@ -249,7 +253,7 @@ end
 --      - iI = (Int)Item ID
 --      - iN = (String)Item Name
 --      - iA = (Int)Amount Collected (Usually blank if one)
-local PAR_L_I = "([^|]*)|?c?f?f?(%x*)|?H?[^:]*:?(%d+):[?(%d+):]+|?h?%[?([^%[%]]*)%]?|?h?|?r?%s?x?(%d*)%.?"
+local PAR_L_I = "([^|]*)|?c?f?f?(%x*)|?H?[^:]*:?(-?%d+):[?(-?%d+):]+|?h?%[?([^%[%]]*)%]?|?h?|?r?%s?x?(%d*)%.?"
 
 -- loot events
 function ChatMsgMoney_Handler(msg)
@@ -269,21 +273,27 @@ end
 
 function ChatMsgLoot_Handler(msg)
     local pM, iQ, iI, iN, iA = select(3, string.find(msg, PAR_L_I))
+    print("Message: ", msg:gsub('\124','\124\124'))
+    print("Debug: ",select(3, string.find(msg, PAR_L_I)))
     local quality, _, _, itemType, _, _, _, _, icon = select(3, GetItemInfo(iI))
     local quest, crafted = (itemType == "Quest"), (pM == "You create: ")
     if (ct.crafteditems and crafted) or (ct.questitems and quest) or (ct.itemsquality <= quality) then
         local r, g, b = GetItemQualityColor(quality)
-        local texture = "\124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+        --local texture = "\124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
         if pM == "You receive loot: " then
-            local s = "Received: ["..iN.."] "..texture
-            if iA > 1 then s = s.."x"..iA end
-            if ct.itemstotal then s = s .. " (" .. GetItemCount(iI) .. ")" end
+            local s = "Received: ["..iN.."] "   --..texture
+            local amount = 1
+            if tonumber(iA) and tonumber(iA) > 1 then
+                s = s.."x"..iA
+                amount = tonumber(iA)
+            end
+            if ct.itemstotal then s = s .. "  (" .. (GetItemCount(iI) + amount) .. ")" end
             xCT3:AddMessage(s, r, g, b)
             return
         end
         if ct.crafteditems and crafted then
             local s = "Crafted: ["..iN.."] "..texture
-            if iA > 1 then s = s.."x"..iA end
+            if type(iA)~="string" and iA > 1 then s = s.."x"..iA end
             if ct.itemstotal then s = s .. " (" .. GetItemCount(iI) .. ")" end
             xCT3:AddMessage(s, r, g, b)
             return
@@ -568,9 +578,11 @@ local function OnEvent(self, event, subevent, ...)
         end
     
     elseif event=="CHAT_MSG_LOOT" then
+        print("TEST2")
         ChatMsgLoot_Handler(subevent)
-    
+        
     elseif event=="CHAT_MSG_MONEY" then
+        print("TEST2")
         ChatMsgMoney_Handler(subevent)
     end
 end
@@ -641,8 +653,12 @@ xCT:RegisterEvent("UNIT_ENTERED_VEHICLE")
 xCT:RegisterEvent("UNIT_EXITING_VEHICLE")
 xCT:RegisterEvent("PLAYER_ENTERING_WORLD")
 -- register loot events
-if ct.loot_money then xCT:RegisterEvent("CHAT_MSG_MONEY") end
-if ct.loot_items then xCT:RegisterEvent("CHAT_MSG_LOOT") end
+if ct.lootitems or ct.questitems or ct.crafteditems then
+    xCT:RegisterEvent("CHAT_MSG_LOOT") 
+end
+if ct.lootmoney then 
+    xCT:RegisterEvent("CHAT_MSG_MONEY")
+end
 
 xCT:SetScript("OnEvent",OnEvent)
 
