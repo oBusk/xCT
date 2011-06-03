@@ -51,6 +51,7 @@ ns.config={
     ["crafteditems"] = false,               -- Display crafted items (if lootitems=true)
 	["questitems"] = true,				    -- Show quest items (if lootitems=true)
     ["itemsquality"] = 0,			    -- 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
+    ["itemstotal"] = true,              -- show the total amount of items
     -- doesn't work yet
 	--["lootmoney"] = false,				-- Display looted money
 	--["loot_showtotal"] = true,			-- Shows total amount of items you have (slower) ("[Epic Item Name]x1 (x23)")
