@@ -296,7 +296,7 @@ function ChatMsgLoot_Handler(msg)
     if (ct.crafteditems and crafted) or (ct.questitems and quest) or (ct.itemsquality <= quality) then
         local r, g, b = GetItemQualityColor(quality)
         local texture = "\124T"..icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
-        if pM == "You receive loot: " then
+        if pM == "You receive loot: " or pM == "You receive item: " then
             local s = "Received: ["..iN.."] "
             if quest then s = "Quest Item: ["..iN.."] "end
             if texture then s = s..texture end
