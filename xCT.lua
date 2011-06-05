@@ -257,35 +257,18 @@ local PAR_L_I = "([^|]*)|?c?f?f?(%x*)|?H?[^:]*:?(-?%d+):[?(-?%d+):]+|?h?%[?([^%[
 
 -- loot events
 function ChatMsgMoney_Handler(msg)
-    local g, s, c = msg:match("(%d+) Gold"), msg:match("(%d+) Silver"), msg:match("(%d+) Copper")
-    local money = 0
-    if tonumber(g) then money = money + tonumber(g) * 10000 end
-    if tonumber(s) then money = money + tonumber(s) * 100 end
-    if tonumber(c) then money = money + tonumber(c) end
-	if msg:find("share") then  -- share money
-        if money ~= "" then
-            if ct.moneycolorblind then
-                local cb = ""
-                if g then cb = cb .. g .. " G  " end
-                if s then cb = cb .. s .. " S  " end
-                if c then cb = cb .. c .. " C  " end
-                xCT3:AddMessage("Money:   " .. cb .. "   (spilt)", 1, 1, 0) -- yellow
-            else
-                xCT3:AddMessage("Money:   " .. GetCoinTextureString(money) .. "   (spilt)", 1, 1, 0) -- yellow
-            end
+    -- Cimplex: version 1.9 beta 2 (NEED TO TEST: this in a guild run)!!!!
+    local g, s, c = tonumber(msg:match("(%d+) Gold")), tonumber(msg:match("(%d+) Silver")), tonumber(msg:match("(%d+) Copper"))
+    -- Cimplex>
+    local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), "Money:   "
+    if money > ct.minmoney then
+        if ct.moneycolorblind then 
+            o = o..(g and g.." G   " or "")..(s and s.." S   " or "")..(c and c.." C   " or "")
+        else
+            o = o..GetCoinTextureString(money).."   "
         end
-    else
-        if money ~= "" then
-            if ct.moneycolorblind then
-                local cb = ""
-                if g then cb = cb .. g .. " G  " end
-                if s then cb = cb .. s .. " S  " end
-                if c then cb = cb .. c .. " C  " end
-                xCT3:AddMessage("Money:   " .. cb, 1, 1, 0) -- yellow
-            else
-                xCT3:AddMessage("Money:   " .. GetCoinTextureString(money), 1, 1, 0) -- yellow
-            end
-        end
+        if msg:find("share") then o = o.."(split)" end
+        xCT3:AddMessage(o, 1, 1, 0) -- yellow
     end
 end
 
@@ -422,192 +405,195 @@ local function OnEvent(self, event, subevent, ...)
             elseif subevent == "SPELL_REFLECT" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
                 xCT1:AddMessage(REFLECT, .5, .5, .5)
 
-            elseif subevent=="RESIST"then
-                if(arg3)then
-                    if(COMBAT_TEXT_SHOW_RESISTANCES=="1") then
-                        xCT1:AddMessage(part:format(arg2,RESIST,arg3),.75,.5,.5)
+            elseif subevent == "RESIST" then
+                if arg3 then
+                    if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                        xCT1:AddMessage(part:format(arg2, RESIST, arg3), .75, .5, .5)
                     else
-                        xCT1:AddMessage(arg2,.75,.1,.1)
+                        xCT1:AddMessage(arg2, .75, .1, .1)
                     end
-                elseif(COMBAT_TEXT_SHOW_RESISTANCES=="1")then
-                    xCT1:AddMessage(RESIST,.5,.5,.5)
+                elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                    xCT1:AddMessage(RESIST, .5, .5, .5)
                 end
-            elseif subevent=="BLOCK"then
-                if(arg3)then
-                    if(COMBAT_TEXT_SHOW_RESISTANCES=="1")then
-                        xCT1:AddMessage(part:format(arg2,BLOCK,arg3),.75,.5,.5)
+                
+            elseif subevent == "BLOCK" then
+                if arg3 then
+                    if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                        xCT1:AddMessage(part:format(arg2, BLOCK, arg3), .75, .5, .5)
                     else
-                        xCT1:AddMessage(arg2,.75,.1,.1)
+                        xCT1:AddMessage(arg2, .75, .1, .1)
                     end
-                elseif(COMBAT_TEXT_SHOW_RESISTANCES=="1")then
-                    xCT1:AddMessage(BLOCK,.5,.5,.5)
+                elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                    xCT1:AddMessage(BLOCK, .5, .5, .5)
                 end
-            elseif subevent=="ABSORB"then
-                if(arg3)then
-                    if(COMBAT_TEXT_SHOW_RESISTANCES=="1")then
-                        xCT1:AddMessage(part:format(arg2,ABSORB,arg3),.75,.5,.5)
+                
+            elseif subevent == "ABSORB"then
+                if arg3 then
+                    if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                        xCT1:AddMessage(part:format(arg2, ABSORB, arg3), .75, .5, .5)
                     else
-                        xCT1:AddMessage(arg2,.75,.1,.1)
+                        xCT1:AddMessage(arg2, .75, .1, .1)
                     end
-                elseif(COMBAT_TEXT_SHOW_RESISTANCES=="1")then
-                    xCT1:AddMessage(ABSORB,.5,.5,.5)
+                elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                    xCT1:AddMessage(ABSORB, .5, .5, .5)
                 end
-            elseif subevent=="SPELL_RESIST"then
-                if(arg3)then
-                    if(COMBAT_TEXT_SHOW_RESISTANCES=="1") then
-                        xCT1:AddMessage(part:format(arg2,RESIST,arg3),.5,.3,.5)
+                
+            elseif subevent == "SPELL_RESIST" then
+                if arg3 then
+                    if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                        xCT1:AddMessage(part:format(arg2, RESIST, arg3), .5, .3, .5)
                     else
-                        xCT1:AddMessage(arg2,.75,.3,.85)
+                        xCT1:AddMessage(arg2, .75, .3, .85)
                     end
-                elseif(COMBAT_TEXT_SHOW_RESISTANCES=="1")then
-                    xCT1:AddMessage(RESIST,.5,.5,.5)
+                elseif COMBAT_TEXT_SHOW_RESISTANCES == "1"then
+                    xCT1:AddMessage(RESIST, .5, .5, .5)
                 end
-            elseif subevent=="SPELL_BLOCK"then
-                if (arg3)then
-                    if(COMBAT_TEXT_SHOW_RESISTANCES=="1")then
-                        xCT1:AddMessage(part:format(arg2,BLOCK,arg3),.5,.3,.5)
+                
+            elseif subevent == "SPELL_BLOCK" then
+                if arg3 then
+                    if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                        xCT1:AddMessage(part:format(arg2, BLOCK, arg3), .5, .3, .5)
                     else
-                        xCT1:AddMessage("-"..arg2,.75,.3,.85)
+                        xCT1:AddMessage("-"..arg2, .75, .3, .85)
                     end
-                elseif(COMBAT_TEXT_SHOW_RESISTANCES=="1")then
-                    xCT1:AddMessage(BLOCK,.5,.5,.5)
+                elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                    xCT1:AddMessage(BLOCK, .5, .5, .5)
                 end
-            elseif subevent=="SPELL_ABSORB"then
-                if(arg3)then
-                    if(COMBAT_TEXT_SHOW_RESISTANCES=="1")then
-                        xCT1:AddMessage(part:format(arg2,ABSORB,arg3),.5,.3,.5)
+                
+            elseif subevent == "SPELL_ABSORB" then
+                if arg3 then
+                    if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                        xCT1:AddMessage(part:format(arg2, ABSORB, arg3), .5, .3, .5)
                     else
-                        xCT1:AddMessage(arg2,.75,.3,.85)
+                        xCT1:AddMessage(arg2, .75, .3, .85)
                     end
-                elseif(COMBAT_TEXT_SHOW_RESISTANCES=="1")then
-                    xCT1:AddMessage(ABSORB,.5,.5,.5)
+                elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
+                    xCT1:AddMessage(ABSORB, .5, .5, .5)
                 end
 
-            elseif subevent=="ENERGIZE"and(COMBAT_TEXT_SHOW_ENERGIZE=="1")then
-                if  tonumber(arg2)>0 then
-                    if(arg3 and arg3=="MANA" or arg3=="RAGE" or arg3=="FOCUS" or arg3=="ENERGY" or arg3=="RUINIC_POWER" or arg3=="SOUL_SHARDS")then
-                        xCT3:AddMessage("+"..arg2.." ".._G[arg3],PowerBarColor[arg3].r,PowerBarColor[arg3].g,PowerBarColor[arg3].b)
-                    end
-                end
-
-            elseif subevent=="PERIODIC_ENERGIZE"and(COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE=="1")then
-                if  tonumber(arg2)>0 then
-                    if(arg3 and arg3=="MANA" or arg3=="RAGE" or arg3=="FOCUS" or arg3=="ENERGY" or arg3=="RUINIC_POWER" or arg3=="SOUL_SHARDS")then
-                        xCT3:AddMessage("+"..arg2.." ".._G[arg3],PowerBarColor[arg3].r,PowerBarColor[arg3].g,PowerBarColor[arg3].b)
-                    end
-                end
-            elseif subevent=="SPELL_AURA_START"and(COMBAT_TEXT_SHOW_AURAS=="1")then
-                xCT3:AddMessage("+"..arg2,1,.5,.5)
-            elseif subevent=="SPELL_AURA_END"and(COMBAT_TEXT_SHOW_AURAS=="1")then
-                xCT3:AddMessage("-"..arg2,.5,.5,.5)
-            elseif subevent=="SPELL_AURA_START_HARMFUL"and(COMBAT_TEXT_SHOW_AURAS=="1")then
-                xCT3:AddMessage("+"..arg2,1,.1,.1)
-            elseif subevent=="SPELL_AURA_END_HARMFUL"and(COMBAT_TEXT_SHOW_AURAS=="1")then
-                xCT3:AddMessage("-"..arg2,.1,1,.1)
-
-            elseif subevent=="HONOR_GAINED"and(COMBAT_TEXT_SHOW_HONOR_GAINED=="1")then
-                arg2=tonumber(arg2)
-                if(arg2 and abs(arg2)>1) then
-                    arg2=floor(arg2)
-                    if (arg2>0)then
-                        xCT3:AddMessage(HONOR.." +"..arg2,.1,.1,1)
+            elseif subevent == "ENERGIZE" and COMBAT_TEXT_SHOW_ENERGIZE == "1" then
+                if  tonumber(arg2) > 0 then
+                    if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUINIC_POWER" or arg3 == "SOUL_SHARDS" then
+                        xCT3:AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
                     end
                 end
 
-            elseif subevent=="FACTION"and(COMBAT_TEXT_SHOW_REPUTATION=="1")then
-                xCT3:AddMessage(arg2.." +"..arg3,.1,.1,1)
+            elseif subevent == "PERIODIC_ENERGIZE" and COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE == "1" then
+                if  tonumber(arg2) > 0 then
+                    if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUINIC_POWER" or arg3 == "SOUL_SHARDS" then
+                        xCT3:AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
+                    end
+                end
+                
+            elseif subevent == "SPELL_AURA_START" and COMBAT_TEXT_SHOW_AURAS == "1" then
+                xCT3:AddMessage("+"..arg2, 1, .5, .5)
+                
+            elseif subevent == "SPELL_AURA_END" and COMBAT_TEXT_SHOW_AURAS == "1" then
+                xCT3:AddMessage("-"..arg2, .5, .5, .5)
+                
+            elseif subevent == "SPELL_AURA_START_HARMFUL" and COMBAT_TEXT_SHOW_AURAS == "1" then
+                xCT3:AddMessage("+"..arg2, 1, .1, .1)
+                
+            elseif subevent == "SPELL_AURA_END_HARMFUL" and COMBAT_TEXT_SHOW_AURAS == "1" then
+                xCT3:AddMessage("-"..arg2, .1, 1, .1)
 
-            elseif subevent=="SPELL_ACTIVE"and(COMBAT_TEXT_SHOW_REACTIVES=="1")then
-                xCT3:AddMessage(arg2,1,.82,0)
+            elseif subevent == "HONOR_GAINED" and COMBAT_TEXT_SHOW_HONOR_GAINED == "1" then
+                arg2 = tonumber(arg2)
+                if arg2 and abs(arg2) > 1 then
+                    arg2 = floor(arg2)
+                    if arg2 > 0 then
+                        xCT3:AddMessage(HONOR.." +"..arg2, .1, .1, 1)
+                    end
+                end
+
+            elseif subevent == "FACTION" and COMBAT_TEXT_SHOW_REPUTATION == "1" then
+                xCT3:AddMessage(arg2.." +"..arg3, .1, .1, 1)
+
+            elseif subevent == "SPELL_ACTIVE" and COMBAT_TEXT_SHOW_REACTIVES == "1" then
+                xCT3:AddMessage(arg2, 1, .82, 0)
             end
         end
 
-    elseif event=="UNIT_HEALTH"and(COMBAT_TEXT_SHOW_LOW_HEALTH_MANA=="1")then
-        if subevent==ct.unit then
-            if(UnitHealth(ct.unit)/UnitHealthMax(ct.unit)<=COMBAT_TEXT_LOW_HEALTH_THRESHOLD)then
-                if (not lowHealth) then
-                    xCT3:AddMessage(HEALTH_LOW,1,.1,.1)
-                    lowHealth=true
+    elseif event == "UNIT_HEALTH" and COMBAT_TEXT_SHOW_LOW_HEALTH_MANA == "1" then
+        if subevent == ct.unit then
+            if UnitHealth(ct.unit) / UnitHealthMax(ct.unit) <= COMBAT_TEXT_LOW_HEALTH_THRESHOLD then
+                if not lowHealth then
+                    xCT3:AddMessage(HEALTH_LOW, 1, .1, .1)
+                    lowHealth = true
                 end
             else
-                lowHealth=nil
+                lowHealth = nil
             end
         end
 
-    elseif event=="UNIT_MANA"and(COMBAT_TEXT_SHOW_LOW_HEALTH_MANA=="1")then
-        if subevent==ct.unit then
-            local _,powerToken=UnitPowerType(ct.unit)
-            if (powerToken=="MANA"and(UnitPower(ct.unit)/UnitPowerMax(ct.unit))<=COMBAT_TEXT_LOW_MANA_THRESHOLD)then
-                if (not lowMana)then
-                    xCT3:AddMessage(MANA_LOW,1,.1,.1)
-                    lowMana=true
+    elseif event == "UNIT_MANA" and COMBAT_TEXT_SHOW_LOW_HEALTH_MANA == "1" then
+        if subevent == ct.unit then
+            local _, powerToken = UnitPowerType(ct.unit)
+            if powerToken == "MANA" and UnitPower(ct.unit) / UnitPowerMax(ct.unit) <= COMBAT_TEXT_LOW_MANA_THRESHOLD then
+                if not lowMana then
+                    xCT3:AddMessage(MANA_LOW, 1, .1, .1)
+                    lowMana = true
                 end
             else
-                lowMana=nil
+                lowMana = nil
             end
         end
 
-    elseif event=="PLAYER_REGEN_ENABLED"and(COMBAT_TEXT_SHOW_COMBAT_STATE=="1")then
-            xCT3:AddMessage("-"..LEAVING_COMBAT,.1,1,.1)
+    elseif event == "PLAYER_REGEN_ENABLED" and COMBAT_TEXT_SHOW_COMBAT_STATE == "1" then
+            xCT3:AddMessage("-"..LEAVING_COMBAT, .1, 1, .1)
 
-    elseif event=="PLAYER_REGEN_DISABLED"and(COMBAT_TEXT_SHOW_COMBAT_STATE=="1")then
-            xCT3:AddMessage("+"..ENTERING_COMBAT,1,.1,.1)
+    elseif event == "PLAYER_REGEN_DISABLED" and COMBAT_TEXT_SHOW_COMBAT_STATE == "1" then
+            xCT3:AddMessage("+"..ENTERING_COMBAT, 1, .1, .1)
 
-    elseif event=="UNIT_COMBO_POINTS"and(COMBAT_TEXT_SHOW_COMBO_POINTS=="1")then
-        if(subevent==ct.unit)then
-            local cp=GetComboPoints(ct.unit,"target")
-                if(cp>0)then
-                    r,g,b=1,.82,.0
-                    if (cp==MAX_COMBO_POINTS)then
-                        r,g,b=0,.82,1
+    elseif event == "UNIT_COMBO_POINTS" and COMBAT_TEXT_SHOW_COMBO_POINTS == "1" then
+        if subevent == ct.unit then
+            local cp = GetComboPoints(ct.unit, "target")
+                if cp > 0 then
+                    r, g, b = 1, .82, .0
+                    if cp == MAX_COMBO_POINTS then
+                        r, g, b = 0, .82, 1
                     end
-                    xCT3:AddMessage(format(COMBAT_TEXT_COMBO_POINTS,cp),r,g,b)
+                    xCT3:AddMessage(format(COMBAT_TEXT_COMBO_POINTS, cp), r, g, b)
                 end
         end
 
-    elseif event=="RUNE_POWER_UPDATE"then
-        local arg1,arg2 = subevent,...
-        if(arg2==true)then
-            local rune=GetRuneType(arg1);
-            local msg=COMBAT_TEXT_RUNE[rune];
-            if(rune==1)then 
-                r=.75
-                g=0
-                b=0
-            elseif(rune==2)then
-                r=.75
-                g=1
-                b=0
-            elseif(rune==3)then
-                r=0
-                g=1
-                b=1    
+    elseif event == "RUNE_POWER_UPDATE" then
+        local arg1, arg2 = subevent, ...
+        if arg2 then
+            local rune = GetRuneType(arg1);
+            local msg = COMBAT_TEXT_RUNE[rune];
+            if rune == 1 then 
+                r, g, b = .75, 0, 0
+            elseif rune==2 then
+                r, g, b = .75, 1, 0
+            elseif rune == 3 then
+                r, g, b = 0, 1, 1  
             end
-            if(rune and rune<4)then
-                xCT3:AddMessage("+"..msg,r,g,b)
+            if rune and rune < 4 then
+                xCT3:AddMessage("+"..msg, r, g, b)
             end
         end
 
-    elseif event=="UNIT_ENTERED_VEHICLE"or event=="UNIT_EXITING_VEHICLE"then
-        if(arg1=="player")then
+    elseif event == "UNIT_ENTERED_VEHICLE" or event == "UNIT_EXITING_VEHICLE" then
+        if arg1 == "player" then
             SetUnit()
         end
 
-    elseif event=="PLAYER_ENTERING_WORLD"then
+    elseif event == "PLAYER_ENTERING_WORLD" then
         SetUnit()    
-        if(ct.scrollable)then
+        if ct.scrollable then
             SetScroll()
         else
             LimitLines()
         end
-        if(ct.damage or ct.healing)then
-            ct.pguid=UnitGUID"player"
+        if ct.damage or ct.healing then
+            ct.pguid = UnitGUID("player")
         end
     
-    elseif event=="CHAT_MSG_LOOT" then
+    elseif event == "CHAT_MSG_LOOT" then
         ChatMsgLoot_Handler(subevent)
         
-    elseif event=="CHAT_MSG_MONEY" then
+    elseif event == "CHAT_MSG_MONEY" then
         ChatMsgMoney_Handler(subevent)
         
     end
@@ -615,16 +601,16 @@ end
 
 -- change damage font (if desired)
 if ct.damagestyle then
-    DAMAGE_TEXT_FONT=ct.damagefont
+    DAMAGE_TEXT_FONT = ct.damagefont
 end
 
 -- the frames
 ct.locked = true
 ct.frames = { }
-for i=1,numf do
-    local f=CreateFrame("ScrollingMessageFrame","xCT"..i,UIParent)
-    f:SetFont(ct.font,ct.fontsize,ct.fontstyle)
-    f:SetShadowColor(0,0,0,0)
+for i = 1, numf do
+    local f = CreateFrame("ScrollingMessageFrame", "xCT"..i, UIParent)
+    f:SetFont(ct.font, ct.fontsize, ct.fontstyle)
+    f:SetShadowColor(0, 0, 0, 0)
     f:SetFading(true)
     f:SetFadeDuration(0.5)
     f:SetTimeVisible(ct.timevisible)
@@ -632,33 +618,33 @@ for i=1,numf do
     f:SetSpacing(2)
     f:SetWidth(128)
     f:SetHeight(128)
-    f:SetPoint("CENTER",0,0)
+    f:SetPoint("CENTER", 0, 0)
     f:SetMovable(true)
     f:SetResizable(true)
-    f:SetMinResize(64,64)
-    f:SetMaxResize(768,768)
+    f:SetMinResize(64, 64)
+    f:SetMaxResize(768, 768)
     f:SetClampedToScreen(true)
-    f:SetClampRectInsets(0,0,ct.fontsize,0)
-    if(i==1)then
+    f:SetClampRectInsets(0, 0, ct.fontsize, 0)
+    if i == 1 then
         f:SetJustifyH(ct.justify_1)
-        f:SetPoint("CENTER",-192,-32)
-    elseif(i==2)then
+        f:SetPoint("CENTER", -192, -32)
+    elseif i == 2 then
         f:SetJustifyH(ct.justify_2)
-        f:SetPoint("CENTER",192,-32)
-    elseif(i==3)then
+        f:SetPoint("CENTER", 192, -32)
+    elseif i == 3 then
         f:SetJustifyH(ct.justify_3)
         f:SetWidth(256)
-        f:SetPoint("CENTER",0,192)
+        f:SetPoint("CENTER", 0, 192)
     else
         f:SetJustifyH(ct.justify_4)
-        f:SetPoint("CENTER",320,0)
-        local a,_,c=f:GetFont()
-        if (ct.damagefontsize=="auto")then
+        f:SetPoint("CENTER", 320, 0)
+        local a, _, c = f:GetFont()
+        if ct.damagefontsize == "auto" then
             if ct.icons then
-                f:SetFont(a,ct.iconsize/2,c)
+                f:SetFont(a, ct.iconsize / 2, c)
             end
-        elseif (type(ct.damagefontsize)=="number")then
-            f:SetFont(a,ct.damagefontsize,c)
+        elseif type(ct.damagefontsize) == "number" then
+            f:SetFont(a, ct.damagefontsize, c)
         end   
     end
     ct.frames[i] = f
@@ -706,10 +692,10 @@ if not ct.blizzheadnumbers then
     InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
     InterfaceOptionsCombatTextPanelPetDamage:Hide()
     InterfaceOptionsCombatTextPanelHealing:Hide()
-    SetCVar("CombatLogPeriodicSpells",0)
-    SetCVar("PetMeleeDamage",0)
-    SetCVar("CombatDamage",0)
-    SetCVar("CombatHealing",0)
+    SetCVar("CombatLogPeriodicSpells", 0)
+    SetCVar("PetMeleeDamage", 0)
+    SetCVar("CombatDamage", 0)
+    SetCVar("CombatHealing", 0)
 end
 
 -- hook blizz float mode selector. blizz sucks, because changing  cVar combatTextFloatMode doesn't fire CVAR_UPDATE
@@ -727,23 +713,25 @@ end
 
 -- awesome configmode and testmode
 local StartConfigmode = function()
-    if not InCombatLockdown()then
-        for i=1,#ct.frames do
-            f=ct.frames[i]
-            f:SetBackdrop({
-                bgFile="Interface/Tooltips/UI-Tooltip-Background",
-                edgeFile="Interface/Tooltips/UI-Tooltip-Border",
-                tile=false,tileSize=0,edgeSize=2,
-                insets={left=0,right=0,top=0,bottom=0}})
-            f:SetBackdropColor(.1,.1,.1,.8)
-            f:SetBackdropBorderColor(.1,.1,.1,.5)
+    if not InCombatLockdown() then
+        for i = 1, #ct.frames do
+            f = ct.frames[i]
+            f:SetBackdrop( { bgFile   = "Interface/Tooltips/UI-Tooltip-Background",
+                             edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+                             tile     = false,
+                             tileSize = 0,
+                             edgeSize = 2,
+                             insets = { left = 0, right = 0, top = 0, bottom = 0 }
+                           } )
+            f:SetBackdropColor(.1, .1, .1, .8)
+            f:SetBackdropBorderColor(.1, .1, .1, .5)
 
-            f.fs=f:CreateFontString(nil,"OVERLAY")
-            f.fs:SetFont(ct.font,ct.fontsize,ct.fontstyle)
-            f.fs:SetPoint("BOTTOM",f,"TOP",0,0)
-            if(i==1)then
+            f.fs = f:CreateFontString(nil, "OVERLAY")
+            f.fs:SetFont(ct.font, ct.fontsize, ct.fontstyle)
+            f.fs:SetPoint("BOTTOM", f, "TOP", 0, 0)
+            if i == 1 then
                 f.fs:SetText(DAMAGE)
-                f.fs:SetTextColor(1,.1,.1,.9)
+                f.fs:SetTextColor(1, .1, .1, .9)
             elseif(i==2)then
                 f.fs:SetText(SHOW_COMBAT_HEALING)
                 f.fs:SetTextColor(.1,1,.1,.9)
@@ -813,106 +801,107 @@ local function EndConfigmode()
 end
 
 local function StartTestMode()
---init really random number generator.
-    local random=math.random
-    random(time());random(); random(time())
+-- init really random number generator.
+    local random = math.random
+    random(time()); random(); random(time())
     
-    local TimeSinceLastUpdate=0
+    local TimeSinceLastUpdate = 0
     local UpdateInterval
-    if(ct.damagecolor)then
-        ct.dmindex={}
-        ct.dmindex[1]=1
-        ct.dmindex[2]=2
-        ct.dmindex[3]=4
-        ct.dmindex[4]=8
-        ct.dmindex[5]=16
-        ct.dmindex[6]=32
-        ct.dmindex[7]=64
+    if ct.damagecolor then
+        ct.dmindex = { }
+        ct.dmindex[1] = 1
+        ct.dmindex[2] = 2
+        ct.dmindex[3] = 4
+        ct.dmindex[4] = 8
+        ct.dmindex[5] = 16
+        ct.dmindex[6] = 32
+        ct.dmindex[7] = 64
     end
-
     
-    for i=1,#ct.frames do
-    ct.frames[i]:SetScript("OnUpdate",function(self,elapsed)
-        UpdateInterval=random(65,1000)/250
-        TimeSinceLastUpdate=TimeSinceLastUpdate+elapsed
-        if(TimeSinceLastUpdate>UpdateInterval)then
-            if(i==1)then
-            ct.frames[i]:AddMessage("-"..random(100000),1,random(255)/255,random(255)/255)
-            elseif(i==2)then
-            ct.frames[i]:AddMessage("+"..random(50000),.1,random(128,255)/255,.1)
-            elseif(i==3)then
-            ct.frames[i]:AddMessage(COMBAT_TEXT_LABEL,random(255)/255,random(255)/255,random(255)/255)
-            elseif(i==4)then
-                local msg
-                local icon
-                local color={}
-                msg=random(40000)
-                if(ct.icons)then
-                    _,_,icon=GetSpellInfo(msg)
-                end
-                if(icon)then
-                    msg=msg.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
-                    if(ct.damagecolor)then
-                        color=ct.dmgcolor[ct.dmindex[random(#ct.dmindex)]]
-                    else
-                        color={1,1,0}
+    for i = 1, #ct.frames do
+        ct.frames[i]:SetScript("OnUpdate", function(self, elapsed)
+                UpdateInterval = random(65, 1000) / 250
+                TimeSinceLastUpdate = TimeSinceLastUpdate + elapsed
+                if TimeSinceLastUpdate > UpdateInterval then
+                    if i == 1 then
+                        ct.frames[i]:AddMessage("-"..random(100000), 1, random(255) / 255, random(255) / 255)
+                    elseif i == 2 then
+                        ct.frames[i]:AddMessage("+"..random(50000), .1, random(128, 255) / 255, .1)
+                    elseif i == 3 then
+                        ct.frames[i]:AddMessage(COMBAT_TEXT_LABEL, random(255) / 255, random(255) / 255, random(255) / 255)
+                    elseif i == 4 then
+                        local msg
+                        local icon
+                        local color = { }
+                        msg = random(40000)
+                        if ct.icons then
+                            _, _, icon = GetSpellInfo(msg)
+                        end
+                        if icon then
+                            msg = msg .. " \124T" .. icon .. ":" .. ct.iconsize .. ":" .. ct.iconsize .. ":0:0:64:64:5:59:5:59\124t"
+                            if ct.damagecolor then
+                                color = ct.dmgcolor[ct.dmindex[random(#ct.dmindex)]]
+                            else
+                                color = { 1, 1, 0 }
+                            end
+                        elseif ct.damagecolor and not ct.icons then
+                            color = ct.dmgcolor[ct.dmindex[random(#ct.dmindex)]]
+                        elseif not ct.damagecolor then
+                            color={ 1, 1, random(0, 1) }
+                        end
+                        ct.frames[i]:AddMessage(msg, unpack(color))
                     end
-                elseif(ct.damagecolor) and not(ct.icons)then
-                    color=ct.dmgcolor[ct.dmindex[random(#ct.dmindex)]]
-                elseif not(ct.damagecolor)then
-                    color={1,1,random(0,1)}
+                    TimeSinceLastUpdate = 0
                 end
-                ct.frames[i]:AddMessage(msg,unpack(color))
-                
-            end
-            TimeSinceLastUpdate = 0
-        end
-        end)        
-    ct.testmode=true
-end
+            end)        
+        ct.testmode = true
+    end
 end
 
 local function EndTestMode()
-    for i=1,#ct.frames do
-        ct.frames[i]:SetScript("OnUpdate",nil)
+    for i = 1, #ct.frames do
+        ct.frames[i]:SetScript("OnUpdate", nil)
         ct.frames[i]:Clear()
     end
-    if(ct.damagecolor)then
-        ct.dmindex=nil
+    if ct.damagecolor then
+        ct.dmindex = nil
     end
-    ct.testmode=false
-    end
+    ct.testmode = false
+end
 
 -- /xct lock popup dialog
 StaticPopupDialogs["XCT_LOCK"]={
-    text="To save |cffFF0000x|rCT window positions you need to reload your UI.\n Click "..ACCEPT.." to reload UI.\nClick "..CANCEL.." to do it later.",
-    button1=ACCEPT,
-    button2=CANCEL,
-    OnAccept=function() if not InCombatLockdown() then ReloadUI() else EndConfigmode() end end,
-    OnCancel=EndConfigmode,
-    timeout=0,
-    whileDead=1,
-    hideOnEscape=true,
-    showAlert=true,
+    text         = "To save |cffFF0000x|rCT window positions you need to reload your UI.\n Click "..ACCEPT.." to reload UI.\nClick "..CANCEL.." to do it later.",
+    button1      = ACCEPT,
+    button2      = CANCEL,
+    OnAccept     = function() if not InCombatLockdown() then ReloadUI() else EndConfigmode() end end,
+    OnCancel     = EndConfigmode,
+    timeout      = 0,
+    whileDead    = 1,
+    hideOnEscape = true,
+    showAlert    = true,
 }
 
 -- slash commands
-SLASH_XCT1="/xct"
-SlashCmdList["XCT"]=function(input)
-    input=string.lower(input)
-    if(input=="unlock")then
-        if (ct.locked)then
+SLASH_XCT1 = "/xct"
+SlashCmdList["XCT"] = function(input)
+    input = string.lower(input)
+    
+    if input == "unlock" then
+        if ct.locked then
             StartConfigmode()
         else
             pr("already unlocked.")
         end
-    elseif(input=="lock")then
-        if (ct.locked) then
+        
+    elseif input=="lock" then
+        if ct.locked then
             pr("already locked.")
         else
             StaticPopup_Show("XCT_LOCK")
         end
-    elseif(input=="test")then
+        
+    elseif input == "test" then
         if (ct.testmode) then
             EndTestMode()
             pr("test mode disabled.")
@@ -920,23 +909,7 @@ SlashCmdList["XCT"]=function(input)
             StartTestMode()
             pr("test mode enabled.")
         end
-    elseif(input=="mypos")then
-        xCT1:ClearAllPoints()
-        xCT1:SetPoint("CENTER",UIParent, "CENTER", -90, -8)
-        xCT1:SetHeight(142)
-        xCT1:SetWidth(128)
-        xCT2:ClearAllPoints()
-        xCT2:SetPoint("CENTER",UIParent, "CENTER", 90, -8)
-        xCT2:SetHeight(142)
-        xCT2:SetWidth(128)
-        xCT3:ClearAllPoints()
-        xCT3:SetPoint("TOP",UIParent, "TOP", -2, -34)
-        xCT3:SetHeight(264)
-        xCT3:SetWidth(216)
-        xCT4:ClearAllPoints()
-        xCT4:SetPoint("CENTER",UIParent, "CENTER", 444, 152)
-        xCT4:SetHeight(172)
-        xCT4:SetWidth(136)
+        
     else
         pr("use |cffFF0000/xct unlock|r to move and resize frames.")
         pr("use |cffFF0000/xct lock|r to lock frames.")
@@ -945,19 +918,19 @@ SlashCmdList["XCT"]=function(input)
 end
 
 -- awesome shadow priest helper
-if(ct.stopvespam and ct.myclass=="PRIEST")then
-    local sp=CreateFrame("Frame")
-    sp:SetScript("OnEvent",function(...)
-        if(GetShapeshiftForm()==1)then
-            if(ct.blizzheadnumbers)then
-                SetCVar('CombatHealing',0)
+if ct.stopvespam and ct.myclass == "PRIEST" then
+    local sp = CreateFrame("Frame")
+    sp:SetScript("OnEvent", function(...)
+            if GetShapeshiftForm() == 1 then
+                if ct.blizzheadnumbers then
+                    SetCVar('CombatHealing', 0)
+                end
+            else
+                if ct.blizzheadnumbers then
+                    SetCVar('CombatHealing', 1)
+                end
             end
-        else
-            if(ct.blizzheadnumbers)then
-                SetCVar('CombatHealing',1)
-            end
-        end
-    end)
+        end)
     sp:RegisterEvent("PLAYER_ENTERING_WORLD")    
     sp:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
     sp:RegisterEvent("UPDATE_SHAPESHIFT_FORMS")
@@ -965,44 +938,44 @@ end
 
 -- spam merger
 local SQ
-if(ct.mergeaoespam)then
-    if (ct.damage or ct.healing) then
-        if (not ct.mergeaoespamtime or ct.mergeaoespamtime<1) then
-            ct.mergeaoespamtime=1
+if ct.mergeaoespam then
+    if ct.damage or ct.healing then
+        if not ct.mergeaoespamtime or ct.mergeaoespamtime < 1 then
+            ct.mergeaoespamtime = 1
         end
-        local pairs=pairs
-        SQ={}
-        for k,v in pairs(ct.aoespam) do
-            SQ[k]={queue = 0, msg = "", color={}, count=0, utime=0, locked=false}
+        local pairs = pairs
+        SQ = { }
+        for k, v in pairs(ct.aoespam) do
+            SQ[k] = {queue = 0, msg = "", color = { }, count = 0, utime = 0, locked = false}
         end
         ct.SpamQueue=function(spellId, add)
             local amount
-            local spam=SQ[spellId]["queue"]
-            if (spam and type(spam=="number"))then
-                amount=spam+add
+            local spam = SQ[spellId]["queue"]
+            if spam and type(spam) == "number" then
+                amount = spam + add
             else
-                amount=add
+                amount = add
             end
             return amount
         end
-        local tslu=0
-        local xCTspam=CreateFrame"Frame"
+        local tslu = 0
+        local xCTspam = CreateFrame("Frame")
         xCTspam:SetScript("OnUpdate", function(self, elapsed)
             local count
-            tslu=tslu+elapsed
+            tslu = tslu + elapsed
             if tslu > 0.5 then
-                tslu=0
-            local utime=time()
-                for k,v in pairs(SQ) do
-                    if not SQ[k]["locked"] and SQ[k]["queue"]>0 and SQ[k]["utime"]+ct.mergeaoespamtime<=utime then
-                        if SQ[k]["count"]>1 then
-                            count=" |cffFFFFFF x "..SQ[k]["count"].."|r"
+                tslu = 0
+            local utime = time()
+                for k, v in pairs(SQ) do
+                    if not SQ[k]["locked"] and SQ[k]["queue"] > 0 and SQ[k]["utime"] + ct.mergeaoespamtime <= utime then
+                        if SQ[k]["count"] > 1 then
+                            count = " |cffFFFFFF x "..SQ[k]["count"].."|r"
                         else
-                            count=""
+                            count = ""
                         end
                         xCT4:AddMessage(SQ[k]["queue"]..SQ[k]["msg"]..count, unpack(SQ[k]["color"]))
-                        SQ[k]["queue"]=0
-                        SQ[k]["count"]=0
+                        SQ[k]["queue"] = 0
+                        SQ[k]["count"] = 0
                     end
                 end
             end
