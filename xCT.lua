@@ -651,7 +651,7 @@ for i = 1, numf do
 end
 
 -- register events
-local xCT=CreateFrame("Frame")
+local xCT = CreateFrame("Frame")
 xCT:RegisterEvent("COMBAT_TEXT_UPDATE")
 xCT:RegisterEvent("UNIT_HEALTH")
 xCT:RegisterEvent("UNIT_MANA")
@@ -782,21 +782,21 @@ local StartConfigmode = function()
 end
 
 local function EndConfigmode()
-    for i=1,#ct.frames do
-        f=ct.frames[i]
+    for i = 1, #ct.frames do
+        f = ct.frames[i]
         f:SetBackdrop(nil)
         f.fs:Hide()
-        f.fs=nil
+        f.fs = nil
         f.t:Hide()
-        f.t=nil
+        f.t = nil
         f.d:Hide()
-        f.d=nil
-        f.tr=nil
+        f.d = nil
+        f.tr = nil
         f:EnableMouse(false)
         f:SetScript("OnDragStart",nil)
         f:SetScript("OnDragStop",nil)
     end
-    ct.locked=true
+    ct.locked = true
     pr("Window positions unsaved, don't forget to reload UI.")
 end
 
@@ -870,7 +870,7 @@ local function EndTestMode()
 end
 
 -- /xct lock popup dialog
-StaticPopupDialogs["XCT_LOCK"]={
+StaticPopupDialogs["XCT_LOCK"] = {
     text         = "To save |cffFF0000x|rCT window positions you need to reload your UI.\n Click "..ACCEPT.." to reload UI.\nClick "..CANCEL.." to do it later.",
     button1      = ACCEPT,
     button2      = CANCEL,
@@ -989,7 +989,7 @@ if(ct.damage)then
     local gflags = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE,
                             COMBATLOG_OBJECT_REACTION_FRIENDLY,
                             COMBATLOG_OBJECT_CONTROL_PLAYER,
-                            COMBATLOG_OBJECT_TYPE_GUARDIAN)
+                            COMBATLOG_OBJECT_TYPE_GUARDIAN )
                             
     local xCTd = CreateFrame("Frame")
     if ct.damagecolor then
@@ -1058,7 +1058,7 @@ if(ct.damage)then
                         if ct.dmgcolor[spellSchool] then
                             color = ct.dmgcolor[spellSchool]
                         else
-                            color=ct.dmgcolor[1]
+                            color = ct.dmgcolor[1]
                         end
                     else
                         color = { 1, 1, 0 }
@@ -1075,7 +1075,7 @@ if(ct.damage)then
                         SQ[spellId]["queue"]  = ct.SpamQueue(spellId, rawamount)
                         SQ[spellId]["msg"]    = msg
                         SQ[spellId]["color"]  = color
-                        SQ[spellId]["count"]  = SQ[spellId]["count"]+1
+                        SQ[spellId]["count"]  = SQ[spellId]["count"] + 1
                         if SQ[spellId]["count"] == 1 then
                             SQ[spellId]["utime"] = time()
                         end
@@ -1085,66 +1085,62 @@ if(ct.damage)then
                     xCT4:AddMessage(amount..""..msg, unpack(color))
                 end
     
-            elseif(eventType=="SWING_MISSED")then
-                local missType,_=select(10,...)
-                if(ct.icons)then
-                    if(sourceGUID==UnitGUID"pet") or (sourceFlags==gflags)then
-                        icon=PET_ATTACK_TEXTURE
+            elseif eventType == "SWING_MISSED" then
+                local missType, _ = select(10, ...)
+                if ct.icons then
+                    if sourceGUID == UnitGUID("pet") or sourceFlags == gflags then
+                        icon = PET_ATTACK_TEXTURE
                     else
-                    --    icon=GetSpellTexture(1, BOOKTYPE_SPELL)
-                    --    _,_,icon=GetSpellInfo(6603)
-                        icon=GetSpellTexture(6603)
+                        icon = GetSpellTexture(6603)
                     end
-                    missType=missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                    missType = missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 end
-    
                 xCT4:AddMessage(missType)
     
-            elseif(eventType=="SPELL_MISSED")or(eventType=="RANGE_MISSED")then
-                local spellId,_,_,missType,_ = select(10,...)
-                if(ct.icons)then
-                --    _,_,icon=GetSpellInfo(spellId)
-                    icon=GetSpellTexture(spellId)
-                    missType=missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+            elseif eventType == "SPELL_MISSED" or eventType == "RANGE_MISSED" then
+                local spellId, _, _, missType, _ = select(10, ...)
+                if ct.icons then
+                    icon = GetSpellTexture(spellId)
+                    missType = missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 end 
-                xCT4:AddMessage(missType)
+                xCT4:AddMesage(missType)
     
-            elseif(eventType=="SPELL_DISPEL")and ct.dispel then
-                local target,_, _, id, effect, _, etype = select(10,...)
+            elseif eventType == "SPELL_DISPEL" and ct.dispel then
+                local target, _, _, id, effect, _, etype = select(10, ...)
                 local color
-                if(ct.icons)then
-                    icon=GetSpellTexture(id)
+                if ct.icons then
+                    icon = GetSpellTexture(id)
                 end
-                if (icon) then
-                    msg=" \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                if icon then
+                    msg = " \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 elseif(ct.icons)then
-                    msg=" \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                    msg = " \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 else
-                    msg=""
+                    msg = ""
                 end
-                if etype=="BUFF"then
-                    color={0,1,.5}
+                if etype == "BUFF"then
+                    color = { 0, 1, .5 }
                 else
-                    color={1,0,.5}
+                    color = { 1, 0, .5 }
                 end
-                xCT3:AddMessage(ACTION_SPELL_DISPEL..": "..effect..msg,unpack(color))
-            
-            elseif(eventType=="SPELL_INTERRUPT")and ct.interrupt then
+                xCT3:AddMessage(ACTION_SPELL_DISPEL..": "..effect..msg, unpack(color))
+                
+            elseif eventType == "SPELL_INTERRUPT" and ct.interrupt then
                 local target,_, _, id, effect = select(10,...)
                 local color={1,.5,0}
                 if(ct.icons)then
-                    icon=GetSpellTexture(id)
+                    icon = GetSpellTexture(id)
                 end
-                if (icon) then
-                    msg=" \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                if icon then
+                    msg = " \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 elseif(ct.icons)then
-                    msg=" \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                    msg = " \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 else
-                    msg=""
+                    msg = ""
                 end
-                xCT3:AddMessage(ACTION_SPELL_INTERRUPT..": "..effect..msg,unpack(color))
-            elseif(eventType=="PARTY_KILL") and ct.killingblow then
-                local tname=select(8,...)
+                xCT3:AddMessage(ACTION_SPELL_INTERRUPT..": "..effect..msg, unpack(color))
+            elseif eventType == "PARTY_KILL" and ct.killingblow then
+                local tname = select(8, ...)
                 xCT3:AddMessage(ACTION_PARTY_KILL..": "..tname, .2, 1, .2)
             end
             
@@ -1161,64 +1157,62 @@ if(ct.damage)then
     
     if tonumber((select(4, GetBuildInfo()))) >= 40200 then
         -- this is version 4.2 or greater, call proxy
-        xCTd:SetScript("OnEvent",dmg_proxy)
+        xCTd:SetScript("OnEvent", dmg_proxy)
     else
         -- this is pre 4.2, call normal
-        xCTd:SetScript("OnEvent",dmg)
+        xCTd:SetScript("OnEvent", dmg)
     end
 end
 
 -- healing
 if(ct.healing)then
-    local unpack,select,time=unpack,select,time
-    local xCTh=CreateFrame"Frame"
-    if(ct.icons)then
-        ct.blank="Interface\\Addons\\xCT\\blank"
+    local unpack, select, time = unpack, select, time
+    local xCTh = CreateFrame("Frame")
+    if ct.icons then
+        ct.blank = "Interface\\Addons\\xCT\\blank"
     end
-    local heal=function(self,event,...)     
-        local msg,icon
-        local timestamp, eventType, dump1, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags = select(1,...)
-        if(sourceGUID==ct.pguid)or(sourceFlags==gflags)then
-            if(eventType=='SPELL_HEAL')or(eventType=='SPELL_PERIODIC_HEAL'and ct.showhots)then
-                if(ct.healing)then
-                    local spellId,spellName,spellSchool,amount,overhealing,absorbed,critical = select(10,...)
-                    if(ct.healfilter[spellId]) then
+    local heal = function(self, event, ...)
+        local msg, icon
+        local timestamp, eventType, dump1, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags = select(1, ...)
+        if sourceGUID == ct.pguid or sourceFlags == gflags then
+            if eventType == 'SPELL_HEAL' or eventType == 'SPELL_PERIODIC_HEAL' and ct.showhots then
+                if ct.healing then
+                    local spellId, spellName, spellSchool, amount, overhealing, absorbed, critical = select(10, ...)
+                    if ct.healfilter[spellId] then
                         return
                     end
-                    if(amount>=ct.healtreshold)then
-                        local color={}
-                        local rawamount=amount
-                        if (critical) then 
-                            amount=ct.critprefix..amount..ct.critpostfix
-                            color={.1,1,.1}
+                    if amount >= ct.healtreshold then
+                        local color = { }
+                        local rawamount = amount
+                        if critical then 
+                            amount = ct.critprefix..amount..ct.critpostfix
+                            color = { .1, 1, .1 }
                         else
-                            
-                            color={.1,.65,.1}
+                            color = { .1, .65, .1 }
                         end 
-                        if(ct.icons)then
-                        --    _,_,icon=GetSpellInfo(spellId)
-                            icon=GetSpellTexture(spellId)
+                        if ct.icons then
+                            icon = GetSpellTexture(spellId)
                         else
-                            msg=""
+                            msg = ""
                         end
-                                   if (icon) then 
-                                    msg=' \124T'..icon..':'..ct.iconsize..':'..ct.iconsize..':0:0:64:64:5:59:5:59\124t'
-                        elseif(ct.icons)then
-                            msg=" \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
-                                end
+                        if icon then 
+                            msg = ' \124T'..icon..':'..ct.iconsize..':'..ct.iconsize..':0:0:64:64:5:59:5:59\124t'
+                        elseif ct.icons then
+                            msg = " \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                        end
                         if ct.mergeaoespam and ct.aoespam[spellId] then
-                            SQ[spellId]["locked"]=true
-                            SQ[spellId]["queue"]=ct.SpamQueue(spellId, rawamount)
-                            SQ[spellId]["msg"]=msg
-                            SQ[spellId]["color"]=color
-                            SQ[spellId]["count"]=SQ[spellId]["count"]+1
-                            if SQ[spellId]["count"]==1 then
-                                SQ[spellId]["utime"]=time()
+                            SQ[spellId]["locked"] = true
+                            SQ[spellId]["queue"] = ct.SpamQueue(spellId, rawamount)
+                            SQ[spellId]["msg"] = msg
+                            SQ[spellId]["color"] = color
+                            SQ[spellId]["count"] = SQ[spellId]["count"] + 1
+                            if SQ[spellId]["count"] == 1 then
+                                SQ[spellId]["utime"] = time()
                             end
-                            SQ[spellId]["locked"]=false
+                            SQ[spellId]["locked"] = false
                             return
-                    end 
-                        xCT4:AddMessage(amount..""..msg,unpack(color))
+                        end 
+                        xCT4:AddMessage(amount..""..msg, unpack(color))
                     end
                 end
             end
@@ -1234,9 +1228,9 @@ if(ct.healing)then
     
     if tonumber((select(4, GetBuildInfo()))) >= 40200 then
         -- this is version 4.2 or greater, call proxy
-        xCTh:SetScript("OnEvent",heal_proxy)
+        xCTh:SetScript("OnEvent", heal_proxy)
     else
         -- this is pre 4.2, call normal
-        xCTh:SetScript("OnEvent",heal)
+        xCTh:SetScript("OnEvent", heal)
     end
 end
