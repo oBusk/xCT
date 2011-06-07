@@ -52,7 +52,7 @@ ns.config = {
         ["lootmoney"]       = true,  -- Display looted money
         
     -- fine tune loot options
-        ["looticons"]       = true   -- show item icons when looted
+        ["loothideicons"]   = true   -- show item icons when looted
         ["looticonsize"]    = 20,    -- Icon size of looted, crafted and quest items
         ["crafteditems"]    = false, -- always show crafted items (will still show if 'lootitems' = true)
         ["questitems"]      = false, -- always show quest items (will still show if 'lootitems' = true)
