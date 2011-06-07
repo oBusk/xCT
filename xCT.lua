@@ -253,7 +253,10 @@ end
 --      - iI = (Int)Item ID
 --      - iN = (String)Item Name
 --      - iA = (Int)Amount Collected (Usually blank if one)
-local PAR_L_I = "([^|]*)|?c?f?f?(%x*)|?H?[^:]*:?(-?%d+):[?(-?%d+):]+|?h?%[?([^%[%]]*)%]?|?h?|?r?%s?x?(%d*)%.?"
+--local PAR_L_I = "([^|]*)|?c?f?f?(%x*)|?H?[^:]*:?(-?%d+):[?(-?%d+):]+|?h?%[?([^%[%]]*)%]?|?h?|?r?%s?x?(%d*)%.?"
+
+-- dandruff added this
+local PAR_L_I = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
 
 -- loot events
 function ChatMsgMoney_Handler(msg)
@@ -427,7 +430,7 @@ local function OnEvent(self, event, subevent, ...)
                     xCT1:AddMessage(BLOCK, .5, .5, .5)
                 end
                 
-            elseif subevent == "ABSORB"then
+            elseif subevent == "ABSORB" then
                 if arg3 then
                     if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
                         xCT1:AddMessage(part:format(arg2, ABSORB, arg3), .75, .5, .5)
@@ -732,10 +735,10 @@ local StartConfigmode = function()
             if i == 1 then
                 f.fs:SetText(DAMAGE)
                 f.fs:SetTextColor(1, .1, .1, .9)
-            elseif(i==2)then
+            elseif i == 2 then
                 f.fs:SetText(SHOW_COMBAT_HEALING)
                 f.fs:SetTextColor(.1,1,.1,.9)
-            elseif(i==3)then
+            elseif i == 3 then
                 f.fs:SetText(COMBAT_TEXT_LABEL)
                 f.fs:SetTextColor(.1,.1,1,.9)
             else
@@ -744,36 +747,36 @@ local StartConfigmode = function()
             end
 
             f.t=f:CreateTexture"ARTWORK"
-            f.t:SetPoint("TOPLEFT",f,"TOPLEFT",1,-1)
-            f.t:SetPoint("TOPRIGHT",f,"TOPRIGHT",-1,-19)
+            f.t:SetPoint("TOPLEFT", f, "TOPLEFT", 1, -1)
+            f.t:SetPoint("TOPRIGHT", f, "TOPRIGHT", -1, -19)
             f.t:SetHeight(20)
-            f.t:SetTexture(.5,.5,.5)
+            f.t:SetTexture(.5, .5, .5)
             f.t:SetAlpha(.3)
 
-            f.d=f:CreateTexture"ARTWORK"
+            f.d=f:CreateTexture("ARTWORK")
             f.d:SetHeight(16)
             f.d:SetWidth(16)
-            f.d:SetPoint("BOTTOMRIGHT",f,"BOTTOMRIGHT",-1,1)
-            f.d:SetTexture(.5,.5,.5)
+            f.d:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -1, 1)
+            f.d:SetTexture(.5, .5, .5)
             f.d:SetAlpha(.3)
 
             f.tr=f:CreateTitleRegion()
-            f.tr:SetPoint("TOPLEFT",f,"TOPLEFT",0,0)
-            f.tr:SetPoint("TOPRIGHT",f,"TOPRIGHT",0,0)
+            f.tr:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
+            f.tr:SetPoint("TOPRIGHT", f, "TOPRIGHT", 0, 0)
             f.tr:SetHeight(20)
 
             f:EnableMouse(true)
-            f:RegisterForDrag"LeftButton"
-            f:SetScript("OnDragStart",f.StartSizing)
-            if not(ct.scrollable)then
-            f:SetScript("OnSizeChanged",function(self)
-                self:SetMaxLines(self:GetHeight()/ct.fontsize)
-                self:Clear()
-            end)
+            f:RegisterForDrag("LeftButton")
+            f:SetScript("OnDragStart", f.StartSizing)
+            if not ct.scrollable then
+                f:SetScript("OnSizeChanged", function(self)
+                        self:SetMaxLines(self:GetHeight() / ct.fontsize)
+                        self:Clear()
+                    end)
             end
 
-            f:SetScript("OnDragStop",f.StopMovingOrSizing)
-            ct.locked=false
+            f:SetScript("OnDragStop", f.StopMovingOrSizing)
+            ct.locked = false
         end
         pr("unlocked.")
     else
@@ -793,8 +796,8 @@ local function EndConfigmode()
         f.d = nil
         f.tr = nil
         f:EnableMouse(false)
-        f:SetScript("OnDragStart",nil)
-        f:SetScript("OnDragStop",nil)
+        f:SetScript("OnDragStart", nil)
+        f:SetScript("OnDragStop", nil)
     end
     ct.locked = true
     pr("Window positions unsaved, don't forget to reload UI.")
