@@ -279,45 +279,47 @@ function ChatMsgLoot_Handler(msg)
     local pM, iQ, iI, iN, iA = select(3, string.find(msg, PAR_L_I))
     local quality, _, _, itemType, _, _, _, icon = select(3, GetItemInfo(iI))
     local quest, crafted, looted, bought = (itemType == "Quest"), (pM == "You create: "), (pM == "You receive loot: "), (pM == "You receive item: ")
-    if (ct.crafteditems and crafted) or (ct.questitems and quest) or (ct.itemsquality <= quality) then
-        local r, g, b = GetItemQualityColor(quality)
+    if looted or bought or crafted then
+        if (ct.crafteditems and crafted) or (ct.questitems and quest) or (ct.itemsquality <= quality) then
+            local r, g, b = GetItemQualityColor(quality)
 
-        -- Type and Item Name
-        local s = "Received: ["..iN.."] "
-        if bought then
-            s = "Purchased: ["..iN.."] "
-        elseif crafted then
-            s = "Crafted: ["..iN.."] "
-        elseif quest then
-            s = "Quest Item: ["..iN.."] "
+            -- Type and Item Name
+            local s = "Received: ["..iN.."] "
+            if bought then
+                s = "Purchased: ["..iN.."] "
+            elseif crafted then
+                s = "Crafted: ["..iN.."] "
+            elseif quest then
+                s = "Quest Item: ["..iN.."] "
+            end
+		
+            -- Add the Texture
+            if ct.loothideicons then
+                s = s.."   "
+            else
+                s = s.."\124T"..icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
+            end
+		
+            -- Amount Looted
+            local amount = tonumber(iA)
+            if amount and amount > 1 then
+                s = s.."x"..amount
+            else
+                amount = 1
+                s = s.."x1"
+            end
+		
+            -- Items purchased seem to get to your bags faster than looted items
+            if bought then amount = 0 end
+		
+            -- Total items in bag (See comment above)
+            if ct.itemstotal then
+                s = s.."  ("..(GetItemCount(iI) + amount).. ")"
+            end
+		
+            -- Add the message
+            xCT3:AddMessage(s, r, g, b)
         end
-		
-        -- Add the Texture
-        if ct.loothideicons then
-            s = s.."   "
-        else
-            s = s.."\124T"..icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
-        end
-		
-        -- Amount Looted
-        local amount = tonumber(iA)
-        if amount and amount > 1 then
-            s = s.."x"..amount
-        else
-            amount = 1
-            s = s.."x1"
-        end
-		
-        -- Items purchased seem to get to your bags faster than looted items
-        if bought then amount = 0 end
-		
-        -- Total items in bag (See comment above)
-        if ct.itemstotal then
-            s = s.."  ("..(GetItemCount(iI) + amount).. ")"
-        end
-		
-        -- Add the message
-        xCT3:AddMessage(s, r, g, b)
     end
 end
 
@@ -1113,7 +1115,7 @@ if(ct.damage)then
                     icon = GetSpellTexture(spellId)
                     missType = missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 end 
-                xCT4:AddMesage(missType)
+                xCT4:AddMessage(missType)
     
             elseif eventType == "SPELL_DISPEL" and ct.dispel then
                 local target, _, _, id, effect, _, etype = select(10, ...)
