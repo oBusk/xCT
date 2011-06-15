@@ -52,10 +52,10 @@ ns.config = {
         ["lootmoney"]       = true,  -- Display looted money
         
     -- fine tune loot options
-        ["loothideicons"]   = true,   -- show item icons when looted
+        ["loothideicons"]   = true,  -- show item icons when looted
         ["looticonsize"]    = 20,    -- Icon size of looted, crafted and quest items
-        ["crafteditems"]    = false, -- always show crafted items (will still show if 'lootitems' = true)
-        ["questitems"]      = false, -- always show quest items (will still show if 'lootitems' = true)
+        ["crafteditems"]    = nil,   -- show crafted items ( nil = default, false = always hide, true = always show)
+        ["questitems"]      = nil,   -- show quest items ( nil = default, false = always hide, true = always show)
         ["itemsquality"]    = 0,     -- filter items shown by item quality: 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
         ["itemstotal"]      = true,  -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)")
         ["moneycolorblind"] = false, -- shows letters G, S, and C instead of textures
