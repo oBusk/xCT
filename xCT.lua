@@ -4,7 +4,7 @@ xCT by affli @ RU-Howling Fjord
 All rights reserved.
 Thanks ALZA and Shestak for making this mod possible. Thanks Tukz for his wonderful style of coding. Thanks Rostok for some fixes and healing code.
 
-Maintained by Dandruff for 4.1 and 4.2 PTR
+Maintained by Dandruff for 4.1, 4.2 PTR, and 4.2 live
 
 ]]--
 
@@ -244,17 +244,27 @@ end
 
 
 -- test
-
+-- You receive loot: |cffffffff|Hitem:22644:0:0:0:0:0:-34534534:85:0|h[Crunchy Spider Leg]|h|r x10
 
 -- regex string for loot items
+--  Example, "local pM, iQ, iI, iN, iA = select(3,string.find(msg, PAR_L_I))" returns:
+--      - pM = (String)Pre-Message (e.g. "You Looted: ")
+--      - iQ = (Int)Item Quality Color (e.g. FFFFFF = Common)
+--      - iI = (Int)Item ID
+--      - iN = (String)Item Name
+--      - iA = (Int)Amount Collected (Usually blank if one)
+--local PAR_L_I = "([^|]*)|?c?f?f?(%x*)|?H?[^:]*:?(-?%d+):[?(-?%d+):]+|?h?%[?([^%[%]]*)%]?|?h?|?r?%s?x?(%d*)%.?"
+
+-- dandruff added this
 local PAR_L_I = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
--- local debug_parse = "You receive loot: |cffffffff|Hitem:22644:0:0:0:0:0:-34534534:85:0|h[Crunchy Spider Leg]|h|r x10"
 
 -- loot events
 function ChatMsgMoney_Handler(msg)
+    -- Cimplex: version 1.9 beta 2 (NEED TO TEST: this in a guild run)!!!!
     local g, s, c = tonumber(msg:match("(%d+) Gold")), tonumber(msg:match("(%d+) Silver")), tonumber(msg:match("(%d+) Copper"))
+    -- Cimplex>
     local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), "Money:   "
-    if money >= ct.minmoney then
+    if money > ct.minmoney then
         if ct.moneycolorblind then 
             o = o..(g and g.." G   " or "")..(s and s.." S   " or "")..(c and c.." C   " or "")
         else
@@ -268,50 +278,48 @@ end
 function ChatMsgLoot_Handler(msg)
     local pM, iQ, iI, iN, iA = select(3, string.find(msg, PAR_L_I))
     local quality, _, _, itemType, _, _, _, icon = select(3, GetItemInfo(iI))
-    local quest, crafted, bought = (itemType == "Quest"), (pM == "You create: "), (pM == "You receive item: ")
-    local self_looted = (pM == "You receive loot: ") or bought
-    
-    if (ct.lootitems and self_looted and quality >= itemsquality) or (quest and ct.questitems) or (crafted and ct.crafteditems) and then
-        local r, g, b = GetItemQualityColor(quality)
-        
-        -- Type and Item Name
-        local s = "Received: ["..iN.."] "
-        if bought then
-            s = "Purchased: ["..iN.."] "
-        elseif crafted then
-            if ct.crafteditems == false then return end     -- hide crafted items if show is set to false
-            s = "Crafted: ["..iN.."] "
-        elseif quest then
-            if ct.questitems == false then return end       -- hide quest items if show is set to false
-            s = "Quest Item: ["..iN.."] "
+    local quest, crafted, looted, bought = (itemType == "Quest"), (pM == "You create: "), (pM == "You receive loot: "), (pM == "You receive item: ")
+    if looted or bought or crafted then
+        if (ct.crafteditems and crafted) or (ct.questitems and quest) or (ct.itemsquality <= quality) then
+            local r, g, b = GetItemQualityColor(quality)
+
+            -- Type and Item Name
+            local s = "Received: ["..iN.."] "
+            if bought then
+                s = "Purchased: ["..iN.."] "
+            elseif crafted then
+                s = "Crafted: ["..iN.."] "
+            elseif quest then
+                s = "Quest Item: ["..iN.."] "
+            end
+		
+            -- Add the Texture
+            if ct.loothideicons then
+                s = s.."   "
+            else
+                s = s.."\124T"..icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
+            end
+		
+            -- Amount Looted
+            local amount = tonumber(iA)
+            if amount and amount > 1 then
+                s = s.."x"..amount
+            else
+                amount = 1
+                s = s.."x1"
+            end
+		
+            -- Items purchased seem to get to your bags faster than looted items
+            if bought then amount = 0 end
+		
+            -- Total items in bag (See comment above)
+            if ct.itemstotal then
+                s = s.."  ("..(GetItemCount(iI) + amount).. ")"
+            end
+		
+            -- Add the message
+            xCT3:AddMessage(s, r, g, b)
         end
-    
-        -- Add the Texture
-        if ct.loothideicons then
-            s = s.."   "
-        else
-            s = s.."\124T"..icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
-        end
-    
-        -- Amount Looted
-        local amount = tonumber(iA)
-        if amount and amount > 1 then
-            s = s.." x "..amount
-        else
-            amount = 1
-            s = s.." x 1"
-        end
-    
-        -- Items purchased seem to get to your bags faster than looted items
-        if bought then amount = 0 end
-    
-        -- Total items in bag (See comment above)
-        if ct.itemstotal then
-            s = s.."   ("..(GetItemCount(iI) + amount).. ")"
-        end
-    
-        -- Add the message
-        xCT3:AddMessage(s, r, g, b)
     end
 end
 
@@ -1013,10 +1021,11 @@ if(ct.damage)then
 
     local dmg = function(self, event, ...) 
         local msg, icon
-        local timestamp, eventType, dump1, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags = select(1,...)
+        local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, srcFlags2, destGUID, destName, destFlags, destFlags2 = select(1,...)
         if (sourceGUID == ct.pguid and destGUID ~= ct.pguid) or (sourceGUID == UnitGUID("pet") and ct.petdamage) or (sourceFlags == gflags) then
             if eventType=="SWING_DAMAGE" then
-                local amount, _, _, _, _, _, critical = select(10, ...)
+				-- 4.2
+                local amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     msg = amount
                     if critical then
@@ -1034,7 +1043,8 @@ if(ct.damage)then
                 end
                 
             elseif eventType == "RANGE_DAMAGE" then
-                local spellId, _, _, amount, _, _, _, _, _, critical = select(10, ...)
+				-- 4.2
+                local spellId, _, _, amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     msg = amount
                     if critical then
@@ -1048,7 +1058,8 @@ if(ct.damage)then
                 end
     
             elseif eventType == "SPELL_DAMAGE" or (eventType == "SPELL_PERIODIC_DAMAGE" and ct.dotdamage) then
-                local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(10, ...)
+				-- 4.2
+                local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     local color = { }
                     local rawamount = amount
@@ -1090,7 +1101,8 @@ if(ct.damage)then
                 end
     
             elseif eventType == "SWING_MISSED" then
-                local missType, _ = select(10, ...)
+				-- 4.2
+                local missType, _ = select(12, ...)
                 if ct.icons then
                     if sourceGUID == UnitGUID("pet") or sourceFlags == gflags then
                         icon = PET_ATTACK_TEXTURE
@@ -1102,7 +1114,8 @@ if(ct.damage)then
                 xCT4:AddMessage(missType)
     
             elseif eventType == "SPELL_MISSED" or eventType == "RANGE_MISSED" then
-                local spellId, _, _, missType, _ = select(10, ...)
+				-- 4.2
+                local spellId, _, _, missType, _ = select(12, ...)
                 if ct.icons then
                     icon = GetSpellTexture(spellId)
                     missType = missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
@@ -1110,7 +1123,8 @@ if(ct.damage)then
                 xCT4:AddMessage(missType)
     
             elseif eventType == "SPELL_DISPEL" and ct.dispel then
-                local target, _, _, id, effect, _, etype = select(10, ...)
+				-- 4.2
+                local target, _, _, id, effect, _, etype = select(12, ...)
                 local color
                 if ct.icons then
                     icon = GetSpellTexture(id)
@@ -1130,9 +1144,10 @@ if(ct.damage)then
                 xCT3:AddMessage(ACTION_SPELL_DISPEL..": "..effect..msg, unpack(color))
                 
             elseif eventType == "SPELL_INTERRUPT" and ct.interrupt then
-                local target,_, _, id, effect = select(10,...)
-                local color={1,.5,0}
-                if(ct.icons)then
+				-- 4.2
+                local target, _, _, id, effect = select(12, ...)
+                local color = { 1, .5, 0}
+                if ct.icons then
                     icon = GetSpellTexture(id)
                 end
                 if icon then
@@ -1144,28 +1159,18 @@ if(ct.damage)then
                 end
                 xCT3:AddMessage(ACTION_SPELL_INTERRUPT..": "..effect..msg, unpack(color))
             elseif eventType == "PARTY_KILL" and ct.killingblow then
-                local tname = select(8, ...)
+				-- 4.2
+                local tname = select(9, ...)
                 xCT3:AddMessage(ACTION_PARTY_KILL..": "..tname, .2, 1, .2)
             end
             
         end
     end
     
-    -- Create a Proxy event to filter unwanted arguments
-    local dmg_proxy = function(self, event, timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, srcFlags2, destGUID, destName, destFlags, destFlags2, ...) 
-            -- Drop srcFlags2 and destFlags2 from the arguements
-            dmg(self, event, timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, ...)
-        end
-    
     xCTd:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    
-    if tonumber((select(4, GetBuildInfo()))) >= 40200 then
-        -- this is version 4.2 or greater, call proxy
-        xCTd:SetScript("OnEvent", dmg_proxy)
-    else
-        -- this is pre 4.2, call normal
-        xCTd:SetScript("OnEvent", dmg)
-    end
+	
+	-- this is corrected for 4.2, call normal
+	xCTd:SetScript("OnEvent", dmg)
 end
 
 -- healing
@@ -1177,11 +1182,11 @@ if(ct.healing)then
     end
     local heal = function(self, event, ...)
         local msg, icon
-        local timestamp, eventType, dump1, sourceGUID, sourceName, sourceFlags, destGUID, destName, destFlags = select(1, ...)
+        local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2 = select(1, ...)
         if sourceGUID == ct.pguid or sourceFlags == gflags then
             if eventType == 'SPELL_HEAL' or eventType == 'SPELL_PERIODIC_HEAL' and ct.showhots then
                 if ct.healing then
-                    local spellId, spellName, spellSchool, amount, overhealing, absorbed, critical = select(10, ...)
+                    local spellId, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
                     if ct.healfilter[spellId] then
                         return
                     end
@@ -1222,19 +1227,9 @@ if(ct.healing)then
             end
         end
     end
-    -- Create a Proxy event to filter unwanted arguments
-    local heal_proxy = function(self, event, timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, srcFlags2, destGUID, destName, destFlags, destFlags2, ...) 
-            -- Drop srcFlags2 and destFlags2 from the arguements
-            heal(self, event, timestamp, eventType, hideCaster, srcGUID, srcName, srcFlags, destGUID, destName, destFlags, ...)
-        end
-    
+
     xCTh:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    
-    if tonumber((select(4, GetBuildInfo()))) >= 40200 then
-        -- this is version 4.2 or greater, call proxy
-        xCTh:SetScript("OnEvent", heal_proxy)
-    else
-        -- this is pre 4.2, call normal
-        xCTh:SetScript("OnEvent", heal)
-    end
+
+	-- this is corrected for 4.2, call normal
+	xCTh:SetScript("OnEvent", heal)
 end
