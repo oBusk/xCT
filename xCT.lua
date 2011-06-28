@@ -242,33 +242,18 @@ local function ScrollDirection()
     end
 end
 
-
--- test
--- You receive loot: |cffffffff|Hitem:22644:0:0:0:0:0:-34534534:85:0|h[Crunchy Spider Leg]|h|r x10
-
 -- regex string for loot items
---  Example, "local pM, iQ, iI, iN, iA = select(3,string.find(msg, PAR_L_I))" returns:
---      - pM = (String)Pre-Message (e.g. "You Looted: ")
---      - iQ = (Int)Item Quality Color (e.g. FFFFFF = Common)
---      - iI = (Int)Item ID
---      - iN = (String)Item Name
---      - iA = (Int)Amount Collected (Usually blank if one)
---local PAR_L_I = "([^|]*)|?c?f?f?(%x*)|?H?[^:]*:?(-?%d+):[?(-?%d+):]+|?h?%[?([^%[%]]*)%]?|?h?|?r?%s?x?(%d*)%.?"
-
--- dandruff added this
 local PAR_L_I = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
 
 -- loot events
 function ChatMsgMoney_Handler(msg)
-    -- Cimplex: version 1.9 beta 2 (NEED TO TEST: this in a guild run)!!!!
     local g, s, c = tonumber(msg:match("(%d+) Gold")), tonumber(msg:match("(%d+) Silver")), tonumber(msg:match("(%d+) Copper"))
-    -- Cimplex>
-    local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), "Money:   "
-    if money > ct.minmoney then
-        if ct.moneycolorblind then 
-            o = o..(g and g.." G   " or "")..(s and s.." S   " or "")..(c and c.." C   " or "")
+    local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), "Money: "
+    if money >= ct.minmoney then
+        if ct.moneycolorblind then
+            o = o..(g and g.." G " or "")..(s and s.." S " or "")..(c and c.." C " or "")
         else
-            o = o..GetCoinTextureString(money).."   "
+            o = o..GetCoinTextureString(money).." "
         end
         if msg:find("share") then o = o.."(split)" end
         xCT3:AddMessage(o, 1, 1, 0) -- yellow
@@ -278,48 +263,50 @@ end
 function ChatMsgLoot_Handler(msg)
     local pM, iQ, iI, iN, iA = select(3, string.find(msg, PAR_L_I))
     local quality, _, _, itemType, _, _, _, icon = select(3, GetItemInfo(iI))
-    local quest, crafted, looted, bought = (itemType == "Quest"), (pM == "You create: "), (pM == "You receive loot: "), (pM == "You receive item: ")
-    if looted or bought or crafted then
-        if (ct.crafteditems and crafted) or (ct.questitems and quest) or (ct.itemsquality <= quality) then
-            local r, g, b = GetItemQualityColor(quality)
-
-            -- Type and Item Name
-            local s = "Received: ["..iN.."] "
-            if bought then
-                s = "Purchased: ["..iN.."] "
-            elseif crafted then
-                s = "Crafted: ["..iN.."] "
-            elseif quest then
-                s = "Quest Item: ["..iN.."] "
-            end
-		
-            -- Add the Texture
-            if ct.loothideicons then
-                s = s.."   "
-            else
-                s = s.."\124T"..icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
-            end
-		
-            -- Amount Looted
-            local amount = tonumber(iA)
-            if amount and amount > 1 then
-                s = s.."x"..amount
-            else
-                amount = 1
-                s = s.."x1"
-            end
-		
-            -- Items purchased seem to get to your bags faster than looted items
-            if bought then amount = 0 end
-		
-            -- Total items in bag (See comment above)
-            if ct.itemstotal then
-                s = s.."  ("..(GetItemCount(iI) + amount).. ")"
-            end
-		
-            -- Add the message
-            xCT3:AddMessage(s, r, g, b)
+    local quest, crafted, bought = (itemType == "Quest"), (pM == "You create: "), (pM == "You receive item: ")
+    local self_looted = (pM == "You receive loot: ") or bought
+    
+    if (ct.lootitems and self_looted and quality >= itemsquality) or (quest and ct.questitems) or (crafted and ct.crafteditems) and then
+        local r, g, b = GetItemQualityColor(quality)
+        
+        -- Type and Item Name
+        local s = "Received: ["..iN.."] "
+        if bought then
+            s = "Purchased: ["..iN.."] "
+        elseif crafted then
+            if ct.crafteditems == false then return end -- hide crafted items if show is set to false
+            s = "Crafted: ["..iN.."] "
+        elseif quest then
+            if ct.questitems == false then return end -- hide quest items if show is set to false
+            s = "Quest Item: ["..iN.."] "
         end
+    
+        -- Add the Texture
+        if ct.loothideicons then
+            s = s.." "
+        else
+            s = s.."\124T"..icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
+        end
+    
+        -- Amount Looted
+        local amount = tonumber(iA)
+        if amount and amount > 1 then
+            s = s.." x "..amount
+        else
+            amount = 1
+            s = s.." x 1"
+        end
+    
+        -- Items purchased seem to get to your bags faster than looted items
+        if bought then amount = 0 end
+    
+        -- Total items in bag (See comment above)
+        if ct.itemstotal then
+            s = s.." ("..(GetItemCount(iI) + amount).. ")"
+        end
+    
+        -- Add the message
+        xCT3:AddMessage(s, r, g, b)
     end
 end
 
