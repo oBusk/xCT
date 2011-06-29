@@ -48,8 +48,8 @@ ns.config = {
 
 
     -- display looted items (set both to false to revert changes and go back to the original xCT)
-        ["lootitems"]       = true,  -- show all looted items
-        ["lootmoney"]       = true,  -- Display looted money
+        ["lootitems"]       = false,  -- show all looted items
+        ["lootmoney"]       = false,  -- Display looted money
         
     -- fine tune loot options
         ["loothideicons"]   = true,  -- show item icons when looted
