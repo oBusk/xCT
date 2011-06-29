@@ -266,7 +266,7 @@ function ChatMsgLoot_Handler(msg)
     local quest, crafted, bought = (itemType == "Quest"), (pM == "You create: "), (pM == "You receive item: ")
     local self_looted = (pM == "You receive loot: ") or bought
     
-    if (ct.lootitems and self_looted and quality >= itemsquality) or (quest and ct.questitems) or (crafted and ct.crafteditems) then
+    if (ct.lootitems and self_looted and quality >= ct.itemsquality) or (quest and ct.questitems) or (crafted and ct.crafteditems) then
         local r, g, b = GetItemQualityColor(quality)
         
         -- Type and Item Name
