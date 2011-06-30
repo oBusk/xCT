@@ -11,7 +11,7 @@ ns.config = {
         ["damage"]       = true,  -- show outgoing damage in it's own frame
         ["healing"]      = true,  -- show outgoing healing in it's own frame
         ["showhots"]     = true,  -- show periodic healing effects in xCT healing frame.
-        ["damagecolor"]  = true,  -- display damage numbers depending on school of magic, see http://www.wowwiki.com/API_COMBAT_LOG_EVENT
+        ["damagecolor"]  = true,  -- display damage numbers depending on school of magic, see http://www.wowpedia.org/API_COMBAT_LOG_EVENT
         ["critprefix"]   = "|cffFF0000*|r", -- symbol that will be added before amount, if you deal critical strike/heal. leave "" for empty. default is red *
         ["critpostfix"]  = "|cffFF0000*|r", -- postfix symbol, "" for empty.
         ["icons"]        = true,  -- show outgoing damage icons
@@ -48,15 +48,15 @@ ns.config = {
 
 
     -- display looted items (set both to false to revert changes and go back to the original xCT)
-        ["lootitems"]       = false,  -- show all looted items
-        ["lootmoney"]       = false,  -- Display looted money
+        ["lootitems"]       = true,  -- show all looted items
+        ["lootmoney"]       = true,  -- Display looted money
         
     -- fine tune loot options
-        ["loothideicons"]   = true,  -- show item icons when looted
+        ["loothideicons"]   = false,  -- show item icons when looted
         ["looticonsize"]    = 20,    -- Icon size of looted, crafted and quest items
-        ["crafteditems"]    = nil,   -- show crafted items ( nil = default, false = always hide, true = always show)
-        ["questitems"]      = nil,   -- show quest items ( nil = default, false = always hide, true = always show)
-        ["itemsquality"]    = 0,     -- filter items shown by item quality: 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
+        ["crafteditems"]    = true,   -- show crafted items ( nil = default, false = always hide, true = always show)
+        ["questitems"]      = true,   -- show quest items ( nil = default, false = always hide, true = always show)
+        ["itemsquality"]    = 3,     -- filter items shown by item quality: 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
         ["itemstotal"]      = true,  -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)")
         ["moneycolorblind"] = false, -- shows letters G, S, and C instead of textures
         ["minmoney"]        = 0,     -- filter money received events, less than this amount (4G 32S 12C = 43212)
