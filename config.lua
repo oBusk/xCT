@@ -60,4 +60,7 @@ ns.config = {
         ["itemstotal"]      = true,  -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)")
         ["moneycolorblind"] = false, -- shows letters G, S, and C instead of textures
         ["minmoney"]        = 0,     -- filter money received events, less than this amount (4G 32S 12C = 43212)
+
+    -- Align Grid
+        ["showgrid"] = true,         -- shows a grid when moving xCT windows around
 }
