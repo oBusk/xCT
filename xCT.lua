@@ -242,6 +242,97 @@ local function ScrollDirection()
     end
 end
 
+local AlignGrid		-- You can now align your xCT exactly
+
+local function AlignGridShow()
+	AlignGrid = CreateFrame('Frame', nil, UIParent)
+	AlignGrid:SetAllPoints(UIParent)
+	local boxSize = 32
+	
+	-- Get the current screen resolution, Mid-points, and the total number of lines
+	local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+	local midX, midY = ResX / 2, ResY / 2
+	local iLinesLeftRight, iLinesTopBottom = midX / boxSize , midY / boxSize
+	
+	-- Vertical Bars
+	for i = 1, iLinesLeftRight do
+		-- Vertical Bars to the Left of the Center
+		local textureLeft = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+		if i % 4 == 0 then
+			textureLeft:SetTexture(.3, .3, .3, .8) 
+		elseif i % 2 == 0 then
+			textureLeft:SetTexture(.1, .1, .1, .8) 
+		else
+			textureLeft:SetTexture(0, 0, 0, .8) 
+		end
+		textureLeft:SetPoint('TOP', AlignGrid, 'TOP', -i * boxSize - 1, 0)
+		textureLeft:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -i * boxSize - 1, 0)
+		textureLeft:SetWidth(1)
+		
+		-- Vertical Bars to the Right of the Center
+		local textureRight = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+		if i % 4 == 0 then
+			textureRight:SetTexture(.3, .3, .3, .8) 
+		elseif i % 2 == 0 then
+			textureRight:SetTexture(.1, .1, .1, .8) 
+		else
+			textureRight:SetTexture(0, 0, 0, .8) 
+		end
+		textureRight:SetPoint('TOP', AlignGrid, 'TOP', i * boxSize, 0)
+		textureRight:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', i * boxSize, 0)
+		textureRight:SetWidth(1)
+	end
+	
+	-- Horizontal Bars
+	for i = 1, iLinesTopBottom do
+		-- Horizontal Bars to the Below of the Center
+		local textureBelow = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+		if i % 4 == 0 then
+			textureBelow:SetTexture(.3, .3, .3, .8) 
+		elseif i % 2 == 0 then
+			textureBelow:SetTexture(.1, .1, .1, .8) 
+		else
+			textureBelow:SetTexture(0, 0, 0, .8) 
+		end
+		textureBelow:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize - 1)
+		textureBelow:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize - 1)
+		textureBelow:SetHeight(1)
+		
+		-- Vertical Bars to the Above of the Center
+		local textureAbove = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+		if i % 4 == 0 then
+			textureAbove:SetTexture(.3, .3, .3, .8) 
+		elseif i % 2 == 0 then
+			textureAbove:SetTexture(.1, .1, .1, .8) 
+		else
+			textureAbove:SetTexture(0, 0, 0, .8) 
+		end
+		textureAbove:SetPoint('LEFT', AlignGrid, 'LEFT', 0, i * boxSize)
+		textureAbove:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, i * boxSize)
+		textureAbove:SetHeight(1)
+	end
+	
+	
+	--Create the Vertical Middle Bar
+	local textureVertMid = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+	textureVertMid:SetTexture(1, 0, 0, .6)
+	textureVertMid:SetPoint('TOP', AlignGrid, 'TOP', -1, 0)
+	textureVertMid:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -1, 0)
+	textureVertMid:SetWidth(2)
+	
+	--Create the Horizontal Middle Bar
+	local textureVertMid = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+	textureVertMid:SetTexture(1, 0, 0, .6)
+	textureVertMid:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -1)
+	textureVertMid:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -1)
+	textureVertMid:SetHeight(2)
+end
+
+local function AlignGridKill()
+	AlignGrid:Kill()
+end
+
+
 -- regex string for loot items
 local PAR_L_I = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
 
@@ -774,6 +865,12 @@ local StartConfigmode = function()
             f:SetScript("OnDragStop", f.StopMovingOrSizing)
             ct.locked = false
         end
+
+        -- also show the align grid during config
+        if ct.showgrid then
+            AlignGridShow()
+        end
+
         pr("unlocked.")
     else
         pr("can't be configured in combat.")
@@ -796,6 +893,12 @@ local function EndConfigmode()
         f:SetScript("OnDragStop", nil)
     end
     ct.locked = true
+
+    -- Kill align grid
+    if ct.showgrid then
+        AlignGridKill()
+    end
+
     pr("Window positions unsaved, don't forget to reload UI.")
 end
 
