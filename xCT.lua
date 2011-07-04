@@ -190,11 +190,29 @@ end
 
 
 --do not edit below unless you know what you are doing
-local numf
+
+--[[   --- xCT Frames ---
+    xCT1 = Damage Taken
+    xCT2 = Healing Taken
+    xCT3 = General
+    xCT4 = Damage Done
+    xCT5 = Loot
+]]--
+
+local xCTdmg, xCTheal, xCTgen, xCTdone, xCTloot 
+local numf = 3
+local framenames = { "dmg", "heal", "gen" }
+
+-- Add window for separate damage and healing windows
 if ct.damage or ct.healing then
-    numf=4
-else
-    numf=3
+    numf = numf + 1     -- 4
+    framenames[numf] = "done"
+end
+
+-- Add window for loot events
+if ct.lootwindow then
+	numf = numf + 1     -- 5
+    framenames[numf] = "loot"
 end
 
 -- detect vechile
@@ -339,7 +357,7 @@ local PAR_L_I = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x
 -- loot events
 function ChatMsgMoney_Handler(msg)
     local g, s, c = tonumber(msg:match("(%d+) Gold")), tonumber(msg:match("(%d+) Silver")), tonumber(msg:match("(%d+) Copper"))
-    local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), "Money: "
+    local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), MONEY .. ": "
     if money >= ct.minmoney then
         if ct.moneycolorblind then
             o = o..(g and g.." G " or "")..(s and s.." S " or "")..(c and c.." C " or "")
@@ -347,7 +365,7 @@ function ChatMsgMoney_Handler(msg)
             o = o..GetCoinTextureString(money).." "
         end
         if msg:find("share") then o = o.."(split)" end
-        xCT3:AddMessage(o, 1, 1, 0) -- yellow
+        (xCTloot or xCT3):AddMessage(o, 1, 1, 0) -- yellow
     end
 end
 
@@ -397,7 +415,7 @@ function ChatMsgLoot_Handler(msg)
         end
     
         -- Add the message
-        xCT3:AddMessage(s, r, g, b)
+        (xCTloot or xCT3):AddMessage(s, r, g, b)
     end
 end
 
@@ -715,17 +733,17 @@ for i = 1, numf do
     f:SetMaxResize(768, 768)
     f:SetClampedToScreen(true)
     f:SetClampRectInsets(0, 0, ct.fontsize, 0)
-    if i == 1 then
+    if framenames[i] == "dmg" then
         f:SetJustifyH(ct.justify_1)
         f:SetPoint("CENTER", -192, -32)
-    elseif i == 2 then
+    elseif framenames[i] == "heal" then
         f:SetJustifyH(ct.justify_2)
         f:SetPoint("CENTER", 192, -32)
-    elseif i == 3 then
+    elseif framenames[i] == "gen" then
         f:SetJustifyH(ct.justify_3)
         f:SetWidth(256)
         f:SetPoint("CENTER", 0, 192)
-    else
+    elseif framenames[i] == "done" then
         f:SetJustifyH(ct.justify_4)
         f:SetPoint("CENTER", 320, 0)
         local a, _, c = f:GetFont()
@@ -735,9 +753,23 @@ for i = 1, numf do
             end
         elseif type(ct.damagefontsize) == "number" then
             f:SetFont(a, ct.damagefontsize, c)
-        end   
+        end
+    else -- loot
+        f:SetTimeVisible(ct.loottimevisible)
+        f:SetJustifyH(ct.justify_3)
+        f:SetWidth(256)
+        f:SetPoint("CENTER", 320, 192)
     end
     ct.frames[i] = f
+    
+    --[[ xCTdmg, xCTheal, xCTgen, xCTdone, xCTloot
+    this is what it is supposed to be:
+    _G[ "xCT" .. framenames[i] ] = f
+    ]]
+    
+    if framenames[i] == "loot" then
+        xCTloot = f
+    end
 end
 
 -- register events
@@ -805,7 +837,7 @@ end
 local StartConfigmode = function()
     if not InCombatLockdown() then
         for i = 1, #ct.frames do
-            f = ct.frames[i]
+            local f = ct.frames[i]
             f:SetBackdrop( { bgFile   = "Interface/Tooltips/UI-Tooltip-Background",
                              edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
                              tile     = false,
@@ -819,18 +851,21 @@ local StartConfigmode = function()
             f.fs = f:CreateFontString(nil, "OVERLAY")
             f.fs:SetFont(ct.font, ct.fontsize, ct.fontstyle)
             f.fs:SetPoint("BOTTOM", f, "TOP", 0, 0)
-            if i == 1 then
+            if framenames[i] == "dmg" then
                 f.fs:SetText(DAMAGE)
                 f.fs:SetTextColor(1, .1, .1, .9)
-            elseif i == 2 then
+            elseif framenames[i] == "heal" then
                 f.fs:SetText(SHOW_COMBAT_HEALING)
                 f.fs:SetTextColor(.1,1,.1,.9)
-            elseif i == 3 then
+            elseif framenames[i] == "gen" then
                 f.fs:SetText(COMBAT_TEXT_LABEL)
                 f.fs:SetTextColor(.1,.1,1,.9)
-            else
+            elseif framenames[i] == "done" then
                 f.fs:SetText(SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE)
                 f.fs:SetTextColor(1,1,0,.9)
+            else
+                f.fs:SetText(LOOT)
+                f.fs:SetTextColor(1,1,1,.9)
             end
 
             f.t=f:CreateTexture"ARTWORK"
@@ -852,6 +887,49 @@ local StartConfigmode = function()
             f.tr:SetPoint("TOPRIGHT", f, "TOPRIGHT", 0, 0)
             f.tr:SetHeight(20)
 
+            -- font string Position (location)
+			f.fsp = f:CreateFontString(nil, "OVERLAY")
+			f.fsp:SetFont(ct.font, ct.fontsize, ct.fontstyle)
+            f.fsp:SetPoint("TOPLEFT", f, "TOPLEFT", 3, -3)
+			f.fsp:SetText("")
+			f.fsp:Hide()
+			
+            -- font string width
+            f.fsw = f:CreateFontString(nil, "OVERLAY")
+			f.fsw:SetFont(ct.font, ct.fontsize, ct.fontstyle)
+            f.fsw:SetPoint("BOTTOM", f, "BOTTOM", 0, 0)
+			f.fsw:SetText("")
+			f.fsw:Hide()
+            
+            -- font string height
+            f.fsh = f:CreateFontString(nil, "OVERLAY")
+			f.fsh:SetFont(ct.font, ct.fontsize, ct.fontstyle)
+            f.fsh:SetPoint("LEFT", f, "LEFT", 3, 0)
+			f.fsh:SetText("")
+			f.fsh:Hide()
+            
+			local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+			local midX, midY = ResX / 2, ResY / 2
+			
+			f:SetScript("OnLeave", function(...)
+					f:SetScript("OnUpdate", nil)
+					f.fsp:Hide()
+                    f.fsw:Hide()
+                    f.fsh:Hide()
+				end)
+			f:SetScript("OnEnter", function(...)
+					f:SetScript("OnUpdate", function(...)
+							f.fsp:SetText(math.floor(f:GetLeft() - midX + 1) .. ", " .. math.floor(f:GetTop() - midY + 2))
+                            f.fsw:SetText(math.floor(f:GetWidth()))
+                            f.fsh:SetText(math.floor(f:GetHeight()))
+						end)
+					f.fsp:Show()
+                    f.fsw:Show()
+                    f.fsh:Show()
+				end)
+			
+			
+			
             f:EnableMouse(true)
             f:RegisterForDrag("LeftButton")
             f:SetScript("OnDragStart", f.StartSizing)
@@ -865,12 +943,10 @@ local StartConfigmode = function()
             f:SetScript("OnDragStop", f.StopMovingOrSizing)
             ct.locked = false
         end
-
-        -- also show the align grid during config
-        if ct.showgrid then
-            AlignGridShow()
-        end
-
+		
+		-- also show the align grid during config
+		AlignGridShow()
+		
         pr("unlocked.")
     else
         pr("can't be configured in combat.")
@@ -925,13 +1001,13 @@ local function StartTestMode()
                 UpdateInterval = random(65, 1000) / 250
                 TimeSinceLastUpdate = TimeSinceLastUpdate + elapsed
                 if TimeSinceLastUpdate > UpdateInterval then
-                    if i == 1 then
+                    if framenames[i] == "dmg" then
                         ct.frames[i]:AddMessage("-"..random(100000), 1, random(255) / 255, random(255) / 255)
-                    elseif i == 2 then
+                    elseif framenames[i] == "heal" then
                         ct.frames[i]:AddMessage("+"..random(50000), .1, random(128, 255) / 255, .1)
-                    elseif i == 3 then
+                    elseif framenames[i] == "gen" then
                         ct.frames[i]:AddMessage(COMBAT_TEXT_LABEL, random(255) / 255, random(255) / 255, random(255) / 255)
-                    elseif i == 4 then
+                    elseif framenames[i] == "done" then
                         local msg
                         local icon
                         local color = { }
@@ -952,7 +1028,15 @@ local function StartTestMode()
                             color={ 1, 1, random(0, 1) }
                         end
                         ct.frames[i]:AddMessage(msg, unpack(color))
+                    
+                    elseif framenames[i] == "loot" then
+                    
+                        if random(3) % 3 == 0 then
+                            local money = random(1000000)
+                            ct.frames[i]:AddMessage(MONEY .. ": " .. GetCoinTextureString(money), 1, 1, 0) -- yellow
+                        end
                     end
+                    
                     TimeSinceLastUpdate = 0
                 end
             end)        
