@@ -48,18 +48,20 @@ ns.config = {
 
 
     -- display looted items (set both to false to revert changes and go back to the original xCT)
-        ["lootitems"]       = true,  -- show all looted items
-        ["lootmoney"]       = true,  -- Display looted money
+        ["lootwindow"]      = true,   -- different loot window (if false, goes into general events window)
+        ["lootitems"]       = true,   -- show all looted items
+        ["lootmoney"]       = true,   -- Display looted money
+        ["loottimevisible"] = 6,      -- the ammount of time in seconds your loot message is displayed (6 seems good, ["lootwindow"] needs to be true)  
         
     -- fine tune loot options
         ["loothideicons"]   = false,  -- show item icons when looted
-        ["looticonsize"]    = 20,    -- Icon size of looted, crafted and quest items
+        ["looticonsize"]    = 20,     -- Icon size of looted, crafted and quest items
         ["crafteditems"]    = true,   -- show crafted items ( nil = default, false = always hide, true = always show)
         ["questitems"]      = true,   -- show quest items ( nil = default, false = always hide, true = always show)
-        ["itemsquality"]    = 3,     -- filter items shown by item quality: 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
-        ["itemstotal"]      = true,  -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)")
-        ["moneycolorblind"] = false, -- shows letters G, S, and C instead of textures
-        ["minmoney"]        = 0,     -- filter money received events, less than this amount (4G 32S 12C = 43212)
+        ["itemsquality"]    = 3,      -- filter items shown by item quality: 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
+        ["itemstotal"]      = true,   -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)")
+        ["moneycolorblind"] = false,  -- shows letters G, S, and C instead of textures
+        ["minmoney"]        = 0,      -- filter money received events, less than this amount (4G 32S 12C = 43212)
 
     -- Align Grid
         ["showgrid"] = true,         -- shows a grid when moving xCT windows around
