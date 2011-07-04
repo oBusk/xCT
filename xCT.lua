@@ -356,7 +356,7 @@ local PAR_L_I = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x
 
 -- loot events
 function ChatMsgMoney_Handler(msg)
-    local g, s, c = tonumber(msg:match("(%d+) Gold")), tonumber(msg:match("(%d+) Silver")), tonumber(msg:match("(%d+) Copper"))
+    local g, s, c = tonumber(msg:match(GOLD_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(SILVER_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(COPPER_AMOUNT:gsub("%%d", "(%%d+)")))
     local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), MONEY .. ": "
     if money >= ct.minmoney then
         if ct.moneycolorblind then
@@ -364,7 +364,7 @@ function ChatMsgMoney_Handler(msg)
         else
             o = o..GetCoinTextureString(money).." "
         end
-        if msg:find("share") then o = o.."(split)" end
+        --if msg:find("share") then o = o.."(split)" end
         (xCTloot or xCT3):AddMessage(o, 1, 1, 0) -- yellow
     end
 end
@@ -372,8 +372,8 @@ end
 function ChatMsgLoot_Handler(msg)
     local pM, iQ, iI, iN, iA = select(3, string.find(msg, PAR_L_I))
     local quality, _, _, itemType, _, _, _, icon = select(3, GetItemInfo(iI))
-    local quest, crafted, bought = (itemType == "Quest"), (pM == "You create: "), (pM == "You receive item: ")
-    local self_looted = (pM == "You receive loot: ") or bought
+    local quest, crafted, bought = (itemType == "Quest"), (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", "")), (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", ""))
+    local self_looted = (pM == LOOT_ITEM_SELF:gsub("%%.*", "")) or bought
     
     if (ct.lootitems and self_looted and quality >= ct.itemsquality) or (quest and ct.questitems) or (crafted and ct.crafteditems) then
         local r, g, b = GetItemQualityColor(quality)
