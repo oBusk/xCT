@@ -60,7 +60,7 @@ ns.config = {
         ["questitems"]      = true,   -- show quest items ( nil = default, false = always hide, true = always show)
         ["itemsquality"]    = 3,      -- filter items shown by item quality: 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
         ["itemstotal"]      = true,   -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)")
-        ["moneycolorblind"] = false,  -- shows letters G, S, and C instead of textures
+        ["colorblind"]      = false,  -- shows letters G, S, and C instead of textures
         ["minmoney"]        = 0,      -- filter money received events, less than this amount (4G 32S 12C = 43212)
 
     -- Align Grid

@@ -190,16 +190,6 @@ end
 
 
 --do not edit below unless you know what you are doing
-
---[[   --- xCT Frames ---
-    xCT1 = Damage Taken
-    xCT2 = Healing Taken
-    xCT3 = General
-    xCT4 = Damage Done
-    xCT5 = Loot
-]]--
-
-local xCTdmg, xCTheal, xCTgen, xCTdone, xCTloot 
 local numf = 3
 local framenames = { "dmg", "heal", "gen" }
 
@@ -215,6 +205,16 @@ if ct.lootwindow then
     framenames[numf] = "loot"
 end
 
+-- Create your own frame
+--[[
+if ct.custom_frame_enable then
+    numf = numf + 1     -- 6
+    framenames[numf] = "custom"
+end
+]]
+--xCTcustom:AddMessage("Message...", 1, 1, 1)
+
+
 -- detect vechile
 local function SetUnit()
     if UnitHasVehicleUI("player") then
@@ -228,7 +228,7 @@ end
 --limit lines
 local function LimitLines()
     for i = 1, #ct.frames do
-        f = ct.frames[i]
+        local f = ct.frames[i]
         f:SetMaxLines(f:GetHeight() / ct.fontsize)
     end
 end
@@ -260,7 +260,8 @@ local function ScrollDirection()
     end
 end
 
-local AlignGrid		-- You can now align your xCT exactly
+-- Load on demand frame (no memory used when not needed)
+local AlignGrid
 
 local function AlignGridShow()
 	AlignGrid = CreateFrame('Frame', nil, UIParent)
@@ -275,75 +276,74 @@ local function AlignGridShow()
 	-- Vertical Bars
 	for i = 1, iLinesLeftRight do
 		-- Vertical Bars to the Left of the Center
-		local textureLeft = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+		local tt1 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
 		if i % 4 == 0 then
-			textureLeft:SetTexture(.3, .3, .3, .8) 
+			tt1:SetTexture(.3, .3, .3, .8) 
 		elseif i % 2 == 0 then
-			textureLeft:SetTexture(.1, .1, .1, .8) 
+			tt1:SetTexture(.1, .1, .1, .8) 
 		else
-			textureLeft:SetTexture(0, 0, 0, .8) 
+			tt1:SetTexture(0, 0, 0, .8) 
 		end
-		textureLeft:SetPoint('TOP', AlignGrid, 'TOP', -i * boxSize - 1, 0)
-		textureLeft:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -i * boxSize - 1, 0)
-		textureLeft:SetWidth(1)
+		tt1:SetPoint('TOP', AlignGrid, 'TOP', -i * boxSize, 0)
+		tt1:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -i * boxSize, 0)
+		tt1:SetWidth(1)
 		
 		-- Vertical Bars to the Right of the Center
-		local textureRight = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+		local tt2 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
 		if i % 4 == 0 then
-			textureRight:SetTexture(.3, .3, .3, .8) 
+			tt2:SetTexture(.3, .3, .3, .8) 
 		elseif i % 2 == 0 then
-			textureRight:SetTexture(.1, .1, .1, .8) 
+			tt2:SetTexture(.1, .1, .1, .8) 
 		else
-			textureRight:SetTexture(0, 0, 0, .8) 
+			tt2:SetTexture(0, 0, 0, .8) 
 		end
-		textureRight:SetPoint('TOP', AlignGrid, 'TOP', i * boxSize, 0)
-		textureRight:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', i * boxSize, 0)
-		textureRight:SetWidth(1)
+		tt2:SetPoint('TOP', AlignGrid, 'TOP', i * boxSize, 0)
+		tt2:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', i * boxSize, 0)
+		tt2:SetWidth(1)
 	end
 	
 	-- Horizontal Bars
 	for i = 1, iLinesTopBottom do
 		-- Horizontal Bars to the Below of the Center
-		local textureBelow = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+		local tt3 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
 		if i % 4 == 0 then
-			textureBelow:SetTexture(.3, .3, .3, .8) 
+			tt3:SetTexture(.3, .3, .3, .8) 
 		elseif i % 2 == 0 then
-			textureBelow:SetTexture(.1, .1, .1, .8) 
+			tt3:SetTexture(.1, .1, .1, .8) 
 		else
-			textureBelow:SetTexture(0, 0, 0, .8) 
+			tt3:SetTexture(0, 0, 0, .8) 
 		end
-		textureBelow:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize - 1)
-		textureBelow:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize - 1)
-		textureBelow:SetHeight(1)
+		tt3:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize)
+		tt3:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize)
+		tt3:SetHeight(1)
 		
-		-- Vertical Bars to the Above of the Center
-		local textureAbove = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+		-- Horizontal Bars to the Above of the Center
+		local tt4 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
 		if i % 4 == 0 then
-			textureAbove:SetTexture(.3, .3, .3, .8) 
+			tt4:SetTexture(.3, .3, .3, .8) 
 		elseif i % 2 == 0 then
-			textureAbove:SetTexture(.1, .1, .1, .8) 
+			tt4:SetTexture(.1, .1, .1, .8) 
 		else
-			textureAbove:SetTexture(0, 0, 0, .8) 
+			tt4:SetTexture(0, 0, 0, .8) 
 		end
-		textureAbove:SetPoint('LEFT', AlignGrid, 'LEFT', 0, i * boxSize)
-		textureAbove:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, i * boxSize)
-		textureAbove:SetHeight(1)
+		tt4:SetPoint('LEFT', AlignGrid, 'LEFT', 0, i * boxSize)
+		tt4:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, i * boxSize)
+		tt4:SetHeight(1)
 	end
 	
-	
 	--Create the Vertical Middle Bar
-	local textureVertMid = AlignGrid:CreateTexture(nil, 'TOOLTIP')
-	textureVertMid:SetTexture(1, 0, 0, .6)
-	textureVertMid:SetPoint('TOP', AlignGrid, 'TOP', -1, 0)
-	textureVertMid:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -1, 0)
-	textureVertMid:SetWidth(2)
+	local tta = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+	tta:SetTexture(1, 0, 0, .6)
+	tta:SetPoint('TOP', AlignGrid, 'TOP', 0, 0)
+	tta:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', 0, 0)
+	tta:SetWidth(2)
 	
 	--Create the Horizontal Middle Bar
-	local textureVertMid = AlignGrid:CreateTexture(nil, 'TOOLTIP')
-	textureVertMid:SetTexture(1, 0, 0, .6)
-	textureVertMid:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -1)
-	textureVertMid:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -1)
-	textureVertMid:SetHeight(2)
+	local ttb = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+	ttb:SetTexture(1, 0, 0, .6)
+	ttb:SetPoint('LEFT', AlignGrid, 'LEFT', 0, 0)
+	ttb:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, 0)
+	ttb:SetHeight(2)
 end
 
 local function AlignGridKill()
@@ -352,70 +352,70 @@ end
 
 
 -- regex string for loot items
-local PAR_L_I = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
+local parseloot = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
+local itemQualities={'Poor','Common','Uncommon','Rare','Epic','Legendary','Artifact','Heirloom'}
+
 
 -- loot events
 function ChatMsgMoney_Handler(msg)
     local g, s, c = tonumber(msg:match(GOLD_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(SILVER_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(COPPER_AMOUNT:gsub("%%d", "(%%d+)")))
     local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), MONEY .. ": "
     if money >= ct.minmoney then
-        if ct.moneycolorblind then
+        if ct.colorblind then
             o = o..(g and g.." G " or "")..(s and s.." S " or "")..(c and c.." C " or "")
         else
             o = o..GetCoinTextureString(money).." "
         end
-        --if msg:find("share") then o = o.."(split)" end
-        (xCTloot or xCT3):AddMessage(o, 1, 1, 0) -- yellow
+        if msg:find("share") then o = o.."(split)" end
+        (xCTloot or xCTgen):AddMessage(o, 1, 1, 0) -- yellow
     end
 end
 
 function ChatMsgLoot_Handler(msg)
-    local pM, iQ, iI, iN, iA = select(3, string.find(msg, PAR_L_I))
-    local quality, _, _, itemType, _, _, _, icon = select(3, GetItemInfo(iI))
-    local quest, crafted, bought = (itemType == "Quest"), (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", "")), (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", ""))
-    local self_looted = (pM == LOOT_ITEM_SELF:gsub("%%.*", "")) or bought
+    local pM,iQ,iI,iN,iA = select(3, string.find(msg, parseloot))
+    local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))
+    local item = { ["name"] = iN,
+                   ["id"] = iI,
+                   ["amount"] = tonumber(iA),
+                   ["quality"] = qq,
+                   ["type"] = tt,
+                   ["icon"] = ic,
+                   ["crafted"] = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
+                   ["self"] = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or (pM == LOOT_ITEM_SELF:gsub("%%.*", ""))
+                 }
     
-    if (ct.lootitems and self_looted and quality >= ct.itemsquality) or (quest and ct.questitems) or (crafted and ct.crafteditems) then
-        local r, g, b = GetItemQualityColor(quality)
+    if (ct.lootitems and item.self and item.quality >= ct.itemsquality) or (item.type == "Quest" and ct.questitems) or (item.crafted and ct.crafteditems) then
+        if item.crafted and ct.crafteditems == false then return end
+        if item.type == "Quest" and ct.questitems == false then return end
         
-        -- Type and Item Name
-        local s = "Received: ["..iN.."] "
-        if bought then
-            s = "Purchased: ["..iN.."] "
-        elseif crafted then
-            if ct.crafteditems == false then return end -- hide crafted items if show is set to false
-            s = "Crafted: ["..iN.."] "
-        elseif quest then
-            if ct.questitems == false then return end -- hide quest items if show is set to false
-            s = "Quest Item: ["..iN.."] "
+        local r,g,b=GetItemQualityColor(item.quality)
+        local s=item.type..": ["..item.name.."] "
+        if ct.colorblind then
+            s = item.type.." ("..itemQualities[item.quality].."): ["..item.name.."] "
         end
-    
+        
         -- Add the Texture
-        if ct.loothideicons then
-            s = s.." "
-        else
-            s = s.."\124T"..icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
+        if not ct.loothideicons then
+            s=s.."\124T"..item.icon..":"..ct.looticonsize..":"..ct.looticonsize..":0:0:64:64:5:59:5:59\124t"
         end
     
         -- Amount Looted
-        local amount = tonumber(iA)
-        if amount and amount > 1 then
-            s = s.." x "..amount
+        if item.amount and item.amount > 1 then
+            s=s.." x "..item.amount
         else
-            amount = 1
-            s = s.." x 1"
+            s=s.." x 1"
         end
     
         -- Items purchased seem to get to your bags faster than looted items
-        if bought then amount = 0 end
+        -- TODO: find a fix
     
-        -- Total items in bag (See comment above)
+        -- Total items in bag
         if ct.itemstotal then
-            s = s.." ("..(GetItemCount(iI) + amount).. ")"
+            s=s.." ("..(GetItemCount(iI) + amount).. ")"  -- buggy AS HELL :\
         end
     
         -- Add the message
-        (xCTloot or xCT3):AddMessage(s, r, g, b)
+        (xCTloot or xCTgen):AddMessage(s, r, g, b)
     end
 end
 
@@ -430,24 +430,24 @@ local function OnEvent(self, event, subevent, ...)
             return
         else
             if subevent == "DAMAGE" then
-                xCT1:AddMessage("-"..arg2, .75, .1, .1)
+                xCTdmg:AddMessage("-"..arg2, .75, .1, .1)
                 
             elseif subevent == "DAMAGE_CRIT" then
-                xCT1:AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .1, .1)
+                xCTdmg:AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .1, .1)
                 
             elseif subevent == "SPELL_DAMAGE" then
-                xCT1:AddMessage("-"..arg2, .75, .3, .85)
+                xCTdmg:AddMessage("-"..arg2, .75, .3, .85)
                 
             elseif subevent == "SPELL_DAMAGE_CRIT" then
-                xCT1:AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .3, .5)
+                xCTdmg:AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .3, .5)
                 
             elseif subevent == "HEAL" then
                 if arg3 >= ct.healtreshold then
                     if arg2 then
                         if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
-                            xCT2:AddMessage(arg2.." +"..arg3, .1, .75, .1)
+                            xCTheal:AddMessage(arg2.." +"..arg3, .1, .75, .1)
                         else
-                            xCT2:AddMessage("+"..arg3, .1, .75, .1)
+                            xCTheal:AddMessage("+"..arg3, .1, .75, .1)
                         end
                     end
                 end
@@ -456,169 +456,169 @@ local function OnEvent(self, event, subevent, ...)
                 if arg3 >= ct.healtreshold then
                     if arg2 then
                         if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
-                            xCT2:AddMessage(arg2.." +"..arg3, .1, 1, .1)
+                            xCTheal:AddMessage(arg2.." +"..arg3, .1, 1, .1)
                         else
-                            xCT2:AddMessage("+"..arg3, .1, 1, .1)
+                            xCTheal:AddMessage("+"..arg3, .1, 1, .1)
                         end
                     end
                 end
                 
             elseif subevent == "PERIODIC_HEAL" then
                 if arg3 >= ct.healtreshold then
-                    xCT2:AddMessage("+"..arg3, .1, .5, .1)
+                    xCTheal:AddMessage("+"..arg3, .1, .5, .1)
                 end
 
             elseif subevent == "SPELL_CAST" then
-                xCT3:AddMessage(arg2, 1, .82, 0)
+                xCTgen:AddMessage(arg2, 1, .82, 0)
             
             elseif subevent == "MISS" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(MISS, .5, .5, .5)
+                xCTdmg:AddMessage(MISS, .5, .5, .5)
                 
             elseif subevent=="DODGE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(DODGE, .5, .5, .5)
+                xCTdmg:AddMessage(DODGE, .5, .5, .5)
                 
             elseif subevent=="PARRY" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(PARRY, .5, .5, .5)
+                xCTdmg:AddMessage(PARRY, .5, .5, .5)
                 
             elseif subevent == "EVADE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(EVADE, .5, .5, .5)
+                xCTdmg:AddMessage(EVADE, .5, .5, .5)
                 
             elseif subevent == "IMMUNE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(IMMUNE, .5, .5, .5)
+                xCTdmg:AddMessage(IMMUNE, .5, .5, .5)
                 
             elseif subevent == "DEFLECT" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(DEFLECT, .5, .5, .5)
+                xCTdmg:AddMessage(DEFLECT, .5, .5, .5)
                 
             elseif subevent == "REFLECT" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(REFLECT, .5, .5, .5)
+                xCTdmg:AddMessage(REFLECT, .5, .5, .5)
                 
             elseif subevent == "SPELL_MISS" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(MISS, .5, .5, .5)
+                xCTdmg:AddMessage(MISS, .5, .5, .5)
                 
             elseif subevent == "SPELL_DODGE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(DODGE, .5, .5, .5)
+                xCTdmg:AddMessage(DODGE, .5, .5, .5)
                 
             elseif subevent == "SPELL_PARRY" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(PARRY, .5, .5, .5)
+                xCTdmg:AddMessage(PARRY, .5, .5, .5)
                 
             elseif subevent == "SPELL_EVADE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(EVADE, .5, .5, .5)
+                xCTdmg:AddMessage(EVADE, .5, .5, .5)
                 
             elseif subevent == "SPELL_IMMUNE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(IMMUNE, .5, .5, .5)
+                xCTdmg:AddMessage(IMMUNE, .5, .5, .5)
                 
             elseif subevent == "SPELL_DEFLECT" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(DEFLECT, .5, .5, .5)
+                xCTdmg:AddMessage(DEFLECT, .5, .5, .5)
                 
             elseif subevent == "SPELL_REFLECT" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCT1:AddMessage(REFLECT, .5, .5, .5)
+                xCTdmg:AddMessage(REFLECT, .5, .5, .5)
 
             elseif subevent == "RESIST" then
                 if arg3 then
                     if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                        xCT1:AddMessage(part:format(arg2, RESIST, arg3), .75, .5, .5)
+                        xCTdmg:AddMessage(part:format(arg2, RESIST, arg3), .75, .5, .5)
                     else
-                        xCT1:AddMessage(arg2, .75, .1, .1)
+                        xCTdmg:AddMessage(arg2, .75, .1, .1)
                     end
                 elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                    xCT1:AddMessage(RESIST, .5, .5, .5)
+                    xCTdmg:AddMessage(RESIST, .5, .5, .5)
                 end
                 
             elseif subevent == "BLOCK" then
                 if arg3 then
                     if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                        xCT1:AddMessage(part:format(arg2, BLOCK, arg3), .75, .5, .5)
+                        xCTdmg:AddMessage(part:format(arg2, BLOCK, arg3), .75, .5, .5)
                     else
-                        xCT1:AddMessage(arg2, .75, .1, .1)
+                        xCTdmg:AddMessage(arg2, .75, .1, .1)
                     end
                 elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                    xCT1:AddMessage(BLOCK, .5, .5, .5)
+                    xCTdmg:AddMessage(BLOCK, .5, .5, .5)
                 end
                 
             elseif subevent == "ABSORB" then
                 if arg3 then
                     if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                        xCT1:AddMessage(part:format(arg2, ABSORB, arg3), .75, .5, .5)
+                        xCTdmg:AddMessage(part:format(arg2, ABSORB, arg3), .75, .5, .5)
                     else
-                        xCT1:AddMessage(arg2, .75, .1, .1)
+                        xCTdmg:AddMessage(arg2, .75, .1, .1)
                     end
                 elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                    xCT1:AddMessage(ABSORB, .5, .5, .5)
+                    xCTdmg:AddMessage(ABSORB, .5, .5, .5)
                 end
                 
             elseif subevent == "SPELL_RESIST" then
                 if arg3 then
                     if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                        xCT1:AddMessage(part:format(arg2, RESIST, arg3), .5, .3, .5)
+                        xCTdmg:AddMessage(part:format(arg2, RESIST, arg3), .5, .3, .5)
                     else
-                        xCT1:AddMessage(arg2, .75, .3, .85)
+                        xCTdmg:AddMessage(arg2, .75, .3, .85)
                     end
                 elseif COMBAT_TEXT_SHOW_RESISTANCES == "1"then
-                    xCT1:AddMessage(RESIST, .5, .5, .5)
+                    xCTdmg:AddMessage(RESIST, .5, .5, .5)
                 end
                 
             elseif subevent == "SPELL_BLOCK" then
                 if arg3 then
                     if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                        xCT1:AddMessage(part:format(arg2, BLOCK, arg3), .5, .3, .5)
+                        xCTdmg:AddMessage(part:format(arg2, BLOCK, arg3), .5, .3, .5)
                     else
-                        xCT1:AddMessage("-"..arg2, .75, .3, .85)
+                        xCTdmg:AddMessage("-"..arg2, .75, .3, .85)
                     end
                 elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                    xCT1:AddMessage(BLOCK, .5, .5, .5)
+                    xCTdmg:AddMessage(BLOCK, .5, .5, .5)
                 end
                 
             elseif subevent == "SPELL_ABSORB" then
                 if arg3 then
                     if COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                        xCT1:AddMessage(part:format(arg2, ABSORB, arg3), .5, .3, .5)
+                        xCTdmg:AddMessage(part:format(arg2, ABSORB, arg3), .5, .3, .5)
                     else
-                        xCT1:AddMessage(arg2, .75, .3, .85)
+                        xCTdmg:AddMessage(arg2, .75, .3, .85)
                     end
                 elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
-                    xCT1:AddMessage(ABSORB, .5, .5, .5)
+                    xCTdmg:AddMessage(ABSORB, .5, .5, .5)
                 end
 
             elseif subevent == "ENERGIZE" and COMBAT_TEXT_SHOW_ENERGIZE == "1" then
                 if  tonumber(arg2) > 0 then
                     if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUINIC_POWER" or arg3 == "SOUL_SHARDS" then
-                        xCT3:AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
+                        xCTgen:AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
                     end
                 end
 
             elseif subevent == "PERIODIC_ENERGIZE" and COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE == "1" then
                 if  tonumber(arg2) > 0 then
                     if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUINIC_POWER" or arg3 == "SOUL_SHARDS" then
-                        xCT3:AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
+                        xCTgen:AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
                     end
                 end
                 
             elseif subevent == "SPELL_AURA_START" and COMBAT_TEXT_SHOW_AURAS == "1" then
-                xCT3:AddMessage("+"..arg2, 1, .5, .5)
+                xCTgen:AddMessage("+"..arg2, 1, .5, .5)
                 
             elseif subevent == "SPELL_AURA_END" and COMBAT_TEXT_SHOW_AURAS == "1" then
-                xCT3:AddMessage("-"..arg2, .5, .5, .5)
+                xCTgen:AddMessage("-"..arg2, .5, .5, .5)
                 
             elseif subevent == "SPELL_AURA_START_HARMFUL" and COMBAT_TEXT_SHOW_AURAS == "1" then
-                xCT3:AddMessage("+"..arg2, 1, .1, .1)
+                xCTgen:AddMessage("+"..arg2, 1, .1, .1)
                 
             elseif subevent == "SPELL_AURA_END_HARMFUL" and COMBAT_TEXT_SHOW_AURAS == "1" then
-                xCT3:AddMessage("-"..arg2, .1, 1, .1)
+                xCTgen:AddMessage("-"..arg2, .1, 1, .1)
 
             elseif subevent == "HONOR_GAINED" and COMBAT_TEXT_SHOW_HONOR_GAINED == "1" then
                 arg2 = tonumber(arg2)
                 if arg2 and abs(arg2) > 1 then
                     arg2 = floor(arg2)
                     if arg2 > 0 then
-                        xCT3:AddMessage(HONOR.." +"..arg2, .1, .1, 1)
+                        xCTgen:AddMessage(HONOR.." +"..arg2, .1, .1, 1)
                     end
                 end
 
             elseif subevent == "FACTION" and COMBAT_TEXT_SHOW_REPUTATION == "1" then
-                xCT3:AddMessage(arg2.." +"..arg3, .1, .1, 1)
+                xCTgen:AddMessage(arg2.." +"..arg3, .1, .1, 1)
 
             elseif subevent == "SPELL_ACTIVE" and COMBAT_TEXT_SHOW_REACTIVES == "1" then
-                xCT3:AddMessage(arg2, 1, .82, 0)
+                xCTgen:AddMessage(arg2, 1, .82, 0)
             end
         end
 
@@ -626,7 +626,7 @@ local function OnEvent(self, event, subevent, ...)
         if subevent == ct.unit then
             if UnitHealth(ct.unit) / UnitHealthMax(ct.unit) <= COMBAT_TEXT_LOW_HEALTH_THRESHOLD then
                 if not lowHealth then
-                    xCT3:AddMessage(HEALTH_LOW, 1, .1, .1)
+                    xCTgen:AddMessage(HEALTH_LOW, 1, .1, .1)
                     lowHealth = true
                 end
             else
@@ -639,7 +639,7 @@ local function OnEvent(self, event, subevent, ...)
             local _, powerToken = UnitPowerType(ct.unit)
             if powerToken == "MANA" and UnitPower(ct.unit) / UnitPowerMax(ct.unit) <= COMBAT_TEXT_LOW_MANA_THRESHOLD then
                 if not lowMana then
-                    xCT3:AddMessage(MANA_LOW, 1, .1, .1)
+                    xCTgen:AddMessage(MANA_LOW, 1, .1, .1)
                     lowMana = true
                 end
             else
@@ -648,10 +648,10 @@ local function OnEvent(self, event, subevent, ...)
         end
 
     elseif event == "PLAYER_REGEN_ENABLED" and COMBAT_TEXT_SHOW_COMBAT_STATE == "1" then
-            xCT3:AddMessage("-"..LEAVING_COMBAT, .1, 1, .1)
+            xCTgen:AddMessage("-"..LEAVING_COMBAT, .1, 1, .1)
 
     elseif event == "PLAYER_REGEN_DISABLED" and COMBAT_TEXT_SHOW_COMBAT_STATE == "1" then
-            xCT3:AddMessage("+"..ENTERING_COMBAT, 1, .1, .1)
+            xCTgen:AddMessage("+"..ENTERING_COMBAT, 1, .1, .1)
 
     elseif event == "UNIT_COMBO_POINTS" and COMBAT_TEXT_SHOW_COMBO_POINTS == "1" then
         if subevent == ct.unit then
@@ -661,7 +661,7 @@ local function OnEvent(self, event, subevent, ...)
                     if cp == MAX_COMBO_POINTS then
                         r, g, b = 0, .82, 1
                     end
-                    xCT3:AddMessage(format(COMBAT_TEXT_COMBO_POINTS, cp), r, g, b)
+                    xCTgen:AddMessage(format(COMBAT_TEXT_COMBO_POINTS, cp), r, g, b)
                 end
         end
 
@@ -678,7 +678,7 @@ local function OnEvent(self, event, subevent, ...)
                 r, g, b = 0, 1, 1  
             end
             if rune and rune < 4 then
-                xCT3:AddMessage("+"..msg, r, g, b)
+                xCTgen:AddMessage("+"..msg, r, g, b)
             end
         end
 
@@ -716,7 +716,7 @@ end
 ct.locked = true
 ct.frames = { }
 for i = 1, numf do
-    local f = CreateFrame("ScrollingMessageFrame", "xCT"..i, UIParent)
+    local f = CreateFrame("ScrollingMessageFrame", "xCT"..framenames[i], UIParent)
     f:SetFont(ct.font, ct.fontsize, ct.fontstyle)
     f:SetShadowColor(0, 0, 0, 0)
     f:SetFading(true)
@@ -754,22 +754,21 @@ for i = 1, numf do
         elseif type(ct.damagefontsize) == "number" then
             f:SetFont(a, ct.damagefontsize, c)
         end
-    else -- loot
+    elseif framenames[i] == "loot" then
         f:SetTimeVisible(ct.loottimevisible)
         f:SetJustifyH(ct.justify_3)
         f:SetWidth(256)
         f:SetPoint("CENTER", 320, 192)
+    
+    -- Add a starting location to your frame
+    --elseif framenames[i] == "custom" then
+    --    f:SetTimeVisible(ct.loottimevisible)
+    --    f:SetJustifyH(ct.justify_3)
+    --    f:SetWidth(256)
+    --    f:SetPoint("CENTER", 320, 192)
+    
     end
     ct.frames[i] = f
-    
-    --[[ xCTdmg, xCTheal, xCTgen, xCTdone, xCTloot
-    this is what it is supposed to be:
-    _G[ "xCT" .. framenames[i] ] = f
-    ]]
-    
-    if framenames[i] == "loot" then
-        xCTloot = f
-    end
 end
 
 -- register events
@@ -805,7 +804,7 @@ CombatText:SetScript("OnUpdate", nil)
 -- steal external messages sent by other addons using CombatText_AddMessage
 Blizzard_CombatText_AddMessage = CombatText_AddMessage
 function CombatText_AddMessage(message,scrollFunction, r, g, b, displayType, isStaggered)
-    xCT3:AddMessage(message, r, g, b)
+    xCTgen:AddMessage(message, r, g, b)
 end
 
 -- force hide blizz damage/healing, if desired
@@ -863,9 +862,13 @@ local StartConfigmode = function()
             elseif framenames[i] == "done" then
                 f.fs:SetText(SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE)
                 f.fs:SetTextColor(1,1,0,.9)
-            else
+            elseif framenames[i] == "loot" then
                 f.fs:SetText(LOOT)
                 f.fs:SetTextColor(1,1,1,.9)
+            -- Add a title to your frame
+            --elseif framenames[i] == "custom" then
+            --    f.fs:SetText("Custom Frame")
+            --    f.fs:SetTextColor(1,1,1,.9)
             end
 
             f.t=f:CreateTexture"ARTWORK"
@@ -1035,6 +1038,13 @@ local function StartTestMode()
                             local money = random(1000000)
                             ct.frames[i]:AddMessage(MONEY .. ": " .. GetCoinTextureString(money), 1, 1, 0) -- yellow
                         end
+                    
+                    -- Add a test pattern to your frame
+                    --elseif framenames[i] == "custom" then
+                    --    if random(3) % 3 == 0 then
+                    --        ct.frames[i]:AddMessage("Test test test", 1, 1, 1)
+                    --    end
+                        
                     end
                     
                     TimeSinceLastUpdate = 0
@@ -1069,7 +1079,7 @@ StaticPopupDialogs["XCT_LOCK"] = {
 }
 
 -- slash commands
-SLASH_XCT1 = "/xct"
+SLASH_xCTdmg = "/xct"
 SlashCmdList["XCT"] = function(input)
     input = string.lower(input)
     
@@ -1159,7 +1169,7 @@ if ct.mergeaoespam then
                         else
                             count = ""
                         end
-                        xCT4:AddMessage(SQ[k]["queue"]..SQ[k]["msg"]..count, unpack(SQ[k]["color"]))
+                        xCTdone:AddMessage(SQ[k]["queue"]..SQ[k]["msg"]..count, unpack(SQ[k]["color"]))
                         SQ[k]["queue"] = 0
                         SQ[k]["count"] = 0
                     end
@@ -1213,7 +1223,7 @@ if(ct.damage)then
                         end
                         msg = msg.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                     end
-                    xCT4:AddMessage(msg)
+                    xCTdone:AddMessage(msg)
                 end
                 
             elseif eventType == "RANGE_DAMAGE" then
@@ -1228,7 +1238,7 @@ if(ct.damage)then
                         icon = GetSpellTexture(spellId)
                         msg = msg.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                     end
-                    xCT4:AddMessage(msg)
+                    xCTdone:AddMessage(msg)
                 end
     
             elseif eventType == "SPELL_DAMAGE" or (eventType == "SPELL_PERIODIC_DAMAGE" and ct.dotdamage) then
@@ -1271,7 +1281,7 @@ if(ct.damage)then
                         SQ[spellId]["locked"] = false
                         return
                     end
-                    xCT4:AddMessage(amount..""..msg, unpack(color))
+                    xCTdone:AddMessage(amount..""..msg, unpack(color))
                 end
     
             elseif eventType == "SWING_MISSED" then
@@ -1285,7 +1295,7 @@ if(ct.damage)then
                     end
                     missType = missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 end
-                xCT4:AddMessage(missType)
+                xCTdone:AddMessage(missType)
     
             elseif eventType == "SPELL_MISSED" or eventType == "RANGE_MISSED" then
 				-- 4.2
@@ -1294,7 +1304,7 @@ if(ct.damage)then
                     icon = GetSpellTexture(spellId)
                     missType = missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 end 
-                xCT4:AddMessage(missType)
+                xCTdone:AddMessage(missType)
     
             elseif eventType == "SPELL_DISPEL" and ct.dispel then
 				-- 4.2
@@ -1315,7 +1325,7 @@ if(ct.damage)then
                 else
                     color = { 1, 0, .5 }
                 end
-                xCT3:AddMessage(ACTION_SPELL_DISPEL..": "..effect..msg, unpack(color))
+                xCTgen:AddMessage(ACTION_SPELL_DISPEL..": "..effect..msg, unpack(color))
                 
             elseif eventType == "SPELL_INTERRUPT" and ct.interrupt then
 				-- 4.2
@@ -1331,11 +1341,11 @@ if(ct.damage)then
                 else
                     msg = ""
                 end
-                xCT3:AddMessage(ACTION_SPELL_INTERRUPT..": "..effect..msg, unpack(color))
+                xCTgen:AddMessage(ACTION_SPELL_INTERRUPT..": "..effect..msg, unpack(color))
             elseif eventType == "PARTY_KILL" and ct.killingblow then
 				-- 4.2
                 local tname = select(9, ...)
-                xCT3:AddMessage(ACTION_PARTY_KILL..": "..tname, .2, 1, .2)
+                xCTgen:AddMessage(ACTION_PARTY_KILL..": "..tname, .2, 1, .2)
             end
             
         end
@@ -1395,7 +1405,7 @@ if(ct.healing)then
                             SQ[spellId]["locked"] = false
                             return
                         end 
-                        xCT4:AddMessage(amount..""..msg, unpack(color))
+                        xCTdone:AddMessage(amount..""..msg, unpack(color))
                     end
                 end
             end
