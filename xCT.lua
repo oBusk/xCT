@@ -1079,7 +1079,7 @@ StaticPopupDialogs["XCT_LOCK"] = {
 }
 
 -- slash commands
-SLASH_xCTdmg = "/xct"
+SLASH_XCT1 = "/xct"
 SlashCmdList["XCT"] = function(input)
     input = string.lower(input)
     
