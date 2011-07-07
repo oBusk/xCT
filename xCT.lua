@@ -380,8 +380,8 @@ function ChatMsgLoot_Handler(msg)
                    ["quality"] = qq,
                    ["type"] = tt,
                    ["icon"] = ic,
-                   ["crafted"] = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
-                   ["self"] = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or (pM == LOOT_ITEM_SELF:gsub("%%.*", ""))
+                   ["crafted"] = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", "")),
+                   ["self"] = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", "")),
                  }
     
     if (ct.lootitems and item.self and item.quality >= ct.itemsquality) or (item.type == "Quest" and ct.questitems) or (item.crafted and ct.crafteditems) then
@@ -407,7 +407,7 @@ function ChatMsgLoot_Handler(msg)
     
         -- Total items in bag
         if ct.itemstotal then
-            s=s.." ("..(GetItemCount(iI)).. ")"  -- buggy AS HELL :\
+            s=s.." ("..(GetItemCount(item.id)).. ")"  -- buggy AS HELL :\
         end
     
         -- Add the message
