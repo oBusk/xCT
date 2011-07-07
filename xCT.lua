@@ -376,7 +376,7 @@ function ChatMsgLoot_Handler(msg)
     local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))
     local item = { ["name"] = iN,
                    ["id"] = iI,
-                   ["amount"] = tonumber(iA),
+                   ["amount"] = tonumber(iA or 1),
                    ["quality"] = qq,
                    ["type"] = tt,
                    ["icon"] = ic,
@@ -400,18 +400,14 @@ function ChatMsgLoot_Handler(msg)
         end
     
         -- Amount Looted
-        if item.amount and item.amount > 1 then
-            s=s.." x "..item.amount
-        else
-            s=s.." x 1"
-        end
+        s=s.." x "..item.amount
     
         -- Items purchased seem to get to your bags faster than looted items
         -- TODO: find a fix
     
         -- Total items in bag
         if ct.itemstotal then
-            s=s.." ("..(GetItemCount(iI) + amount).. ")"  -- buggy AS HELL :\
+            s=s.." ("..(GetItemCount(iI)).. ")"  -- buggy AS HELL :\
         end
     
         -- Add the message
