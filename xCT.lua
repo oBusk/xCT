@@ -55,7 +55,7 @@ if ct.myclass == "WARLOCK" then
     end
     if ct.yelltaunt then
         -- Challenging Howl (aoe)
-        ct.tauntid[59671] = { enabled = false, aoe = true, temp = true, phrase = "Temporarily taunted all enemies with %s!" } 
+        ct.tauntid[59671] = { enabled = false, aoe = true, temp = true, phrase = "Temporarily taunted all enemies with %s!", link = GetSpellLink(59671) } 
     end
     if ct.healing then
         ct.healfilter[28176] = true  -- Fel Armor
@@ -91,9 +91,9 @@ elseif ct.myclass == "DRUID" then
     end
     if ct.yelltaunt then
         -- Growl
-        ct.tauntid[6795] = { enabled = true, aoe = false, temp = false, phrase = "Taunted: %t from %tt [%tho over]!" }
+        ct.tauntid[6795] = { enabled = true, aoe = false, temp = false, phrase = "Taunted: %t from %tt [%tho over]!", link = GetSpellLink(6795) }
         -- Challenging Roar 
-        ct.tauntid[5209] = { enabled = false, aoe = true, temp = false, phrase = "" }
+        ct.tauntid[5209] = { enabled = false, aoe = true, temp = false, phrase = "", link = GetSpellLink(5209) }
     end
 elseif ct.myclass == "PALADIN" then
     if ct.mergeaoespam then
@@ -112,8 +112,8 @@ elseif ct.myclass == "PALADIN" then
         ct.aoespam[85222] = true  -- Light of Dawn        
     end
     if ct.yelltaunt then
-        ct.tauntid[62124] = { enabled = true, aoe = false, temp = false, phrase = "Taunted: %t from %tto [%th over]!" }
-        ct.tauntid[31789] = { enabled = false, aoe = true, temp = false, phrase = "" }
+        ct.tauntid[62124] = { enabled = true, aoe = false, temp = false, phrase = "Taunted: %t from %tto [%th over]!", link = GetSpellLink(62124) }
+        ct.tauntid[31789] = { enabled = false, aoe = true, temp = false, phrase = "", link = GetSpellLink(31789) }
     end
 elseif ct.myclass == "PRIEST" then
     if ct.mergeaoespam then
@@ -154,7 +154,7 @@ elseif ct.myclass == "SHAMAN" then
     end
     if ct.yelltaunt then
         -- Unleash Earth
-        ct.tauntid[73684] = { enabled = true, aoe = false, temp = true, phrase = "Temporarily Taunted: %t from %tt for 5 seconds!" }
+        ct.tauntid[73684] = { enabled = true, aoe = false, temp = true, phrase = "Temporarily Taunted: %t from %tt for 5 seconds!", link = GetSpellLink(73684) }
     end
     if ct.healing then
         ct.aoespam[73921] = true  -- Healing Rain
@@ -184,9 +184,19 @@ elseif ct.myclass == "WARRIOR" then
     end
     if ct.yelltaunt then
         -- Taunt
-        ct.tauntid[355]  = { enabled = true, aoe = false, temp = true, phrase = "Taunted: %t from %tt [%tho over]!" }
+        ct.tauntid[355] = { enabled = true,
+                            aoe = false,
+                            temp = false,
+                            phrase = "Taunted: %t from %tt [%tho over]!",
+                            link = GetSpellLink(355)
+                          }
         -- Challenging Shout
-        ct.tauntid[1161] = { enabled = false, aoe = true, temp = false, phrase = "" }
+        ct.tauntid[1161] = { enabled = false,
+                             aoe = true,
+                             temp = false,
+                             phrase = "",
+                             link = GetSpellLink(1161)
+                           }
     end
     if ct.healing then
         ct.healfilter[23880] = true  -- Bloodthirst
@@ -202,7 +212,7 @@ elseif ct.myclass == "HUNTER" then
     end
     if ct.yelltaunt then
         -- Distracting Shot
-        ct.tauntid[20736] = { enabled = true, aoe = false, temp = true, phrase = "Temporarily Taunted: %t from %tt for 6 seconds!" }  
+        ct.tauntid[20736] = { enabled = true, aoe = false, temp = true, phrase = "Temporarily Taunted: %t from %tt for 6 seconds!", link = GetSpellLink(1161) }  
     end
 elseif ct.myclass == "DEATHKNIGHT" then
     if ct.mergeaoespam then
@@ -228,7 +238,8 @@ elseif ct.myclass == "ROGUE" then
 end
 
 
---do not edit below unless you know what you are doing
+
+-- define frames to create
 local numf = 3
 local framenames = { "dmg", "heal", "gen" }
 
@@ -240,7 +251,7 @@ end
 
 -- Add window for loot events
 if ct.lootwindow then
-	numf = numf + 1     -- 5
+    numf = numf + 1     -- 5
     framenames[numf] = "loot"
 end
 
@@ -299,115 +310,94 @@ local function ScrollDirection()
     end
 end
 
--- Announce events
-local function Announce_Taunt(destName, spellID, spellIDsecondary)
-    local msg
-    
-    
-    return msg
-end
-
-local function Cache_Threat()
-    local isttTanking, _, tankThreat = UnitDetailedThreatSituation("targettarget", "target")
-    local _, _, playerThreat = UnitDetailedThreatSituation("player", "target")
-
-    ct.cachethreat = {
-        ["targetName"]       = GetUnitName("target"),
-        ["targettargetName"] = GetUnitName("targettarget"),
-        ["targetThreat"]     = tankThreat,
-        ["playerThreat"]     = playerThreat,
-        ["isNotTanking"]     = isttTanking,
-    }
-end
-
 -- Load on demand frame (no memory used when not needed)
 local AlignGrid
 
 local function AlignGridShow()
-	AlignGrid = CreateFrame('Frame', nil, UIParent)
-	AlignGrid:SetAllPoints(UIParent)
-	local boxSize = 32
-	
-	-- Get the current screen resolution, Mid-points, and the total number of lines
-	local ResX, ResY = GetScreenWidth(), GetScreenHeight()
-	local midX, midY = ResX / 2, ResY / 2
-	local iLinesLeftRight, iLinesTopBottom = midX / boxSize , midY / boxSize
-	
-	-- Vertical Bars
-	for i = 1, iLinesLeftRight do
-		-- Vertical Bars to the Left of the Center
-		local tt1 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
-		if i % 4 == 0 then
-			tt1:SetTexture(.3, .3, .3, .8) 
-		elseif i % 2 == 0 then
-			tt1:SetTexture(.1, .1, .1, .8) 
-		else
-			tt1:SetTexture(0, 0, 0, .8) 
-		end
-		tt1:SetPoint('TOP', AlignGrid, 'TOP', -i * boxSize, 0)
-		tt1:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -i * boxSize, 0)
-		tt1:SetWidth(1)
-		
-		-- Vertical Bars to the Right of the Center
-		local tt2 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
-		if i % 4 == 0 then
-			tt2:SetTexture(.3, .3, .3, .8) 
-		elseif i % 2 == 0 then
-			tt2:SetTexture(.1, .1, .1, .8) 
-		else
-			tt2:SetTexture(0, 0, 0, .8) 
-		end
-		tt2:SetPoint('TOP', AlignGrid, 'TOP', i * boxSize, 0)
-		tt2:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', i * boxSize, 0)
-		tt2:SetWidth(1)
-	end
-	
-	-- Horizontal Bars
-	for i = 1, iLinesTopBottom do
-		-- Horizontal Bars to the Below of the Center
-		local tt3 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
-		if i % 4 == 0 then
-			tt3:SetTexture(.3, .3, .3, .8) 
-		elseif i % 2 == 0 then
-			tt3:SetTexture(.1, .1, .1, .8) 
-		else
-			tt3:SetTexture(0, 0, 0, .8) 
-		end
-		tt3:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize)
-		tt3:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize)
-		tt3:SetHeight(1)
-		
-		-- Horizontal Bars to the Above of the Center
-		local tt4 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
-		if i % 4 == 0 then
-			tt4:SetTexture(.3, .3, .3, .8) 
-		elseif i % 2 == 0 then
-			tt4:SetTexture(.1, .1, .1, .8) 
-		else
-			tt4:SetTexture(0, 0, 0, .8) 
-		end
-		tt4:SetPoint('LEFT', AlignGrid, 'LEFT', 0, i * boxSize)
-		tt4:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, i * boxSize)
-		tt4:SetHeight(1)
-	end
-	
-	--Create the Vertical Middle Bar
-	local tta = AlignGrid:CreateTexture(nil, 'TOOLTIP')
-	tta:SetTexture(1, 0, 0, .6)
-	tta:SetPoint('TOP', AlignGrid, 'TOP', 0, 0)
-	tta:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', 0, 0)
-	tta:SetWidth(2)
-	
-	--Create the Horizontal Middle Bar
-	local ttb = AlignGrid:CreateTexture(nil, 'TOOLTIP')
-	ttb:SetTexture(1, 0, 0, .6)
-	ttb:SetPoint('LEFT', AlignGrid, 'LEFT', 0, 0)
-	ttb:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, 0)
-	ttb:SetHeight(2)
+    AlignGrid = CreateFrame('Frame', nil, UIParent)
+    AlignGrid:SetAllPoints(UIParent)
+    local boxSize = 32
+    
+    -- Get the current screen resolution, Mid-points, and the total number of lines
+    local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+    local midX, midY = ResX / 2, ResY / 2
+    local iLinesLeftRight, iLinesTopBottom = midX / boxSize , midY / boxSize
+    
+    -- Vertical Bars
+    for i = 1, iLinesLeftRight do
+        -- Vertical Bars to the Left of the Center
+        local tt1 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+        if i % 4 == 0 then
+            tt1:SetTexture(.3, .3, .3, .8) 
+        elseif i % 2 == 0 then
+            tt1:SetTexture(.1, .1, .1, .8) 
+        else
+            tt1:SetTexture(0, 0, 0, .8) 
+        end
+        tt1:SetPoint('TOP', AlignGrid, 'TOP', -i * boxSize, 0)
+        tt1:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -i * boxSize, 0)
+        tt1:SetWidth(1)
+        
+        -- Vertical Bars to the Right of the Center
+        local tt2 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+        if i % 4 == 0 then
+            tt2:SetTexture(.3, .3, .3, .8) 
+        elseif i % 2 == 0 then
+            tt2:SetTexture(.1, .1, .1, .8) 
+        else
+            tt2:SetTexture(0, 0, 0, .8) 
+        end
+        tt2:SetPoint('TOP', AlignGrid, 'TOP', i * boxSize, 0)
+        tt2:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', i * boxSize, 0)
+        tt2:SetWidth(1)
+    end
+    
+    -- Horizontal Bars
+    for i = 1, iLinesTopBottom do
+        -- Horizontal Bars to the Below of the Center
+        local tt3 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+        if i % 4 == 0 then
+            tt3:SetTexture(.3, .3, .3, .8) 
+        elseif i % 2 == 0 then
+            tt3:SetTexture(.1, .1, .1, .8) 
+        else
+            tt3:SetTexture(0, 0, 0, .8) 
+        end
+        tt3:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize)
+        tt3:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize)
+        tt3:SetHeight(1)
+        
+        -- Horizontal Bars to the Above of the Center
+        local tt4 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+        if i % 4 == 0 then
+            tt4:SetTexture(.3, .3, .3, .8) 
+        elseif i % 2 == 0 then
+            tt4:SetTexture(.1, .1, .1, .8) 
+        else
+            tt4:SetTexture(0, 0, 0, .8) 
+        end
+        tt4:SetPoint('LEFT', AlignGrid, 'LEFT', 0, i * boxSize)
+        tt4:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, i * boxSize)
+        tt4:SetHeight(1)
+    end
+    
+    --Create the Vertical Middle Bar
+    local tta = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+    tta:SetTexture(1, 0, 0, .6)
+    tta:SetPoint('TOP', AlignGrid, 'TOP', 0, 0)
+    tta:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', 0, 0)
+    tta:SetWidth(2)
+    
+    --Create the Horizontal Middle Bar
+    local ttb = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+    ttb:SetTexture(1, 0, 0, .6)
+    ttb:SetPoint('LEFT', AlignGrid, 'LEFT', 0, 0)
+    ttb:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, 0)
+    ttb:SetHeight(2)
 end
 
 local function AlignGridKill()
-	AlignGrid:Kill()
+    AlignGrid:Kill()
 end
 
 
@@ -417,7 +407,7 @@ local itemQualities={'Poor','Common','Uncommon','Rare','Epic','Legendary','Artif
 
 
 -- loot events
-function ChatMsgMoney_Handler(msg)
+local function ChatMsgMoney_Handler(msg)
     local g, s, c = tonumber(msg:match(GOLD_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(SILVER_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(COPPER_AMOUNT:gsub("%%d", "(%%d+)")))
     local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), MONEY .. ": "
     if money >= ct.minmoney then
@@ -431,7 +421,7 @@ function ChatMsgMoney_Handler(msg)
     end
 end
 
-function ChatMsgLoot_Handler(msg)
+local function ChatMsgLoot_Handler(msg)
     local pM,iQ,iI,iN,iA = select(3, string.find(msg, parseloot))
     local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))
     local item = { ["name"] = iN,
@@ -444,7 +434,7 @@ function ChatMsgLoot_Handler(msg)
                    ["self"] = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", "")),
                  }
     
-    if (ct.lootitems and item.self and item.quality >= ct.itemsquality) or (item.type == "Quest" and ct.questitems) or (item.crafted and ct.crafteditems) then
+    if (ct.lootitems and item.self and item.quality >= ct.itemsquality) or (item.type == "Quest" and ct.questitems and item.self) or (item.crafted and ct.crafteditems) then
         if item.crafted and ct.crafteditems == false then return end
         if item.type == "Quest" and ct.questitems == false then return end
         
@@ -474,6 +464,42 @@ function ChatMsgLoot_Handler(msg)
         (xCTloot or xCTgen):AddMessage(s, r, g, b)
     end
 end
+
+
+-- yells
+-- Yell_Taunt(dstName, spellID, missType)
+local function Yell_Taunt(dstName, spellID, missType)
+    if missType then
+        local spell = ct.tauntid[spellID]
+        if spell and spell.enabled then
+            -- early beta, don't actually announce yet
+            if ct.cachethreat then
+                local threatDelta = ct.cachethreat.tankThreat - ct.cachethreat.playerThreat
+                if threatDelta > 0 and ct.cachethreat.targetName == dstName and ct.cachethreat.isttTanking then
+                    pr( spell.link .. ": " .. dstName .. " off of " .. ct.cachethreat.targettargetName .. " [" .. threatDelta .. "% over]!" )
+                end
+            else
+            pr( "Taunted: " .. dstName .. " with " .. spell.link .. "!" )
+            end
+        end
+    end
+end
+
+local function Cache_Threat()
+    ct.cachethreat = nil
+
+    local isttTanking, _, tankThreat = UnitDetailedThreatSituation( "targettarget", "target" )
+    local playerThreat = select( 3, UnitDetailedThreatSituation("player", "target") )
+
+    ct.cachethreat = {
+        ["targetName"]       = GetUnitName("target"),
+        ["targettargetName"] = GetUnitName("targettarget"),
+        ["targetThreat"]     = tankThreat,
+        ["playerThreat"]     = playerThreat,
+        ["isNotTanking"]     = isttTanking,
+    }
+end
+
 
 -- partial resists styler
 local part = "-%s (%s %s)"
@@ -947,48 +973,48 @@ local StartConfigmode = function()
             f.tr:SetHeight(20)
 
             -- font string Position (location)
-			f.fsp = f:CreateFontString(nil, "OVERLAY")
-			f.fsp:SetFont(ct.font, ct.fontsize, ct.fontstyle)
+            f.fsp = f:CreateFontString(nil, "OVERLAY")
+            f.fsp:SetFont(ct.font, ct.fontsize, ct.fontstyle)
             f.fsp:SetPoint("TOPLEFT", f, "TOPLEFT", 3, -3)
-			f.fsp:SetText("")
-			f.fsp:Hide()
-			
+            f.fsp:SetText("")
+            f.fsp:Hide()
+            
             -- font string width
             f.fsw = f:CreateFontString(nil, "OVERLAY")
-			f.fsw:SetFont(ct.font, ct.fontsize, ct.fontstyle)
+            f.fsw:SetFont(ct.font, ct.fontsize, ct.fontstyle)
             f.fsw:SetPoint("BOTTOM", f, "BOTTOM", 0, 0)
-			f.fsw:SetText("")
-			f.fsw:Hide()
+            f.fsw:SetText("")
+            f.fsw:Hide()
             
             -- font string height
             f.fsh = f:CreateFontString(nil, "OVERLAY")
-			f.fsh:SetFont(ct.font, ct.fontsize, ct.fontstyle)
+            f.fsh:SetFont(ct.font, ct.fontsize, ct.fontstyle)
             f.fsh:SetPoint("LEFT", f, "LEFT", 3, 0)
-			f.fsh:SetText("")
-			f.fsh:Hide()
+            f.fsh:SetText("")
+            f.fsh:Hide()
             
-			local ResX, ResY = GetScreenWidth(), GetScreenHeight()
-			local midX, midY = ResX / 2, ResY / 2
-			
-			f:SetScript("OnLeave", function(...)
-					f:SetScript("OnUpdate", nil)
-					f.fsp:Hide()
+            local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+            local midX, midY = ResX / 2, ResY / 2
+            
+            f:SetScript("OnLeave", function(...)
+                    f:SetScript("OnUpdate", nil)
+                    f.fsp:Hide()
                     f.fsw:Hide()
                     f.fsh:Hide()
-				end)
-			f:SetScript("OnEnter", function(...)
-					f:SetScript("OnUpdate", function(...)
-							f.fsp:SetText(math.floor(f:GetLeft() - midX + 1) .. ", " .. math.floor(f:GetTop() - midY + 2))
+                end)
+            f:SetScript("OnEnter", function(...)
+                    f:SetScript("OnUpdate", function(...)
+                            f.fsp:SetText(math.floor(f:GetLeft() - midX + 1) .. ", " .. math.floor(f:GetTop() - midY + 2))
                             f.fsw:SetText(math.floor(f:GetWidth()))
                             f.fsh:SetText(math.floor(f:GetHeight()))
-						end)
-					f.fsp:Show()
+                        end)
+                    f.fsp:Show()
                     f.fsw:Show()
                     f.fsh:Show()
-				end)
-			
-			
-			
+                end)
+            
+            
+            
             f:EnableMouse(true)
             f:RegisterForDrag("LeftButton")
             f:SetScript("OnDragStart", f.StartSizing)
@@ -1002,10 +1028,10 @@ local StartConfigmode = function()
             f:SetScript("OnDragStop", f.StopMovingOrSizing)
             ct.locked = false
         end
-		
-		-- also show the align grid during config
-		AlignGridShow()
-		
+        
+        -- also show the align grid during config
+        AlignGridShow()
+        
         pr("unlocked.")
     else
         pr("can't be configured in combat.")
@@ -1161,9 +1187,9 @@ SlashCmdList["XCT"] = function(input)
             StartTestMode()
             pr("test mode enabled.")
         end
-    elseif input == "threat" then
+    elseif input == "t" or input == "taunt" then 
         if ct.yelltaunt then
-            
+            -- cache threat info
         end
     else
         pr("use |cffFF0000/xct unlock|r to move and resize frames.")
@@ -1267,7 +1293,7 @@ if(ct.damage)then
         local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, srcFlags2, destGUID, destName, destFlags, destFlags2 = select(1,...)
         if (sourceGUID == ct.pguid and destGUID ~= ct.pguid) or (sourceGUID == UnitGUID("pet") and ct.petdamage) or (sourceFlags == gflags) then
             if eventType=="SWING_DAMAGE" then
-				-- 4.2
+                -- 4.2
                 local amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     msg = amount
@@ -1286,7 +1312,7 @@ if(ct.damage)then
                 end
                 
             elseif eventType == "RANGE_DAMAGE" then
-				-- 4.2
+                -- 4.2
                 local spellId, _, _, amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     msg = amount
@@ -1301,7 +1327,7 @@ if(ct.damage)then
                 end
     
             elseif eventType == "SPELL_DAMAGE" or (eventType == "SPELL_PERIODIC_DAMAGE" and ct.dotdamage) then
-				-- 4.2
+                -- 4.2
                 local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     local color = { }
@@ -1344,7 +1370,7 @@ if(ct.damage)then
                 end
     
             elseif eventType == "SWING_MISSED" then
-				-- 4.2
+                -- 4.2
                 local missType, _ = select(12, ...)
                 if ct.icons then
                     if sourceGUID == UnitGUID("pet") or sourceFlags == gflags then
@@ -1357,16 +1383,18 @@ if(ct.damage)then
                 xCTdone:AddMessage(missType)
     
             elseif eventType == "SPELL_MISSED" or eventType == "RANGE_MISSED" then
-				-- 4.2
+                -- 4.2
                 local spellId, _, _, missType, _ = select(12, ...)
                 if ct.icons then
                     icon = GetSpellTexture(spellId)
                     missType = missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 end 
                 xCTdone:AddMessage(missType)
+                
+                -- Need to add yell taunt logic here
     
             elseif eventType == "SPELL_DISPEL" and ct.dispel then
-				-- 4.2
+                -- 4.2
                 local target, _, _, id, effect, _, etype = select(12, ...)
                 local color
                 if ct.icons then
@@ -1374,12 +1402,12 @@ if(ct.damage)then
                 end
                 if icon then
                     msg = " \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
-                elseif(ct.icons)then
+                elseif ct.icons then
                     msg = " \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                 else
                     msg = ""
                 end
-                if etype == "BUFF"then
+                if etype == "BUFF" then
                     color = { 0, 1, .5 }
                 else
                     color = { 1, 0, .5 }
@@ -1387,7 +1415,7 @@ if(ct.damage)then
                 xCTgen:AddMessage(ACTION_SPELL_DISPEL..": "..effect..msg, unpack(color))
                 
             elseif eventType == "SPELL_INTERRUPT" and ct.interrupt then
-				-- 4.2
+                -- 4.2
                 local target, _, _, id, effect = select(12, ...)
                 local color = { 1, .5, 0}
                 if ct.icons then
@@ -1401,19 +1429,30 @@ if(ct.damage)then
                     msg = ""
                 end
                 xCTgen:AddMessage(ACTION_SPELL_INTERRUPT..": "..effect..msg, unpack(color))
+                
             elseif eventType == "PARTY_KILL" and ct.killingblow then
-				-- 4.2
+                -- 4.2
                 local tname = select(9, ...)
                 xCTgen:AddMessage(ACTION_PARTY_KILL..": "..tname, .2, 1, .2)
+            
+            -- Add Taunt Captures
+            elseif eventType == "SPELL_AURA_APPLIED" and ct.yelltaunt then
+                local tName, _, _, spellID, _, _, auraType = select(9, ...)
+                Yell_Taunt(dstName, spellID, auraType)
+            
+            elseif eventType == "SPELL_CAST_SUCCESS" and ct.yelltaunt then
+                local tName, _, _, spellID = select(9, ...)
+                Yell_Taunt(dstName, spellID, true)
+            
             end
             
         end
     end
     
     xCTd:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	
-	-- this is corrected for 4.2, call normal
-	xCTd:SetScript("OnEvent", dmg)
+    
+    -- this is corrected for 4.2, call normal
+    xCTd:SetScript("OnEvent", dmg)
 end
 
 -- healing
@@ -1473,6 +1512,6 @@ if(ct.healing)then
 
     xCTh:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
-	-- this is corrected for 4.2, call normal
-	xCTh:SetScript("OnEvent", heal)
+    -- this is corrected for 4.2, call normal
+    xCTh:SetScript("OnEvent", heal)
 end
