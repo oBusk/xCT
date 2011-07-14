@@ -65,4 +65,10 @@ ns.config = {
 
     -- Align Grid
         ["showgrid"] = true,         -- shows a grid when moving xCT windows around
+        
+    -- Announce Events
+        ["yelltaunt"]     = true,   -- yell when you taunt a target
+        ["precachetaunt"] = false,  -- yell extra info when taunting a target
+        ["yellinterrupt"] = false,  -- yell when you interrupt a target
+        ["yelldispell"]   = false,  -- yell when you dispell a target
 }

@@ -26,6 +26,11 @@ if ct.mergeaoespam then
     -- See class-specific config for merged spells.
 end
 
+if ct.yelltaunt then
+    ct.tauntid = { }
+    -- See class-specific config for taunt spells.
+end
+
 -- class config, overrides general
 if ct.myclass == "WARLOCK" then
     if ct.mergeaoespam then
@@ -47,6 +52,10 @@ if ct.myclass == "WARLOCK" then
         ct.aoespam[30213] = true  -- Legion Strike (Felguard)
         ct.aoespam[89753] = true  -- Felstorm (Felguard)
         ct.aoespam[20153] = true  -- Immolation (Infrenal)
+    end
+    if ct.yelltaunt then
+        -- Challenging Howl (aoe)
+        ct.tauntid[59671] = { enabled = false, aoe = true, temp = true, phrase = "Temporarily taunted all enemies with %s!" } 
     end
     if ct.healing then
         ct.healfilter[28176] = true  -- Fel Armor
@@ -80,6 +89,12 @@ elseif ct.myclass == "DRUID" then
         ct.aoespam[33745] = true  -- Lacerate
         ct.aoespam[1079]  = true  -- Rip
     end
+    if ct.yelltaunt then
+        -- Growl
+        ct.tauntid[6795] = { enabled = true, aoe = false, temp = false, phrase = "Taunted: %t from %tt [%tho over]!" }
+        -- Challenging Roar 
+        ct.tauntid[5209] = { enabled = false, aoe = true, temp = false, phrase = "" }
+    end
 elseif ct.myclass == "PALADIN" then
     if ct.mergeaoespam then
         ct.aoespam[81297] = true  -- Consecration
@@ -95,6 +110,10 @@ elseif ct.myclass == "PALADIN" then
         ct.aoespam[94289] = true  -- Protector of the Innocent
         ct.aoespam[53652] = true  -- Beacon of Light
         ct.aoespam[85222] = true  -- Light of Dawn        
+    end
+    if ct.yelltaunt then
+        ct.tauntid[62124] = { enabled = true, aoe = false, temp = false, phrase = "Taunted: %t from %tto [%th over]!" }
+        ct.tauntid[31789] = { enabled = false, aoe = true, temp = false, phrase = "" }
     end
 elseif ct.myclass == "PRIEST" then
     if ct.mergeaoespam then
@@ -133,6 +152,10 @@ elseif ct.myclass == "SHAMAN" then
         ct.aoespam[51490] = true  -- Thunderstorm
         ct.aoespam[8187]  = true  -- Magma Totem
     end
+    if ct.yelltaunt then
+        -- Unleash Earth
+        ct.tauntid[73684] = { enabled = true, aoe = false, temp = true, phrase = "Temporarily Taunted: %t from %tt for 5 seconds!" }
+    end
     if ct.healing then
         ct.aoespam[73921] = true  -- Healing Rain
         ct.aoespam[5394]  = true  -- Healing Stream Totem
@@ -159,6 +182,12 @@ elseif ct.myclass == "WARRIOR" then
         ct.aoespam[94009] = true  -- Rend
         ct.aoespam[12721] = true  -- Deep Wounds
     end
+    if ct.yelltaunt then
+        -- Taunt
+        ct.tauntid[355]  = { enabled = true, aoe = false, temp = true, phrase = "Taunted: %t from %tt [%tho over]!" }
+        -- Challenging Shout
+        ct.tauntid[1161] = { enabled = false, aoe = true, temp = false, phrase = "" }
+    end
     if ct.healing then
         ct.healfilter[23880] = true  -- Bloodthirst
         ct.healfilter[55694] = true  -- Enraged Regeneration
@@ -171,6 +200,10 @@ elseif ct.myclass == "HUNTER" then
         ct.aoespam[1978]  = true  -- Serpent Sting
         ct.aoespam[13812] = true  -- Explosive Trap  
     end
+    if ct.yelltaunt then
+        -- Distracting Shot
+        ct.tauntid[20736] = { enabled = true, aoe = false, temp = true, phrase = "Temporarily Taunted: %t from %tt for 6 seconds!" }  
+    end
 elseif ct.myclass == "DEATHKNIGHT" then
     if ct.mergeaoespam then
         ct.aoespam[55095] = true  -- Frost Fever
@@ -179,6 +212,12 @@ elseif ct.myclass == "DEATHKNIGHT" then
         ct.aoespam[48721] = true  -- Blood Boil
         ct.aoespam[49184] = true  -- Howling Blast
         ct.aoespam[52212] = true  -- Death and Decay
+    end
+    if ct.yelltaunt then
+        -- Death Grip
+        ct.tauntid[49576] = { enabled = false, aoe = false, temp = true, phrase = "Taunted: %t from %tt [%tho over]!" }
+        -- Dark Command
+        ct.tauntid[56222] = { enabled = true, aoe = false, temp = true, phrase = "Taunted: %t from %tt [%tho over]!" }  
     end
 elseif ct.myclass == "ROGUE" then
     if ct.mergeaoespam then
@@ -258,6 +297,27 @@ local function ScrollDirection()
         ct.frames[i]:Clear()
         ct.frames[i]:SetInsertMode(ct.mode)
     end
+end
+
+-- Announce events
+local function Announce_Taunt(destName, spellID, spellIDsecondary)
+    local msg
+    
+    
+    return msg
+end
+
+local function Cache_Threat()
+    local isttTanking, _, tankThreat = UnitDetailedThreatSituation("targettarget", "target")
+    local _, _, playerThreat = UnitDetailedThreatSituation("player", "target")
+
+    ct.cachethreat = {
+        ["targetName"]       = GetUnitName("target"),
+        ["targettargetName"] = GetUnitName("targettarget"),
+        ["targetThreat"]     = tankThreat,
+        ["playerThreat"]     = playerThreat,
+        ["isNotTanking"]     = isttTanking,
+    }
 end
 
 -- Load on demand frame (no memory used when not needed)
@@ -1101,7 +1161,10 @@ SlashCmdList["XCT"] = function(input)
             StartTestMode()
             pr("test mode enabled.")
         end
-        
+    elseif input == "threat" then
+        if ct.yelltaunt then
+            
+        end
     else
         pr("use |cffFF0000/xct unlock|r to move and resize frames.")
         pr("use |cffFF0000/xct lock|r to lock frames.")
