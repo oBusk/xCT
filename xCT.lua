@@ -426,7 +426,7 @@ local function ChatMsgLoot_Handler(msg)
     local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))
     local item = { ["name"] = iN,
                    ["id"] = iI,
-                   ["amount"] = tonumber(iA or 1),
+                   ["amount"] = tonumber(iA) or 1,
                    ["quality"] = qq,
                    ["type"] = tt,
                    ["icon"] = ic,
@@ -457,7 +457,7 @@ local function ChatMsgLoot_Handler(msg)
     
         -- Total items in bag
         if ct.itemstotal then
-            s=s.." ("..(GetItemCount(item.id)).. ")"  -- buggy AS HELL :\
+            s=s.."   ("..(GetItemCount(item.id)).. ")"  -- buggy AS HELL :\
         end
     
         -- Add the message
