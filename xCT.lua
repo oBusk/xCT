@@ -55,7 +55,11 @@ if ct.myclass == "WARLOCK" then
     end
     if ct.yelltaunt then
         -- Challenging Howl (aoe)
-        ct.tauntid[59671] = { enabled = false, aoe = true, temp = true, phrase = "Temporarily taunted all enemies with %s!", link = GetSpellLink(59671) } 
+        ct.tauntid[59671] = {
+            enabled = false,
+            phrase = "Temporarily Taunted: All enemies with #spell!",
+            link = GetSpellLink(59671),
+        } 
     end
     if ct.healing then
         ct.healfilter[28176] = true  -- Fel Armor
@@ -90,10 +94,16 @@ elseif ct.myclass == "DRUID" then
         ct.aoespam[1079]  = true  -- Rip
     end
     if ct.yelltaunt then
-        -- Growl
-        ct.tauntid[6795] = { enabled = true, aoe = false, temp = false, phrase = "Taunted: %t from %tt [%tho over]!", link = GetSpellLink(6795) }
-        -- Challenging Roar 
-        ct.tauntid[5209] = { enabled = false, aoe = true, temp = false, phrase = "", link = GetSpellLink(5209) }
+        ct.tauntid[6795] = { -- Growl
+            enabled = true,
+            phrase = "Taunted: #target #offoftargettarget with #spell!",
+            link = GetSpellLink(6795),
+        }
+        ct.tauntid[5209] = { -- Challenging Roar (aoe)
+            enabled = false,
+            phrase = "Taunted: All enemies with #spell!",
+            link = GetSpellLink(5209),
+        }
     end
 elseif ct.myclass == "PALADIN" then
     if ct.mergeaoespam then
@@ -112,8 +122,18 @@ elseif ct.myclass == "PALADIN" then
         ct.aoespam[85222] = true  -- Light of Dawn        
     end
     if ct.yelltaunt then
-        ct.tauntid[62124] = { enabled = true, aoe = false, temp = false, phrase = "Taunted: %t from %tto [%th over]!", link = GetSpellLink(62124) }
-        ct.tauntid[31789] = { enabled = false, aoe = true, temp = false, phrase = "", link = GetSpellLink(31789) }
+        -- Hand of Reckoning
+        ct.tauntid[62124] = {
+            enabled = true,
+            phrase = "Taunted: #target #offoftargettarget with #spell!",
+            link = GetSpellLink(62124),
+        }
+        -- Righteous Defense
+        ct.tauntid[31789] = {
+            enabled = false,
+            phrase = "Taunting 3 enemies with #spell!",
+            link = GetSpellLink(31789),
+        }
     end
 elseif ct.myclass == "PRIEST" then
     if ct.mergeaoespam then
@@ -153,8 +173,11 @@ elseif ct.myclass == "SHAMAN" then
         ct.aoespam[8187]  = true  -- Magma Totem
     end
     if ct.yelltaunt then
-        -- Unleash Earth
-        ct.tauntid[73684] = { enabled = true, aoe = false, temp = true, phrase = "Temporarily Taunted: %t from %tt for 5 seconds!", link = GetSpellLink(73684) }
+        ct.tauntid[73684] = { -- Unleash Earth
+            enabled = true,
+            phrase = "Temporarily Taunted: #target #offoftargettarget with #spell!",
+            link = GetSpellLink(73684),
+        }
     end
     if ct.healing then
         ct.aoespam[73921] = true  -- Healing Rain
@@ -183,20 +206,16 @@ elseif ct.myclass == "WARRIOR" then
         ct.aoespam[12721] = true  -- Deep Wounds
     end
     if ct.yelltaunt then
-        -- Taunt
-        ct.tauntid[355] = { enabled = true,
-                            aoe = false,
-                            temp = false,
-                            phrase = "Taunted: %t from %tt [%tho over]!",
-                            link = GetSpellLink(355)
-                          }
-        -- Challenging Shout
-        ct.tauntid[1161] = { enabled = false,
-                             aoe = true,
-                             temp = false,
-                             phrase = "",
-                             link = GetSpellLink(1161)
-                           }
+        ct.tauntid[355] = { -- Taunt
+            enabled = true,
+            phrase = "Taunted: #target from #ofofftargettarget with #spell!",
+            link = GetSpellLink(355),
+        }
+        ct.tauntid[1161] = { -- Challenging Shout
+            enabled = true,
+            phrase = "Taunting enemies with #spell!",
+            link = GetSpellLink(1161),
+        }
     end
     if ct.healing then
         ct.healfilter[23880] = true  -- Bloodthirst
@@ -211,8 +230,11 @@ elseif ct.myclass == "HUNTER" then
         ct.aoespam[13812] = true  -- Explosive Trap  
     end
     if ct.yelltaunt then
-        -- Distracting Shot
-        ct.tauntid[20736] = { enabled = true, aoe = false, temp = true, phrase = "Temporarily Taunted: %t from %tt for 6 seconds!", link = GetSpellLink(1161) }  
+        ct.tauntid[20736] = { -- Distracting Shot
+            enabled = true,
+            phrase = "Temporarily Taunted: #target #offoftargettarget with #spell!",
+            link = GetSpellLink(20736),
+        }
     end
 elseif ct.myclass == "DEATHKNIGHT" then
     if ct.mergeaoespam then
@@ -224,10 +246,16 @@ elseif ct.myclass == "DEATHKNIGHT" then
         ct.aoespam[52212] = true  -- Death and Decay
     end
     if ct.yelltaunt then
-        -- Death Grip
-        ct.tauntid[49576] = { enabled = false, aoe = false, temp = true, phrase = "Taunted: %t from %tt [%tho over]!" }
-        -- Dark Command
-        ct.tauntid[56222] = { enabled = true, aoe = false, temp = true, phrase = "Taunted: %t from %tt [%tho over]!" }  
+        ct.tauntid[49576] = { -- Death Grip
+            enabled = false,
+            phrase = "Taunted: #target #offoftargettarget with #spell!",
+            link = GetSpellLink(49576),
+        }
+        ct.tauntid[56222] = { -- Dark Command
+            enabled = true,
+            phrase = "Taunted: #target #offoftargettarget with #spell!",
+            link = GetSpellLink(56222),
+        }
     end
 elseif ct.myclass == "ROGUE" then
     if ct.mergeaoespam then
@@ -467,30 +495,68 @@ end
 
 
 -- yells
--- Yell_Taunt(dstName, spellID, missType)
-local function Yell_Taunt(dstName, spellID, missType)
+local function FormatSpellYell( spell, cached )
+    local msg = spell.phrase or "Taunted: #target #offoftargettarget with #spell!"
+    msg = msg:gsub("#spell",spell.link)
+    
+    -- add the player
+    local playerMarker = GetRaidTargetIndex("player")
+    if playerMarker then
+        msg = msg:gsub("#player","{rt"..playerMarker.."}"..GetUnitName("player") or "")
+    else
+        msg = msg:gsub("#player",GetUnitName("player") or "")
+    end
+    
+    -- add the target
+    local targetMarker = GetRaidTargetIndex("target")
+    if targetMarker then
+        msg = msg:gsub("#target","{rt"..targetMarker.."}"..GetUnitName("target") or "")
+    else
+        msg = msg:gsub("#target",GetUnitName("target") or "")
+    end
+    
+    -- add the target of target
+    local targettargetMarker = GetRaidTargetIndex("targettarget")
+    if targettargetMarker then
+        msg = msg:gsub("#targettarget","{rt"..targettargetMarker.."}"..GetUnitName("targettarget") or "")
+    else
+        msg = msg:gsub("#targettarget",GetUnitName("targettarget") or "")
+    end
+    
+    -- add the "...off of target of target"
+    local offofTargettargetMarker = GetRaidTargetIndex("targettarget")
+    if offofTargettargetMarker then
+        msg = msg:gsub("#offoftargettarget","off of {rt"..offofTargettargetMarker.."}"..GetUnitName("targettarget"))
+    else
+        if GetUnitName("targettarget") then
+            msg = msg:gsub("#offoftargettarget","off of "..GetUnitName("targettarget"))
+        else
+            msg = msg:gsub("#offoftargettarget","")
+        end
+    end
+
+    if cached then
+        msg = msg:gsub("#playerthreat", cached.playerThreat)
+        msg = msg:gsub("#targetthreat", cached.targetThreat)
+    end
+    return msg
+end
+
+local function YellTaunt( destName, spellID, missType )
     if missType then
         local spell = ct.tauntid[spellID]
         if spell and spell.enabled then
-            -- early beta, don't actually announce yet
-            if ct.cachethreat then
-                local threatDelta = ct.cachethreat.tankThreat - ct.cachethreat.playerThreat
-                if threatDelta > 0 and ct.cachethreat.targetName == dstName and ct.cachethreat.isttTanking then
-                    pr( spell.link .. ": " .. dstName .. " off of " .. ct.cachethreat.targettargetName .. " [" .. threatDelta .. "% over]!" )
-                end
-            else
-            pr( "Taunted: " .. dstName .. " with " .. spell.link .. "!" )
+            local msg = FormatSpellYell(spell, ct.cachethreat)
+            if GetUnitName("player") ~= GetUnitName("targettarget") then
+                SendChatMessage(msg, "SAY")
             end
         end
     end
 end
 
-local function Cache_Threat()
-    ct.cachethreat = nil
-
-    local isttTanking, _, tankThreat = UnitDetailedThreatSituation( "targettarget", "target" )
-    local playerThreat = select( 3, UnitDetailedThreatSituation("player", "target") )
-
+local function CacheThreat()
+    local isttTanking,_,tankThreat=UnitDetailedThreatSituation("targettarget","target")
+    local playerThreat=select(3,UnitDetailedThreatSituation("player","target"))
     ct.cachethreat = {
         ["targetName"]       = GetUnitName("target"),
         ["targettargetName"] = GetUnitName("targettarget"),
@@ -1190,6 +1256,7 @@ SlashCmdList["XCT"] = function(input)
     elseif input == "t" or input == "taunt" then 
         if ct.yelltaunt then
             -- cache threat info
+            CacheThreat()
         end
     else
         pr("use |cffFF0000/xct unlock|r to move and resize frames.")
@@ -1437,12 +1504,14 @@ if(ct.damage)then
             
             -- Add Taunt Captures
             elseif eventType == "SPELL_AURA_APPLIED" and ct.yelltaunt then
-                local tName, _, _, spellID, _, _, auraType = select(9, ...)
-                Yell_Taunt(dstName, spellID, auraType)
+                local spellID, _, _, auraType = select(12, ...)
+                YellTaunt(destName, spellID, auraType)
+                --pr("Testing! SPELL_AURA_APPLIED")
             
-            elseif eventType == "SPELL_CAST_SUCCESS" and ct.yelltaunt then
-                local tName, _, _, spellID = select(9, ...)
-                Yell_Taunt(dstName, spellID, true)
+            --elseif eventType == "SPELL_CAST_SUCCESS" and ct.yelltaunt then
+                --local tName, _, _, spellID = select(9, ...)
+                --Yell_Taunt(dstName, spellID, true)
+                --pr("Testing! SPELL_CAST_SUCCESS")
             
             end
             
