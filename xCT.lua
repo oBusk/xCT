@@ -518,7 +518,8 @@ local function FormatSpellYell( spell, cached )
     -- add the target of target
     local targettargetMarker = GetRaidTargetIndex("targettarget")
     if targettargetMarker then
-        msg = msg:gsub("#targettarget","{rt"..targettargetMarker.."}"..GetUnitName("targettarget") or "")
+        print("DEBUG: Found raid marks")
+        msg = msg:gsub("#targettarget","{rt"..targettargetMarker.."}"..(GetUnitName("targettarget") or ""))
     else
         msg = msg:gsub("#targettarget",GetUnitName("targettarget") or "")
     end
@@ -531,7 +532,7 @@ local function FormatSpellYell( spell, cached )
         if GetUnitName("targettarget") then
             msg = msg:gsub("#offoftargettarget","off of "..GetUnitName("targettarget"))
         else
-            msg = msg:gsub("#offoftargettarget","")
+            msg = msg:gsub("%s?#offoftargettarget","")
         end
     end
 
@@ -543,7 +544,7 @@ local function FormatSpellYell( spell, cached )
 end
 
 local function YellTaunt( destName, spellID, missType )
-    if missType then
+    if missType and ct.yelltaunt then
         local spell = ct.tauntid[spellID]
         if spell and spell.enabled then
             local msg = FormatSpellYell(spell, ct.cachethreat)
@@ -1230,22 +1231,28 @@ StaticPopupDialogs["XCT_LOCK"] = {
 SLASH_XCT1 = "/xct"
 SlashCmdList["XCT"] = function(input)
     input = string.lower(input)
+    local args = { }
     
-    if input == "unlock" then
+    -- get the args
+    for v in input:gmatch("%w+") do
+        args[#args+1] = v
+    end
+    
+    if args[1] == "unlock" then
         if ct.locked then
             StartConfigmode()
         else
             pr("already unlocked.")
         end
         
-    elseif input=="lock" then
+    elseif args[1] == "lock" then
         if ct.locked then
             pr("already locked.")
         else
             StaticPopup_Show("XCT_LOCK")
         end
         
-    elseif input == "test" then
+    elseif args[1] == "test" then
         if (ct.testmode) then
             EndTestMode()
             pr("test mode disabled.")
@@ -1253,15 +1260,71 @@ SlashCmdList["XCT"] = function(input)
             StartTestMode()
             pr("test mode enabled.")
         end
-    elseif input == "t" or input == "taunt" then 
+    elseif args[1] == "t" then 
         if ct.yelltaunt then
             -- cache threat info
             CacheThreat()
         end
+    elseif args[1] == "taunt" then
+        if args[2] == "on" then
+            ct.yelltaunt = true
+        elseif args[2] == "off" then
+            ct.yelltaunt = false
+        else
+            if ct.yelltaunt then
+                ct.yelltaunt = false
+            else
+                ct.yelltaunt = true    
+            end
+        end
+        if ct.yelltaunt then
+            pr("Announcing taunts |cffFFFF00enabled|r!")
+        else
+            pr("Announcing taunts |cffFFFF00disabled|r!")
+        end
+    elseif args[1] == "interrupt" then
+        if args[2] == "on" then
+            ct.yellinterrupt = true
+        elseif args[2] == "off" then
+            ct.yellinterrupt = false
+        else
+            if ct.yellinterrupt then
+                ct.yellinterrupt = false
+            else
+                ct.yellinterrupt = true    
+            end
+        end
+        if ct.yellinterrupt then
+            pr("Announcing interrupts |cffFFFF00enabled|r!")
+        else
+            pr("Announcing interrupts |cffFFFF00disabled|r!")
+        end
+    elseif args[1] == "dispell" then
+        if args[2] == "on" then
+            ct.yelldispell = true
+        elseif args[2] == "off" then
+            ct.yelldispell = false
+        else
+            if ct.yelldispell then
+                ct.yelldispell = false
+            else
+                ct.yelldispell = true    
+            end
+        end
+        if ct.yelldispell then
+            pr("Announcing dispells |cffFFFF00enabled|r!")
+        else
+            pr("Announcing dispells |cffFFFF00disabled|r!")
+        end
     else
-        pr("use |cffFF0000/xct unlock|r to move and resize frames.")
-        pr("use |cffFF0000/xct lock|r to lock frames.")
-        pr("use |cffFF0000/xct test|r to toggle testmode (sample xCT output).")
+        pr("Position Commands")
+        print("    use |cffFF0000/xct unlock|r to move and resize frames.")
+        print("    use |cffFF0000/xct lock|r to lock frames.")
+        print("    use |cffFF0000/xct test|r to toggle testmode (sample xCT output).")
+        pr("Announcement Options")
+        print("    use |cffFF0000/xct|r |cff5555FFtaunt|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off taunt yells.")
+        print("    use |cffFF0000/xct|r |cff5555FFinterrupt|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off interrupt yells.")
+        print("    use |cffFF0000/xct|r |cff5555FFdispell|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off dispell yells.")
     end
 end
 
