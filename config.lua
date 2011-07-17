@@ -46,11 +46,12 @@ ns.config = {
         ["dispel"]           = true,  -- tells you about your dispels (works only with ["damage"] = true,)
         ["interrupt"]        = true,  -- tells you about your interrupts (works only with ["damage"] = true,)
 
-
     -- display looted items (set both to false to revert changes and go back to the original xCT)
-        ["lootwindow"]      = true,   -- different loot window (if false, goes into general events window)
         ["lootitems"]       = true,   -- show all looted items
         ["lootmoney"]       = true,   -- Display looted money
+        
+    -- display loot in a separate window
+        ["lootwindow"]      = true,   -- different loot window (if false, goes into general events window)
         ["loottimevisible"] = 6,      -- the ammount of time in seconds your loot message is displayed (6 seems good, ["lootwindow"] needs to be true)  
         
     -- fine tune loot options
@@ -63,10 +64,10 @@ ns.config = {
         ["colorblind"]      = false,  -- shows letters G, S, and C instead of textures
         ["minmoney"]        = 0,      -- filter money received events, less than this amount (4G 32S 12C = 43212)
 
-    -- Align Grid
+    -- show grid when aligning xCT
         ["showgrid"] = true,         -- shows a grid when moving xCT windows around
         
-    -- Announce Events
+    -- announce and yell events
         ["yelltaunt"]     = true,   -- yell when you taunt a target
         ["precachetaunt"] = false,  -- yell extra info when taunting a target
         ["yellinterrupt"] = false,  -- yell when you interrupt a target
