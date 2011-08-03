@@ -65,11 +65,14 @@ ns.config = {
         ["minmoney"]        = 0,      -- filter money received events, less than this amount (4G 32S 12C = 43212)
 
     -- show grid when aligning xCT
-        ["showgrid"] = true,         -- shows a grid when moving xCT windows around
+        ["showgrid"] = true,          -- shows a grid when moving xCT windows around
         
     -- announce and yell events
-        ["yelltaunt"]     = true,   -- yell when you taunt a target
-        ["precachetaunt"] = false,  -- yell extra info when taunting a target
-        ["yellinterrupt"] = false,  -- yell when you interrupt a target
-        ["yelldispell"]   = false,  -- yell when you dispell a target
+        ["yelltaunt"]     = true,     -- yell when you taunt a target
+        ["precachetaunt"] = false,    -- yell extra info when taunting a target
+        ["yellinterrupt"] = false,    -- yell when you interrupt a target
+        ["yelldispell"]   = false,    -- yell when you dispell a target
+        
+    -- experimental
+        ["mergeimmunespam"] = false,  -- merge multiple immune spam (uses "mergeaoespamtime" timer)
 }
