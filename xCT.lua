@@ -611,12 +611,12 @@ local function OnEvent(self, event, subevent, ...)
                         end
                     end
                 end
-                
+                return
             elseif subevent == "PERIODIC_HEAL" then
                 if arg3 >= ct.healtreshold then
                     xCTheal:AddMessage("+"..arg3, .1, .5, .1)
                 end
-
+                
             elseif subevent == "SPELL_CAST" then
                 xCTgen:AddMessage(arg2, 1, .82, 0)
             
@@ -633,7 +633,20 @@ local function OnEvent(self, event, subevent, ...)
                 xCTdmg:AddMessage(EVADE, .5, .5, .5)
                 
             elseif subevent == "IMMUNE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCTdmg:AddMessage(IMMUNE, .5, .5, .5)
+                if ct.mergeimmunespam then
+                    SQ[subevent]["locked"] = true
+                    SQ[subevent]["queue"]  = IMMUNE
+                    SQ[subevent]["msg"]    = ""
+                    SQ[subevent]["color"]  = { .5, .5, .5 }
+                    SQ[subevent]["count"]  = SQ[subevent]["count"] + 1
+                    if SQ[subevent]["count"] == 1 then
+                        SQ[subevent]["utime"] = time()
+                    end
+                    SQ[subevent]["locked"] = false
+                    return
+                else
+                    xCTdmg:AddMessage(IMMUNE, .5, .5, .5)
+                end
                 
             elseif subevent == "DEFLECT" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
                 xCTdmg:AddMessage(DEFLECT, .5, .5, .5)
@@ -654,7 +667,20 @@ local function OnEvent(self, event, subevent, ...)
                 xCTdmg:AddMessage(EVADE, .5, .5, .5)
                 
             elseif subevent == "SPELL_IMMUNE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-                xCTdmg:AddMessage(IMMUNE, .5, .5, .5)
+                if ct.mergeimmunespam then
+                    SQ[subevent]["locked"] = true
+                    SQ[subevent]["queue"]  = IMMUNE
+                    SQ[subevent]["msg"]    = ""
+                    SQ[subevent]["color"]  = { .5, .5, .5 }
+                    SQ[subevent]["count"]  = SQ[subevent]["count"] + 1
+                    if SQ[subevent]["count"] == 1 then
+                        SQ[subevent]["utime"] = time()
+                    end
+                    SQ[subevent]["locked"] = false
+                    return
+                else
+                    xCTdmg:AddMessage(IMMUNE, .5, .5, .5)
+                end
                 
             elseif subevent == "SPELL_DEFLECT" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
                 xCTdmg:AddMessage(DEFLECT, .5, .5, .5)
@@ -1360,15 +1386,15 @@ if ct.mergeaoespam then
             SQ[k] = {queue = 0, msg = "", color = { }, count = 0, utime = 0, locked = false}
         end
         ct.SpamQueue=function(spellId, add)
-            local amount
-            local spam = SQ[spellId]["queue"]
-            if spam and type(spam) == "number" then
-                amount = spam + add
-            else
-                amount = add
+                local amount
+                local spam = SQ[spellId]["queue"]
+                if spam and type(spam) == "number" then
+                    amount = spam + add
+                else
+                    amount = add
+                end
+                return amount
             end
-            return amount
-        end
         local tslu = 0
         local xCTspam = CreateFrame("Frame")
         xCTspam:SetScript("OnUpdate", function(self, elapsed)
@@ -1563,7 +1589,9 @@ if(ct.damage)then
             elseif eventType == "PARTY_KILL" and ct.killingblow then
                 -- 4.2
                 local tname = select(9, ...)
+                local msg = ACTION_PARTY_KILL:sub(1,1):upper()..ACTION_PARTY_KILL:sub(2)
                 xCTgen:AddMessage(ACTION_PARTY_KILL..": "..tname, .2, 1, .2)
+                
             
             -- Add Taunt Captures
             elseif eventType == "SPELL_AURA_APPLIED" and ct.yelltaunt then
