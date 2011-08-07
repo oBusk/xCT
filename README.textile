@@ -24,6 +24,10 @@ p. For those that have used Affli's xCT Add-On, xCT+ expands the functionality o
 
 * And more soon to come!
 
-p. "Screenshot":http://cloud.github.com/downloads/dandruff/xCT/setup-preview.jpg
+h4. Screenshots
+
+p. "Screenshot 1 - xCT+ Setup":http://cloud.github.com/downloads/dandruff/xCT/setup-preview.jpg
+
+p. "Screenshot 2 - xCT+ Combat":https://github.com/downloads/dandruff/xCT/incombat-xct+marked.png
 
 p. I am not accepting any donations for this Add-On.  *Please report all issues "here":https://github.com/dandruff/xCT/issues .*
