@@ -24,4 +24,6 @@ p. For those that have used Affli's xCT Add-On, xCT+ expands the functionality o
 
 * And more soon to come!
 
+p. "Screenshot":http://cloud.github.com/downloads/dandruff/xCT/setup-preview.jpg
+
 p. I am not accepting any donations for this Add-On.  *Please report all issues "here":https://github.com/dandruff/xCT/issues .*
