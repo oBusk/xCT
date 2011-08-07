@@ -10,12 +10,12 @@ p. Overall, xCT+ is a replacement for Blizzard's scrolling combat text.  It is s
 
 p. For those that have used Affli's xCT Add-On, xCT+ expands the functionality of its predecessor.  New features include:
 
-# A new loot frame
+* A new loot frame
 
-# A new yell setting that allows you to yell interrupts, dispells, taunts, and more to your party or raid (coming soon)
+* A new yell setting that allows you to yell interrupts, dispells, taunts, and more to your party or raid (coming soon)
 
-# A grid when positioning the frames
+* A grid when positioning the frames
 
-# And more soon to come!
+* And more soon to come!
 
-p. I am not accepting any donations for this Add-On.  *Please report all issues _"here":https://github.com/dandruff/xCT/issues _.*
+p. I am not accepting any donations for this Add-On.  *Please report all issues "here":https://github.com/dandruff/xCT/issues .*
