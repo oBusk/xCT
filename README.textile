@@ -6,7 +6,7 @@ h2{color:red}. X Combat Text Plus
 
 h4. Download
 
-"Latest Version":https://github.com/downloads/dandruff/xCT/dandruff-xCT+1.95.zip
+"Latest Version":https://github.com/downloads/dandruff/xCT/dandruff-xCT+v1.95.zip
 
 h4. Description
 
