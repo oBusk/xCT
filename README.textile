@@ -2,7 +2,13 @@ h2(#readme).
 
 !https://github.com/downloads/dandruff/xCT/xCT+2.png!
 
-h4. X Combat Text Plus
+h1{color:red}. X Combat Text Plus
+
+h4. Download
+
+"Lastest Version":https://github.com/downloads/dandruff/xCT/dandruff-xCT+1.95.zip
+
+h4. Description
 
 p. xCT+ is a continuation and fork of "xCT":http://www.wowinterface.com/downloads/info18053-xCT.html (by braindump, aka Affli).  Affli has stopped updating xCT since 4.0.6.  I'm hoping to keep this project going as long as Affli is away.
 
