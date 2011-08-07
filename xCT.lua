@@ -1,5 +1,8 @@
 --[[
 
+xCT+
+
+Forked from:
 xCT by affli @ RU-Howling Fjord
 All rights reserved.
 Thanks ALZA and Shestak for making this mod possible. Thanks Tukz for his wonderful style of coding. Thanks Rostok for some fixes and healing code.
@@ -1004,7 +1007,7 @@ InterfaceOptionsCombatTextPanelTitle:SetText(COMBAT_TEXT_LABEL.." (powered by |c
 
 -- color printer
 local pr = function(msg)
-    print("|cffFF0000x|rCT:", tostring(msg))
+    print("\124cffFF0000x\124rCT\124cffDDFF55+\124r", tostring(msg))
 end
 
 -- awesome configmode and testmode
