@@ -1347,10 +1347,11 @@ SlashCmdList["XCT"] = function(input)
         print("    use |cffFF0000/xct unlock|r to move and resize frames.")
         print("    use |cffFF0000/xct lock|r to lock frames.")
         print("    use |cffFF0000/xct test|r to toggle testmode (sample xCT output).")
-        pr("Announcement Options")
-        print("    use |cffFF0000/xct|r |cff5555FFtaunt|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off taunt yells.")
-        print("    use |cffFF0000/xct|r |cff5555FFinterrupt|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off interrupt yells.")
-        print("    use |cffFF0000/xct|r |cff5555FFdispell|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off dispell yells.")
+        -- changes soon to come
+        --pr("Announcement Options")
+        --print("    use |cffFF0000/xct|r |cff5555FFtaunt|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off taunt yells.")
+        --print("    use |cffFF0000/xct|r |cff5555FFinterrupt|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off interrupt yells.")
+        --print("    use |cffFF0000/xct|r |cff5555FFdispell|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off dispell yells.")
     end
 end
 
