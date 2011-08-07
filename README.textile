@@ -1,0 +1,21 @@
+h2(#readme). 
+
+!https://github.com/downloads/dandruff/xCT/xCT+2.png!
+
+h4. X Combat Text Plus
+
+p. xCT+ is a continuation and fork of "xCT":http://www.wowinterface.com/downloads/info18053-xCT.html (by braindump, aka Affli).  Affli has stopped updating xCT since 4.0.6.  I'm hoping to keep this project going as long as Affli is away.
+
+p. Overall, xCT+ is a replacement for Blizzard's scrolling combat text.  It is superior to the default combat text because xCT+ organizes incoming healing, incoming damage, and outgoing damage/healing into their own frames.
+
+p. For those that have used Affli's xCT Add-On, xCT+ expands the functionality of its predecessor.  New features include:
+
+# A new loot frame
+
+# A new yell setting that allows you to yell interrupts, dispells, taunts, and more to your party or raid (coming soon)
+
+# A grid when positioning the frames
+
+# And more soon to come!
+
+p. I am not accepting any donations for this Add-On.  *Please report all issues _"here":https://github.com/dandruff/xCT/issues _.*
