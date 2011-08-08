@@ -174,6 +174,7 @@ elseif ct.myclass == "SHAMAN" then
         ct.aoespam[77478] = true  -- Earhquake
         ct.aoespam[51490] = true  -- Thunderstorm
         ct.aoespam[8187]  = true  -- Magma Totem
+        
     end
     if ct.yelltaunt then
         ct.tauntid[73684] = { -- Unleash Earth
@@ -184,8 +185,9 @@ elseif ct.myclass == "SHAMAN" then
     end
     if ct.healing then
         ct.aoespam[73921] = true  -- Healing Rain
-        ct.aoespam[5394]  = true  -- Healing Stream Totem
+        -- ct.aoespam[5394]  = true  -- Healing Stream Totem (outdated)
         ct.aoespam[1064]  = true  -- Chain Heal
+        ct.aoespam[52042] = true  -- Healing Stream Totem
     end
 elseif ct.myclass == "MAGE" then
     if ct.mergeaoespam then
