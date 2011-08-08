@@ -30,4 +30,10 @@ p. "Screenshot 1 - xCT+ Setup":http://cloud.github.com/downloads/dandruff/xCT/se
 
 p. "Screenshot 2 - xCT+ Combat":https://github.com/downloads/dandruff/xCT/incombat-xct+marked.png
 
+h4. Questions?
+
+p. Please visit the "Tukui forums":http://www.tukui.org/forums/topic.php?id=15582 if you have any questions or comments (see below for issues).
+
+h4. Support and Issues
+
 p. I am not accepting any donations for this Add-On.  *Please report all issues "here":https://github.com/dandruff/xCT/issues .*
