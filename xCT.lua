@@ -297,6 +297,8 @@ end
 ]]
 --xCTcustom:AddMessage("Message...", 1, 1, 1)
 
+-- spam merger
+local SQ
 
 -- detect vechile
 local function SetUnit()
@@ -436,8 +438,6 @@ end
 
 -- regex string for loot items
 local parseloot = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
-local itemQualities={'Poor','Common','Uncommon','Rare','Epic','Legendary','Artifact','Heirloom'}
-
 
 -- loot events
 local function ChatMsgMoney_Handler(msg)
@@ -457,16 +457,17 @@ end
 local function ChatMsgLoot_Handler(msg)
     local pM,iQ,iI,iN,iA = select(3, string.find(msg, parseloot))
     local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))
-    local item = { ["name"] = iN,
-                   ["id"] = iI,
-                   ["amount"] = tonumber(iA) or 1,
-                   ["quality"] = qq,
-                   ["type"] = tt,
-                   ["icon"] = ic,
-                   ["crafted"] = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", "")),
-                   ["self"] = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", "")),
-                 }
-    
+
+    local item   = { }
+        item.name    = iN
+        item.id      = iI
+        item.amount  = tonumber(iA) or 1
+        item.quality = qq
+        item.type    = tt
+        item.icon    = ic
+        item.crafted = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
+        item.self    = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
+
     if (ct.lootitems and item.self and item.quality >= ct.itemsquality) or (item.type == "Quest" and ct.questitems and item.self) or (item.crafted and ct.crafteditems) then
         if item.crafted and ct.crafteditems == false then return end
         if item.type == "Quest" and ct.questitems == false then return end
@@ -474,7 +475,7 @@ local function ChatMsgLoot_Handler(msg)
         local r,g,b=GetItemQualityColor(item.quality)
         local s=item.type..": ["..item.name.."] "
         if ct.colorblind then
-            s = item.type.." ("..itemQualities[item.quality].."): ["..item.name.."] "
+            s = item.type.." (".. _G["ITEM_QUALITY"..item.quality.."_DESC"] .."): ["..item.name.."] "
         end
         
         -- Add the Texture
@@ -1380,7 +1381,6 @@ if ct.stopvespam and ct.myclass == "PRIEST" then
 end
 
 -- spam merger
-local SQ
 if ct.mergeaoespam then
     if ct.damage or ct.healing then
         if not ct.mergeaoespamtime or ct.mergeaoespamtime < 1 then
