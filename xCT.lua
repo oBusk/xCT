@@ -297,6 +297,23 @@ end
 ]]
 --xCTcustom:AddMessage("Message...", 1, 1, 1)
 
+
+-- Create a text texture for spells
+local GetSpellTexture_old = GetSpellTexture
+
+local GetSpellTexture = function(spellID)
+    if ct.texticons then      
+        return " ["..GetSpellName(spellID).."] "
+    else
+        return GetSpellTexture_old(spellID)
+    end
+end
+
+if ct.texticons then
+    ct.icon = true
+end
+
+
 -- spam merger
 local SQ
 
