@@ -960,10 +960,14 @@ for i = 1, numf do
         end
     elseif framenames[i] == "loot" then
         f:SetTimeVisible(ct.loottimevisible)
-        f:SetJustifyH(ct.justify_3)
+        f:SetJustifyH(ct.justify_5)
         f:SetWidth(256)
         f:SetPoint("CENTER", 320, 192)
-    
+    elseif framenames[i] == "loot" then
+        f:SetTimeVisible(ct.crittimevisible)
+        f:SetJustifyH(ct.justify_6)
+        f:SetPoint("CENTER", -64, 64)
+        
     -- Add a starting location to your frame
     --elseif framenames[i] == "custom" then
     --    f:SetTimeVisible(ct.loottimevisible)
@@ -1069,6 +1073,9 @@ local StartConfigmode = function()
             elseif framenames[i] == "loot" then
                 f.fs:SetText(LOOT)
                 f.fs:SetTextColor(1,1,1,.9)
+            elseif framenames[i] == "crit" then
+                f.fs:SetText("crits")
+                f.fs:SetTextColor(1,.5,0,.9)
             -- Add a title to your frame
             --elseif framenames[i] == "custom" then
             --    f.fs:SetText("Custom Frame")
@@ -1248,7 +1255,13 @@ local function StartTestMode()
                     --    if random(3) % 3 == 0 then
                     --        ct.frames[i]:AddMessage("Test test test", 1, 1, 1)
                     --    end
-                        
+                    elseif framenames[i] == "crit" then
+                    
+                        if random(3) % 3 == 0 then
+                            local crit = random(10000, 900000)
+                            ct.frames[i]:AddMessage(ct.critprefix .. crit .. ct.critpostfix)
+                        end
+                    
                     end
                     
                     TimeSinceLastUpdate = 0
