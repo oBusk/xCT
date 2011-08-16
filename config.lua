@@ -21,6 +21,9 @@ ns.config = {
         ["treshold"]     = 1,     -- minimum damage to show in outgoing damage frame
         ["healtreshold"] = 1,     -- minimum healing to show in incoming/outgoing healing messages.
 
+    
+        
+        
     -- appearence
         ["font"]           = "Interface\\Addons\\xCT\\HOOGE.TTF", -- "Fonts\\ARIALN.ttf" is default WoW font.
         ["fontsize"]       = 12,
@@ -36,7 +39,9 @@ ns.config = {
         ["justify_2"] = "RIGHT",    -- incoming healing justify
         ["justify_3"] = "CENTER",   -- various messages justify (mana, rage, auras, etc)
         ["justify_4"] = "RIGHT",    -- outgoing damage/healing justify
-
+        ["justify_5"] = "CENTER",   -- loot
+        ["justify_6"] = "CENTER",   -- crit
+        
     -- class modules and goodies
         ["stopvespam"]       = false, -- automaticly turns off healing spam for priests in shadowform. HIDE THOSE GREEN NUMBERS PLX!
         ["dkrunes"]          = true,  -- show deatchknight rune recharge
@@ -68,12 +73,16 @@ ns.config = {
         ["showgrid"] = true,          -- shows a grid when moving xCT windows around
     
 
-    -- experimental (not fully implemented or supported)
-    -- announce and yell events 
+    -- >>experimental<< (not fully implemented or supported)
+        -- announce and yell events 
         ["yelltaunt"]       = false,  -- yell when you taunt a target
         ["precachetaunt"]   = false,  -- yell extra info when taunting a target
         ["yellinterrupt"]   = false,  -- yell when you interrupt a target
         ["yelldispell"]     = false,  -- yell when you dispell a target
         
         ["mergeimmunespam"] = false,  -- merge multiple immune spam (uses "mergeaoespamtime" timer)
+        
+        -- Additional xCT out/inc dmg/heal options
+        ["critwindow"] = false,    -- show crits in its own frame
+        ["crittimevisible"] = 3,  -- how long to display the crit for
 }
