@@ -288,6 +288,12 @@ if ct.lootwindow then
     framenames[numf] = "loot"
 end
 
+-- Add window for crit events
+if ct.critwindow then
+    numf = numf + 1     -- 6
+    framenames[numf] = "crit"
+end
+
 -- Create your own frame
 --[[
 if ct.custom_frame_enable then
@@ -298,10 +304,10 @@ end
 --xCTcustom:AddMessage("Message...", 1, 1, 1)
 
 
--- Create a text texture for spells
+-- Create a text texture for spells 
 local GetSpellTexture_old = GetSpellTexture
 
-local GetSpellTexture = function(spellID)
+GetSpellTexture = function(spellID)
     if ct.texticons then      
         return " ["..GetSpellName(spellID).."] "
     else
@@ -605,13 +611,13 @@ local function OnEvent(self, event, subevent, ...)
                 xCTdmg:AddMessage("-"..arg2, .75, .1, .1)
                 
             elseif subevent == "DAMAGE_CRIT" then
-                xCTdmg:AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .1, .1)
+                (xCTcrit or xCTdmg):AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .1, .1)
                 
             elseif subevent == "SPELL_DAMAGE" then
                 xCTdmg:AddMessage("-"..arg2, .75, .3, .85)
                 
             elseif subevent == "SPELL_DAMAGE_CRIT" then
-                xCTdmg:AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .3, .5)
+                (xCTcrit or xCTdmg):AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .3, .5)
                 
             elseif subevent == "HEAL" then
                 if arg3 >= ct.healtreshold then
@@ -1487,7 +1493,11 @@ if(ct.damage)then
                         end
                         msg = msg.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                     end
-                    xCTdone:AddMessage(msg)
+                    if critical then
+                        (xCTcrit or xCTdone):AddMessage(msg)
+                    else
+                        xCTdone:AddMessage(msg)
+                    end
                 end
                 
             elseif eventType == "RANGE_DAMAGE" then
@@ -1502,7 +1512,11 @@ if(ct.damage)then
                         icon = GetSpellTexture(spellId)
                         msg = msg.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
                     end
-                    xCTdone:AddMessage(msg)
+                    if critical then
+                        (xCTcrit or xCTdone):AddMessage(msg)
+                    else
+                        xCTdone:AddMessage(msg)
+                    end
                 end
     
             elseif eventType == "SPELL_DAMAGE" or (eventType == "SPELL_PERIODIC_DAMAGE" and ct.dotdamage) then
@@ -1545,7 +1559,12 @@ if(ct.damage)then
                         SQ[spellId]["locked"] = false
                         return
                     end
-                    xCTdone:AddMessage(amount..""..msg, unpack(color))
+                    
+                    if critical then
+                        (xCTcrit or xCTdone):AddMessage(amount..""..msg, unpack(color))
+                    else
+                        xCTdone:AddMessage(amount..""..msg, unpack(color))
+                    end
                 end
     
             elseif eventType == "SWING_MISSED" then
