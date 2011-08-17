@@ -307,7 +307,7 @@ end
 -- Create a text texture for spells 
 local GetSpellTexture_old = GetSpellTexture
 
-GetSpellTexture = function(spellID)
+local GetSpellTexture = function(spellID)
     if ct.texticons then      
         return " ["..GetSpellName(spellID).."] "
     else
