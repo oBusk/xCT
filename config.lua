@@ -62,10 +62,10 @@ ns.config = {
     -- fine tune loot options
         ["loothideicons"]   = false,  -- show item icons when looted
         ["looticonsize"]    = 20,     -- Icon size of looted, crafted and quest items
-        ["crafteditems"]    = true,   -- show crafted items ( nil = default, false = always hide, true = always show)
-        ["questitems"]      = true,   -- show quest items ( nil = default, false = always hide, true = always show)
+        ["crafteditems"]    = nil,    -- show crafted items ( nil = default, false = always hide, true = always show)
+        ["questitems"]      = nil,    -- show quest items ( nil = default, false = always hide, true = always show)
         ["itemsquality"]    = 3,      -- filter items shown by item quality: 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
-        ["itemstotal"]      = false,   -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)") - This is current bugged and inacurate
+        ["itemstotal"]      = false,  -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)") - This is currently bugged and inacurate
         ["colorblind"]      = false,  -- shows letters G, S, and C instead of textures
         ["minmoney"]        = 0,      -- filter money received events, less than this amount (4G 32S 12C = 43212)
 
@@ -83,6 +83,10 @@ ns.config = {
         ["mergeimmunespam"] = false,  -- merge multiple immune spam (uses "mergeaoespamtime" timer)
         
         -- Additional xCT out/inc dmg/heal options
-        ["critwindow"] = false,    -- show crits in its own frame
-        ["crittimevisible"] = 3,  -- how long to display the crit for
+        ["critwindow"]      = false,   -- show crits in its own frame
+        ["crittimevisible"] = 3,          -- how long to display the crit for
+		["critfontsize"]    = "auto",  -- crit font size ("auto" or Number)
+		["criticonsize"]    = 20,      -- size of the icons in the crit frame
+		["criticons"]	    = true,    -- show crit icons
+        ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
 }
