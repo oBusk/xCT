@@ -304,15 +304,31 @@ end
 --xCTcustom:AddMessage("Message...", 1, 1, 1)
 
 
--- Create a text texture for spells 
-local GetSpellTexture_old = GetSpellTexture
-
-local GetSpellTexture = function(spellID)
-    if ct.texticons then      
-        return " ["..GetSpellName(spellID).."] "
+-- Create a text texture for spells
+local GetSpellTextureFormatted = function(spellID, iconSize)
+    local msg = ""
+    if ct.texticons then
+        if spellID == PET_ATTACK_TEXTURE then
+            msg = " ["..GetSpellName(5547).."] " -- "Swing"
+        else
+            local name = GetSpellName(spellID)
+            if name then
+                msg = " ["..name.."] "
+            end
+        end
     else
-        return GetSpellTexture_old(spellID)
+        if spellID == PET_ATTACK_TEXTURE then
+            msg = " \124T"..PET_ATTACK_TEXTURE..":"..iconsize..":"..iconsize..":0:0:64:64:5:59:5:59\124t"
+        else
+            local icon = GetSpellTexture(spellID)
+            if icon then
+                msg = " \124T"..icon..":"..iconsize..":"..iconsize..":0:0:64:64:5:59:5:59\124t"
+            else
+                msg = " \124T"..ct.blank..":"..iconsize..":"..iconsize..":0:0:64:64:5:59:5:59\124t"
+            end
+        end
     end
+    return msg
 end
 
 if ct.texticons then
@@ -568,6 +584,7 @@ local function FormatSpellYell( spell, cached )
     if cached then
         msg = msg:gsub("#playerthreat", cached.playerThreat)
         msg = msg:gsub("#targetthreat", cached.targetThreat)
+    	msg = msg:gsub("#deltathreat", cached.targetThreat - cached.playerThreat)
     end
     return msg
 end
@@ -611,13 +628,13 @@ local function OnEvent(self, event, subevent, ...)
                 xCTdmg:AddMessage("-"..arg2, .75, .1, .1)
                 
             elseif subevent == "DAMAGE_CRIT" then
-                (xCTcrit or xCTdmg):AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .1, .1)
+                xCTdmg:AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .1, .1)
                 
             elseif subevent == "SPELL_DAMAGE" then
                 xCTdmg:AddMessage("-"..arg2, .75, .3, .85)
                 
             elseif subevent == "SPELL_DAMAGE_CRIT" then
-                (xCTcrit or xCTdmg):AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .3, .5)
+                xCTdmg:AddMessage(ct.critprefix.."-"..arg2..ct.critpostfix, 1, .3, .5)
                 
             elseif subevent == "HEAL" then
                 if arg3 >= ct.healtreshold then
@@ -785,14 +802,14 @@ local function OnEvent(self, event, subevent, ...)
 
             elseif subevent == "ENERGIZE" and COMBAT_TEXT_SHOW_ENERGIZE == "1" then
                 if  tonumber(arg2) > 0 then
-                    if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUINIC_POWER" or arg3 == "SOUL_SHARDS" then
+                    if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUINIC_POWER" or arg3 == "SOUL_SHARDS"  or "HOLY_POWER" then
                         xCTgen:AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
                     end
                 end
 
             elseif subevent == "PERIODIC_ENERGIZE" and COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE == "1" then
                 if  tonumber(arg2) > 0 then
-                    if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUINIC_POWER" or arg3 == "SOUL_SHARDS" then
+                    if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUINIC_POWER" or arg3 == "SOUL_SHARDS" or "HOLY_POWER" then
                         xCTgen:AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
                     end
                 end
@@ -963,11 +980,19 @@ for i = 1, numf do
         f:SetJustifyH(ct.justify_5)
         f:SetWidth(256)
         f:SetPoint("CENTER", 320, 192)
-    elseif framenames[i] == "loot" then
+    elseif framenames[i] == "crit" then
         f:SetTimeVisible(ct.crittimevisible)
         f:SetJustifyH(ct.justify_6)
         f:SetPoint("CENTER", -64, 64)
-        
+		local _, _, c = f:GetFont()
+        if ct.critfontsize == "auto" then
+            if ct.criticons then
+                f:SetFont(ct.critfont, ct.criticonsize / 2, c)
+            end
+        elseif type(ct.critfontsize) == "number" then
+            f:SetFont(ct.critfont, ct.critfontsize, c)
+        end
+		
     -- Add a starting location to your frame
     --elseif framenames[i] == "custom" then
     --    f:SetTimeVisible(ct.loottimevisible)
@@ -1033,7 +1058,7 @@ end
 InterfaceOptionsCombatTextPanelFCTDropDown:Hide() -- sorry, blizz fucking bug with SCM:SetInsertMode()
 
 -- modify blizz ct options title lol
-InterfaceOptionsCombatTextPanelTitle:SetText(COMBAT_TEXT_LABEL.." (powered by |cffFF0000x|rCT)")
+InterfaceOptionsCombatTextPanelTitle:SetText(COMBAT_TEXT_LABEL.." (powered by \124cffFF0000x\124rCT\124cffDDFF55+\124r)")
 
 -- color printer
 local pr = function(msg)
@@ -1487,62 +1512,52 @@ if(ct.damage)then
     end
 
     local dmg = function(self, event, ...) 
-        local msg, icon
+        local msg, icon, frame = "", "", xCTdone
         local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, srcFlags2, destGUID, destName, destFlags, destFlags2 = select(1,...)
         if (sourceGUID == ct.pguid and destGUID ~= ct.pguid) or (sourceGUID == UnitGUID("pet") and ct.petdamage) or (sourceFlags == gflags) then
+
             if eventType=="SWING_DAMAGE" then
-                -- 4.2
                 local amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     msg = amount
                     if critical then
                         msg = ct.critprefix .. msg .. ct.critpostfix
+                        frame = xCTcrit or frame
                     end
                     if ct.icons then
+                        local spellNameOrID
                         if sourceGUID == UnitGUID("pet") or sourceFlags == gflags then
-                            icon = PET_ATTACK_TEXTURE
+                            spellNameOrID = PET_ATTACK_TEXTURE
                         else
-                            icon = GetSpellTexture(6603)
+                            spellNameOrID = 6603 
                         end
-                        msg = msg.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                        msg = msg..GetSpellTextureFormatted(spellNameOrID, ct.iconsize)
                     end
-                    if critical then
-                        (xCTcrit or xCTdone):AddMessage(msg)
-                    else
-                        xCTdone:AddMessage(msg)
-                    end
+                    frame:AddMessage(msg)
                 end
                 
             elseif eventType == "RANGE_DAMAGE" then
-                -- 4.2
                 local spellId, _, _, amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     msg = amount
                     if critical then
                         msg = ct.critprefix..msg..ct.critpostfix
+                        frame = xCTcrit or frame
                     end
                     if ct.icons then
-                        icon = GetSpellTexture(spellId)
-                        msg = msg.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                        msg = msg..GetSpellTextureFormatted(spellId, ct.iconsize)
                     end
-                    if critical then
-                        (xCTcrit or xCTdone):AddMessage(msg)
-                    else
-                        xCTdone:AddMessage(msg)
-                    end
+                    frame:AddMessage(msg)
                 end
     
             elseif eventType == "SPELL_DAMAGE" or (eventType == "SPELL_PERIODIC_DAMAGE" and ct.dotdamage) then
-                -- 4.2
                 local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     local color = { }
                     local rawamount = amount
                     if critical then
                         amount = ct.critprefix..amount..ct.critpostfix
-                    end
-                    if ct.icons then
-                        icon = GetSpellTexture(spellId)
+                        frame = xCTcrit or frame
                     end
                     if ct.damagecolor then
                         if ct.dmgcolor[spellSchool] then
@@ -1553,10 +1568,8 @@ if(ct.damage)then
                     else
                         color = { 1, 1, 0 }
                     end
-                    if icon then
-                        msg = " \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
-                    elseif ct.icons then
-                        msg = " \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                    if ct.icons then
+                        msg = GetSpellTextureFormatted(spellId, ct.iconsize)
                     else
                         msg = ""
                     end
@@ -1570,53 +1583,42 @@ if(ct.damage)then
                             SQ[spellId]["utime"] = time()
                         end
                         SQ[spellId]["locked"] = false
-                        return
+                        
+                        if not xCTcrit and critical then
+                            return
+                        end
                     end
                     
-                    if critical then
-                        (xCTcrit or xCTdone):AddMessage(amount..""..msg, unpack(color))
-                    else
-                        xCTdone:AddMessage(amount..""..msg, unpack(color))
-                    end
+                    frame:AddMessage(amount..""..msg, unpack(color))
                 end
     
             elseif eventType == "SWING_MISSED" then
-                -- 4.2
                 local missType, _ = select(12, ...)
                 if ct.icons then
+                    local spellNameOrID
                     if sourceGUID == UnitGUID("pet") or sourceFlags == gflags then
-                        icon = PET_ATTACK_TEXTURE
+                        spellNameOrID = PET_ATTACK_TEXTURE
                     else
-                        icon = GetSpellTexture(6603)
+                        spellNameOrID = 6603 
                     end
-                    missType = missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                    missType = missType..GetSpellTextureFormatted(spellNameOrID, ct.iconsize)
                 end
                 xCTdone:AddMessage(missType)
     
             elseif eventType == "SPELL_MISSED" or eventType == "RANGE_MISSED" then
-                -- 4.2
                 local spellId, _, _, missType, _ = select(12, ...)
                 if ct.icons then
-                    icon = GetSpellTexture(spellId)
-                    missType = missType.." \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                    missType = missType..GetSpellTextureFormatted(spellId, ct.iconsize)
                 end 
                 xCTdone:AddMessage(missType)
-                
+                -- TODO:
                 -- Need to add yell taunt logic here
     
             elseif eventType == "SPELL_DISPEL" and ct.dispel then
-                -- 4.2
                 local target, _, _, id, effect, _, etype = select(12, ...)
                 local color
                 if ct.icons then
-                    icon = GetSpellTexture(id)
-                end
-                if icon then
-                    msg = " \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
-                elseif ct.icons then
-                    msg = " \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
-                else
-                    msg = ""
+                    msg = GetSpellTextureFormatted(id, ct.iconsize)
                 end
                 if etype == "BUFF" then
                     color = { 0, 1, .5 }
@@ -1626,18 +1628,10 @@ if(ct.damage)then
                 xCTgen:AddMessage(ACTION_SPELL_DISPEL..": "..effect..msg, unpack(color))
                 
             elseif eventType == "SPELL_INTERRUPT" and ct.interrupt then
-                -- 4.2
                 local target, _, _, id, effect = select(12, ...)
                 local color = { 1, .5, 0}
                 if ct.icons then
-                    icon = GetSpellTexture(id)
-                end
-                if icon then
-                    msg = " \124T"..icon..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
-                elseif(ct.icons)then
-                    msg = " \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
-                else
-                    msg = ""
+                    msg = GetSpellTextureFormatted(id, ct.iconsize)
                 end
                 xCTgen:AddMessage(ACTION_SPELL_INTERRUPT..": "..effect..msg, unpack(color))
                 
@@ -1678,7 +1672,7 @@ if(ct.healing)then
         ct.blank = "Interface\\Addons\\xCT\\blank"
     end
     local heal = function(self, event, ...)
-        local msg, icon
+        local msg, icon, frame = "", "", xCTdone
         local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2 = select(1, ...)
         if sourceGUID == ct.pguid or sourceFlags == gflags then
             if eventType == 'SPELL_HEAL' or eventType == 'SPELL_PERIODIC_HEAL' and ct.showhots then
@@ -1688,23 +1682,15 @@ if(ct.healing)then
                         return
                     end
                     if amount >= ct.healtreshold then
-                        local color = { }
+                        local color = { .1, .65, .1 }
                         local rawamount = amount
                         if critical then 
                             amount = ct.critprefix..amount..ct.critpostfix
                             color = { .1, 1, .1 }
-                        else
-                            color = { .1, .65, .1 }
+                            frame = xCTcrit or frame
                         end 
                         if ct.icons then
-                            icon = GetSpellTexture(spellId)
-                        else
-                            msg = ""
-                        end
-                        if icon then 
-                            msg = ' \124T'..icon..':'..ct.iconsize..':'..ct.iconsize..':0:0:64:64:5:59:5:59\124t'
-                        elseif ct.icons then
-                            msg = " \124T"..ct.blank..":"..ct.iconsize..":"..ct.iconsize..":0:0:64:64:5:59:5:59\124t"
+                            msg = GetSpellTextureFormatted(spellId, ct.iconsize)
                         end
                         if ct.mergeaoespam and ct.aoespam[spellId] then
                             SQ[spellId]["locked"] = true
@@ -1716,9 +1702,12 @@ if(ct.healing)then
                                 SQ[spellId]["utime"] = time()
                             end
                             SQ[spellId]["locked"] = false
-                            return
+                            
+                            if not xCTcrit and not critical then
+                                return
+                            end
                         end 
-                        xCTdone:AddMessage(amount..""..msg, unpack(color))
+                        frame:AddMessage(amount..""..msg, unpack(color))
                     end
                 end
             end
