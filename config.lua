@@ -83,10 +83,10 @@ ns.config = {
         ["mergeimmunespam"] = false,  -- merge multiple immune spam (uses "mergeaoespamtime" timer)
         
         -- Additional xCT out/inc dmg/heal options
-        ["critwindow"]      = false,   -- show crits in its own frame
-        ["crittimevisible"] = 3,          -- how long to display the crit for
-		["critfontsize"]    = "auto",  -- crit font size ("auto" or Number)
-		["criticonsize"]    = 20,      -- size of the icons in the crit frame
-		["criticons"]	    = true,    -- show crit icons
+        ["critwindow"]      = false,  -- show crits in its own frame
+        ["crittimevisible"] = 3,      -- how long to display the crit for
+        ["critfontsize"]    = "auto", -- crit font size ("auto" or Number)
+        ["criticonsize"]    = 20,     -- size of the icons in the crit frame
+        ["criticons"]       = true,   -- show crit icons
         ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
 }
