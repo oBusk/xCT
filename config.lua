@@ -38,9 +38,9 @@ ns.config = {
         ["justify_1"] = "LEFT",     -- incoming damage justify
         ["justify_2"] = "RIGHT",    -- incoming healing justify
         ["justify_3"] = "CENTER",   -- various messages justify (mana, rage, auras, etc)
-        ["justify_4"] = "RIGHT",    -- outgoing damage/healing justify
+        ["justify_4"] = "LEFT",    -- outgoing damage/healing justify
         ["justify_5"] = "CENTER",   -- loot
-        ["justify_6"] = "CENTER",   -- crit
+        ["justify_6"] = "RIGHT",    -- crit
         
     -- class modules and goodies
         ["stopvespam"]       = false, -- automaticly turns off healing spam for priests in shadowform. HIDE THOSE GREEN NUMBERS PLX!
@@ -83,10 +83,10 @@ ns.config = {
         ["mergeimmunespam"] = false,  -- merge multiple immune spam (uses "mergeaoespamtime" timer)
         
         -- Additional xCT out/inc dmg/heal options
-        ["critwindow"]      = false,  -- show crits in its own frame
+        ["critwindow"]      = true,   -- show crits in its own frame
         ["crittimevisible"] = 3,      -- how long to display the crit for
-        ["critfontsize"]    = "auto", -- crit font size ("auto" or Number)
-        ["criticonsize"]    = 20,     -- size of the icons in the crit frame
+        ["critfontsize"]    = 16,     -- crit font size ("auto" or Number)
+        ["criticonsize"]    = 28,     -- size of the icons in the crit frame
         ["criticons"]       = true,   -- show crit icons
         ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
 }
