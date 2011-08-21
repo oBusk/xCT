@@ -318,13 +318,13 @@ local GetSpellTextureFormatted = function(spellID, iconSize)
         end
     else
         if spellID == PET_ATTACK_TEXTURE then
-            msg = " \124T"..PET_ATTACK_TEXTURE..":"..iconsize..":"..iconsize..":0:0:64:64:5:59:5:59\124t"
+            msg = " \124T"..PET_ATTACK_TEXTURE..":"..iconSize..":"..iconSize..":0:0:64:64:5:59:5:59\124t"
         else
             local icon = GetSpellTexture(spellID)
             if icon then
-                msg = " \124T"..icon..":"..iconsize..":"..iconsize..":0:0:64:64:5:59:5:59\124t"
+                msg = " \124T"..icon..":"..iconSize..":"..iconSize..":0:0:64:64:5:59:5:59\124t"
             else
-                msg = " \124T"..ct.blank..":"..iconsize..":"..iconsize..":0:0:64:64:5:59:5:59\124t"
+                msg = " \124T"..ct.blank..":"..iconSize..":"..iconSize..":0:0:64:64:5:59:5:59\124t"
             end
         end
     end
@@ -970,6 +970,7 @@ for i = 1, numf do
         local a, _, c = f:GetFont()
         if ct.damagefontsize == "auto" then
             if ct.icons then
+                print("DEBUG: ", a, ct.iconsize / 2, c)
                 f:SetFont(a, ct.iconsize / 2, c)
             end
         elseif type(ct.damagefontsize) == "number" then
@@ -984,13 +985,12 @@ for i = 1, numf do
         f:SetTimeVisible(ct.crittimevisible)
         f:SetJustifyH(ct.justify_6)
         f:SetPoint("CENTER", -64, 64)
-		local _, _, c = f:GetFont()
         if ct.critfontsize == "auto" then
             if ct.criticons then
-                f:SetFont(ct.critfont, ct.criticonsize / 2, c)
+                f:SetFont(ct.critfont, ct.criticonsize / 2, ct.fontstyle)
             end
         elseif type(ct.critfontsize) == "number" then
-            f:SetFont(ct.critfont, ct.critfontsize, c)
+            f:SetFont(ct.critfont, ct.critfontsize, ct.fontstyle)
         end
 		
     -- Add a starting location to your frame
