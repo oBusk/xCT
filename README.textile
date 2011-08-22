@@ -10,7 +10,7 @@ h4. World of Warcraft (4.2.2)
 
 p. "Latest Version":https://github.com/downloads/dandruff/xCT/dandruff-xCT+v1.95.zip
 
-h4. Description
+h3. Description
 
 p. xCT+ is a continuation and fork of "xCT":http://www.wowinterface.com/downloads/info18053-xCT.html (by braindump, aka Affli).  Affli has stopped updating xCT since 4.0.6.  I'm hoping to keep this project going as long as Affli is away.
 
@@ -26,16 +26,16 @@ p. For those that have used Affli's xCT Add-On, xCT+ expands the functionality o
 
 * And more soon to come!
 
-h4. Screenshots
+h3. Screenshots
 
 p. "Screenshot 1 - xCT+ Setup":http://cloud.github.com/downloads/dandruff/xCT/setup-preview.jpg
 
 p. "Screenshot 2 - xCT+ Combat":https://github.com/downloads/dandruff/xCT/incombat-xct+marked.png
 
-h4. Questions?
+h3. Questions?
 
 p. Please visit the "Tukui forums":http://www.tukui.org/forums/topic.php?id=15582 if you have any questions or comments (see below for issues).
 
-h4. Support and Issues
+h3. Support and Bugs
 
 p. I am not accepting any donations for this Add-On.  *Please report all issues "here":https://github.com/dandruff/xCT/issues .*
