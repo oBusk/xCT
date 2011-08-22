@@ -1584,9 +1584,7 @@ if(ct.damage)then
                         end
                         SQ[spellId]["locked"] = false
                         
-                        if not xCTcrit and critical then
-                            return
-                        end
+                        return
                     end
                     
                     frame:AddMessage(amount..""..msg, unpack(color))
@@ -1703,9 +1701,7 @@ if(ct.healing)then
                             end
                             SQ[spellId]["locked"] = false
                             
-                            if not xCTcrit and not critical then
-                                return
-                            end
+                            return
                         end 
                         frame:AddMessage(amount..""..msg, unpack(color))
                     end
