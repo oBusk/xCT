@@ -1,6 +1,6 @@
 h2(#readme). 
 
-!http://cloud.github.com/downloads/dandruff/xCT/xCT%2B2.0-3.png!
+!http://cloud.github.com/downloads/dandruff/xCT/xCTplus2.png!
 
 h2{color:red}. X Combat Text Plus
 
