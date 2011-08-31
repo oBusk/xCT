@@ -21,8 +21,14 @@ ns.config = {
         ["treshold"]     = 1,     -- minimum damage to show in outgoing damage frame
         ["healtreshold"] = 1,     -- minimum healing to show in incoming/outgoing healing messages.
 
-    
-        
+    -- ** NEW ** Crit Window
+    -- Additional xCT out/inc dmg/heal options
+        ["critwindow"]      = true,   -- show crits in its own frame
+        ["crittimevisible"] = 3,      -- how long to display the crit for
+        ["critfontsize"]    = 16,     -- crit font size ("auto" or Number)
+        ["criticonsize"]    = 28,     -- size of the icons in the crit frame
+        ["criticons"]       = true,   -- show crit icons
+        ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
         
     -- appearence
         ["font"]           = "Interface\\Addons\\xCT\\HOOGE.TTF", -- "Fonts\\ARIALN.ttf" is default WoW font.
@@ -51,6 +57,7 @@ ns.config = {
         ["dispel"]           = true,  -- tells you about your dispels (works only with ["damage"] = true,)
         ["interrupt"]        = true,  -- tells you about your interrupts (works only with ["damage"] = true,)
 
+    -- ** NEW **
     -- display looted items (set both to false to revert changes and go back to the original xCT)
         ["lootitems"]       = true,   -- show all looted items
         ["lootmoney"]       = true,   -- Display looted money
@@ -69,11 +76,12 @@ ns.config = {
         ["colorblind"]      = false,  -- shows letters G, S, and C instead of textures
         ["minmoney"]        = 0,      -- filter money received events, less than this amount (4G 32S 12C = 43212)
 
+    -- ** NEW **
     -- show grid when aligning xCT
         ["showgrid"] = true,          -- shows a grid when moving xCT windows around
     
-
-    -- >>experimental<< (not fully implemented or supported)
+    -- ** >>experimental<< **
+    -- (not fully implemented or supported)
         -- announce and yell events 
         ["yelltaunt"]       = false,  -- yell when you taunt a target
         ["precachetaunt"]   = false,  -- yell extra info when taunting a target
@@ -81,12 +89,4 @@ ns.config = {
         ["yelldispell"]     = false,  -- yell when you dispell a target
         
         ["mergeimmunespam"] = false,  -- merge multiple immune spam (uses "mergeaoespamtime" timer)
-        
-        -- Additional xCT out/inc dmg/heal options
-        ["critwindow"]      = true,   -- show crits in its own frame
-        ["crittimevisible"] = 3,      -- how long to display the crit for
-        ["critfontsize"]    = 16,     -- crit font size ("auto" or Number)
-        ["criticonsize"]    = 28,     -- size of the icons in the crit frame
-        ["criticons"]       = true,   -- show crit icons
-        ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
 }
