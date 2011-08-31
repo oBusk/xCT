@@ -940,8 +940,10 @@ for i = 1, numf do
     local f = CreateFrame("ScrollingMessageFrame", "xCT"..framenames[i], UIParent)
     f:SetFont(ct.font, ct.fontsize, ct.fontstyle)
     f:SetShadowColor(0, 0, 0, 0)
-    f:SetFading(true)
-    f:SetFadeDuration(0.5)
+    -- thanks to Shestak from http://shestak.org/ for pointing this out!
+    -- leaves ghost icons
+    --f:SetFading(true)
+    --f:SetFadeDuration(0.5)
     f:SetTimeVisible(ct.timevisible)
     f:SetMaxLines(ct.maxlines)
     f:SetSpacing(2)
@@ -956,10 +958,10 @@ for i = 1, numf do
     f:SetClampRectInsets(0, 0, ct.fontsize, 0)
     if framenames[i] == "dmg" then
         f:SetJustifyH(ct.justify_1)
-        f:SetPoint("CENTER", -192, -32)
+        f:SetPoint("CENTER", -192, 0)
     elseif framenames[i] == "heal" then
         f:SetJustifyH(ct.justify_2)
-        f:SetPoint("CENTER", 192, -32)
+        f:SetPoint("CENTER", -320, 0)
     elseif framenames[i] == "gen" then
         f:SetJustifyH(ct.justify_3)
         f:SetWidth(256)
@@ -980,11 +982,11 @@ for i = 1, numf do
         f:SetTimeVisible(ct.loottimevisible)
         f:SetJustifyH(ct.justify_5)
         f:SetWidth(256)
-        f:SetPoint("CENTER", 320, 192)
+        f:SetPoint("CENTER", 0, 0)
     elseif framenames[i] == "crit" then
         f:SetTimeVisible(ct.crittimevisible)
         f:SetJustifyH(ct.justify_6)
-        f:SetPoint("CENTER", -64, 64)
+        f:SetPoint("CENTER", 192, 0)
         if ct.critfontsize == "auto" then
             if ct.criticons then
                 f:SetFont(ct.critfont, ct.criticonsize / 2, ct.fontstyle)
