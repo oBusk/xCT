@@ -1,12 +1,12 @@
 h2(#readme). 
 
-!https://github.com/downloads/dandruff/xCT/xCT+2.png!
+!http://cloud.github.com/downloads/dandruff/xCT/xCT%2B2.0-3.png!
 
 h2{color:red}. X Combat Text Plus
 
 h3. Download
 
-h4. World of Warcraft (4.2 live)
+h4. World of Warcraft (4.2.2 live)
 
 p. "Latest Version":https://github.com/downloads/dandruff/xCT/dandruff-xCT+v1.95.zip
 
@@ -23,6 +23,8 @@ p. For those that have used Affli's xCT Add-On, xCT+ expands the functionality o
 * A new yell setting that allows you to yell interrupts, dispells, taunts, and more to your party or raid (coming soon)
 
 * A grid when positioning the frames
+
+* A new window that shows crits that you've done.  (still needs a spam merger, coming soon)!
 
 * And more soon to come!
 
