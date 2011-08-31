@@ -2,7 +2,7 @@
 ## Title: |cffFF0000x|rCT|cffDDFF55+|r
 ## Notes: X Combat Text Plus
 ## Author: Dandruff @ US-Whisperwind
-## Version: 1.95
+## Version: 2.0
 ## RequiredDeps: Blizzard_CombatText
 
 config.lua
