@@ -30,6 +30,10 @@ ns.config = {
         ["criticons"]       = true,   -- show crit icons
         ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
         
+        ["powergainswindow"] = true,
+        ["justify_7"] = "LEFT",
+        
+        
     -- appearence
         ["font"]           = "Interface\\Addons\\xCT\\HOOGE.TTF", -- "Fonts\\ARIALN.ttf" is default WoW font.
         ["fontsize"]       = 12,
