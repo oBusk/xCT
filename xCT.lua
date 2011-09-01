@@ -14,7 +14,7 @@ Maintained by Dandruff for 4.1, 4.2 PTR, and 4.2 live
 
 --some init
 local addon, ns = ...
-ct = ns.config
+local ct = ns.config
 ct.myname = UnitName("player")
 ct.myclass = select(2, UnitClass("player"))
 
