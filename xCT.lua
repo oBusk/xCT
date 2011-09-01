@@ -294,6 +294,11 @@ if ct.critwindow then
     framenames[numf] = "crit"
 end
 
+if ct.powergainswindow then
+    numf = numf + 1     -- 7
+    framenames[numf] = "pwr"
+end
+
 -- Create your own frame
 --[[
 if ct.custom_frame_enable then
@@ -803,14 +808,14 @@ local function OnEvent(self, event, subevent, ...)
             elseif subevent == "ENERGIZE" and COMBAT_TEXT_SHOW_ENERGIZE == "1" then
                 if  tonumber(arg2) > 0 then
                     if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUINIC_POWER" or arg3 == "SOUL_SHARDS"  or "HOLY_POWER" then
-                        xCTgen:AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
+                        (xCTpwr or xCTgen):AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
                     end
                 end
 
             elseif subevent == "PERIODIC_ENERGIZE" and COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE == "1" then
                 if  tonumber(arg2) > 0 then
                     if arg3 and arg3 == "MANA" or arg3 == "RAGE" or arg3 == "FOCUS" or arg3 == "ENERGY" or arg3 == "RUINIC_POWER" or arg3 == "SOUL_SHARDS" or "HOLY_POWER" then
-                        xCTgen:AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
+                        (xCTpwr or xCTgen):AddMessage("+"..arg2.." ".._G[arg3], PowerBarColor[arg3].r, PowerBarColor[arg3].g, PowerBarColor[arg3].b)
                     end
                 end
                 
@@ -899,7 +904,7 @@ local function OnEvent(self, event, subevent, ...)
                 r, g, b = 0, 1, 1  
             end
             if rune and rune < 4 then
-                xCTgen:AddMessage("+"..msg, r, g, b)
+                (xCTpwr or xCTgen):AddMessage("+"..msg, r, g, b)
             end
         end
 
@@ -994,6 +999,9 @@ for i = 1, numf do
         elseif type(ct.critfontsize) == "number" then
             f:SetFont(ct.critfont, ct.critfontsize, ct.fontstyle)
         end
+	elseif framenames[i] == "pwr" then
+        f:SetJustifyH(ct.justify_7)
+        f:SetPoint("CENTER", -448, 0)
 		
     -- Add a starting location to your frame
     --elseif framenames[i] == "custom" then
@@ -1103,6 +1111,10 @@ local StartConfigmode = function()
             elseif framenames[i] == "crit" then
                 f.fs:SetText("crits")
                 f.fs:SetTextColor(1,.5,0,.9)
+            elseif framenames[i] == "pwr" then
+                f.fs:SetText("power gains")
+                f.fs:SetTextColor(.8,.1,1,.9)
+
             -- Add a title to your frame
             --elseif framenames[i] == "custom" then
             --    f.fs:SetText("Custom Frame")
@@ -1237,6 +1249,30 @@ local function StartTestMode()
         ct.dmindex[7] = 64
     end
     
+    PowerBarColor["MANA"]        = { r = 0.00, g = 0.00, b = 1.00, }  -- << Change Mana Color here >>
+PowerBarColor["RAGE"]        = { r = 1.00, g = 0.00, b = 0.00, }
+PowerBarColor["FOCUS"]       = { r = 1.00, g = 0.50, b = 0.25, }
+PowerBarColor["ENERGY"]      = { r = 1.00, g = 1.00, b = 0.00, }
+PowerBarColor["UNUSED"]      = { r = 0.00, g = 1.00, b = 1.00, }
+PowerBarColor["RUNES"]       = { r = 0.50, g = 0.50, b = 0.50, }
+PowerBarColor["RUNIC_POWER"] = { r = 0.00, g = 0.82, b = 1.00, }
+PowerBarColor["SOUL_SHARDS"] = { r = 0.50, g = 0.32, b = 0.55, }
+PowerBarColor["ECLIPSE"]     = { negative = { r = 0.30, g = 0.52, b = 0.90, },  positive = { r = 0.80, g = 0.82, b = 0.60, }, }
+PowerBarColor["HOLY_POWER"]  = { r = 0.95, g = 0.90, b = 0.60, }
+    
+    local energies = {
+        [0] = "MANA",
+        [1] = "RAGE",
+        [2] = "FOCUS",
+        [3] = "ENERGY",
+        [4] = "UNUSED",
+        [5] = "RUNES",
+        [6] = "RUNIC_POWER",
+        [7] = "SOUL_SHARDS",
+        [8] = "ECLIPSE",
+        [9] = "HOLY_POWER",
+    }
+    
     for i = 1, #ct.frames do
         ct.frames[i]:SetScript("OnUpdate", function(self, elapsed)
                 UpdateInterval = random(65, 1000) / 250
@@ -1289,6 +1325,11 @@ local function StartTestMode()
                             ct.frames[i]:AddMessage(ct.critprefix .. crit .. ct.critpostfix)
                         end
                     
+                    elseif framenames[i] == "pwr" then
+                        if random(3) % 3 == 0 then
+                            local etype = random(0, 9)
+                            ct.frames[i]:AddMessage("+"..random(100000).._G[energies[etype]], PowerBarColor[etype].r, PowerBarColor[etype].g, PowerBarColor[etype].b)
+                        end
                     end
                     
                     TimeSinceLastUpdate = 0
