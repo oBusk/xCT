@@ -1249,17 +1249,6 @@ local function StartTestMode()
         ct.dmindex[7] = 64
     end
     
-    PowerBarColor["MANA"]        = { r = 0.00, g = 0.00, b = 1.00, }  -- << Change Mana Color here >>
-PowerBarColor["RAGE"]        = { r = 1.00, g = 0.00, b = 0.00, }
-PowerBarColor["FOCUS"]       = { r = 1.00, g = 0.50, b = 0.25, }
-PowerBarColor["ENERGY"]      = { r = 1.00, g = 1.00, b = 0.00, }
-PowerBarColor["UNUSED"]      = { r = 0.00, g = 1.00, b = 1.00, }
-PowerBarColor["RUNES"]       = { r = 0.50, g = 0.50, b = 0.50, }
-PowerBarColor["RUNIC_POWER"] = { r = 0.00, g = 0.82, b = 1.00, }
-PowerBarColor["SOUL_SHARDS"] = { r = 0.50, g = 0.32, b = 0.55, }
-PowerBarColor["ECLIPSE"]     = { negative = { r = 0.30, g = 0.52, b = 0.90, },  positive = { r = 0.80, g = 0.82, b = 0.60, }, }
-PowerBarColor["HOLY_POWER"]  = { r = 0.95, g = 0.90, b = 0.60, }
-    
     local energies = {
         [0] = "MANA",
         [1] = "RAGE",
