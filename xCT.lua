@@ -14,12 +14,12 @@ Maintained by Dandruff for 4.1, 4.2 PTR, and 4.2 live
 
 --some init
 local addon, ns = ...
-local ct = ns.config
+ct = ns.config
 ct.myname = UnitName("player")
 ct.myclass = select(2, UnitClass("player"))
 
 -- outgoing healing filter, hide this spammy shit, plx
-if ct.healing then
+if ct.healingout then
     ct.healfilter = { }
     -- See class-specific config for filtered spells.
 end
@@ -64,7 +64,7 @@ if ct.myclass == "WARLOCK" then
             link = GetSpellLink(59671),
         } 
     end
-    if ct.healing then
+    if ct.healingout then
         ct.healfilter[28176] = true  -- Fel Armor
         ct.healfilter[63106] = true  -- Siphon Life
         ct.healfilter[54181] = true  -- Fel Synergy
@@ -163,7 +163,7 @@ elseif ct.myclass == "PRIEST" then
         ct.aoespam[49821] = true  -- Mind Seer
         ct.aoespam[87532] = true  -- Shadowy Apparition
     end
-    if ct.healing then
+    if ct.healingout then
         ct.healfilter[2944]  = true  -- Devouring Plague (Healing)
         ct.healfilter[15290] = true  -- Vampiric Embrace
     end
@@ -183,7 +183,7 @@ elseif ct.myclass == "SHAMAN" then
             link = GetSpellLink(73684),
         }
     end
-    if ct.healing then
+    if ct.healingout then
         ct.aoespam[73921] = true  -- Healing Rain
         -- ct.aoespam[5394]  = true  -- Healing Stream Totem (outdated)
         ct.aoespam[1064]  = true  -- Chain Heal
@@ -222,7 +222,7 @@ elseif ct.myclass == "WARRIOR" then
             link = GetSpellLink(1161),
         }
     end
-    if ct.healing then
+    if ct.healingout then
         ct.healfilter[23880] = true  -- Bloodthirst
         ct.healfilter[55694] = true  -- Enraged Regeneration
     end
@@ -277,7 +277,7 @@ local numf = 3
 local framenames = { "dmg", "heal", "gen" }
 
 -- Add window for separate damage and healing windows
-if ct.damage or ct.healing then
+if ct.damageout or ct.healingout then
     numf = numf + 1     -- 4
     framenames[numf] = "done"
 end
@@ -294,10 +294,18 @@ if ct.critwindow then
     framenames[numf] = "crit"
 end
 
+-- Add a window for power gains
 if ct.powergainswindow then
     numf = numf + 1     -- 7
     framenames[numf] = "pwr"
 end
+
+-- Add a window for procs
+if ct.procwindow then
+    numf = numf + 1     -- 8
+    framenames[numf] = "proc"
+end
+
 
 -- Create your own frame
 --[[
@@ -669,7 +677,7 @@ local function OnEvent(self, event, subevent, ...)
                 end
                 
             elseif subevent == "SPELL_CAST" then
-                xCTgen:AddMessage(arg2, 1, .82, 0)
+                (xCTproc or xCTgen):AddMessage(arg2, 1, .82, 0)
             
             elseif subevent == "MISS" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
                 xCTdmg:AddMessage(MISS, .5, .5, .5)
@@ -920,7 +928,7 @@ local function OnEvent(self, event, subevent, ...)
         else
             LimitLines()
         end
-        if ct.damage or ct.healing then
+        if ct.damageout or ct.healingout then
             ct.pguid = UnitGUID("player")
         end
     
@@ -934,8 +942,8 @@ local function OnEvent(self, event, subevent, ...)
 end
 
 -- change damage font (if desired)
-if ct.damagestyle then
-    DAMAGE_TEXT_FONT = ct.damagefont
+if ct.damageoutstyle then
+    DAMAGE_TEXT_FONT = ct.damageoutfont
 end
 
 -- the frames
@@ -975,13 +983,12 @@ for i = 1, numf do
         f:SetJustifyH(ct.justify_4)
         f:SetPoint("CENTER", 320, 0)
         local a, _, c = f:GetFont()
-        if ct.damagefontsize == "auto" then
+        if ct.damageoutfontsize == "auto" then
             if ct.icons then
-                print("DEBUG: ", a, ct.iconsize / 2, c)
                 f:SetFont(a, ct.iconsize / 2, c)
             end
-        elseif type(ct.damagefontsize) == "number" then
-            f:SetFont(a, ct.damagefontsize, c)
+        elseif type(ct.damageoutfontsize) == "number" then
+            f:SetFont(a, ct.damageoutfontsize, c)
         end
     elseif framenames[i] == "loot" then
         f:SetTimeVisible(ct.loottimevisible)
@@ -1002,6 +1009,9 @@ for i = 1, numf do
 	elseif framenames[i] == "pwr" then
         f:SetJustifyH(ct.justify_7)
         f:SetPoint("CENTER", -448, 0)
+	elseif framenames[i] == "proc" then
+        f:SetJustifyH(ct.justify_8)
+        f:SetPoint("CENTER", 448, 0)
 		
     -- Add a starting location to your frame
     --elseif framenames[i] == "custom" then
@@ -1114,7 +1124,9 @@ local StartConfigmode = function()
             elseif framenames[i] == "pwr" then
                 f.fs:SetText("power gains")
                 f.fs:SetTextColor(.8,.1,1,.9)
-
+            elseif framenames[i] == "proc" then
+                f.fs:SetText("procs")
+                f.fs:SetTextColor(1,.6,.3,.9)
             -- Add a title to your frame
             --elseif framenames[i] == "custom" then
             --    f.fs:SetText("Custom Frame")
@@ -1319,6 +1331,12 @@ local function StartTestMode()
                             local etype = random(0, 9)
                             ct.frames[i]:AddMessage("+"..random(100000).._G[energies[etype]], PowerBarColor[etype].r, PowerBarColor[etype].g, PowerBarColor[etype].b)
                         end
+                    
+                    elseif framenames[i] == "proc" then
+                        if random(3) % 3 == 0 then
+                            ct.frames[i]:AddMessage("A Spell Proc'd!", 1, 1, 0)
+                        end
+                        
                     end
                     
                     TimeSinceLastUpdate = 0
@@ -1475,7 +1493,7 @@ end
 
 -- spam merger
 if ct.mergeaoespam then
-    if ct.damage or ct.healing then
+    if ct.damageout or ct.healingout then
         if not ct.mergeaoespamtime or ct.mergeaoespamtime < 1 then
             ct.mergeaoespamtime = 1
         end
@@ -1520,7 +1538,7 @@ if ct.mergeaoespam then
 end
 
 -- damage
-if(ct.damage)then
+if(ct.damageout)then
     local unpack, select, time = unpack, select, time
     local gflags = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE,
                             COMBATLOG_OBJECT_REACTION_FRIENDLY,
@@ -1552,9 +1570,11 @@ if(ct.damage)then
                 local amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     msg = amount
+                    local iconsize = ct.iconsize
                     if critical then
                         msg = ct.critprefix .. msg .. ct.critpostfix
                         frame = xCTcrit or frame
+                        iconsize = ct.criticonsize
                     end
                     if ct.icons then
                         local spellNameOrID
@@ -1563,7 +1583,7 @@ if(ct.damage)then
                         else
                             spellNameOrID = 6603 
                         end
-                        msg = msg..GetSpellTextureFormatted(spellNameOrID, ct.iconsize)
+                        msg = msg..GetSpellTextureFormatted(spellNameOrID, iconsize)
                     end
                     frame:AddMessage(msg)
                 end
@@ -1572,12 +1592,14 @@ if(ct.damage)then
                 local spellId, _, _, amount, _, _, _, _, _, critical = select(12, ...)
                 if amount >= ct.treshold then
                     msg = amount
+                    local iconsize = ct.iconsize
                     if critical then
                         msg = ct.critprefix..msg..ct.critpostfix
                         frame = xCTcrit or frame
+                        iconsize = ct.criticonsize
                     end
                     if ct.icons then
-                        msg = msg..GetSpellTextureFormatted(spellId, ct.iconsize)
+                        msg = msg..GetSpellTextureFormatted(spellId, iconsize)
                     end
                     frame:AddMessage(msg)
                 end
@@ -1587,9 +1609,11 @@ if(ct.damage)then
                 if amount >= ct.treshold then
                     local color = { }
                     local rawamount = amount
+                    local iconsize = ct.iconsize
                     if critical then
                         amount = ct.critprefix..amount..ct.critpostfix
                         frame = xCTcrit or frame
+                        iconsize = ct.criticonsize
                     end
                     if ct.damagecolor then
                         if ct.dmgcolor[spellSchool] then
@@ -1601,7 +1625,7 @@ if(ct.damage)then
                         color = { 1, 1, 0 }
                     end
                     if ct.icons then
-                        msg = GetSpellTextureFormatted(spellId, ct.iconsize)
+                        msg = GetSpellTextureFormatted(spellId, iconsize)
                     else
                         msg = ""
                     end
@@ -1695,7 +1719,7 @@ if(ct.damage)then
 end
 
 -- healing
-if(ct.healing)then
+if(ct.healingout)then
     local unpack, select, time = unpack, select, time
     local xCTh = CreateFrame("Frame")
     if ct.icons then
@@ -1706,7 +1730,7 @@ if(ct.healing)then
         local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceFlags2, destGUID, destName, destFlags, destFlags2 = select(1, ...)
         if sourceGUID == ct.pguid or sourceFlags == gflags then
             if eventType == 'SPELL_HEAL' or eventType == 'SPELL_PERIODIC_HEAL' and ct.showhots then
-                if ct.healing then
+                if ct.healingout then
                     local spellId, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
                     if ct.healfilter[spellId] then
                         return
@@ -1714,13 +1738,15 @@ if(ct.healing)then
                     if amount >= ct.healtreshold then
                         local color = { .1, .65, .1 }
                         local rawamount = amount
+                        local iconsize = ct.iconsize
                         if critical then 
                             amount = ct.critprefix..amount..ct.critpostfix
                             color = { .1, 1, .1 }
                             frame = xCTcrit or frame
+                            iconsize = ct.criticonsize
                         end 
                         if ct.icons then
-                            msg = GetSpellTextureFormatted(spellId, ct.iconsize)
+                            msg = GetSpellTextureFormatted(spellId, iconsize)
                         end
                         if ct.mergeaoespam and ct.aoespam[spellId] then
                             SQ[spellId]["locked"] = true
