@@ -1,89 +1,161 @@
 local addon, ns = ...
 ns.config = {
-    ---------------------------------------------------------------------------------
-    -- use ["option"] = true/false, to set options.
-    -- options
-    -- blizz damage options.
-        ["blizzheadnumbers"] = false, -- use blizzard damage/healing output (above mob/player head)
-        ["damagestyle"]      = true,  -- change default damage/healing font above mobs/player heads. you need to restart WoW to see changes! has no effect if blizzheadnumbers = false
+    -- --------------------------------------------------------------------------------------
+    -- Blizzard Damage Options.
+    -- --------------------------------------------------------------------------------------   
+        -- Use Blizzard Damage/Healing Output (Numbers Above Mob/Player's Head)
+        ["blizzheadnumbers"]    = false, 
+        
+        -- Change Default Damage/Healing Font Above Mobs/Player Heads. (This has no effect if ["blizzheadnumbers"] = false)
+        ["damagestyle"]         = true,  -- (You need to restart WoW to see changes!)
+        
+        
+    -- --------------------------------------------------------------------------------------
+    -- xCT+ Frames
+    -- --------------------------------------------------------------------------------------
+        -- Allow mouse scrolling on ALL frames (recommended "false")
+        ["scrollable"]          = false,
+        ["maxlines"]            = 64,       -- Max lines to keep in scrollable mode. More lines = more Memory Nom nom nom
+        
+        -- __________________________________________________________________________________
+        -- Healing/Damage Outing Frame (frame is called "xCTdone")
+        ["damageout"]           = true,     -- show outgoing damage
+        ["healingout"]          = true,     -- show outgoing heals
+        
+            -- Filter Units/Periodic Spells
+            ["petdamage"]       = true,     -- show your pet damage.
+            ["dotdamage"]       = true,     -- show DoT damage
+            ["showhots"]        = true,     -- show periodic healing effects in xCT healing frame.
+            
+            -- Damage/Healing Icon Sizes and Appearence
+            ["icons"]           = true,     -- show outgoing damage icons
+            ["iconsize"]        = 20,       -- outgoing damage icons' size
+            ["fontsize"]        = 18,
+            ["damagefontsize"]  = "auto",
+            ["fontstyle"]       = "OUTLINE",                            -- valid options are "OUTLINE", "MONOCHROME", "THICKOUTLINE", "OUTLINE,MONOCHROME", "THICKOUTLINE,MONOCHROME"
+            ["font"]            = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- "Fonts\\ARIALN.ttf" is default WoW font.
+            ["damagefont"]      = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- "Fonts\\FRIZQT__.ttf" is default WoW damage font
 
-    -- xCT outgoing damage/healing options
-        ["damage"]       = true,  -- show outgoing damage in it's own frame
-        ["healing"]      = true,  -- show outgoing healing in it's own frame
-        ["showhots"]     = true,  -- show periodic healing effects in xCT healing frame.
-        ["damagecolor"]  = true,  -- display damage numbers depending on school of magic, see http://www.wowpedia.org/API_COMBAT_LOG_EVENT
-        ["critprefix"]   = "|cffFF0000*|r", -- symbol that will be added before amount, if you deal critical strike/heal. leave "" for empty. default is red *
-        ["critpostfix"]  = "|cffFF0000*|r", -- postfix symbol, "" for empty.
-        ["icons"]        = true,  -- show outgoing damage icons
-        ["iconsize"]     = 28,    -- icon size of spells in outgoing damage frame, also has effect on dmg font size if it's set to "auto"
-        ["petdamage"]    = true,  -- show your pet damage.
-        ["dotdamage"]    = true,  -- show damage from your dots. someone asked an option to disable lol.
-        ["treshold"]     = 1,     -- minimum damage to show in outgoing damage frame
-        ["healtreshold"] = 1,     -- minimum healing to show in incoming/outgoing healing messages.
+            -- Damage/Healing Minimum Value threshold
+            ["treshold"]        = 1,        -- minimum value for outgoing damage
+            ["healtreshold"]    = 1,        -- minimum value for outgoing heals
+        
+        -- __________________________________________________________________________________
+        -- Healing/Damage Incoming Frames (frames are called "xCTheal" and "xCTdmg")
+        ["damagecolor"]         = true,     -- display colored damage numbers by type
+        
+        -- __________________________________________________________________________________
+        -- Critical Damage/Healing Outging Frame (frame is called "xCTcrit")
+        ["critwindow"]          = true,
+        
+            -- Critical Icon Sizes
+            ["criticons"]       = true,     -- show crit icons
+            ["criticonsize"]    = 10,       -- size of the icons in the crit frame
+                        
+            -- Critical Custom Font and Format
+            ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
+            ["critfontsize"]    = 22,                   -- crit font size ("auto" or Number)
+            ["critprefix"]      = "|cffFF0000*|r",      -- prefix symbol shown before crit'd amount (default: red *)
+            ["critpostfix"]     = "|cffFF0000*|r",      -- postfix symbol shown after crit'd amount (default: red *)
 
-    -- ** NEW ** Crit Window
-    -- Additional xCT out/inc dmg/heal options
-        ["critwindow"]      = true,   -- show crits in its own frame
-        ["crittimevisible"] = 3,      -- how long to display the crit for
-        ["critfontsize"]    = 16,     -- crit font size ("auto" or Number)
-        ["criticonsize"]    = 28,     -- size of the icons in the crit frame
-        ["criticons"]       = true,   -- show crit icons
-        ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
+        -- __________________________________________________________________________________
+        -- Power Gains Incoming Frame (frame is called "xCTpwr")
+        ["powergainswindow"]    = true,
         
-        ["powergainswindow"] = true,
-        ["justify_7"] = "LEFT",
+        -- __________________________________________________________________________________
+        -- Loot Items/Money Gains (frame is called "xCTloot")
+        ["lootitems"]           = true,
+        ["lootmoney"]           = true,
+        ["lootwindow"]          = true,     -- Use the frame "xCTloot" instead of "xCTgen" for Loot/Money Gains
+            
+            -- Item Options
+            ["loothideicons"]   = false,    -- hide item icons when looted
+            ["looticonsize"]    = 20,       -- Icon size of looted, crafted and quest items
+            ["itemstotal"]      = false,    -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)") - This is currently bugged and inacurate
+            
+            -- Item/Money Filter
+            ["crafteditems"]    = nil,      -- show crafted items ( nil = default, false = always hide, true = always show)
+            ["questitems"]      = nil,      -- show quest items ( nil = default, false = always hide, true = always show)
+            ["itemsquality"]    = 3,        -- filter items shown by item quality: 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
+            ["minmoney"]        = 0,        -- filter money received events, less than this amount (4G 32S 12C = 43212)
         
-        
-    -- appearence
-        ["font"]           = "Interface\\Addons\\xCT\\HOOGE.TTF", -- "Fonts\\ARIALN.ttf" is default WoW font.
-        ["fontsize"]       = 12,
-        ["fontstyle"]      = "OUTLINE",                           -- valid options are "OUTLINE", "MONOCHROME", "THICKOUTLINE", "OUTLINE,MONOCHROME", "THICKOUTLINE,MONOCHROME"
-        ["damagefont"]     = "Interface\\Addons\\xCT\\HOOGE.TTF", -- "Fonts\\FRIZQT__.ttf" is default WoW damage font
-        ["damagefontsize"] = "auto",                              -- size of xCT damage font. use "auto" to set it automatically depending on icon size, or use own value, 16 for example. if it's set to number value icons will change size.
-        ["timevisible"]    = 3,                                   -- time (seconds) a single message will be visible. 3 is a good value.
-        ["scrollable"]     = false,                               -- allows you to scroll frame lines with mousewheel.
-        ["maxlines"]       = 64,                                  -- max lines to keep in scrollable mode. more lines=more memory. nom nom nom.
+            -- Item/Money Appearance 
+            ["colorblind"]      = false,    -- shows letters G, S, and C instead of textures
 
-    -- justify messages in frames, valid values are "RIGHT" "LEFT" "CENTER"
-        ["justify_1"] = "LEFT",     -- incoming damage justify
-        ["justify_2"] = "RIGHT",    -- incoming healing justify
-        ["justify_3"] = "CENTER",   -- various messages justify (mana, rage, auras, etc)
-        ["justify_4"] = "LEFT",    -- outgoing damage/healing justify
-        ["justify_5"] = "CENTER",   -- loot
-        ["justify_6"] = "RIGHT",    -- crit
+        -- __________________________________________________________________________________
+        -- Power Gains (frame is called "xCTpwr")
+        ["powergainswindow"]    = true,
         
-    -- class modules and goodies
-        ["stopvespam"]       = false, -- automaticly turns off healing spam for priests in shadowform. HIDE THOSE GREEN NUMBERS PLX!
-        ["dkrunes"]          = true,  -- show deatchknight rune recharge
-        ["mergeaoespam"]     = true,  -- merges multiple aoe spam into single message, can be useful for dots too.
-        ["mergeaoespamtime"] = 3,     -- time in seconds aoe spell will be merged into single message. minimum is 1.
-        ["killingblow"]      = true,  -- tells you about your killingblows (works only with ["damage"] = true,)
-        ["dispel"]           = true,  -- tells you about your dispels (works only with ["damage"] = true,)
-        ["interrupt"]        = true,  -- tells you about your interrupts (works only with ["damage"] = true,)
-
-    -- ** NEW **
-    -- display looted items (set both to false to revert changes and go back to the original xCT)
-        ["lootitems"]       = true,   -- show all looted items
-        ["lootmoney"]       = true,   -- Display looted money
+        -- __________________________________________________________________________________
+        -- Proc Frame (frame is called "xCTproc")
+        ["procwindow"]          = true,
         
-    -- display loot in a separate window
-        ["lootwindow"]      = true,   -- different loot window (if false, goes into general events window)
-        ["loottimevisible"] = 6,      -- the ammount of time in seconds your loot message is displayed (6 seems good, ["lootwindow"] needs to be true)  
         
-    -- fine tune loot options
-        ["loothideicons"]   = false,  -- show item icons when looted
-        ["looticonsize"]    = 20,     -- Icon size of looted, crafted and quest items
-        ["crafteditems"]    = nil,    -- show crafted items ( nil = default, false = always hide, true = always show)
-        ["questitems"]      = nil,    -- show quest items ( nil = default, false = always hide, true = always show)
-        ["itemsquality"]    = 3,      -- filter items shown by item quality: 0 = Poor, 1 = Common, 2 = Uncommon, 3 = Rare, 4 = Epic, 5 = Legendary, 6 = Artifact, 7 = Heirloom
-        ["itemstotal"]      = false,  -- show the total amount of items in bag ("[Epic Item Name]x1 (x23)") - This is currently bugged and inacurate
-        ["colorblind"]      = false,  -- shows letters G, S, and C instead of textures
-        ["minmoney"]        = 0,      -- filter money received events, less than this amount (4G 32S 12C = 43212)
-
-    -- ** NEW **
-    -- show grid when aligning xCT
-        ["showgrid"] = true,          -- shows a grid when moving xCT windows around
-    
+    -- --------------------------------------------------------------------------------------
+    -- xCT+ Class Specific and Misc. Options
+    -- --------------------------------------------------------------------------------------
+        -- Priest
+        ["stopvespam"]       = false,       -- Hides Healing Spam for Priests in Shadowform.
+        
+        -- Death Knight
+        ["dkrunes"]          = true,        -- Show Death Knight Rune Recharge
+        
+        -- Misc.
+            -- Spell Spam Spam Spam Spam Spam Spam Spam Spam
+            ["mergeaoespam"]     = true,    -- merges multiple aoe spam into single message, can be useful for dots too.
+            ["mergeaoespamtime"] = 3,       -- time in seconds aoe spell will be merged into single message. minimum is 1.
+        
+            -- Helpful Alerts
+            ["killingblow"]      = true,    -- Alerts with the name of the PC/NPC that you had a killing blow on (["damageout"] needs to be on)
+            ["dispel"]           = true,    -- Alerts with the name of the (De)Buff Dispelled  (["damageout"] needs to be on)
+            ["interrupt"]        = true,    -- Alerts with the name of the Spell Interupted (["damageout"] needs to be on)
+        
+            -- Alignment Help
+            ["showgrid"]        = true,     -- shows a grid when moving xCT windows around
+            
+            
+    -- --------------------------------------------------------------------------------------
+    -- xCT+ Frames' Justification
+    -- --------------------------------------------------------------------------------------
+        --[[Justification Options:
+              - "RIGHT"
+              - "LEFT"
+              - "CENTER"
+        ]]
+        
+        -- __________________________________________________________________________________
+        -- Damage Incoming Frame (frame is called "xCTdmg")
+        ["justify_1"] = "LEFT",
+        
+        -- __________________________________________________________________________________
+        -- Healing Incoming Frame (frame is called "xCTheal")
+        ["justify_2"] = "RIGHT",
+        
+        -- __________________________________________________________________________________
+        -- General Buffs Gains/Drops Frame (frame is called "xCTgen")
+        ["justify_3"] = "CENTER",
+        
+        -- __________________________________________________________________________________
+        -- Healing/Damage Outgoing Frame (frame is called "xCTdone")
+        ["justify_4"] = "RIGHT",
+        
+        -- __________________________________________________________________________________
+        -- Loot/Money Gains Frame (frame is called "xCTloot")
+        ["justify_5"] = "CENTER",
+        
+        -- __________________________________________________________________________________
+        -- Criticals Outgoing Frame (frame is called "xCTcrit")
+        ["justify_6"] = "RIGHT",
+        
+        -- __________________________________________________________________________________
+        -- Power Gains Frame (frame is called "xCTpwr")
+        ["justify_7"] = "RIGHT",
+        
+        -- __________________________________________________________________________________
+        -- Power Gains Frame (frame is called "xCTproc")
+        ["justify_8"] = "CENTER",
+        
+        
     -- ** >>experimental<< **
     -- (not fully implemented or supported)
         -- announce and yell events 
@@ -93,4 +165,9 @@ ns.config = {
         ["yelldispell"]     = false,  -- yell when you dispell a target
         
         ["mergeimmunespam"] = false,  -- merge multiple immune spam (uses "mergeaoespamtime" timer)
+        
+        -- (DISABLED: Currently does not work)
+            ["loottimevisible"]     = 6,
+            ["crittimevisible"]     = 3,
+            ["timevisible"]         = 3,
 }
