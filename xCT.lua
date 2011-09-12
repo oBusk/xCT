@@ -14,7 +14,7 @@ Maintained by Dandruff for 4.1, 4.2 PTR, and 4.2 live
 
 --some init
 local addon, ns = ...
-ct = ns.config
+local ct = ns.config
 ct.myname = UnitName("player")
 ct.myclass = select(2, UnitClass("player"))
 
@@ -942,7 +942,7 @@ local function OnEvent(self, event, subevent, ...)
 end
 
 -- change damage font (if desired)
-if ct.damageoutstyle then
+if ct.damagestyle then
     DAMAGE_TEXT_FONT = ct.damageoutfont
 end
 
@@ -983,12 +983,12 @@ for i = 1, numf do
         f:SetJustifyH(ct.justify_4)
         f:SetPoint("CENTER", 320, 0)
         local a, _, c = f:GetFont()
-        if ct.damageoutfontsize == "auto" then
+        if ct.damagefontsize == "auto" then
             if ct.icons then
                 f:SetFont(a, ct.iconsize / 2, c)
             end
-        elseif type(ct.damageoutfontsize) == "number" then
-            f:SetFont(a, ct.damageoutfontsize, c)
+        elseif type(ct.damagefontsize) == "number" then
+            f:SetFont(a, ct.damagefontsize, c)
         end
     elseif framenames[i] == "loot" then
         f:SetTimeVisible(ct.loottimevisible)
