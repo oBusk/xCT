@@ -165,9 +165,12 @@ ns.config = {
         ["yelldispell"]     = false,  -- yell when you dispell a target
         
         ["mergeimmunespam"] = false,  -- merge multiple immune spam (uses "mergeaoespamtime" timer)
+ 
+        ["texticons"] = false,
         
         -- (DISABLED: Currently does not work)
             ["loottimevisible"]     = 6,
             ["crittimevisible"]     = 3,
             ["timevisible"]         = 3,
 }
+

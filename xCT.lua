@@ -234,10 +234,16 @@ elseif ct.myclass == "HUNTER" then
         ct.aoespam[1978]  = true  -- Serpent Sting
         ct.aoespam[13812] = true  -- Explosive Trap  
     end
+    
+    --[[
+        msg = msg:gsub("#playerthreat", cached.playerThreat)
+        msg = msg:gsub("#targetthreat", cached.targetThreat)
+    	msg = msg:gsub("#deltathreat", cached.targetThreat - cached.playerThreat)
+    ]]
     if ct.yelltaunt then
         ct.tauntid[20736] = { -- Distracting Shot
             enabled = true,
-            phrase = "Temporarily Taunted: #target #offoftargettarget with #spell!",
+            phrase = "Temporarily Taunted: #target #offoftargettarget with #spell! (Player: #playerthreat / Target: #targetthreat / Diff: #deltathreat)",
             link = GetSpellLink(20736),
         }
     end
@@ -310,7 +316,7 @@ end
 -- Create your own frame
 --[[
 if ct.custom_frame_enable then
-    numf = numf + 1     -- 6
+    numf = numf + 1     -- 9
     framenames[numf] = "custom"
 end
 ]]
@@ -322,11 +328,13 @@ local GetSpellTextureFormatted = function(spellID, iconSize)
     local msg = ""
     if ct.texticons then
         if spellID == PET_ATTACK_TEXTURE then
-            msg = " ["..GetSpellName(5547).."] " -- "Swing"
+            msg = " ["..GetSpellInfo(5547).."] " -- "Swing"
         else
-            local name = GetSpellName(spellID)
+            local name = GetSpellInfo(spellID)
             if name then
                 msg = " ["..name.."] "
+            else
+                print("No Name SpellID: " .. spellID)
             end
         end
     else
@@ -554,8 +562,21 @@ end
 
 -- yells
 local function FormatSpellYell( spell, cached )
-    local msg = spell.phrase or "Taunted: #target #offoftargettarget with #spell!"
+    local dMsg
+    if cached then
+        dMsg = "Taunted: #target #offoftargettarget with #spell! (#deltathreat over)"
+    else
+        dMsg = "Taunted: #target #offoftargettarget with #spell!"
+    end
+
+    local msg = spell.phrase or 
     msg = msg:gsub("#spell",spell.link)
+    
+    if cached then
+        msg = msg:gsub("#playerthreat", math.floor(cached.playerThreat + 0.5).."%%")
+        msg = msg:gsub("#targetthreat", math.floor(cached.targetThreat + 0.5).."%%")
+    	msg = msg:gsub("#deltathreat", math.floor(110 - cached.playerThreat + 0.5).."%%")
+    end
     
     -- add the player
     local playerMarker = GetRaidTargetIndex("player")
@@ -563,23 +584,6 @@ local function FormatSpellYell( spell, cached )
         msg = msg:gsub("#player","{rt"..playerMarker.."}"..GetUnitName("player") or "")
     else
         msg = msg:gsub("#player",GetUnitName("player") or "")
-    end
-    
-    -- add the target
-    local targetMarker = GetRaidTargetIndex("target")
-    if targetMarker then
-        msg = msg:gsub("#target","{rt"..targetMarker.."}"..GetUnitName("target") or "")
-    else
-        msg = msg:gsub("#target",GetUnitName("target") or "")
-    end
-    
-    -- add the target of target
-    local targettargetMarker = GetRaidTargetIndex("targettarget")
-    if targettargetMarker then
-        print("DEBUG: Found raid marks")
-        msg = msg:gsub("#targettarget","{rt"..targettargetMarker.."}"..(GetUnitName("targettarget") or ""))
-    else
-        msg = msg:gsub("#targettarget",GetUnitName("targettarget") or "")
     end
     
     -- add the "...off of target of target"
@@ -593,12 +597,24 @@ local function FormatSpellYell( spell, cached )
             msg = msg:gsub("%s?#offoftargettarget","")
         end
     end
-
-    if cached then
-        msg = msg:gsub("#playerthreat", cached.playerThreat)
-        msg = msg:gsub("#targetthreat", cached.targetThreat)
-    	msg = msg:gsub("#deltathreat", cached.targetThreat - cached.playerThreat)
+    
+    -- add the target of target
+    local targettargetMarker = GetRaidTargetIndex("targettarget")
+    if targettargetMarker then
+        print("DEBUG: Found raid marks")
+        msg = msg:gsub("#targettarget","{rt"..targettargetMarker.."}"..(GetUnitName("targettarget") or ""))
+    else
+        msg = msg:gsub("#targettarget",GetUnitName("targettarget") or "")
     end
+    
+    -- add the target
+    local targetMarker = GetRaidTargetIndex("target")
+    if targetMarker then
+        msg = msg:gsub("#target","{rt"..targetMarker.."}"..GetUnitName("target") or "")
+    else
+        msg = msg:gsub("#target",GetUnitName("target") or "")
+    end
+
     return msg
 end
 
@@ -985,7 +1001,11 @@ for i = 1, numf do
         local a, _, c = f:GetFont()
         if ct.damagefontsize == "auto" then
             if ct.icons then
-                f:SetFont(a, ct.iconsize / 2, c)
+                if ct.texticons then
+                    f:SetFont(a, ct.iconsize, c)
+                else
+                    f:SetFont(a, ct.iconsize / 2, c)
+                end
             end
         elseif type(ct.damagefontsize) == "number" then
             f:SetFont(a, ct.damagefontsize, c)
