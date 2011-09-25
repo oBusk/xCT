@@ -9,6 +9,10 @@ ns.config = {
         -- Change Default Damage/Healing Font Above Mobs/Player Heads. (This has no effect if ["blizzheadnumbers"] = false)
         ["damagestyle"]         = true,  -- (You need to restart WoW to see changes!)
         
+        -- "Everything else" font size (heals/interrupts and the like)
+        ["fontsize"]        = 18,
+        ["font"]            = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- "Fonts\\ARIALN.ttf" is default WoW font.
+        
         
     -- --------------------------------------------------------------------------------------
     -- xCT+ Frames
@@ -29,11 +33,9 @@ ns.config = {
             
             -- Damage/Healing Icon Sizes and Appearence
             ["icons"]           = true,     -- show outgoing damage icons
-            ["iconsize"]        = 20,       -- outgoing damage icons' size
-            ["fontsize"]        = 18,
-            ["damagefontsize"]  = "auto",
+            ["iconsize"]        = 28,       -- outgoing damage icons' size
+            ["damagefontsize"]  = 18,
             ["fontstyle"]       = "OUTLINE",                            -- valid options are "OUTLINE", "MONOCHROME", "THICKOUTLINE", "OUTLINE,MONOCHROME", "THICKOUTLINE,MONOCHROME"
-            ["font"]            = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- "Fonts\\ARIALN.ttf" is default WoW font.
             ["damagefont"]      = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- "Fonts\\FRIZQT__.ttf" is default WoW damage font
 
             -- Damage/Healing Minimum Value threshold
@@ -50,11 +52,11 @@ ns.config = {
         
             -- Critical Icon Sizes
             ["criticons"]       = true,     -- show crit icons
-            ["criticonsize"]    = 10,       -- size of the icons in the crit frame
+            ["criticonsize"]    = 21,       -- size of the icons in the crit frame
                         
             -- Critical Custom Font and Format
             ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
-            ["critfontsize"]    = 22,                   -- crit font size ("auto" or Number)
+            ["critfontsize"]    = 24,                   -- crit font size ("auto" or Number)
             ["critprefix"]      = "|cffFF0000*|r",      -- prefix symbol shown before crit'd amount (default: red *)
             ["critpostfix"]     = "|cffFF0000*|r",      -- postfix symbol shown after crit'd amount (default: red *)
 

@@ -569,7 +569,7 @@ local function FormatSpellYell( spell, cached )
         dMsg = "Taunted: #target #offoftargettarget with #spell!"
     end
 
-    local msg = spell.phrase or 
+    local msg = spell.phrase or dMsg
     msg = msg:gsub("#spell",spell.link)
     
     if cached then
@@ -987,10 +987,10 @@ for i = 1, numf do
     f:SetClampRectInsets(0, 0, ct.fontsize, 0)
     if framenames[i] == "dmg" then
         f:SetJustifyH(ct.justify_1)
-        f:SetPoint("CENTER", -192, 0)
+        f:SetPoint("CENTER", -320, 0)
     elseif framenames[i] == "heal" then
         f:SetJustifyH(ct.justify_2)
-        f:SetPoint("CENTER", -320, 0)
+        f:SetPoint("CENTER", -448, 0)
     elseif framenames[i] == "gen" then
         f:SetJustifyH(ct.justify_3)
         f:SetWidth(256)
@@ -999,7 +999,9 @@ for i = 1, numf do
         f:SetJustifyH(ct.justify_4)
         f:SetPoint("CENTER", 320, 0)
         local a, _, c = f:GetFont()
-        if ct.damagefontsize == "auto" then
+        if type(ct.damagefontsize) == "number" then
+            f:SetFont(a, ct.damagefontsize, c)
+        else
             if ct.icons then
                 if ct.texticons then
                     f:SetFont(a, ct.iconsize, c)
@@ -1007,31 +1009,35 @@ for i = 1, numf do
                     f:SetFont(a, ct.iconsize / 2, c)
                 end
             end
-        elseif type(ct.damagefontsize) == "number" then
-            f:SetFont(a, ct.damagefontsize, c)
         end
     elseif framenames[i] == "loot" then
-        f:SetTimeVisible(ct.loottimevisible)
+        --f:SetTimeVisible(ct.loottimevisible)
         f:SetJustifyH(ct.justify_5)
         f:SetWidth(256)
-        f:SetPoint("CENTER", 0, 0)
+        f:SetPoint("CENTER", 0, -192)
     elseif framenames[i] == "crit" then
-        f:SetTimeVisible(ct.crittimevisible)
+        --f:SetTimeVisible(ct.crittimevisible)
         f:SetJustifyH(ct.justify_6)
-        f:SetPoint("CENTER", 192, 0)
-        if ct.critfontsize == "auto" then
-            if ct.criticons then
-                f:SetFont(ct.critfont, ct.criticonsize / 2, ct.fontstyle)
-            end
-        elseif type(ct.critfontsize) == "number" then
+        f:SetWidth(256)
+        f:SetPoint("CENTER", 128, 0)
+        if type(ct.critfontsize) == "number" then
             f:SetFont(ct.critfont, ct.critfontsize, ct.fontstyle)
+        else
+            if ct.criticons then
+                if ct.texticons then
+                    f:SetFont(ct.critfont, ct.criticonsize, ct.fontstyle)
+                else
+                    f:SetFont(ct.critfont, ct.criticonsize / 2, ct.fontstyle)
+                end
+            end
         end
 	elseif framenames[i] == "pwr" then
         f:SetJustifyH(ct.justify_7)
-        f:SetPoint("CENTER", -448, 0)
+        f:SetPoint("CENTER", 448, 0)
 	elseif framenames[i] == "proc" then
         f:SetJustifyH(ct.justify_8)
-        f:SetPoint("CENTER", 448, 0)
+        f:SetWidth(256)
+        f:SetPoint("CENTER", -128, 0)
 		
     -- Add a starting location to your frame
     --elseif framenames[i] == "custom" then
