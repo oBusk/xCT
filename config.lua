@@ -21,8 +21,10 @@ ns.config = {
         ["scrollable"]          = false,
         ["maxlines"]            = 64,       -- Max lines to keep in scrollable mode. More lines = more Memory Nom nom nom
         
-        -- __________________________________________________________________________________
+        
+        -- ==================================================================================
         -- Healing/Damage Outing Frame (frame is called "xCTdone")
+        -- ==================================================================================
         ["damageout"]           = true,     -- show outgoing damage
         ["healingout"]          = true,     -- show outgoing heals
         
@@ -41,13 +43,12 @@ ns.config = {
             -- Damage/Healing Minimum Value threshold
             ["treshold"]        = 1,        -- minimum value for outgoing damage
             ["healtreshold"]    = 1,        -- minimum value for outgoing heals
-        
         -- __________________________________________________________________________________
-        -- Healing/Damage Incoming Frames (frames are called "xCTheal" and "xCTdmg")
-        ["damagecolor"]         = true,     -- display colored damage numbers by type
-        
-        -- __________________________________________________________________________________
+
+
+        -- ==================================================================================
         -- Critical Damage/Healing Outging Frame (frame is called "xCTcrit")
+        -- ==================================================================================
         ["critwindow"]          = true,
         
             -- Critical Icon Sizes
@@ -59,13 +60,12 @@ ns.config = {
             ["critfontsize"]    = 24,                   -- crit font size ("auto" or Number)
             ["critprefix"]      = "|cffFF0000*|r",      -- prefix symbol shown before crit'd amount (default: red *)
             ["critpostfix"]     = "|cffFF0000*|r",      -- postfix symbol shown after crit'd amount (default: red *)
+        -- __________________________________________________________________________________
 
-        -- __________________________________________________________________________________
-        -- Power Gains Incoming Frame (frame is called "xCTpwr")
-        ["powergainswindow"]    = true,
         
-        -- __________________________________________________________________________________
+        -- ==================================================================================
         -- Loot Items/Money Gains (frame is called "xCTloot")
+        -- ==================================================================================
         ["lootitems"]           = true,
         ["lootmoney"]           = true,
         ["lootwindow"]          = true,     -- Use the frame "xCTloot" instead of "xCTgen" for Loot/Money Gains
@@ -83,15 +83,25 @@ ns.config = {
         
             -- Item/Money Appearance 
             ["colorblind"]      = false,    -- shows letters G, S, and C instead of textures
+        -- __________________________________________________________________________________
 
-        -- __________________________________________________________________________________
-        -- Power Gains (frame is called "xCTpwr")
-        ["powergainswindow"]    = true,
         
-        -- __________________________________________________________________________________
-        -- Proc Frame (frame is called "xCTproc")
-        ["procwindow"]          = true,
+        -- ==================================================================================
+        -- Misc. Frames
+        -- ==================================================================================
         
+            -- Healing/Damage Incoming Frames (frames are called "xCTheal" and "xCTdmg")
+            ["damagecolor"]         = true,     -- display colored damage numbers by type
+        
+            -- Power Gains Incoming Frame (frame is called "xCTpwr")
+            ["powergainswindow"]    = true,
+        
+            -- Power Gains (frame is called "xCTpwr")
+            ["powergainswindow"]    = true,
+        
+            -- Proc Frame (frame is called "xCTproc")
+            ["procwindow"]          = true,
+        -- __________________________________________________________________________________
         
     -- --------------------------------------------------------------------------------------
     -- xCT+ Class Specific and Misc. Options
@@ -104,58 +114,30 @@ ns.config = {
         
         -- Misc.
             -- Spell Spam Spam Spam Spam Spam Spam Spam Spam
-            ["mergeaoespam"]     = true,    -- merges multiple aoe spam into single message, can be useful for dots too.
-            ["mergeaoespamtime"] = 3,       -- time in seconds aoe spell will be merged into single message. minimum is 1.
+            ["mergeaoespam"]     = true,    -- Merges multiple AoE spam into single message, can be useful for dots too.
+            ["mergeaoespamtime"] = 3,       -- Time in seconds AoE spell will be merged into single message.  Minimum is 1.
         
-            -- Helpful Alerts
-            ["killingblow"]      = true,    -- Alerts with the name of the PC/NPC that you had a killing blow on (["damageout"] needs to be on)
-            ["dispel"]           = true,    -- Alerts with the name of the (De)Buff Dispelled  (["damageout"] needs to be on)
-            ["interrupt"]        = true,    -- Alerts with the name of the Spell Interupted (["damageout"] needs to be on)
+            -- Helpful Alerts (Shown in the Gerenal Gains/Drops Frame)
+            ["killingblow"]      = true,    -- Alerts with the name of the PC/NPC that you had a killing blow on (Req. ["damageout"] = true)
+            ["dispel"]           = true,    -- Alerts with the name of the (De)Buff Dispelled (Req. ["damageout"] = true)
+            ["interrupt"]        = true,    -- Alerts with the name of the Spell Interupted (Req. ["damageout"] = true)
         
-            -- Alignment Help
+            -- Alignment Help (Shown when configuring frames)
             ["showgrid"]        = true,     -- shows a grid when moving xCT windows around
             
             
     -- --------------------------------------------------------------------------------------
     -- xCT+ Frames' Justification
     -- --------------------------------------------------------------------------------------
-        --[[Justification Options:
-              - "RIGHT"
-              - "LEFT"
-              - "CENTER"
-        ]]
-        
-        -- __________________________________________________________________________________
-        -- Damage Incoming Frame (frame is called "xCTdmg")
-        ["justify_1"] = "LEFT",
-        
-        -- __________________________________________________________________________________
-        -- Healing Incoming Frame (frame is called "xCTheal")
-        ["justify_2"] = "RIGHT",
-        
-        -- __________________________________________________________________________________
-        -- General Buffs Gains/Drops Frame (frame is called "xCTgen")
-        ["justify_3"] = "CENTER",
-        
-        -- __________________________________________________________________________________
-        -- Healing/Damage Outgoing Frame (frame is called "xCTdone")
-        ["justify_4"] = "RIGHT",
-        
-        -- __________________________________________________________________________________
-        -- Loot/Money Gains Frame (frame is called "xCTloot")
-        ["justify_5"] = "CENTER",
-        
-        -- __________________________________________________________________________________
-        -- Criticals Outgoing Frame (frame is called "xCTcrit")
-        ["justify_6"] = "RIGHT",
-        
-        -- __________________________________________________________________________________
-        -- Power Gains Frame (frame is called "xCTpwr")
-        ["justify_7"] = "RIGHT",
-        
-        -- __________________________________________________________________________________
-        -- Power Gains Frame (frame is called "xCTproc")
-        ["justify_8"] = "CENTER",
+        --[[Justification Options: "RIGHT", "LEFT", "CENTER" ]]
+        ["justify_1"] = "LEFT",             -- Damage Incoming Frame (frame is called "xCTdmg")
+        ["justify_2"] = "RIGHT",            -- Healing Incoming Frame (frame is called "xCTheal")
+        ["justify_3"] = "CENTER",           -- General Buffs Gains/Drops Frame (frame is called "xCTgen")
+        ["justify_4"] = "RIGHT",            -- Healing/Damage Outgoing Frame (frame is called "xCTdone")
+        ["justify_5"] = "CENTER",           -- Loot/Money Gains Frame (frame is called "xCTloot")
+        ["justify_6"] = "RIGHT",            -- Criticals Outgoing Frame (frame is called "xCTcrit")
+        ["justify_7"] = "RIGHT",            -- Power Gains Frame (frame is called "xCTpwr")
+        ["justify_8"] = "CENTER",           -- Procs Frame (frame is called "xCTproc")
         
         
     -- ** >>experimental<< **
