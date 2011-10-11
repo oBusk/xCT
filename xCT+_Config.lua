@@ -15,6 +15,246 @@ of xCT (by Affli) that has been outdated since WoW 4.0.6.
 
 ]]
 
+-- This is what gets loaded on the first load, or after you type '/xct reset'
+local DEFUALT_CONFIG = {
+  Profiles = {
+    _active = "Default",
+    Default = {
+      ["ShowHeadNumbers"] = false,
+      ["CritPrefix"] = "*",
+      ["CritPostfix"] = "*",
+      ["HealThreshold"] = 0,
+      ["StopVESpam"] = true,
+      EnergyTypes = { -- Display Energy Types
+        ["MANA"]          = true,
+        ["RAGE"]          = true,
+        ["FOCUS"]         = true,
+        ["ENERGY"]        = true,
+        ["RUINIC_POWER"]  = true,
+        ["SOUL_SHARDS"]   = true,
+        ["HOLY_POWER"]    = true,
+      },
+    },
+  },
+  Colors = {
+    -- Damage Colors
+    Damage          = { 0.75, 0.10, 0.10 },
+    DamageCrit      = { 1.00, 0.10, 0.10 },
+    SpellDamage     = { 0.75, 0.30, 0.85 },
+    SpellDamageCrit = { 1.00, 0.30, 0.50 },
+    
+    -- Healing Colors
+    Healing         = { 0.10, 0.75, 0.10 },
+    HealingCrit     = { 0.10, 1.00, 0.10 },
+    
+    -- Spells and (De)Buffs
+    SpellCast       = { 1.00, 0.82, 0.00 },
+    SpellReactive   = { 1.00, 0.82, 0.00 },
+    
+    BuffStart       = { 1.00, 0.50, 0.50 },
+    BuffEnd         = { 0.50, 0.50, 0.50 },
+    DebuffStart     = { 1.00, 0.10, 0.10 },
+    DebuffEnd       = { 0.10, 1.00, 0.10 },
+    
+    MissType        = { 0.50, 0.50, 0.50 },
+    
+    -- Misc
+    Honor           = { 0.10, 0.10, 1.00 },
+    Reputation      = { 0.10, 0.10, 1.00 },
+    
+    LowHealth       = { 1.00, 0.10, 0.10 },
+    LowMana         = { 1.00, 0.10, 0.10 },
+    
+    EnteringCombat  = { 0.10, 1.00, 0.10 },
+    LeavingCombat   = { 0.10, 1.00, 0.10 },
+    
+    PowerBarColor   = _G["PowerBarColor"]
+  },
+  Localization = {
+    _active = "enUS",
+    enUS = {
+      -- Miss Types
+      Absorb            = ABSORB,             -- "Absorb", 
+      Block             = BLOCK,              -- "Block",
+      Deflect           = DEFLECT,            -- "Deflect",
+      Dodge             = DODGE,              -- "Dodge",
+      Evade             = EVADE,              -- "Evade",
+      Immune            = IMMUNE,             -- "Immune",
+      Miss              = MISS,               -- "Miss",
+      Parry             = PARRY,              -- "Parry",
+      Reflect           = REFLECT,            -- "Reflect",
+      Resist            = RESIST,             -- "Resist",
+      
+      -- Energy Types
+      MANA              = MANA,               -- "Mana",
+      RAGE              = RAGE,               -- "Rage",
+      FOCUS             = FOCUS,              -- "Focus",
+      ENERGY            = ENERGY,             -- "Energy",
+      RUINIC_POWER      = RUINIC_POWER,       -- "Runic Power",
+      SOUL_SHARDS       = SOUL_SHARDS,        -- "Soul Shards",
+      HOLY_POWER        = HOLY_POWER,         -- "Holy Power",
+      
+      -- Messages and Alerts
+      HEALTH_LOW        = HEALTH_LOW,         -- "Low Heath!",
+      ENTERING_COMBAT   = ENTERING_COMBAT,    -- "Entering Combat!"
+      LEAVING_COMBAT    = LEAVING_COMBAT,     -- "Leaving Combat!"
+      
+      -- Misc
+      HONOR             = "Honor",
+    },
+  },
+  Frames = {
+    -- Frame Names canNOT have a space or special character in them
+    ["Critical"] = {
+      Enabled = true,
+      Label = "Crits",
+      LabelColor = { 1.00, 0.50, 0.00, 0.90 },
+      Justify = "RIGHT",
+      Font = {
+        Size = 16,
+        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
+        Style = "OUTLINE",
+      },
+      Point = {
+        Relative = "Center",
+        X = 128,
+        Y = 0,
+      },
+      Width = 256,
+      Height = 128,
+    }, -- Critical
+    ["Damage"] = {
+      Enabled = true,
+      Label = DAMAGE,
+      LabelColor = { 1.00, 0.10, 0.10, 0.90 },
+      Justify = "LEFT",
+      Font = {
+        Size = 16,
+        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
+        Style = "OUTLINE",
+      },
+      Point = {
+        Relative = "Center",
+        X = -320,
+        Y = 0,
+      },
+      Width = 128,
+      Height = 128,
+    }, -- Damage
+    ["General"] = {
+      Enabled = true,
+      Label = COMBAT_TEXT_LABEL,
+      LabelColor = { 0.10, 0.10, 1.00, 0.90 },
+      Justify = "CENTER",
+      Font = {
+        Size = 16,
+        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
+        Style = "OUTLINE",
+      },
+      Point = {
+        Relative = "Center",
+        X = 0,
+        Y = 192,
+      },
+      Width = 256,
+      Height = 128,
+    }, -- General
+    ["Healing"] = {
+      Enabled = true,
+      Label = SHOW_COMBAT_HEALING,
+      LabelColor = { 0.10, 1.00, 0.10, 0.90 },
+      Justify = "RIGHT",
+      Font = {
+        Size = 16,
+        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
+        Style = "OUTLINE",
+      },
+      Point = {
+        Relative = "Center",
+        X = -448,
+        Y = 0,
+      },
+      Width = 128,
+      Height = 128,
+    }, -- Healing
+    ["Loot"] = {
+      Enabled = true,
+      Label = LOOT,
+      LabelColor = { 1.00, 1.00, 1.00, 0.90 },
+      Justify = "CENTER",
+      Font = {
+        Size = 16,
+        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
+        Style = "OUTLINE",
+      },
+      Point = {
+        Relative = "Center",
+        X = 0,
+        Y = -192,
+      },
+      Width = 256,
+      Height = 128,
+    },
+    ["Outgoing"] = {
+      Enabled = true,
+      Label = SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE,
+      LabelColor = { 1.00, 1.00, 0.00, 0.90 },
+      Justify = "RIGHT",
+      Font = {
+        Size = 16,
+        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
+        Style = "OUTLINE",
+      },
+      Point = {
+        Relative = "Center",
+        X = 320,
+        Y = 0,
+      },
+      Width = 128,
+      Height = 128,
+    },
+    ["PowerGains"] = {
+      Enabled = true,
+      Label = "Power Gains",
+      LabelColor = { 0.80, 0.10, 1.00, 0.90 },
+      Justify = "RIGHT",
+      Font = {
+        Size = 16,
+        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
+        Style = "OUTLINE",
+      },
+      Point = {
+        Relative = "Center",
+        X = 448,
+        Y = 0,
+      },
+      Width = 128,
+      Height = 128,
+    },
+    ["Procs"] = {
+      Enabled = true,
+      Label = "Procs",
+      LabelColor = { 1.00, 0.60, 0.30, 0.90 },
+      Justify = "CENTER",
+      Font = {
+        Size = 16,
+        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
+        Style = "OUTLINE",
+      },
+      Point = {
+        Relative = "Center",
+        X = -128,
+        Y = 0,
+      },
+      Width = 256,
+      Height = 128,
+    },
+  },
+}
+
+-- Lua code below.  Do NOT edit below this point!
+
+-- If you didn't listen, then that means you know what you are doing, please continue. :)
 local ADDON_NAME, engine = ...
 
 engine[1] = {} -- Events (Fake)
@@ -31,250 +271,10 @@ local frame = CreateFrame"Frame"
 frame:RegisterEvent"ADDON_LOADED"
 frame:SetScript("OnEvent", function(addon)
   if addon == ADDON_NAME then
-    -- Default Options
-    if not xCTOptions then
-      -- Debug
-      print("FIRST LOAD: Could not find options. Loading default Options.")
-      xCTOptions = {
-        Frames = {
-          -- Frame Names canNOT have a space or special character in them
-          ["Critical"] = {
-            Enabled = true,
-            Label = "Crits",
-            Color = { 1.00, 0.50, 0.00, 0.90 },
-            Justify = "RIGHT",
-            Font = {
-              Size = 16,
-              Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-              Style = "OUTLINE",
-            },
-            Point = {
-              Relative = "Center",
-              X = 128,
-              Y = 0,
-            },
-            Width = 256,
-            Height = 128,
-          }, -- Critical
-          ["Damage"] = {
-            Enabled = true,
-            Label = DAMAGE,
-            Color = { 1.00, 0.10, 0.10, 0.90 },
-            Justify = "LEFT",
-            Font = {
-              Size = 16,
-              Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-              Style = "OUTLINE",
-            },
-            Point = {
-              Relative = "Center",
-              X = -320,
-              Y = 0,
-            },
-            Width = 128,
-            Height = 128,
-          }, -- Damage
-          ["General"] = {
-            Enabled = true,
-            Label = COMBAT_TEXT_LABEL,
-            Color = { 0.10, 0.10, 1.00, 0.90 },
-            Justify = "CENTER",
-            Font = {
-              Size = 16,
-              Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-              Style = "OUTLINE",
-            },
-            Point = {
-              Relative = "Center",
-              X = 0,
-              Y = 192,
-            },
-            Width = 256,
-            Height = 128,
-          }, -- General
-          ["Healing"] = {
-            Enabled = true,
-            Label = SHOW_COMBAT_HEALING,
-            Color = { 0.10, 1.00, 0.10, 0.90 },
-            Justify = "RIGHT",
-            Font = {
-              Size = 16,
-              Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-              Style = "OUTLINE",
-            },
-            Point = {
-              Relative = "Center",
-              X = -448,
-              Y = 0,
-            },
-            Width = 128,
-            Height = 128,
-          }, -- Healing
-          ["Loot"] = {
-            Enabled = true,
-            Label = LOOT,
-            Color = { 1.00, 1.00, 1.00, 0.90 },
-            Justify = "CENTER",
-            Font = {
-              Size = 16,
-              Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-              Style = "OUTLINE",
-            },
-            Point = {
-              Relative = "Center",
-              X = 0,
-              Y = -192,
-            },
-            Width = 256,
-            Height = 128,
-          },
-          ["Outgoing"] = {
-            Enabled = true,
-            Label = SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE,
-            Color = { 1.00, 1.00, 0.00, 0.90 },
-            Justify = "RIGHT",
-            Font = {
-              Size = 16,
-              Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-              Style = "OUTLINE",
-            },
-            Point = {
-              Relative = "Center",
-              X = 320,
-              Y = 0,
-            },
-            Width = 128,
-            Height = 128,
-          },
-          ["PowerGains"] = {
-            Enabled = true,
-            Label = "Power Gains",
-            Color = { 0.80, 0.10, 1.00, 0.90 },
-            Justify = "RIGHT",
-            Font = {
-              Size = 16,
-              Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-              Style = "OUTLINE",
-            },
-            Point = {
-              Relative = "Center",
-              X = 448,
-              Y = 0,
-            },
-            Width = 128,
-            Height = 128,
-          },
-          ["Procs"] = {
-            Enabled = true,
-            Label = "Procs",
-            Color = { 1.00, 0.60, 0.30, 0.90 },
-            Justify = "CENTER",
-            Font = {
-              Size = 16,
-              Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-              Style = "OUTLINE",
-            },
-            Point = {
-              Relative = "Center",
-              X = -128,
-              Y = 0,
-            },
-            Width = 256,
-            Height = 128,
-          },
-        },
-        Profiles = {
-          _active = "Default",
-          Default = {
-            ["ShowHeadNumbers"] = false,
-            ["CritPrefix"] = "*",
-            ["CritPostfix"] = "*",
-            ["HealThreshold"] = 0,
-            ["StopVESpam"] = true,
-            EnergyTypes = { -- Display Energy Types
-              ["MANA"]          = true,
-              ["RAGE"]          = true,
-              ["FOCUS"]         = true,
-              ["ENERGY"]        = true,
-              ["RUINIC_POWER"]  = true,
-              ["SOUL_SHARDS"]   = true,
-              ["HOLY_POWER"]    = true,
-            },
-          },
-        },
-        Colors = {
-          -- Damage Colors
-          Damage          = { 0.75, 0.10, 0.10 },
-          DamageCrit      = { 1.00, 0.10, 0.10 },
-          SpellDamage     = { 0.75, 0.30, 0.85 },
-          SpellDamageCrit = { 1.00, 0.30, 0.50 },
-          
-          -- Healing Colors
-          Healing         = { 0.10, 0.75, 0.10 },
-          HealingCrit     = { 0.10, 1.00, 0.10 },
-          
-          -- Spells and (De)Buffs
-          SpellCast       = { 1.00, 0.82, 0.00 },
-          SpellReactive   = { 1.00, 0.82, 0.00 },
-          
-          BuffStart       = { 1.00, 0.50, 0.50 },
-          BuffEnd         = { 0.50, 0.50, 0.50 },
-          DebuffStart     = { 1.00, 0.10, 0.10 },
-          DebuffEnd       = { 0.10, 1.00, 0.10 },
-          
-          MissType        = { 0.50, 0.50, 0.50 },
-          
-          -- Misc
-          Honor           = { 0.10, 0.10, 1.00 },
-          Reputation      = { 0.10, 0.10, 1.00 },
-          
-          LowHealth       = { 1.00, 0.10, 0.10 },
-          LowMana         = { 1.00, 0.10, 0.10 },
-          
-          EnteringCombat  = { 0.10, 1.00, 0.10 },
-          LeavingCombat   = { 0.10, 1.00, 0.10 },
-          
-          PowerBarColor   = _G["PowerBarColor"]
-        },
-        Localization = {
-          _active = "enUS",
-          enUS = {
-            -- Miss Types
-            Absorb            = ABSORB,             -- "Absorb", 
-            Block             = BLOCK,              -- "Block",
-            Deflect           = DEFLECT,            -- "Deflect",
-            Dodge             = DODGE,              -- "Dodge",
-            Evade             = EVADE,              -- "Evade",
-            Immune            = IMMUNE,             -- "Immune",
-            Miss              = MISS,               -- "Miss",
-            Parry             = PARRY,              -- "Parry",
-            Reflect           = REFLECT,            -- "Reflect",
-            Resist            = RESIST,             -- "Resist",
-            
-            -- Energy Types
-            MANA              = MANA,               -- "Mana",
-            RAGE              = RAGE,               -- "Rage",
-            FOCUS             = FOCUS,              -- "Focus",
-            ENERGY            = ENERGY,             -- "Energy",
-            RUINIC_POWER      = RUINIC_POWER,       -- "Runic Power",
-            SOUL_SHARDS       = SOUL_SHARDS,        -- "Soul Shards",
-            HOLY_POWER        = HOLY_POWER,         -- "Holy Power",
-            
-            -- Messages and Alerts
-            HEALTH_LOW        = HEALTH_LOW,         -- "Low Heath!",
-            ENTERING_COMBAT   = ENTERING_COMBAT,    -- "Entering Combat!"
-            LEAVING_COMBAT    = LEAVING_COMBAT,     -- "Leaving Combat!"
-            
-            -- Misc
-            HONOR             = "Honor",
-          },
-        },
-      }
-    else
-      print("FOUND CONFIG: Saved and Loaded Successfully")
-      
+    if not xCTOptions then   -- Default Options
+      xCTOptions = DEFUALT_CONFIG
     end
-    
+    engine[3] = xCTOptions
     xCT.InvokeEvent("OptionsLoaded")
   end
 end)
