@@ -14,15 +14,14 @@ scrolling combat text with something that is more concised and organized.  xCT+ 
 of xCT (by Affli) that has been outdated since WoW 4.0.6.
 
 ]]
+
 local ADDON_NAME, engine = ...
 
-engine[1] = {} -- Events (Fake)
-engine[2] = {} -- Functions
-engine[3] = {} -- Options
-
--- Gobal xCT+ accessors
-xCTShared = engine 
+local xCTEvents = engine[1]
 local xCT = engine[2]
+
+--implied
+--local xCTOptions = engine[3]
 
 -- Events Engine
 local Events = { -- Events (Real)
@@ -56,10 +55,10 @@ local EventsMT = {
 }
 
 -- Set the engine event's metatable
-setmetatable(engine[1], EventsMT)
+setmetatable(xCTEvents, EventsMT)
 
-local function InvokeEvent(event, ...)
-  print("EVENT INVOKED: Attempted to fire all events tied to:   "..event)
+local function xCT.InvokeEvent(event, ...)
+  print("EVENT INVOKED: "..event)
   for _, handle in pairs(Events[event]) do
     if type(handle) == "function" then
       handle(event, ...)
@@ -71,10 +70,16 @@ end
 local s_format  = string.format
 local s_lower   = string.lower
 
-local function t_copy(copy)
+local function t_copy(copy, lookup)
   local temp = { }
   for k, v in pairs(copy) do
-    temp[k] = v end
+    temp[k] = v end  
+  if lookup then
+    local tempMT = {
+      __index = function(t, k)
+        return lookup[k]
+      end, }
+    setmetatable(temp, tempMT) end
   return temp
 end
 
@@ -88,6 +93,7 @@ local EnergyTypes = nil
 local FrameMT = {
   __index = function(t, k)
       local fakeFrame = { AddMessage = function(...)
+            -- Debug
             print("Attempted to put a message in frame: '"..k.."' which does not exist")
           end,
         }
@@ -100,257 +106,13 @@ local FrameMT = {
 local F = { }
 setmetatable(F, FrameMT)
 
-local function VariablesLoaded()
-  -- Default Options
-  if not xCTOptions then
-    -- Debug
-    print("FIRST LOAD: Could not find options. Loading default Options.")
-    xCTOptions = {
-      Frames = {
-        -- Frame Names canNOT have a space or special character in them
-        ["Critical"] = {
-          Enabled = true,
-          Label = "Crits",
-          Color = { 1.00, 0.50, 0.00, 0.90 },
-          Justify = "RIGHT",
-          Font = {
-            Size = 16,
-            Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-            Style = "OUTLINE",
-          },
-          Point = {
-            Relative = "Center",
-            X = 128,
-            Y = 0,
-          },
-          Width = 256,
-          Height = 128,
-        }, -- Critical
-        ["Damage"] = {
-          Enabled = true,
-          Label = DAMAGE,
-          Color = { 1.00, 0.10, 0.10, 0.90 },
-          Justify = "LEFT",
-          Font = {
-            Size = 16,
-            Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-            Style = "OUTLINE",
-          },
-          Point = {
-            Relative = "Center",
-            X = -320,
-            Y = 0,
-          },
-          Width = 128,
-          Height = 128,
-        }, -- Damage
-        ["General"] = {
-          Enabled = true,
-          Label = COMBAT_TEXT_LABEL,
-          Color = { 0.10, 0.10, 1.00, 0.90 },
-          Justify = "CENTER",
-          Font = {
-            Size = 16,
-            Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-            Style = "OUTLINE",
-          },
-          Point = {
-            Relative = "Center",
-            X = 0,
-            Y = 192,
-          },
-          Width = 256,
-          Height = 128,
-        }, -- General
-        ["Healing"] = {
-          Enabled = true,
-          Label = SHOW_COMBAT_HEALING,
-          Color = { 0.10, 1.00, 0.10, 0.90 },
-          Justify = "RIGHT",
-          Font = {
-            Size = 16,
-            Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-            Style = "OUTLINE",
-          },
-          Point = {
-            Relative = "Center",
-            X = -448,
-            Y = 0,
-          },
-          Width = 128,
-          Height = 128,
-        }, -- Healing
-        ["Loot"] = {
-          Enabled = true,
-          Label = LOOT,
-          Color = { 1.00, 1.00, 1.00, 0.90 },
-          Justify = "CENTER",
-          Font = {
-            Size = 16,
-            Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-            Style = "OUTLINE",
-          },
-          Point = {
-            Relative = "Center",
-            X = 0,
-            Y = -192,
-          },
-          Width = 256,
-          Height = 128,
-        },
-        ["Outgoing"] = {
-          Enabled = true,
-          Label = SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE,
-          Color = { 1.00, 1.00, 0.00, 0.90 },
-          Justify = "RIGHT",
-          Font = {
-            Size = 16,
-            Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-            Style = "OUTLINE",
-          },
-          Point = {
-            Relative = "Center",
-            X = 320,
-            Y = 0,
-          },
-          Width = 128,
-          Height = 128,
-        },
-        ["PowerGains"] = {
-          Enabled = true,
-          Label = "Power Gains",
-          Color = { 0.80, 0.10, 1.00, 0.90 },
-          Justify = "RIGHT",
-          Font = {
-            Size = 16,
-            Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-            Style = "OUTLINE",
-          },
-          Point = {
-            Relative = "Center",
-            X = 448,
-            Y = 0,
-          },
-          Width = 128,
-          Height = 128,
-        },
-        ["Procs"] = {
-          Enabled = true,
-          Label = "Procs",
-          Color = { 1.00, 0.60, 0.30, 0.90 },
-          Justify = "CENTER",
-          Font = {
-            Size = 16,
-            Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-            Style = "OUTLINE",
-          },
-          Point = {
-            Relative = "Center",
-            X = -128,
-            Y = 0,
-          },
-          Width = 256,
-          Height = 128,
-        },
-      },
-      Profiles = {
-        _active = "Default",
-        Default = {
-          ["ShowHeadNumbers"] = false,
-          ["CritPrefix"] = "*",
-          ["CritPostfix"] = "*",
-          ["HealThreshold"] = 0,
-          EnergyTypes = { -- Display Energy Types
-            ["MANA"]          = true,
-            ["RAGE"]          = true,
-            ["FOCUS"]         = true,
-            ["ENERGY"]        = true,
-            ["RUINIC_POWER"]  = true,
-            ["SOUL_SHARDS"]   = true,
-            ["HOLY_POWER"]    = true,
-          },
-        },
-      },
-      Colors = {
-        -- Damage Colors
-        Damage          = { 0.75, 0.10, 0.10 },
-        DamageCrit      = { 1.00, 0.10, 0.10 },
-        SpellDamage     = { 0.75, 0.30, 0.85 },
-        SpellDamageCrit = { 1.00, 0.30, 0.50 },
-        
-        -- Healing Colors
-        Healing         = { 0.10, 0.75, 0.10 },
-        HealingCrit     = { 0.10, 1.00, 0.10 },
-        
-        -- Spells and (De)Buffs
-        SpellCast       = { 1.00, 0.82, 0.00 },
-        SpellReactive   = { 1.00, 0.82, 0.00 },
-        
-        BuffStart       = { 1.00, 0.50, 0.50 },
-        BuffEnd         = { 0.50, 0.50, 0.50 },
-        DebuffStart     = { 1.00, 0.10, 0.10 },
-        DebuffEnd       = { 0.10, 1.00, 0.10 },
-        
-        MissType        = { 0.50, 0.50, 0.50 },
-        
-        -- Misc
-        Honor           = { 0.10, 0.10, 1.00 },
-        Reputation      = { 0.10, 0.10, 1.00 },
-        
-        LowHealth       = { 1.00, 0.10, 0.10 },
-        LowMana         = { 1.00, 0.10, 0.10 },
-        
-        EnteringCombat  = { 0.10, 1.00, 0.10 },
-        LeavingCombat   = { 0.10, 1.00, 0.10 },
-        
-        PowerBarColor   = _G["PowerBarColor"]
-      },
-      Localization = {
-        _active = "enUS",
-        enUS = {
-          -- Miss Types
-          Absorb            = ABSORB,             -- "Absorb", 
-          Block             = BLOCK,              -- "Block",
-          Deflect           = DEFLECT,            -- "Deflect",
-          Dodge             = DODGE,              -- "Dodge",
-          Evade             = EVADE,              -- "Evade",
-          Immune            = IMMUNE,             -- "Immune",
-          Miss              = MISS,               -- "Miss",
-          Parry             = PARRY,              -- "Parry",
-          Reflect           = REFLECT,            -- "Reflect",
-          Resist            = RESIST,             -- "Resist",
-          
-          -- Energy Types
-          MANA              = MANA,               -- "Mana",
-          RAGE              = RAGE,               -- "Rage",
-          FOCUS             = FOCUS,              -- "Focus",
-          ENERGY            = ENERGY,             -- "Energy",
-          RUINIC_POWER      = RUINIC_POWER,       -- "Runic Power",
-          SOUL_SHARDS       = SOUL_SHARDS,        -- "Soul Shards",
-          HOLY_POWER        = HOLY_POWER,         -- "Holy Power",
-          
-          -- Messages and Alerts
-          HEALTH_LOW        = HEALTH_LOW,         -- "Low Heath!",
-          ENTERING_COMBAT   = ENTERING_COMBAT,    -- "Entering Combat!"
-          LEAVING_COMBAT    = LEAVING_COMBAT,     -- "Leaving Combat!"
-          
-          -- Misc
-          HONOR             = "Honor",
-        },
-      },
-    }
-  else
-    print("FOUND CONFIG: Saved and Loaded Successfully")
-  end
-
-  ActiveProfile = xCTOptions.Profiles[xCTOptions.Profiles._active] 
+xCTEvents["OptionsLoaded"] = function ()
+  xCT.ChangeProfile()
+  
+  -- Assign some aliases
   L = xCTOptions.Localization[xCTOptions.Localization._active]
   C = xCTOptions.Colors
-  
   EnergyTypes = ActiveProfile.EnergyTypes
-  
-  engine[3] = xCTOptions
-  InvokeEvent("OptionsLoaded")
   
   -- Load the Frames
   for FrameName, Frame in pairs(xCTOptions.Frames) do
@@ -403,39 +165,47 @@ local function VariablesLoaded()
 end
 
 function xCT.CreateProfile(NewProfileName, CopyFromProfile)
+  local _DEFAULT = xCTOptions.Profiles["Default"]
   if CopyFromProfile then
-    xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles[CopyFromProfile])
+    xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles[CopyFromProfile], _DEFAULT)
     xCTOptions.Profiles._active = NewProfileName
   else
     if xCTOptions.Profiles[NewProfileName] then
-      _active = NewProfileName
+      xCTOptions.Profiles._active = NewProfileName
     else
-      xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles[Default])
+      xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles["Default"])
       xCTOptions.Profiles._active = NewProfileName
     end
   end
+  xCT.ChangeProfile()
 end
 
 function xCT.ChangeProfile(NewProfileName)
-  _active = NewProfileName
+  if NewProfileName then
+    xCTOptions.Profiles._active = NewProfileName end
   ActiveProfile = xCTOptions.Profiles[xCTOptions.Profiles._active]
+  
+  -- Backward Compatibility
+  if not getmetatable(ActiveProfile) then
+    local activeMT = { __index = xCTOptions.Profiles["Default"], }
+    setmetatable(ActiveProfile, activeMT)
+  end
+  xCT.InvokeEvent("ChangedProfiles")
 end
 
 -- xCT String Formats
 local X = {
   Healing = function(msg, name)
-      if name and COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
-        return name.." +"..msg
-      else
-        return "+"..msg
-      end
+    if name and COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
+      return name.." +"..msg
+    else
+      return "+"..msg end
     end,
   HealingCrit = function(msg, name)
-      if name and COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
-        return name.." "..ActiveProfile.CritPrefix.."+"..msg..ActiveProfile.CritPostfix
-      else
-        return ActiveProfile.CritPrefix.."+"..msg..ActiveProfile.CritPostfix
-      end
+    if name and COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
+      return name.." "..ActiveProfile.CritPrefix.."+"..msg..ActiveProfile.CritPostfix
+    else
+      return ActiveProfile.CritPrefix.."+"..msg..ActiveProfile.CritPostfix end
     end,
   Damage = function(msg)
       return "-"..msg
@@ -453,8 +223,8 @@ local X = {
       return msg end
     end,
   Energize = function(amount, energy, ...)
-      if EnergyTypes[energy] and amount > 0 then
-        return s_format("+%s %s", amount, L[energy]) end
+    if EnergyTypes[energy] and amount > 0 then
+      return s_format("+%s %s", amount, L[energy]) end
     end,
   xCTPrint = function (msg)
       return "\124cffFF0000x\124rCT\124cffDDFF55+\124r "..msg
@@ -488,19 +258,18 @@ local Player = {
       end return false
     end,
   SetUnit = function(self)
-      if UnitHasVehicleUI("player") then
-        self.Unit = "vehicle"
-        self.Power = select(2, UnitPowerType("vehicle"))
-        CombatTextSetActiveUnit("vehicle")
-      else
-        self.Unit = "player"
-        self.Power = select(2, UnitPowerType("player"))
-        CombatTextSetActiveUnit("player")
-      end
+    if UnitHasVehicleUI("player") then
+      self.Unit = "vehicle"
+      self.Power = select(2, UnitPowerType("vehicle"))
+      CombatTextSetActiveUnit("vehicle")
+    else
+      self.Unit = "player"
+      self.Power = select(2, UnitPowerType("player"))
+      CombatTextSetActiveUnit("player") end
     end,
 }
 
-local xCTEvents = {
+local xCTCombatEvents = {
   COMBAT_TEXT_UPDATE = {  -- Sub-Events
     DAMAGE = function(amount)
         F.Damage:AddMessage(X.Damage(amount), unpack(C.Damage))
@@ -669,10 +438,6 @@ local xCTEvents = {
       print("Changing/leaving to a vehicle")
       Player:SetUnit() end
     end,
-  ADDON_LOADED = function(addon)
-    if addon == ADDON_NAME then
-      VariablesLoaded() end
-    end,
     
   -- UNIT_COMBO_POINTS
   -- RUNE_POWER_UPDATE
@@ -684,7 +449,6 @@ local xCTEvents = {
 -- Register the Events
 do
   local frame = CreateFrame"Frame"
-  frame:RegisterEvent"ADDON_LOADED"
   frame:RegisterEvent"COMBAT_TEXT_UPDATE"
   frame:RegisterEvent"UNIT_HEALTH"
   frame:RegisterEvent"UNIT_MANA"
@@ -694,7 +458,7 @@ do
   frame:RegisterEvent"UNIT_EXITING_VEHICLE"
   frame:SetScript("OnEvent",
     function(_, event, ...)
-      local handler = xCTEvents[event]
+      local handler = xCTCombatEvents[event]
       if handler then
         if type(handler) == "function" then
           return handler( ... )
@@ -729,29 +493,53 @@ SLASH_XCTPLUS1 = "/xct"
 SlashCmdList["XCTPLUS"] = function(input)
     input = s_lower(input)
     
-    -- get the args
+    -- Get the Args
     local args = { }
     for v in input:gmatch("%w+") do
         args[#args+1] = v
     end
-
+    
+    -- Unlock the frames (show them) so that you can move them
     if args[1] == "unlock" then
         if F.Locked then
             --StartConfigmode()
         else
             print(X.xCTPrint("Frames already unlocked."))
         end
-        
+    
+    -- Hides the frames and saves their position
     elseif args[1] == "lock" then
         if F.Locked then
             print(X.xCTPrint("Frames already locked."))
         else
             --StaticPopup_Show("XCT_LOCK")
         end
+    
+    -- Erases ALL profiles and resets the addon back to default. for development only. this WILL BE REMOVED!
     elseif args[1] == "reset" then
       xCTOptions = nil
       ReloadUI()
-      
+    
+    -- List all the profiles (and mark the one that's active)
+    elseif args[1] == "profiles" then
+      print(X.xCTPrint("User Profiles:"))
+      local counter = 1
+      for profile,_ in pairs(xCTOptions.Profiles) do
+        local active = ""
+        if profile ~= xCTOptions.Profiles._active then
+          active = " (|cffFFFF00active|r)" end
+        print(s_format("    [%d] - %s%s", counter, profile, active))
+        counter=counter+1
+      end
+    
+    -- Load a profile (syntax: /xct load ProfileName)
+    elseif args[1] == "load" then
+      if xCTOptions.Profiles[args[2]] then
+        xCT.ChangeProfile(args[2])
+      else
+        print(X.xCTPrint("'|cff5555FF"..args[2].."|r' is not a profile. Type '/xct profiles' to see a list."))
+      end
+    
     elseif args[1] == "test" then
         print(X.xCTPrint("attempted to start Test Mode."))
         --[[if (ct.testmode) then

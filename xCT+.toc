@@ -6,4 +6,5 @@
 ## SavedVariables: xCTOptions
 ## RequiredDeps: Blizzard_CombatText
 
+xCT+_Config.lua
 xCT+.lua
