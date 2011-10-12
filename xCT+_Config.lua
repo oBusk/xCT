@@ -7,7 +7,7 @@ World of Warcraft (4.3)
 
 Title: xCT+
 Author: Dandruff
-Version: 3
+Version: 3.0.0 beta
 Description:
   xCT+ is an extremely lightwight scrolling combat text addon.  It replaces Blizzard's default
 scrolling combat text with something that is more concised and organized.  xCT+ is the continuation
@@ -30,6 +30,10 @@ local DEFAULT_CONFIG = {
       ["IconSize"] = 22,
       ["PetDamage"] = true,
       ["DamageColor"] = true,
+      ["FontSize"] = 16,
+      ["FontName"] = "Interface\\Addons\\xCT+\\HOOGE.TTF",
+      ["FontStyle"] = "OUTLINE",
+      
       EnergyTypes = { -- Display Energy Types
         ["MANA"]          = true,
         ["RAGE"]          = true,
@@ -321,6 +325,46 @@ function xCT.InvokeEvent(event, ...)
     end
   end
 end
+
+function xCT.Print(msg)
+  print(X.xCTPrint(msg))
+end
+
+function xCT.Debug(msg)
+  if XCT_DEBUG then
+    xCT.Print(msg)
+  end
+end
+
+function xCT.CreateProfile(NewProfileName, CopyFromProfile)
+  local _DEFAULT = xCTOptions.Profiles["Default"]
+  if CopyFromProfile then
+    xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles[CopyFromProfile], _DEFAULT)
+    xCTOptions._activeProfile = NewProfileName
+  else
+    if xCTOptions.Profiles[NewProfileName] then
+      xCTOptions._activeProfile = NewProfileName
+    else
+      xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles["Default"])
+      xCTOptions._activeProfile = NewProfileName
+    end
+  end
+  xCT.ChangeProfile()
+end
+
+function xCT.ChangeProfile(NewProfileName)
+  if NewProfileName then
+    xCTOptions._activeProfile = NewProfileName end
+  ActiveProfile = xCTOptions.Profiles[xCTOptions._activeProfile]
+  
+  -- Backward Compatibility
+  if not getmetatable(ActiveProfile) and xCTOptions._activeProfile ~= "Default" then
+    local activeMT = { __index = xCTOptions.Profiles["Default"], }
+    setmetatable(ActiveProfile, activeMT)
+  end
+  xCT.InvokeEvent("ChangedProfiles")
+end
+
 
 -- Global Accessor to the engine
 xCTShared = engine

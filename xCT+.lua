@@ -7,18 +7,18 @@ World of Warcraft (4.3)
 
 Title: xCT+
 Author: Dandruff
-Version: 3
+Version: 3.0.0 beta
 Description:
   xCT+ is an extremely lightwight scrolling combat text addon.  It replaces Blizzard's default
 scrolling combat text with something that is more concised and organized.  xCT+ is the continuation
 of xCT (by Affli) that has been outdated since WoW 4.0.6.
 
 ]]
-local XCT_DEBUG = true
-
 
 local ADDON_NAME, engine = ...
 local xCTEvents, xCT, _ = unpack(engine)
+
+local XCT_DEBUG = true
 
 -- Create Locals for faster lookups
 local s_format  = string.format
@@ -59,8 +59,10 @@ local FrameMT = {
 -- Frames
 local F = { }
 setmetatable(F, FrameMT)
+local FramesLocked = true
 
-xCTEvents["OptionsLoaded"] = function ()
+-- Register Event for when we get loaded
+xCTEvents["OptionsLoaded"] = function()
   xCT.ChangeProfile()
   
   -- Assign some aliases
@@ -116,35 +118,6 @@ xCTEvents["OptionsLoaded"] = function ()
   end
   
   xCT.InvokeEvent("FramesLoaded")
-end
-
-function xCT.CreateProfile(NewProfileName, CopyFromProfile)
-  local _DEFAULT = xCTOptions.Profiles["Default"]
-  if CopyFromProfile then
-    xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles[CopyFromProfile], _DEFAULT)
-    xCTOptions._activeProfile = NewProfileName
-  else
-    if xCTOptions.Profiles[NewProfileName] then
-      xCTOptions._activeProfile = NewProfileName
-    else
-      xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles["Default"])
-      xCTOptions._activeProfile = NewProfileName
-    end
-  end
-  xCT.ChangeProfile()
-end
-
-function xCT.ChangeProfile(NewProfileName)
-  if NewProfileName then
-    xCTOptions._activeProfile = NewProfileName end
-  ActiveProfile = xCTOptions.Profiles[xCTOptions._activeProfile]
-  
-  -- Backward Compatibility
-  if not getmetatable(ActiveProfile) and xCTOptions._activeProfile ~= "Default" then
-    local activeMT = { __index = xCTOptions.Profiles["Default"], }
-    setmetatable(ActiveProfile, activeMT)
-  end
-  xCT.InvokeEvent("ChangedProfiles")
 end
 
 -- xCT String Formats
@@ -215,17 +188,6 @@ local X = {
       return "\124cffFF0000x\124rCT\124cffDDFF55+\124r "..msg
     end,
 }
-
-
-function xCT.Print(msg)
-  print(X.xCTPrint(msg))
-end
-
-function xCT.Debug(msg)
-  if XCT_DEBUG then
-    xCT.Print(msg)
-  end
-end
 
 local Player = {
   Name = GetUnitName("player"),
@@ -439,7 +401,6 @@ local xCTCombatEvents = {
   -- CHAT_MSG_MONEY
 }
 
-
 local xCTDamageEvents = {
   SWING_DAMAGE = function(_, pet, _, ...)
     local amount, _, _, _, _, _, critical = select(12, ...)
@@ -506,6 +467,22 @@ local xCTDamageEvents = {
       local name = select(9, ...)
       F.General:AddMessage(L.ACTION_KILLED..": "..name, unpack(UnitKilled))
     end,
+  SPELL_HEAL = function(_, _, _, ...)
+      local spellId, _, _, amount, _, _, critical = select(12, ...)
+      local color, frame = C.Healing, F.Outgoing
+      if critical then
+        color = C.HealingCrit
+        frame = F.Critical end
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+    end,
+  SPELL_PERIODIC_HEAL = function(_, _, _, ...)
+      local spellId, _, _, amount, _, _, critical = select(12, ...)
+      local color, frame = C.Healing, F.Outgoing
+      if critical then
+        color = C.HealingCrit
+        frame = F.Critical end
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+    end,
 }
 
 -- Register the Events
@@ -542,7 +519,6 @@ do
       local player = (scrGUID == Player.GUID and dstGUID ~= Player.GUID)
       local pet = (scrGUID == UnitGUID("pet") and ActiveProfile.PetDamage)
       local vehicle = (scrFlags == X.GoodSourceFlags)
-
       local handler = xCTDamageEvents[eventType]
       if handler and (player or pet or vehicle) then
         handler(player, pet, vehicle, ...)
@@ -559,7 +535,96 @@ do
   InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
   
   local CombatText_AddMessage = function(msg, _, r, g, b)
-      F.General:AddMessage(message, r, g, b)
+    F.General:AddMessage(message, r, g, b)
+  end
+end
+
+function xCT.StartConfigMode()
+  if not InCombatLockdown() then
+    for frameName, frame in pairs(F) do
+      local FrameOptions = xCTOptions.Frames[frameName]
+      frame:SetBackdrop( {
+        bgFile    = "Interface/Tooltips/UI-Tooltip-Background",
+        edgeFile  = "Interface/Tooltips/UI-Tooltip-Border",
+        tile      = false,
+        tileSize  = 0,
+        edgeSize  = 2,
+        insets = {
+          left    = 0,
+          right   = 0,
+          top     = 0,
+          bottom  = 0,
+        }
+      })
+      frame:SetBackdropColor(.1, .1, .1, .8)
+      frame:SetBackdropBorderColor(.1, .1, .1, .5)
+      
+      -- Add the Frame's Title
+      frame.fsTitle = frame:CreateFontString(nil, "OVERLAY")
+      frame.fsTitle:SetFont(xCTOptions.FontName, xCTOptions.FontSize, xCTOptions.FontStyle)
+      frame.fsTitle:SetPoint("BOTTOM", f, "TOP", 0, 0)
+      frame.fsTitle:SetText(FrameOptions.Label)
+      frame.fsTitle:SetTextColor(unpack(FrameOptions.LabelColor))
+      
+      frame.texBackHighlight=frame:CreateTexture"ARTWORK"
+      frame.texBackHighlight:SetPoint("TOPLEFT", f, "TOPLEFT", 1, -1)
+      frame.texBackHighlight:SetPoint("TOPRIGHT", f, "TOPRIGHT", -1, -19)
+      frame.texBackHighlight:SetHeight(20)
+      frame.texBackHighlight:SetTexture(.5, .5, .5)
+      frame.texBackHighlight:SetAlpha(.3)
+
+      frame.texResize=frame:CreateTexture"ARTWORK"
+      frame.texResize:SetHeight(16)
+      frame.texResize:SetWidth(16)
+      frame.texResize:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -1, 1)
+      frame.texResize:SetTexture(.5, .5, .5)
+      frame.texResize:SetAlpha(.3)
+
+      frame.titleRegion=frame:CreateTitleRegion()
+      frame.titleRegion:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
+      frame.titleRegion:SetPoint("TOPRIGHT", f, "TOPRIGHT", 0, 0)
+      frame.titleRegion:SetHeight(20)
+      
+      frame:EnableMouse(true)
+      frame:RegisterForDrag("LeftButton")
+      frame:SetScript("OnDragStart", frame.StartSizing)
+      frame:SetScript("OnSizeChanged", function(self)
+          self:SetMaxLines(self:GetHeight() / ct.fontsize)
+          self:Clear()
+        end)
+
+      frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
+    end
+    FramesLocked = false
+  end
+end
+
+function xCT.EndConfigMode()
+  for frameName, frame in pairs(F) do
+    local FrameOptions = xCTOptions.Frames[frameName]
+    frame:SetBackdrop(nil)
+    
+    frame.fsTitle:Hide()
+    frame.fsTitle = nil
+    
+    frame.texBackHighlight:Hide()
+    frame.texBackHighlight = nil
+    
+    frame.texResize:Hide()
+    frame.texResize = nil
+    
+    frame.titleRegion = nil
+    
+    frame:EnableMouse(false)
+    frame:SetScript("OnDragStart", nil)
+    frame:SetScript("OnDragStop", nil)
+    
+    -- Save the Frames
+    FrameOptions.Width = frame:GetWidth()
+    FrameOptions.Height = frame:GetWidth()
+    FrameOptions.Point.Relative, _, _, FrameOptions.Point.X, FrameOptions.Point.Y = frame:GetPoint(1)
+    
+    FramesLocked = true
   end
 end
 
@@ -576,22 +641,22 @@ SlashCmdList["XCTPLUS"] = function(input)
     
     -- Unlock the frames (show them) so that you can move them
     if args[1] == "unlock" then
-        if F.Locked then
-            --StartConfigmode()
+        if FFramesLocked then
+            xCT.StartConfigMode()
         else
             xCT.Print("Frames already unlocked.")
         end
     
     -- Hides the frames and saves their position
     elseif args[1] == "lock" then
-        if F.Locked then
+        if FramesLocked then
             xCT.Print("Frames already locked.")
         else
-            --StaticPopup_Show("XCT_LOCK")
+            xCT.EndConfigMode()
         end
     
     -- Erases ALL profiles and resets the addon back to default. for development only. this WILL BE REMOVED!
-    elseif args[1] == "reset" then
+    elseif args[1] == "reset" and XCT_DEBUG then
       xCTOptions = nil
       ReloadUI()
     
