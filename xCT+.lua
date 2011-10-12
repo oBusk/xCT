@@ -14,57 +14,11 @@ scrolling combat text with something that is more concised and organized.  xCT+ 
 of xCT (by Affli) that has been outdated since WoW 4.0.6.
 
 ]]
+local XCT_DEBUG = true
+
 
 local ADDON_NAME, engine = ...
-
-local xCTEvents = engine[1]
-local xCT = engine[2]
-
---implied
---local xCTOptions = engine[3]
-
--- Events Engine
-local Events = { -- Events (Real)
-  ["ChangedProfiles"] = { },
-  ["OptionsLoaded"] = { },
-  ["FramesLoaded"] = { },
-}
-
---[[  In the end, this is a cool feature that I don't think anyone will use.  It would be a nice way of tying in
-modules that are CPU intensive to people that would want those features.  It might be good for a GUI
-config.  But as far as 3rd party dev goes, I don't know how useful this is.  ]]
-
-local EventsMT = {
-  -- You cannot create new events
-  __newindex = function( _, event, handle)
-      if Events[event] ~= nil then
-        table.insert(Events[event], handle)
-      end
-    end,
-    
-  __metatable = { },
-  
-  __call = function(...)
-    -- if they call the events, give them a list
-      local list = { }
-      for k, _ in pairs(Events) do
-        table.insert(list, k)
-      end
-      return list
-    end,
-}
-
--- Set the engine event's metatable
-setmetatable(xCTEvents, EventsMT)
-
-local function xCT.InvokeEvent(event, ...)
-  print("EVENT INVOKED: "..event)
-  for _, handle in pairs(Events[event]) do
-    if type(handle) == "function" then
-      handle(event, ...)
-    end
-  end
-end
+local xCTEvents, xCT, _ = unpack(engine)
 
 -- Create Locals for faster lookups
 local s_format  = string.format
@@ -94,7 +48,7 @@ local FrameMT = {
   __index = function(t, k)
       local fakeFrame = { AddMessage = function(...)
             -- Debug
-            print("Attempted to put a message in frame: '"..k.."' which does not exist")
+            xCT.Debug("Attempted to put a message in frame: '"..k.."' which does not exist")
           end,
         }
       t[k] = fakeFrame
@@ -161,20 +115,20 @@ xCTEvents["OptionsLoaded"] = function ()
     SetCVar("CombatHealing", 0)
   end
   
-  InvokeEvent("FramesLoaded")
+  xCT.InvokeEvent("FramesLoaded")
 end
 
 function xCT.CreateProfile(NewProfileName, CopyFromProfile)
   local _DEFAULT = xCTOptions.Profiles["Default"]
   if CopyFromProfile then
     xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles[CopyFromProfile], _DEFAULT)
-    xCTOptions.Profiles._active = NewProfileName
+    xCTOptions._activeProfile = NewProfileName
   else
     if xCTOptions.Profiles[NewProfileName] then
-      xCTOptions.Profiles._active = NewProfileName
+      xCTOptions._activeProfile = NewProfileName
     else
       xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles["Default"])
-      xCTOptions.Profiles._active = NewProfileName
+      xCTOptions._activeProfile = NewProfileName
     end
   end
   xCT.ChangeProfile()
@@ -182,11 +136,11 @@ end
 
 function xCT.ChangeProfile(NewProfileName)
   if NewProfileName then
-    xCTOptions.Profiles._active = NewProfileName end
-  ActiveProfile = xCTOptions.Profiles[xCTOptions.Profiles._active]
+    xCTOptions._activeProfile = NewProfileName end
+  ActiveProfile = xCTOptions.Profiles[xCTOptions._activeProfile]
   
   -- Backward Compatibility
-  if not getmetatable(ActiveProfile) then
+  if not getmetatable(ActiveProfile) and xCTOptions._activeProfile ~= "Default" then
     local activeMT = { __index = xCTOptions.Profiles["Default"], }
     setmetatable(ActiveProfile, activeMT)
   end
@@ -195,6 +149,8 @@ end
 
 -- xCT String Formats
 local X = {
+  BlankIcon = "Interface\\Addons\\xCT\\blank",
+  GoodSourceFlags = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_GUARDIAN ),
   Healing = function(msg, name)
     if name and COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
       return name.." +"..msg
@@ -212,6 +168,35 @@ local X = {
     end,
   DamageCrit = function(msg)
       return ActiveProfile.CritPrefix.."-"..msg..ActiveProfile.CritPostfix
+    end,
+  DamageOut = function(amount, crit, icon)
+    if crit then
+      return s_format("%s%s%s %s", ActiveProfile.CritPrefix, amount, ActiveProfile.CritPostfix, icon)
+    else
+      return s_format("%s %s", amount, icon) end
+    end,
+  Icon = function(spellID, pet)
+    local name, _, icon = GetSpellInfo(spellID or 0)
+    local size = ActiveProfile.IconSize
+    if ActiveProfile.ShowOutgoingIcons or ActiveProfile.UseTextIcons then
+      if ActiveProfile.UseTextIcons then
+        if pet then
+          return "["..L.Pet.."]"
+        else
+          if not name then name = L.Swing end
+          return "["..name.."]" end
+      else
+        if pet then
+          return " \124T"..PET_ATTACK_TEXTURE..":"..size..":"..size..":0:0:64:64:5:59:5:59\124t"
+        else
+          if not icon then
+            return " \124T"..X.BlankIcon..":"..size..":"..size..":0:0:64:64:5:59:5:59\124t"
+          else
+            return " \124T"..icon..":"..size..":"..size..":0:0:64:64:5:59:5:59\124t" end
+        end
+      end
+    else
+      return "" end
     end,
   Resist = function(amount, msg, resisted)
     if resisted then
@@ -231,6 +216,17 @@ local X = {
     end,
 }
 
+
+function xCT.Print(msg)
+  print(X.xCTPrint(msg))
+end
+
+function xCT.Debug(msg)
+  if XCT_DEBUG then
+    xCT.Print(msg)
+  end
+end
+
 local Player = {
   Name = GetUnitName("player"),
   Class = select(2, UnitClass("player")),
@@ -247,7 +243,6 @@ local Player = {
       return false
     end,
   IsLowMana = function(self)
-    print("My power is: " .. self.Power)
     if self.Power == "MANA" then
       if UnitPower(self.Unit) / UnitPowerMax(self.Unit) <= COMBAT_TEXT_LOW_MANA_THRESHOLD then
         if not self.lowMana then
@@ -294,89 +289,89 @@ local xCTCombatEvents = {
           F.Healing:AddMessage(X.HealingCrit(amount, name), unpack(C.HealingCrit)) end
       end,
     SPELL_CAST = function(spell)
-        F.General:AddMessage(spell, unpack(C.SpellCast))
+        F.Procs:AddMessage(spell, unpack(C.SpellCast))
       end,
     MISS = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Miss, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.MISS, unpack(C.MissType)) end
       end,
     DODGE = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Dodge, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.DODGE, unpack(C.MissType)) end
       end,
     PARRY = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Parry, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.PARRY, unpack(C.MissType)) end
       end,
     EVADE = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Evade, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.EVADE, unpack(C.MissType)) end
       end,
     IMMUNE = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Immune, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.IMMUNE, unpack(C.MissType)) end
       end,
     DEFLECT = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Deflect, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.DEFLECT, unpack(C.MissType)) end
       end,
     REFLECT = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Reflect, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.REFLECT, unpack(C.MissType)) end
       end,
     SPELL_MISS = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Miss, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.MISS, unpack(C.MissType)) end
       end,
     SPELL_DODGE = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Dodge, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.DODGE, unpack(C.MissType)) end
       end,
     SPELL_PARRY = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Parry, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.PARRY, unpack(C.MissType)) end
       end,
     SPELL_EVADE = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Evade, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.EVADE, unpack(C.MissType)) end
       end,
     SPELL_IMMUNE = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Immune, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.IMMUNE, unpack(C.MissType)) end
       end,
     SPELL_DEFLECT = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Deflect, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.DEFLECT, unpack(C.MissType)) end
       end,
     SPELL_REFLECT = function()
       if COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-        F.Damage:AddMessage(L.Reflect, unpack(C.MissType)) end
+        F.Damage:AddMessage(L.REFLECT, unpack(C.MissType)) end
       end,
     RESIST = function(amount, resisted)
-        F.Damage:AddMessage(X.Resist(amount, L.Resist, resisted), unpack(C.MissType))
+        F.Damage:AddMessage(X.Resist(amount, L.RESIST, resisted), unpack(C.MissType))
       end,
     BLOCK = function(amount, blocked)
-        F.Damage:AddMessage(X.Resist(amount, L.Block, blocked), unpack(C.MissType))
+        F.Damage:AddMessage(X.Resist(amount, L.BLOCK, blocked), unpack(C.MissType))
       end,
     ABSORB = function(amount, absorbed)
-        F.Damage:AddMessage(X.Resist(amount, L.Block, absorbed), unpack(C.MissType))
+        F.Damage:AddMessage(X.Resist(amount, L.ABSORB, absorbed), unpack(C.MissType))
       end,
     SPELL_RESIST = function(amount, resisted)
-        F.Damage:AddMessage(X.Resist(amount, L.Resist, resisted), unpack(C.MissType))
+        F.Damage:AddMessage(X.Resist(amount, L.RESIST, resisted), unpack(C.MissType))
       end,
     SPELL_BLOCK = function(amount, blocked)
-        F.Damage:AddMessage(X.Resist(amount, L.Block, blocked), unpack(C.MissType))
+        F.Damage:AddMessage(X.Resist(amount, L.BLOCK, blocked), unpack(C.MissType))
       end,
     SPELL_ABSORB = function(amount, absorbed)
-        F.Damage:AddMessage(X.Resist(amount, L.Block, absorbed), unpack(C.MissType))
+        F.Damage:AddMessage(X.Resist(amount, L.ABSORB, absorbed), unpack(C.MissType))
       end,
     ENERGIZE = function(amount, energy)
       if COMBAT_TEXT_SHOW_ENERGIZE == "1" then
-        F.Damage:AddMessage(X.Energize(amount, energy), unpack(C.PowerBarColor[energy])) end
+        F.PowerGains:AddMessage(X.Energize(amount, energy), C.PowerBarColor[energy].r, C.PowerBarColor[energy].g, C.PowerBarColor[energy].b) end
       end,
     PERIODIC_ENERGIZE = function(amount, energy)
       if COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE == "1" then
-        F.PowerGains:AddMessage(X.Energize(amount, energy), unpack(C.PowerBarColor[energy])) end
+        F.PowerGains:AddMessage(X.Energize(amount, energy), C.PowerBarColor[energy].r, C.PowerBarColor[energy].g, C.PowerBarColor[energy].b) end
       end,
     SPELL_AURA_START = function(spell)
       if COMBAT_TEXT_SHOW_AURAS == "1" then
@@ -430,12 +425,10 @@ local xCTCombatEvents = {
     end,
   UNIT_ENTERED_VEHICLE = function(unit)
     if unit == "player" then
-      print("Changing/leaving to a vehicle")
       Player:SetUnit() end
     end,
   UNIT_EXITING_VEHICLE = function(unit)
     if unit == "player" then
-      print("Changing/leaving to a vehicle")
       Player:SetUnit() end
     end,
     
@@ -446,34 +439,116 @@ local xCTCombatEvents = {
   -- CHAT_MSG_MONEY
 }
 
+
+local xCTDamageEvents = {
+  SWING_DAMAGE = function(_, pet, _, ...)
+    local amount, _, _, _, _, _, critical = select(12, ...)
+    local frame = F.Outgoing
+    if critical then
+      frame = F.Critical end
+    if pet then
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(nil, true)), unpack(C[1]))
+    else
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(6603)), unpack(C[1])) end
+    end,
+  RANGE_DAMAGE = function(_, _, _, ...)
+    local spellId, _, _, amount, _, _, _, _, _, critical = select(12, ...)
+    local frame = F.Outgoing
+    if critical then
+      frame = F.Critical end
+    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(C[1]))
+    end,
+  SPELL_DAMAGE = function(_, _, _, ...)
+    local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
+    local color, frame = C[1], F.Outgoing
+    if ActiveProfile.DamageColors then
+      color = C[spellSchool] end
+    if critical then
+      frame = F.Critical end
+    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+  end,
+  SPELL_PERIODIC_DAMAGE = function(_, _, _, ...)
+      local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
+      local color, frame = C[1], F.Outgoing
+      if ActiveProfile.DamageColors then
+        color = C[spellSchool] end
+      if critical then
+        frame = F.Critical end
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+    end,
+  SWING_MISSED = function(_, pet, _, ...)
+    local missType = select(12, ...)
+    if pet then
+      F.Outgoing:AddMessage(X.DamageOut(L[missType], false, X.Icon(nil, true)), unpack(C.MissType))
+    else
+      F.Outgoing:AddMessage(X.DamageOut(L[missType], false, X.Icon(6603)), unpack(C.MissType)) end
+    end,
+  SPELL_MISSED = function(_, _, _, ...)
+      local spellId, _, _, missType, _ = select(12, ...)
+      F.Outgoing:AddMessage(X.DamageOut(L[missType], false, X.Icon(spellId)), unpack(C.MissType))
+    end,
+  RANGE_MISSED = function(_, _, _, ...)
+      local spellId, _, _, missType, _ = select(12, ...)
+      F.Outgoing:AddMessage(X.DamageOut(L[missType], false, X.Icon(spellId)), unpack(C.MissType))
+    end,
+  SPELL_DISPEL = function(_, _, _, ...)
+      local target, _, _, id, effect, _, etype = select(12, ...)
+      local color = C.DispellDebuff
+      if etype == "BUFF" then
+        color = C.DispellBuff end
+      F.General:AddMessage(L.ACTION_DISPEL..": "..effect..X.Icon(id), unpack(color))
+    end,
+  SPELL_INTERRUPT = function(_, _, _, ...)
+      local target, _, _, id, effect = select(12, ...)
+      F.General:AddMessage(L.ACTION_INTERRUPT..": "..effect..X.Icon(id), unpack(C.Interrupt))
+    end,
+  PARTY_KILL = function(_, _, _, ...)
+      local name = select(9, ...)
+      F.General:AddMessage(L.ACTION_KILLED..": "..name, unpack(UnitKilled))
+    end,
+}
+
 -- Register the Events
 do
-  local frame = CreateFrame"Frame"
-  frame:RegisterEvent"COMBAT_TEXT_UPDATE"
-  frame:RegisterEvent"UNIT_HEALTH"
-  frame:RegisterEvent"UNIT_MANA"
-  frame:RegisterEvent"PLAYER_REGEN_DISABLED"
-  frame:RegisterEvent"PLAYER_REGEN_ENABLED"
-  frame:RegisterEvent"UNIT_ENTERED_VEHICLE"
-  frame:RegisterEvent"UNIT_EXITING_VEHICLE"
-  frame:SetScript("OnEvent",
+  -- Combat Events
+  local combat = CreateFrame"FRAME"
+  combat:RegisterEvent"COMBAT_TEXT_UPDATE"
+  combat:RegisterEvent"UNIT_HEALTH"
+  combat:RegisterEvent"UNIT_MANA"
+  combat:RegisterEvent"PLAYER_REGEN_DISABLED"
+  combat:RegisterEvent"PLAYER_REGEN_ENABLED"
+  combat:RegisterEvent"UNIT_ENTERED_VEHICLE"
+  combat:RegisterEvent"UNIT_EXITING_VEHICLE"
+  combat:SetScript("OnEvent",
     function(_, event, ...)
       local handler = xCTCombatEvents[event]
       if handler then
         if type(handler) == "function" then
-          return handler( ... )
+          return handler(...)
         end
         local subevent = ...
-        if subevent then
+        if subevent and handler[subevent] then
           handler[subevent]( select(2, ...) )
-        else
-          print("there was no event or subevent???")
         end
-      else
-        print("MISSING event : "..tostring(event))
       end
     end)
-    
+
+  -- Outgoing Damage Events
+  local damage = CreateFrame"FRAME"
+  damage:RegisterEvent"COMBAT_LOG_EVENT_UNFILTERED"
+  damage:SetScript("OnEvent",
+    function(self, event, ...)    
+      local timeStamp, eventType, hideCaster, scrGUID, scrName, scrFlags, scrFlags2, dstGUID = select(1, ...)
+      local player = (scrGUID == Player.GUID and dstGUID ~= Player.GUID)
+      local pet = (scrGUID == UnitGUID("pet") and ActiveProfile.PetDamage)
+      local vehicle = (scrFlags == X.GoodSourceFlags)
+
+      local handler = xCTDamageEvents[eventType]
+      if handler and (player or pet or vehicle) then
+        handler(player, pet, vehicle, ...)
+      end
+    end)
+  
   -- Turn Off Blizzard's CT
   CombatText:UnregisterAllEvents()
   CombatText:SetScript("OnLoad", nil)
@@ -504,13 +579,13 @@ SlashCmdList["XCTPLUS"] = function(input)
         if F.Locked then
             --StartConfigmode()
         else
-            print(X.xCTPrint("Frames already unlocked."))
+            xCT.Print("Frames already unlocked.")
         end
     
     -- Hides the frames and saves their position
     elseif args[1] == "lock" then
         if F.Locked then
-            print(X.xCTPrint("Frames already locked."))
+            xCT.Print("Frames already locked.")
         else
             --StaticPopup_Show("XCT_LOCK")
         end
@@ -522,11 +597,11 @@ SlashCmdList["XCTPLUS"] = function(input)
     
     -- List all the profiles (and mark the one that's active)
     elseif args[1] == "profiles" then
-      print(X.xCTPrint("User Profiles:"))
+      print(xCT.Print("User Profiles:"))
       local counter = 1
       for profile,_ in pairs(xCTOptions.Profiles) do
         local active = ""
-        if profile ~= xCTOptions.Profiles._active then
+        if profile == xCTOptions._activeProfile then
           active = " (|cffFFFF00active|r)" end
         print(s_format("    [%d] - %s%s", counter, profile, active))
         counter=counter+1
@@ -537,11 +612,20 @@ SlashCmdList["XCTPLUS"] = function(input)
       if xCTOptions.Profiles[args[2]] then
         xCT.ChangeProfile(args[2])
       else
-        print(X.xCTPrint("'|cff5555FF"..args[2].."|r' is not a profile. Type '/xct profiles' to see a list."))
+        xCT.Print("'|cff5555FF"..args[2].."|r' is not a profile. Type '/xct profiles' to see a list.")
       end
     
+    elseif args[1] == "create" then
+      if xCTOptions.Profiles[args[2]] then
+        xCT.Print("'|cff5555FF"..args[2].."|r' is already a profile. Type '/xct profiles' to see a list.")
+      else
+        xCT.CreateProfile(args[2], args[3])
+        xCT.Print("Created and loaded new profile.")
+      end
+    
+
     elseif args[1] == "test" then
-        print(X.xCTPrint("attempted to start Test Mode."))
+        xCT.Print("attempted to start Test Mode.")
         --[[if (ct.testmode) then
             EndTestMode()
             pr("test mode disabled.")
@@ -549,10 +633,16 @@ SlashCmdList["XCTPLUS"] = function(input)
             StartTestMode()
             pr("test mode enabled.")
         end]]
+        
     else
-        print(X.xCTPrint("Position Commands"))
+        xCT.Print("|cff888888Position Commands|r")
         print("    Use |cffFF0000/xct|r |cff5555FFunlock|r to move and resize the frames.")
         print("    Use |cffFF0000/xct|r |cff5555FFlock|r to lock the frames.")
         print("    Use |cffFF0000/xct|r |cff5555FFtest|r to toggle Test Mode (|cffFFFF00on|r/|cffFFFF00off|r).")
+        print()
+        xCT.Print("|cff888888Profile Commands|r")
+        print("    Use |cffFF0000/xct|r |cff5555FFprofiles|r to print a list of all the profiles.")
+        print("    Use |cffFF0000/xct|r |cff5555FFload|r (|cff5555FFNumber|r or |cff5555FFName|r) to load a profile.")
+        print("    Use |cffFF0000/xct|r |cff5555FFcreate|r (|cff5555FFName|r) to create a new profile.")
     end
 end

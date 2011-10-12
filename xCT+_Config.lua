@@ -16,15 +16,20 @@ of xCT (by Affli) that has been outdated since WoW 4.0.6.
 ]]
 
 -- This is what gets loaded on the first load, or after you type '/xct reset'
-local DEFUALT_CONFIG = {
+local DEFAULT_CONFIG = {
+  _activeProfile = "Default",
   Profiles = {
-    _active = "Default",
     Default = {
       ["ShowHeadNumbers"] = false,
       ["CritPrefix"] = "*",
       ["CritPostfix"] = "*",
       ["HealThreshold"] = 0,
       ["StopVESpam"] = true,
+      ["ShowOutgoingIcons"] = true,
+      ["UseTextIcons"] = false,
+      ["IconSize"] = 22,
+      ["PetDamage"] = true,
+      ["DamageColor"] = true,
       EnergyTypes = { -- Display Energy Types
         ["MANA"]          = true,
         ["RAGE"]          = true,
@@ -37,6 +42,15 @@ local DEFUALT_CONFIG = {
     },
   },
   Colors = {
+    -- Magic Colors
+    [1]             = { 1.00, 1.00, 0.00 },   -- Physical Damage
+    [2]             = { 1.00, 0.90, 0.50 },   -- Holy Damage
+    [4]             = { 1.00, 0.50, 0.00 },   -- Fire Damage
+    [8]             = { 0.30, 1.00, 0.30 },   -- Nature Damage
+    [16]            = { 0.50, 1.00, 1.00 },   -- Frost Damage
+    [32]            = { 0.50, 0.50, 1.00 },   -- Shadow Damage
+    [64]            = { 1.00, 0.50, 1.00 },   -- Arcane Damage
+    
     -- Damage Colors
     Damage          = { 0.75, 0.10, 0.10 },
     DamageCrit      = { 1.00, 0.10, 0.10 },
@@ -50,41 +64,41 @@ local DEFUALT_CONFIG = {
     -- Spells and (De)Buffs
     SpellCast       = { 1.00, 0.82, 0.00 },
     SpellReactive   = { 1.00, 0.82, 0.00 },
-    
     BuffStart       = { 1.00, 0.50, 0.50 },
     BuffEnd         = { 0.50, 0.50, 0.50 },
     DebuffStart     = { 1.00, 0.10, 0.10 },
     DebuffEnd       = { 0.10, 1.00, 0.10 },
-    
     MissType        = { 0.50, 0.50, 0.50 },
+    DispellBuff     = { 0.00, 1.00, 0.50 },
+    DispellDebuff   = { 0.00, 1.00, 0.50 },
+    Interrupt       = { 1.00, 0.50, 0.00 },
     
     -- Misc
     Honor           = { 0.10, 0.10, 1.00 },
     Reputation      = { 0.10, 0.10, 1.00 },
-    
     LowHealth       = { 1.00, 0.10, 0.10 },
     LowMana         = { 1.00, 0.10, 0.10 },
-    
     EnteringCombat  = { 0.10, 1.00, 0.10 },
     LeavingCombat   = { 0.10, 1.00, 0.10 },
-    
+    UnitKilled      = { 0.20, 1.00, 0.20 },
     PowerBarColor   = _G["PowerBarColor"]
   },
   Localization = {
     _active = "enUS",
     enUS = {
       -- Miss Types
-      Absorb            = ABSORB,             -- "Absorb", 
-      Block             = BLOCK,              -- "Block",
-      Deflect           = DEFLECT,            -- "Deflect",
-      Dodge             = DODGE,              -- "Dodge",
-      Evade             = EVADE,              -- "Evade",
-      Immune            = IMMUNE,             -- "Immune",
-      Miss              = MISS,               -- "Miss",
-      Parry             = PARRY,              -- "Parry",
-      Reflect           = REFLECT,            -- "Reflect",
-      Resist            = RESIST,             -- "Resist",
-      
+      ABSORB            = ABSORB,             -- "Absorb", 
+      BLOCK             = BLOCK,              -- "Block",
+      DEFLECT           = DEFLECT,            -- "Deflect",
+      DODGE             = DODGE,              -- "Dodge",
+      EVADE             = EVADE,              -- "Evade",
+      IMMUNE            = IMMUNE,             -- "Immune",
+      INTERRUPT         = INTERRUPT,
+      MISS              = MISS,               -- "Miss",
+      PARRY             = PARRY,              -- "Parry",
+      REFLECT           = REFLECT,            -- "Reflect",
+      RESIST            = RESIST,             -- "Resist",
+
       -- Energy Types
       MANA              = MANA,               -- "Mana",
       RAGE              = RAGE,               -- "Rage",
@@ -93,14 +107,21 @@ local DEFUALT_CONFIG = {
       RUINIC_POWER      = RUINIC_POWER,       -- "Runic Power",
       SOUL_SHARDS       = SOUL_SHARDS,        -- "Soul Shards",
       HOLY_POWER        = HOLY_POWER,         -- "Holy Power",
-      
+
       -- Messages and Alerts
       HEALTH_LOW        = HEALTH_LOW,         -- "Low Heath!",
       ENTERING_COMBAT   = ENTERING_COMBAT,    -- "Entering Combat!"
       LEAVING_COMBAT    = LEAVING_COMBAT,     -- "Leaving Combat!"
-      
+
       -- Misc
       HONOR             = "Honor",
+      Swing             = ACTION_SWING,       -- GetSpellInfo(5547), -- "Swing"
+      Pet               = "Pet",
+      
+      -- Actions
+      ACTION_DISPEL     = ACTION_SPELL_DISPEL,    -- "dispelled"
+      ACTION_INTERRUPT  = ACTION_SPELL_INTERRUPT, -- "interrupted"
+      ACTION_KILLED     = ACTION_PARTY_KILL,      -- "killed"
     },
   },
   Frames = {
@@ -261,20 +282,58 @@ engine[1] = {} -- Events (Fake)
 engine[2] = {} -- Functions
 engine[3] = {} -- Options
 
+local xCT = engine[2]
+
+-- Events Engine
+local Events = { -- Events (Real)
+  ["ChangedProfiles"] = { },
+  ["OptionsLoaded"] = { },
+  ["FramesLoaded"] = { },
+}
+
+local EventsMT = {
+  -- You cannot create new events
+  __newindex = function( _, event, handle)
+      if Events[event] ~= nil then
+        table.insert(Events[event], handle)
+      end
+    end,
+    
+  __metatable = { },
+  
+  __call = function(...)
+    -- if they call the events, give them a list
+      local list = { }
+      for k, _ in pairs(Events) do
+        table.insert(list, k)
+      end
+      return list
+    end,
+}
+
+-- Set the engine event's metatable
+setmetatable(engine[1], EventsMT)
+
+function xCT.InvokeEvent(event, ...)
+  for _, handle in pairs(Events[event]) do
+    if type(handle) == "function" then
+      handle(event, ...)
+    end
+  end
+end
+
 -- Global Accessor to the engine
 xCTShared = engine
 
--- Functions
-local xCT = engine[2]
-
 local frame = CreateFrame"Frame"
 frame:RegisterEvent"ADDON_LOADED"
-frame:SetScript("OnEvent", function(addon)
+frame:SetScript("OnEvent", function(self, event, addon)
   if addon == ADDON_NAME then
     if not xCTOptions then   -- Default Options
-      xCTOptions = DEFUALT_CONFIG
+      xCTOptions = DEFAULT_CONFIG
     end
     engine[3] = xCTOptions
     xCT.InvokeEvent("OptionsLoaded")
+    xCT.Print("is now your default Combat Text handler.")
   end
 end)
