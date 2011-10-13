@@ -63,7 +63,7 @@ local FramesLocked = true
 
 -- Register Event for when we get loaded
 xCTEvents["OptionsLoaded"] = function()
-  xCT.ChangeProfile()
+  ActiveProfile = xCT.ChangeProfile()
   
   -- Assign some aliases
   L = xCTOptions.Localization[xCTOptions.Localization._active]
@@ -73,7 +73,7 @@ xCTEvents["OptionsLoaded"] = function()
   -- Load the Frames
   for FrameName, Frame in pairs(xCTOptions.Frames) do
     if Frame.Enabled then
-      local f = CreateFrame("ScrollingMessageFrame", "xCT"..FrameName, UIParent)
+      local f = CreateFrame("ScrollingMessageFrame", _, UIParent)
       
       -- Unconfig values
       f:SetClampedToScreen(true)
@@ -184,10 +184,8 @@ local X = {
     if EnergyTypes[energy] and amount > 0 then
       return s_format("+%s %s", amount, L[energy]) end
     end,
-  xCTPrint = function (msg)
-      return "\124cffFF0000x\124rCT\124cffDDFF55+\124r "..msg
-    end,
 }
+
 
 local Player = {
   Name = GetUnitName("player"),
@@ -467,7 +465,10 @@ local xCTDamageEvents = {
       local name = select(9, ...)
       F.General:AddMessage(L.ACTION_KILLED..": "..name, unpack(UnitKilled))
     end,
-  SPELL_HEAL = function(_, _, _, ...)
+}
+
+local xCTHealingEvents = {
+  SPELL_HEAL = function(_, _, ...)
       local spellId, _, _, amount, _, _, critical = select(12, ...)
       local color, frame = C.Healing, F.Outgoing
       if critical then
@@ -475,7 +476,7 @@ local xCTDamageEvents = {
         frame = F.Critical end
       frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
     end,
-  SPELL_PERIODIC_HEAL = function(_, _, _, ...)
+  SPELL_PERIODIC_HEAL = function(_, _, ...)
       local spellId, _, _, amount, _, _, critical = select(12, ...)
       local color, frame = C.Healing, F.Outgoing
       if critical then
@@ -510,11 +511,11 @@ do
       end
     end)
 
-  -- Outgoing Damage Events
+  -- Outgoing Event Handlers
   local damage = CreateFrame"FRAME"
   damage:RegisterEvent"COMBAT_LOG_EVENT_UNFILTERED"
   damage:SetScript("OnEvent",
-    function(self, event, ...)    
+    function(self, event, ...)
       local timeStamp, eventType, hideCaster, scrGUID, scrName, scrFlags, scrFlags2, dstGUID = select(1, ...)
       local player = (scrGUID == Player.GUID and dstGUID ~= Player.GUID)
       local pet = (scrGUID == UnitGUID("pet") and ActiveProfile.PetDamage)
@@ -524,6 +525,20 @@ do
         handler(player, pet, vehicle, ...)
       end
     end)
+  local healing = CreateFrame"FRAME"
+  healing:RegisterEvent"COMBAT_LOG_EVENT_UNFILTERED"
+  healing:SetScript("OnEvent",
+    function(self, event, ...)
+      local timeStamp, eventType, hideCaster, scrGUID, scrName, scrFlags, scrFlags2, dstGUID = select(1, ...)
+      local player = (scrGUID == Player.GUID)
+      local vehicle = (scrFlags == X.GoodSourceFlags)
+      local handler = xCTHealingEvents[eventType]
+      --print("event", eventType,"player", player, "pet", pet, "vehicle", vehicle, "handler", handler, "args", select(13, ...))
+      if handler and (player or vehicle) then
+        handler(player, vehicle, ...)
+      end
+    end)
+  
   
   -- Turn Off Blizzard's CT
   CombatText:UnregisterAllEvents()
@@ -561,35 +576,75 @@ function xCT.StartConfigMode()
       
       -- Add the Frame's Title
       frame.fsTitle = frame:CreateFontString(nil, "OVERLAY")
-      frame.fsTitle:SetFont(xCTOptions.FontName, xCTOptions.FontSize, xCTOptions.FontStyle)
-      frame.fsTitle:SetPoint("BOTTOM", f, "TOP", 0, 0)
+      frame.fsTitle:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
+      frame.fsTitle:SetPoint("BOTTOM", frame, "TOP", 0, 0)
       frame.fsTitle:SetText(FrameOptions.Label)
       frame.fsTitle:SetTextColor(unpack(FrameOptions.LabelColor))
       
-      frame.texBackHighlight=frame:CreateTexture"ARTWORK"
-      frame.texBackHighlight:SetPoint("TOPLEFT", f, "TOPLEFT", 1, -1)
-      frame.texBackHighlight:SetPoint("TOPRIGHT", f, "TOPRIGHT", -1, -19)
+      frame.texBackHighlight = frame:CreateTexture"ARTWORK"
+      frame.texBackHighlight:SetPoint("TOPLEFT", frame, "TOPLEFT", 1, -1)
+      frame.texBackHighlight:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -1, -19)
       frame.texBackHighlight:SetHeight(20)
       frame.texBackHighlight:SetTexture(.5, .5, .5)
       frame.texBackHighlight:SetAlpha(.3)
 
-      frame.texResize=frame:CreateTexture"ARTWORK"
+      frame.texResize = frame:CreateTexture"ARTWORK"
       frame.texResize:SetHeight(16)
       frame.texResize:SetWidth(16)
-      frame.texResize:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -1, 1)
+      frame.texResize:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, 1)
       frame.texResize:SetTexture(.5, .5, .5)
       frame.texResize:SetAlpha(.3)
 
-      frame.titleRegion=frame:CreateTitleRegion()
-      frame.titleRegion:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
-      frame.titleRegion:SetPoint("TOPRIGHT", f, "TOPRIGHT", 0, 0)
+      frame.titleRegion = frame:CreateTitleRegion()
+      frame.titleRegion:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, 0)
+      frame.titleRegion:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
       frame.titleRegion:SetHeight(20)
       
+      -- font string Position (location)
+      frame.fsPosition = frame:CreateFontString(nil, "OVERLAY")
+      frame.fsPosition:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
+      frame.fsPosition:SetPoint("TOPLEFT", frame, "TOPLEFT", 3, -3)
+      frame.fsPosition:SetText("")
+      frame.fsPosition:Hide()
+      
+      -- font string width
+      frame.fsWidth = frame:CreateFontString(nil, "OVERLAY")
+      frame.fsWidth:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
+      frame.fsWidth:SetPoint("BOTTOM", frame, "BOTTOM", 0, 0)
+      frame.fsWidth:SetText("")
+      frame.fsWidth:Hide()
+      
+      -- font string height
+      frame.fsHeight = frame:CreateFontString(nil, "OVERLAY")
+      frame.fsHeight:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
+      frame.fsHeight:SetPoint("LEFT", frame, "LEFT", 3, 0)
+      frame.fsHeight:SetText("")
+      frame.fsHeight:Hide()
+      
+      local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+      local midX, midY = ResX / 2, ResY / 2
+      
+      frame:SetScript("OnLeave", function(...)
+              frame:SetScript("OnUpdate", nil)
+              frame.fsPosition:Hide()
+              frame.fsWidth:Hide()
+              frame.fsHeight:Hide()
+          end)
+      frame:SetScript("OnEnter", function(...)
+              frame:SetScript("OnUpdate", function(...)
+                      frame.fsPosition:SetText(math.floor(frame:GetLeft() - midX + 1) .. ", " .. math.floor(frame:GetTop() - midY + 2))
+                      frame.fsWidth:SetText(math.floor(frame:GetWidth()))
+                      frame.fsHeight:SetText(math.floor(frame:GetHeight()))
+                  end)
+              frame.fsPosition:Show()
+              frame.fsWidth:Show()
+              frame.fsHeight:Show()
+          end)
       frame:EnableMouse(true)
       frame:RegisterForDrag("LeftButton")
       frame:SetScript("OnDragStart", frame.StartSizing)
       frame:SetScript("OnSizeChanged", function(self)
-          self:SetMaxLines(self:GetHeight() / ct.fontsize)
+          self:SetMaxLines(self:GetHeight() / ActiveProfile.FontSize)
           self:Clear()
         end)
 
@@ -615,9 +670,22 @@ function xCT.EndConfigMode()
     
     frame.titleRegion = nil
     
+    frame.fsPosition:Hide()
+    frame.fsPosition = nil
+    
+    frame.fsWidth:Hide()
+    frame.fsWidth = nil
+    
+    frame.fsHeight:Hide()
+    frame.fsHeight = nil
+    
     frame:EnableMouse(false)
     frame:SetScript("OnDragStart", nil)
     frame:SetScript("OnDragStop", nil)
+    frame:SetScript("OnSizeChanged", nil)
+    frame:SetScript("OnLeave", nil)
+    frame:SetScript("OnEnter", nil)
+    frame:SetScript("OnUpdate", nil)
     
     -- Save the Frames
     FrameOptions.Width = frame:GetWidth()
@@ -641,7 +709,7 @@ SlashCmdList["XCTPLUS"] = function(input)
     
     -- Unlock the frames (show them) so that you can move them
     if args[1] == "unlock" then
-        if FFramesLocked then
+        if FramesLocked then
             xCT.StartConfigMode()
         else
             xCT.Print("Frames already unlocked.")
@@ -674,12 +742,15 @@ SlashCmdList["XCTPLUS"] = function(input)
     
     -- Load a profile (syntax: /xct load ProfileName)
     elseif args[1] == "load" then
-      if xCTOptions.Profiles[args[2]] then
-        xCT.ChangeProfile(args[2])
+      if not args[2] then
+        xCT.ChangeProfile("Default")
       else
-        xCT.Print("'|cff5555FF"..args[2].."|r' is not a profile. Type '/xct profiles' to see a list.")
+        if xCTOptions.Profiles[args[2]] then
+          xCT.ChangeProfile(args[2])
+        else
+          xCT.Print("'|cff5555FF"..args[2].."|r' is not a profile. Type '/xct profiles' to see a list.")
+        end
       end
-    
     elseif args[1] == "create" then
       if xCTOptions.Profiles[args[2]] then
         xCT.Print("'|cff5555FF"..args[2].."|r' is already a profile. Type '/xct profiles' to see a list.")

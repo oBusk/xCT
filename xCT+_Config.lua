@@ -132,7 +132,7 @@ local DEFAULT_CONFIG = {
     -- Frame Names canNOT have a space or special character in them
     ["Critical"] = {
       Enabled = true,
-      Label = "Crits",
+      Label = TEXT_MODE_A_STRING_RESULT_CRITICAL:match("%a+"),
       LabelColor = { 1.00, 0.50, 0.00, 0.90 },
       Justify = "RIGHT",
       Font = {
@@ -240,7 +240,7 @@ local DEFAULT_CONFIG = {
     },
     ["PowerGains"] = {
       Enabled = true,
-      Label = "Power Gains",
+      Label = MANA.." ("..select(2, UnitPowerType("player"))..")",
       LabelColor = { 0.80, 0.10, 1.00, 0.90 },
       Justify = "RIGHT",
       Font = {
@@ -258,7 +258,7 @@ local DEFAULT_CONFIG = {
     },
     ["Procs"] = {
       Enabled = true,
-      Label = "Procs",
+      Label = DISPLAY_SPELL_ALERTS,
       LabelColor = { 1.00, 0.60, 0.30, 0.90 },
       Justify = "CENTER",
       Font = {
@@ -326,13 +326,13 @@ function xCT.InvokeEvent(event, ...)
   end
 end
 
-function xCT.Print(msg)
-  print(X.xCTPrint(msg))
+function xCT.Print(...)
+  print("\124cffFF0000x\124rCT\124cffDDFF55+\124r ", ...)
 end
 
-function xCT.Debug(msg)
+function xCT.Debug(...)
   if XCT_DEBUG then
-    xCT.Print(msg)
+    xCT.Print(...)
   end
 end
 
@@ -355,7 +355,7 @@ end
 function xCT.ChangeProfile(NewProfileName)
   if NewProfileName then
     xCTOptions._activeProfile = NewProfileName end
-  ActiveProfile = xCTOptions.Profiles[xCTOptions._activeProfile]
+  local ActiveProfile = xCTOptions.Profiles[xCTOptions._activeProfile]
   
   -- Backward Compatibility
   if not getmetatable(ActiveProfile) and xCTOptions._activeProfile ~= "Default" then
@@ -363,6 +363,8 @@ function xCT.ChangeProfile(NewProfileName)
     setmetatable(ActiveProfile, activeMT)
   end
   xCT.InvokeEvent("ChangedProfiles")
+  
+  return ActiveProfile
 end
 
 
