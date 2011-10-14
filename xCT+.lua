@@ -84,7 +84,7 @@ xCTEvents["OptionsLoaded"] = function()
       f:SetSpacing(2)
       f:SetMinResize(64, 64)
       f:SetMaxResize(768, 768)
-      
+
       -- Config Values
       local Frame_Font = Frame.Font
       f:SetFont(Frame_Font.Name, Frame_Font.Size, Frame_Font.Style)
@@ -95,6 +95,9 @@ xCTEvents["OptionsLoaded"] = function()
       f:ClearAllPoints() -- Don't use Blizzard's Frame saver
       f:SetPoint(Frame_Point.Relative, Frame_Point.X, Frame_Point.Y)
       f:SetJustifyH(Frame.Justify)
+      
+      f:SetMaxLines(Frame.Height / Frame_Font.Size)
+      
       F[FrameName] = f  -- store the frame
     end
   end
@@ -121,7 +124,7 @@ xCTEvents["OptionsLoaded"] = function()
 end
 
 -- xCT String Formats
-local X = {
+xCT.Formats = {
   BlankIcon = "Interface\\Addons\\xCT\\blank",
   GoodSourceFlags = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_GUARDIAN ),
   Healing = function(msg, name)
@@ -185,14 +188,13 @@ local X = {
       return s_format("+%s %s", amount, L[energy]) end
     end,
 }
+local X = xCT.Formats
 
-
-local Player = {
+xCT.Player = {
   Name = GetUnitName("player"),
   Class = select(2, UnitClass("player")),
   Power = select(2, UnitPowerType("player")),
   Unit = "player",
-  GUID = UnitGUID("player"),
   IsLowHealth = function(self)
     if UnitHealth(self.Unit) / UnitHealthMax(self.Unit) <= COMBAT_TEXT_LOW_HEALTH_THRESHOLD then
       if not self.lowHealth then
@@ -203,14 +205,18 @@ local Player = {
       return false
     end,
   IsLowMana = function(self)
-    if self.Power == "MANA" then
-      if UnitPower(self.Unit) / UnitPowerMax(self.Unit) <= COMBAT_TEXT_LOW_MANA_THRESHOLD then
-        if not self.lowMana then
-          self.lowMana = true
-          return true end
-      else
-        self.lowMana = nil end
-      end return false
+      if self.Power == "MANA" then
+        if UnitPower(self.Unit) / UnitPowerMax(self.Unit) <= COMBAT_TEXT_LOW_MANA_THRESHOLD then
+          if not self.lowMana then
+            self.lowMana = true
+            return true
+          end
+          return false
+        else
+          self.lowMana = nil
+        end
+      end
+      return false
     end,
   SetUnit = function(self)
     if UnitHasVehicleUI("player") then
@@ -223,6 +229,16 @@ local Player = {
       CombatTextSetActiveUnit("player") end
     end,
 }
+
+local Player = xCT.Player
+local PlayerMT = {
+  __index = function(t, k)
+      if k == "GUID" then
+        return UnitGUID("player")
+      end
+    end
+}
+setmetatable(Player, PlayerMT)
 
 local xCTCombatEvents = {
   COMBAT_TEXT_UPDATE = {  -- Sub-Events
@@ -391,7 +407,21 @@ local xCTCombatEvents = {
     if unit == "player" then
       Player:SetUnit() end
     end,
-    
+  UNIT_COMBO_POINTS = function(unit)
+    if COMBAT_TEXT_SHOW_COMBO_POINTS == "1" and unit == Player.Unit then
+      local color, comboPoints = C.ComboPoint, GetComboPoints(Player.Unit, "target")
+      if comboPoints == MAX_COMBO_POINTS then
+        color = C.MaxComboPoints end
+      F.General:AddMessage(s_format(COMBAT_TEXT_COMBO_POINTS, comboPoints), unpack(color)) end
+    end,
+  RUNE_POWER_UPDATE = function(runeSlot)
+    local usable = select(3, GetRuneCooldown(runeSlot))
+    if usable then
+      local runeType = GetRuneType(runeSlot)
+      if runeType then
+        F.General:AddMessage("+"..L.RUNES[runeType], unpack(C.Runes[runeType])) end
+      end
+    end,
   -- UNIT_COMBO_POINTS
   -- RUNE_POWER_UPDATE
   -- PLAYER_ENTERING_WORLD
@@ -406,31 +436,31 @@ local xCTDamageEvents = {
     if critical then
       frame = F.Critical end
     if pet then
-      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(nil, true)), unpack(C[1]))
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(nil, true)), unpack(C["1"]))
     else
-      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(6603)), unpack(C[1])) end
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(6603)), unpack(C["1"])) end
     end,
   RANGE_DAMAGE = function(_, _, _, ...)
     local spellId, _, _, amount, _, _, _, _, _, critical = select(12, ...)
     local frame = F.Outgoing
     if critical then
       frame = F.Critical end
-    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(C[1]))
+    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(C["1"]))
     end,
   SPELL_DAMAGE = function(_, _, _, ...)
     local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
-    local color, frame = C[1], F.Outgoing
+    local color, frame = C["1"], F.Outgoing
     if ActiveProfile.DamageColors then
-      color = C[spellSchool] end
+      color = C[tostring(spellSchool)] end
     if critical then
       frame = F.Critical end
     frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
   end,
   SPELL_PERIODIC_DAMAGE = function(_, _, _, ...)
       local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
-      local color, frame = C[1], F.Outgoing
+      local color, frame = C["1"], F.Outgoing
       if ActiveProfile.DamageColors then
-        color = C[spellSchool] end
+        color = C[tostring(spellSchool)] end
       if critical then
         frame = F.Critical end
       frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
@@ -463,7 +493,7 @@ local xCTDamageEvents = {
     end,
   PARTY_KILL = function(_, _, _, ...)
       local name = select(9, ...)
-      F.General:AddMessage(L.ACTION_KILLED..": "..name, unpack(UnitKilled))
+      F.General:AddMessage(L.ACTION_KILLED..": "..name, unpack(C.UnitKilled))
     end,
 }
 
@@ -497,6 +527,8 @@ do
   combat:RegisterEvent"PLAYER_REGEN_ENABLED"
   combat:RegisterEvent"UNIT_ENTERED_VEHICLE"
   combat:RegisterEvent"UNIT_EXITING_VEHICLE"
+  combat:RegisterEvent"UNIT_COMBO_POINTS"
+  combat:RegisterEvent"RUNE_POWER_UPDATE"
   combat:SetScript("OnEvent",
     function(_, event, ...)
       local handler = xCTCombatEvents[event]
@@ -558,6 +590,8 @@ function xCT.StartConfigMode()
   if not InCombatLockdown() then
     for frameName, frame in pairs(F) do
       local FrameOptions = xCTOptions.Frames[frameName]
+      frame.FrameOptions = FrameOptions
+      
       frame:SetBackdrop( {
         bgFile    = "Interface/Tooltips/UI-Tooltip-Background",
         edgeFile  = "Interface/Tooltips/UI-Tooltip-Border",
@@ -624,27 +658,27 @@ function xCT.StartConfigMode()
       local ResX, ResY = GetScreenWidth(), GetScreenHeight()
       local midX, midY = ResX / 2, ResY / 2
       
-      frame:SetScript("OnLeave", function(...)
-              frame:SetScript("OnUpdate", nil)
-              frame.fsPosition:Hide()
-              frame.fsWidth:Hide()
-              frame.fsHeight:Hide()
+      frame:SetScript("OnLeave", function(self, ...)
+              self:SetScript("OnUpdate", nil)
+              self.fsPosition:Hide()
+              self.fsWidth:Hide()
+              self.fsHeight:Hide()
           end)
-      frame:SetScript("OnEnter", function(...)
-              frame:SetScript("OnUpdate", function(...)
-                      frame.fsPosition:SetText(math.floor(frame:GetLeft() - midX + 1) .. ", " .. math.floor(frame:GetTop() - midY + 2))
-                      frame.fsWidth:SetText(math.floor(frame:GetWidth()))
-                      frame.fsHeight:SetText(math.floor(frame:GetHeight()))
+      frame:SetScript("OnEnter", function(self, ...)
+              self:SetScript("OnUpdate", function(self, ...)
+                      self.fsPosition:SetText(math.floor(self:GetLeft() - midX + 1) .. ", " .. math.floor(self:GetTop() - midY + 2))
+                      self.fsWidth:SetText(math.floor(self:GetWidth()))
+                      self.fsHeight:SetText(math.floor(self:GetHeight()))
                   end)
-              frame.fsPosition:Show()
-              frame.fsWidth:Show()
-              frame.fsHeight:Show()
+              self.fsPosition:Show()
+              self.fsWidth:Show()
+              self.fsHeight:Show()
           end)
       frame:EnableMouse(true)
       frame:RegisterForDrag("LeftButton")
       frame:SetScript("OnDragStart", frame.StartSizing)
       frame:SetScript("OnSizeChanged", function(self)
-          self:SetMaxLines(self:GetHeight() / ActiveProfile.FontSize)
+          self:SetMaxLines(self:GetHeight() / self.FrameOptions.Font.Size)
           self:Clear()
         end)
 
@@ -657,28 +691,8 @@ end
 function xCT.EndConfigMode()
   for frameName, frame in pairs(F) do
     local FrameOptions = xCTOptions.Frames[frameName]
-    frame:SetBackdrop(nil)
     
-    frame.fsTitle:Hide()
-    frame.fsTitle = nil
-    
-    frame.texBackHighlight:Hide()
-    frame.texBackHighlight = nil
-    
-    frame.texResize:Hide()
-    frame.texResize = nil
-    
-    frame.titleRegion = nil
-    
-    frame.fsPosition:Hide()
-    frame.fsPosition = nil
-    
-    frame.fsWidth:Hide()
-    frame.fsWidth = nil
-    
-    frame.fsHeight:Hide()
-    frame.fsHeight = nil
-    
+    -- Unregister all the events
     frame:EnableMouse(false)
     frame:SetScript("OnDragStart", nil)
     frame:SetScript("OnDragStop", nil)
@@ -686,10 +700,28 @@ function xCT.EndConfigMode()
     frame:SetScript("OnLeave", nil)
     frame:SetScript("OnEnter", nil)
     frame:SetScript("OnUpdate", nil)
+
+    -- Create Islands so they are GC'd
+    frame:SetBackdrop(nil)
+    frame.fsTitle:Hide()
+    frame.fsTitle = nil
+    frame.texBackHighlight:Hide()
+    frame.texBackHighlight = nil
+    frame.texResize:Hide()
+    frame.texResize = nil
+    frame.titleRegion = nil
+    frame.fsPosition:Hide()
+    frame.fsPosition = nil
+    frame.fsWidth:Hide()
+    frame.fsWidth = nil
+    frame.fsHeight:Hide()
+    frame.fsHeight = nil
+    
+    frame.FrameOptions = nil
     
     -- Save the Frames
     FrameOptions.Width = frame:GetWidth()
-    FrameOptions.Height = frame:GetWidth()
+    FrameOptions.Height = frame:GetHeight()
     FrameOptions.Point.Relative, _, _, FrameOptions.Point.X, FrameOptions.Point.Y = frame:GetPoint(1)
     
     FramesLocked = true

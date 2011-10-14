@@ -29,7 +29,7 @@ local DEFAULT_CONFIG = {
       ["UseTextIcons"] = false,
       ["IconSize"] = 22,
       ["PetDamage"] = true,
-      ["DamageColor"] = true,
+      ["DamageColors"] = true,
       ["FontSize"] = 16,
       ["FontName"] = "Interface\\Addons\\xCT+\\HOOGE.TTF",
       ["FontStyle"] = "OUTLINE",
@@ -47,13 +47,13 @@ local DEFAULT_CONFIG = {
   },
   Colors = {
     -- Magic Colors
-    [1]             = { 1.00, 1.00, 0.00 },   -- Physical Damage
-    [2]             = { 1.00, 0.90, 0.50 },   -- Holy Damage
-    [4]             = { 1.00, 0.50, 0.00 },   -- Fire Damage
-    [8]             = { 0.30, 1.00, 0.30 },   -- Nature Damage
-    [16]            = { 0.50, 1.00, 1.00 },   -- Frost Damage
-    [32]            = { 0.50, 0.50, 1.00 },   -- Shadow Damage
-    [64]            = { 1.00, 0.50, 1.00 },   -- Arcane Damage
+    ["1"]           = { 1.00, 1.00, 0.00 },   -- Physical Damage
+    ["2"]           = { 1.00, 0.90, 0.50 },   -- Holy Damage
+    ["4"]           = { 1.00, 0.50, 0.00 },   -- Fire Damage
+    ["8"]           = { 0.30, 1.00, 0.30 },   -- Nature Damage
+    ["16"]          = { 0.50, 1.00, 1.00 },   -- Frost Damage
+    ["32"]          = { 0.50, 0.50, 1.00 },   -- Shadow Damage
+    ["64"]          = { 1.00, 0.50, 1.00 },   -- Arcane Damage
     
     -- Damage Colors
     Damage          = { 0.75, 0.10, 0.10 },
@@ -76,6 +76,16 @@ local DEFAULT_CONFIG = {
     DispellBuff     = { 0.00, 1.00, 0.50 },
     DispellDebuff   = { 0.00, 1.00, 0.50 },
     Interrupt       = { 1.00, 0.50, 0.00 },
+    
+    ComboPoint      = { 1.00, 0.82, 0.00 },
+    MaxComboPoints  = { 0.00, 0.82, 1.00 },
+    
+    Runes = {
+      { 0.75, 0.00, 0.00 }, -- [1] Blood Rune
+      { 0.75, 1.00, 0.00 }, -- [2] Unholy Rune
+      { 0.00, 1.00, 1.00 }, -- [3] Frost Rune
+      { 1.00, 1.00, 1.00 }, -- [4] Death Rune
+    },
     
     -- Misc
     Honor           = { 0.10, 0.10, 1.00 },
@@ -111,6 +121,12 @@ local DEFAULT_CONFIG = {
       RUINIC_POWER      = RUINIC_POWER,       -- "Runic Power",
       SOUL_SHARDS       = SOUL_SHARDS,        -- "Soul Shards",
       HOLY_POWER        = HOLY_POWER,         -- "Holy Power",
+      RUNES = {
+        [1] = COMBAT_TEXT_RUNE_BLOOD,
+        [2] = COMBAT_TEXT_RUNE_UNHOLY,
+        [3] = COMBAT_TEXT_RUNE_FROST,
+        [4] = COMBAT_TEXT_RUNE_DEATH,
+      },
 
       -- Messages and Alerts
       HEALTH_LOW        = HEALTH_LOW,         -- "Low Heath!",
