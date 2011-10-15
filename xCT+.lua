@@ -39,8 +39,8 @@ end
 
 -- Fast Access Locals
 local ActiveProfile = nil
-local C = nil
-local L = nil
+local C = xCT.Colors
+local L = xCT.Localization
 local EnergyTypes = nil
 
 -- Create a Metatable for our frames
@@ -63,15 +63,13 @@ local FramesLocked = true
 
 -- Register Event for when we get loaded
 xCTEvents["OptionsLoaded"] = function()
-  ActiveProfile = xCT.ChangeProfile()
+  ActiveProfile = xCT.ActiveProfile
   
   -- Assign some aliases
-  L = xCTOptions.Localization[xCTOptions.Localization._active]
-  C = xCTOptions.Colors
   EnergyTypes = ActiveProfile.EnergyTypes
   
   -- Load the Frames
-  for FrameName, Frame in pairs(xCTOptions.Frames) do
+  for FrameName, Frame in pairs(ActiveProfile.Frames) do
     if Frame.Enabled then
       local f = CreateFrame("ScrollingMessageFrame", _, UIParent)
       
@@ -104,20 +102,42 @@ xCTEvents["OptionsLoaded"] = function()
   
   if not ActiveProfile.ShowHeadNumbers then  
     -- Move the options up
+    local defaultFont, defaultSize = InterfaceOptionsCombatTextPanelTargetEffectsText:GetFont()
+    
+    -- Show Combat Options Title
+    local fsTitle = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
+    fsTitle:SetTextColor(1.00, 0.82, 0.00, 1.00)
+    fsTitle:SetFont(defaultFont, defaultSize + 2)
+    fsTitle:SetText("xCT+ Combat Text Options")
+    fsTitle:SetPoint("TOPLEFT", 16, -80)
+    
+    -- Show Version Number
+    local fsVersion = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
+    fsVersion:SetFont(defaultFont, 11)
+    fsVersion:SetText("|cff5555FFPowered By:|r \124cffFF0000x\124rCT\124cffFFFFFF+\124r (Version "..GetAddOnMetadata("xCT+", "Version")..")")
+    fsVersion:SetPoint("BOTTOMRIGHT", -8, 8)
+    
+    -- Move the Effects and Floating Options
+    InterfaceOptionsCombatTextPanelTargetEffects:ClearAllPoints()
+    InterfaceOptionsCombatTextPanelTargetEffects:SetPoint("TOPLEFT", 18, -370)
     InterfaceOptionsCombatTextPanelEnableFCT:ClearAllPoints()
-    InterfaceOptionsCombatTextPanelEnableFCT:SetPoint("TOPLEFT", 16, -94)
+    InterfaceOptionsCombatTextPanelEnableFCT:SetPoint("TOPLEFT", 8, -66)
     
     -- Hide some options
     InterfaceOptionsCombatTextPanelTargetDamage:Hide()
     InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
     InterfaceOptionsCombatTextPanelPetDamage:Hide()
     InterfaceOptionsCombatTextPanelHealing:Hide()
+    InterfaceOptionsCombatTextPanelEnableFCT:Hide()
+    InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
     
     -- Disallow these options (head numbers)
+    SetCVar("enableCombatText", 1)
     SetCVar("CombatLogPeriodicSpells", 0)
     SetCVar("PetMeleeDamage", 0)
     SetCVar("CombatDamage", 0)
     SetCVar("CombatHealing", 0)
+    
   end
   
   xCT.InvokeEvent("FramesLoaded")
@@ -159,8 +179,9 @@ xCT.Formats = {
         if pet then
           return "["..L.Pet.."]"
         else
-          if not name then name = L.Swing end
-          return "["..name.."]" end
+          if not name then
+            name = L.Swing end
+        return "["..name.."]" end
       else
         if pet then
           return " \124T"..PET_ATTACK_TEXTURE..":"..size..":"..size..":0:0:64:64:5:59:5:59\124t"
@@ -169,10 +190,9 @@ xCT.Formats = {
             return " \124T"..X.BlankIcon..":"..size..":"..size..":0:0:64:64:5:59:5:59\124t"
           else
             return " \124T"..icon..":"..size..":"..size..":0:0:64:64:5:59:5:59\124t" end
-        end
-      end
-    else
-      return "" end
+        end end
+      else
+        return "" end
     end,
   Resist = function(amount, msg, resisted)
     if resisted then
@@ -182,10 +202,12 @@ xCT.Formats = {
         return "-"..amount end
     elseif COMBAT_TEXT_SHOW_RESISTANCES == "1" then
       return msg end
+    return ""
     end,
   Energize = function(amount, energy, ...)
     if EnergyTypes[energy] and amount > 0 then
       return s_format("+%s %s", amount, L[energy]) end
+    return ""
     end,
 }
 local X = xCT.Formats
@@ -194,6 +216,7 @@ xCT.Player = {
   Name = GetUnitName("player"),
   Class = select(2, UnitClass("player")),
   Power = select(2, UnitPowerType("player")),
+  GUID = UnitGUID("player"),
   Unit = "player",
   IsLowHealth = function(self)
     if UnitHealth(self.Unit) / UnitHealthMax(self.Unit) <= COMBAT_TEXT_LOW_HEALTH_THRESHOLD then
@@ -221,24 +244,19 @@ xCT.Player = {
   SetUnit = function(self)
     if UnitHasVehicleUI("player") then
       self.Unit = "vehicle"
+      self.GUID = UnitGUID("vehicle")
       self.Power = select(2, UnitPowerType("vehicle"))
       CombatTextSetActiveUnit("vehicle")
     else
       self.Unit = "player"
+      self.GUID = UnitGUID("player")
       self.Power = select(2, UnitPowerType("player"))
       CombatTextSetActiveUnit("player") end
     end,
 }
 
 local Player = xCT.Player
-local PlayerMT = {
-  __index = function(t, k)
-      if k == "GUID" then
-        return UnitGUID("player")
-      end
-    end
-}
-setmetatable(Player, PlayerMT)
+
 
 local xCTCombatEvents = {
   COMBAT_TEXT_UPDATE = {  -- Sub-Events
@@ -397,6 +415,7 @@ local xCTCombatEvents = {
     end,
   PLAYER_REGEN_DISABLED = function()
     if COMBAT_TEXT_SHOW_COMBAT_STATE == "1" then
+      --print("Frames:", F, "Frame(General):", F.General, "Message:", L.ENTERING_COMBAT, "Color:", unpack(C.EnteringCombat))
       F.General:AddMessage(L.ENTERING_COMBAT, unpack(C.EnteringCombat)) end
     end,
   UNIT_ENTERED_VEHICLE = function(unit)
@@ -406,6 +425,9 @@ local xCTCombatEvents = {
   UNIT_EXITING_VEHICLE = function(unit)
     if unit == "player" then
       Player:SetUnit() end
+    end,
+  PLAYER_ENTERING_WORLD = function(name)
+      Player:SetUnit()  -- might fix a bug with disappearing GUIDs
     end,
   UNIT_COMBO_POINTS = function(unit)
     if COMBAT_TEXT_SHOW_COMBO_POINTS == "1" and unit == Player.Unit then
@@ -422,9 +444,6 @@ local xCTCombatEvents = {
         F.General:AddMessage("+"..L.RUNES[runeType], unpack(C.Runes[runeType])) end
       end
     end,
-  -- UNIT_COMBO_POINTS
-  -- RUNE_POWER_UPDATE
-  -- PLAYER_ENTERING_WORLD
   -- CHAT_MSG_LOOT
   -- CHAT_MSG_MONEY
 }
@@ -523,6 +542,7 @@ do
   combat:RegisterEvent"COMBAT_TEXT_UPDATE"
   combat:RegisterEvent"UNIT_HEALTH"
   combat:RegisterEvent"UNIT_MANA"
+  combat:RegisterEvent"PLAYER_ENTERING_WORLD"
   combat:RegisterEvent"PLAYER_REGEN_DISABLED"
   combat:RegisterEvent"PLAYER_REGEN_ENABLED"
   combat:RegisterEvent"UNIT_ENTERED_VEHICLE"
@@ -578,9 +598,6 @@ do
   CombatText:SetScript("OnEvent", nil)
   CombatText:SetScript("OnUpdate", nil)
   Blizzard_CombatText_AddMessage = CombatText_AddMessage
-  InterfaceOptionsCombatTextPanelTitle:SetText(COMBAT_TEXT_LABEL.." (powered by \124cffFF0000x\124rCT\124cffFFFFFF+\124r)")
-  InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
-  
   local CombatText_AddMessage = function(msg, _, r, g, b)
     F.General:AddMessage(message, r, g, b)
   end
@@ -589,7 +606,7 @@ end
 function xCT.StartConfigMode()
   if not InCombatLockdown() then
     for frameName, frame in pairs(F) do
-      local FrameOptions = xCTOptions.Frames[frameName]
+      local FrameOptions = ActiveProfile.Frames[frameName]
       frame.FrameOptions = FrameOptions
       
       frame:SetBackdrop( {
@@ -690,7 +707,7 @@ end
 
 function xCT.EndConfigMode()
   for frameName, frame in pairs(F) do
-    local FrameOptions = xCTOptions.Frames[frameName]
+    local FrameOptions = ActiveProfile.Frames[frameName]
     
     -- Unregister all the events
     frame:EnableMouse(false)
@@ -731,7 +748,7 @@ end
 -- Hook Slash Commands
 SLASH_XCTPLUS1 = "/xct"
 SlashCmdList["XCTPLUS"] = function(input)
-    input = s_lower(input)
+    --input = s_lower(input)
     
     -- Get the Args
     local args = { }
