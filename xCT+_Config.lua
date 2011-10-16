@@ -16,133 +16,29 @@ of xCT (by Affli) that has been outdated since WoW 4.0.6.
 ]]
 
 -- This is what gets loaded on the first load, or after you type '/xct reset'
-local DEFAULT_CONFIG = {
-  _activeProfile = "Default",
-  Profiles = {
-    Default = {
-      ["ShowHeadNumbers"] = false,
-      ["CritPrefix"] = "*",
-      ["CritPostfix"] = "*",
-      ["HealThreshold"] = 0,
-      ["StopVESpam"] = true,
-      ["ShowOutgoingIcons"] = true,
-      ["UseTextIcons"] = false,
-      ["IconSize"] = 22,
-      ["PetDamage"] = true,
-      ["DamageColors"] = true,
-      ["FontSize"] = 16,
-      ["FontName"] = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-      ["FontStyle"] = "OUTLINE",
-      
-      EnergyTypes = { -- Display Energy Types
-        ["MANA"]          = true,
-        ["RAGE"]          = true,
-        ["FOCUS"]         = true,
-        ["ENERGY"]        = true,
-        ["RUINIC_POWER"]  = true,
-        ["SOUL_SHARDS"]   = true,
-        ["HOLY_POWER"]    = true,
-      },
-    },
-  },
-  Colors = {
-    -- Magic Colors
-    ["1"]           = { 1.00, 1.00, 0.00 },   -- Physical Damage
-    ["2"]           = { 1.00, 0.90, 0.50 },   -- Holy Damage
-    ["4"]           = { 1.00, 0.50, 0.00 },   -- Fire Damage
-    ["8"]           = { 0.30, 1.00, 0.30 },   -- Nature Damage
-    ["16"]          = { 0.50, 1.00, 1.00 },   -- Frost Damage
-    ["32"]          = { 0.50, 0.50, 1.00 },   -- Shadow Damage
-    ["64"]          = { 1.00, 0.50, 1.00 },   -- Arcane Damage
-    
-    -- Damage Colors
-    Damage          = { 0.75, 0.10, 0.10 },
-    DamageCrit      = { 1.00, 0.10, 0.10 },
-    SpellDamage     = { 0.75, 0.30, 0.85 },
-    SpellDamageCrit = { 1.00, 0.30, 0.50 },
-    
-    -- Healing Colors
-    Healing         = { 0.10, 0.75, 0.10 },
-    HealingCrit     = { 0.10, 1.00, 0.10 },
-    
-    -- Spells and (De)Buffs
-    SpellCast       = { 1.00, 0.82, 0.00 },
-    SpellReactive   = { 1.00, 0.82, 0.00 },
-    BuffStart       = { 1.00, 0.50, 0.50 },
-    BuffEnd         = { 0.50, 0.50, 0.50 },
-    DebuffStart     = { 1.00, 0.10, 0.10 },
-    DebuffEnd       = { 0.10, 1.00, 0.10 },
-    MissType        = { 0.50, 0.50, 0.50 },
-    DispellBuff     = { 0.00, 1.00, 0.50 },
-    DispellDebuff   = { 0.00, 1.00, 0.50 },
-    Interrupt       = { 1.00, 0.50, 0.00 },
-    
-    ComboPoint      = { 1.00, 0.82, 0.00 },
-    MaxComboPoints  = { 0.00, 0.82, 1.00 },
-    
-    Runes = {
-      { 0.75, 0.00, 0.00 }, -- [1] Blood Rune
-      { 0.75, 1.00, 0.00 }, -- [2] Unholy Rune
-      { 0.00, 1.00, 1.00 }, -- [3] Frost Rune
-      { 1.00, 1.00, 1.00 }, -- [4] Death Rune
-    },
-    
-    -- Misc
-    Honor           = { 0.10, 0.10, 1.00 },
-    Reputation      = { 0.10, 0.10, 1.00 },
-    LowHealth       = { 1.00, 0.10, 0.10 },
-    LowMana         = { 1.00, 0.10, 0.10 },
-    EnteringCombat  = { 0.10, 1.00, 0.10 },
-    LeavingCombat   = { 0.10, 1.00, 0.10 },
-    UnitKilled      = { 0.20, 1.00, 0.20 },
-    PowerBarColor   = _G["PowerBarColor"]
-  },
-  Localization = {
-    _active = "enUS",
-    enUS = {
-      -- Miss Types
-      ABSORB            = ABSORB,             -- "Absorb", 
-      BLOCK             = BLOCK,              -- "Block",
-      DEFLECT           = DEFLECT,            -- "Deflect",
-      DODGE             = DODGE,              -- "Dodge",
-      EVADE             = EVADE,              -- "Evade",
-      IMMUNE            = IMMUNE,             -- "Immune",
-      INTERRUPT         = INTERRUPT,
-      MISS              = MISS,               -- "Miss",
-      PARRY             = PARRY,              -- "Parry",
-      REFLECT           = REFLECT,            -- "Reflect",
-      RESIST            = RESIST,             -- "Resist",
-
-      -- Energy Types
-      MANA              = MANA,               -- "Mana",
-      RAGE              = RAGE,               -- "Rage",
-      FOCUS             = FOCUS,              -- "Focus",
-      ENERGY            = ENERGY,             -- "Energy",
-      RUINIC_POWER      = RUINIC_POWER,       -- "Runic Power",
-      SOUL_SHARDS       = SOUL_SHARDS,        -- "Soul Shards",
-      HOLY_POWER        = HOLY_POWER,         -- "Holy Power",
-      RUNES = {
-        [1] = COMBAT_TEXT_RUNE_BLOOD,
-        [2] = COMBAT_TEXT_RUNE_UNHOLY,
-        [3] = COMBAT_TEXT_RUNE_FROST,
-        [4] = COMBAT_TEXT_RUNE_DEATH,
-      },
-
-      -- Messages and Alerts
-      HEALTH_LOW        = HEALTH_LOW,         -- "Low Heath!",
-      ENTERING_COMBAT   = ENTERING_COMBAT,    -- "Entering Combat!"
-      LEAVING_COMBAT    = LEAVING_COMBAT,     -- "Leaving Combat!"
-
-      -- Misc
-      HONOR             = "Honor",
-      Swing             = ACTION_SWING,       -- GetSpellInfo(5547), -- "Swing"
-      Pet               = "Pet",
-      
-      -- Actions
-      ACTION_DISPEL     = ACTION_SPELL_DISPEL,    -- "dispelled"
-      ACTION_INTERRUPT  = ACTION_SPELL_INTERRUPT, -- "interrupted"
-      ACTION_KILLED     = ACTION_PARTY_KILL,      -- "killed"
-    },
+local DEFAULT_PROFILE = {
+  ["ShowHeadNumbers"] = false,
+  ["CritPrefix"] = "*",
+  ["CritPostfix"] = "*",
+  ["HealThreshold"] = 0,
+  ["StopVESpam"] = true,
+  ["ShowOutgoingIcons"] = true,
+  ["UseTextIcons"] = false,
+  ["IconSize"] = 22,
+  ["PetDamage"] = true,
+  ["DamageColors"] = true,
+  ["FontSize"] = 16,
+  ["FontName"] = "Interface\\Addons\\xCT+\\HOOGE.TTF",
+  ["FontStyle"] = "OUTLINE",
+  
+  EnergyTypes = { -- Display Energy Types
+    ["MANA"]          = true,
+    ["RAGE"]          = true,
+    ["FOCUS"]         = true,
+    ["ENERGY"]        = true,
+    ["RUINIC_POWER"]  = true,
+    ["SOUL_SHARDS"]   = true,
+    ["HOLY_POWER"]    = true,
   },
   Frames = {
     -- Frame Names canNOT have a space or special character in them
@@ -304,6 +200,103 @@ engine[3] = {} -- Options
 
 local xCT = engine[2]
 
+xCT.Colors = {
+  -- Magic Colors
+  ["1"]           = { 1.00, 1.00, 0.00 },   -- Physical Damage
+  ["2"]           = { 1.00, 0.90, 0.50 },   -- Holy Damage
+  ["4"]           = { 1.00, 0.50, 0.00 },   -- Fire Damage
+  ["8"]           = { 0.30, 1.00, 0.30 },   -- Nature Damage
+  ["16"]          = { 0.50, 1.00, 1.00 },   -- Frost Damage
+  ["32"]          = { 0.50, 0.50, 1.00 },   -- Shadow Damage
+  ["64"]          = { 1.00, 0.50, 1.00 },   -- Arcane Damage
+  
+  -- Damage Colors
+  Damage          = { 0.75, 0.10, 0.10 },
+  DamageCrit      = { 1.00, 0.10, 0.10 },
+  SpellDamage     = { 0.75, 0.30, 0.85 },
+  SpellDamageCrit = { 1.00, 0.30, 0.50 },
+  
+  -- Healing Colors
+  Healing         = { 0.10, 0.75, 0.10 },
+  HealingCrit     = { 0.10, 1.00, 0.10 },
+  
+  -- Spells and (De)Buffs
+  SpellCast       = { 1.00, 0.82, 0.00 },
+  SpellReactive   = { 1.00, 0.82, 0.00 },
+  BuffStart       = { 1.00, 0.50, 0.50 },
+  BuffEnd         = { 0.50, 0.50, 0.50 },
+  DebuffStart     = { 1.00, 0.10, 0.10 },
+  DebuffEnd       = { 0.10, 1.00, 0.10 },
+  MissType        = { 0.50, 0.50, 0.50 },
+  DispellBuff     = { 0.00, 1.00, 0.50 },
+  DispellDebuff   = { 0.00, 1.00, 0.50 },
+  Interrupt       = { 1.00, 0.50, 0.00 },
+  
+  ComboPoint      = { 1.00, 0.82, 0.00 },
+  MaxComboPoints  = { 0.00, 0.82, 1.00 },
+  
+  Runes = {
+    { 0.75, 0.00, 0.00 }, -- [1] Blood Rune
+    { 0.75, 1.00, 0.00 }, -- [2] Unholy Rune
+    { 0.00, 1.00, 1.00 }, -- [3] Frost Rune
+    { 1.00, 1.00, 1.00 }, -- [4] Death Rune
+  },
+  
+  -- Misc
+  Honor           = { 0.10, 0.10, 1.00 },
+  Reputation      = { 0.10, 0.10, 1.00 },
+  LowHealth       = { 1.00, 0.10, 0.10 },
+  LowMana         = { 1.00, 0.10, 0.10 },
+  EnteringCombat  = { 0.10, 1.00, 0.10 },
+  LeavingCombat   = { 0.10, 1.00, 0.10 },
+  UnitKilled      = { 0.20, 1.00, 0.20 },
+  PowerBarColor   = _G["PowerBarColor"]
+}
+xCT.Localization = {
+  -- Miss Types
+  ABSORB            = ABSORB,             -- "Absorb", 
+  BLOCK             = BLOCK,              -- "Block",
+  DEFLECT           = DEFLECT,            -- "Deflect",
+  DODGE             = DODGE,              -- "Dodge",
+  EVADE             = EVADE,              -- "Evade",
+  IMMUNE            = IMMUNE,             -- "Immune",
+  INTERRUPT         = INTERRUPT,
+  MISS              = MISS,               -- "Miss",
+  PARRY             = PARRY,              -- "Parry",
+  REFLECT           = REFLECT,            -- "Reflect",
+  RESIST            = RESIST,             -- "Resist",
+
+  -- Energy Types
+  MANA              = MANA,               -- "Mana",
+  RAGE              = RAGE,               -- "Rage",
+  FOCUS             = FOCUS,              -- "Focus",
+  ENERGY            = ENERGY,             -- "Energy",
+  RUINIC_POWER      = RUINIC_POWER,       -- "Runic Power",
+  SOUL_SHARDS       = SOUL_SHARDS,        -- "Soul Shards",
+  HOLY_POWER        = HOLY_POWER,         -- "Holy Power",
+  RUNES = {
+    [1] = COMBAT_TEXT_RUNE_BLOOD,
+    [2] = COMBAT_TEXT_RUNE_UNHOLY,
+    [3] = COMBAT_TEXT_RUNE_FROST,
+    [4] = COMBAT_TEXT_RUNE_DEATH,
+  },
+
+  -- Messages and Alerts
+  HEALTH_LOW        = HEALTH_LOW,         -- "Low Heath!",
+  ENTERING_COMBAT   = ENTERING_COMBAT,    -- "Entering Combat!"
+  LEAVING_COMBAT    = LEAVING_COMBAT,     -- "Leaving Combat!"
+
+  -- Misc
+  HONOR             = "Honor",
+  Swing             = ACTION_SWING,       -- GetSpellInfo(5547), -- "Swing"
+  Pet               = "Pet",
+  
+  -- Actions
+  ACTION_DISPEL     = ACTION_SPELL_DISPEL,    -- "dispelled"
+  ACTION_INTERRUPT  = ACTION_SPELL_INTERRUPT, -- "interrupted"
+  ACTION_KILLED     = ACTION_PARTY_KILL,      -- "killed"
+}
+
 -- Events Engine
 local Events = { -- Events (Real)
   ["ChangedProfiles"] = { },
@@ -352,16 +345,35 @@ function xCT.Debug(...)
   end
 end
 
+-- Create Locals for faster lookups
+local s_format  = string.format
+local s_lower   = string.lower
+
+local function t_copy(copy, lookup)
+  local temp = { }
+  for k, v in pairs(copy) do
+    temp[k] = v end  
+  if lookup then
+    local tempMT = {
+      __index = function(t, k)
+        return lookup[k]
+      end, }
+    setmetatable(temp, tempMT) end
+  return temp
+end
+
 function xCT.CreateProfile(NewProfileName, CopyFromProfile)
-  local _DEFAULT = xCTOptions.Profiles["Default"]
   if CopyFromProfile then
-    xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles[CopyFromProfile], _DEFAULT)
+    -- Create a new profile as a copy of another
+    xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles[CopyFromProfile], DEFAULT_PROFILE)
     xCTOptions._activeProfile = NewProfileName
   else
+    -- new profile already exists
     if xCTOptions.Profiles[NewProfileName] then
       xCTOptions._activeProfile = NewProfileName
     else
-      xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles["Default"])
+      -- create a new profile using the defaults as a template
+      xCTOptions.Profiles[NewProfileName] = t_copy(DEFAULT_PROFILE)
       xCTOptions._activeProfile = NewProfileName
     end
   end
@@ -378,9 +390,9 @@ function xCT.ChangeProfile(NewProfileName)
     local activeMT = { __index = xCTOptions.Profiles["Default"], }
     setmetatable(ActiveProfile, activeMT)
   end
-  xCT.InvokeEvent("ChangedProfiles")
   
-  return ActiveProfile
+  xCT.ActiveProfile = ActiveProfile
+  xCT.InvokeEvent("ChangedProfiles")
 end
 
 
@@ -392,7 +404,10 @@ frame:RegisterEvent"ADDON_LOADED"
 frame:SetScript("OnEvent", function(self, event, addon)
   if addon == ADDON_NAME then
     if not xCTOptions then   -- Default Options
-      xCTOptions = DEFAULT_CONFIG
+      xCTOptions = { Profiles = { }, }
+      xCT.CreateProfile(xCT.Player.Name)
+    else 
+      xCT.ChangeProfile()
     end
     engine[3] = xCTOptions
     xCT.InvokeEvent("OptionsLoaded")
