@@ -470,7 +470,7 @@ local xCTDamageEvents = {
     local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
     local color, frame = C["1"], F.Outgoing
     if ActiveProfile.DamageColors then
-      color = C[tostring(spellSchool)] end
+      color = C[tostring(spellSchool)] or C["1"] end
     if critical then
       frame = F.Critical end
     frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
@@ -479,7 +479,7 @@ local xCTDamageEvents = {
       local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
       local color, frame = C["1"], F.Outgoing
       if ActiveProfile.DamageColors then
-        color = C[tostring(spellSchool)] end
+        color = C[tostring(spellSchool)] or C["1"] end
       if critical then
         frame = F.Critical end
       frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
