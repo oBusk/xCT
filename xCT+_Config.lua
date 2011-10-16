@@ -283,6 +283,7 @@ xCT.Localization = {
 
   -- Messages and Alerts
   HEALTH_LOW        = HEALTH_LOW,         -- "Low Heath!",
+  MANA_LOW          = MANA_LOW,
   ENTERING_COMBAT   = ENTERING_COMBAT,    -- "Entering Combat!"
   LEAVING_COMBAT    = LEAVING_COMBAT,     -- "Leaving Combat!"
 
