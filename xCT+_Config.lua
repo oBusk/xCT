@@ -17,7 +17,7 @@ of xCT (by Affli) that has been outdated since WoW 4.0.6.
 
 -- This is what gets loaded on the first load, or after you type '/xct reset'
 local DEFAULT_PROFILE = {
-  ["ShowHeadNumbers"] = false,
+  --["ShowHeadNumbers"] = false,
   ["CritPrefix"] = "*",
   ["CritPostfix"] = "*",
   ["HealThreshold"] = 0,
@@ -59,6 +59,7 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
+      Secondary = nil,
     }, -- Critical
     ["Damage"] = {
       Enabled = true,
@@ -77,6 +78,7 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
+      Secondary = nil,
     }, -- Damage
     ["General"] = {
       Enabled = true,
@@ -95,6 +97,7 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
+      Secondary = nil,
     }, -- General
     ["Healing"] = {
       Enabled = true,
@@ -113,6 +116,7 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
+      Secondary = nil,
     }, -- Healing
     ["Loot"] = {
       Enabled = true,
@@ -131,7 +135,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
-    },
+      Secondary = nil,
+    }, -- Loot
     ["Outgoing"] = {
       Enabled = true,
       Label = SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE,
@@ -149,7 +154,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
-    },
+      Secondary = nil,
+    }, -- Outgoing
     ["PowerGains"] = {
       Enabled = true,
       Label = MANA.." ("..select(2, UnitPowerType("player"))..")",
@@ -167,7 +173,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
-    },
+      Secondary = nil,
+    }, -- PowerGains
     ["Procs"] = {
       Enabled = true,
       Label = DISPLAY_SPELL_ALERTS,
@@ -185,7 +192,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
-    },
+      Secondary = nil,
+    }, -- Procs
   },
 }
 
