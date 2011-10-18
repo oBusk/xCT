@@ -519,7 +519,14 @@ local xCTDamageEvents = {
     end,
   PARTY_KILL = function(_, _, _, ...)
       local name = select(9, ...)
-      F.General:AddMessage(L.ACTION_KILLED..": "..name, unpack(C.UnitKilled))
+      local color = C.UnitKilled
+      if ActiveProfile.ClassKilled then
+        local class = RAID_CLASS_COLORS[select(2,UnitClass("target"))]
+        if class then
+          color = { class.r, class.g, class.b }
+        end
+      end
+      F.General:AddMessage(L.ACTION_KILLED..": "..name, unpack(color))
     end,
 }
 

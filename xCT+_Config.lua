@@ -30,6 +30,7 @@ local DEFAULT_PROFILE = {
   ["FontSize"] = 16,
   ["FontName"] = "Interface\\Addons\\xCT+\\HOOGE.TTF",
   ["FontStyle"] = "OUTLINE",
+  ["ClassKilled"] = true, -- Show the color of the class you killed
   
   EnergyTypes = { -- Display Energy Types
     ["MANA"]          = true,
