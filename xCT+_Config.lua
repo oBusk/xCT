@@ -44,6 +44,7 @@ local DEFAULT_PROFILE = {
     -- Frame Names canNOT have a space or special character in them
     ["Critical"] = {
       Enabled = true,
+      Secondary = nil,
       Label = TEXT_MODE_A_STRING_RESULT_CRITICAL:match("%a+"),
       LabelColor = { 1.00, 0.50, 0.00, 0.90 },
       Justify = "RIGHT",
@@ -59,10 +60,10 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
-      Secondary = nil,
     }, -- Critical
     ["Damage"] = {
       Enabled = true,
+      Secondary = nil,
       Label = DAMAGE,
       LabelColor = { 1.00, 0.10, 0.10, 0.90 },
       Justify = "LEFT",
@@ -78,10 +79,10 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
-      Secondary = nil,
     }, -- Damage
     ["General"] = {
       Enabled = true,
+      Secondary = nil,
       Label = COMBAT_TEXT_LABEL,
       LabelColor = { 0.10, 0.10, 1.00, 0.90 },
       Justify = "CENTER",
@@ -97,10 +98,10 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
-      Secondary = nil,
     }, -- General
     ["Healing"] = {
-      Enabled = true,
+      Enabled = false,
+      Secondary = "Damage",
       Label = SHOW_COMBAT_HEALING,
       LabelColor = { 0.10, 1.00, 0.10, 0.90 },
       Justify = "RIGHT",
@@ -116,10 +117,10 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
-      Secondary = nil,
     }, -- Healing
     ["Loot"] = {
       Enabled = true,
+      Secondary = nil,
       Label = LOOT,
       LabelColor = { 1.00, 1.00, 1.00, 0.90 },
       Justify = "CENTER",
@@ -135,10 +136,10 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
-      Secondary = nil,
     }, -- Loot
     ["Outgoing"] = {
       Enabled = true,
+      Secondary = nil,
       Label = SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE,
       LabelColor = { 1.00, 1.00, 0.00, 0.90 },
       Justify = "RIGHT",
@@ -154,10 +155,10 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
-      Secondary = nil,
     }, -- Outgoing
     ["PowerGains"] = {
       Enabled = true,
+      Secondary = nil,
       Label = MANA.." ("..select(2, UnitPowerType("player"))..")",
       LabelColor = { 0.80, 0.10, 1.00, 0.90 },
       Justify = "RIGHT",
@@ -173,10 +174,10 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
-      Secondary = nil,
     }, -- PowerGains
     ["Procs"] = {
       Enabled = true,
+      Secondary = nil,
       Label = DISPLAY_SPELL_ALERTS,
       LabelColor = { 1.00, 0.60, 0.30, 0.90 },
       Justify = "CENTER",
@@ -192,7 +193,6 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
-      Secondary = nil,
     }, -- Procs
   },
 }

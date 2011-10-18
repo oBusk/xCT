@@ -100,6 +100,13 @@ xCTEvents["OptionsLoaded"] = function()
     end
   end
   
+  -- Set Secondary Frames
+  for FrameName, Frame in pairs(ActiveProfile.Frames) do
+    if not Frame.Enabled and Frame.Secondary then      
+      F[FrameName] = F[Frame.Secondary]  -- store the frame
+    end
+  end
+  
   if not ActiveProfile.ShowHeadNumbers then  
     -- Move the options up
     local defaultFont, defaultSize = InterfaceOptionsCombatTextPanelTargetEffectsText:GetFont()
@@ -607,99 +614,118 @@ function xCT.StartConfigMode()
   if not InCombatLockdown() then
     for frameName, frame in pairs(F) do
       local FrameOptions = ActiveProfile.Frames[frameName]
-      frame.FrameOptions = FrameOptions
-      
-      frame:SetBackdrop( {
-        bgFile    = "Interface/Tooltips/UI-Tooltip-Background",
-        edgeFile  = "Interface/Tooltips/UI-Tooltip-Border",
-        tile      = false,
-        tileSize  = 0,
-        edgeSize  = 2,
-        insets = {
-          left    = 0,
-          right   = 0,
-          top     = 0,
-          bottom  = 0,
-        }
-      })
-      frame:SetBackdropColor(.1, .1, .1, .8)
-      frame:SetBackdropBorderColor(.1, .1, .1, .5)
-      
-      -- Add the Frame's Title
-      frame.fsTitle = frame:CreateFontString(nil, "OVERLAY")
-      frame.fsTitle:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
-      frame.fsTitle:SetPoint("BOTTOM", frame, "TOP", 0, 0)
-      frame.fsTitle:SetText(FrameOptions.Label)
-      frame.fsTitle:SetTextColor(unpack(FrameOptions.LabelColor))
-      
-      frame.texBackHighlight = frame:CreateTexture"ARTWORK"
-      frame.texBackHighlight:SetPoint("TOPLEFT", frame, "TOPLEFT", 1, -1)
-      frame.texBackHighlight:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -1, -19)
-      frame.texBackHighlight:SetHeight(20)
-      frame.texBackHighlight:SetTexture(.5, .5, .5)
-      frame.texBackHighlight:SetAlpha(.3)
+      if FrameOptions.Enabled then
+        frame.FrameOptions = FrameOptions
+        
+        frame:SetBackdrop( {
+          bgFile    = "Interface/Tooltips/UI-Tooltip-Background",
+          edgeFile  = "Interface/Tooltips/UI-Tooltip-Border",
+          tile      = false,
+          tileSize  = 0,
+          edgeSize  = 2,
+          insets = {
+            left    = 0,
+            right   = 0,
+            top     = 0,
+            bottom  = 0,
+          }
+        })
+        frame:SetBackdropColor(.1, .1, .1, .8)
+        frame:SetBackdropBorderColor(.1, .1, .1, .5)
+        
+        local HEX_COLOR_FORMAT = "\124Cff%2x%2x%2x%s\124r"
+        
+        -- Look for Secondary Frames
+        local secondaries = " ("
+        for secondName,secondFrame in pairs(ActiveProfile.Frames) do
+          if secondFrame.Secondary == frameName then
+            local SECOND_FRAME_STRING = string.format("\124C%2x%2x%2x%2x%s\124r", secondFrame.LabelColor[4]*255, secondFrame.LabelColor[1]*255, secondFrame.LabelColor[2]*255, secondFrame.LabelColor[3]*255,  secondFrame.Label)
+            if secondaries ~= " (" then
+              secondaries = secondaries.." & "..SECOND_FRAME_STRING
+            else
+              secondaries = secondaries..SECOND_FRAME_STRING
+            end
+          end
+        end
+        secondaries = secondaries..")"
+        if secondaries == " ()" then secondaries = "" end
+        
+        -- Add the Frame's Title
+        frame.fsTitle = frame:CreateFontString(nil, "OVERLAY")
+        frame.fsTitle:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
+        frame.fsTitle:SetPoint("BOTTOM", frame, "TOP", 0, 0)
+        frame.fsTitle:SetText(FrameOptions.Label..secondaries)
+        frame.fsTitle:SetTextColor(unpack(FrameOptions.LabelColor))
+        
+        frame.texBackHighlight = frame:CreateTexture"ARTWORK"
+        frame.texBackHighlight:SetPoint("TOPLEFT", frame, "TOPLEFT", 1, -1)
+        frame.texBackHighlight:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -1, -19)
+        frame.texBackHighlight:SetHeight(20)
+        frame.texBackHighlight:SetTexture(.5, .5, .5)
+        frame.texBackHighlight:SetAlpha(.3)
 
-      frame.texResize = frame:CreateTexture"ARTWORK"
-      frame.texResize:SetHeight(16)
-      frame.texResize:SetWidth(16)
-      frame.texResize:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, 1)
-      frame.texResize:SetTexture(.5, .5, .5)
-      frame.texResize:SetAlpha(.3)
+        frame.texResize = frame:CreateTexture"ARTWORK"
+        frame.texResize:SetHeight(16)
+        frame.texResize:SetWidth(16)
+        frame.texResize:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, 1)
+        frame.texResize:SetTexture(.5, .5, .5)
+        frame.texResize:SetAlpha(.3)
 
-      frame.titleRegion = frame:CreateTitleRegion()
-      frame.titleRegion:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, 0)
-      frame.titleRegion:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
-      frame.titleRegion:SetHeight(20)
-      
-      -- font string Position (location)
-      frame.fsPosition = frame:CreateFontString(nil, "OVERLAY")
-      frame.fsPosition:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
-      frame.fsPosition:SetPoint("TOPLEFT", frame, "TOPLEFT", 3, -3)
-      frame.fsPosition:SetText("")
-      frame.fsPosition:Hide()
-      
-      -- font string width
-      frame.fsWidth = frame:CreateFontString(nil, "OVERLAY")
-      frame.fsWidth:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
-      frame.fsWidth:SetPoint("BOTTOM", frame, "BOTTOM", 0, 0)
-      frame.fsWidth:SetText("")
-      frame.fsWidth:Hide()
-      
-      -- font string height
-      frame.fsHeight = frame:CreateFontString(nil, "OVERLAY")
-      frame.fsHeight:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
-      frame.fsHeight:SetPoint("LEFT", frame, "LEFT", 3, 0)
-      frame.fsHeight:SetText("")
-      frame.fsHeight:Hide()
-      
-      local ResX, ResY = GetScreenWidth(), GetScreenHeight()
-      local midX, midY = ResX / 2, ResY / 2
-      
-      frame:SetScript("OnLeave", function(self, ...)
-              self:SetScript("OnUpdate", nil)
-              self.fsPosition:Hide()
-              self.fsWidth:Hide()
-              self.fsHeight:Hide()
+        frame.titleRegion = frame:CreateTitleRegion()
+        frame.titleRegion:SetPoint("TOPLEFT", frame, "TOPLEFT", 0, 0)
+        frame.titleRegion:SetPoint("TOPRIGHT", frame, "TOPRIGHT", 0, 0)
+        frame.titleRegion:SetHeight(20)
+        
+        -- font string Position (location)
+        frame.fsPosition = frame:CreateFontString(nil, "OVERLAY")
+        frame.fsPosition:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
+        frame.fsPosition:SetPoint("TOPLEFT", frame, "TOPLEFT", 3, -3)
+        frame.fsPosition:SetText("")
+        frame.fsPosition:Hide()
+        
+        -- font string width
+        frame.fsWidth = frame:CreateFontString(nil, "OVERLAY")
+        frame.fsWidth:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
+        frame.fsWidth:SetPoint("BOTTOM", frame, "BOTTOM", 0, 0)
+        frame.fsWidth:SetText("")
+        frame.fsWidth:Hide()
+        
+        -- font string height
+        frame.fsHeight = frame:CreateFontString(nil, "OVERLAY")
+        frame.fsHeight:SetFont(ActiveProfile.FontName, ActiveProfile.FontSize, ActiveProfile.FontStyle)
+        frame.fsHeight:SetPoint("LEFT", frame, "LEFT", 3, 0)
+        frame.fsHeight:SetText("")
+        frame.fsHeight:Hide()
+        
+        local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+        local midX, midY = ResX / 2, ResY / 2
+        
+        frame:SetScript("OnLeave", function(self, ...)
+                self:SetScript("OnUpdate", nil)
+                self.fsPosition:Hide()
+                self.fsWidth:Hide()
+                self.fsHeight:Hide()
+            end)
+        frame:SetScript("OnEnter", function(self, ...)
+                self:SetScript("OnUpdate", function(self, ...)
+                        self.fsPosition:SetText(math.floor(self:GetLeft() - midX + 1) .. ", " .. math.floor(self:GetTop() - midY + 2))
+                        self.fsWidth:SetText(math.floor(self:GetWidth()))
+                        self.fsHeight:SetText(math.floor(self:GetHeight()))
+                    end)
+                self.fsPosition:Show()
+                self.fsWidth:Show()
+                self.fsHeight:Show()
+            end)
+        frame:EnableMouse(true)
+        frame:RegisterForDrag("LeftButton")
+        frame:SetScript("OnDragStart", frame.StartSizing)
+        frame:SetScript("OnSizeChanged", function(self)
+            self:SetMaxLines(self:GetHeight() / self.FrameOptions.Font.Size)
+            self:Clear()
           end)
-      frame:SetScript("OnEnter", function(self, ...)
-              self:SetScript("OnUpdate", function(self, ...)
-                      self.fsPosition:SetText(math.floor(self:GetLeft() - midX + 1) .. ", " .. math.floor(self:GetTop() - midY + 2))
-                      self.fsWidth:SetText(math.floor(self:GetWidth()))
-                      self.fsHeight:SetText(math.floor(self:GetHeight()))
-                  end)
-              self.fsPosition:Show()
-              self.fsWidth:Show()
-              self.fsHeight:Show()
-          end)
-      frame:EnableMouse(true)
-      frame:RegisterForDrag("LeftButton")
-      frame:SetScript("OnDragStart", frame.StartSizing)
-      frame:SetScript("OnSizeChanged", function(self)
-          self:SetMaxLines(self:GetHeight() / self.FrameOptions.Font.Size)
-          self:Clear()
-        end)
 
-      frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
+        frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
+      end
     end
     FramesLocked = false
   end
@@ -744,6 +770,15 @@ function xCT.EndConfigMode()
     FramesLocked = true
   end
 end
+
+local function recursiveSetter(currentTable, args, itter)
+  if type(currentTable[args[i][args[i+1]]]) == "table" then
+    return recursiveSetter(key[args[i]], args, itter+1)
+  end
+  currentTable[args[i]] = currentTable[args[i][args[i+1]]]
+  return true
+end
+
 
 -- Hook Slash Commands
 SLASH_XCTPLUS1 = "/xct"
@@ -807,19 +842,18 @@ SlashCmdList["XCTPLUS"] = function(input)
         xCT.CreateProfile(args[2], args[3])
         xCT.Print("Created and loaded new profile.")
       end
+    elseif args[1] == "set" then
+      
+    
     
 
     elseif args[1] == "test" then
         xCT.Print("attempted to start Test Mode.")
-        --[[if (ct.testmode) then
-            EndTestMode()
-            pr("test mode disabled.")
-        else
-            StartTestMode()
-            pr("test mode enabled.")
-        end]]
         
     else
+        xCT.Print("You did not supply a valid commandline, here is what you said: ", unpack(args))
+        
+        
         xCT.Print("|cff888888Position Commands|r")
         print("    Use |cffFF0000/xct|r |cff5555FFunlock|r to move and resize the frames.")
         print("    Use |cffFF0000/xct|r |cff5555FFlock|r to lock the frames.")
