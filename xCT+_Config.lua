@@ -43,6 +43,7 @@ local DEFAULT_PROFILE = {
   },
   Frames = {
     -- Frame Names canNOT have a space or special character in them
+    -- <Critical>
     ["Critical"] = {
       Enabled = true,
       Secondary = nil,
@@ -61,7 +62,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
-    }, -- Critical
+    }, -- </Critical>
+    -- <Damage>
     ["Damage"] = {
       Enabled = true,
       Secondary = nil,
@@ -80,7 +82,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
-    }, -- Damage
+    }, -- </Damage>
+    -- <General>
     ["General"] = {
       Enabled = true,
       Secondary = nil,
@@ -99,7 +102,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
-    }, -- General
+    }, -- </General>
+    -- <Healing>
     ["Healing"] = {
       Enabled = false,
       Secondary = "Damage",
@@ -118,7 +122,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
-    }, -- Healing
+    }, -- </Healing>
+    -- <Loot>
     ["Loot"] = {
       Enabled = true,
       Secondary = nil,
@@ -137,7 +142,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
-    }, -- Loot
+    }, -- </Loot>
+    -- <Outgoing>
     ["Outgoing"] = {
       Enabled = true,
       Secondary = nil,
@@ -156,7 +162,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
-    }, -- Outgoing
+    }, -- </Outgoing>
+    -- <PowerGains>
     ["PowerGains"] = {
       Enabled = true,
       Secondary = nil,
@@ -175,7 +182,8 @@ local DEFAULT_PROFILE = {
       },
       Width = 128,
       Height = 128,
-    }, -- PowerGains
+    }, -- </PowerGains>
+    -- <Procs>
     ["Procs"] = {
       Enabled = true,
       Secondary = nil,
@@ -194,7 +202,7 @@ local DEFAULT_PROFILE = {
       },
       Width = 256,
       Height = 128,
-    }, -- Procs
+    }, -- </Procs>
   },
 }
 
