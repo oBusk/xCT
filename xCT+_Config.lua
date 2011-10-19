@@ -321,9 +321,9 @@ xCT.Localization = {
   ACTION_KILLED     = ACTION_PARTY_KILL,      -- "killed"
   
   -- Loot
-  GOLD_MATCH = GOLD_AMOUNT:gsub("%%d", "(%%d+)")),      -- "(%d)+ Gold"
-  SILVER_MATCH = SILVER_AMOUNT:gsub("%%d", "(%%d+)")),  -- "(%d)+ Silver"
-  COPPER_MATCH = COPPER_AMOUNT:gsub("%%d", "(%%d+)")),  -- "(%d)+ Copper"
+  GOLD_MATCH = GOLD_AMOUNT:gsub("%%d", "(%%d+)"),       -- "(%d)+ Gold"
+  SILVER_MATCH = SILVER_AMOUNT:gsub("%%d", "(%%d+)"),   -- "(%d)+ Silver"
+  COPPER_MATCH = COPPER_AMOUNT:gsub("%%d", "(%%d+)"),   -- "(%d)+ Copper"
   
   GOLD_LETTER = GOLD_AMOUNT:match("%%d%s+(%a)%a+"),     -- "G"
   SILVER_LETTER = SILVER_AMOUNT:match("%%d%s+(%a)%a+"), -- "S"
