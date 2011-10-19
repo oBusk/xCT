@@ -216,6 +216,12 @@ xCT.Formats = {
       return s_format("+%s %s", amount, L[energy]) end
     return ""
     end,
+  Money = function(money, g, s, c)
+    if ActiveProfile.ColorBlind then
+      return s_format("%s: %d%s %d%s %d%s", L.MONEY, g, L.GOLD_LETTER, s, L.SILVER_LETTER, c, L.COPPER_LETTER)
+    else
+      return s_format("%s: %s", L.MONEY, GetCoinTextureString(money)) end
+    end,
 }
 local X = xCT.Formats
 
@@ -451,8 +457,14 @@ local xCTCombatEvents = {
         F.General:AddMessage("+"..L.RUNES[runeType], unpack(C.Runes[runeType])) end
       end
     end,
-  -- CHAT_MSG_LOOT
-  -- CHAT_MSG_MONEY
+  CHAT_MSG_MONEY = function(msg)
+      local gold, silver, copper = tonumber(msg:match(L.GOLD_MATCH)) or 0, tonumber(msg:match(L.SILVER_MATCH)) or 0, tonumber(msg:match(L.COPPER_MATCH)) or 0
+      local money = gold * 10000 + silver * 100 + copper
+      if money >= ActiveProfile.minmoney then
+        F.Loot:AddMessage(X.Money(money, gold, silver, copper), unpack(C.Money))
+      end
+    end,
+  -- CHAT_MSG_LOOT  
 }
 
 local xCTDamageEvents = {
@@ -563,6 +575,9 @@ do
   combat:RegisterEvent"UNIT_EXITING_VEHICLE"
   combat:RegisterEvent"UNIT_COMBO_POINTS"
   combat:RegisterEvent"RUNE_POWER_UPDATE"
+  
+  combat:RegisterEvent"CHAT_MSG_MONEY"
+  
   combat:SetScript("OnEvent",
     function(_, event, ...)
       local handler = xCTCombatEvents[event]

@@ -31,6 +31,8 @@ local DEFAULT_PROFILE = {
   ["FontName"] = "Interface\\Addons\\xCT+\\HOOGE.TTF",
   ["FontStyle"] = "OUTLINE",
   ["ClassKilled"] = true, -- Show the color of the class you killed
+  ["ColorBlind"] = false,
+  ["minmoney"] = 0,
   
   EnergyTypes = { -- Display Energy Types
     ["MANA"]          = true,
@@ -209,7 +211,7 @@ engine[3] = {} -- Options
 
 local xCT = engine[2]
 
-xCT.Colors = {
+xCT.Colors = {      -- { Red, Green, Blue }
   -- Magic Colors
   ["1"]           = { 1.00, 1.00, 0.00 },   -- Physical Damage
   ["2"]           = { 1.00, 0.90, 0.50 },   -- Holy Damage
@@ -251,6 +253,9 @@ xCT.Colors = {
     { 1.00, 1.00, 1.00 }, -- [4] Death Rune
   },
   
+  -- Loot
+  Money           = { 1.00, 1.00, 0.00 },
+  
   -- Misc
   Honor           = { 0.10, 0.10, 1.00 },
   Reputation      = { 0.10, 0.10, 1.00 },
@@ -260,6 +265,7 @@ xCT.Colors = {
   LeavingCombat   = { 0.10, 1.00, 0.10 },
   UnitKilled      = { 0.20, 1.00, 0.20 },
   PowerBarColor   = _G["PowerBarColor"]
+  
 }
 xCT.Localization = {
   -- Miss Types
@@ -305,6 +311,17 @@ xCT.Localization = {
   ACTION_DISPEL     = ACTION_SPELL_DISPEL,    -- "dispelled"
   ACTION_INTERRUPT  = ACTION_SPELL_INTERRUPT, -- "interrupted"
   ACTION_KILLED     = ACTION_PARTY_KILL,      -- "killed"
+  
+  -- Loot
+  GOLD_MATCH = GOLD_AMOUNT:gsub("%%d", "(%%d+)")),      -- "(%d)+ Gold"
+  SILVER_MATCH = SILVER_AMOUNT:gsub("%%d", "(%%d+)")),  -- "(%d)+ Silver"
+  COPPER_MATCH = COPPER_AMOUNT:gsub("%%d", "(%%d+)")),  -- "(%d)+ Copper"
+  
+  GOLD_LETTER = GOLD_AMOUNT:match("%%d%s+(%a)%a+"),     -- "G"
+  SILVER_LETTER = SILVER_AMOUNT:match("%%d%s+(%a)%a+"), -- "S"
+  COPPER_LETTER = COPPER_AMOUNT:match("%%d%s+(%a)%a+"), -- "C"
+  
+  MONEY             = MONEY,              -- "Money"
 }
 
 -- Events Engine
