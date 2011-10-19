@@ -742,39 +742,41 @@ function xCT.EndConfigMode()
   for frameName, frame in pairs(F) do
     local FrameOptions = ActiveProfile.Frames[frameName]
     
-    -- Unregister all the events
-    frame:EnableMouse(false)
-    frame:SetScript("OnDragStart", nil)
-    frame:SetScript("OnDragStop", nil)
-    frame:SetScript("OnSizeChanged", nil)
-    frame:SetScript("OnLeave", nil)
-    frame:SetScript("OnEnter", nil)
-    frame:SetScript("OnUpdate", nil)
+    if FrameOptions.Enabled then
+      -- Unregister all the events
+      frame:EnableMouse(false)
+      frame:SetScript("OnDragStart", nil)
+      frame:SetScript("OnDragStop", nil)
+      frame:SetScript("OnSizeChanged", nil)
+      frame:SetScript("OnLeave", nil)
+      frame:SetScript("OnEnter", nil)
+      frame:SetScript("OnUpdate", nil)
 
-    -- Create Islands so they are GC'd
-    frame:SetBackdrop(nil)
-    frame.fsTitle:Hide()
-    frame.fsTitle = nil
-    frame.texBackHighlight:Hide()
-    frame.texBackHighlight = nil
-    frame.texResize:Hide()
-    frame.texResize = nil
-    frame.titleRegion = nil
-    frame.fsPosition:Hide()
-    frame.fsPosition = nil
-    frame.fsWidth:Hide()
-    frame.fsWidth = nil
-    frame.fsHeight:Hide()
-    frame.fsHeight = nil
+      -- Create Islands so they are GC'd
+      frame:SetBackdrop(nil)
+      frame.fsTitle:Hide()
+      frame.fsTitle = nil
+      frame.texBackHighlight:Hide()
+      frame.texBackHighlight = nil
+      frame.texResize:Hide()
+      frame.texResize = nil
+      frame.titleRegion = nil
+      frame.fsPosition:Hide()
+      frame.fsPosition = nil
+      frame.fsWidth:Hide()
+      frame.fsWidth = nil
+      frame.fsHeight:Hide()
+      frame.fsHeight = nil
     
-    frame.FrameOptions = nil
+      frame.FrameOptions = nil
     
-    -- Save the Frames
-    FrameOptions.Width = frame:GetWidth()
-    FrameOptions.Height = frame:GetHeight()
-    FrameOptions.Point.Relative, _, _, FrameOptions.Point.X, FrameOptions.Point.Y = frame:GetPoint(1)
-    
-    FramesLocked = true
+      -- Save the Frames
+      FrameOptions.Width = frame:GetWidth()
+      FrameOptions.Height = frame:GetHeight()
+      FrameOptions.Point.Relative, _, _, FrameOptions.Point.X, FrameOptions.Point.Y = frame:GetPoint(1)
+ 
+      FramesLocked = true
+    end
   end
 end
 
