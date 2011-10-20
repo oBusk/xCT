@@ -39,7 +39,7 @@ local DEFAULT_PROFILE = {
     ["RAGE"]          = true,
     ["FOCUS"]         = true,
     ["ENERGY"]        = true,
-    ["RUINIC_POWER"]  = true,
+    ["RUNIC_POWER"]  = true,
     ["SOUL_SHARDS"]   = true,
     ["HOLY_POWER"]    = true,
   },
