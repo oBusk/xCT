@@ -10,6 +10,8 @@ h4. World of Warcraft (4.2.2 live)
 
 p. "Latest Version":https://github.com/downloads/dandruff/xCT/dandruff-xCT+2.0a(4.2.2).zip
 
+p. "BETA (Latest Commit)":https://github.com/dandruff/xCT/zipball/beta
+
 h3. Description
 
 p. xCT+ is a continuation and fork of "xCT":http://www.wowinterface.com/downloads/info18053-xCT.html (by braindump, aka Affli).  Affli has stopped updating xCT since 4.0.6.  I'm hoping to keep this project going as long as Affli is away.
