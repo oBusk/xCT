@@ -18,6 +18,24 @@ of xCT (by Affli) that has been outdated since WoW 4.0.6.
 -- This is what gets loaded on the first load, or after you type '/xct reset'
 local DEFAULT_PROFILE = {
   --["ShowHeadNumbers"] = false,
+  
+  -- READ THIS BEFORE EDITING!
+  
+  -- The default config is only used EVERY time if you "BypassProfileManager"
+  
+  -- REASONS TO ENABLE:
+  -- - Allows you to use this config to change settings
+  -- - Much simpler to keep track of settings
+  -- - NO FRAME SAVING SUPPORTED YET!!!!!!!!!!!!!!
+  
+  -- REASONS TO LEAVE DISABLED
+  -- - Allows each of you characters to have a different profile
+  -- - Allows each of you characters to use the same profile
+  -- - FRAME positions are saved
+  -- - NOT "AS" BUGGY!!! (hopefully)
+  
+  ["BypassProfileManager"] = false,  
+  
   ["CritPrefix"] = "*",
   ["CritPostfix"] = "*",
   ["HealThreshold"] = 0,
@@ -422,7 +440,10 @@ function xCT.ChangeProfile(NewProfileName)
   
   -- Backward Compatibility
   if not getmetatable(ActiveProfile) and xCTOptions._activeProfile ~= "Default" then
-    local activeMT = { __index = xCTOptions.Profiles["Default"], }
+    local activeMT = { __index = function(self, key)
+        self[key] = DEFAULT_PROFILE[key]
+        return self[key]
+      end, }
     setmetatable(ActiveProfile, activeMT)
   end
   
@@ -438,7 +459,7 @@ local frame = CreateFrame"Frame"
 frame:RegisterEvent"ADDON_LOADED"
 frame:SetScript("OnEvent", function(self, event, addon)
   if addon == ADDON_NAME then
-    if not xCTOptions then   -- Default Options
+    if not xCTOptions or  then   -- Default Options
       xCTOptions = { Profiles = { }, }
       xCT.CreateProfile(xCT.Player.Name)
     else 
