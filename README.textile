@@ -14,29 +14,23 @@ p. "BETA (Latest Commit)":https://github.com/dandruff/xCT/zipball/beta
 
 h3. Description
 
-p. xCT+ is a continuation and fork of "xCT":http://www.wowinterface.com/downloads/info18053-xCT.html (by braindump, aka Affli).  Affli has stopped updating xCT since 4.0.6.  I'm hoping to keep this project going as long as Affli is away.
+Rewriting xCT from the ground up!  It looks relatively the same on the top through.
 
-p. Overall, xCT+ is a replacement for Blizzard's scrolling combat text.  It is superior to the default combat text because xCT+ organizes incoming healing, incoming damage, and outgoing damage/healing into their own frames.
+The most notable change is that of the xCT Profile Manager (also this is probably the most annoying feature currently).  While there is an option to disable, I encourage you to put up with it for now.  I would love to get a GUI config going as a separate module, but I'm probably going to need help. :o
+Currently the only way to make changes to your "Active Profile" is like this:
+/run xCTShared.ActiveProfile [FEATURE] = VALUE
 
-p. For those that have used Affli's xCT Add-On, xCT+ expands the functionality of its predecessor.  New features include:
+Some common examples are:
+*/run xCTShared.ActiveProfile.Frames.Critical.Font.Size = 22*
+*/run xCTShared.ActiveProfile.Frames.Critical.Font.Style = "THICKOUTLINE"*
+*/run xCTShared.ActiveProfile.ClassKilled = false*
 
-* A new loot frame
-
-* A new yell setting that allows you to yell interrupts, dispells, taunts, and more to your party or raid (coming soon)
-
-* A grid when positioning the frames
-
-* A new window that shows crits that you've done.  (still needs a spam merger, coming soon)!
-
-* And more soon to come!
+*/run xCTShared.ActiveProfile.Frames.Healing.Enabled = false*
+*/run xCTShared.ActiveProfile.Frames.Healing.Secondary = "Damage"*
 
 h3. Screenshots
 
-p. "Screenshot 1 - xCT+ Setup":http://cloud.github.com/downloads/dandruff/xCT/setup-preview.jpg
-
-p. "Screenshot 2 - xCT+ Combat":https://github.com/downloads/dandruff/xCT/incombat-xct+marked.png
-
-p. "*new* Screenshot 3 - xCT+ Setup":https://github.com/downloads/dandruff/xCT/New_xCT+_Setup.jpg
+None yet ;)
 
 h3. Questions?
 
@@ -44,4 +38,4 @@ p. Please visit the "Tukui forums":http://www.tukui.org/forums/topic.php?id=1558
 
 h3. Support and Bugs
 
-p. I am not accepting any donations for this Add-On.  *Please report all issues "here":https://github.com/dandruff/xCT/issues .*
+p. *Please report all issues "here":https://github.com/dandruff/xCT/issues .*
