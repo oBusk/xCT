@@ -21,12 +21,21 @@ Currently the only way to make changes to your "Active Profile" is like this:
 /run xCTShared[2].ActiveProfile [FEATURE] = VALUE
 
 Some common examples are:
-*/run xCTShared[2].ActiveProfile.Frames.Critical.Font.Size = 22*
-*/run xCTShared[2].ActiveProfile.Frames.Critical.Font.Style = "THICKOUTLINE"*
-*/run xCTShared[2].ActiveProfile.ClassKilled = false*
-
-*/run xCTShared[2].ActiveProfile.Frames.Healing.Enabled = false*
-*/run xCTShared[2].ActiveProfile.Frames.Healing.Secondary = "Damage"*
+<code>
+/run xCTShared[2].ActiveProfile.Frames.Critical.Font.Size = 22
+</code>
+<code>
+/run xCTShared[2].ActiveProfile.Frames.Critical.Font.Style = "THICKOUTLINE"
+</code>
+<code>
+/run xCTShared[2].ActiveProfile.ClassKilled = false
+</code>
+<code>
+/run xCTShared[2].ActiveProfile.Frames.Healing.Enabled = false
+</code>
+<code>
+/run xCTShared[2].ActiveProfile.Frames.Healing.Secondary = "Damage"
+</code>
 
 h3. Screenshots
 
