@@ -18,15 +18,15 @@ Rewriting xCT from the ground up!  It looks relatively the same on the top throu
 
 The most notable change is that of the xCT Profile Manager (also this is probably the most annoying feature currently).  While there is an option to disable, I encourage you to put up with it for now.  I would love to get a GUI config going as a separate module, but I'm probably going to need help. :o
 Currently the only way to make changes to your "Active Profile" is like this:
-/run xCTShared.ActiveProfile [FEATURE] = VALUE
+/run xCTShared[2].ActiveProfile [FEATURE] = VALUE
 
 Some common examples are:
-*/run xCTShared.ActiveProfile.Frames.Critical.Font.Size = 22*
-*/run xCTShared.ActiveProfile.Frames.Critical.Font.Style = "THICKOUTLINE"*
-*/run xCTShared.ActiveProfile.ClassKilled = false*
+*/run xCTShared[2].ActiveProfile.Frames.Critical.Font.Size = 22*
+*/run xCTShared[2].ActiveProfile.Frames.Critical.Font.Style = "THICKOUTLINE"*
+*/run xCTShared[2].ActiveProfile.ClassKilled = false*
 
-*/run xCTShared.ActiveProfile.Frames.Healing.Enabled = false*
-*/run xCTShared.ActiveProfile.Frames.Healing.Secondary = "Damage"*
+*/run xCTShared[2].ActiveProfile.Frames.Healing.Enabled = false*
+*/run xCTShared[2].ActiveProfile.Frames.Healing.Secondary = "Damage"*
 
 h3. Screenshots
 
