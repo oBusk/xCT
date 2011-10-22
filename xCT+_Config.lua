@@ -459,7 +459,7 @@ local frame = CreateFrame"Frame"
 frame:RegisterEvent"ADDON_LOADED"
 frame:SetScript("OnEvent", function(self, event, addon)
   if addon == ADDON_NAME then
-    if not xCTOptions or  then   -- Default Options
+    if not xCTOptions or DEFAULT_PROFILE.BypassProfileManager then   -- Default Options
       xCTOptions = { Profiles = { }, }
       xCT.CreateProfile(xCT.Player.Name)
     else 
