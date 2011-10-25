@@ -15,53 +15,60 @@ of xCT (by Affli) that has been outdated since WoW 4.0.6.
 
 ]]
 
+-- Lua code below.  Do NOT edit below this point!
+-- If you didn't listen, then that means you know what you are doing, please continue. :)
+
 local ADDON_NAME, engine = ...
-local xCTEvents, xCT, _ = unpack(engine)
-
-local XCT_DEBUG = true
-
--- Create Locals for faster lookups
+local xCTEvents, xCT, _ = unpack(engine)  -- xCTEvents, xCT, xCTOptions (assigned later)
 local s_format  = string.format
 local s_lower   = string.lower
-
-local function t_copy(copy, lookup)
-  local temp = { }
-  for k, v in pairs(copy) do
-    temp[k] = v end  
-  if lookup then
-    local tempMT = {
-      __index = function(t, k)
-        return lookup[k]
-      end, }
-    setmetatable(temp, tempMT) end
-  return temp
-end
-
--- Fast Access Locals
 local ActiveProfile = nil
 local C = xCT.Colors
 local L = xCT.Localization
 local EnergyTypes = nil
+local XCT_BLANK_ICON = "Interface\\Addons\\xCT\\blank"
+xCTShared = engine
 
--- Create a Metatable for our frames
+-- ==============================================================
+-- xCT+   The Frames
+-- ==============================================================
+local F = { }
 local FrameMT = {
   __index = function(t, k)
-      local fakeFrame = { AddMessage = function(...)
-            -- Debug
-            xCT.Debug("Attempted to put a message in frame: '"..k.."' which does not exist")
-          end,
-        }
-      t[k] = fakeFrame
-      return fakeFrame
-    end,
+    local fakeFrame = { AddMessage = function(...)
+          -- Debug
+          xCT.Debug("Attempted to put a message in frame: '"..k.."' which does not exist")
+        end,
+      }
+    t[k] = fakeFrame
+    return fakeFrame
+  end,
 }
-
--- Frames
-local F = { }
 setmetatable(F, FrameMT)
 local FramesLocked = true
 
--- Register Event for when we get loaded
+-- ==============================================================
+-- xCT+   Load Saved Variables
+-- ==============================================================
+local frame = CreateFrame"Frame"
+frame:RegisterEvent"ADDON_LOADED"
+frame:SetScript("OnEvent", function(self, event, addon)
+  if addon == ADDON_NAME then
+    if not xCTOptions or xCT.DEFAULT_PROFILE.BypassProfileManager then   -- Default Options
+      xCTOptions = { Profiles = { }, }
+      xCT.CreateProfile(xCT.Player.Name)
+    else 
+      xCT.ChangeProfile()
+    end
+    engine[3] = xCTOptions
+    xCT.InvokeEvent("OptionsLoaded")
+    xCT.Print("is now your default Combat Text handler.")
+  end
+end)
+
+-- ==============================================================
+-- xCT+   On Loaded Variables Handler (Setup)
+-- ==============================================================
 xCTEvents["OptionsLoaded"] = function()
   ActiveProfile = xCT.ActiveProfile
   
@@ -84,17 +91,15 @@ xCTEvents["OptionsLoaded"] = function()
       f:SetMaxResize(768, 768)
 
       -- Config Values
-      local Frame_Font = Frame.Font
-      f:SetFont(Frame_Font.Name, Frame_Font.Size, Frame_Font.Style)
-      f:SetClampRectInsets(0, 0, Frame_Font.Size, 0)
+      f:SetFont(Frame.Font.Name, Frame.Font.Size, Frame.Font.Style)
+      f:SetClampRectInsets(0, 0, Frame.Font.Size, 0)
       f:SetWidth(Frame.Width)
       f:SetHeight(Frame.Height)
-      local Frame_Point = Frame.Point
       f:ClearAllPoints() -- Don't use Blizzard's Frame saver
-      f:SetPoint(Frame_Point.Relative, Frame_Point.X, Frame_Point.Y)
+      f:SetPoint(Frame.Point.Relative, Frame.Point.X, Frame.Point.Y)
       f:SetJustifyH(Frame.Justify)
       
-      f:SetMaxLines(Frame.Height / Frame_Font.Size)
+      f:SetMaxLines(Frame.Height / Frame.Font.Size)
       
       F[FrameName] = f  -- store the frame
     end
@@ -144,16 +149,14 @@ xCTEvents["OptionsLoaded"] = function()
     SetCVar("PetMeleeDamage", 0)
     SetCVar("CombatDamage", 0)
     SetCVar("CombatHealing", 0)
-    
   end
-  
   xCT.InvokeEvent("FramesLoaded")
 end
 
--- xCT String Formats
+-- ==============================================================
+-- xCT+   Output Formats
+-- ==============================================================
 xCT.Formats = {
-  BlankIcon = "Interface\\Addons\\xCT\\blank",
-  GoodSourceFlags = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_GUARDIAN ),
   Healing = function(msg, name)
     if name and COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
       return name.." +"..msg
@@ -194,7 +197,7 @@ xCT.Formats = {
           return " \124T"..PET_ATTACK_TEXTURE..":"..size..":"..size..":0:0:64:64:5:59:5:59\124t"
         else
           if not icon then
-            return " \124T"..X.BlankIcon..":"..size..":"..size..":0:0:64:64:5:59:5:59\124t"
+            return " \124T"..XCT_BLANK_ICON..":"..size..":"..size..":0:0:64:64:5:59:5:59\124t"
           else
             return " \124T"..icon..":"..size..":"..size..":0:0:64:64:5:59:5:59\124t" end
         end end
@@ -225,12 +228,16 @@ xCT.Formats = {
 }
 local X = xCT.Formats
 
+-- ==============================================================
+-- xCT+   Current Player Information Cache
+-- ==============================================================
 xCT.Player = {
   Name = GetUnitName("player"),
   Class = select(2, UnitClass("player")),
   Power = select(2, UnitPowerType("player")),
   GUID = UnitGUID("player"),
   Unit = "player",
+  GoodSourceFlags = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_GUARDIAN ),
   IsLowHealth = function(self)
     if UnitHealth(self.Unit) / UnitHealthMax(self.Unit) <= COMBAT_TEXT_LOW_HEALTH_THRESHOLD then
       if not self.lowHealth then
@@ -267,10 +274,11 @@ xCT.Player = {
       CombatTextSetActiveUnit("player") end
     end,
 }
-
 local Player = xCT.Player
 
-
+-- ==============================================================
+-- xCT+   General Combat Events
+-- ==============================================================
 local xCTCombatEvents = {
   COMBAT_TEXT_UPDATE = {  -- Sub-Events
     DAMAGE = function(amount)
@@ -464,9 +472,14 @@ local xCTCombatEvents = {
         F.Loot:AddMessage(X.Money(money, gold, silver, copper), unpack(C.Money))
       end
     end,
-  -- CHAT_MSG_LOOT  
+  CHAT_MSG_LOOT = function(msg)
+  
+    end,
 }
 
+-- ==============================================================
+-- xCT+   Outgoing Combat Events (DMG)
+-- ==============================================================
 local xCTDamageEvents = {
   SWING_DAMAGE = function(_, pet, _, ...)
     local amount, _, _, _, _, _, critical = select(12, ...)
@@ -495,73 +508,77 @@ local xCTDamageEvents = {
     frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
   end,
   SPELL_PERIODIC_DAMAGE = function(_, _, _, ...)
-      local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
-      local color, frame = C["1"], F.Outgoing
-      if ActiveProfile.DamageColors then
-        color = C[tostring(spellSchool)] or C["1"] end
-      if critical then
-        frame = F.Critical end
-      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
-    end,
+    local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
+    local color, frame = C["1"], F.Outgoing
+    if ActiveProfile.DamageColors then
+      color = C[tostring(spellSchool)] or C["1"] end
+    if critical then
+      frame = F.Critical end
+    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+  end,
   SWING_MISSED = function(_, pet, _, ...)
     local missType = select(12, ...)
     if pet then
       F.Outgoing:AddMessage(X.DamageOut(L[missType], false, X.Icon(nil, true)), unpack(C.MissType))
     else
       F.Outgoing:AddMessage(X.DamageOut(L[missType], false, X.Icon(6603)), unpack(C.MissType)) end
-    end,
+  end,
   SPELL_MISSED = function(_, _, _, ...)
-      local spellId, _, _, missType, _ = select(12, ...)
-      F.Outgoing:AddMessage(X.DamageOut(L[missType], false, X.Icon(spellId)), unpack(C.MissType))
-    end,
+    local spellId, _, _, missType, _ = select(12, ...)
+    F.Outgoing:AddMessage(X.DamageOut(L[missType], false, X.Icon(spellId)), unpack(C.MissType))
+  end,
   RANGE_MISSED = function(_, _, _, ...)
-      local spellId, _, _, missType, _ = select(12, ...)
-      F.Outgoing:AddMessage(X.DamageOut(L[missType], false, X.Icon(spellId)), unpack(C.MissType))
-    end,
+    local spellId, _, _, missType, _ = select(12, ...)
+    F.Outgoing:AddMessage(X.DamageOut(L[missType], false, X.Icon(spellId)), unpack(C.MissType))
+  end,
   SPELL_DISPEL = function(_, _, _, ...)
-      local target, _, _, id, effect, _, etype = select(12, ...)
-      local color = C.DispellDebuff
-      if etype == "BUFF" then
-        color = C.DispellBuff end
-      F.General:AddMessage(L.ACTION_DISPEL..": "..effect..X.Icon(id), unpack(color))
-    end,
+    local target, _, _, id, effect, _, etype = select(12, ...)
+    local color = C.DispellDebuff
+    if etype == "BUFF" then
+      color = C.DispellBuff end
+    F.General:AddMessage(L.ACTION_DISPEL..": "..effect..X.Icon(id), unpack(color))
+  end,
   SPELL_INTERRUPT = function(_, _, _, ...)
-      local target, _, _, id, effect = select(12, ...)
-      F.General:AddMessage(L.ACTION_INTERRUPT..": "..effect..X.Icon(id), unpack(C.Interrupt))
-    end,
+    local target, _, _, id, effect = select(12, ...)
+    F.General:AddMessage(L.ACTION_INTERRUPT..": "..effect..X.Icon(id), unpack(C.Interrupt))
+  end,
   PARTY_KILL = function(_, _, _, ...)
-      local name = select(9, ...)
-      local color = C.UnitKilled
-      if ActiveProfile.ClassKilled then
-        local class = RAID_CLASS_COLORS[select(2,UnitClass("target"))]
-        if class then
-          color = { class.r, class.g, class.b }
-        end
+    local name = select(9, ...)
+    local color = C.UnitKilled
+    if ActiveProfile.ClassKilled then
+      if RAID_CLASS_COLORS[select(2,UnitClass("target"))] then
+        color = { class.r, class.g, class.b }
       end
-      F.General:AddMessage(L.ACTION_KILLED..": "..name, unpack(color))
-    end,
+    end
+    F.General:AddMessage(L.ACTION_KILLED..": "..name, unpack(color))
+  end,
 }
 
+-- ==============================================================
+-- xCT+   Outgoing Combat Events (HEAL)
+-- ==============================================================
 local xCTHealingEvents = {
   SPELL_HEAL = function(_, _, ...)
-      local spellId, _, _, amount, _, _, critical = select(12, ...)
-      local color, frame = C.Healing, F.Outgoing
-      if critical then
-        color = C.HealingCrit
-        frame = F.Critical end
-      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
-    end,
+    local spellId, _, _, amount, _, _, critical = select(12, ...)
+    local color, frame = C.Healing, F.Outgoing
+    if critical then
+      color = C.HealingCrit
+      frame = F.Critical end
+    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+  end,
   SPELL_PERIODIC_HEAL = function(_, _, ...)
-      local spellId, _, _, amount, _, _, critical = select(12, ...)
-      local color, frame = C.Healing, F.Outgoing
-      if critical then
-        color = C.HealingCrit
-        frame = F.Critical end
-      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
-    end,
+    local spellId, _, _, amount, _, _, critical = select(12, ...)
+    local color, frame = C.Healing, F.Outgoing
+    if critical then
+      color = C.HealingCrit
+      frame = F.Critical end
+    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+  end,
 }
 
--- Register the Events
+-- ==============================================================
+-- xCT+   Event Registration
+-- ==============================================================
 do
   -- Combat Events
   local combat = CreateFrame"FRAME"
@@ -575,9 +592,7 @@ do
   combat:RegisterEvent"UNIT_EXITING_VEHICLE"
   combat:RegisterEvent"UNIT_COMBO_POINTS"
   combat:RegisterEvent"RUNE_POWER_UPDATE"
-  
   combat:RegisterEvent"CHAT_MSG_MONEY"
-  
   combat:SetScript("OnEvent",
     function(_, event, ...)
       local handler = xCTCombatEvents[event]
@@ -600,7 +615,7 @@ do
       local timeStamp, eventType, hideCaster, scrGUID, scrName, scrFlags, scrFlags2, dstGUID = select(1, ...)
       local player = (scrGUID == Player.GUID and dstGUID ~= Player.GUID)
       local pet = (scrGUID == UnitGUID("pet") and ActiveProfile.PetDamage)
-      local vehicle = (scrFlags == X.GoodSourceFlags)
+      local vehicle = (scrFlags == Player.GoodSourceFlags)
       local handler = xCTDamageEvents[eventType]
       if handler and (player or pet or vehicle) then
         handler(player, pet, vehicle, ...)
@@ -612,7 +627,7 @@ do
     function(self, event, ...)
       local timeStamp, eventType, hideCaster, scrGUID, scrName, scrFlags, scrFlags2, dstGUID = select(1, ...)
       local player = (scrGUID == Player.GUID)
-      local vehicle = (scrFlags == X.GoodSourceFlags)
+      local vehicle = (scrFlags == Player.GoodSourceFlags)
       local handler = xCTHealingEvents[eventType]
       --print("event", eventType,"player", player, "pet", pet, "vehicle", vehicle, "handler", handler, "args", select(13, ...))
       if handler and (player or vehicle) then
@@ -632,6 +647,9 @@ do
   end
 end
 
+-- ==============================================================
+-- xCT+   Configuration Mode
+-- ==============================================================
 function xCT.StartConfigMode()
   if not InCombatLockdown() then
     for frameName, frame in pairs(F) do
@@ -795,6 +813,9 @@ function xCT.EndConfigMode()
   end
 end
 
+-- ==============================================================
+-- xCT+   In-Game Configuration Editor
+-- ==============================================================
 local function recursiveSetter(currentTable, args, itter)
   if type(currentTable[args[i][args[i+1]]]) == "table" then
     return recursiveSetter(key[args[i]], args, itter+1)
@@ -803,89 +824,87 @@ local function recursiveSetter(currentTable, args, itter)
   return true
 end
 
-
--- Hook Slash Commands
+-- ==============================================================
+-- xCT+   Slash Commands
+-- ==============================================================
 SLASH_XCTPLUS1 = "/xct"
 SlashCmdList["XCTPLUS"] = function(input)
-    --input = s_lower(input)
-    
-    -- Get the Args
-    local args = { }
-    for v in input:gmatch("%w+") do
-        args[#args+1] = v
-    end
-    
-    -- Unlock the frames (show them) so that you can move them
-    if args[1] == "unlock" then
-        if FramesLocked then
-            xCT.StartConfigMode()
-        else
-            xCT.Print("Frames already unlocked.")
-        end
-    
-    -- Hides the frames and saves their position
-    elseif args[1] == "lock" then
-        if FramesLocked then
-            xCT.Print("Frames already locked.")
-        else
-            xCT.EndConfigMode()
-        end
-    
-    -- Erases ALL profiles and resets the addon back to default. for development only. this WILL BE REMOVED!
-    elseif args[1] == "reset" and XCT_DEBUG then
-      xCTOptions = nil
-      ReloadUI()
-    
-    -- List all the profiles (and mark the one that's active)
-    elseif args[1] == "profiles" then
-      print(xCT.Print("User Profiles:"))
-      local counter = 1
-      for profile,_ in pairs(xCTOptions.Profiles) do
-        local active = ""
-        if profile == xCTOptions._activeProfile then
-          active = " (|cffFFFF00active|r)" end
-        print(s_format("    [%d] - %s%s", counter, profile, active))
-        counter=counter+1
-      end
-    
-    -- Load a profile (syntax: /xct load ProfileName)
-    elseif args[1] == "load" then
-      if not args[2] then
-        xCT.ChangeProfile("Default")
-      else
-        if xCTOptions.Profiles[args[2]] then
-          xCT.ChangeProfile(args[2])
-        else
-          xCT.Print("'|cff5555FF"..args[2].."|r' is not a profile. Type '/xct profiles' to see a list.")
-        end
-      end
-    elseif args[1] == "create" then
-      if xCTOptions.Profiles[args[2]] then
-        xCT.Print("'|cff5555FF"..args[2].."|r' is already a profile. Type '/xct profiles' to see a list.")
-      else
-        xCT.CreateProfile(args[2], args[3])
-        xCT.Print("Created and loaded new profile.")
-      end
-    elseif args[1] == "set" then
-      
-    
-    
-
-    elseif args[1] == "test" then
-        xCT.Print("attempted to start Test Mode.")
-        
+  --input = s_lower(input)
+  
+  -- Get the Args
+  local args = { }
+  for v in input:gmatch("%w+") do
+    args[#args+1] = v
+  end
+  
+  -- Unlock the frames (show them) so that you can move them
+  if args[1] == "unlock" then
+    if FramesLocked then
+        xCT.StartConfigMode()
     else
-        xCT.Print("You did not supply a valid commandline, here is what you said: ", unpack(args))
-        
-        
-        xCT.Print("|cff888888Position Commands|r")
-        print("    Use |cffFF0000/xct|r |cff5555FFunlock|r to move and resize the frames.")
-        print("    Use |cffFF0000/xct|r |cff5555FFlock|r to lock the frames.")
-        print("    Use |cffFF0000/xct|r |cff5555FFtest|r to toggle Test Mode (|cffFFFF00on|r/|cffFFFF00off|r).")
-        print()
-        xCT.Print("|cff888888Profile Commands|r")
-        print("    Use |cffFF0000/xct|r |cff5555FFprofiles|r to print a list of all the profiles.")
-        print("    Use |cffFF0000/xct|r |cff5555FFload|r (|cff5555FFNumber|r or |cff5555FFName|r) to load a profile.")
-        print("    Use |cffFF0000/xct|r |cff5555FFcreate|r (|cff5555FFName|r) to create a new profile.")
+        xCT.Print("Frames already unlocked.")
     end
+  
+  -- Hides the frames and saves their position
+  elseif args[1] == "lock" then
+    if FramesLocked then
+        xCT.Print("Frames already locked.")
+    else
+        xCT.EndConfigMode()
+    end
+  
+  -- Erases ALL profiles and resets the addon back to default. for development only. this WILL BE REMOVED!
+  elseif args[1] == "reset" and XCT_DEBUG then
+    xCTOptions = nil
+    ReloadUI()
+  
+  -- List all the profiles (and mark the one that's active)
+  elseif args[1] == "profiles" then
+    print(xCT.Print("User Profiles:"))
+    local counter = 1
+    for profile,_ in pairs(xCTOptions.Profiles) do
+      local active = ""
+      if profile == xCTOptions._activeProfile then
+        active = " (|cffFFFF00active|r)" end
+      print(s_format("    [%d] - %s%s", counter, profile, active))
+      counter=counter+1
+    end
+  
+  -- Load a profile (syntax: /xct load ProfileName)
+  elseif args[1] == "load" then
+    if not args[2] then
+      xCT.ChangeProfile("Default")
+    else
+      if xCTOptions.Profiles[args[2]] then
+        xCT.ChangeProfile(args[2])
+      else
+        xCT.Print("'|cff5555FF"..args[2].."|r' is not a profile. Type '/xct profiles' to see a list.")
+      end
+    end
+    
+  elseif args[1] == "create" then
+    if xCTOptions.Profiles[args[2]] then
+      xCT.Print("'|cff5555FF"..args[2].."|r' is already a profile. Type '/xct profiles' to see a list.")
+    else
+      xCT.CreateProfile(args[2], args[3])
+      xCT.Print("Created and loaded new profile.")
+    end
+    
+  elseif args[1] == "set" then
+
+  elseif args[1] == "test" then
+    xCT.Print("attempted to start Test Mode.")
+      
+  else
+    xCT.Print("You did not supply a valid commandline, here is what you said: ", unpack(args))
+    xCT.Print("|cff888888Position Commands|r")
+    print("    Use |cffFF0000/xct|r |cff5555FFunlock|r to move and resize the frames.")
+    print("    Use |cffFF0000/xct|r |cff5555FFlock|r to lock the frames.")
+    print("    Use |cffFF0000/xct|r |cff5555FFtest|r to toggle Test Mode (|cffFFFF00on|r/|cffFFFF00off|r).")
+    print()
+    xCT.Print("|cff888888Profile Commands|r")
+    print("    Use |cffFF0000/xct|r |cff5555FFprofiles|r to print a list of all the profiles.")
+    print("    Use |cffFF0000/xct|r |cff5555FFload|r (|cff5555FFNumber|r or |cff5555FFName|r) to load a profile.")
+    print("    Use |cffFF0000/xct|r |cff5555FFcreate|r (|cff5555FFName|r) to create a new profile.")
+  end
 end

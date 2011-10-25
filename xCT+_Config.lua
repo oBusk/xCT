@@ -15,8 +15,11 @@ of xCT (by Affli) that has been outdated since WoW 4.0.6.
 
 ]]
 
+local ADDON_NAME, engine = ...
+local xCT = engine[2]
+
 -- This is what gets loaded on the first load, or after you type '/xct reset'
-local DEFAULT_PROFILE = {
+xCT.DEFAULT_PROFILE = {
   --["ShowHeadNumbers"] = false,
   
   -- READ THIS BEFORE EDITING!
@@ -226,17 +229,6 @@ local DEFAULT_PROFILE = {
   },
 }
 
--- Lua code below.  Do NOT edit below this point!
-
--- If you didn't listen, then that means you know what you are doing, please continue. :)
-local ADDON_NAME, engine = ...
-
-engine[1] = {} -- Events (Fake)
-engine[2] = {} -- Functions
-engine[3] = {} -- Options
-
-local xCT = engine[2]
-
 xCT.Colors = {      -- { Red, Green, Blue }
   -- Magic Colors
   ["1"]           = { 1.00, 1.00, 0.00 },   -- Physical Damage
@@ -291,8 +283,8 @@ xCT.Colors = {      -- { Red, Green, Blue }
   LeavingCombat   = { 0.10, 1.00, 0.10 },
   UnitKilled      = { 0.20, 1.00, 0.20 },
   PowerBarColor   = _G["PowerBarColor"]
-  
 }
+
 xCT.Localization = {
   -- Miss Types
   ABSORB            = ABSORB,             -- "Absorb", 
@@ -349,124 +341,3 @@ xCT.Localization = {
   
   MONEY             = MONEY,              -- "Money"
 }
-
--- Events Engine
-local Events = { -- Events (Real)
-  ["ChangedProfiles"] = { },
-  ["OptionsLoaded"] = { },
-  ["FramesLoaded"] = { },
-}
-
-local EventsMT = {
-  -- You cannot create new events
-  __newindex = function( _, event, handle)
-      if Events[event] ~= nil then
-        table.insert(Events[event], handle)
-      end
-    end,
-    
-  __metatable = { },
-  
-  __call = function(...)
-    -- if they call the events, give them a list
-      local list = { }
-      for k, _ in pairs(Events) do
-        table.insert(list, k)
-      end
-      return list
-    end,
-}
-
--- Set the engine event's metatable
-setmetatable(engine[1], EventsMT)
-
-function xCT.InvokeEvent(event, ...)
-  for _, handle in pairs(Events[event]) do
-    if type(handle) == "function" then
-      handle(event, ...)
-    end
-  end
-end
-
-function xCT.Print(...)
-  print("\124cffFF0000x\124rCT\124cffDDFF55+\124r ", ...)
-end
-
-function xCT.Debug(...)
-  if XCT_DEBUG then
-    xCT.Print(...)
-  end
-end
-
--- Create Locals for faster lookups
-local s_format  = string.format
-local s_lower   = string.lower
-
-local function t_copy(copy, lookup)
-  local temp = { }
-  for k, v in pairs(copy) do
-    temp[k] = v end  
-  if lookup then
-    local tempMT = {
-      __index = function(t, k)
-        return lookup[k]
-      end, }
-    setmetatable(temp, tempMT) end
-  return temp
-end
-
-function xCT.CreateProfile(NewProfileName, CopyFromProfile)
-  if CopyFromProfile then
-    -- Create a new profile as a copy of another
-    xCTOptions.Profiles[NewProfileName] = t_copy(xCTOptions.Profiles[CopyFromProfile], DEFAULT_PROFILE)
-    xCTOptions._activeProfile = NewProfileName
-  else
-    -- new profile already exists
-    if xCTOptions.Profiles[NewProfileName] then
-      xCTOptions._activeProfile = NewProfileName
-    else
-      -- create a new profile using the defaults as a template
-      xCTOptions.Profiles[NewProfileName] = t_copy(DEFAULT_PROFILE)
-      xCTOptions._activeProfile = NewProfileName
-    end
-  end
-  xCT.ChangeProfile()
-end
-
-function xCT.ChangeProfile(NewProfileName)
-  if NewProfileName then
-    xCTOptions._activeProfile = NewProfileName end
-  local ActiveProfile = xCTOptions.Profiles[xCTOptions._activeProfile]
-  
-  -- Backward Compatibility
-  if not getmetatable(ActiveProfile) and xCTOptions._activeProfile ~= "Default" then
-    local activeMT = { __index = function(self, key)
-        self[key] = DEFAULT_PROFILE[key]
-        return self[key]
-      end, }
-    setmetatable(ActiveProfile, activeMT)
-  end
-  
-  xCT.ActiveProfile = ActiveProfile
-  xCT.InvokeEvent("ChangedProfiles")
-end
-
-
--- Global Accessor to the engine
-xCTShared = engine
-
-local frame = CreateFrame"Frame"
-frame:RegisterEvent"ADDON_LOADED"
-frame:SetScript("OnEvent", function(self, event, addon)
-  if addon == ADDON_NAME then
-    if not xCTOptions or DEFAULT_PROFILE.BypassProfileManager then   -- Default Options
-      xCTOptions = { Profiles = { }, }
-      xCT.CreateProfile(xCT.Player.Name)
-    else 
-      xCT.ChangeProfile()
-    end
-    engine[3] = xCTOptions
-    xCT.InvokeEvent("OptionsLoaded")
-    xCT.Print("is now your default Combat Text handler.")
-  end
-end)
