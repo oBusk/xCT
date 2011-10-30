@@ -593,6 +593,7 @@ do
   combat:RegisterEvent"UNIT_COMBO_POINTS"
   combat:RegisterEvent"RUNE_POWER_UPDATE"
   combat:RegisterEvent"CHAT_MSG_MONEY"
+  combat:RegisterEvent"PARTY_KILL"
   combat:SetScript("OnEvent",
     function(_, event, ...)
       local handler = xCTCombatEvents[event]
