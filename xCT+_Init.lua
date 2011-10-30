@@ -26,7 +26,12 @@ local xCTEvents, xCT, _ = unpack(engine)
 local function t_copy(copy, lookup)
   local temp = { }
   for k, v in pairs(copy) do
-    temp[k] = v end  
+    if type(v) == "table" then
+      temp[k] = t_copy(v, lookup)
+    else
+      temp[k] = v
+    end
+  end  
   if lookup then
     local tempMT = {
       __index = function(t, k)
