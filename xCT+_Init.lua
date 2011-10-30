@@ -27,15 +27,15 @@ local function t_copy(copy, lookup)
   local temp = { }
   for k, v in pairs(copy) do
     if type(v) == "table" then
-      temp[k] = t_copy(v, lookup)
+      temp[k] = t_copy(v, lookup[k])
     else
       temp[k] = v
     end
-  end  
+  end
   if lookup then
     local tempMT = {
-      __index = function(t, k)
-        return lookup[k]
+      __index = function(self, key)
+        return lookup[key]
       end, }
     setmetatable(temp, tempMT) end
   return temp
