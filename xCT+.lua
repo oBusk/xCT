@@ -491,6 +491,22 @@ local xCTDamageEvents = {
     else
       frame:AddMessage(X.DamageOut(amount, critical, X.Icon(6603)), unpack(C["1"])) end
     end,
+  SPELL_PERIODIC_HEAL = function(_, _, ...)
+    local spellId, _, _, amount, _, _, critical = select(12, ...)
+    local color, frame = C.Healing, F.Outgoing
+    if critical then
+      color = C.HealingCrit
+      frame = F.Critical end
+    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+  end,
+  SPELL_HEAL = function(_, _, ...)
+    local spellId, _, _, amount, _, _, critical = select(12, ...)
+    local color, frame = C.Healing, F.Outgoing
+    if critical then
+      color = C.HealingCrit
+      frame = F.Critical end
+    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+  end,
   RANGE_DAMAGE = function(_, _, _, ...)
     local spellId, _, _, amount, _, _, _, _, _, critical = select(12, ...)
     local frame = F.Outgoing
@@ -545,34 +561,14 @@ local xCTDamageEvents = {
   PARTY_KILL = function(_, _, _, ...)
     local name = select(9, ...)
     local color = C.UnitKilled
+    local unitclass = select(2,UnitClass("target"))
     if ActiveProfile.ClassKilled then
-      if RAID_CLASS_COLORS[select(2,UnitClass("target"))] then
-        color = { class.r, class.g, class.b }
+      if unitclass and RAID_CLASS_COLORS[unitclass] then
+        local classcolor = RAID_CLASS_COLORS[unitclass]
+        color = { classcolor.r, classcolor.g, classcolor.b }
       end
     end
     F.General:AddMessage(L.ACTION_KILLED..": "..name, unpack(color))
-  end,
-}
-
--- ==============================================================
--- xCT+   Outgoing Combat Events (HEAL)
--- ==============================================================
-local xCTHealingEvents = {
-  SPELL_HEAL = function(_, _, ...)
-    local spellId, _, _, amount, _, _, critical = select(12, ...)
-    local color, frame = C.Healing, F.Outgoing
-    if critical then
-      color = C.HealingCrit
-      frame = F.Critical end
-    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
-  end,
-  SPELL_PERIODIC_HEAL = function(_, _, ...)
-    local spellId, _, _, amount, _, _, critical = select(12, ...)
-    local color, frame = C.Healing, F.Outgoing
-    if critical then
-      color = C.HealingCrit
-      frame = F.Critical end
-    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
   end,
 }
 
@@ -593,7 +589,6 @@ do
   combat:RegisterEvent"UNIT_COMBO_POINTS"
   combat:RegisterEvent"RUNE_POWER_UPDATE"
   combat:RegisterEvent"CHAT_MSG_MONEY"
-  combat:RegisterEvent"PARTY_KILL"
   combat:SetScript("OnEvent",
     function(_, event, ...)
       local handler = xCTCombatEvents[event]
@@ -617,25 +612,12 @@ do
       local player = (scrGUID == Player.GUID and dstGUID ~= Player.GUID)
       local pet = (scrGUID == UnitGUID("pet") and ActiveProfile.PetDamage)
       local vehicle = (scrFlags == Player.GoodSourceFlags)
+      --print("event", eventType,"player", player, "pet", pet, "vehicle", vehicle, "handler", handler, "args", select(9, ...))
       local handler = xCTDamageEvents[eventType]
       if handler and (player or pet or vehicle) then
         handler(player, pet, vehicle, ...)
       end
-    end)
-  local healing = CreateFrame"FRAME"
-  healing:RegisterEvent"COMBAT_LOG_EVENT_UNFILTERED"
-  healing:SetScript("OnEvent",
-    function(self, event, ...)
-      local timeStamp, eventType, hideCaster, scrGUID, scrName, scrFlags, scrFlags2, dstGUID = select(1, ...)
-      local player = (scrGUID == Player.GUID)
-      local vehicle = (scrFlags == Player.GoodSourceFlags)
-      local handler = xCTHealingEvents[eventType]
-      --print("event", eventType,"player", player, "pet", pet, "vehicle", vehicle, "handler", handler, "args", select(13, ...))
-      if handler and (player or vehicle) then
-        handler(player, vehicle, ...)
-      end
-    end)
-  
+    end)  
   
   -- Turn Off Blizzard's CT
   CombatText:UnregisterAllEvents()
