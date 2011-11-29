@@ -27,7 +27,7 @@ local function t_copy(copy, lookup)
   local temp = { }
   for k, v in pairs(copy) do
     if type(v) == "table" then
-      temp[k] = t_copy(v, lookup[k])
+      temp[k] = t_copy(v, lookup and lookup[k] or nil)
     else
       temp[k] = v
     end

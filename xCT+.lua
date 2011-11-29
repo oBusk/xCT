@@ -837,7 +837,7 @@ SlashCmdList["XCTPLUS"] = function(input)
     end
   
   -- Erases ALL profiles and resets the addon back to default. for development only. this WILL BE REMOVED!
-  elseif args[1] == "reset" and XCT_DEBUG then
+  elseif args[1] == "reset" then
     xCTOptions = nil
     ReloadUI()
   
