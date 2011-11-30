@@ -6,9 +6,9 @@ h2{color:red}. X Combat Text Plus
 
 h3. Download
 
-h4. World of Warcraft (4.2.2 live)
+h4. World of Warcraft (4.3 live)
 
-p. "Latest Version":https://github.com/downloads/dandruff/xCT/dandruff-xCT+2.1.0(4.2.2).zip
+p. "Latest Version":https://github.com/downloads/dandruff/xCT/dandruff-xCT+2.1.1(4.3).zip
 
 h3. Description
 
