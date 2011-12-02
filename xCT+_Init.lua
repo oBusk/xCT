@@ -118,7 +118,11 @@ function xCT.ChangeProfile(NewProfileName)
   -- Backward Compatibility
   if not getmetatable(ActiveProfile) and xCTOptions._activeProfile ~= "Default" then
     local activeMT = { __index = function(self, key)
-        self[key] = xCT.DEFAULT_PROFILE[key]
+        if type(xCT.DEFAULT_PROFILE[key]) == "table" then
+          self[key] = t_copy(xCT.DEFAULT_PROFILE[key])
+        else
+          self[key] = xCT.DEFAULT_PROFILE[key]
+        end
         return self[key]
       end, }
     setmetatable(ActiveProfile, activeMT)
