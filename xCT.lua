@@ -442,8 +442,8 @@ local function AlignGridShow()
         else
             tt2:SetTexture(0, 0, 0, .8) 
         end
-        tt2:SetPoint('TOP', AlignGrid, 'TOP', i * boxSize, 0)
-        tt2:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', i * boxSize, 0)
+        tt2:SetPoint('TOP', AlignGrid, 'TOP', i * boxSize + 1, 0)
+        tt2:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', i * boxSize + 1, 0)
         tt2:SetWidth(1)
     end
     
@@ -458,8 +458,8 @@ local function AlignGridShow()
         else
             tt3:SetTexture(0, 0, 0, .8) 
         end
-        tt3:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize)
-        tt3:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize)
+        tt3:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize + 1)
+        tt3:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize + 1)
         tt3:SetHeight(1)
         
         -- Horizontal Bars to the Above of the Center
