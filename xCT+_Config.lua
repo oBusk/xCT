@@ -20,8 +20,7 @@ local xCT = engine[2]
 
 -- This is what gets loaded on the first load, or after you type '/xct reset'
 xCT.DEFAULT_PROFILE = {
-  --["ShowHeadNumbers"] = false,
-  
+
   -- READ THIS BEFORE EDITING!
   
   -- The default config is only used EVERY time if you "BypassProfileManager"
@@ -54,6 +53,7 @@ xCT.DEFAULT_PROFILE = {
   ["ClassKilled"] = true, -- Show the color of the class you killed
   ["ColorBlind"] = false,
   ["minmoney"] = 0,
+  ["ShowHeadNumbers"] = false,
   
   EnergyTypes = { -- Display Energy Types
     ["MANA"]          = true,
@@ -64,6 +64,7 @@ xCT.DEFAULT_PROFILE = {
     ["SOUL_SHARDS"]   = true,
     ["HOLY_POWER"]    = true,
   },
+  
   Frames = {
     -- Frame Names canNOT have a space or special character in them
     -- <Critical>
@@ -128,8 +129,8 @@ xCT.DEFAULT_PROFILE = {
     }, -- </General>
     -- <Healing>
     ["Healing"] = {
-      Enabled = false,
-      Secondary = "Damage",
+      Enabled = true,
+      Secondary = nil,
       Label = SHOW_COMBAT_HEALING,
       LabelColor = { 0.10, 1.00, 0.10, 0.90 },
       Justify = "RIGHT",
@@ -341,3 +342,4 @@ xCT.Localization = {
   
   MONEY             = MONEY,              -- "Money"
 }
+

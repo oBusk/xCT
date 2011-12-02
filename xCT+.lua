@@ -150,6 +150,7 @@ xCTEvents["OptionsLoaded"] = function()
     SetCVar("CombatDamage", 0)
     SetCVar("CombatHealing", 0)
   end
+  
   xCT.InvokeEvent("FramesLoaded")
 end
 
@@ -824,8 +825,10 @@ SlashCmdList["XCTPLUS"] = function(input)
   if args[1] == "unlock" then
     if FramesLocked then
         xCT.StartConfigMode()
+        xCT.InvokeEvent("FramesUnlocked")
     else
         xCT.Print("Frames already unlocked.")
+        
     end
   
   -- Hides the frames and saves their position
@@ -834,6 +837,7 @@ SlashCmdList["XCTPLUS"] = function(input)
         xCT.Print("Frames already locked.")
     else
         xCT.EndConfigMode()
+        xCT.InvokeEvent("FramesLocked")
     end
   
   -- Erases ALL profiles and resets the addon back to default. for development only. this WILL BE REMOVED!
@@ -843,7 +847,7 @@ SlashCmdList["XCTPLUS"] = function(input)
   
   -- List all the profiles (and mark the one that's active)
   elseif args[1] == "profiles" then
-    print(xCT.Print("User Profiles:"))
+    xCT.Print("User Profiles:")
     local counter = 1
     for profile,_ in pairs(xCTOptions.Profiles) do
       local active = ""
