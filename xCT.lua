@@ -7,7 +7,7 @@ xCT by affli @ RU-Howling Fjord
 All rights reserved.
 Thanks ALZA and Shestak for making this mod possible. Thanks Tukz for his wonderful style of coding. Thanks Rostok for some fixes and healing code.
 
-Maintained by Dandruff for 4.1, 4.2 PTR, and 4.2 live
+Maintained by Dandruff for 4.1, 4.2 PTR and Live, and 4.3 PTR and Live
 
 ]]--
 
@@ -1075,33 +1075,42 @@ end
 xCT:SetScript("OnEvent",OnEvent)
 
 -- turn off blizz ct
-CombatText:UnregisterAllEvents()
-CombatText:SetScript("OnLoad", nil)
-CombatText:SetScript("OnEvent", nil)
-CombatText:SetScript("OnUpdate", nil)
+-- force hide blizz damage/healing, if desired
+if not ct.blizzheadnumbers then
+
+  -- hook blizz float mode selector. blizz sucks, because changing  cVar combatTextFloatMode doesn't fire CVAR_UPDATE
+  --hooksecurefunc("InterfaceOptionsCombatTextPanelFCTDropDown_OnClick",ScrollDirection)
+  --COMBAT_TEXT_SCROLL_ARC="" --may cause unexpected bugs, use with caution!
+  InterfaceOptionsCombatTextPanelFCTDropDown:Hide() -- sorry, blizz fucking bug with SCM:SetInsertMode()
+  
+  CombatText:UnregisterAllEvents()
+  CombatText:SetScript("OnLoad", nil)
+  CombatText:SetScript("OnEvent", nil)
+  CombatText:SetScript("OnUpdate", nil)
+  
+  InterfaceOptionsCombatTextPanelTargetDamage:Hide()
+  InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
+  InterfaceOptionsCombatTextPanelPetDamage:Hide()
+  InterfaceOptionsCombatTextPanelHealing:Hide()
+  SetCVar("CombatLogPeriodicSpells", 0)
+  SetCVar("PetMeleeDamage", 0)
+  SetCVar("CombatDamage", 0)
+  SetCVar("CombatHealing", 0)
+end
 
 -- steal external messages sent by other addons using CombatText_AddMessage
+local BCT_AddMessage = Blizzard_CombatText_AddMessage
 Blizzard_CombatText_AddMessage = CombatText_AddMessage
 function CombatText_AddMessage(message,scrollFunction, r, g, b, displayType, isStaggered)
     xCTgen:AddMessage(message, r, g, b)
+    
+    if blizzheadnumbers then
+      BCT_AddMessage(message,scrollFunction, r, g, b, displayType, isStaggered)
+    end
 end
 
--- force hide blizz damage/healing, if desired
-if not ct.blizzheadnumbers then
-    InterfaceOptionsCombatTextPanelTargetDamage:Hide()
-    InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
-    InterfaceOptionsCombatTextPanelPetDamage:Hide()
-    InterfaceOptionsCombatTextPanelHealing:Hide()
-    SetCVar("CombatLogPeriodicSpells", 0)
-    SetCVar("PetMeleeDamage", 0)
-    SetCVar("CombatDamage", 0)
-    SetCVar("CombatHealing", 0)
-end
 
--- hook blizz float mode selector. blizz sucks, because changing  cVar combatTextFloatMode doesn't fire CVAR_UPDATE
---hooksecurefunc("InterfaceOptionsCombatTextPanelFCTDropDown_OnClick",ScrollDirection)
---COMBAT_TEXT_SCROLL_ARC="" --may cause unexpected bugs, use with caution!
-InterfaceOptionsCombatTextPanelFCTDropDown:Hide() -- sorry, blizz fucking bug with SCM:SetInsertMode()
+
 
 -- modify blizz ct options title lol
 InterfaceOptionsCombatTextPanelTitle:SetText(COMBAT_TEXT_LABEL.." (powered by \124cffFF0000x\124rCT\124cffDDFF55+\124r)")

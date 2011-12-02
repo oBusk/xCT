@@ -4,10 +4,12 @@ ns.config = {
     -- Blizzard Damage Options.
     -- --------------------------------------------------------------------------------------   
         -- Use Blizzard Damage/Healing Output (Numbers Above Mob/Player's Head)
-        ["blizzheadnumbers"]    = false, 
+        ["blizzheadnumbers"]    = false,  -- (You need to restart WoW to see changes!)
         
+        -- DO NOT USE - BUGGY
         -- Change Default Damage/Healing Font Above Mobs/Player Heads. (This has no effect if ["blizzheadnumbers"] = false)
-        ["damagestyle"]         = true,  -- (You need to restart WoW to see changes!)
+        -- ["damagestyle"]         = true,  -- (You need to restart WoW to see changes!)
+        -- DO NOT USE - BUGGY
         
         -- "Everything else" font size (heals/interrupts and the like)
         ["fontsize"]        = 18,
