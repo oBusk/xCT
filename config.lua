@@ -154,6 +154,8 @@ ns.config = {
  
         ["texticons"] = false,
         
+        ["hideimmunedamage"] = true,
+        
         -- (DISABLED: Currently does not work)
             ["loottimevisible"]     = 6,
             ["crittimevisible"]     = 3,
