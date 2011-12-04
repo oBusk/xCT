@@ -405,10 +405,11 @@ local function ScrollDirection()
     end
 end
 
--- Load on demand frame (no memory used when not needed)
+-- Uses resources until reset, still load on demand
 local AlignGrid
 
 local function AlignGridShow()
+  if not AlignGrid then
     AlignGrid = CreateFrame('Frame', nil, UIParent)
     AlignGrid:SetAllPoints(UIParent)
     local boxSize = 32
@@ -489,10 +490,13 @@ local function AlignGridShow()
     ttb:SetPoint('LEFT', AlignGrid, 'LEFT', 0, 0)
     ttb:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, 0)
     ttb:SetHeight(2)
+  else
+  AlignGrid:Show()
+  end
 end
 
 local function AlignGridKill()
-    AlignGrid:Kill()
+    AlignGrid:Hide()
 end
 
 
