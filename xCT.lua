@@ -708,6 +708,7 @@ local function OnEvent(self, event, subevent, ...)
                 xCTdmg:AddMessage(EVADE, .5, .5, .5)
                 
             elseif subevent == "IMMUNE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
+            	if ct.hideimmunedamage then return end
                 if ct.mergeimmunespam then
                     SQ[subevent]["locked"] = true
                     SQ[subevent]["queue"]  = IMMUNE
@@ -742,6 +743,7 @@ local function OnEvent(self, event, subevent, ...)
                 xCTdmg:AddMessage(EVADE, .5, .5, .5)
                 
             elseif subevent == "SPELL_IMMUNE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
+            	if ct.hideimmunedamage then return end
                 if ct.mergeimmunespam then
                     SQ[subevent]["locked"] = true
                     SQ[subevent]["queue"]  = IMMUNE
