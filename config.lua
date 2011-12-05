@@ -34,6 +34,7 @@ ns.config = {
             ["petdamage"]       = true,     -- show your pet damage.
             ["dotdamage"]       = true,     -- show DoT damage
             ["showhots"]        = true,     -- show periodic healing effects in xCT healing frame.
+            ["showimmunes"]     = true,     -- show "IMMUNE"s when you or your target cannot take damage or healing
             
             -- Damage/Healing Icon Sizes and Appearence
             ["icons"]           = true,     -- show outgoing damage icons
@@ -153,8 +154,6 @@ ns.config = {
         ["mergeimmunespam"] = false,  -- merge multiple immune spam (uses "mergeaoespamtime" timer)
  
         ["texticons"] = false,
-        
-        ["hideimmunedamage"] = true,
         
         -- (DISABLED: Currently does not work)
             ["loottimevisible"]     = 6,
