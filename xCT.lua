@@ -712,7 +712,7 @@ local function OnEvent(self, event, subevent, ...)
                 xCTdmg:AddMessage(EVADE, .5, .5, .5)
                 
             elseif subevent == "IMMUNE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-            	if ct.hideimmunedamage then return end
+            	if not ct.showimmunes then return end
                 if ct.mergeimmunespam then
                     SQ[subevent]["locked"] = true
                     SQ[subevent]["queue"]  = IMMUNE
@@ -747,7 +747,7 @@ local function OnEvent(self, event, subevent, ...)
                 xCTdmg:AddMessage(EVADE, .5, .5, .5)
                 
             elseif subevent == "SPELL_IMMUNE" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
-            	if ct.hideimmunedamage then return end
+            	if not ct.showimmunes then return end
                 if ct.mergeimmunespam then
                     SQ[subevent]["locked"] = true
                     SQ[subevent]["queue"]  = IMMUNE
@@ -1690,7 +1690,7 @@ if(ct.damageout)then
             elseif eventType == "SWING_MISSED" then
                 local missType, _ = select(12, ...)
                 
-                if ct.hideimmunedamage then
+                if not ct.showimmunes then
                   if string.lower(missType) == string.lower(IMMUNE) then return end
                 end
                 
@@ -1708,7 +1708,7 @@ if(ct.damageout)then
             elseif eventType == "SPELL_MISSED" or eventType == "RANGE_MISSED" then
                 local spellId, _, _, missType, _ = select(12, ...)
                 
-                if ct.hideimmunedamage then
+                if not ct.showimmunes then
                   if string.lower(missType) == string.lower(IMMUNE) then return end
                 end
                 
