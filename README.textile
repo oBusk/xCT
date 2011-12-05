@@ -12,7 +12,7 @@ p. "Latest Version":https://github.com/downloads/dandruff/xCT/dandruff-xCT+2.1.5
 
 h3. Description
 
-p. xCT+ is a continuation and fork of "xCT":http://www.wowinterface.com/downloads/info18053-xCT.html (by braindump, aka Affli).  Affli has stopped updating xCT since 4.0.6.  I'm hoping to keep this project going as long as Affli is away.
+p. xCT+ is a continuation and fork of "xCT":http://www.wowinterface.com/downloads/info18053-xCT.html (by braindump, aka Affli).  Affli is currently updating his version of xCT.  xCT+ will continue to expand upon the features that xCT has.
 
 p. Overall, xCT+ is a replacement for Blizzard's scrolling combat text.  It is superior to the default combat text because xCT+ organizes incoming healing, incoming damage, and outgoing damage/healing into their own frames.
 
