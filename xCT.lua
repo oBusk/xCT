@@ -1689,6 +1689,11 @@ if(ct.damageout)then
     
             elseif eventType == "SWING_MISSED" then
                 local missType, _ = select(12, ...)
+                
+                if ct.hideimmunedamage then
+                  if string.lower(missType) == string.lower(IMMUNE) then return end
+                end
+                
                 if ct.icons then
                     local spellNameOrID
                     if sourceGUID == UnitGUID("pet") or sourceFlags == gflags then
@@ -1702,6 +1707,11 @@ if(ct.damageout)then
     
             elseif eventType == "SPELL_MISSED" or eventType == "RANGE_MISSED" then
                 local spellId, _, _, missType, _ = select(12, ...)
+                
+                if ct.hideimmunedamage then
+                  if string.lower(missType) == string.lower(IMMUNE) then return end
+                end
+                
                 if ct.icons then
                     missType = missType..GetSpellTextureFormatted(spellId, ct.iconsize)
                 end 
