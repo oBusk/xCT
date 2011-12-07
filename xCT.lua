@@ -66,6 +66,7 @@ if ct.myclass == "WARLOCK" then
     end
     if ct.healingout then
         ct.healfilter[28176] = true  -- Fel Armor
+        ct.healfilter[96379] = true	 -- Fel Armor (Thanks Shestak)
         ct.healfilter[63106] = true  -- Siphon Life
         ct.healfilter[54181] = true  -- Fel Synergy
         ct.healfilter[89653] = true  -- Drain Life
@@ -116,7 +117,7 @@ elseif ct.myclass == "PALADIN" then
         ct.aoespam[31803] = true  -- Censure
         ct.aoespam[20424] = true  -- Seals of Command
         ct.aoespam[42463] = true  -- Seal of Truth
-        ct.aoespam[25742] = true  -- Seal of Righteousness
+        ct.aoespam[101423] = true	-- Seal of Righteousness (Thanks Shestak)
         ct.aoespam[20167] = true  -- Seal of Insight (Heal Effect)
         ct.aoespam[88263] = true  -- Hammer of the Righteous
         ct.aoespam[31935] = true  -- Avenger's Shield
@@ -174,7 +175,7 @@ elseif ct.myclass == "SHAMAN" then
         ct.aoespam[77478] = true  -- Earhquake
         ct.aoespam[51490] = true  -- Thunderstorm
         ct.aoespam[8187]  = true  -- Magma Totem
-        
+        ct.aoespam[8050] = true		-- Flame Shock (Thanks Shestak)
     end
     if ct.yelltaunt then
         ct.tauntid[73684] = { -- Unleash Earth
@@ -185,7 +186,6 @@ elseif ct.myclass == "SHAMAN" then
     end
     if ct.healingout then
         ct.aoespam[73921] = true  -- Healing Rain
-        -- ct.aoespam[5394]  = true  -- Healing Stream Totem (outdated)
         ct.aoespam[1064]  = true  -- Chain Heal
         ct.aoespam[52042] = true  -- Healing Stream Totem
     end
@@ -200,6 +200,14 @@ elseif ct.myclass == "MAGE" then
         ct.aoespam[42208] = true  -- Blizzard
         ct.aoespam[122]   = true  -- Frost Nova
         ct.aoespam[1449]  = true  -- Arcane Explosion
+        ct.aoespam[92315] = true  -- Pyroblast (Thanks Shestak)
+        ct.aoespam[83853] = true  -- Combustion (Thanks Shestak)
+        ct.aoespam[11113] = true  -- Blast Wave (Thanks Shestak)
+        ct.aoespam[88148] = true  -- Flamestrike void (Thanks Shestak)
+        ct.aoespam[83619] = true  -- Fire Power (Thanks Shestak)
+        ct.aoespam[120]   = true  -- Cone of Cold (Thanks Shestak)
+        ct.aoespam[1449]  = true  -- Arcane Explosion (Thanks Shestak)
+        ct.aoespam[92315] = true  -- Pyroblast (Thanks Shestak)
     end
 elseif ct.myclass == "WARRIOR" then
     if ct.mergeaoespam then
@@ -255,6 +263,20 @@ elseif ct.myclass == "DEATHKNIGHT" then
         ct.aoespam[48721] = true  -- Blood Boil
         ct.aoespam[49184] = true  -- Howling Blast
         ct.aoespam[52212] = true  -- Death and Decay
+        ct.aoespam[55050] = true  -- Heart Strike (Thanks Shestak)
+        -- Merging mh/oh strikes(by Bozo) (Thanks Shestak)
+        ct.aoespam[49020] = true  -- Obliterate MH
+        ct.aoespam[66198] = 49020 -- Obliterate OH
+        ct.aoespam[49998] = true  -- Death Strike MH
+        ct.aoespam[66188] = 49998 -- Death Strike OH
+        ct.aoespam[45462] = true  -- Plague Strike MH
+        ct.aoespam[66216] = 45462 -- Plague Strike OH
+        ct.aoespam[49143] = true  -- Frost Strike MH
+        ct.aoespam[66196] = 49143 -- Frost Strike OH
+        ct.aoespam[56815] = true  -- Rune Strike MH
+        ct.aoespam[66217] = 56815 -- Rune Strike OH
+        ct.aoespam[45902] = true  -- Blood Strike MH
+        ct.aoespam[66215] = 45902 -- Blood Strike OH
     end
     if ct.yelltaunt then
         ct.tauntid[49576] = { -- Death Grip
@@ -1739,6 +1761,14 @@ if(ct.damageout)then
                     msg = GetSpellTextureFormatted(id, ct.iconsize)
                 end
                 xCTgen:AddMessage(ACTION_SPELL_INTERRUPT..": "..effect..msg, unpack(color))
+            
+            elseif eventType == "SPELL_STOLEN" and C.combattext.dispel then
+                local target, _, _, id, effect = select(12, ...)
+                local color = { .9, 0, .9 }
+                if ct.icons then
+                    msg = GetSpellTextureFormatted(id, ct.iconsize)
+                end
+                xCTgen:AddMessage(ACTION_SPELL_STOLEN..": "..effect..msg, unpack(color))
                 
             elseif eventType == "PARTY_KILL" and ct.killingblow then
                 -- 4.2
