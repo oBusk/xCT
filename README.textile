@@ -8,7 +8,7 @@ h3. Download
 
 h4. World of Warcraft (4.3 live)
 
-p. "Latest Version":https://github.com/dandruff/xCT/zipball/master
+p. "Latest Version":https://github.com/downloads/dandruff/xCT/dandruff-xCT+2.1.5b(4.3).zip
 
 h3. Description
 
