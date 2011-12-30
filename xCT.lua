@@ -1132,7 +1132,7 @@ Blizzard_CombatText_AddMessage = CombatText_AddMessage
 function CombatText_AddMessage(message,scrollFunction, r, g, b, displayType, isStaggered)
     xCTgen:AddMessage(message, r, g, b)
     
-    if blizzheadnumbers then
+    if ct.blizzheadnumbers then
       BCT_AddMessage(message,scrollFunction, r, g, b, displayType, isStaggered)
     end
 end
