@@ -12,7 +12,7 @@ ns.config = {
         -- DO NOT USE - BUGGY
         
         -- "Everything else" font size (heals/interrupts and the like)
-        ["fontsize"]        = 18,
+        ["fontsize"]        = 16,
         ["font"]            = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- "Fonts\\ARIALN.ttf" is default WoW font.
         
         
@@ -38,8 +38,8 @@ ns.config = {
             
             -- Damage/Healing Icon Sizes and Appearence
             ["icons"]           = true,     -- show outgoing damage icons
-            ["iconsize"]        = 28,       -- outgoing damage icons' size
-            ["damagefontsize"]  = 18,
+            ["iconsize"]        = 16,       -- outgoing damage icons' size
+            ["damagefontsize"]  = 16,
             ["fontstyle"]       = "OUTLINE",                            -- valid options are "OUTLINE", "MONOCHROME", "THICKOUTLINE", "OUTLINE,MONOCHROME", "THICKOUTLINE,MONOCHROME"
             ["damagefont"]      = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- "Fonts\\FRIZQT__.ttf" is default WoW damage font
 
@@ -56,11 +56,14 @@ ns.config = {
         
             -- Critical Icon Sizes
             ["criticons"]       = true,     -- show crit icons
-            ["criticonsize"]    = 21,       -- size of the icons in the crit frame
+            ["criticonsize"]    = 14,       -- size of the icons in the crit frame
                         
             -- Critical Custom Font and Format
             ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
+            ["critfontstyle"]   = "OUTLINE",
             ["critfontsize"]    = 24,                   -- crit font size ("auto" or Number)
+            
+            -- Critical Appearance Options
             ["critprefix"]      = "|cffFF0000*|r",      -- prefix symbol shown before crit'd amount (default: red *)
             ["critpostfix"]     = "|cffFF0000*|r",      -- postfix symbol shown after crit'd amount (default: red *)
         -- __________________________________________________________________________________
@@ -69,9 +72,11 @@ ns.config = {
         -- ==================================================================================
         -- Loot Items/Money Gains (frame is called "xCTloot")
         -- ==================================================================================
-        ["lootitems"]           = true,
-        ["lootmoney"]           = true,
-        ["lootwindow"]          = true,     -- Use the frame "xCTloot" instead of "xCTgen" for Loot/Money Gains
+        ["lootwindow"]          = true,     -- Enable the frame "xCTloot" (use instead of "xCTgen" for Loot/Money)
+        
+            -- What to show in "xCTloot"
+            ["lootitems"]       = true,
+            ["lootmoney"]       = true,
             
             -- Item Options
             ["loothideicons"]   = false,    -- hide item icons when looted
@@ -88,11 +93,24 @@ ns.config = {
             ["colorblind"]      = false,    -- shows letters G, S, and C instead of textures
         -- __________________________________________________________________________________
 
+
+        -- ==================================================================================
+        -- Spell / Ability Procs Frame (frame is called "xCTproc")
+        -- ==================================================================================
+        -- NOTE: This only has the ability to show only procs that blizzards sends to it
+        --       (mostly spells that "light up" and some others too).
+        ["procwindow"]          = true,     -- Enable the frame to show Procs
+        
+            -- Proc Frame Custom Font Options
+            ["procfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the proc frame
+            ["procfontsize"]    = 16,                   -- proc font size ("auto" or Number)
+            ["procfontstyle"]   = "OUTLINE",
+        -- __________________________________________________________________________________
+        
         
         -- ==================================================================================
         -- Misc. Frames
         -- ==================================================================================
-        
             -- Healing/Damage Incoming Frames (frames are called "xCTheal" and "xCTdmg")
             ["damagecolor"]         = true,     -- display colored damage numbers by type
         
@@ -101,9 +119,6 @@ ns.config = {
         
             -- Power Gains (frame is called "xCTpwr")
             ["powergainswindow"]    = true,
-        
-            -- Proc Frame (frame is called "xCTproc")
-            ["procwindow"]          = true,
         -- __________________________________________________________________________________
         
     -- --------------------------------------------------------------------------------------
@@ -139,11 +154,10 @@ ns.config = {
         ["justify_4"] = "RIGHT",            -- Healing/Damage Outgoing Frame (frame is called "xCTdone")
         ["justify_5"] = "CENTER",           -- Loot/Money Gains Frame (frame is called "xCTloot")
         ["justify_6"] = "RIGHT",            -- Criticals Outgoing Frame (frame is called "xCTcrit")
-        ["justify_7"] = "RIGHT",            -- Power Gains Frame (frame is called "xCTpwr")
+        ["justify_7"] = "LEFT",             -- Power Gains Frame (frame is called "xCTpwr")
         ["justify_8"] = "CENTER",           -- Procs Frame (frame is called "xCTproc")
         
-        
-    -- ** >>experimental<< **
+    -- ** >> !! experimental !! << **
     -- (not fully implemented or supported)
         -- announce and yell events 
         ["yelltaunt"]       = false,  -- yell when you taunt a target
