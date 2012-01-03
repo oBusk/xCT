@@ -719,7 +719,8 @@ local function OnEvent(self, event, subevent, ...)
                 end
                 
             elseif subevent == "SPELL_CAST" then
-                (xCTproc or xCTgen):AddMessage(arg2, 1, .82, 0)
+                if not ct.filterprocs then
+                    (xCTproc or xCTgen):AddMessage(arg2, 1, .82, 0) end
             
             elseif subevent == "MISS" and COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" then
                 xCTdmg:AddMessage(MISS, .5, .5, .5)
