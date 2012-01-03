@@ -140,6 +140,9 @@ ns.config = {
             -- Alignment Help (Shown when configuring frames)
             ["showgrid"]        = true,     -- shows a grid when moving xCT windows around
             
+            -- Show Procs
+            ["filterprocs"]     = true,     -- Enable to hide procs from ALL frames (will show in xCTproc or xCTgen otherwise)
+            
             
     -- --------------------------------------------------------------------------------------
     -- xCT+ Frames' Justification
