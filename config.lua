@@ -116,9 +116,6 @@ ns.config = {
         
             -- Power Gains Incoming Frame (frame is called "xCTpwr")
             ["powergainswindow"]    = true,
-        
-            -- Power Gains (frame is called "xCTpwr")
-            ["powergainswindow"]    = true,
         -- __________________________________________________________________________________
         
     -- --------------------------------------------------------------------------------------
