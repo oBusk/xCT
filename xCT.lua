@@ -1018,7 +1018,8 @@ for i = 1, numf do
         f:SetPoint("CENTER", -320, 0)
     elseif framenames[i] == "heal" then
         f:SetJustifyH(ct.justify_2)
-        f:SetPoint("CENTER", -448, 0)
+        f:SetPoint("CENTER", -512, 0)
+        f:SetWidth(256)
     elseif framenames[i] == "gen" then
         f:SetJustifyH(ct.justify_3)
         f:SetWidth(256)
@@ -1049,24 +1050,26 @@ for i = 1, numf do
         f:SetWidth(256)
         f:SetPoint("CENTER", 128, 0)
         if type(ct.critfontsize) == "number" then
-            f:SetFont(ct.critfont, ct.critfontsize, ct.fontstyle)
+            f:SetFont(ct.critfont, ct.critfontsize, ct.critfontstyle)
         else
             if ct.criticons then
                 if ct.texticons then
-                    f:SetFont(ct.critfont, ct.criticonsize, ct.fontstyle)
+                    f:SetFont(ct.critfont, ct.criticonsize, ct.critfontstyle)
                 else
-                    f:SetFont(ct.critfont, ct.criticonsize / 2, ct.fontstyle)
+                    f:SetFont(ct.critfont, ct.criticonsize / 2, ct.critfontstyle)
                 end
             end
         end
 	elseif framenames[i] == "pwr" then
         f:SetJustifyH(ct.justify_7)
-        f:SetPoint("CENTER", 448, 0)
+        f:SetPoint("CENTER", 512, 0)
+        f:SetWidth(256)
 	elseif framenames[i] == "proc" then
         f:SetJustifyH(ct.justify_8)
         f:SetWidth(256)
         f:SetPoint("CENTER", -128, 0)
-		
+		    f:SetFont(ct.procfont, ct.procfontsize, ct.procfontstyle)
+		    
     -- Add a starting location to your frame
     --elseif framenames[i] == "custom" then
     --    f:SetTimeVisible(ct.loottimevisible)
@@ -1105,17 +1108,6 @@ xCT:SetScript("OnEvent",OnEvent)
 -- turn off blizz ct
 -- force hide blizz damage/healing, if desired
 if not ct.blizzheadnumbers then
-
-  -- hook blizz float mode selector. blizz sucks, because changing  cVar combatTextFloatMode doesn't fire CVAR_UPDATE
-  --hooksecurefunc("InterfaceOptionsCombatTextPanelFCTDropDown_OnClick",ScrollDirection)
-  --COMBAT_TEXT_SCROLL_ARC="" --may cause unexpected bugs, use with caution!
-  InterfaceOptionsCombatTextPanelFCTDropDown:Hide() -- sorry, blizz fucking bug with SCM:SetInsertMode()
-  
-  CombatText:UnregisterAllEvents()
-  CombatText:SetScript("OnLoad", nil)
-  CombatText:SetScript("OnEvent", nil)
-  CombatText:SetScript("OnUpdate", nil)
-  
   InterfaceOptionsCombatTextPanelTargetDamage:Hide()
   InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
   InterfaceOptionsCombatTextPanelPetDamage:Hide()
@@ -1126,15 +1118,18 @@ if not ct.blizzheadnumbers then
   SetCVar("CombatHealing", 0)
 end
 
+InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
+
+CombatText:UnregisterAllEvents()
+CombatText:SetScript("OnLoad", nil)
+CombatText:SetScript("OnEvent", nil)
+CombatText:SetScript("OnUpdate", nil)
+
 -- steal external messages sent by other addons using CombatText_AddMessage
-local BCT_AddMessage = Blizzard_CombatText_AddMessage
+--local BCT_AddMessage = Blizzard_CombatText_AddMessage
 Blizzard_CombatText_AddMessage = CombatText_AddMessage
 function CombatText_AddMessage(message,scrollFunction, r, g, b, displayType, isStaggered)
     xCTgen:AddMessage(message, r, g, b)
-    
-    if ct.blizzheadnumbers then
-      BCT_AddMessage(message,scrollFunction, r, g, b, displayType, isStaggered)
-    end
 end
 
 
@@ -1345,16 +1340,22 @@ local function StartTestMode()
                     if framenames[i] == "dmg" then
                         ct.frames[i]:AddMessage("-"..random(100000), 1, random(255) / 255, random(255) / 255)
                     elseif framenames[i] == "heal" then
-                        ct.frames[i]:AddMessage("+"..random(50000), .1, random(128, 255) / 255, .1)
+                        if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" and random(1, 2) % 2 == 0 then
+                            ct.frames[i]:AddMessage(UnitName("player") .. " +"..random(50000), .1, random(128, 255) / 255, .1)
+                        else
+                            ct.frames[i]:AddMessage("+"..random(50000), .1, random(128, 255) / 255, .1)
+                        end
                     elseif framenames[i] == "gen" then
                         ct.frames[i]:AddMessage(COMBAT_TEXT_LABEL, random(255) / 255, random(255) / 255, random(255) / 255)
                     elseif framenames[i] == "done" then
-                        local msg
+                        local msg = random(40000)
                         local icon
                         local color = { }
-                        msg = random(40000)
                         if ct.icons then
-                            _, _, icon = GetSpellInfo(msg)
+                            while not icon do
+                                local id = random(10000, 900000) 
+                                _, _, icon = GetSpellInfo(id)
+                            end
                         end
                         if icon then
                             msg = msg .. " \124T" .. icon .. ":" .. ct.iconsize .. ":" .. ct.iconsize .. ":0:0:64:64:5:59:5:59\124t"
@@ -1383,16 +1384,35 @@ local function StartTestMode()
                     --        ct.frames[i]:AddMessage("Test test test", 1, 1, 1)
                     --    end
                     elseif framenames[i] == "crit" then
-                    
-                        if random(3) % 3 == 0 then
+                        
+                        if random(3) % 1 == 0 then
+                            local icon
                             local crit = random(10000, 900000)
-                            ct.frames[i]:AddMessage(ct.critprefix .. crit .. ct.critpostfix)
+                            local color = { 1, 1, random(0, 1) }
+                            
+                            if ct.icons then
+                                while not icon do
+                                    local id = random(10000, 90000)
+                                    _, _, icon = GetSpellInfo(id)
+                                end
+                            end
+                            
+                            if icon then
+                                crit = ct.critprefix .. crit .. ct.critpostfix .. " \124T" .. icon .. ":" .. ct.criticonsize .. ":" .. ct.criticonsize .. ":0:0:64:64:5:59:5:59\124t"
+                                if ct.damagecolor then
+                                    color = ct.dmgcolor[ct.dmindex[random(#ct.dmindex)]]
+                                end
+                            elseif ct.damagecolor and not ct.icons then
+                                color = ct.dmgcolor[ct.dmindex[random(#ct.dmindex)]]
+                            end
+                            
+                            ct.frames[i]:AddMessage(crit, unpack(color))
                         end
                     
                     elseif framenames[i] == "pwr" then
                         if random(3) % 3 == 0 then
                             local etype = random(0, 9)
-                            ct.frames[i]:AddMessage("+"..random(100000).._G[energies[etype]], PowerBarColor[etype].r, PowerBarColor[etype].g, PowerBarColor[etype].b)
+                            ct.frames[i]:AddMessage("+"..random(500).." ".._G[energies[etype]], PowerBarColor[etype].r, PowerBarColor[etype].g, PowerBarColor[etype].b)
                         end
                     
                     elseif framenames[i] == "proc" then
