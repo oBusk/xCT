@@ -2,9 +2,10 @@
 ## Title: |cffFF0000x|rCT|cffDDFF55+|r
 ## Notes: X Combat Text Plus
 ## Author: Dandruff @ US-Whisperwind
-## Version: 3.0.0 beta r0012
+## Version: 3.0.0 beta r0014
 ## SavedVariables: xCTOptions
 ## RequiredDeps: Blizzard_CombatText
 xCT+_Init.lua
 xCT+_Config.lua
+xCT+_Spells.lua
 xCT+.lua

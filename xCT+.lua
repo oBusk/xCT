@@ -126,7 +126,8 @@ xCTEvents["OptionsLoaded"] = function()
     -- Show Version Number
     local fsVersion = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
     fsVersion:SetFont(defaultFont, 11)
-    fsVersion:SetText("|cff5555FFPowered By:|r \124cffFF0000x\124rCT\124cffFFFFFF+\124r (Version "..GetAddOnMetadata("xCT+", "Version")..")")
+    fsVersion:SetText("|cff5555FFPowered By:|r \124cffFF0000x\124rCT\124cffFFFFFF+\124r (Version "
+      .. GetAddOnMetadata("xCT+", "Version")..")")
     fsVersion:SetPoint("BOTTOMRIGHT", -8, 8)
     
     -- Move the Effects and Floating Options
@@ -149,6 +150,12 @@ xCTEvents["OptionsLoaded"] = function()
     SetCVar("PetMeleeDamage", 0)
     SetCVar("CombatDamage", 0)
     SetCVar("CombatHealing", 0)
+  end
+  
+  -- Start the Spell Merge Update Frame
+  if ActiveProfile.SpellMerge then
+    xCT.MergeFrame = CreateFrame"frame"
+    xCT.MergeFrame:SetScript("OnUpdate", xCT.MergeUpdate)
   end
   
   xCT.InvokeEvent("FramesLoaded")
@@ -275,6 +282,13 @@ xCT.Player = {
       CombatTextSetActiveUnit("player") end
     end,
 }
+
+local PlayerMT = {
+  __newindex = function(self, index)
+    xCT.InvokeEvent("PlayerChanged", self, index)
+  end,
+}
+setmetatable(xCT.Player, PlayerMT)
 local Player = xCT.Player
 
 -- ==============================================================
@@ -494,19 +508,27 @@ local xCTDamageEvents = {
     end,
   SPELL_PERIODIC_HEAL = function(_, _, ...)
     local spellId, _, _, amount, _, _, critical = select(12, ...)
-    local color, frame = C.Healing, F.Outgoing
-    if critical then
-      color = C.HealingCrit
-      frame = F.Critical end
-    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+    if xCT.IsSpellMergeable(spellId) then
+      xCT.AddSpellEntry(spellId, amount, C.Healing)
+    else
+      local color, frame = C.Healing, F.Outgoing
+      if critical then
+        color = C.HealingCrit
+        frame = F.Critical end
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+    end
   end,
   SPELL_HEAL = function(_, _, ...)
     local spellId, _, _, amount, _, _, critical = select(12, ...)
-    local color, frame = C.Healing, F.Outgoing
-    if critical then
-      color = C.HealingCrit
-      frame = F.Critical end
-    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+    if xCT.IsSpellMergeable(spellId) then
+      xCT.AddSpellEntry(spellId, amount, C.Healing)
+    else
+      local color, frame = C.Healing, F.Outgoing
+      if critical then
+        color = C.HealingCrit
+        frame = F.Critical end
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+    end
   end,
   RANGE_DAMAGE = function(_, _, _, ...)
     local spellId, _, _, amount, _, _, _, _, _, critical = select(12, ...)
@@ -519,19 +541,27 @@ local xCTDamageEvents = {
     local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
     local color, frame = C["1"], F.Outgoing
     if ActiveProfile.DamageColors then
-      color = C[tostring(spellSchool)] or C["1"] end
-    if critical then
-      frame = F.Critical end
-    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+        color = C[tostring(spellSchool)] or C["1"] end
+    if xCT.IsSpellMergeable(spellId) then
+      xCT.AddSpellEntry(spellId, amount, color)
+    else  
+      if critical then
+        frame = F.Critical end
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+    end
   end,
   SPELL_PERIODIC_DAMAGE = function(_, _, _, ...)
     local spellId, _, spellSchool, amount, _, _, _, _, _, critical = select(12, ...)
     local color, frame = C["1"], F.Outgoing
     if ActiveProfile.DamageColors then
       color = C[tostring(spellSchool)] or C["1"] end
-    if critical then
-      frame = F.Critical end
-    frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+    if xCT.IsSpellMergeable(spellId) then
+      xCT.AddSpellEntry(spellId, amount, color)
+    else  
+      if critical then
+        frame = F.Critical end
+      frame:AddMessage(X.DamageOut(amount, critical, X.Icon(spellId)), unpack(color))
+    end
   end,
   SWING_MISSED = function(_, pet, _, ...)
     local missType = select(12, ...)
@@ -573,6 +603,41 @@ local xCTDamageEvents = {
   end,
 }
 
+
+-- ==============================================================
+-- xCT+   Event Handlers
+-- ==============================================================
+function xCT.CombatText_AddMessage(msg, _, r, g, b)
+  F.General:AddMessage(message, r, g, b)
+end
+
+function xCT.CombatEventHandler(self, event, ...)
+  local handler = xCTCombatEvents[event]
+  if handler then
+    if type(handler) == "function" then
+      handler(...)
+      return 
+    end
+    local subevent = ...
+    if subevent and handler[subevent] then
+      handler[subevent]( select(2, ...) )
+    end
+  end
+end
+
+function xCT.DamageEventHandler(self, event, ...)
+  local timeStamp, eventType, hideCaster, scrGUID, scrName, scrFlags, scrFlags2, dstGUID = select(1, ...)
+  local player = (scrGUID == Player.GUID and dstGUID ~= Player.GUID)
+  local pet = (scrGUID == UnitGUID("pet") and ActiveProfile.PetDamage)
+  local vehicle = (scrFlags == Player.GoodSourceFlags)
+  --print("event", eventType,"player", player, "pet", pet, "vehicle", vehicle, "handler", handler, "args", select(9, ...))
+  local handler = xCTDamageEvents[eventType]
+  if handler and (player or pet or vehicle) then
+    handler(player, pet, vehicle, ...)
+  end
+end
+
+
 -- ==============================================================
 -- xCT+   Event Registration
 -- ==============================================================
@@ -590,46 +655,22 @@ do
   combat:RegisterEvent"UNIT_COMBO_POINTS"
   combat:RegisterEvent"RUNE_POWER_UPDATE"
   combat:RegisterEvent"CHAT_MSG_MONEY"
-  combat:SetScript("OnEvent",
-    function(_, event, ...)
-      local handler = xCTCombatEvents[event]
-      if handler then
-        if type(handler) == "function" then
-          return handler(...)
-        end
-        local subevent = ...
-        if subevent and handler[subevent] then
-          handler[subevent]( select(2, ...) )
-        end
-      end
-    end)
+  combat:SetScript("OnEvent", xCT.CombatEventHandler)
 
   -- Outgoing Event Handlers
   local damage = CreateFrame"FRAME"
   damage:RegisterEvent"COMBAT_LOG_EVENT_UNFILTERED"
-  damage:SetScript("OnEvent",
-    function(self, event, ...)
-      local timeStamp, eventType, hideCaster, scrGUID, scrName, scrFlags, scrFlags2, dstGUID = select(1, ...)
-      local player = (scrGUID == Player.GUID and dstGUID ~= Player.GUID)
-      local pet = (scrGUID == UnitGUID("pet") and ActiveProfile.PetDamage)
-      local vehicle = (scrFlags == Player.GoodSourceFlags)
-      --print("event", eventType,"player", player, "pet", pet, "vehicle", vehicle, "handler", handler, "args", select(9, ...))
-      local handler = xCTDamageEvents[eventType]
-      if handler and (player or pet or vehicle) then
-        handler(player, pet, vehicle, ...)
-      end
-    end)  
-  
+  damage:SetScript("OnEvent", xCT.DamageEventHandler)
+    
   -- Turn Off Blizzard's CT
   CombatText:UnregisterAllEvents()
   CombatText:SetScript("OnLoad", nil)
   CombatText:SetScript("OnEvent", nil)
   CombatText:SetScript("OnUpdate", nil)
-  Blizzard_CombatText_AddMessage = CombatText_AddMessage
-  local CombatText_AddMessage = function(msg, _, r, g, b)
-    F.General:AddMessage(message, r, g, b)
-  end
+  Blizzard_CombatText_AddMessage = xCT.CombatText_AddMessage
 end
+
+
 
 -- ==============================================================
 -- xCT+   Configuration Mode
@@ -806,6 +847,67 @@ local function recursiveSetter(currentTable, args, itter)
   end
   currentTable[args[i]] = currentTable[args[i][args[i+1]]]
   return true
+end
+
+-- ==============================================================
+-- xCT+   Spell Merger
+-- ==============================================================
+local squeue = { }
+
+function xCT.AddSpellEntry(spellid, amount, color)
+  if ammount == "Immune" and ActiveProfile.MergeImmunes then
+    local immuneid = "i" .. spellid
+    if not squeue[immuneid] then
+      squeue[immuneid] = {
+        t = GetTime(),      -- last update time stamp
+        n = 0,              -- count
+        c = color,          -- text color
+      }
+    end
+    local entry = squeue[immuneid]
+    entry.n = entry.n + 1
+  elseif type(amount) == "number" then
+    if not squeue[spellid] then
+      squeue[spellid] = {
+        t = GetTime(),      -- last update time stamp
+        a = 0,              -- total amount
+        n = 0,              -- count
+        c = color,          -- text color
+      }
+    end
+    local entry = squeue[spellid]
+    entry.a = entry.a + amount
+    entry.n = entry.n + 1
+  end
+end
+
+local timePast = 0
+function xCT.MergeUpdate(self, itime)
+  timePast = timePast + itime
+  if timePast > 1 then
+    timePast = 0
+    local currentTime = GetTime()
+    for index, entry in pairs(squeue) do
+      if entry.n > 0 and currentTime - entry.t > ActiveProfile.MergeTime then
+        local immune, spellid = string.match(index, "(%a?)(%d+)")
+      
+        -- display entry
+        if immune == "" then
+          -- DamageOut(amount, critical, icon)
+          F.Outgoing:AddMessage(X.DamageOut(entry.a, nil, X.Icon(spellid)) .. " x" .. entry.n, unpack(entry.c))
+        else
+          -- Immune
+          F.Outgoing:AddMessage( string.format("%s %s x%d", L["IMMUNE"], X.Icon(spellid), entry.n), unpack(entry.c) )
+        end
+        
+        -- reset entry
+        entry.t = currentTime
+        entry.a = 0
+        entry.n = 0
+      end
+    end    
+    
+  end
 end
 
 -- ==============================================================

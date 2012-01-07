@@ -23,8 +23,6 @@ engine[3] = {} -- Options (Global and Loaded Later, No need to unpack)
 
 local _, xCT, _ = unpack(engine)
 
-xCT_Plus = engine
-
 local function t_copy(copy, lookup)
   local temp = { }
   for k, v in pairs(copy) do
@@ -49,7 +47,7 @@ end
 function xCT.Print(...)
   print("\124cffFF0000x\124rCT\124cffDDFF55+\124r ", ...)
 end
-
+  
 function xCT.Debug(...)
   if XCT_DEBUG then
     xCT.Print(...)
@@ -61,11 +59,12 @@ end
 -- ==============================================================
 do 
   local Events = {
-    ["ChangedProfiles"] = { },
-    ["OptionsLoaded"] = { },
-    ["FramesLoaded"] = { },
-    ["FramesUnlocked"] = { },
-    ["FramesLocked"] = { },
+    ["ChangedProfiles"]  = { },
+    ["OptionsLoaded"]    = { },
+    ["FramesLoaded"]     = { },
+    ["FramesUnlocked"]   = { },
+    ["FramesLocked"]     = { },
+    ["PlayerChanged"]    = { },
   }
   
   local EventsMT = {                                  -- You cannot create new events
@@ -85,6 +84,7 @@ do
   }
   setmetatable(engine[1], EventsMT)                   -- Set the engine event's metatable
   function xCT.InvokeEvent(event, ...)
+    --print("Invoking Event ['"..event.."'] with args:", select(1, ...))
     for _, handle in pairs(Events[event]) do
       if type(handle) == "function" then
         handle(event, ...)
@@ -121,7 +121,8 @@ function xCT.ChangeProfile(NewProfileName)
   
   -- Backward Compatibility (Profile)
   for key, value in pairs(xCT.DEFAULT_PROFILE) do
-    if not ActiveProfile[key] then
+    if ActiveProfile[key] == nil then
+      print("FOUND NEW PROFILE KEY", key, "=", value)
       if type(value) == "table" then
         ActiveProfile[key] = t_copy(value)
       else
@@ -132,7 +133,8 @@ function xCT.ChangeProfile(NewProfileName)
   
   -- Backward Compatibility (Frames)
   for key, value in pairs(xCT.DEFAULT_PROFILE.Frames) do
-    if not ActiveProfile.Frames[key] then
+    if ActiveProfile.Frames[key] == nil then
+      print("FOUND NEW FRAME KEY", key, "=", value)
       if type(value) == "table" then
         ActiveProfile.Frames[key] = t_copy(value)
       else
@@ -143,7 +145,8 @@ function xCT.ChangeProfile(NewProfileName)
   
   -- Backward Compatibility (EnergyTypes)
   for key, value in pairs(xCT.DEFAULT_PROFILE.EnergyTypes) do
-    if not ActiveProfile.EnergyTypes[key] then
+    if ActiveProfile.EnergyTypes[key] == nil then
+      print("FOUND NEW ENERGY KEY", key, "=", value)
       if type(value) == "table" then
         ActiveProfile.EnergyTypes[key] = t_copy(value)
       else
@@ -151,6 +154,9 @@ function xCT.ChangeProfile(NewProfileName)
       end
     end
   end
+  
+  -- Save the Changes
+  --xCTOptions.Profiles[xCTOptions._activeProfile] = ActiveProfile
   
   xCT.ActiveProfile = ActiveProfile
   xCT.InvokeEvent("ChangedProfiles")

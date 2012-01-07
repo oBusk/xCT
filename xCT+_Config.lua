@@ -55,12 +55,19 @@ xCT.DEFAULT_PROFILE = {
   ["minmoney"] = 0,
   ["ShowHeadNumbers"] = false,
   
+  ["SpellMerge"]  = true,
+  ["MergeTime"] = 3,        -- Seconds for the length of time spells are merged
+  ["MergeImmunes"] = true,
+  ["NEW KEY Test"] = "This is a test",
+  ["NEW KEY Test 2"] = "This is a test",
+  
+  
   EnergyTypes = { -- Display Energy Types
     ["MANA"]          = true,
     ["RAGE"]          = true,
     ["FOCUS"]         = true,
     ["ENERGY"]        = true,
-    ["RUNIC_POWER"]  = true,
+    ["RUNIC_POWER"]   = true,
     ["SOUL_SHARDS"]   = true,
     ["HOLY_POWER"]    = true,
   },
