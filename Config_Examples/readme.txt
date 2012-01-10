@@ -23,11 +23,14 @@ HOW TO USE:
   - Copy to the parent folder (../xCT/)
   - Rename to "config.lua"
   - Reload your UI (/reloadui) or start World of Warcraft
+  - Once you set up your config, feel free to DELETE "Config_Examples"
 
 
 CONFIG DISCRIPTIONS:
 
   - Please submit configs that you would think people would like :)
+
+
 
 
 

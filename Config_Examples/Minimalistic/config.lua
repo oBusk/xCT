@@ -6,11 +6,6 @@ ns.config = {
         -- Use Blizzard Damage/Healing Output (Numbers Above Mob/Player's Head)
         ["blizzheadnumbers"]    = false,  -- (You need to restart WoW to see changes!)
         
-        -- DO NOT USE - BUGGY
-        -- Change Default Damage/Healing Font Above Mobs/Player Heads. (This has no effect if ["blizzheadnumbers"] = false)
-        -- ["damagestyle"]         = true,  -- (You need to restart WoW to see changes!)
-        -- DO NOT USE - BUGGY
-        
         -- "Everything else" font size (heals/interrupts and the like)
         ["fontsize"]        = 16,
         ["font"]            = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- "Fonts\\ARIALN.ttf" is default WoW font.
@@ -21,7 +16,7 @@ ns.config = {
     -- --------------------------------------------------------------------------------------
         -- Allow mouse scrolling on ALL frames (recommended "false")
         ["scrollable"]          = false,
-        ["maxlines"]            = 64,       -- Max lines to keep in scrollable mode. More lines = more Memory Nom nom nom
+        ["maxlines"]            = 12,       -- Max lines to keep in scrollable mode. More lines = more Memory Nom nom nom
         
         
         -- ==================================================================================
@@ -35,9 +30,10 @@ ns.config = {
             ["dotdamage"]       = true,     -- show DoT damage
             ["showhots"]        = true,     -- show periodic healing effects in xCT healing frame.
             ["showimmunes"]     = true,     -- show "IMMUNE"s when you or your target cannot take damage or healing
+            ["hideautoattack"]  = false,    -- Hides the auto attack icon from outgoing frame
             
             -- Damage/Healing Icon Sizes and Appearence
-            ["icons"]           = true,     -- show outgoing damage icons
+            ["icons"]           = false,    -- show outgoing damage icons
             ["iconsize"]        = 16,       -- outgoing damage icons' size
             ["damagefontsize"]  = 16,
             ["fontstyle"]       = "OUTLINE",                            -- valid options are "OUTLINE", "MONOCHROME", "THICKOUTLINE", "OUTLINE,MONOCHROME", "THICKOUTLINE,MONOCHROME"
@@ -52,7 +48,7 @@ ns.config = {
         -- ==================================================================================
         -- Critical Damage/Healing Outging Frame (frame is called "xCTcrit")
         -- ==================================================================================
-        ["critwindow"]          = true,
+        ["critwindow"]          = false,
         
             -- Critical Icon Sizes
             ["criticons"]       = true,     -- show crit icons
@@ -72,11 +68,11 @@ ns.config = {
         -- ==================================================================================
         -- Loot Items/Money Gains (frame is called "xCTloot")
         -- ==================================================================================
-        ["lootwindow"]          = true,     -- Enable the frame "xCTloot" (use instead of "xCTgen" for Loot/Money)
+        ["lootwindow"]          = false,     -- Enable the frame "xCTloot" (use instead of "xCTgen" for Loot/Money)
         
             -- What to show in "xCTloot"
-            ["lootitems"]       = true,
-            ["lootmoney"]       = true,
+            ["lootitems"]       = false,
+            ["lootmoney"]       = false,
             
             -- Item Options
             ["loothideicons"]   = false,    -- hide item icons when looted
@@ -99,7 +95,7 @@ ns.config = {
         -- ==================================================================================
         -- NOTE: This only has the ability to show only procs that blizzards sends to it
         --       (mostly spells that "light up" and some others too).
-        ["procwindow"]          = true,     -- Enable the frame to show Procs
+        ["procwindow"]          = false,     -- Enable the frame to show Procs
         
             -- Proc Frame Custom Font Options
             ["procfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the proc frame
@@ -115,21 +111,21 @@ ns.config = {
             ["damagecolor"]         = true,     -- display colored damage numbers by type
         
             -- Power Gains Incoming Frame (frame is called "xCTpwr")
-            ["powergainswindow"]    = true,
+            ["powergainswindow"]    = false,
         -- __________________________________________________________________________________
         
     -- --------------------------------------------------------------------------------------
     -- xCT+ Class Specific and Misc. Options
     -- --------------------------------------------------------------------------------------
         -- Priest
-        ["stopvespam"]       = false,       -- Hides Healing Spam for Priests in Shadowform.
+        ["stopvespam"]       = true,         -- Hides Healing Spam for Priests in Shadowform.
         
         -- Death Knight
-        ["dkrunes"]          = true,        -- Show Death Knight Rune Recharge
+        ["dkrunes"]          = false,        -- Show Death Knight Rune Recharge
         
         -- Misc.
             -- Spell Spam Spam Spam Spam Spam Spam Spam Spam
-            ["mergeaoespam"]     = true,    -- Merges multiple AoE spam into single message, can be useful for dots too.
+            ["mergeaoespam"]     = false,   -- Merges multiple AoE spam into single message, can be useful for dots too.
             ["mergeaoespamtime"] = 3,       -- Time in seconds AoE spell will be merged into single message.  Minimum is 1.
         
             -- Helpful Alerts (Shown in the Gerenal Gains/Drops Frame)
@@ -138,7 +134,7 @@ ns.config = {
             ["interrupt"]        = true,    -- Alerts with the name of the Spell Interupted (Req. ["damageout"] = true)
         
             -- Alignment Help (Shown when configuring frames)
-            ["showgrid"]        = true,     -- shows a grid when moving xCT windows around
+            ["showgrid"]        = false,    -- shows a grid when moving xCT windows around
             
             -- Show Procs
             ["filterprocs"]     = true,     -- Enable to hide procs from ALL frames (will show in xCTproc or xCTgen otherwise)
@@ -174,4 +170,3 @@ ns.config = {
             ["crittimevisible"]     = 3,
             ["timevisible"]         = 3,
 }
-

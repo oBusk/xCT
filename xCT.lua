@@ -1660,7 +1660,7 @@ if(ct.damageout)then
                         frame = xCTcrit or frame
                         iconsize = ct.criticonsize
                     end
-                    if ct.icons then
+                    if ct.icons and not ct.hideautoattack then
                         local spellNameOrID
                         if sourceGUID == UnitGUID("pet") or sourceFlags == gflags then
                             spellNameOrID = PET_ATTACK_TEXTURE
@@ -1683,7 +1683,9 @@ if(ct.damageout)then
                         iconsize = ct.criticonsize
                     end
                     if ct.icons then
-                        msg = msg..GetSpellTextureFormatted(spellId, iconsize)
+                        if not (spellId == 75 and ct.hideautoattack) then
+                          msg = msg..GetSpellTextureFormatted(spellId, iconsize)
+                        end
                     end
                     frame:AddMessage(msg)
                 end
@@ -1737,7 +1739,7 @@ if(ct.damageout)then
                   if string.lower(missType) == string.lower(IMMUNE) then return end
                 end
                 
-                if ct.icons then
+                if ct.icons and not ct.hideautoattack then
                     local spellNameOrID
                     if sourceGUID == UnitGUID("pet") or sourceFlags == gflags then
                         spellNameOrID = PET_ATTACK_TEXTURE

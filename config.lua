@@ -35,6 +35,7 @@ ns.config = {
             ["dotdamage"]       = true,     -- show DoT damage
             ["showhots"]        = true,     -- show periodic healing effects in xCT healing frame.
             ["showimmunes"]     = true,     -- show "IMMUNE"s when you or your target cannot take damage or healing
+            ["hideautoattack"]  = false,    -- Hides the auto attack icon from outgoing frame
             
             -- Damage/Healing Icon Sizes and Appearence
             ["icons"]           = true,     -- show outgoing damage icons

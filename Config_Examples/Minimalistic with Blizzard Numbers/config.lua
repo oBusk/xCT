@@ -4,7 +4,12 @@ ns.config = {
     -- Blizzard Damage Options.
     -- --------------------------------------------------------------------------------------   
         -- Use Blizzard Damage/Healing Output (Numbers Above Mob/Player's Head)
-        ["blizzheadnumbers"]    = false,  -- (You need to restart WoW to see changes!)
+        ["blizzheadnumbers"]    = true,  -- (You need to restart WoW to see changes!)
+        
+        -- DO NOT USE - BUGGY
+        -- Change Default Damage/Healing Font Above Mobs/Player Heads. (This has no effect if ["blizzheadnumbers"] = false)
+        -- ["damagestyle"]         = true,  -- (You need to restart WoW to see changes!)
+        -- DO NOT USE - BUGGY
         
         -- "Everything else" font size (heals/interrupts and the like)
         ["fontsize"]        = 16,
@@ -22,14 +27,15 @@ ns.config = {
         -- ==================================================================================
         -- Healing/Damage Outing Frame (frame is called "xCTdone")
         -- ==================================================================================
-        ["damageout"]           = true,     -- show outgoing damage
-        ["healingout"]          = true,     -- show outgoing heals
+        ["damageout"]           = false,     -- show outgoing damage
+        ["healingout"]          = false,     -- show outgoing heals
         
             -- Filter Units/Periodic Spells
             ["petdamage"]       = true,     -- show your pet damage.
             ["dotdamage"]       = true,     -- show DoT damage
             ["showhots"]        = true,     -- show periodic healing effects in xCT healing frame.
             ["showimmunes"]     = true,     -- show "IMMUNE"s when you or your target cannot take damage or healing
+            ["hideautoattack"]  = false,    -- Hides the auto attack icon from outgoing frame
             
             -- Damage/Healing Icon Sizes and Appearence
             ["icons"]           = false,    -- show outgoing damage icons
