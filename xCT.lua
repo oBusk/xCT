@@ -123,7 +123,9 @@ elseif ct.myclass == "PALADIN" then
         ct.aoespam[31935] = true  -- Avenger's Shield
         ct.aoespam[94289] = true  -- Protector of the Innocent
         ct.aoespam[53652] = true  -- Beacon of Light
-        ct.aoespam[85222] = true  -- Light of Dawn        
+        ct.aoespam[85222] = true  -- Light of Dawn
+        ct.aoespam[86452] = true  -- Holy radiance (HoT) (Thanks Nidra)
+        ct.aoespam[82327] = true  -- Holy Radiance       (Thanks Nidra)
     end
     if ct.yelltaunt then
         -- Hand of Reckoning
@@ -175,7 +177,8 @@ elseif ct.myclass == "SHAMAN" then
         ct.aoespam[77478] = true  -- Earhquake
         ct.aoespam[51490] = true  -- Thunderstorm
         ct.aoespam[8187]  = true  -- Magma Totem
-        ct.aoespam[8050] = true		-- Flame Shock (Thanks Shestak)
+        ct.aoespam[8050]  = true	-- Flame Shock (Thanks Shestak)
+        ct.aoespam[8232]  = true  -- Windfury (Thanks NitZo)      
     end
     if ct.yelltaunt then
         ct.tauntid[73684] = { -- Unleash Earth
@@ -200,14 +203,14 @@ elseif ct.myclass == "MAGE" then
         ct.aoespam[42208] = true  -- Blizzard
         ct.aoespam[122]   = true  -- Frost Nova
         ct.aoespam[1449]  = true  -- Arcane Explosion
-        ct.aoespam[92315] = true  -- Pyroblast (Thanks Shestak)
-        ct.aoespam[83853] = true  -- Combustion (Thanks Shestak)
-        ct.aoespam[11113] = true  -- Blast Wave (Thanks Shestak)
+        ct.aoespam[92315] = true  -- Pyroblast        (Thanks Shestak)
+        ct.aoespam[83853] = true  -- Combustion       (Thanks Shestak)
+        ct.aoespam[11113] = true  -- Blast Wave       (Thanks Shestak)
         ct.aoespam[88148] = true  -- Flamestrike void (Thanks Shestak)
-        ct.aoespam[83619] = true  -- Fire Power (Thanks Shestak)
-        ct.aoespam[120]   = true  -- Cone of Cold (Thanks Shestak)
+        ct.aoespam[83619] = true  -- Fire Power       (Thanks Shestak)
+        ct.aoespam[120]   = true  -- Cone of Cold     (Thanks Shestak)
         ct.aoespam[1449]  = true  -- Arcane Explosion (Thanks Shestak)
-        ct.aoespam[92315] = true  -- Pyroblast (Thanks Shestak)
+        ct.aoespam[92315] = true  -- Pyroblast        (Thanks Shestak)
     end
 elseif ct.myclass == "WARRIOR" then
     if ct.mergeaoespam then
@@ -298,7 +301,12 @@ elseif ct.myclass == "ROGUE" then
     end
 end
 
-
+-- add healer specific ids
+if ct.myclass == "DRUID" or ct.myclass == "PRIEST" or ct.myclass == "SHAMAN" or ct.myclass == "PALADIN" then
+  ct.aoespam[109847] = true   -- Maw of the Dragonlord (LFR)    (Thanks Nidra)
+  ct.aoespam[107835] = true   -- Maw of the Dragonlord          (Thanks Nidra)
+  ct.aoespam[109849] = true   -- Maw of the Dragonlord (Heroic) (Thanks Nidra)
+end
 
 -- define frames to create
 local numf = 3
