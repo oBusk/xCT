@@ -178,7 +178,9 @@ elseif ct.myclass == "SHAMAN" then
         ct.aoespam[51490] = true  -- Thunderstorm
         ct.aoespam[8187]  = true  -- Magma Totem
         ct.aoespam[8050]  = true	-- Flame Shock (Thanks Shestak)
-        ct.aoespam[8232]  = true  -- Windfury (Thanks NitZo)      
+        ct.aoespam[25504] = true  -- Windfury (Thanks NitZo)
+        ct.aoespam[51945] = true  -- Earthliving   (Thanks gnangnan)
+        ct.aoespam[61295] = true  -- Riptide (HoT) (Thanks gnangnan)
     end
     if ct.yelltaunt then
         ct.tauntid[73684] = { -- Unleash Earth
