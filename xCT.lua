@@ -56,14 +56,6 @@ if ct.myclass == "WARLOCK" then
         ct.aoespam[89753] = true  -- Felstorm (Felguard)
         ct.aoespam[20153] = true  -- Immolation (Infrenal)
     end
-    if ct.yelltaunt then
-        -- Challenging Howl (aoe)
-        ct.tauntid[59671] = {
-            enabled = false,
-            phrase = "Temporarily Taunted: All enemies with #spell!",
-            link = GetSpellLink(59671),
-        } 
-    end
     if ct.healingout then
         ct.healfilter[28176] = true  -- Fel Armor
         ct.healfilter[96379] = true	 -- Fel Armor (Thanks Shestak)
@@ -75,15 +67,7 @@ if ct.myclass == "WARLOCK" then
     end
 elseif ct.myclass == "DRUID" then
     if ct.mergeaoespam then
-     -- Healer spells
-        ct.aoespam[774]   = true  -- Rejuvenation (Normal)
-        ct.aoespam[64801] = true  -- Rejuvenation (First tick)
-        ct.aoespam[48438] = true  -- Wild Growth
-        ct.aoespam[8936]  = true  -- Regrowth
-        ct.aoespam[33763] = true  -- Lifebloom
-        ct.aoespam[44203] = true  -- Tranquility
-        ct.aoespam[81269] = true  -- Efflorescence
-     -- Damager spells
+    -- Damager spells
         ct.aoespam[8921]  = true  -- Moonfire
         ct.aoespam[93402] = true  -- Sunfire
         ct.aoespam[5570]  = true  -- Insect Swarm
@@ -97,17 +81,15 @@ elseif ct.myclass == "DRUID" then
         ct.aoespam[33745] = true  -- Lacerate
         ct.aoespam[1079]  = true  -- Rip
     end
-    if ct.yelltaunt then
-        ct.tauntid[6795] = { -- Growl
-            enabled = true,
-            phrase = "Taunted: #target #offoftargettarget with #spell!",
-            link = GetSpellLink(6795),
-        }
-        ct.tauntid[5209] = { -- Challenging Roar (aoe)
-            enabled = false,
-            phrase = "Taunted: All enemies with #spell!",
-            link = GetSpellLink(5209),
-        }
+    if ct.healingout then
+        -- Healer spells
+        ct.aoespam[774]   = true  -- Rejuvenation (Normal)
+        ct.aoespam[64801] = true  -- Rejuvenation (First tick)
+        ct.aoespam[48438] = true  -- Wild Growth
+        ct.aoespam[8936]  = true  -- Regrowth
+        ct.aoespam[33763] = true  -- Lifebloom
+        ct.aoespam[44203] = true  -- Tranquility
+        ct.aoespam[81269] = true  -- Efflorescence
     end
 elseif ct.myclass == "PALADIN" then
     if ct.mergeaoespam then
@@ -118,43 +100,19 @@ elseif ct.myclass == "PALADIN" then
         ct.aoespam[20424] = true  -- Seals of Command
         ct.aoespam[42463] = true  -- Seal of Truth
         ct.aoespam[101423] = true	-- Seal of Righteousness (Thanks Shestak)
-        ct.aoespam[20167] = true  -- Seal of Insight (Heal Effect)
         ct.aoespam[88263] = true  -- Hammer of the Righteous
         ct.aoespam[31935] = true  -- Avenger's Shield
         ct.aoespam[94289] = true  -- Protector of the Innocent
-        ct.aoespam[53652] = true  -- Beacon of Light
-        ct.aoespam[85222] = true  -- Light of Dawn
-        ct.aoespam[86452] = true  -- Holy radiance (HoT) (Thanks Nidra)
-        ct.aoespam[82327] = true  -- Holy Radiance       (Thanks Nidra)
     end
-    if ct.yelltaunt then
-        -- Hand of Reckoning
-        ct.tauntid[62124] = {
-            enabled = true,
-            phrase = "Taunted: #target #offoftargettarget with #spell!",
-            link = GetSpellLink(62124),
-        }
-        -- Righteous Defense
-        ct.tauntid[31789] = {
-            enabled = false,
-            phrase = "Taunting 3 enemies with #spell!",
-            link = GetSpellLink(31789),
-        }
+    if ct.healingout then
+      ct.aoespam[53652] = true  -- Beacon of Light
+      ct.aoespam[85222] = true  -- Light of Dawn
+      ct.aoespam[86452] = true  -- Holy radiance (HoT) (Thanks Nidra)
+      ct.aoespam[82327] = true  -- Holy Radiance       (Thanks Nidra)
+      ct.aoespam[20167] = true  -- Seal of Insight (Heal Effect)
     end
 elseif ct.myclass == "PRIEST" then
     if ct.mergeaoespam then
-     -- Healer spells
-        ct.aoespam[47750] = true  -- Penance (Heal Effect)
-        ct.aoespam[139]   = true  -- Renew
-        ct.aoespam[596]   = true  -- Prayer of Healing
-        ct.aoespam[56161] = true  -- Glyph of Prayer of Healing
-        ct.aoespam[64844] = true  -- Divine Hymn
-        ct.aoespam[32546] = true  -- Binding Heal
-        ct.aoespam[77489] = true  -- Echo of Light
-        ct.aoespam[34861] = true  -- Circle of Healing
-        ct.aoespam[23455] = true  -- Holy Nova (Healing Effect)
-        ct.aoespam[33110] = true  -- Prayer of Mending
-        ct.aoespam[63544] = true  -- Divine Touch
      -- Damager spells
         ct.aoespam[47666] = true  -- Penance (Damage Effect)
         ct.aoespam[15237] = true  -- Holy Nova (Damage Effect)
@@ -167,6 +125,18 @@ elseif ct.myclass == "PRIEST" then
         ct.aoespam[87532] = true  -- Shadowy Apparition
     end
     if ct.healingout then
+        -- Healer spells
+        ct.aoespam[47750]    = true  -- Penance (Heal Effect)
+        ct.aoespam[139]      = true  -- Renew
+        ct.aoespam[596]      = true  -- Prayer of Healing
+        ct.aoespam[56161]    = true  -- Glyph of Prayer of Healing
+        ct.aoespam[64844]    = true  -- Divine Hymn
+        ct.aoespam[32546]    = true  -- Binding Heal
+        ct.aoespam[77489]    = true  -- Echo of Light
+        ct.aoespam[34861]    = true  -- Circle of Healing
+        ct.aoespam[23455]    = true  -- Holy Nova (Healing Effect)
+        ct.aoespam[33110]    = true  -- Prayer of Mending
+        ct.aoespam[63544]    = true  -- Divine Touch
         ct.healfilter[2944]  = true  -- Devouring Plague (Healing)
         ct.healfilter[15290] = true  -- Vampiric Embrace
     end
@@ -179,20 +149,13 @@ elseif ct.myclass == "SHAMAN" then
         ct.aoespam[8187]  = true  -- Magma Totem
         ct.aoespam[8050]  = true	-- Flame Shock (Thanks Shestak)
         ct.aoespam[25504] = true  -- Windfury (Thanks NitZo)
-        ct.aoespam[51945] = true  -- Earthliving   (Thanks gnangnan)
-        ct.aoespam[61295] = true  -- Riptide (HoT) (Thanks gnangnan)
-    end
-    if ct.yelltaunt then
-        ct.tauntid[73684] = { -- Unleash Earth
-            enabled = true,
-            phrase = "Temporarily Taunted: #target #offoftargettarget with #spell!",
-            link = GetSpellLink(73684),
-        }
     end
     if ct.healingout then
         ct.aoespam[73921] = true  -- Healing Rain
         ct.aoespam[1064]  = true  -- Chain Heal
         ct.aoespam[52042] = true  -- Healing Stream Totem
+        ct.aoespam[51945] = true  -- Earthliving             (Thanks gnangnan)
+        ct.aoespam[61295] = true  -- Riptide (Instant & HoT) (Thanks gnangnan)
     end
 elseif ct.myclass == "MAGE" then
     if ct.mergeaoespam then
@@ -223,18 +186,6 @@ elseif ct.myclass == "WARRIOR" then
         ct.aoespam[94009] = true  -- Rend
         ct.aoespam[12721] = true  -- Deep Wounds
     end
-    if ct.yelltaunt then
-        ct.tauntid[355] = { -- Taunt
-            enabled = true,
-            phrase = "Taunted: #target from #ofofftargettarget with #spell!",
-            link = GetSpellLink(355),
-        }
-        ct.tauntid[1161] = { -- Challenging Shout
-            enabled = true,
-            phrase = "Taunting enemies with #spell!",
-            link = GetSpellLink(1161),
-        }
-    end
     if ct.healingout then
         ct.healfilter[23880] = true  -- Bloodthirst
         ct.healfilter[55694] = true  -- Enraged Regeneration
@@ -247,19 +198,6 @@ elseif ct.myclass == "HUNTER" then
         ct.aoespam[1978]  = true  -- Serpent Sting
         ct.aoespam[13812] = true  -- Explosive Trap  
     end
-    
-    --[[
-        msg = msg:gsub("#playerthreat", cached.playerThreat)
-        msg = msg:gsub("#targetthreat", cached.targetThreat)
-    	msg = msg:gsub("#deltathreat", cached.targetThreat - cached.playerThreat)
-    ]]
-    if ct.yelltaunt then
-        ct.tauntid[20736] = { -- Distracting Shot
-            enabled = true,
-            phrase = "Temporarily Taunted: #target #offoftargettarget with #spell! (Player: #playerthreat / Target: #targetthreat / Diff: #deltathreat)",
-            link = GetSpellLink(20736),
-        }
-    end
 elseif ct.myclass == "DEATHKNIGHT" then
     if ct.mergeaoespam then
         ct.aoespam[55095] = true  -- Frost Fever
@@ -270,30 +208,18 @@ elseif ct.myclass == "DEATHKNIGHT" then
         ct.aoespam[52212] = true  -- Death and Decay
         ct.aoespam[55050] = true  -- Heart Strike (Thanks Shestak)
         -- Merging mh/oh strikes(by Bozo) (Thanks Shestak)
-        ct.aoespam[49020] = true  -- Obliterate MH
-        ct.aoespam[66198] = 49020 -- Obliterate OH
-        ct.aoespam[49998] = true  -- Death Strike MH
-        ct.aoespam[66188] = 49998 -- Death Strike OH
+        ct.aoespam[49020] = true  --    Obliterate MH
+        ct.aoespam[66198] = 49020 --    Obliterate OH
+        ct.aoespam[49998] = true  --  Death Strike MH
+        ct.aoespam[66188] = 49998 --  Death Strike OH
         ct.aoespam[45462] = true  -- Plague Strike MH
         ct.aoespam[66216] = 45462 -- Plague Strike OH
-        ct.aoespam[49143] = true  -- Frost Strike MH
-        ct.aoespam[66196] = 49143 -- Frost Strike OH
-        ct.aoespam[56815] = true  -- Rune Strike MH
-        ct.aoespam[66217] = 56815 -- Rune Strike OH
-        ct.aoespam[45902] = true  -- Blood Strike MH
-        ct.aoespam[66215] = 45902 -- Blood Strike OH
-    end
-    if ct.yelltaunt then
-        ct.tauntid[49576] = { -- Death Grip
-            enabled = false,
-            phrase = "Taunted: #target #offoftargettarget with #spell!",
-            link = GetSpellLink(49576),
-        }
-        ct.tauntid[56222] = { -- Dark Command
-            enabled = true,
-            phrase = "Taunted: #target #offoftargettarget with #spell!",
-            link = GetSpellLink(56222),
-        }
+        ct.aoespam[49143] = true  --  Frost Strike MH
+        ct.aoespam[66196] = 49143 --  Frost Strike OH
+        ct.aoespam[56815] = true  --   Rune Strike MH
+        ct.aoespam[66217] = 56815 --   Rune Strike OH
+        ct.aoespam[45902] = true  --  Blood Strike MH
+        ct.aoespam[66215] = 45902 --  Blood Strike OH
     end
 elseif ct.myclass == "ROGUE" then
     if ct.mergeaoespam then
