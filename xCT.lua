@@ -1721,7 +1721,7 @@ if(ct.damageout)then
                 end
                 xCTgen:AddMessage(ACTION_SPELL_INTERRUPT..": "..effect..msg, unpack(color))
             
-            elseif eventType == "SPELL_STOLEN" and C.combattext.dispel then
+            elseif eventType == "SPELL_STOLEN" and ct.dispel then
                 local target, _, _, id, effect = select(12, ...)
                 local color = { .9, 0, .9 }
                 if ct.icons then
