@@ -18,6 +18,23 @@ local ct = ns.config
 ct.myname = UnitName("player")
 ct.myclass = select(2, UnitClass("player"))
 
+
+-- =================================================
+-- NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW
+-- =================================================
+if ct.filteraura then
+    -- User Added Spell Auras to filter (can be class specific)
+    ct.auranames = { }
+    
+    
+    -- All classes
+    
+    -- Tests
+    --ct.auranames["Sick 'Em!"]     = true
+    --ct.auranames["Chronohunter"]  = true
+end
+-- =================================================
+
 -- outgoing healing filter, hide this spammy shit, plx
 if ct.healingout then
     ct.healfilter = { }
@@ -809,16 +826,32 @@ local function OnEvent(self, event, subevent, ...)
                 end
                 
             elseif subevent == "SPELL_AURA_START" and COMBAT_TEXT_SHOW_AURAS == "1" then
+                if ct.debug_aura then print("AURA_S", arg2) end
+                if not ct.showhelpfulaura then return end
+                
+                if ct.filteraura then
+                  if ct.auranames[arg2] and ct.aura_blacklist then
+                    return
+                  elseif not ct.aura_blacklist then
+                    return
+                  end
+                end
+                
                 xCTgen:AddMessage("+"..arg2, 1, .5, .5)
                 
             elseif subevent == "SPELL_AURA_END" and COMBAT_TEXT_SHOW_AURAS == "1" then
+                if ct.debug_aura then print("AURA_E", arg2) end
+                if not ct.showhelpfulaura then return end
+                
+                if ct.filteraura then
+                  if ct.auranames[arg2] and ct.aura_blacklist then
+                    return
+                  elseif not ct.aura_blacklist then
+                    return
+                  end
+                end
+                
                 xCTgen:AddMessage("-"..arg2, .5, .5, .5)
-                
-            elseif subevent == "SPELL_AURA_START_HARMFUL" and COMBAT_TEXT_SHOW_AURAS == "1" then
-                xCTgen:AddMessage("+"..arg2, 1, .1, .1)
-                
-            elseif subevent == "SPELL_AURA_END_HARMFUL" and COMBAT_TEXT_SHOW_AURAS == "1" then
-                xCTgen:AddMessage("-"..arg2, .1, 1, .1)
 
             elseif subevent == "HONOR_GAINED" and COMBAT_TEXT_SHOW_HONOR_GAINED == "1" then
                 arg2 = tonumber(arg2)
