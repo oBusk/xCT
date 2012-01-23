@@ -160,19 +160,13 @@ ns.config = {
         
     -- ** >> !! experimental !! << **
     -- (not fully implemented or supported)
-        -- announce and yell events 
-        ["yelltaunt"]       = false,  -- yell when you taunt a target
-        ["precachetaunt"]   = false,  -- yell extra info when taunting a target
-        ["yellinterrupt"]   = false,  -- yell when you interrupt a target
-        ["yelldispell"]     = false,  -- yell when you dispell a target
+
+        -- filter auras
+        ["showharmfulaura"] = true,   -- Show Harmful Auras (Gains and Losses)
+        ["showhelpfulaura"] = true,   -- Show Helpful Auras (Gains and Losses)
         
-        ["mergeimmunespam"] = false,  -- merge multiple immune spam (uses "mergeaoespamtime" timer)
- 
-        ["texticons"] = false,
-        
-        -- (DISABLED: Currently does not work)
-            ["loottimevisible"]     = 6,
-            ["crittimevisible"]     = 3,
-            ["timevisible"]         = 3,
+        ["filteraura"]      = true,   -- allows you to filter out unwanted aura gains/losses
+        ["aura_blacklist"]  = true,   -- aura list is a blacklist (opposed to a whitelist)
+        ["debug_aura"]      = false,  -- Shows your Aura's names in the chatbox.  Useful when adding to the filter yourself.
 }
 
