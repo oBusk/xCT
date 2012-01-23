@@ -161,6 +161,12 @@ ns.config = {
     -- ** >> !! experimental !! << **
     -- (not fully implemented or supported)
 
+        -- (DISABLED: Currently does not work)
+        ["loottimevisible"]     = 6,
+        ["crittimevisible"]     = 3,
+        ["timevisible"]         = 3,
+
+
         -- filter auras
         ["showharmfulaura"] = true,   -- Show Harmful Auras (Gains and Losses)
         ["showhelpfulaura"] = true,   -- Show Helpful Auras (Gains and Losses)
