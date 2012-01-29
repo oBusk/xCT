@@ -171,8 +171,19 @@ ns.config = {
         ["showharmfulaura"] = true,   -- Show Harmful Auras (Gains and Losses)
         ["showhelpfulaura"] = true,   -- Show Helpful Auras (Gains and Losses)
         
+        ["showgains"]       = true,
+        ["showfades"]       = true,
+        
         ["filteraura"]      = true,   -- allows you to filter out unwanted aura gains/losses
         ["aura_blacklist"]  = true,   -- aura list is a blacklist (opposed to a whitelist)
         ["debug_aura"]      = false,  -- Shows your Aura's names in the chatbox.  Useful when adding to the filter yourself.
+        
+        -- filter criticals
+        ["filtercrits"]     = true,   -- Allows you to turn on a list that will filter out buffs
+        ["crits_blacklist"] = false,  -- critical filter list is a blacklist (opposed to a whitelist)
+        
+        ["showswingcrits"]  = true,   -- Allows you to show/hide (true / false) swing criticals
+        
+        
 }
 

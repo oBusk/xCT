@@ -19,21 +19,25 @@ ct.myname = UnitName("player")
 ct.myclass = select(2, UnitClass("player"))
 
 
--- =================================================
--- NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW
--- =================================================
+-- Filter Auras
 if ct.filteraura then
     -- User Added Spell Auras to filter (can be class specific)
     ct.auranames = { }
     
-    
     -- All classes
-    
     -- Tests
     --ct.auranames["Sick 'Em!"]     = true
     --ct.auranames["Chronohunter"]  = true
 end
--- =================================================
+
+-- Filter Criticals
+if ct.filtercrits then
+  ct.critfilter = { }
+  
+  -- Add spells for all classes here (example below)
+  --ct.critfilter[# Spell ID] = true
+end
+
 
 -- outgoing healing filter, hide this spammy shit, plx
 if ct.healingout then
@@ -82,6 +86,10 @@ if ct.myclass == "WARLOCK" then
         ct.healfilter[79268] = true  -- Soul Harvest
         ct.healfilter[30294] = true  -- Soul Leech
     end
+    if ct.filtercrits then
+      -- Add spells for all warlocks here (example below)
+      --ct.critfilter[# Spell ID] = true
+    end
 elseif ct.myclass == "DRUID" then
     if ct.mergeaoespam then
     -- Damager spells
@@ -108,6 +116,10 @@ elseif ct.myclass == "DRUID" then
         ct.aoespam[44203] = true  -- Tranquility
         ct.aoespam[81269] = true  -- Efflorescence
     end
+    if ct.filtercrits then
+      -- Add spells for all druids here (example below)
+      --ct.critfilter[# Spell ID] = true
+    end
 elseif ct.myclass == "PALADIN" then
     if ct.mergeaoespam then
         ct.aoespam[81297] = true  -- Consecration
@@ -127,6 +139,10 @@ elseif ct.myclass == "PALADIN" then
       ct.aoespam[86452] = true  -- Holy radiance (HoT) (Thanks Nidra)
       ct.aoespam[82327] = true  -- Holy Radiance       (Thanks Nidra)
       ct.aoespam[20167] = true  -- Seal of Insight (Heal Effect)
+    end
+    if ct.filtercrits then
+      -- Add spells for all paladins here (example below)
+      --ct.critfilter[# Spell ID] = true
     end
 elseif ct.myclass == "PRIEST" then
     if ct.mergeaoespam then
@@ -157,6 +173,10 @@ elseif ct.myclass == "PRIEST" then
         ct.healfilter[2944]  = true  -- Devouring Plague (Healing)
         ct.healfilter[15290] = true  -- Vampiric Embrace
     end
+    if ct.filtercrits then
+      -- Add spells for all priests here (example below)
+      --ct.critfilter[# Spell ID] = true
+    end
 elseif ct.myclass == "SHAMAN" then
     if ct.mergeaoespam then
         ct.aoespam[421]   = true  -- Chain Lightning
@@ -173,6 +193,10 @@ elseif ct.myclass == "SHAMAN" then
         ct.aoespam[52042] = true  -- Healing Stream Totem
         ct.aoespam[51945] = true  -- Earthliving             (Thanks gnangnan)
         ct.aoespam[61295] = true  -- Riptide (Instant & HoT) (Thanks gnangnan)
+    end
+    if ct.filtercrits then
+      -- Add spells for all shamans here (example below)
+      --ct.critfilter[# Spell ID] = true
     end
 elseif ct.myclass == "MAGE" then
     if ct.mergeaoespam then
@@ -194,6 +218,10 @@ elseif ct.myclass == "MAGE" then
         ct.aoespam[1449]  = true  -- Arcane Explosion (Thanks Shestak)
         ct.aoespam[92315] = true  -- Pyroblast        (Thanks Shestak)
     end
+    if ct.filtercrits then
+      -- Add spells for all mages here (example below)
+      --ct.critfilter[# Spell ID] = true
+    end
 elseif ct.myclass == "WARRIOR" then
     if ct.mergeaoespam then
         ct.aoespam[845]   = true  -- Cleave
@@ -207,6 +235,10 @@ elseif ct.myclass == "WARRIOR" then
         ct.healfilter[23880] = true  -- Bloodthirst
         ct.healfilter[55694] = true  -- Enraged Regeneration
     end
+    if ct.filtercrits then
+      -- Add spells for all warriors here (example below)
+      --ct.critfilter[# Spell ID] = true
+    end
 elseif ct.myclass == "HUNTER" then
     if ct.mergeaoespam then
         ct.aoespam[2643]  = true  -- Multi-Shot
@@ -214,6 +246,10 @@ elseif ct.myclass == "HUNTER" then
         ct.aoespam[88466] = true  -- Serpent Sting (DOT Serpent Spread)
         ct.aoespam[1978]  = true  -- Serpent Sting
         ct.aoespam[13812] = true  -- Explosive Trap  
+    end
+    if ct.filtercrits then
+      -- Add spells for all hunters here (example below)
+      --ct.critfilter[# Spell ID] = true
     end
 elseif ct.myclass == "DEATHKNIGHT" then
     if ct.mergeaoespam then
@@ -238,11 +274,19 @@ elseif ct.myclass == "DEATHKNIGHT" then
         ct.aoespam[45902] = true  --  Blood Strike MH
         ct.aoespam[66215] = 45902 --  Blood Strike OH
     end
+    if ct.filtercrits then
+      -- Add spells for all dks here (example below)
+      --ct.critfilter[# Spell ID] = true
+    end
 elseif ct.myclass == "ROGUE" then
     if ct.mergeaoespam then
         ct.aoespam[51723] = true  -- Fan of Knives
         ct.aoespam[2818]  = true  -- Deadly Poison
         ct.aoespam[8680]  = true  -- Instant Poison
+    end
+    if ct.filtercrits then
+      -- Add spells for all rogues here (example below)
+      --ct.critfilter[# Spell ID] = true
     end
 end
 
@@ -1625,6 +1669,14 @@ if(ct.damageout)then
                     msg = amount
                     local iconsize = ct.iconsize
                     if critical then
+                    
+                        -- Filter Criticals
+                        if ct.filtercrits then
+                          if not ct.showswingcrits then
+                            return
+                          end
+                        end
+
                         msg = ct.critprefix .. msg .. ct.critpostfix
                         frame = xCTcrit or frame
                         iconsize = ct.criticonsize
@@ -1647,6 +1699,18 @@ if(ct.damageout)then
                     msg = amount
                     local iconsize = ct.iconsize
                     if critical then
+                        
+                        -- Filter Criticals
+                        if ct.filtercrits then
+                          if spellId == 75 and not ct.showswingcrits then
+                            return
+                          elseif ct.critfilter[spellId] and ct.crits_blacklist then
+                            return
+                          elseif not ct.crits_blacklist then
+                            return
+                          end
+                        end
+                        
                         msg = ct.critprefix..msg..ct.critpostfix
                         frame = xCTcrit or frame
                         iconsize = ct.criticonsize
@@ -1666,6 +1730,16 @@ if(ct.damageout)then
                     local rawamount = amount
                     local iconsize = ct.iconsize
                     if critical then
+                    
+                        -- Filter Criticals
+                        if ct.filtercrits then
+                          if ct.critfilter[spellId] and ct.crits_blacklist then
+                            return
+                          elseif not ct.crits_blacklist then
+                            return
+                          end
+                        end
+                    
                         amount = ct.critprefix..amount..ct.critpostfix
                         frame = xCTcrit or frame
                         iconsize = ct.criticonsize
