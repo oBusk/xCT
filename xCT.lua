@@ -1,15 +1,19 @@
---[[
+--[[   ____ _____
+__  __/ ___|_   _|_
+\ \/ / |     | |_| |_
+ >  <| |___  | |_   _|
+/_/\_\\____| |_| |_|
+World of Warcraft (4.3)
 
-xCT+
+Title: xCT+
+Author: Dandruff
+Version: 2.x.x
+Description:
+  xCT+ is an extremely lightwight scrolling combat text addon.  It replaces Blizzard's default
+scrolling combat text with something that is more concised and organized.  xCT+ is a stand alone
+addon, based on xCT (by Affli).
 
-Forked from:
-xCT by affli @ RU-Howling Fjord
-All rights reserved.
-Thanks ALZA and Shestak for making this mod possible. Thanks Tukz for his wonderful style of coding. Thanks Rostok for some fixes and healing code.
-
-Maintained by Dandruff for 4.1, 4.2 PTR and Live, and 4.3 PTR and Live
-
-]]--
+]]
 
 
 --some init
@@ -18,44 +22,56 @@ local ct = ns.config
 ct.myname = UnitName("player")
 ct.myclass = select(2, UnitClass("player"))
 
+--[[  Filter Auras
+  Allows you to filter auras (by name only). Some settings that affect this filter:
 
--- Filter Auras
+      ct.aura_blacklist - changes the following list to be a blacklist or white list
+]]
 if ct.filteraura then
-    -- User Added Spell Auras to filter (can be class specific)
     ct.auranames = { }
+  --[[  All classes Aura filter
+    Examples:
+      -- Hunter
+      ct.auranames["Sick 'Em!"]     = true
+      ct.auranames["Chronohunter"]  = true
+  ]]
+end
+
+--[[  Filter Criticals
+  Allows you to filter out certain criticals and have them show in the regular damage
+    frame.  Some settings that affect this:
     
-    -- All classes
-    -- Tests
-    --ct.auranames["Sick 'Em!"]     = true
-    --ct.auranames["Chronohunter"]  = true
-end
-
--- Filter Criticals
+      ct.filtercrits     -  Allows you to turn on a list that will filter out buffs
+      ct.crits_blacklist -  This list is a blacklist (opposed to a whitelist)  
+      ct.showswingcrits  -  Allows you to show/hide (true / false) swing criticals
+]]
 if ct.filtercrits then
-  ct.critfilter = { }
-  
-  -- Add spells for all classes here (example below)
-  --ct.critfilter[# Spell ID] = true
+    ct.critfilter = { }
+  --[[  All classes Critical Spell IDs
+    Examples:
+        ct.critfilter[# Spell ID] = true
+  ]]
 end
 
-
--- outgoing healing filter, hide this spammy shit, plx
+--[[  Filter Outgoing Heals (For Spammy Heals)  ]]
 if ct.healingout then
     ct.healfilter = { }
     -- See class-specific config for filtered spells.
 end
 
+--[[  Merge Outgoing Damage (For Spammy Damage)  ]]
 if ct.mergeaoespam then
     ct.aoespam = { }
     -- See class-specific config for merged spells.
 end
 
+--[[  Do not use, this will be removed in a later version.  For experimental purposes only  ]]
 if ct.yelltaunt then
     ct.tauntid = { }
     -- See class-specific config for taunt spells.
 end
 
--- class config, overrides general
+--[[  Class Specific Filter Assignment  ]]
 if ct.myclass == "WARLOCK" then
     if ct.mergeaoespam then
         ct.aoespam[27243] = true  -- Seed of Corruption (DoT)
@@ -259,20 +275,23 @@ elseif ct.myclass == "DEATHKNIGHT" then
         ct.aoespam[48721] = true  -- Blood Boil
         ct.aoespam[49184] = true  -- Howling Blast
         ct.aoespam[52212] = true  -- Death and Decay
-        ct.aoespam[55050] = true  -- Heart Strike (Thanks Shestak)
-        -- Merging mh/oh strikes(by Bozo) (Thanks Shestak)
-        ct.aoespam[49020] = true  --    Obliterate MH
-        ct.aoespam[66198] = 49020 --    Obliterate OH
-        ct.aoespam[49998] = true  --  Death Strike MH
-        ct.aoespam[66188] = 49998 --  Death Strike OH
-        ct.aoespam[45462] = true  -- Plague Strike MH
-        ct.aoespam[66216] = 45462 -- Plague Strike OH
-        ct.aoespam[49143] = true  --  Frost Strike MH
-        ct.aoespam[66196] = 49143 --  Frost Strike OH
-        ct.aoespam[56815] = true  --   Rune Strike MH
-        ct.aoespam[66217] = 56815 --   Rune Strike OH
-        ct.aoespam[45902] = true  --  Blood Strike MH
-        ct.aoespam[66215] = 45902 --  Blood Strike OH
+        
+        -- Merging MainHand/OffHand Strikes (by Bozo)    (Thanks Shestak)
+        if ct.mergedualwield then
+          ct.aoespam[55050] = true  --  Heart Strike     (Thanks Shestak)
+          ct.aoespam[49020] = true  --    Obliterate MH
+          ct.aoespam[66198] = 49020 --    Obliterate OH
+          ct.aoespam[49998] = true  --  Death Strike MH
+          ct.aoespam[66188] = 49998 --  Death Strike OH
+          ct.aoespam[45462] = true  -- Plague Strike MH
+          ct.aoespam[66216] = 45462 -- Plague Strike OH
+          ct.aoespam[49143] = true  --  Frost Strike MH
+          ct.aoespam[66196] = 49143 --  Frost Strike OH
+          ct.aoespam[56815] = true  --   Rune Strike MH
+          ct.aoespam[66217] = 56815 --   Rune Strike OH
+          ct.aoespam[45902] = true  --  Blood Strike MH
+          ct.aoespam[66215] = 45902 --  Blood Strike OH
+        end
     end
     if ct.filtercrits then
       -- Add spells for all dks here (example below)
@@ -290,59 +309,61 @@ elseif ct.myclass == "ROGUE" then
     end
 end
 
--- add healer specific ids
-if ct.myclass == "DRUID" or ct.myclass == "PRIEST" or ct.myclass == "SHAMAN" or ct.myclass == "PALADIN" then
-  ct.aoespam[109847] = true   -- Maw of the Dragonlord (LFR)    (Thanks Nidra)
-  ct.aoespam[107835] = true   -- Maw of the Dragonlord          (Thanks Nidra)
-  ct.aoespam[109849] = true   -- Maw of the Dragonlord (Heroic) (Thanks Nidra)
-end
+--[[  Role Specific Filter Assignment  ]]
+  -- Healers
+  if ct.myclass == "DRUID" or ct.myclass == "PRIEST" or ct.myclass == "SHAMAN" or ct.myclass == "PALADIN" then
+    ct.aoespam[109847] = true   -- Maw of the Dragonlord (LFR)    (Thanks Nidra)
+    ct.aoespam[107835] = true   -- Maw of the Dragonlord          (Thanks Nidra)
+    ct.aoespam[109849] = true   -- Maw of the Dragonlord (Heroic) (Thanks Nidra)
+  end
+  
+--[[  Defining the Frames  ]]
+local framenames = { "dmg", "heal", "gen" }   -- Default frames (Always enabled)
+local numf = #framenames                      -- Number of Frames
 
--- define frames to create
-local numf = 3
-local framenames = { "dmg", "heal", "gen" }
+--[[  Extra Frames  ]]
+    -- Add window for separate damage and healing windows
+    if ct.damageout or ct.healingout then
+        numf = numf + 1     -- 4
+        framenames[numf] = "done"
+    end
 
--- Add window for separate damage and healing windows
-if ct.damageout or ct.healingout then
-    numf = numf + 1     -- 4
-    framenames[numf] = "done"
-end
+    -- Add window for loot events
+    if ct.lootwindow then
+        numf = numf + 1     -- 5
+        framenames[numf] = "loot"
+    end
 
--- Add window for loot events
-if ct.lootwindow then
-    numf = numf + 1     -- 5
-    framenames[numf] = "loot"
-end
+    -- Add window for crit events
+    if ct.critwindow then
+        numf = numf + 1     -- 6
+        framenames[numf] = "crit"
+    end
 
--- Add window for crit events
-if ct.critwindow then
-    numf = numf + 1     -- 6
-    framenames[numf] = "crit"
-end
+    -- Add a window for power gains
+    if ct.powergainswindow then
+        numf = numf + 1     -- 7
+        framenames[numf] = "pwr"
+    end
 
--- Add a window for power gains
-if ct.powergainswindow then
-    numf = numf + 1     -- 7
-    framenames[numf] = "pwr"
-end
-
--- Add a window for procs
-if ct.procwindow then
-    numf = numf + 1     -- 8
-    framenames[numf] = "proc"
-end
-
-
--- Create your own frame
---[[
-if ct.custom_frame_enable then
-    numf = numf + 1     -- 9
-    framenames[numf] = "custom"
-end
+    -- Add a window for procs
+    if ct.procwindow then
+        numf = numf + 1     -- 8
+        framenames[numf] = "proc"
+    end
+    
+--[[  Create Your Own Frame
+  Example:
+    if ct.custom_frame_enable then
+        numf = numf + 1     -- 9
+        framenames[numf] = "Custom_Name_Prefix"
+    end
+    
+  -- Send a message to your custom frame
+  xCTCustom_Name_Prefix:AddMessage("Message...", 1, 1, 1)
 ]]
---xCTcustom:AddMessage("Message...", 1, 1, 1)
 
-
--- Create a text texture for spells
+--[[  Overload Blizzard's GetSpellTexture so that I can get "Text" instead of an Image.  ]]
 local GetSpellTextureFormatted = function(spellID, iconSize)
     local msg = ""
     if ct.texticons then
@@ -371,15 +392,21 @@ local GetSpellTextureFormatted = function(spellID, iconSize)
     return msg
 end
 
+-- Sanity Check:  If "ct.texticons" are enabled, I need to enable "ct.icons" incase the user has it disabled
 if ct.texticons then
     ct.icon = true
 end
 
 
--- spam merger
+--[[  Spam Merger  ]]
 local SQ
+-- Yep, that's the spell merger
 
--- detect vechile
+
+--[[  Change Player Unit
+    Allows you to change the Player's unit. This is in case you get in a vehicle and you want to
+      recieve damage combat text from the vehicle.
+]]
 local function SetUnit()
     if UnitHasVehicleUI("player") then
         ct.unit = "vehicle"
@@ -389,7 +416,7 @@ local function SetUnit()
     CombatTextSetActiveUnit(ct.unit)
 end
 
---limit lines
+--[[  Limit Lines (Memory Optimizer)  ]]
 local function LimitLines()
     for i = 1, #ct.frames do
         local f = ct.frames[i]
@@ -397,7 +424,9 @@ local function LimitLines()
     end
 end
 
--- scrollable frames
+--[[  Scrollable Frames
+    Yes this is a feature, I would not recommend using it.
+]]
 local function SetScroll()
     for i = 1, #ct.frames do
         ct.frames[i]:EnableMouseWheel(true)
@@ -411,7 +440,9 @@ local function SetScroll()
     end
 end
     
--- msg flow direction
+--[[  Message Flow Direction
+    This does not work.  Whether or not it is Blizzard's fault is yet TBD. 
+]]
 local function ScrollDirection()
     if COMBAT_TEXT_FLOAT_MODE == "2" then
         ct.mode = "TOP"
@@ -424,7 +455,9 @@ local function ScrollDirection()
     end
 end
 
--- Uses resources until reset, still load on demand
+--[[  Align Grid
+    Uses resources until UI Reset, but is loaded on demand
+]]
 local AlignGrid
 
 local function AlignGridShow()
@@ -518,11 +551,12 @@ local function AlignGridKill()
     AlignGrid:Hide()
 end
 
+--[[  Loot and Money Parsing  ]]
 
--- regex string for loot items
+-- RegEx String for Loot Items
 local parseloot = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
 
--- loot events
+-- Loot Event Handlers
 local function ChatMsgMoney_Handler(msg)
     local g, s, c = tonumber(msg:match(GOLD_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(SILVER_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(COPPER_AMOUNT:gsub("%%d", "(%%d+)")))
     local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), MONEY .. ": "
@@ -538,10 +572,10 @@ local function ChatMsgMoney_Handler(msg)
 end
 
 local function ChatMsgLoot_Handler(msg)
-    local pM,iQ,iI,iN,iA = select(3, string.find(msg, parseloot))
-    local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))
+    local pM,iQ,iI,iN,iA = select(3, string.find(msg, parseloot))  -- Pre-Message, ItemColor, ItemID, ItemName, ItemAmount
+    local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))          -- Item Quality, See "GetAuctionItemClasses()", Item Icon Texture Location
 
-    local item   = { }
+    local item       = { }
         item.name    = iN
         item.id      = iI
         item.amount  = tonumber(iA) or 1
@@ -583,7 +617,7 @@ local function ChatMsgLoot_Handler(msg)
 end
 
 
--- yells
+-- Yells... Yes this is getting removed in a future version.
 local function FormatSpellYell( spell, cached )
     local dMsg
     if cached then
@@ -641,6 +675,7 @@ local function FormatSpellYell( spell, cached )
     return msg
 end
 
+-- Removing This
 local function YellTaunt( destName, spellID, missType )
     if missType and ct.yelltaunt then
         local spell = ct.tauntid[spellID]
@@ -653,6 +688,7 @@ local function YellTaunt( destName, spellID, missType )
     end
 end
 
+-- Removing This
 local function CacheThreat()
     local isttTanking,_,tankThreat=UnitDetailedThreatSituation("targettarget","target")
     local playerThreat=select(3,UnitDetailedThreatSituation("player","target"))
@@ -666,10 +702,11 @@ local function CacheThreat()
 end
 
 
--- partial resists styler
+-- Partial Resist Styler (Format String)
 local part = "-%s (%s %s)"
 local r, g, b
--- the function, handles everything
+
+-- Handlers for Combat Text and other incoming events.  Outgoing events are handled further down.
 local function OnEvent(self, event, subevent, ...)
     if event == "COMBAT_TEXT_UPDATE" then
         local arg2, arg3 = ...
@@ -999,14 +1036,14 @@ local function OnEvent(self, event, subevent, ...)
     end
 end
 
--- change damage font (if desired)
+--[[  Change Damage Font  ]]
 if ct.damagestyle then
     DAMAGE_TEXT_FONT = ct.damageoutfont
 end
 
--- the frames
-ct.locked = true
-ct.frames = { }
+--[[  Create the Frames  ]]
+ct.locked = true    -- not configuring
+ct.frames = { }     -- location to store the frames
 for i = 1, numf do
     local f = CreateFrame("ScrollingMessageFrame", "xCT"..framenames[i], UIParent)
     f:SetFont(ct.font, ct.fontsize, ct.fontstyle)
@@ -1103,25 +1140,29 @@ xCT:RegisterEvent("UNIT_MANA")
 xCT:RegisterEvent("PLAYER_REGEN_DISABLED")
 xCT:RegisterEvent("PLAYER_REGEN_ENABLED")
 xCT:RegisterEvent("UNIT_COMBO_POINTS")
-if ct.dkrunes and select(2, UnitClass("player")) == "DEATHKNIGHT" then
-    xCT:RegisterEvent("RUNE_POWER_UPDATE")
-end
 xCT:RegisterEvent("UNIT_ENTERED_VEHICLE")
 xCT:RegisterEvent("UNIT_EXITING_VEHICLE")
 xCT:RegisterEvent("PLAYER_ENTERING_WORLD")
--- register loot events
+
+-- Register DK Events
+if ct.dkrunes and select(2, UnitClass("player")) == "DEATHKNIGHT" then
+    xCT:RegisterEvent("RUNE_POWER_UPDATE")
+end
+
+-- Register Loot Events
 if ct.lootitems or ct.questitems or ct.crafteditems then
     xCT:RegisterEvent("CHAT_MSG_LOOT") 
 end
+
+-- Register Money Events
 if ct.lootmoney then 
     xCT:RegisterEvent("CHAT_MSG_MONEY")
 end
 
 xCT:SetScript("OnEvent",OnEvent)
 
--- turn off blizz ct
--- force hide blizz damage/healing, if desired
-if not ct.blizzheadnumbers then
+-- Blizzard Damage/Healing Head Anchors
+if not ct.blizzheadnumbers then   
   InterfaceOptionsCombatTextPanelTargetDamage:Hide()
   InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
   InterfaceOptionsCombatTextPanelPetDamage:Hide()
@@ -1132,32 +1173,30 @@ if not ct.blizzheadnumbers then
   SetCVar("CombatHealing", 0)
 end
 
-InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
-
+-- Turn off Blizzard's Combat Text
 CombatText:UnregisterAllEvents()
 CombatText:SetScript("OnLoad", nil)
 CombatText:SetScript("OnEvent", nil)
 CombatText:SetScript("OnUpdate", nil)
 
--- steal external messages sent by other addons using CombatText_AddMessage
---local BCT_AddMessage = Blizzard_CombatText_AddMessage
+-- Direction does NOT work with xCT+ at all
+InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
+
+-- Intercept Messages Sent by other Add-Ons that use CombatText_AddMessage
 Blizzard_CombatText_AddMessage = CombatText_AddMessage
 function CombatText_AddMessage(message,scrollFunction, r, g, b, displayType, isStaggered)
     xCTgen:AddMessage(message, r, g, b)
 end
 
-
-
-
--- modify blizz ct options title lol
+-- Modify Blizzard's Combat Text Options Title  ("Powered by xCT+")
 InterfaceOptionsCombatTextPanelTitle:SetText(COMBAT_TEXT_LABEL.." (powered by \124cffFF0000x\124rCT\124cffDDFF55+\124r)")
 
--- color printer
+-- xCT internal color Printer for debug and such
 local pr = function(msg)
     print("\124cffFF0000x\124rCT\124cffDDFF55+\124r", tostring(msg))
 end
 
--- awesome configmode and testmode
+-- Awesome Config and Test Modes
 local StartConfigmode = function()
     if not InCombatLockdown() then
         for i = 1, #ct.frames do
@@ -1282,7 +1321,9 @@ local StartConfigmode = function()
         end
         
         -- also show the align grid during config
-        AlignGridShow()
+        if ct.showgrid then
+          AlignGridShow()
+        end
         
         pr("unlocked.")
     else
@@ -1291,6 +1332,7 @@ local StartConfigmode = function()
 end
 
 local function EndConfigmode()
+    -- Major Clean-Up :D
     for i = 1, #ct.frames do
         f = ct.frames[i]
         f:SetBackdrop(nil)
@@ -1454,7 +1496,7 @@ local function EndTestMode()
     ct.testmode = false
 end
 
--- /xct lock popup dialog
+--[[  Pop-Up Dialog  ]]
 StaticPopupDialogs["XCT_LOCK"] = {
     text         = "To save |cffFF0000x|rCT window positions you need to reload your UI.\n Click "..ACCEPT.." to reload UI.\nClick "..CANCEL.." to do it later.",
     button1      = ACCEPT,
@@ -1467,7 +1509,7 @@ StaticPopupDialogs["XCT_LOCK"] = {
     showAlert    = true,
 }
 
--- slash commands
+--[[  Register Slash Commands  ]]
 SLASH_XCT1 = "/xct"
 SlashCmdList["XCT"] = function(input)
     input = string.lower(input)
@@ -1804,8 +1846,6 @@ if(ct.damageout)then
                     missType = missType..GetSpellTextureFormatted(spellId, ct.iconsize)
                 end 
                 xCTdone:AddMessage(missType)
-                -- TODO:
-                -- Need to add yell taunt logic here
     
             elseif eventType == "SPELL_DISPEL" and ct.dispel then
                 local target, _, _, id, effect, _, etype = select(12, ...)

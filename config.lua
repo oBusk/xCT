@@ -127,6 +127,7 @@ ns.config = {
         
         -- Death Knight
         ["dkrunes"]          = true,        -- Show Death Knight Rune Recharge
+        ["mergedualwield"]   = true,        -- Merge dual wield damage
         
         -- Misc.
             -- Spell Spam Spam Spam Spam Spam Spam Spam Spam
