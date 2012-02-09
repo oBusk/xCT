@@ -1,3 +1,20 @@
+--[[   ____ _____
+__  __/ ___|_   _|_
+\ \/ / |     | |_| |_
+ >  <| |___  | |_   _|
+/_/\_\\____| |_| |_|
+World of Warcraft (4.3)
+
+Title: xCT+
+Author: Dandruff
+Version: 2.x.x
+Description:
+  xCT+ is an extremely lightwight scrolling combat text addon.  It replaces Blizzard's default
+scrolling combat text with something that is more concised and organized.  xCT+ is a stand alone
+addon, based on xCT (by Affli).
+
+]]
+
 local addon, ns = ...
 ns.config = {
     -- --------------------------------------------------------------------------------------
@@ -38,12 +55,13 @@ ns.config = {
             ["hideautoattack"]  = false,    -- Hides the auto attack icon from outgoing frame
             
             -- Damage/Healing Icon Sizes and Appearence
+            ["damagecolor"]     = true,     -- display colored damage numbers by type
             ["icons"]           = true,     -- show outgoing damage icons
             ["iconsize"]        = 16,       -- outgoing damage icons' size
             ["damagefontsize"]  = 16,
             ["fontstyle"]       = "OUTLINE",                            -- valid options are "OUTLINE", "MONOCHROME", "THICKOUTLINE", "OUTLINE,MONOCHROME", "THICKOUTLINE,MONOCHROME"
             ["damagefont"]      = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- "Fonts\\FRIZQT__.ttf" is default WoW damage font
-
+            
             -- Damage/Healing Minimum Value threshold
             ["treshold"]        = 1,        -- minimum value for outgoing damage
             ["healtreshold"]    = 1,        -- minimum value for outgoing heals
@@ -67,6 +85,12 @@ ns.config = {
             -- Critical Appearance Options
             ["critprefix"]      = "|cffFF0000*|r",      -- prefix symbol shown before crit'd amount (default: red *)
             ["critpostfix"]     = "|cffFF0000*|r",      -- postfix symbol shown after crit'd amount (default: red *)
+            
+            -- Filter Criticals
+            ["filtercrits"]     = false,    -- Allows you to turn on a list that will filter out buffs
+            ["crits_blacklist"] = false,    -- Filter list is a blacklist (If you want a TRUE whitelist, don't forget to hide Swings too!!)
+            ["showswingcrits"]  = true,     -- Allows you to show/hide (true / false) swing criticals
+            ["showasnoncrit"]   = true,     -- When a spell it filtered, show it in the non Critical window (with critical pre/post-fixes)
         -- __________________________________________________________________________________
 
         
@@ -110,42 +134,23 @@ ns.config = {
         
         
         -- ==================================================================================
-        -- Misc. Frames
+        -- Power Gains/Fades Incoming Frame (frame is called "xCTpwr")
         -- ==================================================================================
-            -- Healing/Damage Incoming Frames (frames are called "xCTheal" and "xCTdmg")
-            ["damagecolor"]         = true,     -- display colored damage numbers by type
+        ["powergainswindow"]    = true,     -- Enable the frame to show Auras
         
-            -- Power Gains Incoming Frame (frame is called "xCTpwr")
-            ["powergainswindow"]    = true,
+            -- Filter Auras Gains or Fades
+            ["showharmfulaura"] = true,   -- Show Harmful Auras (Gains and Losses)
+            ["showhelpfulaura"] = true,   -- Show Helpful Auras (Gains and Losses)
+            ["showgains"]       = true,   -- Show Gains in the Aura frame
+            ["showfades"]       = true,   -- Show Fades in the Aura frame
+            ["filteraura"]      = true,   -- allows you to filter out unwanted aura gains/losses
+            ["aura_blacklist"]  = true,   -- aura list is a blacklist (opposed to a whitelist)
+            
+            -- Filter Aura Helpers
+            ["debug_aura"]      = false,  -- Shows your Aura's names in the chatbox.  Useful when adding to the filter yourself.
         -- __________________________________________________________________________________
-        
-    -- --------------------------------------------------------------------------------------
-    -- xCT+ Class Specific and Misc. Options
-    -- --------------------------------------------------------------------------------------
-        -- Priest
-        ["stopvespam"]       = false,       -- Hides Healing Spam for Priests in Shadowform.
-        
-        -- Death Knight
-        ["dkrunes"]          = true,        -- Show Death Knight Rune Recharge
-        ["mergedualwield"]   = true,        -- Merge dual wield damage
-        
-        -- Misc.
-            -- Spell Spam Spam Spam Spam Spam Spam Spam Spam
-            ["mergeaoespam"]     = true,    -- Merges multiple AoE spam into single message, can be useful for dots too.
-            ["mergeaoespamtime"] = 3,       -- Time in seconds AoE spell will be merged into single message.  Minimum is 1.
-        
-            -- Helpful Alerts (Shown in the Gerenal Gains/Drops Frame)
-            ["killingblow"]      = true,    -- Alerts with the name of the PC/NPC that you had a killing blow on (Req. ["damageout"] = true)
-            ["dispel"]           = true,    -- Alerts with the name of the (De)Buff Dispelled (Req. ["damageout"] = true)
-            ["interrupt"]        = true,    -- Alerts with the name of the Spell Interupted (Req. ["damageout"] = true)
-        
-            -- Alignment Help (Shown when configuring frames)
-            ["showgrid"]        = true,     -- shows a grid when moving xCT windows around
-            
-            -- Show Procs
-            ["filterprocs"]     = true,     -- Enable to hide procs from ALL frames (will show in xCTproc or xCTgen otherwise)
-            
-            
+    
+
     -- --------------------------------------------------------------------------------------
     -- xCT+ Frames' Justification
     -- --------------------------------------------------------------------------------------
@@ -157,34 +162,48 @@ ns.config = {
         ["justify_5"] = "CENTER",           -- Loot/Money Gains Frame (frame is called "xCTloot")
         ["justify_6"] = "RIGHT",            -- Criticals Outgoing Frame (frame is called "xCTcrit")
         ["justify_7"] = "LEFT",             -- Power Gains Frame (frame is called "xCTpwr")
-        ["justify_8"] = "CENTER",           -- Procs Frame (frame is called "xCTproc")
+        ["justify_8"] = "CENTER",           -- Procs Frame (frame is called "xCTproc")    
+    
+    
+    -- --------------------------------------------------------------------------------------
+    -- xCT+ Class Specific and Misc. Options
+    -- --------------------------------------------------------------------------------------
+        -- Priest
+        ["stopvespam"]          = false,  -- Hides Healing Spam for Priests in Shadowform.
         
-    -- ** >> !! experimental !! << **
-    -- (not fully implemented or supported)
+        -- Death Knight
+        ["dkrunes"]             = true,   -- Show Death Knight Rune Recharge
+        ["mergedualwield"]      = true,   -- Merge dual wield damage
+        
+        -- Misc.
+            -- Spell Spam Spam Spam Spam Spam Spam Spam Spam
+            ["mergeaoespam"]    = true,   -- Merges multiple AoE spam into single message, can be useful for dots too.
+            ["mergeaoespamtime"] = 3,     -- Time in seconds AoE spell will be merged into single message.  Minimum is 1.
+        
+            -- Helpful Alerts (Shown in the Gerenal Gains/Drops Frame)
+            ["killingblow"]     = true,   -- Alerts with the name of the PC/NPC that you had a killing blow on (Req. ["damageout"] = true)
+            ["dispel"]          = true,   -- Alerts with the name of the (De)Buff Dispelled (Req. ["damageout"] = true)
+            ["interrupt"]       = true,   -- Alerts with the name of the Spell Interupted (Req. ["damageout"] = true)
+        
+            -- Alignment Help (Shown when configuring frames)
+            ["showgrid"]        = true,   -- shows a grid when moving xCT windows around
+            
+            -- Show Procs
+            ["filterprocs"]     = true,   -- Enable to hide procs from ALL frames (will show in xCTproc or xCTgen otherwise)
+            
+            
+    -- --------------------------------------------------------------------------------------
+    -- Experimental Options - USE CAUTION
+    -- --------------------------------------------------------------------------------------
+--[[ Please Note:  Any option below might not work according to the description, which may include poor implementation, bugs, and
+--                 and rare cases unstability.  Enable only if you are specifically told you can try out features.
+--  
+--                 In other words:  USE AT YOUR OWN RISK
+]]    
 
         -- (DISABLED: Currently does not work)
         ["loottimevisible"]     = 6,
         ["crittimevisible"]     = 3,
         ["timevisible"]         = 3,
-
-
-        -- filter auras
-        ["showharmfulaura"] = true,   -- Show Harmful Auras (Gains and Losses)
-        ["showhelpfulaura"] = true,   -- Show Helpful Auras (Gains and Losses)
-        
-        ["showgains"]       = true,
-        ["showfades"]       = true,
-        
-        ["filteraura"]      = true,   -- allows you to filter out unwanted aura gains/losses
-        ["aura_blacklist"]  = true,   -- aura list is a blacklist (opposed to a whitelist)
-        ["debug_aura"]      = false,  -- Shows your Aura's names in the chatbox.  Useful when adding to the filter yourself.
-        
-        -- filter criticals
-        ["filtercrits"]     = true,   -- Allows you to turn on a list that will filter out buffs
-        ["crits_blacklist"] = false,  -- critical filter list is a blacklist (opposed to a whitelist)
-        
-        ["showswingcrits"]  = true,   -- Allows you to show/hide (true / false) swing criticals
-        
-        
 }
 

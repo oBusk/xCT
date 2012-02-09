@@ -51,6 +51,8 @@ if ct.filtercrits then
     Examples:
         ct.critfilter[# Spell ID] = true
   ]]
+  
+  ct.critfilter[3044] = true  -- Arcane Shot
 end
 
 --[[  Filter Outgoing Heals (For Spammy Heals)  ]]
@@ -63,12 +65,6 @@ end
 if ct.mergeaoespam then
     ct.aoespam = { }
     -- See class-specific config for merged spells.
-end
-
---[[  Do not use, this will be removed in a later version.  For experimental purposes only  ]]
-if ct.yelltaunt then
-    ct.tauntid = { }
-    -- See class-specific config for taunt spells.
 end
 
 --[[  Class Specific Filter Assignment  ]]
@@ -616,92 +612,6 @@ local function ChatMsgLoot_Handler(msg)
     end
 end
 
-
--- Yells... Yes this is getting removed in a future version.
-local function FormatSpellYell( spell, cached )
-    local dMsg
-    if cached then
-        dMsg = "Taunted: #target #offoftargettarget with #spell! (#deltathreat over)"
-    else
-        dMsg = "Taunted: #target #offoftargettarget with #spell!"
-    end
-
-    local msg = spell.phrase or dMsg
-    msg = msg:gsub("#spell",spell.link)
-    
-    if cached then
-        msg = msg:gsub("#playerthreat", math.floor(cached.playerThreat + 0.5).."%%")
-        msg = msg:gsub("#targetthreat", math.floor(cached.targetThreat + 0.5).."%%")
-    	msg = msg:gsub("#deltathreat", math.floor(110 - cached.playerThreat + 0.5).."%%")
-    end
-    
-    -- add the player
-    local playerMarker = GetRaidTargetIndex("player")
-    if playerMarker then
-        msg = msg:gsub("#player","{rt"..playerMarker.."}"..GetUnitName("player") or "")
-    else
-        msg = msg:gsub("#player",GetUnitName("player") or "")
-    end
-    
-    -- add the "...off of target of target"
-    local offofTargettargetMarker = GetRaidTargetIndex("targettarget")
-    if offofTargettargetMarker then
-        msg = msg:gsub("#offoftargettarget","off of {rt"..offofTargettargetMarker.."}"..GetUnitName("targettarget"))
-    else
-        if GetUnitName("targettarget") then
-            msg = msg:gsub("#offoftargettarget","off of "..GetUnitName("targettarget"))
-        else
-            msg = msg:gsub("%s?#offoftargettarget","")
-        end
-    end
-    
-    -- add the target of target
-    local targettargetMarker = GetRaidTargetIndex("targettarget")
-    if targettargetMarker then
-        print("DEBUG: Found raid marks")
-        msg = msg:gsub("#targettarget","{rt"..targettargetMarker.."}"..(GetUnitName("targettarget") or ""))
-    else
-        msg = msg:gsub("#targettarget",GetUnitName("targettarget") or "")
-    end
-    
-    -- add the target
-    local targetMarker = GetRaidTargetIndex("target")
-    if targetMarker then
-        msg = msg:gsub("#target","{rt"..targetMarker.."}"..GetUnitName("target") or "")
-    else
-        msg = msg:gsub("#target",GetUnitName("target") or "")
-    end
-
-    return msg
-end
-
--- Removing This
-local function YellTaunt( destName, spellID, missType )
-    if missType and ct.yelltaunt then
-        local spell = ct.tauntid[spellID]
-        if spell and spell.enabled then
-            local msg = FormatSpellYell(spell, ct.cachethreat)
-            if GetUnitName("player") ~= GetUnitName("targettarget") then
-                SendChatMessage(msg, "SAY")
-            end
-        end
-    end
-end
-
--- Removing This
-local function CacheThreat()
-    local isttTanking,_,tankThreat=UnitDetailedThreatSituation("targettarget","target")
-    local playerThreat=select(3,UnitDetailedThreatSituation("player","target"))
-    ct.cachethreat = {
-        ["targetName"]       = GetUnitName("target"),
-        ["targettargetName"] = GetUnitName("targettarget"),
-        ["targetThreat"]     = tankThreat,
-        ["playerThreat"]     = playerThreat,
-        ["isNotTanking"]     = isttTanking,
-    }
-end
-
-
 -- Partial Resist Styler (Format String)
 local part = "-%s (%s %s)"
 local r, g, b
@@ -1048,11 +958,13 @@ for i = 1, numf do
     local f = CreateFrame("ScrollingMessageFrame", "xCT"..framenames[i], UIParent)
     f:SetFont(ct.font, ct.fontsize, ct.fontstyle)
     f:SetShadowColor(0, 0, 0, 0)
-    -- thanks to Shestak from http://shestak.org/ for pointing this out!
-    -- leaves ghost icons
+    
+    -- Thanks to Shestak for pointing this out!
+    -- Leaves ghost icons (Uncomment at your own Risk)
     --f:SetFading(true)
     --f:SetFadeDuration(0.5)
-    f:SetTimeVisible(ct.timevisible)
+    
+    f:SetTimeVisible(3)
     f:SetMaxLines(ct.maxlines)
     f:SetSpacing(2)
     f:SetWidth(128)
@@ -1162,7 +1074,35 @@ end
 xCT:SetScript("OnEvent",OnEvent)
 
 -- Blizzard Damage/Healing Head Anchors
-if not ct.blizzheadnumbers then   
+if not ct.blizzheadnumbers then
+    -- Move the options up
+    local defaultFont, defaultSize = InterfaceOptionsCombatTextPanelTargetEffectsText:GetFont()
+    
+    -- Show Combat Options Title
+    local fsTitle = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
+    fsTitle:SetTextColor(1.00, 0.82, 0.00, 1.00)
+    fsTitle:SetFont(defaultFont, defaultSize + 6)
+    fsTitle:SetText("xCT+ Combat Text Options")
+    fsTitle:SetPoint("TOPLEFT", 16, -90)
+    
+    -- Show Version Number
+    local fsVersion = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
+    fsVersion:SetFont(defaultFont, 11)
+    fsVersion:SetText("|cff5555FFPowered By:|r \124cffFF0000x\124rCT\124cffFFFFFF+\124r (Version "
+      .. GetAddOnMetadata("xCT", "Version")..")")
+    fsVersion:SetPoint("BOTTOMRIGHT", -8, 8)
+
+  -- Move the Effects and Floating Options
+  InterfaceOptionsCombatTextPanelTargetEffects:ClearAllPoints()
+  --InterfaceOptionsCombatTextPanelTargetEffects:SetPoint("TOPLEFT", 18, -370)
+  InterfaceOptionsCombatTextPanelTargetEffects:SetPoint("TOPLEFT", 314, -132)
+  
+  InterfaceOptionsCombatTextPanelEnableFCT:ClearAllPoints()
+  --InterfaceOptionsCombatTextPanelEnableFCT:SetPoint("TOPLEFT", 8, -66)
+  InterfaceOptionsCombatTextPanelEnableFCT:SetPoint("TOPLEFT", 18, -132)
+  
+  
+  -- Hide invalid Objects
   InterfaceOptionsCombatTextPanelTargetDamage:Hide()
   InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
   InterfaceOptionsCombatTextPanelPetDamage:Hide()
@@ -1189,7 +1129,7 @@ function CombatText_AddMessage(message,scrollFunction, r, g, b, displayType, isS
 end
 
 -- Modify Blizzard's Combat Text Options Title  ("Powered by xCT+")
-InterfaceOptionsCombatTextPanelTitle:SetText(COMBAT_TEXT_LABEL.." (powered by \124cffFF0000x\124rCT\124cffDDFF55+\124r)")
+--InterfaceOptionsCombatTextPanelTitle:SetText(COMBAT_TEXT_LABEL.." (powered by \124cffFF0000x\124rCT\124cffDDFF55+\124r)")
 
 -- xCT internal color Printer for debug and such
 local pr = function(msg)
@@ -1542,72 +1482,11 @@ SlashCmdList["XCT"] = function(input)
             StartTestMode()
             pr("test mode enabled.")
         end
-    elseif args[1] == "t" then 
-        if ct.yelltaunt then
-            -- cache threat info
-            CacheThreat()
-        end
-    elseif args[1] == "taunt" then
-        if args[2] == "on" then
-            ct.yelltaunt = true
-        elseif args[2] == "off" then
-            ct.yelltaunt = false
-        else
-            if ct.yelltaunt then
-                ct.yelltaunt = false
-            else
-                ct.yelltaunt = true    
-            end
-        end
-        if ct.yelltaunt then
-            pr("Announcing taunts |cffFFFF00enabled|r!")
-        else
-            pr("Announcing taunts |cffFFFF00disabled|r!")
-        end
-    elseif args[1] == "interrupt" then
-        if args[2] == "on" then
-            ct.yellinterrupt = true
-        elseif args[2] == "off" then
-            ct.yellinterrupt = false
-        else
-            if ct.yellinterrupt then
-                ct.yellinterrupt = false
-            else
-                ct.yellinterrupt = true    
-            end
-        end
-        if ct.yellinterrupt then
-            pr("Announcing interrupts |cffFFFF00enabled|r!")
-        else
-            pr("Announcing interrupts |cffFFFF00disabled|r!")
-        end
-    elseif args[1] == "dispell" then
-        if args[2] == "on" then
-            ct.yelldispell = true
-        elseif args[2] == "off" then
-            ct.yelldispell = false
-        else
-            if ct.yelldispell then
-                ct.yelldispell = false
-            else
-                ct.yelldispell = true    
-            end
-        end
-        if ct.yelldispell then
-            pr("Announcing dispells |cffFFFF00enabled|r!")
-        else
-            pr("Announcing dispells |cffFFFF00disabled|r!")
-        end
     else
         pr("Position Commands")
         print("    use |cffFF0000/xct unlock|r to move and resize frames.")
         print("    use |cffFF0000/xct lock|r to lock frames.")
         print("    use |cffFF0000/xct test|r to toggle testmode (sample xCT output).")
-        -- changes soon to come
-        --pr("Announcement Options")
-        --print("    use |cffFF0000/xct|r |cff5555FFtaunt|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off taunt yells.")
-        --print("    use |cffFF0000/xct|r |cff5555FFinterrupt|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off interrupt yells.")
-        --print("    use |cffFF0000/xct|r |cff5555FFdispell|r (|cffFFFF00on|r/|cffFFFF00off|r) to turn on/off dispell yells.")
     end
 end
 
@@ -1711,17 +1590,18 @@ if(ct.damageout)then
                     msg = amount
                     local iconsize = ct.iconsize
                     if critical then
-                    
+                        frame = xCTcrit or frame
+                        msg = ct.critprefix .. msg .. ct.critpostfix
+                        iconsize = ct.criticonsize
+                        
                         -- Filter Criticals
-                        if ct.filtercrits then
-                          if not ct.showswingcrits then
+                        if ct.filtercrits and not ct.showswingcrits then 
+                          if ct.showasnoncrit then
+                            frame = xCTdone -- redirect to the regular frame
+                          else
                             return
                           end
                         end
-
-                        msg = ct.critprefix .. msg .. ct.critpostfix
-                        frame = xCTcrit or frame
-                        iconsize = ct.criticonsize
                     end
                     if ct.icons and not ct.hideautoattack then
                         local spellNameOrID
@@ -1741,21 +1621,30 @@ if(ct.damageout)then
                     msg = amount
                     local iconsize = ct.iconsize
                     if critical then
-                        
+                        local bfilter = false
+                        msg = ct.critprefix..msg..ct.critpostfix
+                        iconsize = ct.criticonsize
+                        frame = xCTcrit or frame
+
                         -- Filter Criticals
                         if ct.filtercrits then
                           if spellId == 75 and not ct.showswingcrits then
-                            return
+                            bfilter = true
                           elseif ct.critfilter[spellId] and ct.crits_blacklist then
-                            return
-                          elseif not ct.crits_blacklist then
-                            return
+                            bfilter = true
+                          elseif not ct.critfilter[spellId] and not ct.crits_blacklist then
+                            bfilter = true
                           end
                         end
                         
-                        msg = ct.critprefix..msg..ct.critpostfix
-                        frame = xCTcrit or frame
-                        iconsize = ct.criticonsize
+                        -- Redirect to the regular frame
+                        if bfilter then
+                          if ct.showasnoncrit then
+                            frame = xCTdone
+                          else
+                            return
+                          end
+                        end
                     end
                     if ct.icons then
                         if not (spellId == 75 and ct.hideautoattack) then
@@ -1772,19 +1661,28 @@ if(ct.damageout)then
                     local rawamount = amount
                     local iconsize = ct.iconsize
                     if critical then
-                    
+                        local bfilter = false
+                        frame = xCTcrit or frame
+                        amount = ct.critprefix..amount..ct.critpostfix
+                        iconsize = ct.criticonsize
+                        
                         -- Filter Criticals
                         if ct.filtercrits then
                           if ct.critfilter[spellId] and ct.crits_blacklist then
-                            return
-                          elseif not ct.crits_blacklist then
+                            bfilter = true
+                          elseif not ct.critfilter[spellId] and not ct.crits_blacklist then
+                            bfilter = true
+                          end
+                        end
+                        
+                        -- Redirect to the regular frame
+                        if bfilter then
+                          if ct.showasnoncrit then
+                            frame = xCTdone 
+                          else
                             return
                           end
                         end
-                    
-                        amount = ct.critprefix..amount..ct.critpostfix
-                        frame = xCTcrit or frame
-                        iconsize = ct.criticonsize
                     end
                     if ct.damagecolor then
                         if ct.dmgcolor[spellSchool] then
@@ -1877,25 +1775,10 @@ if(ct.damageout)then
                 xCTgen:AddMessage(ACTION_SPELL_STOLEN..": "..effect..msg, unpack(color))
                 
             elseif eventType == "PARTY_KILL" and ct.killingblow then
-                -- 4.2
                 local tname = select(9, ...)
                 local msg = ACTION_PARTY_KILL:sub(1,1):upper()..ACTION_PARTY_KILL:sub(2)
                 xCTgen:AddMessage(ACTION_PARTY_KILL..": "..tname, .2, 1, .2)
-                
-            
-            -- Add Taunt Captures
-            elseif eventType == "SPELL_AURA_APPLIED" and ct.yelltaunt then
-                local spellID, _, _, auraType = select(12, ...)
-                YellTaunt(destName, spellID, auraType)
-                --pr("Testing! SPELL_AURA_APPLIED")
-            
-            --elseif eventType == "SPELL_CAST_SUCCESS" and ct.yelltaunt then
-                --local tName, _, _, spellID = select(9, ...)
-                --Yell_Taunt(dstName, spellID, true)
-                --pr("Testing! SPELL_CAST_SUCCESS")
-            
             end
-            
         end
     end
     
@@ -1927,10 +1810,29 @@ if(ct.healingout)then
                         local rawamount = amount
                         local iconsize = ct.iconsize
                         if critical then 
+                            local bfilter = false
                             amount = ct.critprefix..amount..ct.critpostfix
                             color = { .1, 1, .1 }
                             frame = xCTcrit or frame
                             iconsize = ct.criticonsize
+
+                            -- Filter Criticals
+                            if ct.filtercrits then
+                              if ct.critfilter[spellId] and ct.crits_blacklist then
+                                bfilter = true
+                              elseif not ct.critfilter[spellId] and not ct.crits_blacklist then
+                                bfilter = true
+                              end
+                            end
+                            
+                            -- Redirect to the regular frame
+                            if bfilter then
+                              if ct.showasnoncrit then
+                                frame = xCTdone 
+                              else
+                                return
+                              end
+                            end
                         end 
                         if ct.icons then
                             msg = GetSpellTextureFormatted(spellId, iconsize)
