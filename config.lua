@@ -196,14 +196,18 @@ ns.config = {
     -- Experimental Options - USE CAUTION
     -- --------------------------------------------------------------------------------------
 --[[ Please Note:  Any option below might not work according to the description, which may include poor implementation, bugs, and
---                 and rare cases unstability.  Enable only if you are specifically told you can try out features.
---  
---                 In other words:  USE AT YOUR OWN RISK
+                   and rare cases unstability.  Enable only if you are specifically told you can try out features.
+    
+                   In other words:  USE AT YOUR OWN RISK
 ]]    
 
         -- (DISABLED: Currently does not work)
         ["loottimevisible"]     = 6,
         ["crittimevisible"]     = 3,
         ["timevisible"]         = 3,
+        
+                
+        -- AoE Spam Merge Options
+        ["mergeitems"]          = true,   -- Merge spammy items (mainly items from dragon soul)
 }
 

@@ -15,7 +15,6 @@ addon, based on xCT (by Affli).
 
 ]]
 
-
 --some init
 local addon, ns = ...
 local ct = ns.config
@@ -254,9 +253,10 @@ elseif ct.myclass == "WARRIOR" then
 elseif ct.myclass == "HUNTER" then
     if ct.mergeaoespam then
         ct.aoespam[2643]  = true  -- Multi-Shot
-        ct.aoespam[83077] = true  -- Serpent Sting (Instant Serpent Spread)
-        ct.aoespam[88466] = true  -- Serpent Sting (DOT Serpent Spread)
-        ct.aoespam[1978]  = true  -- Serpent Sting
+        ct.aoespam[83077] = true  -- Serpent Sting (Instant Serpent Spread) (Thanks Naughtia)
+        ct.aoespam[88453] = true  -- Serpent Sting (DOT 1/2 Serpent Spread) (Thanks Naughtia)
+        ct.aoespam[88466] = true  -- Serpent Sting (DOT 2/2 Serpent Spread) (Thanks Naughtia)
+        ct.aoespam[1978]  = true  -- Serpent Sting                          (Thanks Naughtia)
         ct.aoespam[13812] = true  -- Explosive Trap  
     end
     if ct.filtercrits then
@@ -305,13 +305,46 @@ elseif ct.myclass == "ROGUE" then
     end
 end
 
---[[  Role Specific Filter Assignment  ]]
-  -- Healers
-  if ct.myclass == "DRUID" or ct.myclass == "PRIEST" or ct.myclass == "SHAMAN" or ct.myclass == "PALADIN" then
-    ct.aoespam[109847] = true   -- Maw of the Dragonlord (LFR)    (Thanks Nidra)
-    ct.aoespam[107835] = true   -- Maw of the Dragonlord          (Thanks Nidra)
-    ct.aoespam[109849] = true   -- Maw of the Dragonlord (Heroic) (Thanks Nidra)
-  end
+--[[  Spammy Items and Procs that affect multiple classes  ]]
+if ct.mergeaoespam and ct.mergeitems then
+  
+    --[[ Dragon Soul Item - Spam Filter List ]]
+        -- Windward Heart (Healer Trinket)
+        ct.aoespam[108000] = true  -- Nick of Time (Windward Heart)
+        ct.aoespam[109822] = true  -- Nick of Time (Windward Heart - LFR)
+        ct.aoespam[109825] = true  -- Nick of Time (Windward Heart - Heroic)
+
+        -- Bone-Link Fetish (Melee DPS Trinket)
+        ct.aoespam[107997] = true  -- Whirling Maw (Bone-Link Fetish)
+        ct.aoespam[109752] = true  -- Whirling Maw (Bone-Link Fetish - LFR)
+        ct.aoespam[109754] = true  -- Whirling Maw (Bone-Link Fetish - Heroic)
+
+        -- Cunning of the Cruel (Caster DPS Trinket)
+        ct.aoespam[108005] = true  -- Shadowbolt Volley (Cunning of the Cruel)
+        ct.aoespam[109798] = true  -- Shadowbolt Volley (Cunning of the Cruel - LFR)
+        ct.aoespam[109800] = true  -- Shadowbolt Volley (Cunning of the Cruel - Heroic)
+
+        -- Maw of the Dragonlord (Healer MH Mace, Thanks Nidra!)
+        ct.aoespam[107835] = true  -- Cleansing Flames (Maw of the Dragonlord)
+        ct.aoespam[109847] = true  -- Cleansing Flames (Maw of the Dragonlord - LFR)
+        ct.aoespam[109849] = true  -- Cleansing Flames (Maw of the Dragonlord - Heroic)
+
+        -- Rathrak, the Poisonous Mind (Caster DPS MH Dagger)
+        ct.aoespam[107831] = true  -- Blast of Corruption (Rathrak, the Poisonous Mind)
+        ct.aoespam[109851] = true  -- Blast of Corruption (Rathrak, the Poisonous Mind - LFR)
+        ct.aoespam[109854] = true  -- Blast of Corruption (Rathrak, the Poisonous Mind - Heroic)
+
+        -- Vishanka, Jaws of the Earth (Physical DPS Bow)
+        ct.aoespam[107821] = true  -- Speaking of Rage (Vishanka, Jaws of the Earth)
+        ct.aoespam[109856] = true  -- Speaking of Rage (Vishanka, Jaws of the Earth - LFR)
+        ct.aoespam[109859] = true  -- Speaking of Rage (Vishanka, Jaws of the Earth - Heroic)
+        
+        -- Dragon Soul - The Madness of Deathwing
+        ct.aoespam[109609] = true  -- Spellweave
+        ct.aoespam[109610] = true  -- Spellweave
+        ct.aoespam[106043] = true  -- Spellweave
+        ct.aoespam[109611] = true  -- Spellweave
+end
   
 --[[  Defining the Frames  ]]
 local framenames = { "dmg", "heal", "gen" }   -- Default frames (Always enabled)
