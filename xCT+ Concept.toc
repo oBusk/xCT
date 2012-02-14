@@ -1,0 +1,15 @@
+## Interface: 40300
+## Title: xCT+ 3 Concept
+## Notes: This is for private use only. General public will NOT receive any support. 
+## Author: Dandruff @ US-Whisperwind
+## Version: ALPHA v3 R1
+## SavedVariables: xCTSavedVariables
+## RequiredDeps: Blizzard_CombatText
+
+Options.lua
+Event.lua
+Engine.lua
+Blizzard.lua
+Frames.lua
+Profile.lua
+Utility.lua
