@@ -19,7 +19,7 @@ local xCT_CurrentProfile = xCT.CurrentProfile
   xCT.Player = {
     Pet = { },
   }
-  local xCT_Player
+  local xCT_Player = xCT.Player
 -- ===================================================
 
 -- Accessors
@@ -74,14 +74,18 @@ function xCT_Player:SetUnit()
 end
 
 function xCT_Player:UpdatePlayer()
-  self.Unit   = XCT_PLAYER
-  self.GUID   = UnitGUID(XCT_PLAYER)
-  self.Unit   = select(2, UnitPowerType(XCT_PLAYER))
+  --self.Unit   = XCT_PLAYER
+  --self.GUID   = UnitGUID(XCT_PLAYER)
+  --self.Power  = select(2, UnitPowerType(XCT_PLAYER))
+  
+  self:SetUnit()
   self.Class  = select(2, UnitClass("player")),
   self.Flags  = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE,
                         COMBATLOG_OBJECT_REACTION_FRIENDLY,
                         COMBATLOG_OBJECT_CONTROL_PLAYER,
                         COMBATLOG_OBJECT_TYPE_GUARDIAN)
+  
+  self:UpdatePlayerPet()
 end
 
 function xCT_Player:UpdatePlayerPet()

@@ -1,3 +1,5 @@
+-- this is the advanced combat text reader.  in the end I don't think that I am going to use it.
+-- This still needs a lot of work to be completed
 
 -- Combat Text Event Engine
 local ADDON_NAME, xCT = ...
@@ -34,6 +36,16 @@ local MissTypes = {
     ["PARRY"] = true,
   ["REFLECT"] = true,
    ["RESIST"] = true,
+}
+
+local SpellSchools = {
+ --   Type     [Red - Green - Blue]
+    ["Holy"] = { 0xFF, 0xE6, 0x80 },
+    ["Fire"] = { 0xFF, 0x80, 0x00 },
+  ["Nature"] = { 0x4D, 0xFF, 0x4D },
+   ["Frost"] = { 0x80, 0xFF, 0xFF },
+  ["Shadow"] = { 0x80, 0x80, 0xFF },
+  ["Arcane"] = { 0xFF, 0x80, 0xFF },
 }
 
 -- Returns if this event affects a player, pet or vehicle

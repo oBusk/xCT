@@ -34,10 +34,18 @@ function xCT_Output.SendIncomingDamageMessage(msg, critical, r, g, b)
 
 end
 
-function xCT_Output.SendIncomingHealingMessage(msg, critical, r, g, b)
+function xCT_Output.SendIncomingHealingMessage(msg, name, critical, r, g, b)
 
 end
 
-function xCT_Output.SendGeneralMessage(msg, critical, r, g, b)
+function xCT_Output.SendGeneralMessage(msg, r, g, b)
+
+end
+
+function xCT_Output.SendProcMessage(msg, critical, r, g, b)
+
+end
+
+function xCT_Output.SendPowerMessage(msg, power)
 
 end
