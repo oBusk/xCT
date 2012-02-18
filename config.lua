@@ -155,15 +155,15 @@ ns.config = {
     -- xCT+ Frames' Justification
     -- --------------------------------------------------------------------------------------
         --[[Justification Options: "RIGHT", "LEFT", "CENTER" ]]
-        ["justify_1"] = "LEFT",             -- Damage Incoming Frame (frame is called "xCTdmg")
-        ["justify_2"] = "RIGHT",            -- Healing Incoming Frame (frame is called "xCTheal")
-        ["justify_3"] = "CENTER",           -- General Buffs Gains/Drops Frame (frame is called "xCTgen")
-        ["justify_4"] = "RIGHT",            -- Healing/Damage Outgoing Frame (frame is called "xCTdone")
-        ["justify_5"] = "CENTER",           -- Loot/Money Gains Frame (frame is called "xCTloot")
-        ["justify_6"] = "RIGHT",            -- Criticals Outgoing Frame (frame is called "xCTcrit")
-        ["justify_7"] = "LEFT",             -- Power Gains Frame (frame is called "xCTpwr")
-        ["justify_8"] = "CENTER",           -- Procs Frame (frame is called "xCTproc")    
-    
+        ["justify_1"] = "LEFT",             -- Damage Incoming Frame            (frame is called "xCTdmg")
+        ["justify_2"] = "RIGHT",            -- Healing Incoming Frame           (frame is called "xCTheal")
+        ["justify_3"] = "CENTER",           -- General Buffs Gains/Drops Frame  (frame is called "xCTgen")
+        ["justify_4"] = "RIGHT",            -- Healing/Damage Outgoing Frame    (frame is called "xCTdone")
+        ["justify_5"] = "CENTER",           -- Loot/Money Gains Frame           (frame is called "xCTloot")
+        ["justify_6"] = "RIGHT",            -- Criticals Outgoing Frame         (frame is called "xCTcrit")
+        ["justify_7"] = "LEFT",             -- Power Gains Frame                (frame is called "xCTpwr")
+        ["justify_8"] = "CENTER",           -- Procs Frame                      (frame is called "xCTproc")    
+        ["justify_9"] = "CENTER",           -- Class Combo Points Frame         (frame is called "xCTclass")    
     
     -- --------------------------------------------------------------------------------------
     -- xCT+ Class Specific and Misc. Options
@@ -209,5 +209,13 @@ ns.config = {
                 
         -- AoE Spam Merge Options
         ["mergeitems"]          = true,   -- Merge spammy items (mainly items from dragon soul)
+        
+        
+        -- Class combo window
+        ["classcombopoints"]    = true,
+        ["classcombofont"]      = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the class combo points frame
+        ["classcombofontsize"]  = 48,                                   -- multiples of 8 for pixel perfect
+        ["classcombofontstyle"] = "THICKOUTLINE",
 }
+
 

@@ -21,6 +21,10 @@ local ct = ns.config
 ct.myname = UnitName("player")
 ct.myclass = select(2, UnitClass("player"))
 
+
+
+
+
 --[[  Filter Auras
   Allows you to filter auras (by name only). Some settings that affect this filter:
 
@@ -64,6 +68,55 @@ end
 if ct.mergeaoespam then
     ct.aoespam = { }
     -- See class-specific config for merged spells.
+end
+
+--[[  Assign Class Combo Abilities ]]
+local function AssignTalentTree()
+  -- Spec Calculator
+  ct.myspec = GetPrimaryTalentTree(false, false, GetActiveTalentGroup(false, false))
+
+  if ct.classcombopoints then
+    ct.classcomboUnit = "player" -- most of the time, this is the player
+
+    if ct.myclass == "WARLOCK" then
+      ct.classcombopoints = false
+      
+    elseif ct.myclass == "DRUID" then
+      ct.classcombopoints = false
+      
+    elseif ct.myclass == "PALADIN" then
+      ct.classcombopoints = false
+      
+    elseif ct.myclass == "PRIEST" then
+      if ct.myspec == 1 then  -- Discipline
+        ct.classcomboIDs = {
+          [81660] = true,     -- Evangelism (Rank 1)
+          [81661] = true,     -- Evangelism (Rank 2)
+        }
+      else
+        ct.classcombopoints = false
+      end
+      
+    elseif ct.myclass == "SHAMAN" then
+      ct.classcombopoints = false
+      
+    elseif ct.myclass == "MAGE" then
+      ct.classcombopoints = false
+      
+    elseif ct.myclass == "WARRIOR" then
+      ct.classcombopoints = false
+      
+    elseif ct.myclass == "HUNTER" then
+      if ct.myspec == 1 then  -- Beast Mastery
+        ct.classcomboUnit = "pet"
+        ct.classcomboIDs = {
+          [19615] = true,     -- Frenzy Effect
+        }
+      else
+        ct.classcombopoints = false
+      end
+    end
+  end
 end
 
 --[[  Class Specific Filter Assignment  ]]
@@ -381,6 +434,12 @@ local numf = #framenames                      -- Number of Frames
         framenames[numf] = "proc"
     end
     
+    -- Add a window for a class's combo points
+    if ct.classcombopoints then
+        numf = numf + 1     -- 9
+        framenames[numf] = "class"
+    end
+    
 --[[  Create Your Own Frame
   Example:
     if ct.custom_frame_enable then
@@ -449,7 +508,9 @@ end
 local function LimitLines()
     for i = 1, #ct.frames do
         local f = ct.frames[i]
-        f:SetMaxLines(f:GetHeight() / ct.fontsize)
+        if framenames[i] ~= "class" then
+          f:SetMaxLines(f:GetHeight() / ct.fontsize)
+        end
     end
 end
 
@@ -928,13 +989,22 @@ local function OnEvent(self, event, subevent, ...)
     elseif event == "UNIT_COMBO_POINTS" and COMBAT_TEXT_SHOW_COMBO_POINTS == "1" then
         if subevent == ct.unit then
             local cp = GetComboPoints(ct.unit, "target")
-                if cp > 0 then
-                    r, g, b = 1, .82, .0
-                    if cp == MAX_COMBO_POINTS then
-                        r, g, b = 0, .82, 1
-                    end
-                    xCTgen:AddMessage(format(COMBAT_TEXT_COMBO_POINTS, cp), r, g, b)
+            
+            if cp > 0 then
+                r, g, b = 1, .82, .0
+                if cp == MAX_COMBO_POINTS then
+                    r, g, b = 0, .82, 1
                 end
+                if ct.classcombopoints then
+                  xCTclass:AddMessage(tostring(cp), r, g, b)
+                  ct.classcomboupdate = true
+                else
+                  xCTgen:AddMessage(format(COMBAT_TEXT_COMBO_POINTS, cp), r, g, b)
+                end
+            elseif ct.classcomboupdate then
+              ct.classcomboupdate = false
+              xCTclass:AddMessage("", 1, 1, 1)
+            end
         end
 
     elseif event == "RUNE_POWER_UPDATE" then
@@ -969,7 +1039,8 @@ local function OnEvent(self, event, subevent, ...)
         if ct.damageout or ct.healingout then
             ct.pguid = UnitGUID("player")
         end
-    
+        AssignTalentTree()
+        
     elseif event == "CHAT_MSG_LOOT" then
         ChatMsgLoot_Handler(subevent)
         
@@ -1011,18 +1082,19 @@ for i = 1, numf do
     f:SetClampRectInsets(0, 0, ct.fontsize, 0)
     if framenames[i] == "dmg" then
         f:SetJustifyH(ct.justify_1)
-        f:SetPoint("CENTER", -320, 0)
+        f:SetPoint("CENTER", -256, 0)
     elseif framenames[i] == "heal" then
         f:SetJustifyH(ct.justify_2)
-        f:SetPoint("CENTER", -512, 0)
-        f:SetWidth(256)
+        f:SetPoint("CENTER", -480, 0)
+        f:SetWidth(320)
     elseif framenames[i] == "gen" then
         f:SetJustifyH(ct.justify_3)
-        f:SetWidth(256)
-        f:SetPoint("CENTER", 0, 192)
+        f:SetWidth(512)
+        f:SetPoint("CENTER", 0, 320)
     elseif framenames[i] == "done" then
         f:SetJustifyH(ct.justify_4)
-        f:SetPoint("CENTER", 320, 0)
+        f:SetHeight(384)
+        f:SetPoint("CENTER", 576, 0)
         local a, _, c = f:GetFont()
         if type(ct.damagefontsize) == "number" then
             f:SetFont(a, ct.damagefontsize, c)
@@ -1036,15 +1108,13 @@ for i = 1, numf do
             end
         end
     elseif framenames[i] == "loot" then
-        --f:SetTimeVisible(ct.loottimevisible)
         f:SetJustifyH(ct.justify_5)
-        f:SetWidth(256)
-        f:SetPoint("CENTER", 0, -192)
+        f:SetWidth(512)
+        f:SetPoint("CENTER", 0, 192)
     elseif framenames[i] == "crit" then
-        --f:SetTimeVisible(ct.crittimevisible)
         f:SetJustifyH(ct.justify_6)
-        f:SetWidth(256)
-        f:SetPoint("CENTER", 128, 0)
+        f:SetWidth(192)
+        f:SetPoint("CENTER", 416, 0)
         if type(ct.critfontsize) == "number" then
             f:SetFont(ct.critfont, ct.critfontsize, ct.critfontstyle)
         else
@@ -1056,16 +1126,23 @@ for i = 1, numf do
                 end
             end
         end
-	elseif framenames[i] == "pwr" then
+    elseif framenames[i] == "pwr" then
         f:SetJustifyH(ct.justify_7)
-        f:SetPoint("CENTER", 512, 0)
-        f:SetWidth(256)
-	elseif framenames[i] == "proc" then
+        f:SetPoint("CENTER", 0, -64)
+        f:SetWidth(384)
+    elseif framenames[i] == "proc" then
         f:SetJustifyH(ct.justify_8)
-        f:SetWidth(256)
-        f:SetPoint("CENTER", -128, 0)
+        f:SetWidth(512)
+        f:SetPoint("CENTER", 0, -192)
 		    f:SetFont(ct.procfont, ct.procfontsize, ct.procfontstyle)
-		    
+    elseif framenames[i] == "class" then
+        f:SetJustifyH(ct.justify_9)
+        f:SetMaxLines(1)
+        f:SetWidth(64)
+        f:SetHeight(64)
+        f:SetPoint("CENTER", 0, 64)
+		    f:SetFont(ct.classcombofont, ct.classcombofontsize, ct.classcombofontstyle)
+        f:SetFading(false)
     -- Add a starting location to your frame
     --elseif framenames[i] == "custom" then
     --    f:SetTimeVisible(ct.loottimevisible)
@@ -1211,6 +1288,9 @@ local StartConfigmode = function()
             elseif framenames[i] == "proc" then
                 f.fs:SetText("procs")
                 f.fs:SetTextColor(1,.6,.3,.9)
+            elseif framenames[i] == "class" then
+                f.fs:SetText("class combo")
+                f.fs:SetTextColor(1,1,.1,.9)
             -- Add a title to your frame
             --elseif framenames[i] == "custom" then
             --    f.fs:SetText("Custom Frame")
@@ -1449,6 +1529,20 @@ local function StartTestMode()
                             ct.frames[i]:AddMessage("A Spell Proc'd!", 1, 1, 0)
                         end
                         
+                    elseif framenames[i] == "class" then
+                        local frame = ct.frames[i]
+                        if not frame.testcombo then
+                          frame.testcombo = 0
+                        end
+                        if random(3) % 3 == 0 then
+                            frame.testcombo = frame.testcombo + 1
+                            
+                            if frame.testcombo > 8 then
+                              frame.testcombo = 1
+                            end
+                            
+                            ct.frames[i]:AddMessage(tostring(frame.testcombo), 1, .82, 0)
+                        end
                     end
                     
                     TimeSinceLastUpdate = 0
@@ -1894,4 +1988,41 @@ if(ct.healingout)then
 
     -- this is corrected for 4.2, call normal
     xCTh:SetScript("OnEvent", heal)
+end
+
+-- Stack Tracker
+if (ct.classcombopoints) then
+  xCTclass:SetMaxLines(1)
+  local unpack, select, time = unpack, select, time
+  local xCTstacks = CreateFrame("Frame")
+  ct.combolastupdate = 0
+  local track = function(self, event, unit)
+    if unit == ct.classcomboUnit then
+      local i, name, _, icon, count, _, _, _, _, _, _, spellId = 1, UnitBuff(ct.classcomboUnit, 1)
+      while name do
+        if ct.classcomboIDs[spellId] then break end
+        i = i + 1;
+        name, _, icon, count, _, _, _, _, _, _, spellId = UnitBuff(ct.classcomboUnit, i)
+      end
+      if name then
+        if count > 0 and count ~= ct.combolastupdate then
+          xCTclass:AddMessage(count, 1, .82, 0)
+          ct.classcomboupdated = true
+          ct.combolastupdate = count
+        end
+      elseif not count and ct.classcomboupdated then
+        ct.classcomboupdated = false
+        xCTclass:AddMessage(" ", 1, .82, 0)
+        ct.combolastupdate = 0
+      end
+      
+    -- Fix issue of not reseting when unit disapears (e.g. dismiss pet)
+    elseif not UnitExists(ct.classcomboUnit) then
+      ct.classcomboupdated = false
+      xCTclass:AddMessage(" ", 1, .82, 0)
+      ct.combolastupdate = 0
+    end
+  end
+  xCTstacks:RegisterEvent("UNIT_AURA")
+  xCTstacks:SetScript("OnEvent", track)
 end
