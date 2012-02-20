@@ -115,7 +115,14 @@ local function AssignTalentTree()
       else
         ct.classcombopoints = false
       end
+    else
+      -- Unknown Class
+      ct.classcombopoints = false
     end
+  end
+
+  if ct.classcombopoints then
+    loadstacktracker()
   end
 end
 
@@ -1996,38 +2003,40 @@ if(ct.healingout)then
 end
 
 -- Stack Tracker
-if (ct.classcombopoints) then
-  xCTclass:SetMaxLines(1)
-  local unpack, select, time = unpack, select, time
-  local xCTstacks = CreateFrame("Frame")
-  ct.combolastupdate = 0
-  local track = function(self, event, unit)
-    if unit == ct.classcomboUnit then
-      local i, name, _, icon, count, _, _, _, _, _, _, spellId = 1, UnitBuff(ct.classcomboUnit, 1)
-      while name do
-        if ct.classcomboIDs[spellId] then break end
-        i = i + 1;
-        name, _, icon, count, _, _, _, _, _, _, spellId = UnitBuff(ct.classcomboUnit, i)
-      end
-      if name then
-        if count > 0 and count ~= ct.combolastupdate then
-          xCTclass:AddMessage(count, 1, .82, 0)
-          ct.classcomboupdated = true
-          ct.combolastupdate = count
+  function loadstacktracker()
+  if (ct.classcombopoints) then
+    xCTclass:SetMaxLines(1)
+    local unpack, select, time = unpack, select, time
+    local xCTstacks = CreateFrame("Frame")
+    ct.combolastupdate = 0
+    local track = function(self, event, unit)
+      if unit == ct.classcomboUnit then
+        local i, name, _, icon, count, _, _, _, _, _, _, spellId = 1, UnitBuff(ct.classcomboUnit, 1)
+        while name do
+          if ct.classcomboIDs[spellId] then break end
+          i = i + 1;
+          name, _, icon, count, _, _, _, _, _, _, spellId = UnitBuff(ct.classcomboUnit, i)
         end
-      elseif not count and ct.classcomboupdated then
+        if name then
+          if count > 0 and count ~= ct.combolastupdate then
+            xCTclass:AddMessage(count, 1, .82, 0)
+            ct.classcomboupdated = true
+            ct.combolastupdate = count
+          end
+        elseif not count and ct.classcomboupdated then
+          ct.classcomboupdated = false
+          xCTclass:AddMessage(" ", 1, .82, 0)
+          ct.combolastupdate = 0
+        end
+        
+      -- Fix issue of not reseting when unit disapears (e.g. dismiss pet)
+      elseif not UnitExists(ct.classcomboUnit) then
         ct.classcomboupdated = false
         xCTclass:AddMessage(" ", 1, .82, 0)
         ct.combolastupdate = 0
       end
-      
-    -- Fix issue of not reseting when unit disapears (e.g. dismiss pet)
-    elseif not UnitExists(ct.classcomboUnit) then
-      ct.classcomboupdated = false
-      xCTclass:AddMessage(" ", 1, .82, 0)
-      ct.combolastupdate = 0
     end
+    xCTstacks:RegisterEvent("UNIT_AURA")
+    xCTstacks:SetScript("OnEvent", track)
   end
-  xCTstacks:RegisterEvent("UNIT_AURA")
-  xCTstacks:SetScript("OnEvent", track)
 end
