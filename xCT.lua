@@ -107,7 +107,7 @@ local function AssignTalentTree()
         
       end
       
-    elseif ct.myclass == "PALADIN" then'
+    elseif ct.myclass == "PALADIN" then
       if ct.myspec == 1 then      -- Holy
         ct.classcomboIDs = {
           [20050] = true,         -- Conviction (Rank 1)
