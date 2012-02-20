@@ -21,12 +21,7 @@ ns.config = {
     -- Blizzard Damage Options.
     -- --------------------------------------------------------------------------------------   
         -- Use Blizzard Damage/Healing Output (Numbers Above Mob/Player's Head)
-        ["blizzheadnumbers"]    = false,  -- (You need to restart WoW to see changes!)
-        
-        -- DO NOT USE - BUGGY
-        -- Change Default Damage/Healing Font Above Mobs/Player Heads. (This has no effect if ["blizzheadnumbers"] = false)
-        -- ["damagestyle"]         = true,  -- (You need to restart WoW to see changes!)
-        -- DO NOT USE - BUGGY
+        ["blizzheadnumbers"]    = false,    -- (You need to restart WoW to see changes!)
         
         -- "Everything else" font size (heals/interrupts and the like)
         ["fontsize"]        = 16,
@@ -80,11 +75,11 @@ ns.config = {
             -- Critical Custom Font and Format
             ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
             ["critfontstyle"]   = "OUTLINE",
-            ["critfontsize"]    = 24,                   -- crit font size ("auto" or Number)
+            ["critfontsize"]    = 24,                                   -- crit font size ("auto" or Number)
             
             -- Critical Appearance Options
-            ["critprefix"]      = "|cffFF0000*|r",      -- prefix symbol shown before crit'd amount (default: red *)
-            ["critpostfix"]     = "|cffFF0000*|r",      -- postfix symbol shown after crit'd amount (default: red *)
+            ["critprefix"]      = "|cffFF0000*|r",                      -- prefix symbol shown before crit'd amount (default: red *)
+            ["critpostfix"]     = "|cffFF0000*|r",                      -- postfix symbol shown after crit'd amount (default: red *)
             
             -- Filter Criticals
             ["filtercrits"]     = false,    -- Allows you to turn on a list that will filter out buffs
@@ -128,7 +123,7 @@ ns.config = {
         
             -- Proc Frame Custom Font Options
             ["procfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the proc frame
-            ["procfontsize"]    = 16,                   -- proc font size ("auto" or Number)
+            ["procfontsize"]    = 16,                                   -- proc font size ("auto" or Number)
             ["procfontstyle"]   = "OUTLINE",
         -- __________________________________________________________________________________
         
@@ -139,17 +134,29 @@ ns.config = {
         ["powergainswindow"]    = true,     -- Enable the frame to show Auras
         
             -- Filter Auras Gains or Fades
-            ["showharmfulaura"] = true,   -- Show Harmful Auras (Gains and Losses)
-            ["showhelpfulaura"] = true,   -- Show Helpful Auras (Gains and Losses)
-            ["showgains"]       = true,   -- Show Gains in the Aura frame
-            ["showfades"]       = true,   -- Show Fades in the Aura frame
-            ["filteraura"]      = true,   -- allows you to filter out unwanted aura gains/losses
-            ["aura_blacklist"]  = true,   -- aura list is a blacklist (opposed to a whitelist)
+            ["showharmfulaura"] = true,     -- Show Harmful Auras (Gains and Losses)
+            ["showhelpfulaura"] = true,     -- Show Helpful Auras (Gains and Losses)
+            ["showgains"]       = true,     -- Show Gains in the Aura frame
+            ["showfades"]       = true,     -- Show Fades in the Aura frame
+            ["filteraura"]      = true,     -- allows you to filter out unwanted aura gains/losses
+            ["aura_blacklist"]  = true,     -- aura list is a blacklist (opposed to a whitelist)
             
             -- Filter Aura Helpers
-            ["debug_aura"]      = false,  -- Shows your Aura's names in the chatbox.  Useful when adding to the filter yourself.
+            ["debug_aura"]      = false,    -- Shows your Aura's names in the chatbox.  Useful when adding to the filter yourself.
         -- __________________________________________________________________________________
-    
+        
+        
+        -- ==================================================================================
+        -- Class Combo Points (Stacking Aura's) Tracker (frame is called "xCTclass")
+        -- ==================================================================================
+        -- Class combo window
+        ["combowindow"]         = true,     -- Create a Combo Points frame
+        
+            -- Class Combo Points Frame Custom Font Options
+            ["classcombofont"]      = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the class combo points frame
+            ["classcombofontsize"]  = 48,                                   -- multiples of 8 for pixel perfect
+            ["classcombofontstyle"] = "THICKOUTLINE",
+        -- __________________________________________________________________________________
 
     -- --------------------------------------------------------------------------------------
     -- xCT+ Frames' Justification
@@ -169,27 +176,28 @@ ns.config = {
     -- xCT+ Class Specific and Misc. Options
     -- --------------------------------------------------------------------------------------
         -- Priest
-        ["stopvespam"]          = false,  -- Hides Healing Spam for Priests in Shadowform.
+        ["stopvespam"]          = false,    -- Hides Healing Spam for Priests in Shadowform.
         
         -- Death Knight
-        ["dkrunes"]             = true,   -- Show Death Knight Rune Recharge
-        ["mergedualwield"]      = true,   -- Merge dual wield damage
+        ["dkrunes"]             = true,     -- Show Death Knight Rune Recharge
+        ["mergedualwield"]      = true,     -- Merge dual wield damage
         
         -- Misc.
             -- Spell Spam Spam Spam Spam Spam Spam Spam Spam
-            ["mergeaoespam"]    = true,   -- Merges multiple AoE spam into single message, can be useful for dots too.
-            ["mergeaoespamtime"] = 3,     -- Time in seconds AoE spell will be merged into single message.  Minimum is 1.
+            ["mergeaoespam"]    = true,     -- Merges multiple AoE spam into single message, can be useful for dots too.
+            ["mergeitems"]      = true,     -- Merges spammy items (mainly items from dragon soul)
+            ["mergeaoespamtime"] = 3,       -- Time in seconds AoE spell will be merged into single message.  Minimum is 1.
         
             -- Helpful Alerts (Shown in the Gerenal Gains/Drops Frame)
-            ["killingblow"]     = true,   -- Alerts with the name of the PC/NPC that you had a killing blow on (Req. ["damageout"] = true)
-            ["dispel"]          = true,   -- Alerts with the name of the (De)Buff Dispelled (Req. ["damageout"] = true)
-            ["interrupt"]       = true,   -- Alerts with the name of the Spell Interupted (Req. ["damageout"] = true)
+            ["killingblow"]     = true,     -- Alerts with the name of the PC/NPC that you had a killing blow on (Req. ["damageout"] = true)
+            ["dispel"]          = true,     -- Alerts with the name of the (De)Buff Dispelled (Req. ["damageout"] = true)
+            ["interrupt"]       = true,     -- Alerts with the name of the Spell Interupted (Req. ["damageout"] = true)
         
             -- Alignment Help (Shown when configuring frames)
-            ["showgrid"]        = true,   -- shows a grid when moving xCT windows around
+            ["showgrid"]        = true,     -- shows a grid when moving xCT windows around
             
             -- Show Procs
-            ["filterprocs"]     = true,   -- Enable to hide procs from ALL frames (will show in xCTproc or xCTgen otherwise)
+            ["filterprocs"]     = true,     -- Enable to hide procs from ALL frames (will show in xCTproc or xCTgen otherwise)
             
             
     -- --------------------------------------------------------------------------------------
@@ -206,17 +214,11 @@ ns.config = {
         ["crittimevisible"]     = 3,
         ["timevisible"]         = 3,
         
-                
-        -- AoE Spam Merge Options
-        ["mergeitems"]          = true,   -- Merge spammy items (mainly items from dragon soul)
         
-        
-        -- Class combo window
-        ["combowindow"]         = true,   -- Create a Combo Points frame
-        ["classcombopoints"]    = true,
-        ["classcombofont"]      = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the class combo points frame
-        ["classcombofontsize"]  = 48,                                   -- multiples of 8 for pixel perfect
-        ["classcombofontstyle"] = "THICKOUTLINE",
+        -- DO NOT USE - BUGGY
+        -- Change Default Damage/Healing Font Above Mobs/Player Heads. (This has no effect if ["blizzheadnumbers"] = false)
+        -- ["damagestyle"]         = true,  -- (You need to restart WoW to see changes!)
+        -- DO NOT USE - BUGGY
 }
 
 
