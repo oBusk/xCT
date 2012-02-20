@@ -212,6 +212,7 @@ ns.config = {
         
         
         -- Class combo window
+        ["combowindow"]         = true,   -- Create a Combo Points frame
         ["classcombopoints"]    = true,
         ["classcombofont"]      = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the class combo points frame
         ["classcombofontsize"]  = 48,                                   -- multiples of 8 for pixel perfect

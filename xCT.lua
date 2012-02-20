@@ -447,7 +447,7 @@ local numf = #framenames                      -- Number of Frames
     end
     
     -- Add a window for a class's combo points
-    if ct.classcombopoints then
+    if ct.combowindow then
         numf = numf + 1     -- 9
         framenames[numf] = "class"
     end
@@ -725,7 +725,7 @@ local r, g, b
 -- Handlers for Combat Text and other incoming events.  Outgoing events are handled further down.
 local function OnEvent(self, event, subevent, ...)
     if event == "COMBAT_TEXT_UPDATE" then
-        local arg2, arg3 = ...
+        local arg2, arg3 = select(1, ...)
         if SHOW_COMBAT_TEXT == "0" then
             return
         else
@@ -999,26 +999,14 @@ local function OnEvent(self, event, subevent, ...)
             xCTgen:AddMessage("+"..ENTERING_COMBAT, 1, .1, .1)
 
     elseif event == "UNIT_COMBO_POINTS" and COMBAT_TEXT_SHOW_COMBO_POINTS == "1" then
-        if subevent == ct.unit then
-            local cp = GetComboPoints(ct.unit, "target")
-            
-            if cp > 0 then
-                r, g, b = 1, .82, .0
-                if cp == MAX_COMBO_POINTS then
-                    r, g, b = 0, .82, 1
-                end
-                if ct.classcombopoints then
-                  xCTclass:AddMessage(tostring(cp), r, g, b)
-                  ct.classcomboupdate = true
-                else
-                  xCTgen:AddMessage(format(COMBAT_TEXT_COMBO_POINTS, cp), r, g, b)
-                end
-            elseif ct.classcomboupdate then
-              ct.classcomboupdate = false
-              xCTclass:AddMessage("", 1, 1, 1)
-            end
-        end
-
+      -- Rewrite Combo Points
+      if subevent == ct.unit then
+        ct:UpdateComboPoints()
+      end
+      
+    elseif event == "PLAYER_TARGET_CHANGED" and ct.combowindow then
+      ct:UpdateComboPoints()
+      
     elseif event == "RUNE_POWER_UPDATE" then
         local arg1, arg2 = subevent, ...
         if arg2 then
@@ -1177,6 +1165,7 @@ xCT:RegisterEvent("UNIT_COMBO_POINTS")
 xCT:RegisterEvent("UNIT_ENTERED_VEHICLE")
 xCT:RegisterEvent("UNIT_EXITING_VEHICLE")
 xCT:RegisterEvent("PLAYER_ENTERING_WORLD")
+xCT:RegisterEvent("PLAYER_TARGET_CHANGED")
 
 -- Register DK Events
 if ct.dkrunes and select(2, UnitClass("player")) == "DEATHKNIGHT" then
@@ -2003,8 +1992,8 @@ if(ct.healingout)then
 end
 
 -- Stack Tracker
-  function loadstacktracker()
-  if (ct.classcombopoints) then
+function loadstacktracker()
+  if ct.combowindow then
     xCTclass:SetMaxLines(1)
     local unpack, select, time = unpack, select, time
     local xCTstacks = CreateFrame("Frame")
@@ -2038,5 +2027,28 @@ end
     end
     xCTstacks:RegisterEvent("UNIT_AURA")
     xCTstacks:SetScript("OnEvent", track)
+  end
+end
+
+function ct:UpdateComboPoints()
+  local cp = GetComboPoints(ct.unit, "target")
+          
+  -- Combo points Color
+  r, g, b = 1, .82, .0
+  if cp == MAX_COMBO_POINTS then
+    r, g, b = 0, .82, 1
+  end
+  
+  -- Combo Points Add Message
+  if cp > 0 then
+    if ct.combowindow then
+      xCTclass:AddMessage(tostring(cp), r, g, b)
+      ct.classcomboupdated = true
+    else
+      xCTgen:AddMessage(format(COMBAT_TEXT_COMBO_POINTS, cp), r, g, b)
+    end
+  elseif ct.classcomboupdated then
+    ct.classcomboupdated = false
+    xCTclass:AddMessage(" ", 1, .82, 0)
   end
 end
