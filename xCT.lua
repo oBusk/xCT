@@ -11,9 +11,7 @@ Version: 2.x.x
 Description:
   xCT+ is an extremely lightwight scrolling combat text addon.  It replaces Blizzard's default
 scrolling combat text with something that is more concised and organized.  xCT+ is a stand alone
-addon, based on xCT (by Affli).
-
-]]
+addon, based on xCT (by Affli).                                                                     ]]
 
 --some init
 local addon, ns = ...
@@ -124,11 +122,24 @@ local function AssignTalentTree()
       end
       
     elseif ct.myclass == "PRIEST" then
-      -- All Priest Specs
-      ct.classcomboIDs = {
-        [81660] = true,     -- Evangelism (Rank 1)
-        [81661] = true,     -- Evangelism (Rank 2)
-      }
+      if ct.myspec == 1 then      -- Discipline
+        ct.classcomboIDs = {
+          [81660] = true,         -- Evangelism (Rank 1)
+          [81661] = true,         -- Evangelism (Rank 2)
+        }
+        
+      elseif ct.myspec == 2 then  -- Holy
+        ct.classcomboIDs = {
+          [81660] = true,         -- Evangelism (Rank 1)
+          [81661] = true,         -- Evangelism (Rank 2)
+        }
+        
+      elseif ct.myspec == 3 then  -- Shadow
+        ct.classcomboIDs = {
+          [77487] = true,         -- Shadow Orbs
+        }
+        
+      end
       
     elseif ct.myclass == "SHAMAN" then
       if ct.myspec == 1 then      -- Elemental
@@ -141,9 +152,11 @@ local function AssignTalentTree()
         
       elseif ct.myspec == 3 then  -- Restoration
         ct.classcomboIDs = {
-          [29206] = true,         -- Healing Way (Rank 1)
-          [29205] = true,         -- Healing Way (Rank 2)
-          [29202] = true,         -- Healing Way (Rank 3)
+        --[29206] = true,         -- Healing Way (Rank 1)
+        --[29205] = true,         -- Healing Way (Rank 2)
+        --[29202] = true,         -- Healing Way (Rank 3)
+        
+          [53390] = true,         -- Tidal Waves
         }
         
       end
@@ -169,6 +182,23 @@ local function AssignTalentTree()
       elseif ct.myspec == 3 then  -- Survival
         ct.classcomboIDs = {
           [56453] = true,         -- Lock 'n Load
+        }
+        
+      end
+      
+    elseif ct.myclass == "DEATHKNIGHT" then
+      if ct.myspec == 1 then      -- Blood
+        ct.classcomboIDs = {
+          [49222] = true,         -- Bone Shield
+        }
+        
+      elseif ct.myspec == 2 then  -- Frost
+        ct.combowindow = false
+        
+      elseif ct.myspec == 3 then  -- Unholy
+        ct.classcomboUnit = "pet"
+        ct.classcomboIDs = {
+          [91342] = true,         -- Shadow Infusion
         }
         
       end

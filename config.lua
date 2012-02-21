@@ -15,10 +15,58 @@ addon, based on xCT (by Affli).
 
 ]]
 
+--[[  
+Table of Contents:
+  > Blizzard Damage Options
+  
+  > xCT+ Frames
+    + Healing/Damage Outing Frame ("xCTdone")
+        * Filter Units/Periodic Spells
+        * Damage/Healing Icon Sizes and Appearence
+        * Damage/Healing Minimum Value Threshold
+        
+    + Critical Damage/Healing Outging Frame ("xCTcrit")
+        * Critical Icon Sizes   
+        * Critical Custom Font and Format
+        * Critical Appearance Options
+        * Filter Criticals
+        
+    + Loot Items/Money Gains ("xCTloot")
+        * What to show in "xCTloot"
+        * Item Options
+        * Item/Money Filter
+        * Item/Money Appearance
+        
+    + Spell / Ability Procs Frame ("xCTproc")
+        * Proc Frame Custom Font Options
+
+    + Class Combo Points (Stacking Aura's) Tracker ("xCTclass")
+        * Class Combo Points Frame Custom Font Options
+        
+  > xCT+ Frames' Justification
+  
+  > xCT+ Class Specific and Misc. Options
+    + Priest
+    
+    + Death Knight
+    
+    + Misc.
+        * Spell Spam Spam Spam Spam Spam Spam Spam Spam
+        * Helpful Alerts
+        * Alignment Help (Configuring Frames)
+        * Show Procs
+
+  > Experimental Options
+]]
+
+
+
+
+
 local addon, ns = ...
 ns.config = {
     -- --------------------------------------------------------------------------------------
-    -- Blizzard Damage Options.
+    -- Blizzard Damage Options
     -- --------------------------------------------------------------------------------------   
         -- Use Blizzard Damage/Healing Output (Numbers Above Mob/Player's Head)
         ["blizzheadnumbers"]    = false,    -- (You need to restart WoW to see changes!)
@@ -57,7 +105,7 @@ ns.config = {
             ["fontstyle"]       = "OUTLINE",                            -- valid options are "OUTLINE", "MONOCHROME", "THICKOUTLINE", "OUTLINE,MONOCHROME", "THICKOUTLINE,MONOCHROME"
             ["damagefont"]      = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- "Fonts\\FRIZQT__.ttf" is default WoW damage font
             
-            -- Damage/Healing Minimum Value threshold
+            -- Damage/Healing Minimum Value Threshold
             ["treshold"]        = 1,        -- minimum value for outgoing damage
             ["healtreshold"]    = 1,        -- minimum value for outgoing heals
         -- __________________________________________________________________________________
@@ -71,16 +119,16 @@ ns.config = {
             -- Critical Icon Sizes
             ["criticons"]       = true,     -- show crit icons
             ["criticonsize"]    = 14,       -- size of the icons in the crit frame
-                        
+
             -- Critical Custom Font and Format
             ["critfont"]        = "Interface\\Addons\\xCT\\HOOGE.TTF",  -- Special font for the crit frame
             ["critfontstyle"]   = "OUTLINE",
             ["critfontsize"]    = 24,                                   -- crit font size ("auto" or Number)
-            
+
             -- Critical Appearance Options
             ["critprefix"]      = "|cffFF0000*|r",                      -- prefix symbol shown before crit'd amount (default: red *)
             ["critpostfix"]     = "|cffFF0000*|r",                      -- postfix symbol shown after crit'd amount (default: red *)
-            
+
             -- Filter Criticals
             ["filtercrits"]     = false,    -- Allows you to turn on a list that will filter out buffs
             ["crits_blacklist"] = false,    -- Filter list is a blacklist (If you want a TRUE whitelist, don't forget to hide Swings too!!)
@@ -149,7 +197,6 @@ ns.config = {
         -- ==================================================================================
         -- Class Combo Points (Stacking Aura's) Tracker (frame is called "xCTclass")
         -- ==================================================================================
-        -- Class combo window
         ["combowindow"]         = true,     -- Create a Combo Points frame
         
             -- Class Combo Points Frame Custom Font Options
@@ -203,11 +250,11 @@ ns.config = {
     -- --------------------------------------------------------------------------------------
     -- Experimental Options - USE CAUTION
     -- --------------------------------------------------------------------------------------
---[[ Please Note:  Any option below might not work according to the description, which may include poor implementation, bugs, and
-                   and rare cases unstability.  Enable only if you are specifically told you can try out features.
-    
-                   In other words:  USE AT YOUR OWN RISK
-]]    
+--[[ Please Note:  Any option below might not work according to the description, which may include poor implementation, bugs, and   ]]
+--[[               in rare cases, unstability.  Enable only if you are specifically told you can try out features.                  ]]
+--[[                                                                                                                                ]]
+--[[               In other words:  USE AT YOUR OWN RISK                                                                            ]]
+
 
         -- (DISABLED: Currently does not work)
         ["loottimevisible"]     = 6,
