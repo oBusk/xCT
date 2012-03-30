@@ -11,18 +11,13 @@ Version: 2.x.x
 Description:
   xCT+ is an extremely lightwight scrolling combat text addon.  It replaces Blizzard's default
 scrolling combat text with something that is more concised and organized.  xCT+ is a stand alone
-addon, based on xCT (by Affli).
-
-]]
+addon, based on xCT (by Affli).                                                                     ]]
 
 --some init
 local addon, ns = ...
 local ct = ns.config
 ct.myname = UnitName("player")
 ct.myclass = select(2, UnitClass("player"))
-
-
-
 
 
 --[[  Filter Auras
@@ -75,54 +70,156 @@ local function AssignTalentTree()
   -- Spec Calculator
   ct.myspec = GetPrimaryTalentTree(false, false, GetActiveTalentGroup(false, false))
 
-  if ct.classcombopoints then
+  if ct.combowindow then
     ct.classcomboUnit = "player" -- most of the time, this is the player
-
+    
     if ct.myclass == "WARLOCK" then
-      ct.classcombopoints = false
+      if ct.myspec == 1 then      -- Affliction
+        ct.classcomboIDs = {
+          [32386] = true,         -- Shadow Embrace (Rank 1)
+          [32388] = true,         -- Shadow Embrace (Rank 2)
+          [32389] = true,         -- Shadow Embrace (Rank 3)
+        }
+        
+      elseif ct.myspec == 2 then  -- Demonology
+        ct.combowindow = false
+        
+      elseif ct.myspec == 3 then  -- Destruction
+        ct.combowindow = false
+        
+      end
       
     elseif ct.myclass == "DRUID" then
-      ct.classcombopoints = false
+      if ct.myspec == 1 then      -- Balance
+        ct.classcomboIDs = {
+          [81006] = true,         -- Lunar Shower (Rank 1)
+          [81191] = true,         -- Lunar Shower (Rank 2)
+          [81192] = true,         -- Lunar Shower (Rank 3)
+        }
+        
+      elseif ct.myspec == 2 then  -- Feral
+        ct.combowindow = false
+        
+      elseif ct.myspec == 3 then  -- Restoration
+        ct.combowindow = false
+        
+      end
       
     elseif ct.myclass == "PALADIN" then
-      ct.classcombopoints = false
+      if ct.myspec == 1 then      -- Holy
+        ct.classcomboIDs = {
+          [20050] = true,         -- Conviction (Rank 1)
+          [20052] = true,         -- Conviction (Rank 2)
+          [20053] = true,         -- Conviction (Rank 3)
+        }
+        
+      elseif ct.myspec == 2 then  -- Protection
+        ct.combowindow = false
+        
+      elseif ct.myspec == 3 then  -- Retribution
+        ct.combowindow = false
+        
+      end
       
     elseif ct.myclass == "PRIEST" then
-      if ct.myspec == 1 then  -- Discipline
+      if ct.myspec == 1 then      -- Discipline
         ct.classcomboIDs = {
-          [81660] = true,     -- Evangelism (Rank 1)
-          [81661] = true,     -- Evangelism (Rank 2)
+          [81660] = true,         -- Evangelism (Rank 1)
+          [81661] = true,         -- Evangelism (Rank 2)
         }
-      else
-        ct.classcombopoints = false
+        
+      elseif ct.myspec == 2 then  -- Holy
+        ct.classcomboIDs = {
+          [63731] = true,         -- Serendipity (Rank 1)
+          [63735] = true,         -- Serendipity (Rank 2)
+        }
+        
+      elseif ct.myspec == 3 then  -- Shadow
+        ct.classcomboIDs = {
+          [77487] = true,         -- Shadow Orbs
+        }
+        
       end
       
     elseif ct.myclass == "SHAMAN" then
-      ct.classcombopoints = false
+      if ct.myspec == 1 then      -- Elemental
+        ct.combowindow = false
+        
+      elseif ct.myspec == 2 then  -- Enhancement
+        ct.classcomboIDs = {
+          [53817] = true,         -- Maelstrom Weapon
+        }
+        
+      elseif ct.myspec == 3 then  -- Restoration
+        ct.classcomboIDs = {
+        --[29206] = true,         -- Healing Way (Rank 1)
+        --[29205] = true,         -- Healing Way (Rank 2)
+        --[29202] = true,         -- Healing Way (Rank 3)
+        
+          [53390] = true,         -- Tidal Waves
+        }
+        
+      end
       
     elseif ct.myclass == "MAGE" then
-      ct.classcombopoints = false
+      ct.combowindow = false
       
     elseif ct.myclass == "WARRIOR" then
-      ct.classcombopoints = false
+      ct.combowindow = false
       
     elseif ct.myclass == "HUNTER" then
-      if ct.myspec == 1 then  -- Beast Mastery
+      if ct.myspec == 1 then      -- Beast Mastery
         ct.classcomboUnit = "pet"
         ct.classcomboIDs = {
-          [19615] = true,     -- Frenzy Effect
+          [19615] = true,         -- Frenzy Effect
         }
-      else
-        ct.classcombopoints = false
+        
+      elseif ct.myspec == 2 then  -- Marksman
+        ct.classcomboIDs = {
+          [82925] = true,         -- Ready, Set, Aim...
+        }
+        
+      elseif ct.myspec == 3 then  -- Survival
+        ct.classcomboIDs = {
+          [56453] = true,         -- Lock 'n Load
+        }
+        
+      end
+      
+    elseif ct.myclass == "DEATHKNIGHT" then
+      if ct.myspec == 1 then      -- Blood
+        ct.classcomboIDs = {
+          [49222] = true,         -- Bone Shield
+        }
+        
+      elseif ct.myspec == 2 then  -- Frost
+        ct.combowindow = false
+        
+      elseif ct.myspec == 3 then  -- Unholy
+        ct.classcomboUnit = "pet"
+        ct.classcomboIDs = {
+          [91342] = true,         -- Shadow Infusion
+        }
+        
       end
     else
       -- Unknown Class
-      ct.classcombopoints = false
+      ct.combowindow = false
+      
     end
   end
 
-  if ct.classcombopoints then
+  if ct.combowindow then
     loadstacktracker()
+  end
+  
+  -- Check to see if we should show Combo Points (COMBAT_TEXT_SHOW_COMBO_POINTS is universal across ALL your toons)
+  ct.showcombopoints = false          -- dont check combo points for any other class
+  if ct.myclass == "ROGUE" then
+    -- Rogues need some special care      
+    if COMBAT_TEXT_SHOW_COMBO_POINTS == "1" then
+      ct.showcombopoints = true
+    end
   end
 end
 
@@ -241,6 +338,7 @@ elseif ct.myclass == "PRIEST" then
         ct.aoespam[23455]    = true  -- Holy Nova (Healing Effect)
         ct.aoespam[33110]    = true  -- Prayer of Mending
         ct.aoespam[63544]    = true  -- Divine Touch
+        ct.aoespam[88686]    = true  -- Holy Word: Sanctuary
         ct.healfilter[2944]  = true  -- Devouring Plague (Healing)
         ct.healfilter[15290] = true  -- Vampiric Embrace
     end
@@ -998,13 +1096,13 @@ local function OnEvent(self, event, subevent, ...)
     elseif event == "PLAYER_REGEN_DISABLED" and COMBAT_TEXT_SHOW_COMBAT_STATE == "1" then
             xCTgen:AddMessage("+"..ENTERING_COMBAT, 1, .1, .1)
 
-    elseif event == "UNIT_COMBO_POINTS" and COMBAT_TEXT_SHOW_COMBO_POINTS == "1" then
+    elseif event == "UNIT_COMBO_POINTS" and ct.showcombopoints then
       -- Rewrite Combo Points
       if subevent == ct.unit then
         ct:UpdateComboPoints()
       end
       
-    elseif event == "PLAYER_TARGET_CHANGED" and ct.combowindow then
+    elseif event == "PLAYER_TARGET_CHANGED" and ct.showcombopoints then
       ct:UpdateComboPoints()
       
     elseif event == "RUNE_POWER_UPDATE" then
@@ -1488,11 +1586,6 @@ local function StartTestMode()
                             ct.frames[i]:AddMessage(MONEY .. ": " .. GetCoinTextureString(money), 1, 1, 0) -- yellow
                         end
                     
-                    -- Add a test pattern to your frame
-                    --elseif framenames[i] == "custom" then
-                    --    if random(3) % 3 == 0 then
-                    --        ct.frames[i]:AddMessage("Test test test", 1, 1, 1)
-                    --    end
                     elseif framenames[i] == "crit" then
                         
                         if random(3) % 1 == 0 then
@@ -1545,6 +1638,12 @@ local function StartTestMode()
                             ct.frames[i]:AddMessage(tostring(frame.testcombo), 1, .82, 0)
                         end
                     end
+                    
+                    -- Add a test pattern to your frame
+                    --elseif framenames[i] == "custom" then
+                    --    if random(3) % 3 == 0 then
+                    --        ct.frames[i]:AddMessage("Test test test", 1, 1, 1)
+                    --    end
                     
                     TimeSinceLastUpdate = 0
                 end
@@ -1977,7 +2076,8 @@ if(ct.healingout)then
                             SQ[spellId]["locked"] = false
                             
                             return
-                        end 
+                        end
+                        --frame:AddMessage(amount..""..msg.." (id "..spellId..")", unpack(color))
                         frame:AddMessage(amount..""..msg, unpack(color))
                     end
                 end
