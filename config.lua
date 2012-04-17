@@ -13,9 +13,8 @@ Description:
 scrolling combat text with something that is more concised and organized.  xCT+ is a stand alone
 addon, based on xCT (by Affli).
 
-]]
 
---[[  
+ 
 Table of Contents:
   > Blizzard Damage Options
   
@@ -229,7 +228,7 @@ ns.config = {
         -- Misc.
             -- Spell Spam Spam Spam Spam Spam Spam Spam Spam
             ["mergeaoespam"]    = true,     -- Merges multiple AoE spam into single message, can be useful for dots too.
-            ["mergeitems"]      = true,     -- Merges spammy items (mainly items from dragon soul)
+            ["mergeitems"]      = true,     -- Merges spammy items (mainly items from Dragon Soul)
             ["mergeaoespamtime"] = 3,       -- Time in seconds AoE spell will be merged into single message.  Minimum is 1.
         
             -- Helpful Alerts (Shown in the Gerenal Gains/Drops Frame)
@@ -251,14 +250,18 @@ ns.config = {
 --[[               in rare cases, unstability.  Enable only if you are specifically told you can try out features.                  ]]
 --[[                                                                                                                                ]]
 --[[               In other words:  USE AT YOUR OWN RISK                                                                            ]]
-        ["colorkillingblows"]    = true,     -- Colors the alerts of a killing blow with the class color of the unit killed (Req. ["damageout"] = true)
 
+        ["colorkillingblows"]    = true,        -- Colors the alerts of a killing blow with the class color of the unit killed (Req. ["damageout"] = true)
+        
+        ["showincomingheals"]    = true,        -- Allows You to Show/Hide Incoming Healing
+        ["showincomingdmg"]      = true,        -- Allows You to Show/Hide Incoming Damage
+        
+        
         -- (DISABLED: Currently does not work)
         ["loottimevisible"]     = 6,
         ["crittimevisible"]     = 3,
         ["timevisible"]         = 3,
-        
-        
+                
         -- DO NOT USE - BUGGY
         -- Change Default Damage/Healing Font Above Mobs/Player Heads. (This has no effect if ["blizzheadnumbers"] = false)
         -- ["damagestyle"]         = true,  -- (You need to restart WoW to see changes!)

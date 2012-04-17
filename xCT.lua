@@ -510,8 +510,24 @@ if ct.mergeaoespam and ct.mergeitems then
 end
   
 --[[  Defining the Frames  ]]
-local framenames = { "dmg", "heal", "gen" }   -- Default frames (Always enabled)
-local numf = #framenames                      -- Number of Frames
+local framenames = { "gen" }    -- Default frames (Always enabled)
+local numf = 0                  -- Number of Frames
+
+--[[  Incoming Frames  ]]
+    if ct.showincomingdmg then
+        numf = numf + 1
+        framenames[numf] = "dmg"
+    else
+        -- Since I basically get damage events for free, there is no reason to remove the event handlers
+        xCTdmg = { AddMessage = function(self, ...) end }
+    end
+
+    if ct.showincomingheals then
+        numf = numf + 1
+        framenames[numf] = "heal"
+    else
+        xCTheal = { AddMessage = function(self, ...) end }
+    end
 
 --[[  Extra Frames  ]]
     -- Add window for separate damage and healing windows
