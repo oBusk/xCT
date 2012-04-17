@@ -2004,7 +2004,12 @@ if(ct.damageout)then
             elseif eventType == "PARTY_KILL" and ct.killingblow then
                 local tname = select(9, ...)
                 local msg = ACTION_PARTY_KILL:sub(1,1):upper()..ACTION_PARTY_KILL:sub(2)
-                xCTgen:AddMessage(ACTION_PARTY_KILL..": "..tname, .2, 1, .2)
+                local color
+                if ct.colorkillingblows then 
+                  local classIndex = select(2, GetPlayerInfoByGUID(destGUID))
+                  color = classIndex and RAID_CLASS_COLORS[classIndex] or { r = .2, g = 1, b = .2 }
+                end
+                xCTgen:AddMessage(msg..": "..tname, color.r, color.g, color.b)
             end
         end
     end

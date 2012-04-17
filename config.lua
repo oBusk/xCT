@@ -251,7 +251,7 @@ ns.config = {
 --[[               in rare cases, unstability.  Enable only if you are specifically told you can try out features.                  ]]
 --[[                                                                                                                                ]]
 --[[               In other words:  USE AT YOUR OWN RISK                                                                            ]]
-
+        ["colorkillingblows"]    = true,     -- Colors the alerts of a killing blow with the class color of the unit killed (Req. ["damageout"] = true)
 
         -- (DISABLED: Currently does not work)
         ["loottimevisible"]     = 6,
