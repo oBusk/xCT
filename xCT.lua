@@ -721,7 +721,7 @@ local function AlignGridShow()
         -- Horizontal Bars to the Below of the Center
         local tt3 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
         if i % 4 == 0 then
-            tt3:SetTexture(.3, .3, .3, .8) 1
+            tt3:SetTexture(.3, .3, .3, .8)
         elseif i % 2 == 0 then
             tt3:SetTexture(.1, .1, .1, .8) 
         else
