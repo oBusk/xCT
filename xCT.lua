@@ -511,7 +511,7 @@ end
   
 --[[  Defining the Frames  ]]
 local framenames = { "gen" }    -- Default frames (Always enabled)
-local numf = 0                  -- Number of Frames
+local numf = 1                  -- Number of Frames
 
 --[[  Incoming Frames  ]]
     if ct.showincomingdmg then
