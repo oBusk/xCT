@@ -511,7 +511,7 @@ end
   
 --[[  Defining the Frames  ]]
 local framenames = { "gen" }    -- Default frames (Always enabled)
-local numf = 0                  -- Number of Frames
+local numf = 1                  -- Number of Frames
 
 --[[  Incoming Frames  ]]
     if ct.showincomingdmg then
@@ -690,7 +690,7 @@ local function AlignGridShow()
     -- Vertical Bars
     for i = 1, iLinesLeftRight do
         -- Vertical Bars to the Left of the Center
-        local tt1 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+        local tt1 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
         if i % 4 == 0 then
             tt1:SetTexture(.3, .3, .3, .8) 
         elseif i % 2 == 0 then
@@ -703,7 +703,7 @@ local function AlignGridShow()
         tt1:SetWidth(1)
         
         -- Vertical Bars to the Right of the Center
-        local tt2 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+        local tt2 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
         if i % 4 == 0 then
             tt2:SetTexture(.3, .3, .3, .8) 
         elseif i % 2 == 0 then
@@ -719,9 +719,9 @@ local function AlignGridShow()
     -- Horizontal Bars
     for i = 1, iLinesTopBottom do
         -- Horizontal Bars to the Below of the Center
-        local tt3 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+        local tt3 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
         if i % 4 == 0 then
-            tt3:SetTexture(.3, .3, .3, .8) 
+            tt3:SetTexture(.3, .3, .3, .8) 1
         elseif i % 2 == 0 then
             tt3:SetTexture(.1, .1, .1, .8) 
         else
@@ -732,7 +732,7 @@ local function AlignGridShow()
         tt3:SetHeight(1)
         
         -- Horizontal Bars to the Above of the Center
-        local tt4 = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+        local tt4 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
         if i % 4 == 0 then
             tt4:SetTexture(.3, .3, .3, .8) 
         elseif i % 2 == 0 then
@@ -746,14 +746,14 @@ local function AlignGridShow()
     end
     
     --Create the Vertical Middle Bar
-    local tta = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+    local tta = AlignGrid:CreateTexture(nil, 'BACKGROUND')
     tta:SetTexture(1, 0, 0, .6)
     tta:SetPoint('TOP', AlignGrid, 'TOP', 0, 0)
     tta:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', 0, 0)
     tta:SetWidth(2)
     
     --Create the Horizontal Middle Bar
-    local ttb = AlignGrid:CreateTexture(nil, 'TOOLTIP')
+    local ttb = AlignGrid:CreateTexture(nil, 'BACKGROUND')
     ttb:SetTexture(1, 0, 0, .6)
     ttb:SetPoint('LEFT', AlignGrid, 'LEFT', 0, 0)
     ttb:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, 0)
@@ -1429,7 +1429,7 @@ local StartConfigmode = function()
             f.tr=f:CreateTitleRegion()
             f.tr:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
             f.tr:SetPoint("TOPRIGHT", f, "TOPRIGHT", 0, 0)
-            f.tr:SetHeight(20)
+            f.tr:SetHeight(21)
 
             -- font string Position (location)
             f.fsp = f:CreateFontString(nil, "OVERLAY")
@@ -1451,6 +1451,17 @@ local StartConfigmode = function()
             f.fsh:SetPoint("LEFT", f, "LEFT", 3, 0)
             f.fsh:SetText("")
             f.fsh:Hide()
+            
+            -- Enabled CheckBox
+            --[[  Saving for a rainy day
+            f.ebc = CreateFrame("CheckButton", "xCT"..framenames[i].."EBC", f, "OptionsCheckButtonTemplate")
+            f.ebc:SetPoint("TOPRIGHT", 0, 1)
+            f.ebc:SetChecked(true)
+
+            f.ebc:SetScript("OnClick", function(self)
+              print("clicking")
+            end)
+            ]]
             
             local ResX, ResY = GetScreenWidth(), GetScreenHeight()
             local midX, midY = ResX / 2, ResY / 2
@@ -1493,7 +1504,7 @@ local StartConfigmode = function()
           AlignGridShow()
         end
         
-        pr("unlocked.")
+        pr("unlocked. Type '|cff22FF55/xct lock|r' to save your changes or type '|cffFF2222/reload|r' to cancel.")
     else
         pr("can't be configured in combat.")
     end
@@ -1510,6 +1521,8 @@ local function EndConfigmode()
         f.t = nil
         f.d:Hide()
         f.d = nil
+        f.ebc:Hide()
+        f.ebc = nil
         f.tr = nil
         f:EnableMouse(false)
         f:SetScript("OnDragStart", nil)

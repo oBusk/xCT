@@ -253,8 +253,8 @@ ns.config = {
 
         ["colorkillingblows"]    = true,        -- Colors the alerts of a killing blow with the class color of the unit killed (Req. ["damageout"] = true)
         
-        ["showincomingheals"]    = true,        -- Allows You to Show/Hide Incoming Healing
-        ["showincomingdmg"]      = true,        -- Allows You to Show/Hide Incoming Damage
+        ["showincomingheals"]    = false,        -- Allows You to Show/Hide Incoming Healing
+        ["showincomingdmg"]      = false,        -- Allows You to Show/Hide Incoming Damage
         
         
         -- (DISABLED: Currently does not work)
