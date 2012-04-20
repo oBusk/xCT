@@ -13,6 +13,10 @@ Description:
 scrolling combat text with something that is more concised and organized.  xCT+ is a stand alone
 addon, based on xCT (by Affli).                                                                     ]]
 
+
+print("|cffFF0000Warning:|r You are running a |cffFF6600DEBUG|r version of |cffFFFF00xCT+|r.  Please download the real version at |cff5555FFCurse.com|r")
+
+
 --some init
 local addon, ns = ...
 local ct = ns.config
@@ -1357,9 +1361,11 @@ end
 --InterfaceOptionsCombatTextPanelTitle:SetText(COMBAT_TEXT_LABEL.." (powered by \124cffFF0000x\124rCT\124cffDDFF55+\124r)")
 
 -- xCT internal color Printer for debug and such
-local pr = function(msg)
+ns.pr = function(msg)
     print("\124cffFF0000x\124rCT\124cffDDFF55+\124r", tostring(msg))
 end
+
+local pr = ns.pr
 
 -- Awesome Config and Test Modes
 local StartConfigmode = function()
@@ -1703,6 +1709,9 @@ StaticPopupDialogs["XCT_LOCK"] = {
     whileDead    = 1,
     hideOnEscape = true,
     showAlert    = true,
+    
+    -- Taint work around
+    preferredIndex = 3,
 }
 
 --[[  Register Slash Commands  ]]
@@ -1738,6 +1747,16 @@ SlashCmdList["XCT"] = function(input)
             StartTestMode()
             pr("test mode enabled.")
         end
+        
+    elseif args[1] == "config" then
+      InterfaceOptionsFrame:Show()
+      InterfaceOptionsFrameCategoriesButton8:Click()
+    
+    -- DEBUG WARNING - THIS WILL ERASE ALL OF YOUR SETTINGS!
+    elseif args[1] == "reset" then
+      xCTPlus_SavedVars = nil
+      ReloadUI()
+      
     else
         pr("Position Commands")
         print("    use |cffFF0000/xct unlock|r to move and resize frames.")

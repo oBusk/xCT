@@ -39,6 +39,8 @@ Table of Contents:
     + Spell / Ability Procs Frame ("xCTproc")
         * Proc Frame Custom Font Options
 
+    + Power Gains Frame (frame is called "xCTpwr")
+        
     + Class Combo Points (Stacking Aura's) Tracker ("xCTclass")
         * Class Combo Points Frame Custom Font Options
         
@@ -52,6 +54,7 @@ Table of Contents:
     + Misc.
         * Spell Spam Spam Spam Spam Spam Spam Spam Spam
         * Helpful Alerts
+        * Filter Auras Gains or Fades
         * Alignment Help (Configuring Frames)
         * Show Procs
 
@@ -177,16 +180,6 @@ ns.config = {
         -- ==================================================================================
         ["powergainswindow"]    = true,     -- Enable the Frame to Show Auras
         
-            -- Filter Auras Gains or Fades
-            ["showharmfulaura"] = true,     -- Show Harmful Auras (Gains and Fades)
-            ["showhelpfulaura"] = true,     -- Show Helpful Auras (Gains and Fades)
-            ["showgains"]       = true,     -- Show Gains in the Aura frame
-            ["showfades"]       = true,     -- Show Fades in the Aura frame
-            ["filteraura"]      = true,     -- Allows You to Filter out Unwanted Aura Gains/Fades
-            ["aura_blacklist"]  = true,     -- Aura List is a Blacklist (Opposed to a Whitelist)
-            
-            -- Filter Aura Helpers
-            ["debug_aura"]      = false,    -- Shows the Aura's Names in the Chatbox.  Useful when Adding to the Filter Yourself.
         -- __________________________________________________________________________________
         
         
@@ -235,6 +228,17 @@ ns.config = {
             ["killingblow"]     = true,     -- Alerts with the name of the PC/NPC that you had a killing blow on (Req. ["damageout"] = true)
             ["dispel"]          = true,     -- Alerts with the name of the (De)Buff Dispelled (Req. ["damageout"] = true)
             ["interrupt"]       = true,     -- Alerts with the name of the Spell Interupted (Req. ["damageout"] = true)
+            
+            -- Filter Auras Gains or Fades
+            ["showharmfulaura"] = true,     -- Show Harmful Auras (Gains and Fades)
+            ["showhelpfulaura"] = true,     -- Show Helpful Auras (Gains and Fades)
+            ["showgains"]       = true,     -- Show Gains in the Aura frame
+            ["showfades"]       = true,     -- Show Fades in the Aura frame
+            ["filteraura"]      = true,     -- Allows You to Filter out Unwanted Aura Gains/Fades
+            ["aura_blacklist"]  = true,     -- Aura List is a Blacklist (Opposed to a Whitelist)
+            
+            -- Filter Aura Helpers
+            ["debug_aura"]      = false,    -- Shows the Aura's Names in the Chatbox.  Useful when Adding to the Filter Yourself.
         
             -- Alignment Help (Shown when configuring frames)
             ["showgrid"]        = true,     -- shows a grid when moving xCT windows around
@@ -253,8 +257,8 @@ ns.config = {
 
         ["colorkillingblows"]    = true,        -- Colors the alerts of a killing blow with the class color of the unit killed (Req. ["damageout"] = true)
         
-        ["showincomingheals"]    = false,        -- Allows You to Show/Hide Incoming Healing
-        ["showincomingdmg"]      = false,        -- Allows You to Show/Hide Incoming Damage
+        ["showincomingheals"]    = true,        -- Allows You to Show/Hide Incoming Healing
+        ["showincomingdmg"]      = true,        -- Allows You to Show/Hide Incoming Damage
         
         
         -- (DISABLED: Currently does not work)
