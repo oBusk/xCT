@@ -61,7 +61,6 @@ Table of Contents:
   > Experimental Options
 ]]
 
-
 local addon, ns = ...
 ns.config = {
     -- --------------------------------------------------------------------------------------
@@ -259,6 +258,8 @@ ns.config = {
         
         ["showincomingheals"]    = true,        -- Allows You to Show/Hide Incoming Healing
         ["showincomingdmg"]      = true,        -- Allows You to Show/Hide Incoming Damage
+        
+        ["DisableProfileManager"] = false,
         
         
         -- (DISABLED: Currently does not work)

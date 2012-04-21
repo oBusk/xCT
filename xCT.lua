@@ -13,9 +13,10 @@ Description:
 scrolling combat text with something that is more concised and organized.  xCT+ is a stand alone
 addon, based on xCT (by Affli).                                                                     ]]
 
-
-print("|cffFF0000Warning:|r You are running a |cffFF6600DEBUG|r version of |cffFFFF00xCT+|r.  Please download the real version at |cff5555FFCurse.com|r")
-
+XCT_DEBUG = 1
+if XCT_DEBUG then
+  print("|cffFF0000Warning:|r You are running a |cffFF6600DEBUG|r version of |cffFFFF00xCT+|r.  Please download the real version at |cff5555FFCurse.com|r")
+end
 
 --some init
 local addon, ns = ...
@@ -1480,7 +1481,7 @@ local StartConfigmode = function()
                 end)
             f:SetScript("OnEnter", function(...)
                     f:SetScript("OnUpdate", function(...)
-                            f.fsp:SetText(math.floor(f:GetLeft() - midX + 1) .. ", " .. math.floor(f:GetTop() - midY + 2))
+                            f.fsp:SetText(math.floor(f:GetLeft() - midX + 1) .. ", " .. math.floor(f:GetTop() - midY + 1))
                             f.fsw:SetText(math.floor(f:GetWidth()))
                             f.fsh:SetText(math.floor(f:GetHeight()))
                         end)
@@ -1516,7 +1517,7 @@ local StartConfigmode = function()
     end
 end
 
-local function EndConfigmode()
+local function EndConfigmode(showWarning)
     -- Major Clean-Up :D
     for i = 1, #ct.frames do
         f = ct.frames[i]
@@ -1527,8 +1528,8 @@ local function EndConfigmode()
         f.t = nil
         f.d:Hide()
         f.d = nil
-        f.ebc:Hide()
-        f.ebc = nil
+        --f.ebc:Hide()
+        --f.ebc = nil
         f.tr = nil
         f:EnableMouse(false)
         f:SetScript("OnDragStart", nil)
@@ -1541,7 +1542,9 @@ local function EndConfigmode()
         AlignGridKill()
     end
 
-    pr("Window positions unsaved, don't forget to reload UI.")
+    if showWarning then
+      pr("window positions unsaved, don't forget to reload UI.")
+    end
 end
 
 local function StartTestMode()
@@ -1703,7 +1706,14 @@ StaticPopupDialogs["XCT_LOCK"] = {
     text         = "To save |cffFF0000x|rCT window positions you need to reload your UI.\n Click "..ACCEPT.." to reload UI.\nClick "..CANCEL.." to do it later.",
     button1      = ACCEPT,
     button2      = CANCEL,
-    OnAccept     = function() if not InCombatLockdown() then ReloadUI() else EndConfigmode() end end,
+    OnAccept     = function()
+                      if not InCombatLockdown() then
+                        ReloadUI()
+                      else
+                        EndConfigmode()
+                        --ns:SaveFrames()
+                      end
+                    end,
     OnCancel     = EndConfigmode,
     timeout      = 0,
     whileDead    = 1,
@@ -1736,7 +1746,12 @@ SlashCmdList["XCT"] = function(input)
         if ct.locked then
             pr("already locked.")
         else
-            StaticPopup_Show("XCT_LOCK")
+            if ct["DisableProfileManager"] then
+              StaticPopup_Show("XCT_LOCK")
+            else
+              ns:SaveFrames()
+              EndConfigmode()
+            end
         end
         
     elseif args[1] == "test" then

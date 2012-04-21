@@ -7,183 +7,75 @@ engine.default_profile = {
   Frames = {
     -- <Critical>
     ["crit"] = {
-      Enabled = true,
-      Secondary = nil,
-      Label = TEXT_MODE_A_STRING_RESULT_CRITICAL:match("%a+"),
-      LabelColor = { 1.00, 0.50, 0.00, 0.90 },
-      Justify = "RIGHT",
-      Font = {
-        Size = 16,
-        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-        Style = "OUTLINE",
-      },
-      Point = {
-        Relative = "Center",
-        X = 128,
-        Y = 0,
-      },
+      X = 128,
+      Y = 0,
       Width = 256,
       Height = 128,
+      Justify = "CENTER",
     }, -- </Critical>
     -- <Damage>
     ["dmg"] = {
-      Enabled = true,
-      Secondary = nil,
-      Label = DAMAGE,
-      LabelColor = { 1.00, 0.10, 0.10, 0.90 },
-      Justify = "LEFT",
-      Font = {
-        Size = 16,
-        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-        Style = "OUTLINE",
-      },
-      Point = {
-        Relative = "Center",
-        X = -320,
-        Y = 0,
-      },
+      X = -320,
+      Y = 0,
       Width = 128,
       Height = 128,
+      Justify = "CENTER",
     }, -- </Damage>
     -- <General>
     ["gen"] = {
-      Enabled = true,
-      Secondary = nil,
-      Label = COMBAT_TEXT_LABEL,
-      LabelColor = { 0.10, 0.10, 1.00, 0.90 },
-      Justify = "CENTER",
-      Font = {
-        Size = 16,
-        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-        Style = "OUTLINE",
-      },
-      Point = {
-        Relative = "Center",
-        X = 0,
-        Y = 192,
-      },
+      X = 0,
+      Y = 192,
       Width = 256,
       Height = 128,
+      Justify = "CENTER",
     }, -- </General>
     -- <Healing>
     ["heal"] = {
-      Enabled = true,
-      Secondary = nil,
-      Label = SHOW_COMBAT_HEALING,
-      LabelColor = { 0.10, 1.00, 0.10, 0.90 },
-      Justify = "RIGHT",
-      Font = {
-        Size = 16,
-        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-        Style = "OUTLINE",
-      },
-      Point = {
-        Relative = "Center",
-        X = -448,
-        Y = 0,
-      },
+      X = -448,
+      Y = 0,
       Width = 128,
       Height = 128,
+      Justify = "CENTER",
     }, -- </Healing>
     -- <Loot>
     ["loot"] = {
-      Enabled = true,
-      Secondary = nil,
-      Label = LOOT,
-      LabelColor = { 1.00, 1.00, 1.00, 0.90 },
-      Justify = "CENTER",
-      Font = {
-        Size = 16,
-        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-        Style = "OUTLINE",
-      },
-      Point = {
-        Relative = "Center",
-        X = 0,
-        Y = -192,
-      },
+      X = 0,
+      Y = -192,
       Width = 256,
       Height = 128,
+      Justify = "CENTER",
     }, -- </Loot>
     -- <Outgoing>
     ["done"] = {
-      Enabled = true,
-      Secondary = nil,
-      Label = SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE,
-      LabelColor = { 1.00, 1.00, 0.00, 0.90 },
-      Justify = "RIGHT",
-      Font = {
-        Size = 16,
-        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-        Style = "OUTLINE",
-      },
-      Point = {
-        Relative = "Center",
-        X = 320,
-        Y = 0,
-      },
+      X = 320,
+      Y = 0,
       Width = 128,
       Height = 128,
+      Justify = "CENTER",
     }, -- </Outgoing>
     -- <PowerGains>
     ["pwr"] = {
-      Enabled = true,
-      Secondary = nil,
-      Label = MANA.." ("..select(2, UnitPowerType("player"))..")",
-      LabelColor = { 0.80, 0.10, 1.00, 0.90 },
-      Justify = "RIGHT",
-      Font = {
-        Size = 16,
-        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-        Style = "OUTLINE",
-      },
-      Point = {
-        Relative = "Center",
-        X = 448,
-        Y = 0,
-      },
+      X = 448,
+      Y = 0,
       Width = 128,
       Height = 128,
+      Justify = "CENTER",
     }, -- </PowerGains>
     -- <SpellProcs>
     ["proc"] = {
-      Enabled = true,
-      Secondary = nil,
-      Label = DISPLAY_SPELL_ALERTS,
-      LabelColor = { 1.00, 0.60, 0.30, 0.90 },
-      Justify = "CENTER",
-      Font = {
-        Size = 16,
-        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-        Style = "OUTLINE",
-      },
-      Point = {
-        Relative = "Center",
-        X = -128,
-        Y = 0,
-      },
+      X = -128,
+      Y = 0,
       Width = 256,
       Height = 128,
+      Justify = "CENTER",
     }, -- </SpellProcs>
     -- <ComboPoints>
     ["class"] = {
-      Enabled = true,
-      Secondary = nil,
-      Label = COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT,
-      LabelColor = { 1.00, 0.60, 0.30, 0.90 },
-      Justify = "CENTER",
-      Font = {
-        Size = 16,
-        Name = "Interface\\Addons\\xCT+\\HOOGE.TTF",
-        Style = "OUTLINE",
-      },
-      Point = {
-        Relative = "Center",
-        X = -128,
-        Y = 0,
-      },
+      X = 0,
+      Y = -512,
       Width = 256,
       Height = 128,
+      Justify = "CENTER",
     }, -- </ComboPoints>
   },
 }
@@ -207,7 +99,11 @@ loadingFrame:SetScript("OnEvent", function(self, event, name)
       UIDropDownMenu_Initialize(DropDownMenuTest, engine.DropBox_Initialize)
       UIDropDownMenu_SetSelectedID(DropDownMenuTest, xCTPlus_SavedVars.SelectedProfile)
       
+      --engine:LoadFrames()
       
+      local enteringWorld = CreateFrame("Frame")
+      enteringWorld:RegisterEvent("PLAYER_ENTERING_WORLD")
+      enteringWorld:SetScript("OnEvent", engine.LoadFrames)
       
       -- If we are using the default profile
       if UIDropDownMenu_GetSelectedID(DropDownMenuTest) == 1 then   -- if Defualt Profile Selected
@@ -243,6 +139,8 @@ local function OnClick(self)
   end
   xCTPlus_SavedVars.SelectedProfile = currentIndex
   UIDropDownMenu_SetSelectedID(DropDownMenuTest, currentIndex)
+  
+  engine:LoadFrames()
 end
  
 function engine.DropBox_Initialize(self, level)
@@ -315,11 +213,9 @@ StaticPopupDialogs["XCT_NEWPROFILE"] = {
   button2       = CANCEL,
   OnAccept      = function(self)
       local newProfileName = self.editBox:GetText()
-      --print("Accepted: Creating new profile named '".. newProfileName.."'")
-      
       engine:CreateNewProfile(newProfileName)
     end,
-  OnCancel      = function() print("Cancel") end,
+  OnCancel      = function() end,
   hideOnEscape  = true,
   
   -- Taint work around
@@ -344,8 +240,9 @@ StaticPopupDialogs["XCT_REMOVEPROFILE"] = {
   OnAccept      = function()
       local currentIndex = UIDropDownMenu_GetSelectedID(DropDownMenuTest)
       engine:RemoveProfile(currentIndex)
+      engine:LoadFrames()
     end,
-  OnCancel      = function() print("Delete Cancel") end,
+  OnCancel      = function() end,
   hideOnEscape  = true,
   
   -- Taint work around
@@ -360,13 +257,28 @@ xCTRemoveProfileButton:SetScript("OnClick", function(self)
   StaticPopup_Show("XCT_REMOVEPROFILE")
 end)
 
+function engine:CreateTable(fromTable)
+  local t = { }
+  for i, v in pairs(fromTable) do
+    if type(v) == "table" then
+      t[i] = self:CreateTable(v)
+    else
+      t[i] = v
+    end
+  end
+  return t
+end
+
 function engine:CreateNewProfile(profileName)
   if profileName == "Default" then
     engine.pr("cannot create a profile named: 'Default'")
     return
   end
 
-  table.insert(xCTPlus_SavedVars.Profiles, { Name = profileName })
+  local newProfile = engine:CreateTable(engine.default_profile)
+  newProfile.Name = profileName
+  
+  table.insert(xCTPlus_SavedVars.Profiles, newProfile)
   xCTPlus_SavedVars.SelectedProfile = #xCTPlus_SavedVars.Profiles
   
   UIDropDownMenu_Initialize(DropDownMenuTest, engine.DropBox_Initialize)
@@ -381,5 +293,54 @@ function engine:RemoveProfile(profileIndex)
   xCTRemoveProfileButton:Disable()
   UIDropDownMenu_Initialize(DropDownMenuTest, engine.DropBox_Initialize)
   UIDropDownMenu_SetSelectedID(DropDownMenuTest, xCTPlus_SavedVars.SelectedProfile)
+end
+
+function engine:SaveFrames()
+  engine.pr("frames saved.")
+  
+  local selectedIndex = xCTPlus_SavedVars.SelectedProfile
+  local currentProfile = xCTPlus_SavedVars.Profiles[selectedIndex]
+  
+  for name, config in pairs(currentProfile.Frames) do
+    self:SaveFrame(name, config)
+  end
+  
+end
+
+function engine:SaveFrame(frameName, frameConfig)
+  local frame = _G["xCT"..frameName]
+
+  local width   = frame:GetWidth()
+  local height  = frame:GetHeight()
+  frameConfig.Width   = width
+  frameConfig.Height  = height
+  
+  local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+  local midX, midY = ResX / 2, ResY / 2
+  
+  local x, y = math.floor(frame:GetLeft() - midX + 1), math.floor(frame:GetTop() - midY + 1)
+  
+  frameConfig.Justify = "CENTER"
+  frameConfig.X       = x + (width / 2)
+  frameConfig.Y       = y --+ (height / 2)
+end
+
+function engine:LoadFrames()
+  local selectedIndex = xCTPlus_SavedVars.SelectedProfile
+  local currentProfile = xCTPlus_SavedVars.Profiles[selectedIndex]
+  
+  for name, config in pairs(currentProfile.Frames) do
+    engine:LoadFrame(name, config)
+  end
+  
+end
+
+function engine:LoadFrame(frameName, frameConfig)
+  local frame = _G["xCT"..frameName]
+
+  frame:ClearAllPoints()
+  frame:SetHeight(frameConfig.Height)
+  frame:SetWidth(frameConfig.Width)
+  frame:SetPoint(frameConfig.Justify, frameConfig.X, frameConfig.Y)
 end
 
