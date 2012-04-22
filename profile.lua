@@ -1,7 +1,10 @@
 local ADDON_NAME, engine = ...
+local ct = engine.config
 
-if (engine.config["DisableProfileManager"]) then return end
+-- Check to see if we should load this module
+if (ct["DisableProfileManager"]) then return end
 
+--//== Default Profile ===========================================================================\\
 engine.default_profile = {
   Name = "Default",
   Frames = {
@@ -79,13 +82,17 @@ engine.default_profile = {
     }, -- </ComboPoints>
   },
 }
+--\\==============================================================================================//
 
+--//== Init Functions ============================================================================\\
 function engine:Install()
   xCTPlus_SavedVars = {
     Profiles = {
       [1] = self.default_profile,
     },
-    SelectedProfile = 1,
+    Characters = {
+      [GetUnitName("player").."-"..GetRealmName()] = 1,
+    }
   }
 end
 
@@ -95,107 +102,235 @@ loadingFrame:SetScript("OnEvent", function(self, event, name)
     if name == ADDON_NAME then
       if not xCTPlus_SavedVars then engine:Install() end
     
+      -- Get Character Selected ID
+      engine.MyName = GetUnitName("player").."-"..GetRealmName()
+      
+      if not xCTPlus_SavedVars.Characters[engine.MyName] then
+        xCTPlus_SavedVars.Characters[engine.MyName] = 1
+      end
+      
       -- init profile drop down
-      UIDropDownMenu_Initialize(DropDownMenuTest, engine.DropBox_Initialize)
-      UIDropDownMenu_SetSelectedID(DropDownMenuTest, xCTPlus_SavedVars.SelectedProfile)
-      
-      --engine:LoadFrames()
-      
+      UIDropDownMenu_Initialize(xCTProfilesDropDownMenu, engine.DropBox_Initialize)
+      UIDropDownMenu_SetSelectedID(xCTProfilesDropDownMenu, xCTPlus_SavedVars.Characters[engine.MyName])
+
       local enteringWorld = CreateFrame("Frame")
       enteringWorld:RegisterEvent("PLAYER_ENTERING_WORLD")
       enteringWorld:SetScript("OnEvent", engine.LoadFrames)
       
       -- If we are using the default profile
-      if UIDropDownMenu_GetSelectedID(DropDownMenuTest) == 1 then   -- if Defualt Profile Selected
+      if UIDropDownMenu_GetSelectedID(xCTProfilesDropDownMenu) == 1 then   -- if Defualt Profile Selected
         xCTRemoveProfileButton:Disable()
       end
     end
   end)
-
-
-
--- =================================================================================================
--- =================================================================================================
-if not DropDownMenuTest then
-   CreateFrame("Button", "DropDownMenuTest", InterfaceOptionsCombatTextPanel, "UIDropDownMenuTemplate")
-end
- 
-DropDownMenuTest:ClearAllPoints()
-DropDownMenuTest:SetPoint("TOPLEFT", 4, -400)
-DropDownMenuTest:Size(300, 26)
-DropDownMenuTest:Show()
- 
- 
-local items = {
-   "Default",
-}
- 
-local function OnClick(self)
-  local currentIndex = self:GetID()
-  if (currentIndex == 1) then
-    xCTRemoveProfileButton:Disable()
-  else
-    xCTRemoveProfileButton:Enable()
+--\\==============================================================================================//
+  
+--//== Init UI Objects ===========================================================================\\
+do -- init xct frame manager gui
+  if not xCTProfilesDropDownMenu then
+     CreateFrame("Button", "xCTProfilesDropDownMenu", InterfaceOptionsCombatTextPanel, "UIDropDownMenuTemplate")
   end
-  xCTPlus_SavedVars.SelectedProfile = currentIndex
-  UIDropDownMenu_SetSelectedID(DropDownMenuTest, currentIndex)
+   
+  xCTProfilesDropDownMenu:ClearAllPoints()
+  xCTProfilesDropDownMenu:SetPoint("TOPLEFT", 4, -400)
+  xCTProfilesDropDownMenu:Size(300, 26)
+  xCTProfilesDropDownMenu:Show()
+
+  -- When someone clicks a "profile" from the DropDownMenu
+  local function xCTProfilesDropDownMenuButtonOnClick(self)
+    
+    -- Can't change profiles while the frames are being configured
+    if not ct.locked then
+      StaticPopup_Show("XCT_ERRORPROFILE")
+      return
+    end
   
-  engine:LoadFrames()
+    local currentIndex = self:GetID()
+
+    if (currentIndex == 1) then
+      xCTRemoveProfileButton:Disable()
+    else
+      xCTRemoveProfileButton:Enable()
+    end
+    xCTPlus_SavedVars.Characters[engine.MyName] = currentIndex
+    UIDropDownMenu_SetSelectedID(xCTProfilesDropDownMenu, currentIndex)
+    
+    engine:LoadFrames()
+  end
+
+  -- Gets called OnLoad and when you add a profile (populates the drop down menu)
+  function engine.DropBox_Initialize(self, level)
+     local info = UIDropDownMenu_CreateInfo()
+     for index, profile in ipairs(xCTPlus_SavedVars.Profiles) do
+        info = UIDropDownMenu_CreateInfo()
+        info.text = profile.Name
+        info.value = profile.Name
+        info.func = xCTProfilesDropDownMenuButtonOnClick
+        UIDropDownMenu_AddButton(info, level)
+     end
+  end
+
+  UIDropDownMenu_SetWidth(xCTProfilesDropDownMenu, 200);
+  UIDropDownMenu_SetButtonWidth(xCTProfilesDropDownMenu, 224)
+  UIDropDownMenu_JustifyText(xCTProfilesDropDownMenu, "LEFT")
+
+  -- Create a title for the Frame Manager on Blizzard's Combat Text Options Page
+  local defaultFont, defaultSize = InterfaceOptionsCombatTextPanelTargetEffectsText:GetFont()
+
+  local fsProfileTitle = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
+    fsProfileTitle:SetTextColor(1.00, 0.82, 0.00, 1.00)
+    fsProfileTitle:SetFont(defaultFont, defaultSize + 6)
+    fsProfileTitle:SetText("xCT+ Frame Manager")
+    fsProfileTitle:SetPoint("TOPLEFT", 16, -356)
+    
+  local fsProfileSubtitle = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
+    fsProfileSubtitle:SetTextColor(0.90, 0.90, 0.00, 1.00)
+    fsProfileSubtitle:SetFont(defaultFont, defaultSize)
+    fsProfileSubtitle:SetText("Frame Profiles")
+    fsProfileSubtitle:SetPoint("TOPLEFT", 20, -382)
+
+  -- Create a button to create new profiles
+  if not xCTNewProfileButton then
+    CreateFrame("Button", "xCTNewProfileButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate2")
+  end
+
+  xCTNewProfileButton:ClearAllPoints()
+  xCTNewProfileButton:SetPoint("TOPLEFT", 242, -400)
+  xCTNewProfileButton:Size(100, 26)
+  xCTNewProfileButton:SetText(CREATE)
+  xCTNewProfileButton:Show()
+  xCTNewProfileButton:SetScript("OnClick", function(self)
+    if ct.locked then
+      StaticPopup_Show("XCT_NEWPROFILE")
+    else
+      StaticPopup_Show("XCT_ERRORPROFILE")
+    end
+  end)
+
+  -- Create a button to delete profiles
+  if not xCTRemoveProfileButton then
+    CreateFrame("Button", "xCTRemoveProfileButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate2")
+  end
+
+  xCTRemoveProfileButton:ClearAllPoints()
+  xCTRemoveProfileButton:SetPoint("TOPLEFT", 344, -400)
+  xCTRemoveProfileButton:Size(100, 26)
+  xCTRemoveProfileButton:SetText(CALENDAR_VIEW_EVENT_REMOVE)
+  xCTRemoveProfileButton:Show()
+  xCTRemoveProfileButton:SetScript("OnClick", function(self)
+    if ct.locked then
+      StaticPopup_Show("XCT_REMOVEPROFILE")
+    else
+      StaticPopup_Show("XCT_ERRORPROFILE")
+    end
+  end)
 end
- 
-function engine.DropBox_Initialize(self, level)
-   local info = UIDropDownMenu_CreateInfo()
-   for index, profile in ipairs(xCTPlus_SavedVars.Profiles) do
-      info = UIDropDownMenu_CreateInfo()
-      info.text = profile.Name
-      info.value = profile.Name
-      info.func = OnClick
-      UIDropDownMenu_AddButton(info, level)
-   end
+--\\==============================================================================================//
+
+--//== Manage the Profiles =======================================================================\\
+--[[ Creates a copy of a table (including sub-tables)                                             ]]
+function engine:CreateTable(fromTable)
+  local newTable = { }
+  for i, v in pairs(fromTable) do
+    if type(v) == "table" then
+      newTable[i] = self:CreateTable(v)
+    else
+      newTable[i] = v
+    end
+  end
+  return newTable
 end
 
-UIDropDownMenu_SetWidth(DropDownMenuTest, 200);
-UIDropDownMenu_SetButtonWidth(DropDownMenuTest, 224)
-UIDropDownMenu_JustifyText(DropDownMenuTest, "LEFT")
+--[[ Creates a new profile                                                                        ]]
+function engine:CreateNewProfile(profileName)
+  if profileName == "Default" then
+    engine.pr("cannot create a profile named: 'Default'")
+    return
+  end
 
--- =================================================================================================
--- =================================================================================================
-local defaultFont, defaultSize = InterfaceOptionsCombatTextPanelTargetEffectsText:GetFont()
-
-local fsProfileTitle = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
-  fsProfileTitle:SetTextColor(1.00, 0.82, 0.00, 1.00)
-  fsProfileTitle:SetFont(defaultFont, defaultSize + 6)
-  fsProfileTitle:SetText("xCT+ Frame Manager")
-  fsProfileTitle:SetPoint("TOPLEFT", 16, -356)
+  local newProfile = engine:CreateTable(engine.default_profile)
+  newProfile.Name = profileName
   
-local fsProfileSubtitle = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
-  fsProfileSubtitle:SetTextColor(0.90, 0.90, 0.00, 1.00)
-  fsProfileSubtitle:SetFont(defaultFont, defaultSize)
-  fsProfileSubtitle:SetText("Frame Profiles")
-  fsProfileSubtitle:SetPoint("TOPLEFT", 20, -382)
+  table.insert(xCTPlus_SavedVars.Profiles, newProfile)
+  xCTPlus_SavedVars.Characters[engine.MyName] = #xCTPlus_SavedVars.Profiles
   
--- =================================================================================================
--- =================================================================================================
-if not xCTNewProfileButton then
-  CreateFrame("Button", "xCTNewProfileButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate2")
+  UIDropDownMenu_Initialize(xCTProfilesDropDownMenu, engine.DropBox_Initialize)
+  UIDropDownMenu_SetSelectedID(xCTProfilesDropDownMenu, xCTPlus_SavedVars.Characters[engine.MyName])
+  xCTRemoveProfileButton:Enable()
 end
 
-xCTNewProfileButton:ClearAllPoints()
-xCTNewProfileButton:SetPoint("TOPLEFT", 242, -400)
-xCTNewProfileButton:Size(100, 26)
-xCTNewProfileButton:SetText(CREATE)
-xCTNewProfileButton:Show()
+--[[ Removes a profile at the index                                                               ]]
+function engine:RemoveProfile(profileIndex)
+  table.remove(xCTPlus_SavedVars.Profiles, profileIndex)
+  xCTPlus_SavedVars.Characters[engine.MyName] = 1
 
-if not xCTRemoveProfileButton then
-  CreateFrame("Button", "xCTRemoveProfileButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate2")
+  xCTRemoveProfileButton:Disable()
+  UIDropDownMenu_Initialize(xCTProfilesDropDownMenu, engine.DropBox_Initialize)
+  UIDropDownMenu_SetSelectedID(xCTProfilesDropDownMenu, xCTPlus_SavedVars.Characters[engine.MyName])
+end
+--\\==============================================================================================//
+
+--//== Saving the Frames =========================================================================\\
+--[[Saves all the frames to the current profile                                                   ]]
+function engine:SaveFrames()
+  engine.pr("frames saved.")
+  
+  local selectedIndex = xCTPlus_SavedVars.Characters[engine.MyName]
+  local currentProfile = xCTPlus_SavedVars.Profiles[selectedIndex]
+  
+  for name, config in pairs(currentProfile.Frames) do
+    self:SaveFrame(name, config)
+  end
+  
 end
 
-xCTRemoveProfileButton:ClearAllPoints()
-xCTRemoveProfileButton:SetPoint("TOPLEFT", 344, -400)
-xCTRemoveProfileButton:Size(100, 26)
-xCTRemoveProfileButton:SetText(CALENDAR_VIEW_EVENT_REMOVE)
-xCTRemoveProfileButton:Show()
+--[[ Saves the current frameName (global name) to a configFrame table                             ]]
+function engine:SaveFrame(frameName, frameConfig)
+  local frame = _G["xCT"..frameName]
 
+  local width   = frame:GetWidth()
+  local height  = frame:GetHeight()
+  frameConfig.Width   = width
+  frameConfig.Height  = height
+  frameConfig.Justify = "CENTER"
+  
+  -- Calculate the center of the screen
+  local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+  local midX, midY = ResX / 2, ResY / 2
+  
+  -- Calculate the Top/Left of a frame relative to the center
+  local left, top = math.floor(frame:GetLeft() - midX + 1), math.floor(frame:GetTop() - midY + 1)
+  
+  -- Calculate get the center of the screen from the left/top
+  frameConfig.X       = left + (width / 2)
+  frameConfig.Y       = top - (height / 2)
+end
+--\\==============================================================================================//
+
+--//== Loading the Frames ========================================================================\\
+--[[ Loads all the frames from the current profile                                                ]]
+function engine:LoadFrames()
+  local selectedIndex = xCTPlus_SavedVars.Characters[engine.MyName]
+  local currentProfile = xCTPlus_SavedVars.Profiles[selectedIndex]
+  
+  for name, config in pairs(currentProfile.Frames) do
+    engine:LoadFrame(name, config)
+  end
+  
+end
+
+--[[ Loads the current frameConfig to the frameName (global name)                                 ]]
+function engine:LoadFrame(frameName, frameConfig)
+  local frame = _G["xCT"..frameName]
+
+  frame:ClearAllPoints()
+  frame:SetHeight(frameConfig.Height)
+  frame:SetWidth(frameConfig.Width)
+  frame:SetPoint(frameConfig.Justify, frameConfig.X, frameConfig.Y)
+end
+--\\==============================================================================================//
+
+--//== Static Popup Dialogs ======================================================================\\
 StaticPopupDialogs["XCT_NEWPROFILE"] = {
   text          = "|cffFFFF00Creating New Profile|r\n\nA frame profile will remember your frame positions and their enabled states, but it will not save your settings.\n\n|cff5555FFProfile Name:|r",
   hasEditBox    = 1,
@@ -222,23 +357,22 @@ StaticPopupDialogs["XCT_NEWPROFILE"] = {
   preferredIndex = 3,
 }
 
--- Index 3 not skinned
--- http://www.tukui.org/code/view.php?id=DANDRUFF200412053929
 StaticPopupDialogs["XCT_REMOVEPROFILE"] = {
   text          = "Are you certain you want to delete",
   timeout       = 0,
   whileDead     = 1,
   showAlert     = 1,
   OnShow = function(self)
-    local currentIndex = UIDropDownMenu_GetSelectedID(DropDownMenuTest)
+    local currentIndex = UIDropDownMenu_GetSelectedID(xCTProfilesDropDownMenu)
     local currentProfileName = xCTPlus_SavedVars.Profiles[currentIndex].Name
-    self.text:SetText("Are you sure you want to delete: " .. currentProfileName)
+    local message = string.gsub(CONFIRM_COMPACT_UNIT_FRAME_PROFILE_DELETION, "%%s", "|r\n|cffFF0000"..currentProfileName.."|r")
+    self.text:SetText(message)
   end,
   
-  button1       = ACCEPT,
+  button1       = DELETE,
   button2       = CANCEL,
   OnAccept      = function()
-      local currentIndex = UIDropDownMenu_GetSelectedID(DropDownMenuTest)
+      local currentIndex = UIDropDownMenu_GetSelectedID(xCTProfilesDropDownMenu)
       engine:RemoveProfile(currentIndex)
       engine:LoadFrames()
     end,
@@ -249,98 +383,18 @@ StaticPopupDialogs["XCT_REMOVEPROFILE"] = {
   preferredIndex = 3,
 }
 
-xCTNewProfileButton:SetScript("OnClick", function(self)
-  StaticPopup_Show("XCT_NEWPROFILE")
-end)
-
-xCTRemoveProfileButton:SetScript("OnClick", function(self)
-  StaticPopup_Show("XCT_REMOVEPROFILE")
-end)
-
-function engine:CreateTable(fromTable)
-  local t = { }
-  for i, v in pairs(fromTable) do
-    if type(v) == "table" then
-      t[i] = self:CreateTable(v)
-    else
-      t[i] = v
-    end
-  end
-  return t
-end
-
-function engine:CreateNewProfile(profileName)
-  if profileName == "Default" then
-    engine.pr("cannot create a profile named: 'Default'")
-    return
-  end
-
-  local newProfile = engine:CreateTable(engine.default_profile)
-  newProfile.Name = profileName
+StaticPopupDialogs["XCT_ERRORPROFILE"] = {
+  text          = "|cffFF0000Warning:  Unlocked Frames|r\n\n Cannot create, remove, or change profiles while frames are unlocked. To lock the frames type |cffFFFF00/xct lock|r.",
+  timeout       = 0,
+  whileDead     = 1,
+  showAlert     = 1,
   
-  table.insert(xCTPlus_SavedVars.Profiles, newProfile)
-  xCTPlus_SavedVars.SelectedProfile = #xCTPlus_SavedVars.Profiles
+  button1       = CONTINUE,
+  OnAccept      = function() end,
+  hideOnEscape  = true,
   
-  UIDropDownMenu_Initialize(DropDownMenuTest, engine.DropBox_Initialize)
-  UIDropDownMenu_SetSelectedID(DropDownMenuTest, xCTPlus_SavedVars.SelectedProfile)
-  xCTRemoveProfileButton:Enable()
-end
-
-function engine:RemoveProfile(profileIndex)
-  table.remove(xCTPlus_SavedVars.Profiles, profileIndex)
-  xCTPlus_SavedVars.SelectedProfile = 1
-
-  xCTRemoveProfileButton:Disable()
-  UIDropDownMenu_Initialize(DropDownMenuTest, engine.DropBox_Initialize)
-  UIDropDownMenu_SetSelectedID(DropDownMenuTest, xCTPlus_SavedVars.SelectedProfile)
-end
-
-function engine:SaveFrames()
-  engine.pr("frames saved.")
-  
-  local selectedIndex = xCTPlus_SavedVars.SelectedProfile
-  local currentProfile = xCTPlus_SavedVars.Profiles[selectedIndex]
-  
-  for name, config in pairs(currentProfile.Frames) do
-    self:SaveFrame(name, config)
-  end
-  
-end
-
-function engine:SaveFrame(frameName, frameConfig)
-  local frame = _G["xCT"..frameName]
-
-  local width   = frame:GetWidth()
-  local height  = frame:GetHeight()
-  frameConfig.Width   = width
-  frameConfig.Height  = height
-  
-  local ResX, ResY = GetScreenWidth(), GetScreenHeight()
-  local midX, midY = ResX / 2, ResY / 2
-  
-  local x, y = math.floor(frame:GetLeft() - midX + 1), math.floor(frame:GetTop() - midY + 1)
-  
-  frameConfig.Justify = "CENTER"
-  frameConfig.X       = x + (width / 2)
-  frameConfig.Y       = y --+ (height / 2)
-end
-
-function engine:LoadFrames()
-  local selectedIndex = xCTPlus_SavedVars.SelectedProfile
-  local currentProfile = xCTPlus_SavedVars.Profiles[selectedIndex]
-  
-  for name, config in pairs(currentProfile.Frames) do
-    engine:LoadFrame(name, config)
-  end
-  
-end
-
-function engine:LoadFrame(frameName, frameConfig)
-  local frame = _G["xCT"..frameName]
-
-  frame:ClearAllPoints()
-  frame:SetHeight(frameConfig.Height)
-  frame:SetWidth(frameConfig.Width)
-  frame:SetPoint(frameConfig.Justify, frameConfig.X, frameConfig.Y)
-end
+  -- Taint work around
+  preferredIndex = 3,
+}
+--\\==============================================================================================//
 
