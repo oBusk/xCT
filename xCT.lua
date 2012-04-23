@@ -13,7 +13,7 @@ Description:
 scrolling combat text with something that is more concised and organized.  xCT+ is a stand alone
 addon, based on xCT (by Affli).                                                                     ]]
 
-XCT_DEBUG = 1
+XCT_DEBUG = nil
 if XCT_DEBUG then
   print("|cffFF0000Warning:|r You are running a |cffFF6600DEBUG|r version of |cffFFFF00xCT+|r.  Please download the real version at |cff5555FFCurse.com|r")
 end
@@ -1511,10 +1511,12 @@ local StartConfigmode = function()
           AlignGridShow()
         end
         
-        pr("unlocked. Type '|cff22FF55/xct lock|r' to save your changes or type '|cffFF2222/reload|r' to cancel.")
+        return true
     else
         pr("can't be configured in combat.")
     end
+    
+    return false
 end
 
 local function EndConfigmode(showWarning)
@@ -1545,7 +1547,13 @@ local function EndConfigmode(showWarning)
     if showWarning then
       pr("window positions unsaved, don't forget to reload UI.")
     end
+    
+    -- sweep up
+    collectgarbage()
 end
+
+ns.StartConfigMode = StartConfigmode
+ns.EndConfigMode = EndConfigmode
 
 local function StartTestMode()
 -- init really random number generator.
@@ -1711,7 +1719,6 @@ StaticPopupDialogs["XCT_LOCK"] = {
                         ReloadUI()
                       else
                         EndConfigmode()
-                        --ns:SaveFrames()
                       end
                     end,
     OnCancel     = EndConfigmode,
@@ -1737,7 +1744,12 @@ SlashCmdList["XCT"] = function(input)
     
     if args[1] == "unlock" then
         if ct.locked then
-            StartConfigmode()
+            if not ct["DisableProfileManager"] then
+              ns:OnChangedLockedState(false)
+            end
+            if StartConfigmode() then
+              pr("unlocked. Type '|cff22FF55/xct lock|r' to save your changes or type '|cffFF2222/reload|r' to cancel.")
+            end
         else
             pr("already unlocked.")
         end
@@ -1749,6 +1761,7 @@ SlashCmdList["XCT"] = function(input)
             if ct["DisableProfileManager"] then
               StaticPopup_Show("XCT_LOCK")
             else
+              ns:OnChangedLockedState(true)
               ns:SaveFrames()
               EndConfigmode()
             end
@@ -1768,7 +1781,7 @@ SlashCmdList["XCT"] = function(input)
       InterfaceOptionsFrameCategoriesButton8:Click()
     
     -- DEBUG WARNING - THIS WILL ERASE ALL OF YOUR SETTINGS!
-    elseif args[1] == "reset" then
+    elseif args[1] == "reset"  and XCT_DEBUG then
       xCTPlus_SavedVars = nil
       ReloadUI()
       

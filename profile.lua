@@ -224,6 +224,42 @@ do -- init xct frame manager gui
       StaticPopup_Show("XCT_ERRORPROFILE")
     end
   end)
+
+
+  -- Create a button that allows you to enter config
+  if not xCTStartConfigButton then
+    CreateFrame("Button", "xCTStartConfigButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate2")
+  end
+
+  xCTStartConfigButton:ClearAllPoints()
+  xCTStartConfigButton:SetPoint("TOPLEFT", 12, -528)
+  xCTStartConfigButton:Size(100, 26)
+  xCTStartConfigButton:SetText("Unlock Frames")
+  xCTStartConfigButton:Show()
+  xCTStartConfigButton:SetScript("OnClick", function(self)
+    engine.StartConfigMode()
+    xCTStartConfigButton:Disable()
+    xCTEndConfigButton:Enable()
+  end)
+
+
+  -- Create a button that allows you to enter config
+  if not xCTEndConfigButton then
+    CreateFrame("Button", "xCTEndConfigButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate2")
+  end
+
+  xCTEndConfigButton:ClearAllPoints()
+  xCTEndConfigButton:SetPoint("TOPLEFT", 114, -528)
+  xCTEndConfigButton:Size(100, 26)
+  xCTEndConfigButton:SetText("Lock Frames")
+  xCTEndConfigButton:Show()
+  xCTEndConfigButton:Disable()
+  xCTEndConfigButton:SetScript("OnClick", function(self)
+    engine:SaveFrames()
+    engine.EndConfigMode()
+    xCTEndConfigButton:Disable()
+    xCTStartConfigButton:Enable()
+  end)
 end
 --\\==============================================================================================//
 
@@ -273,8 +309,6 @@ end
 --//== Saving the Frames =========================================================================\\
 --[[Saves all the frames to the current profile                                                   ]]
 function engine:SaveFrames()
-  engine.pr("frames saved.")
-  
   local selectedIndex = xCTPlus_SavedVars.Characters[engine.MyName]
   local currentProfile = xCTPlus_SavedVars.Profiles[selectedIndex]
   
@@ -282,6 +316,7 @@ function engine:SaveFrames()
     self:SaveFrame(name, config)
   end
   
+  --engine.pr("frames saved.")
 end
 
 --[[ Saves the current frameName (global name) to a configFrame table                             ]]
@@ -398,3 +433,15 @@ StaticPopupDialogs["XCT_ERRORPROFILE"] = {
 }
 --\\==============================================================================================//
 
+--//== Changed Locked State Events ===============================================================\\
+-- Someone manually changed the state by typing in a command
+function engine:OnChangedLockedState(state)
+  if state then
+    xCTEndConfigButton:Disable()
+    xCTStartConfigButton:Enable()
+  else
+    xCTEndConfigButton:Enable()
+    xCTStartConfigButton:Disable()
+  end
+end
+--\\==============================================================================================//
