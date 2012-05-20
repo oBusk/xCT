@@ -351,17 +351,17 @@ function engine:LoadFrames()
   for name, config in pairs(currentProfile.Frames) do
     engine:LoadFrame(name, config)
   end
-  
 end
 
 --[[ Loads the current frameConfig to the frameName (global name)                                 ]]
 function engine:LoadFrame(frameName, frameConfig)
   local frame = _G["xCT"..frameName]
-
-  frame:ClearAllPoints()
-  frame:SetHeight(frameConfig.Height)
-  frame:SetWidth(frameConfig.Width)
-  frame:SetPoint(frameConfig.Justify, frameConfig.X, frameConfig.Y)
+  if frame then
+    frame:ClearAllPoints()
+    frame:SetHeight(frameConfig.Height)
+    frame:SetWidth(frameConfig.Width)
+    frame:SetPoint(frameConfig.Justify, frameConfig.X, frameConfig.Y)
+  end
 end
 --\\==============================================================================================//
 
