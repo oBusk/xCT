@@ -133,7 +133,7 @@ do -- init xct frame manager gui
    
   xCTProfilesDropDownMenu:ClearAllPoints()
   xCTProfilesDropDownMenu:SetPoint("TOPLEFT", 4, -400)
-  xCTProfilesDropDownMenu:Size(300, 26)
+  xCTProfilesDropDownMenu:SetSize(300, 26)
   xCTProfilesDropDownMenu:Show()
 
   -- When someone clicks a "profile" from the DropDownMenu
@@ -196,7 +196,7 @@ do -- init xct frame manager gui
 
   xCTNewProfileButton:ClearAllPoints()
   xCTNewProfileButton:SetPoint("TOPLEFT", 242, -400)
-  xCTNewProfileButton:Size(100, 26)
+  xCTNewProfileButton:SetSize(100, 26)
   xCTNewProfileButton:SetText(CREATE)
   xCTNewProfileButton:Show()
   xCTNewProfileButton:SetScript("OnClick", function(self)
@@ -214,7 +214,7 @@ do -- init xct frame manager gui
 
   xCTRemoveProfileButton:ClearAllPoints()
   xCTRemoveProfileButton:SetPoint("TOPLEFT", 344, -400)
-  xCTRemoveProfileButton:Size(100, 26)
+  xCTRemoveProfileButton:SetSize(100, 26)
   xCTRemoveProfileButton:SetText(CALENDAR_VIEW_EVENT_REMOVE)
   xCTRemoveProfileButton:Show()
   xCTRemoveProfileButton:SetScript("OnClick", function(self)
@@ -233,7 +233,7 @@ do -- init xct frame manager gui
 
   xCTStartConfigButton:ClearAllPoints()
   xCTStartConfigButton:SetPoint("TOPLEFT", 12, -528)
-  xCTStartConfigButton:Size(100, 26)
+  xCTStartConfigButton:SetSize(100, 26)
   xCTStartConfigButton:SetText("Unlock Frames")
   xCTStartConfigButton:Show()
   xCTStartConfigButton:SetScript("OnClick", function(self)
@@ -250,7 +250,7 @@ do -- init xct frame manager gui
 
   xCTEndConfigButton:ClearAllPoints()
   xCTEndConfigButton:SetPoint("TOPLEFT", 114, -528)
-  xCTEndConfigButton:Size(100, 26)
+  xCTEndConfigButton:SetSize(100, 26)
   xCTEndConfigButton:SetText("Lock Frames")
   xCTEndConfigButton:Show()
   xCTEndConfigButton:Disable()

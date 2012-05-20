@@ -1786,7 +1786,7 @@ SlashCmdList["XCT"] = function(input)
       ReloadUI()
       
     else
-        pr("Position Commands")
+        pr("Type '/xct config' to enter the Combat Text options")
         print("    use |cffFF0000/xct unlock|r to move and resize frames.")
         print("    use |cffFF0000/xct lock|r to lock frames.")
         print("    use |cffFF0000/xct test|r to toggle testmode (sample xCT output).")
