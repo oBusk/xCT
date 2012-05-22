@@ -323,22 +323,25 @@ end
 function engine:SaveFrame(frameName, frameConfig)
   local frame = _G["xCT"..frameName]
 
-  local width   = frame:GetWidth()
-  local height  = frame:GetHeight()
-  frameConfig.Width   = width
-  frameConfig.Height  = height
-  frameConfig.Justify = "CENTER"
-  
-  -- Calculate the center of the screen
-  local ResX, ResY = GetScreenWidth(), GetScreenHeight()
-  local midX, midY = ResX / 2, ResY / 2
-  
-  -- Calculate the Top/Left of a frame relative to the center
-  local left, top = math.floor(frame:GetLeft() - midX + 1), math.floor(frame:GetTop() - midY + 1)
-  
-  -- Calculate get the center of the screen from the left/top
-  frameConfig.X       = left + (width / 2)
-  frameConfig.Y       = top - (height / 2)
+  -- Fixing Error when you disable a frame (reported by Alatariell)
+  if frame and frame.Show then
+    local width   = frame:GetWidth()
+    local height  = frame:GetHeight()
+    frameConfig.Width   = width
+    frameConfig.Height  = height
+    frameConfig.Justify = "CENTER"
+    
+    -- Calculate the center of the screen
+    local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+    local midX, midY = ResX / 2, ResY / 2
+    
+    -- Calculate the Top/Left of a frame relative to the center
+    local left, top = math.floor(frame:GetLeft() - midX + 1), math.floor(frame:GetTop() - midY + 1)
+    
+    -- Calculate get the center of the screen from the left/top
+    frameConfig.X = left + (width / 2)
+    frameConfig.Y = top - (height / 2)
+  end
 end
 --\\==============================================================================================//
 
@@ -356,7 +359,8 @@ end
 --[[ Loads the current frameConfig to the frameName (global name)                                 ]]
 function engine:LoadFrame(frameName, frameConfig)
   local frame = _G["xCT"..frameName]
-  if frame then
+  -- Fixing Error when you disable a frame (reported by Alatariell)
+  if frame and frame.Show then
     frame:ClearAllPoints()
     frame:SetHeight(frameConfig.Height)
     frame:SetWidth(frameConfig.Width)
