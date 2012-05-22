@@ -19,6 +19,9 @@ Table of Contents:
   > Blizzard Damage Options
   
   > xCT+ Frames
+    + Healing/Damage Incoming Frame ("xCTheal" and "xCTdmg")
+        * Enable/Disable Frames
+        
     + Healing/Damage Outing Frame ("xCTdone")
         * Filter Units/Periodic Spells
         * Damage/Healing Icon Sizes and Appearence
@@ -80,6 +83,14 @@ ns.config = {
         -- Allow mouse scrolling on ALL frames (recommended "false")
         ["scrollable"]          = false,
         ["maxlines"]            = 64,       -- Max lines to keep in scrollable mode. More lines = more Memory Nom nom nom
+        
+        
+        -- ==================================================================================
+        -- Healing/Damage Incoming Frames (frames are called "xCTheal" and "xCTdmg")
+        -- ==================================================================================
+        ["showincomingheals"]    = true,        -- Allows You to Show/Hide Incoming Healing
+        ["showincomingdmg"]      = true,        -- Allows You to Show/Hide Incoming Damage
+        -- __________________________________________________________________________________
         
         
         -- ==================================================================================
@@ -197,13 +208,13 @@ ns.config = {
     -- xCT+ Frames' Justification
     -- --------------------------------------------------------------------------------------
         --[[Justification Options: "RIGHT", "LEFT", "CENTER" ]]
-        ["justify_1"] = "LEFT",             -- Damage Incoming Frame            (frame is called "xCTdmg")
+        ["justify_1"] = "RIGHT",            -- Damage Incoming Frame            (frame is called "xCTdmg")
         ["justify_2"] = "RIGHT",            -- Healing Incoming Frame           (frame is called "xCTheal")
         ["justify_3"] = "CENTER",           -- General Buffs Gains/Drops Frame  (frame is called "xCTgen")
         ["justify_4"] = "RIGHT",            -- Healing/Damage Outgoing Frame    (frame is called "xCTdone")
         ["justify_5"] = "CENTER",           -- Loot/Money Gains Frame           (frame is called "xCTloot")
         ["justify_6"] = "RIGHT",            -- Criticals Outgoing Frame         (frame is called "xCTcrit")
-        ["justify_7"] = "LEFT",             -- Power Gains Frame                (frame is called "xCTpwr")
+        ["justify_7"] = "CENTER",           -- Power Gains Frame                (frame is called "xCTpwr")
         ["justify_8"] = "CENTER",           -- Procs Frame                      (frame is called "xCTproc")    
         ["justify_9"] = "CENTER",           -- Class Combo Points Frame         (frame is called "xCTclass")    
     
@@ -219,21 +230,22 @@ ns.config = {
         
         -- Misc.
             -- Spell Spam Spam Spam Spam Spam Spam Spam Spam
-            ["mergeaoespam"]    = true,     -- Merges multiple AoE spam into single message, can be useful for dots too.
-            ["mergeitems"]      = true,     -- Merges spammy items (mainly items from Dragon Soul)
-            ["mergeaoespamtime"] = 3,       -- Time in seconds AoE spell will be merged into single message.  Minimum is 1.
+            ["mergeaoespam"]      = true,   -- Merges multiple AoE spam into single message, can be useful for dots too.
+            ["mergeitems"]        = true,   -- Merges spammy items (mainly items from Dragon Soul)
+            ["mergeaoespamtime"]  = 3,      -- Time in seconds AoE spell will be merged into single message.  Minimum is 1.
         
             -- Helpful Alerts (Shown in the Gerenal Gains/Drops Frame)
-            ["killingblow"]     = true,     -- Alerts with the name of the PC/NPC that you had a killing blow on (Req. ["damageout"] = true)
-            ["dispel"]          = true,     -- Alerts with the name of the (De)Buff Dispelled (Req. ["damageout"] = true)
-            ["interrupt"]       = true,     -- Alerts with the name of the Spell Interupted (Req. ["damageout"] = true)
+            ["killingblow"]       = true,   -- Alerts with the name of the PC/NPC that you had a killing blow on (Req. ["damageout"] = true)
+            ["dispel"]            = true,   -- Alerts with the name of the (De)Buff Dispelled (Req. ["damageout"] = true)
+            ["interrupt"]         = true,   -- Alerts with the name of the Spell Interupted (Req. ["damageout"] = true)
+            ["colorkillingblows"] = true,   -- Colors the alerts of a killing blow with the class color of the unit killed (Req. ["damageout"] = true)
             
             -- Filter Auras Gains or Fades
             ["showharmfulaura"] = true,     -- Show Harmful Auras (Gains and Fades)
             ["showhelpfulaura"] = true,     -- Show Helpful Auras (Gains and Fades)
-            ["showgains"]       = true,     -- Show Gains in the Aura frame
-            ["showfades"]       = true,     -- Show Fades in the Aura frame
-            ["filteraura"]      = true,     -- Allows You to Filter out Unwanted Aura Gains/Fades
+            ["showgains"]       = true,     -- Show Gains in the Aura frame (overrides above)
+            ["showfades"]       = true,     -- Show Fades in the Aura frame (overrides above)
+            ["filteraura"]      = false,    -- Allows You to Filter out Unwanted Aura Gains/Fades
             ["aura_blacklist"]  = true,     -- Aura List is a Blacklist (Opposed to a Whitelist)
             
             -- Filter Aura Helpers
@@ -254,14 +266,8 @@ ns.config = {
 --[[                                                                                                                                ]]
 --[[               In other words:  USE AT YOUR OWN RISK                                                                            ]]
 
-        ["colorkillingblows"]    = true,        -- Colors the alerts of a killing blow with the class color of the unit killed (Req. ["damageout"] = true)
-        
-        ["showincomingheals"]    = true,        -- Allows You to Show/Hide Incoming Healing
-        ["showincomingdmg"]      = true,        -- Allows You to Show/Hide Incoming Damage
-        
         ["DisableProfileManager"] = false,
-        
-        
+
         -- (DISABLED: Currently does not work)
         ["loottimevisible"]     = 6,
         ["crittimevisible"]     = 3,
@@ -271,6 +277,24 @@ ns.config = {
         -- Change Default Damage/Healing Font Above Mobs/Player Heads. (This has no effect if ["blizzheadnumbers"] = false)
         -- ["damagestyle"]         = true,  -- (You need to restart WoW to see changes!)
         -- DO NOT USE - BUGGY
+        
+        
+        
+    -- --------------------------------------------------------------------------------------
+    -- xCT+ Frames' Scrolling Direction  - Note: "top" goes DOWN, "bottom" goes UP (default)
+    -- --------------------------------------------------------------------------------------
+        --[[Scrolling Direction Options: "top", "bottom" ]]
+        ["direction_1"] = "top",            -- Damage Incoming Frame            (frame is called "xCTdmg")
+        ["direction_2"] = "bottom",         -- Healing Incoming Frame           (frame is called "xCTheal")
+        ["direction_3"] = "bottom",         -- General Buffs Gains/Drops Frame  (frame is called "xCTgen")
+        ["direction_4"] = "bottom",         -- Healing/Damage Outgoing Frame    (frame is called "xCTdone")
+        ["direction_5"] = "top",            -- Loot/Money Gains Frame           (frame is called "xCTloot")
+        ["direction_6"] = "bottom",         -- Criticals Outgoing Frame         (frame is called "xCTcrit")
+        ["direction_7"] = "top",            -- Power Gains Frame                (frame is called "xCTpwr")
+        ["direction_8"] = "bottom",         -- Procs Frame                      (frame is called "xCTproc")
+        
+        -- This effectively does... nothing :)
+        ["direction_9"] = "bottom",         -- Class Combo Points Frame         (frame is called "xCTclass")
 }
 
 

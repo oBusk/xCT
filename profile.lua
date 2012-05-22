@@ -8,9 +8,16 @@ if (ct["DisableProfileManager"]) then return end
 engine.default_profile = {
   Name = "Default",
   Frames = {
+    --[[
+    X - Horizontal Axis
+    Y - Vertical Axis
+    Width - Width of the frame
+    Height - Height of the frame
+    Justify - Frame Anchor to Parent (this is NOT text justify)
+    ]]
     -- <Critical>
     ["crit"] = {
-      X = 128,
+      X = 256,
       Y = 0,
       Width = 256,
       Height = 128,
@@ -18,8 +25,8 @@ engine.default_profile = {
     }, -- </Critical>
     -- <Damage>
     ["dmg"] = {
-      X = -320,
-      Y = 0,
+      X = -448,
+      Y = -80,
       Width = 128,
       Height = 128,
       Justify = "CENTER",
@@ -35,7 +42,7 @@ engine.default_profile = {
     -- <Healing>
     ["heal"] = {
       X = -448,
-      Y = 0,
+      Y = 80,
       Width = 128,
       Height = 128,
       Justify = "CENTER",
@@ -43,30 +50,30 @@ engine.default_profile = {
     -- <Loot>
     ["loot"] = {
       X = 0,
-      Y = -192,
+      Y = 0,
       Width = 256,
       Height = 128,
       Justify = "CENTER",
     }, -- </Loot>
     -- <Outgoing>
     ["done"] = {
-      X = 320,
+      X = 448,
       Y = 0,
       Width = 128,
-      Height = 128,
+      Height = 320,
       Justify = "CENTER",
     }, -- </Outgoing>
     -- <PowerGains>
     ["pwr"] = {
-      X = 448,
-      Y = 0,
-      Width = 128,
+      X = 0,
+      Y = -192,
+      Width = 256,
       Height = 128,
       Justify = "CENTER",
     }, -- </PowerGains>
     -- <SpellProcs>
     ["proc"] = {
-      X = -128,
+      X = -256,
       Y = 0,
       Width = 256,
       Height = 128,
@@ -75,9 +82,9 @@ engine.default_profile = {
     -- <ComboPoints>
     ["class"] = {
       X = 0,
-      Y = -512,
-      Width = 256,
-      Height = 128,
+      Y = 96,
+      Width = 64,
+      Height = 64,
       Justify = "CENTER",
     }, -- </ComboPoints>
   },

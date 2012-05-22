@@ -1201,17 +1201,21 @@ for i = 1, numf do
     f:SetClampRectInsets(0, 0, ct.fontsize, 0)
     if framenames[i] == "dmg" then
         f:SetJustifyH(ct.justify_1)
+        f:SetInsertMode(ct.direction_1 or "bottom")
         f:SetPoint("CENTER", -256, 0)
     elseif framenames[i] == "heal" then
         f:SetJustifyH(ct.justify_2)
+        f:SetInsertMode(ct.direction_2 or "bottom")
         f:SetPoint("CENTER", -480, 0)
         f:SetWidth(320)
     elseif framenames[i] == "gen" then
         f:SetJustifyH(ct.justify_3)
+        f:SetInsertMode(ct.direction_3 or "bottom")
         f:SetWidth(512)
         f:SetPoint("CENTER", 0, 320)
     elseif framenames[i] == "done" then
         f:SetJustifyH(ct.justify_4)
+        f:SetInsertMode(ct.direction_4 or "bottom")
         f:SetHeight(384)
         f:SetPoint("CENTER", 576, 0)
         local a, _, c = f:GetFont()
@@ -1228,10 +1232,12 @@ for i = 1, numf do
         end
     elseif framenames[i] == "loot" then
         f:SetJustifyH(ct.justify_5)
+        f:SetInsertMode(ct.direction_5 or "bottom")
         f:SetWidth(512)
         f:SetPoint("CENTER", 0, 192)
     elseif framenames[i] == "crit" then
         f:SetJustifyH(ct.justify_6)
+        f:SetInsertMode(ct.direction_6 or "bottom")
         f:SetWidth(192)
         f:SetPoint("CENTER", 416, 0)
         if type(ct.critfontsize) == "number" then
@@ -1247,15 +1253,18 @@ for i = 1, numf do
         end
     elseif framenames[i] == "pwr" then
         f:SetJustifyH(ct.justify_7)
+        f:SetInsertMode(ct.direction_7 or "bottom")
         f:SetPoint("CENTER", 0, -64)
         f:SetWidth(384)
     elseif framenames[i] == "proc" then
         f:SetJustifyH(ct.justify_8)
+        f:SetInsertMode(ct.direction_8 or "bottom")
         f:SetWidth(512)
         f:SetPoint("CENTER", 0, -192)
 		    f:SetFont(ct.procfont, ct.procfontsize, ct.procfontstyle)
     elseif framenames[i] == "class" then
         f:SetJustifyH(ct.justify_9)
+        f:SetInsertMode(ct.direction_9 or "bottom")
         f:SetMaxLines(1)
         f:SetWidth(64)
         f:SetHeight(64)
@@ -1265,11 +1274,13 @@ for i = 1, numf do
     -- Add a starting location to your frame
     --elseif framenames[i] == "custom" then
     --    f:SetTimeVisible(ct.loottimevisible)
-    --    f:SetJustifyH(ct.justify_3)
+    --    f:SetJustifyH(ct.justify_10)
+    --    f:SetInsertMode(ct.direction_10 or "bottom")
     --    f:SetWidth(256)
     --    f:SetPoint("CENTER", 320, 192)
     
     end
+    
     ct.frames[i] = f
 end
 
@@ -2233,3 +2244,15 @@ function ct:UpdateComboPoints()
     xCTclass:AddMessage(" ", 1, .82, 0)
   end
 end
+
+--[==[
+xCTgen:SetInsertMode("top")       -- General Messages Frame
+xCTdmg:SetInsertMode("top")       -- Incoming Damage Frame
+xCTheal:SetInsertMode("top")      -- Incoming Healing Frame
+xCTdone:SetInsertMode("top")      -- Outgoing Damage/Healing Frame
+xCTloot:SetInsertMode("top")      -- Loot / Money Text
+xCTcrit:SetInsertMode("top")      -- Outgoing Damage/Healing Criticals Frame
+xCTpwr:SetInsertMode("top")       -- Incoming Power Gains (Mana, Rage, etc.)
+xCTproc:SetInsertMode("top")      -- Class Procs Tiggered (Spells that light up) Frame
+xCTclass:SetInsertMode("top")     -- Class and Rogue Combo Point Frame
+]==]
