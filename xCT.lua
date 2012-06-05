@@ -1166,6 +1166,9 @@ local function OnEvent(self, event, subevent, ...)
     elseif event == "CHAT_MSG_MONEY" then
         ChatMsgMoney_Handler(subevent)
         
+    elseif event == "ACTIVE_TALENT_GROUP_CHANGED" then
+        AssignTalentTree()
+    
     end
 end
 
@@ -1296,6 +1299,11 @@ xCT:RegisterEvent("UNIT_ENTERED_VEHICLE")
 xCT:RegisterEvent("UNIT_EXITING_VEHICLE")
 xCT:RegisterEvent("PLAYER_ENTERING_WORLD")
 xCT:RegisterEvent("PLAYER_TARGET_CHANGED")
+
+--ACTIVE_TALENT_GROUP_CHANGED
+if ct.combowindow then
+  xCT:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+end
 
 -- Register DK Events
 if ct.dkrunes and select(2, UnitClass("player")) == "DEATHKNIGHT" then
