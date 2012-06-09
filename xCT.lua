@@ -329,6 +329,7 @@ elseif ct.myclass == "PRIEST" then
         ct.aoespam[15407] = true  -- Mind Flay
         ct.aoespam[49821] = true  -- Mind Seer
         ct.aoespam[87532] = true  -- Shadowy Apparition
+        ct.aoespam[14914] = true  -- Holy Fire
     end
     if ct.healingout then
         -- Healer spells
