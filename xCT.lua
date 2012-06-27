@@ -2200,30 +2200,34 @@ function loadstacktracker()
     local xCTstacks = CreateFrame("Frame")
     ct.combolastupdate = 0
     local track = function(self, event, unit)
-      if unit == ct.classcomboUnit then
-        local i, name, _, icon, count, _, _, _, _, _, _, spellId = 1, UnitBuff(ct.classcomboUnit, 1)
-        while name do
-          if ct.classcomboIDs[spellId] then break end
-          i = i + 1;
-          name, _, icon, count, _, _, _, _, _, _, spellId = UnitBuff(ct.classcomboUnit, i)
-        end
-        if name then
-          if count > 0 and count ~= ct.combolastupdate then
-            xCTclass:AddMessage(count, 1, .82, 0)
-            ct.classcomboupdated = true
-            ct.combolastupdate = count
+      -- Reported by Marius80 (Post #10 on Curse)
+      -- Possibly fixing an error when you change specs to a non-combo points spec
+      if ct.combowindow then
+        if unit == ct.classcomboUnit then
+          local i, name, _, icon, count, _, _, _, _, _, _, spellId = 1, UnitBuff(ct.classcomboUnit, 1)
+          while name do
+            if ct.classcomboIDs[spellId] then break end
+            i = i + 1;
+            name, _, icon, count, _, _, _, _, _, _, spellId = UnitBuff(ct.classcomboUnit, i)
           end
-        elseif not count and ct.classcomboupdated then
+          if name then
+            if count > 0 and count ~= ct.combolastupdate then
+              xCTclass:AddMessage(count, 1, .82, 0)
+              ct.classcomboupdated = true
+              ct.combolastupdate = count
+            end
+          elseif not count and ct.classcomboupdated then
+            ct.classcomboupdated = false
+            xCTclass:AddMessage(" ", 1, .82, 0)
+            ct.combolastupdate = 0
+          end
+          
+        -- Fix issue of not reseting when unit disapears (e.g. dismiss pet)
+        elseif not UnitExists(ct.classcomboUnit) then
           ct.classcomboupdated = false
           xCTclass:AddMessage(" ", 1, .82, 0)
           ct.combolastupdate = 0
         end
-        
-      -- Fix issue of not reseting when unit disapears (e.g. dismiss pet)
-      elseif not UnitExists(ct.classcomboUnit) then
-        ct.classcomboupdated = false
-        xCTclass:AddMessage(" ", 1, .82, 0)
-        ct.combolastupdate = 0
       end
     end
     xCTstacks:RegisterEvent("UNIT_AURA")
