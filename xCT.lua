@@ -2207,7 +2207,7 @@ function loadstacktracker()
         if unit == ct.classcomboUnit then
           local i, name, _, icon, count, _, _, _, _, _, _, spellId = 1, UnitBuff(ct.classcomboUnit, 1)
           while name do
-            if ct.classcomboIDs[spellId] then break end
+            if ct.classcomboIDs and ct.classcomboIDs[spellId] then break end
             i = i + 1;
             name, _, icon, count, _, _, _, _, _, _, spellId = UnitBuff(ct.classcomboUnit, i)
           end
