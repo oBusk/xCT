@@ -1373,10 +1373,11 @@ CombatText:SetScript("OnUpdate", nil)
 InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
 
 -- Intercept Messages Sent by other Add-Ons that use CombatText_AddMessage
-Blizzard_CombatText_AddMessage = CombatText_AddMessage
-function CombatText_AddMessage(message,scrollFunction, r, g, b, displayType, isStaggered)
-    xCTgen:AddMessage(message, r, g, b)
-end
+hooksecurefunc('CombatText_AddMessage', function(message, scrollFunction, r, g, b, displayType, isStaggered)
+  local lastEntry = COMBAT_TEXT_TO_ANIMATE[ #COMBAT_TEXT_TO_ANIMATE ]
+  CombatText_RemoveMessage(lastEntry)
+  xCTgen:AddMessage(message, r, g, b)
+end)
 
 -- Modify Blizzard's Combat Text Options Title  ("Powered by xCT+")
 --InterfaceOptionsCombatTextPanelTitle:SetText(COMBAT_TEXT_LABEL.." (powered by \124cffFF0000x\124rCT\124cffDDFF55+\124r)")
