@@ -297,4 +297,7 @@ ns.config = {
         ["direction_9"] = "bottom",         -- Class Combo Points Frame         (frame is called "xCTclass")
 }
 
-
+-- Figure Out if this is the Beta/5.0.4
+if select(4, GetBuildInfo()) >= 50001 then
+  XCT_ISMOP = true
+end

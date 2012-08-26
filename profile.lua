@@ -1,8 +1,30 @@
+--[[   ____ _____
+__  __/ ___|_   _|_
+\ \/ / |     | |_| |_
+ >  <| |___  | |_   _|
+/_/\_\\____| |_| |_|
+World of Warcraft (4.3)
+
+Title: xCT+
+Author: Dandruff
+Version: 2.x.x
+Description:
+  xCT+ is an extremely lightwight scrolling combat text addon.  It replaces Blizzard's default
+scrolling combat text with something that is more concised and organized.  xCT+ is a stand alone
+addon, based on xCT (by Affli).                                                                     ]]
+
 local ADDON_NAME, engine = ...
 local ct = engine.config
 
 -- Check to see if we should load this module
 if (ct["DisableProfileManager"]) then return end
+
+-- New Button Template in MOP
+local xct_ButtonTemplate = "UIPanelButtonTemplate2"
+if XCT_ISMOP then
+  xct_ButtonTemplate = "UIPanelButtonTemplate"
+end
+
 
 --//== Default Profile ===========================================================================\\
 engine.default_profile = {
@@ -198,13 +220,13 @@ do -- init xct frame manager gui
 
   -- Create a button to create new profiles
   if not xCTNewProfileButton then
-    CreateFrame("Button", "xCTNewProfileButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate2")
+    CreateFrame("Button", "xCTNewProfileButton", InterfaceOptionsCombatTextPanel, xct_ButtonTemplate)
   end
 
   xCTNewProfileButton:ClearAllPoints()
   xCTNewProfileButton:SetPoint("TOPLEFT", 242, -400)
   xCTNewProfileButton:SetSize(100, 26)
-  xCTNewProfileButton:SetText(CREATE)
+  xCTNewProfileButton:SetText(CALENDAR_CREATE)
   xCTNewProfileButton:Show()
   xCTNewProfileButton:SetScript("OnClick", function(self)
     if ct.locked then
@@ -216,7 +238,7 @@ do -- init xct frame manager gui
 
   -- Create a button to delete profiles
   if not xCTRemoveProfileButton then
-    CreateFrame("Button", "xCTRemoveProfileButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate2")
+    CreateFrame("Button", "xCTRemoveProfileButton", InterfaceOptionsCombatTextPanel, xct_ButtonTemplate)
   end
 
   xCTRemoveProfileButton:ClearAllPoints()
@@ -235,13 +257,13 @@ do -- init xct frame manager gui
 
   -- Create a button that allows you to enter config
   if not xCTStartConfigButton then
-    CreateFrame("Button", "xCTStartConfigButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate2")
+    CreateFrame("Button", "xCTStartConfigButton", InterfaceOptionsCombatTextPanel, xct_ButtonTemplate)
   end
 
   xCTStartConfigButton:ClearAllPoints()
   xCTStartConfigButton:SetPoint("TOPLEFT", 12, -528)
   xCTStartConfigButton:SetSize(100, 26)
-  xCTStartConfigButton:SetText("Unlock Frames")
+  xCTStartConfigButton:SetText(UNLOCK_FRAME)
   xCTStartConfigButton:Show()
   xCTStartConfigButton:SetScript("OnClick", function(self)
     engine.StartConfigMode()
@@ -252,13 +274,13 @@ do -- init xct frame manager gui
 
   -- Create a button that allows you to enter config
   if not xCTEndConfigButton then
-    CreateFrame("Button", "xCTEndConfigButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate2")
+    CreateFrame("Button", "xCTEndConfigButton", InterfaceOptionsCombatTextPanel, xct_ButtonTemplate)
   end
 
   xCTEndConfigButton:ClearAllPoints()
   xCTEndConfigButton:SetPoint("TOPLEFT", 114, -528)
   xCTEndConfigButton:SetSize(100, 26)
-  xCTEndConfigButton:SetText("Lock Frames")
+  xCTEndConfigButton:SetText(LOCK_FRAME)
   xCTEndConfigButton:Show()
   xCTEndConfigButton:Disable()
   xCTEndConfigButton:SetScript("OnClick", function(self)

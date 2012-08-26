@@ -14,6 +14,7 @@ scrolling combat text with something that is more concised and organized.  xCT+ 
 addon, based on xCT (by Affli).                                                                     ]]
 
 XCT_DEBUG = nil
+
 if XCT_DEBUG then
   print("|cffFF0000Warning:|r You are running a |cffFF6600DEBUG|r version of |cffFFFF00xCT+|r.  Please download the real version at |cff5555FFCurse.com|r")
 end
@@ -73,8 +74,13 @@ end
 --[[  Assign Class Combo Abilities ]]
 local function AssignTalentTree()
   -- Spec Calculator
-  ct.myspec = GetPrimaryTalentTree(false, false, GetActiveTalentGroup(false, false))
-
+  
+  if XCT_ISMOP then
+    ct.myspec = GetSpecialization(false, false, GetActiveSpecGroup(false, false))
+  else
+    ct.myspec = GetPrimaryTalentTree(false, false, GetActiveTalentGroup(false, false))
+  end
+  
   if ct.combowindow then
     ct.classcomboUnit = "player" -- most of the time, this is the player
     
