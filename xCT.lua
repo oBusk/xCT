@@ -2117,8 +2117,12 @@ if(ct.damageout)then
         end
     end
     
-    xCTd:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    
+	if XCT_ISMOP then
+		xCTd:RegisterUnitEvent("COMBAT_LOG_EVENT_UNFILTERED", "player", "pet")
+	else
+		xCTd:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	end
+	
     -- this is corrected for 4.2, call normal
     xCTd:SetScript("OnEvent", dmg)
 end
@@ -2193,9 +2197,12 @@ if(ct.healingout)then
         end
     end
 
-    xCTh:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-
-    -- this is corrected for 4.2, call normal
+	if XCT_ISMOP then
+		xCTh:RegisterUnitEvent("COMBAT_LOG_EVENT_UNFILTERED", "player", "pet")
+	else
+		xCTh:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+	end
+	
     xCTh:SetScript("OnEvent", heal)
 end
 
@@ -2237,6 +2244,8 @@ function loadstacktracker()
         end
       end
     end
+	
+	-- This cannot use "RegisterUnitEvent" because we might need to watch more than 2 targets... for now
     xCTstacks:RegisterEvent("UNIT_AURA")
     xCTstacks:SetScript("OnEvent", track)
   end
@@ -2246,7 +2255,7 @@ function ct:UpdateComboPoints()
   local cp = GetComboPoints(ct.unit, "target")
           
   -- Combo points Color
-  r, g, b = 1, .82, .0
+  local r, g, b = 1, .82, .0
   if cp == MAX_COMBO_POINTS then
     r, g, b = 0, .82, 1
   end
