@@ -22,6 +22,10 @@ end
 --some init
 local addon, ns = ...
 local ct = ns.config
+
+-- leak a global for now
+xCT = ns
+
 ct.myname = UnitName("player")
 ct.myclass = select(2, UnitClass("player"))
 
@@ -431,6 +435,7 @@ elseif ct.myclass == "HUNTER" then
         ct.aoespam[1978]  = true  -- Serpent Sting                          (Thanks Naughtia)
         ct.aoespam[13812] = true  -- Explosive Trap
         ct.aoespam[53301] = true  -- Explosive Shot (3 ticks merged as one)
+        ct.aoespam[63468] = true  -- Piercing Shots
     end
     if ct.filtercrits then
       -- Add spells for all hunters here (example below)
@@ -1871,11 +1876,11 @@ if ct.mergeaoespam then
                 for k, v in pairs(SQ) do
                     if not SQ[k]["locked"] and SQ[k]["queue"] > 0 and SQ[k]["utime"] + ct.mergeaoespamtime <= utime then
                         if SQ[k]["count"] > 1 then
-                            count = " |cffFFFFFF x "..SQ[k]["count"].."|r"
+                            count = "|cffFFFFFF (x "..SQ[k]["count"]..")|r "
                         else
                             count = ""
                         end
-                        xCTdone:AddMessage(SQ[k]["queue"]..SQ[k]["msg"]..count, unpack(SQ[k]["color"]))
+                        xCTdone:AddMessage(SQ[k]["queue"]..count..SQ[k]["msg"], unpack(SQ[k]["color"]))
                         SQ[k]["queue"] = 0
                         SQ[k]["count"] = 0
                     end
@@ -2049,7 +2054,13 @@ if(ct.damageout)then
                 local missType, _ = select(12, ...)
                 
                 if not ct.showimmunes then
-                  if string.lower(missType) == string.lower(IMMUNE) then return end
+                  if string.lower(missType) == string.lower(IMMUNE) then
+                    return
+                  end
+                end
+                
+                if not ct.showmisstypes then
+                  return
                 end
                 
                 if ct.icons and not ct.hideautoattack then
@@ -2067,7 +2078,13 @@ if(ct.damageout)then
                 local spellId, _, _, missType, _ = select(12, ...)
                 
                 if not ct.showimmunes then
-                  if string.lower(missType) == string.lower(IMMUNE) then return end
+                  if string.lower(missType) == string.lower(IMMUNE) then
+                    return
+                  end
+                end
+                
+                if not ct.showmisstypes then
+                  return
                 end
                 
                 if ct.icons then
@@ -2117,11 +2134,8 @@ if(ct.damageout)then
         end
     end
     
-	if XCT_ISMOP then
-		xCTd:RegisterUnitEvent("COMBAT_LOG_EVENT_UNFILTERED", "player", "pet")
-	else
+
 		xCTd:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	end
 	
     -- this is corrected for 4.2, call normal
     xCTd:SetScript("OnEvent", dmg)
@@ -2197,12 +2211,7 @@ if(ct.healingout)then
         end
     end
 
-	if XCT_ISMOP then
-		xCTh:RegisterUnitEvent("COMBAT_LOG_EVENT_UNFILTERED", "player", "pet")
-	else
 		xCTh:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	end
-	
     xCTh:SetScript("OnEvent", heal)
 end
 
@@ -2219,8 +2228,11 @@ function loadstacktracker()
       if ct.combowindow then
         if unit == ct.classcomboUnit then
           local i, name, _, icon, count, _, _, _, _, _, _, spellId = 1, UnitBuff(ct.classcomboUnit, 1)
+          
           while name do
-            if ct.classcomboIDs and ct.classcomboIDs[spellId] then break end
+            if ct.classcomboIDs and ct.classcomboIDs[spellId] then
+              break
+            end
             i = i + 1;
             name, _, icon, count, _, _, _, _, _, _, spellId = UnitBuff(ct.classcomboUnit, i)
           end
