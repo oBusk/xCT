@@ -8,7 +8,7 @@ h3. Download
 
 h4. World of Warcraft (5.0.4 live)
 
-p. "Latest Version - 2.5.1":https://github.com/downloads/dandruff/xCT/dandruff-xCT+2.5.1(5.0.4).zip
+p. "Latest Version - 2.5.2":https://github.com/downloads/dandruff/xCT/dandruff-xCT+2.5.2(5.0.4).zip
 
 h3. Description
 
