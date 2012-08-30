@@ -289,7 +289,7 @@ elseif ct.myclass == "DRUID" then
         ct.aoespam[33745] = true  -- Lacerate
         ct.aoespam[1079]  = true  -- Rip
     end
-    if ct.healingout then
+    if ct.healingout and ct.mergeaoespam then
         -- Healer spells
         ct.aoespam[774]   = true  -- Rejuvenation (Normal)
         ct.aoespam[64801] = true  -- Rejuvenation (First tick)
@@ -316,7 +316,7 @@ elseif ct.myclass == "PALADIN" then
         ct.aoespam[31935] = true  -- Avenger's Shield
         ct.aoespam[94289] = true  -- Protector of the Innocent
     end
-    if ct.healingout then
+    if ct.healingout and ct.mergeaoespam  then
       ct.aoespam[53652] = true  -- Beacon of Light
       ct.aoespam[85222] = true  -- Light of Dawn
       ct.aoespam[86452] = true  -- Holy radiance (HoT) (Thanks Nidra)
@@ -342,6 +342,10 @@ elseif ct.myclass == "PRIEST" then
         ct.aoespam[14914] = true  -- Holy Fire
     end
     if ct.healingout then
+        ct.healfilter[2944]  = true  -- Devouring Plague (Healing)
+        ct.healfilter[15290] = true  -- Vampiric Embrace
+    end
+    if ct.healingout and ct.mergeaoespam then
         -- Healer spells
         ct.aoespam[47750]    = true  -- Penance (Heal Effect)
         ct.aoespam[139]      = true  -- Renew
@@ -355,8 +359,6 @@ elseif ct.myclass == "PRIEST" then
         ct.aoespam[33110]    = true  -- Prayer of Mending
         ct.aoespam[63544]    = true  -- Divine Touch
         ct.aoespam[88686]    = true  -- Holy Word: Sanctuary
-        ct.healfilter[2944]  = true  -- Devouring Plague (Healing)
-        ct.healfilter[15290] = true  -- Vampiric Embrace
     end
     if ct.filtercrits then
       -- Add spells for all priests here (example below)
@@ -372,7 +374,7 @@ elseif ct.myclass == "SHAMAN" then
         ct.aoespam[8050]  = true	-- Flame Shock (Thanks Shestak)
         ct.aoespam[25504] = true  -- Windfury (Thanks NitZo)
     end
-    if ct.healingout then
+    if ct.healingout and ct.mergeaoespam  then
         ct.aoespam[73921] = true  -- Healing Rain
         ct.aoespam[1064]  = true  -- Chain Heal
         ct.aoespam[52042] = true  -- Healing Stream Totem
@@ -416,7 +418,7 @@ elseif ct.myclass == "WARRIOR" then
         ct.aoespam[94009] = true  -- Rend
         ct.aoespam[12721] = true  -- Deep Wounds
         ct.aoespam[50622] = true  -- Bladestorm
-	ct.aoespam[52174] = true  -- Heroic Leap
+        ct.aoespam[52174] = true  -- Heroic Leap
     end
     if ct.healingout then
         ct.healfilter[23880] = true  -- Bloodthirst
@@ -450,7 +452,7 @@ elseif ct.myclass == "DEATHKNIGHT" then
         ct.aoespam[49184] = true  -- Howling Blast
         ct.aoespam[52212] = true  -- Death and Decay
         ct.aoespam[98957] = true  -- Burning Blood Tier 13 2pc Bonus
-	ct.aoespam[59754] = true  -- Rune Tap (aoe heal if glyphed)
+        ct.aoespam[59754] = true  -- Rune Tap (aoe heal if glyphed)
         
         -- Merging MainHand/OffHand Strikes (by Bozo)    (Thanks Shestak)
         if ct.mergedualwield then
