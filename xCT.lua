@@ -306,7 +306,6 @@ elseif ct.myclass == "DRUID" then
 elseif ct.myclass == "PALADIN" then
     if ct.mergeaoespam then
         ct.aoespam[81297] = true  -- Consecration
-        ct.aoespam[2812]  = true  -- Holy Wrath
         ct.aoespam[53385] = true  -- Divine Storm
         ct.aoespam[31803] = true  -- Censure
         ct.aoespam[20424] = true  -- Seals of Command
@@ -315,6 +314,7 @@ elseif ct.myclass == "PALADIN" then
         ct.aoespam[88263] = true  -- Hammer of the Righteous
         ct.aoespam[31935] = true  -- Avenger's Shield
         ct.aoespam[94289] = true  -- Protector of the Innocent
+        ct.aoespam[121129] = true -- Daybreak
     end
     if ct.healingout and ct.mergeaoespam  then
       ct.aoespam[53652] = true  -- Beacon of Light
