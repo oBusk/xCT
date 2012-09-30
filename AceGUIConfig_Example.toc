@@ -1,0 +1,8 @@
+## Interface: 50001
+## Title: CONFIG_EXAMPLE
+## Notes: CONFIG_EXAMPLE
+## Author: Dandruff
+## Version: 1.0.0
+## SavedVariables: xCTSavedDB
+embeds.xml
+core.lua
