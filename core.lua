@@ -1,12 +1,12 @@
 -- Get Addon's name and Blizzard's Addon Stub
-local AddonName, Addon = ...
+local AddonName, addon = ...
 
 -- Load AceStuff
-local MyAddon = LibStub("AceAddon-3.0"):NewAddon(AddonName, "AceConsole-3.0")
-MyAddon.DefaultProfile = Addon.DefaultProfile
+addon.engine = LibStub("AceAddon-3.0"):NewAddon(AddonName, "AceConsole-3.0")
+MyAddon.DefaultProfile = addon.DefaultProfile
 
 -- Give a Global handle
-GUIConfig = MyAddon
+GUIConfig = addon.engine
 
 -- Shorten my handle
 local X = GUIConfig
