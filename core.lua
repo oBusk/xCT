@@ -1,9 +1,10 @@
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
+local sgsub = string.gsub
+
 -- Load AceStuff
-addon.engine = LibStub("AceAddon-3.0"):NewAddon(AddonName, "AceConsole-3.0")
-MyAddon.DefaultProfile = addon.DefaultProfile
+addon.engine.DefaultProfile = addon.DefaultProfile
 
 -- Give a Global handle
 GUIConfig = addon.engine
@@ -24,7 +25,9 @@ local function inv_tcopy(t1, t2)
   end
 end
 
-
+--[==[
+  /run for i,v in pairs(GUIConfig) do print(i,"=", v) end
+]==]
 
 -- Important Addon Event Handlers
 function X:OnInitialize()
@@ -44,6 +47,10 @@ function X:OnInitialize()
   end
   
   inv_tcopy(self.db.profile.frames, self.DefaultProfile.frames)
+  
+  X:UpdatePlayer()
+  X:UpdateFrames()
+  X:UpdateCombatTextEvents(true)
   
 end
 
@@ -127,7 +134,7 @@ options.args["Frames"] = {
     -- |cFFFF6D1F - crits
     -- |cFFA10320 - heals
     -- |cFFFF102B - damage
-    xCTgen = {
+    general = {
       name = "|cffFFFFFFGeneral|r",
       desc = "Frame Name: '" .. 'xCTgen' .. "'",
       type = 'group',
@@ -286,7 +293,7 @@ options.args["Frames"] = {
       },
     },
     
-    xCTdone = {
+    outgoing = {
       name = "|cffFFFFFFOutgoing|r",
       desc = "Frame Name: '" .. 'xCTdone' .. "'",
       type = 'group',
@@ -548,7 +555,7 @@ options.args["Frames"] = {
       },
     },
     
-    xCTcrit = {
+    critical = {
       name = "|cffFFFFFFOutgoing|r |cff798BDD(Criticals)|r",
       desc = "Frame Name: '" .. 'xCTcrit' .. "'",
       type = 'group',
@@ -692,8 +699,8 @@ options.args["Frames"] = {
               type = 'input',
               name = "Prefix",
               desc = "Prefix this value to the beginning when displaying a critical amount.",
-              get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              get = function(info) return sgsub(X.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = sgsub(value, "||", "|") end,
             },
             
             critPostfix = {
@@ -763,7 +770,7 @@ options.args["Frames"] = {
       },
     },
     
-    xCTdmg = {
+    damage = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Damage)|r",
       desc = "Frame Name: '" .. 'xCTdmg' .. "'",
       type = 'group',
@@ -922,7 +929,7 @@ options.args["Frames"] = {
       },
     },
     
-    xCTheal = {
+    healing = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Healing)|r",
       desc = "Frame Name: '" .. 'xCTheal' .. "'",
       type = 'group',
@@ -983,7 +990,7 @@ options.args["Frames"] = {
               desc = "Set the font of the frame.",
               values = AceGUIWidgetLSMlists.font,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames() end,
             },
             
             fontSize = {
@@ -993,7 +1000,7 @@ options.args["Frames"] = {
               type = 'range',
               min = 6, max = 22, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames() end,
             },
             
             fontOutline = {
@@ -1009,7 +1016,7 @@ options.args["Frames"] = {
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames() end,
             },
             
             fontJustify = {
@@ -1081,7 +1088,7 @@ options.args["Frames"] = {
       },
     },
     
-    xCTclass = {
+    class = {
       name = "|cffFFFFFFClass Combo Points|r",
       desc = "Frame Name: '" .. 'xCTclass' .. "'",
       type = 'group',
@@ -1176,7 +1183,7 @@ options.args["Frames"] = {
       },
     },
     
-    xCTpwr = {
+    power = {
       name = "|cffFFFFFFClass Power|r",
       desc = "Frame Name: '" .. 'xCTpwr' .. "'",
       type = 'group',
@@ -1335,7 +1342,7 @@ options.args["Frames"] = {
       },
     },
     
-    xCTproc = {
+    procs = {
       name = "|cffFFFFFFSpecial Effects|r |cff798BDD(Procs)|r",
       desc = "Frame Name: '" .. 'xCTproc' .. "'",
       type = 'group',
@@ -1494,7 +1501,7 @@ options.args["Frames"] = {
       },
     },
     
-    xCTloot = {
+    loot = {
       name = "|cffFFFFFFLoot & Money|r",
       desc = "Frame Name: '" .. 'xCTloot' .. "'",
       type = 'group',
@@ -1762,18 +1769,6 @@ options.args["Frames"] = {
 
 X.options = options
 
--- Called from the options
-function MyAddon:GetMyMessage(info)
-    return myMessageVar
-end
-
--- Called from the options
-function MyAddon:SetMyMessage(info, input)
-    myMessageVar = input
-end
-
-
-
 
 
 -- This allows us to create our config dialog
@@ -1787,10 +1782,10 @@ ACD:SetDefaultSize(AddonName, 800, 550)
 AC:RegisterOptionsTable(AddonName, X.options)
 
 -- Register Slash Commands
-MyAddon:RegisterChatCommand("xct", "OpenGUICommand")
+X:RegisterChatCommand("xct", "OpenGUICommand")
 
 -- Process the slash command ('input' contains whatever follows the slash command)
-function MyAddon:OpenGUICommand(input)
+function X:OpenGUICommand(input)
   if (input == "r") then
     xCTSavedDB = nil
     ReloadUI()
