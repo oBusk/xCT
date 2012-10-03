@@ -1,5 +1,3 @@
-print("HELLO WORLD")
-
 local ADDON_NAME, addon = ...
 
 -- Shorten my handle
@@ -8,6 +6,18 @@ local x = addon.engine
 -- up values
 local sformat, sreplace, mfloor, sgsub = string.format, math.floor, string.gsub
 local tostring, tonumber, select, unpack = tostring, tonumber, select, unpack
+
+
+-- TODO: finish this module
+x.player = {
+  unit = "player",
+  guid = nil, -- dont get the id until we load
+}
+
+function x:UpdatePlayer()
+  x.player.guid = UnitGUID("player")
+end
+
 
 -- Registers or Updates the combat text event frame
 function x:UpdateCombatTextEvents(enable)
@@ -77,27 +87,25 @@ local format_fade = "-%s"
 local format_gain = "+%s"
 local format_resist = "-%s (%s %s)"
 local format_energy = "+%s %s"
-local format_honor = "%s +%s"
+local format_honor = COMBAT_TEXT_HONOR_GAINED:sgsub("%%s", "+%%s")
+local format_faction = "%s +%s"
 local format_crit = "%s%s%s"
 
-local GOOD_FLAGS = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE,
+local COMBATLOG_FILTER_MY_VEHICLE = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE,
   COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_GUARDIAN )
 
 function x.OnCombatTextEvent(self, event, ...)
   if event == "COMBAT_LOG_EVENT_UNFILTERED" then
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, srcFlags2, destGUID, destName, destFlags, destFlags2 = select(1, ...)
-    if sourceGUID == x.player.guid or ( sourceGUID == UnitGUID("pet") and ShowPetDamage() ) or sourceFlags == GOOD_FLAGS then
+    if sourceGUID == x.player.guid or ( sourceGUID == UnitGUID("pet") and ShowPetDamage() ) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
       if x.outgoing_events[eventType] then
-        --print("sending eventype:", eventType, unpack({select(1,...)}))
         x.outgoing_events[eventType](...)
-      else
-        --print("no event type:", eventType)
       end
     end
   elseif event == "COMBAT_TEXT_UPDATE" then
-    local arg1, arg2, arg3 = ...
-    if x.combat_events[arg1] then
-      x.combat_events[arg1](arg2, arg3)
+    local subevent, arg2, arg3 = ...
+    if x.combat_events[subevent] then
+      x.combat_events[subevent](arg2, arg3)
     end
   else
     if x.events[event] then
@@ -226,7 +234,10 @@ x.combat_events = {
     end,
   ["ENERGIZE"] = function(amount, energy_type)
       if tonumber(amount) > 0 then
-        if energy_type and energy_type == "MANA" or energy_type == "RAGE" or energy_type == "FOCUS" or energy_type == "ENERGY" or energy_type == "RUINIC_POWER" or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
+        if energy_type and energy_type == "MANA"
+            or energy_type == "RAGE" or energy_type == "FOCUS"
+            or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
+            or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
           local color = {PowerBarColor[energy_type].r, PowerBarColor[energy_type].g, PowerBarColor[energy_type].b}
           x:AddMessage("energy", sformat(format_energy, amount, energy_type), color)
         end
@@ -234,7 +245,10 @@ x.combat_events = {
     end,
   ["PERIODIC_ENERGIZE"] = function(amount, energy_type)
       if tonumber(amount) > 0 then
-        if energy_type and energy_type == "MANA" or energy_type == "RAGE" or energy_type == "FOCUS" or energy_type == "ENERGY" or energy_type == "RUINIC_POWER" or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
+        if energy_type and energy_type == "MANA"
+            or energy_type == "RAGE" or energy_type == "FOCUS"
+            or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
+            or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
           local color = {PowerBarColor[energy_type].r, PowerBarColor[energy_type].g, PowerBarColor[energy_type].b}
           x:AddMessage("energy", sformat(format_energy, amount, energy_type), color)
         end
@@ -255,13 +269,11 @@ x.combat_events = {
   ["FACTION"] = function(faction, amount)
       local num = mfloor(tonumber(amount) or 0)
       if num > 0 and ShowFaction() then
-        x:AddMessage("general", sformat(format_honor, faction, amount), "honor")
+        x:AddMessage("general", sformat(format_faction, faction, amount), "honor")
       end
     end,
 }
 
--- List containing event handlers
--- TODO: Remove this, subevent, arg2, arg3
 x.events = {
   ["UNIT_HEALTH"] = function()
       if ShowLowResources() and UnitHealth(x.player.unit) / UnitHealthMax(x.player.unit) <= COMBAT_TEXT_LOW_HEALTH_THRESHOLD then
@@ -354,4 +366,55 @@ x.outgoing_events = {
         x:AddMessage(outputFrame, message, outputColor)
       end
     end,
+    
+    
+    
+    
+  ["SWING_DAMAGE"] = function(...)
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _, amount, _, _, _, _, _, critical = select(12, ...)
+      local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
+      
+      -- Check for Critical
+      if critical then  -- TODO: Filter Criticals
+        message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
+        outputColor = "heal_out"
+        outputFrame = "critical"
+      end
+      
+      -- Add Icons
+      if x.db.profile.frames["outgoing"].iconsEnabled then
+        if critical then
+          message = message .. x:GetSpellTextureFormatted(spellId, x.db.profile.frames["outgoing"].iconsSize)
+        else
+          message = message .. x:GetSpellTextureFormatted(spellId, x.db.profile.frames["critical"].iconsSize)
+        end
+      end
+      
+          if ct.icons and not ct.hideautoattack then
+            local spellNameOrID
+            if sourceGUID == UnitGUID("pet") and ShowPetDmg or sourceFlags == gflags then
+              spellNameOrID = PET_ATTACK_TEXTURE
+            else
+              spellNameOrID = 6603 -- auto attack
+            end
+            msg = msg..GetSpellTextureFormatted(spellNameOrID, iconsize)
+          end
+          frame:AddMessage(msg)
+        end
+    end,
+    
+    
+    
+    
+    
+  ["RANGE_DAMAGE"] = function(...) end,
+  ["SPELL_DAMAGE"] = function(...) end,
+  ["SPELL_PERIODIC_DAMAGE"] = function(...) end,
+  ["SWING_MISSED"] = function(...) end,
+  ["SPELL_MISSED"] = function(...) end,
+  ["RANGE_MISSED"] = function(...) end,
+  ["SPELL_DISPEL"] = function(...) end,
+  ["SPELL_INTERRUPT"] = function(...) end,
+  ["SPELL_STOLEN"] = function(...) end,
+  ["PARTY_KILL"] = function(...) end,
 }

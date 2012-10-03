@@ -1,6 +1,7 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">	
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+  <Script file="blizzard.lua"/>
   <Script file="frames.lua"/>
   <Script file="messages.lua"/>
-  <Script file="player.lua"/>
   <Script file="simplecombattext.lua"/>
+  <Script file="options.lua"/>
 </Ui>

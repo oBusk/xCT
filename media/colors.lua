@@ -27,5 +27,7 @@ x.colors = {
   combat_begin = {1,.1,.1},
   combat_end = {.1,1,.1},
   
-  
+  -- outgoing
+  out_damage = {1,.82,0},
+  out_damage_crit = {1,1,0},
 }

@@ -1,7 +1,5 @@
 local ADDON_NAME, addon = ...
 
-print("LOADING PROFILE")
-
 addon.DefaultProfile = {
   frames = {
     general = {
