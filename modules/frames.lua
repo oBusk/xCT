@@ -28,9 +28,9 @@ function x:UpdateFrames()
     
     -- Create the frame (or retrieve it)
     if x.frames[framename] then
-      f = CreateFrame("ScrollingMessageFrame", "xCT"..framename, UIParent)
-    else
       f = x.frames[framename]
+    else
+      f = CreateFrame("ScrollingMessageFrame", "xCT"..framename, UIParent)
     end
     
     --TODO: add time visible
@@ -68,13 +68,13 @@ function x:UpdateFrames()
     -- ==================================================
     -- Frame Output Attributes
     -- ==================================================
-    f.frameEnabled = x.db.profile.frames[framename].enabled
-    f.secondaryFrame = x.db.profile.frames[framename].secondaryFrame
-    if not x.db.profile.frames[framename].autoColor then
-      f.forceColor = x.db.profile.frames[framename].fontColor
-    else
-      f.forceColor = nil
-    end
+    --f.frameEnabled = x.db.profile.frames[framename].enabled
+    --f.secondaryFrame = x.db.profile.frames[framename].secondaryFrame
+    --if not x.db.profile.frames[framename].autoColor then
+    --  f.forceColor = x.db.profile.frames[framename].fontColor
+    --else
+    --  f.forceColor = nil
+    --end
     
     -- ==================================================
     -- Frame Specific Properties
@@ -92,7 +92,11 @@ end
 
 function x:AddMessage(framename, message, colorname)
   local frame = x.frames[framename]
-  local secondFrame = x.frames[frameIndex[f.secondaryFrame]]
+  local frameOptions = x.db.profile.frames[framename]
+  
+  local secondFrameName = frameIndex[frameOptions.secondaryFrame]
+  local secondFrame = x.frames[secondFrameName]
+  local secondFrameOptions = x.db.profile.frames[secondFrameName]
   
   if frame then
     -- Load the color
@@ -107,15 +111,22 @@ function x:AddMessage(framename, message, colorname)
       end
     end
 
+    if not frameOptions.enabled then
+      print("secondFrameName", secondFrameName)
+      print("secondFrame", secondFrame)
+      print("secondFrameOptions", secondFrameOptions)
+    end
+    
     -- make sure the frame is enabled
-    if frame.frameEnabled then
-      if frame.forceColor then      -- check for forced color
-        r, g, b = unpack(frame.forceColor)
+    if frameOptions.enabled then
+      if frameOptions.customColor then      -- check for forced color
+        r, g, b = unpack(frameOptions.fontColor or {1, 1, 1})
       end
       frame:AddMessage(message, r, g, b)
-    elseif secondFrame and secondFrame.frameEnabled then 
-      if secondFrame.forceColor then      -- check for forced color
-        r, g, b = unpack(frame.forceColor)
+    elseif secondFrame and secondFrameOptions.enabled then 
+      print("sending to frame")
+      if secondFrameOptions.customColor then      -- check for forced color
+        r, g, b = unpack(secondFrameOptions.fontColor or {1, 1, 1})
       end
       secondFrame:AddMessage(message, r, g, b)
     end

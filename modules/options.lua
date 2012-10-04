@@ -1,5 +1,7 @@
 local ADDON_NAME, addon = ...
 
+local X = addon.engine
+
 local blankTable, unpack, select = {}, unpack, select
 
 local string_gsub = string.gsub
@@ -45,7 +47,7 @@ addon.options = {
   },
 }
 
-options.args["General"] = {
+addon.options.args["General"] = {
   name = "General",
   type = 'group',
   args = {
@@ -59,7 +61,7 @@ options.args["General"] = {
   },
 }
 
-options.args["Frames"] = {
+addon.options.args["Frames"] = {
   name = "Frames",
   type = 'group',
   args = {
@@ -185,10 +187,10 @@ options.args["Frames"] = {
           name = "Font Colors",
           args = {
           
-            autoColor = {
+            customColor = {
               order = 1,
               type = 'toggle',
-              name = "Use Default Colors",
+              name = "Use Custom Colors",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -196,7 +198,6 @@ options.args["Frames"] = {
             fontColor = {
               type = 'color',
               name = "Custom Color",
-              desc = "Disable Default Colors to use a custom color.",
               order = 2,
               get = function(info) return unpack(X.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end,
               set = function(info, r, g, b) X.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end,
@@ -345,10 +346,10 @@ options.args["Frames"] = {
           name = "Font Colors",
           args = {
           
-            autoColor = {
+            customColor = {
               order = 1,
               type = 'toggle',
-              name = "Use Default Colors",
+              name = "Use Custom Colors",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -356,7 +357,6 @@ options.args["Frames"] = {
             fontColor = {
               type = 'color',
               name = "Custom Color",
-              desc = "Disable Default Colors to use a custom color.",
               order = 2,
               get = function(info) return unpack(X.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end,
               set = function(info, r, g, b) X.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end,
@@ -606,10 +606,10 @@ options.args["Frames"] = {
           name = "Font Colors",
           args = {
           
-            autoColor = {
+            customColor = {
               order = 1,
               type = 'toggle',
-              name = "Use Default Colors",
+              name = "Use Custom Colors",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -617,7 +617,6 @@ options.args["Frames"] = {
             fontColor = {
               type = 'color',
               name = "Custom Color",
-              desc = "Disable Default Colors to use a custom color.",
               order = 2,
               get = function(info) return unpack(X.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end,
               set = function(info, r, g, b) X.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end,
@@ -821,10 +820,10 @@ options.args["Frames"] = {
           name = "Font Colors",
           args = {
           
-            autoColor = {
+            customColor = {
               order = 1,
               type = 'toggle',
-              name = "Use Default Colors",
+              name = "Use Custom Colors",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -832,7 +831,6 @@ options.args["Frames"] = {
             fontColor = {
               type = 'color',
               name = "Custom Color",
-              desc = "Disable Default Colors to use a custom color.",
               order = 2,
               get = function(info) return unpack(X.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end,
               set = function(info, r, g, b) X.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end,
@@ -980,10 +978,10 @@ options.args["Frames"] = {
           name = "Font Colors",
           args = {
           
-            autoColor = {
+            customColor = {
               order = 1,
               type = 'toggle',
-              name = "Use Default Colors",
+              name = "Use Custom Colors",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -991,7 +989,6 @@ options.args["Frames"] = {
             fontColor = {
               type = 'color',
               name = "Custom Color",
-              desc = "Disable Default Colors to use a custom color.",
               order = 2,
               get = function(info) return unpack(X.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end,
               set = function(info, r, g, b) X.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end,
@@ -1099,10 +1096,10 @@ options.args["Frames"] = {
           name = "Font Colors",
           args = {
           
-            autoColor = {
+            customColor = {
               order = 1,
               type = 'toggle',
-              name = "Use Default Colors",
+              name = "Use Custom Colors",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -1110,7 +1107,6 @@ options.args["Frames"] = {
             fontColor = {
               type = 'color',
               name = "Custom Color",
-              desc = "Disable Default Colors to use a custom color.",
               order = 2,
               get = function(info) return unpack(X.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end,
               set = function(info, r, g, b) X.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end,
@@ -1234,10 +1230,10 @@ options.args["Frames"] = {
           name = "Font Colors",
           args = {
           
-            autoColor = {
+            customColor = {
               order = 1,
               type = 'toggle',
-              name = "Use Default Colors",
+              name = "Use Custom Colors",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -1245,7 +1241,6 @@ options.args["Frames"] = {
             fontColor = {
               type = 'color',
               name = "Custom Color",
-              desc = "Disable Default Colors to use a custom color.",
               order = 2,
               get = function(info) return unpack(X.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end,
               set = function(info, r, g, b) X.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end,
@@ -1393,10 +1388,10 @@ options.args["Frames"] = {
           name = "Font Colors",
           args = {
           
-            autoColor = {
+            customColor = {
               order = 1,
               type = 'toggle',
-              name = "Use Default Colors",
+              name = "Use Custom Colors",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -1404,7 +1399,6 @@ options.args["Frames"] = {
             fontColor = {
               type = 'color',
               name = "Custom Color",
-              desc = "Disable Default Colors to use a custom color.",
               order = 2,
               get = function(info) return unpack(X.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end,
               set = function(info, r, g, b) X.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end,
@@ -1552,10 +1546,10 @@ options.args["Frames"] = {
           name = "Font Colors",
           args = {
           
-            autoColor = {
+            customColor = {
               order = 1,
               type = 'toggle',
-              name = "Use Default Colors",
+              name = "Use Custom Colors",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -1563,7 +1557,6 @@ options.args["Frames"] = {
             fontColor = {
               type = 'color',
               name = "Custom Color",
-              desc = "Disable Default Colors to use a custom color.",
               order = 2,
               get = function(info) return unpack(X.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end,
               set = function(info, r, g, b) X.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end,

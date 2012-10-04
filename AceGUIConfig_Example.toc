@@ -3,6 +3,7 @@
 ## Notes: CONFIG_EXAMPLE
 ## Author: Dandruff
 ## Version: 1.0.0
+## RequiredDeps: Blizzard_CombatText
 ## SavedVariables: xCTSavedDB
 embeds.xml
 core.lua

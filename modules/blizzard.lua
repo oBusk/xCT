@@ -1,6 +1,7 @@
 local ADDON_NAME, addon = ...
 local x = addon.engine
 
+--[==[
 -- Intercept Messages Sent by other Add-Ons that use CombatText_AddMessage
 hooksecurefunc('CombatText_AddMessage', function(message, scrollFunction, r, g, b, displayType, isStaggered)
   local lastEntry = COMBAT_TEXT_TO_ANIMATE[ #COMBAT_TEXT_TO_ANIMATE ]
@@ -49,3 +50,4 @@ CombatText:SetScript("OnUpdate", nil)
 
 -- Direction does NOT work with xCT+ at all
 InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
+]==]

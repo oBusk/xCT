@@ -4,7 +4,7 @@ local ADDON_NAME, addon = ...
 local x = addon.engine
 
 -- up values
-local sformat, sreplace, mfloor, sgsub = string.format, math.floor, string.gsub
+local sformat, mfloor, sgsub = string.format, math.floor, string.gsub
 local tostring, tonumber, select, unpack = tostring, tonumber, select, unpack
 
 
@@ -87,7 +87,7 @@ local format_fade = "-%s"
 local format_gain = "+%s"
 local format_resist = "-%s (%s %s)"
 local format_energy = "+%s %s"
-local format_honor = COMBAT_TEXT_HONOR_GAINED:sgsub("%%s", "+%%s")
+local format_honor = sgsub(COMBAT_TEXT_HONOR_GAINED, "%%s", "+%%s")
 local format_faction = "%s +%s"
 local format_crit = "%s%s%s"
 
@@ -381,26 +381,21 @@ x.outgoing_events = {
         outputFrame = "critical"
       end
       
+      local spellID = 6603
+      if (sourceGUID == UnitGUID("pet") and ShowPetDamage()) or sourceFlags == gflags then
+        spellNameOrID = PET_ATTACK_TEXTURE
+      end
+      
       -- Add Icons
       if x.db.profile.frames["outgoing"].iconsEnabled then
         if critical then
-          message = message .. x:GetSpellTextureFormatted(spellId, x.db.profile.frames["outgoing"].iconsSize)
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames["outgoing"].iconsSize)
         else
-          message = message .. x:GetSpellTextureFormatted(spellId, x.db.profile.frames["critical"].iconsSize)
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames["critical"].iconsSize)
         end
       end
       
-          if ct.icons and not ct.hideautoattack then
-            local spellNameOrID
-            if sourceGUID == UnitGUID("pet") and ShowPetDmg or sourceFlags == gflags then
-              spellNameOrID = PET_ATTACK_TEXTURE
-            else
-              spellNameOrID = 6603 -- auto attack
-            end
-            msg = msg..GetSpellTextureFormatted(spellNameOrID, iconsize)
-          end
-          frame:AddMessage(msg)
-        end
+      x:AddMessage("outgoing", message, "out_damage")
     end,
     
     

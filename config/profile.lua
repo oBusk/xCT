@@ -20,7 +20,7 @@ addon.DefaultProfile = {
       ["fontJustify"] = "CENTER",
 
     -- font colors
-      ["autoColor"] = true,
+      ["customColor"] = false,
       ["fontColor"] = nil,
       
     -- scrollable
@@ -46,7 +46,7 @@ addon.DefaultProfile = {
       ["fontJustify"] = "CENTER",
       
     -- font colors
-      ["autoColor"] = true,
+      ["customColor"] = false,
       ["fontColor"] = nil,
       
     -- icons
@@ -86,7 +86,7 @@ addon.DefaultProfile = {
       ["fontJustify"] = "CENTER",
       
     -- font colors
-      ["autoColor"] = true,
+      ["customColor"] = false,
       ["fontColor"] = nil,
       
     -- critical appearance
@@ -120,7 +120,7 @@ addon.DefaultProfile = {
       ["fontJustify"] = "CENTER",
       
     -- font colors
-      ["autoColor"] = true,
+      ["customColor"] = false,
       ["fontColor"] = nil,
       
     -- scrollable
@@ -146,7 +146,7 @@ addon.DefaultProfile = {
       ["fontJustify"] = "CENTER",
       
     -- font colors
-      ["autoColor"] = true,
+      ["customColor"] = false,
       ["fontColor"] = nil,
       
     -- scrollable
@@ -169,7 +169,7 @@ addon.DefaultProfile = {
       ["fontOutline"] = "4MONOCHROMEOUTLINE",
       
     -- font colors
-      ["autoColor"] = true,
+      ["customColor"] = false,
       ["fontColor"] = nil,
     },
     
@@ -191,7 +191,7 @@ addon.DefaultProfile = {
       ["fontJustify"] = "CENTER",
       
     -- font colors
-      ["autoColor"] = true,
+      ["customColor"] = false,
       ["fontColor"] = nil,
       
     -- scrollable
@@ -217,7 +217,7 @@ addon.DefaultProfile = {
       ["fontJustify"] = "CENTER",
       
     -- font colors
-      ["autoColor"] = true,
+      ["customColor"] = false,
       ["fontColor"] = nil,
       
     -- scrollable
@@ -243,7 +243,7 @@ addon.DefaultProfile = {
       ["fontJustify"] = "CENTER",
       
     -- font colors
-      ["autoColor"] = true,
+      ["customColor"] = false,
       ["fontColor"] = nil,
       
     -- icons
