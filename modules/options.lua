@@ -1,9 +1,6 @@
 local ADDON_NAME, addon = ...
-
 local X = addon.engine
-
 local blankTable, unpack, select = {}, unpack, select
-
 local string_gsub = string.gsub
 
 -- Creating an Config
@@ -70,13 +67,9 @@ addon.options.args["Frames"] = {
       type = "header",
       name = "xCT+ Frames",
     },
-    -- |cff798BDD - title
-    -- |cFFFF6D1F - crits
-    -- |cFFA10320 - heals
-    -- |cFFFF102B - damage
+
     general = {
       name = "|cffFFFFFFGeneral|r",
-      desc = "Frame Name: '" .. 'xCTgen' .. "'",
       type = 'group',
       order = 1,
       args = {
@@ -118,7 +111,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
         },
         
         fonts = {
@@ -135,7 +128,7 @@ addon.options.args["Frames"] = {
               desc = "Set the font of the frame.",
               values = AceGUIWidgetLSMlists.font,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontSize = {
@@ -145,7 +138,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 6, max = 22, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontOutline = {
@@ -161,7 +154,7 @@ addon.options.args["Frames"] = {
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontJustify = {
@@ -175,7 +168,7 @@ addon.options.args["Frames"] = {
                 ['CENTER'] = "Center",
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -216,7 +209,7 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Enabled",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             scrollableLines = {
               order = 2,
@@ -224,7 +217,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 10, max = 60, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -234,7 +227,6 @@ addon.options.args["Frames"] = {
     
     outgoing = {
       name = "|cffFFFFFFOutgoing|r",
-      desc = "Frame Name: '" .. 'xCTdone' .. "'",
       type = 'group',
       order = 2,
       args = {
@@ -277,7 +269,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
         },
         
         fonts = {
@@ -294,7 +286,7 @@ addon.options.args["Frames"] = {
               desc = "Set the font of the frame.",
               values = AceGUIWidgetLSMlists.font,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontSize = {
@@ -304,7 +296,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 6, max = 22, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontOutline = {
@@ -320,7 +312,7 @@ addon.options.args["Frames"] = {
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontJustify = {
@@ -334,7 +326,7 @@ addon.options.args["Frames"] = {
                 ['CENTER'] = "Center",
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -403,7 +395,7 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Enabled",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             scrollableLines = {
               order = 2,
@@ -411,7 +403,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 10, max = 60, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -495,7 +487,6 @@ addon.options.args["Frames"] = {
     
     critical = {
       name = "|cffFFFFFFOutgoing|r |cff798BDD(Criticals)|r",
-      desc = "Frame Name: '" .. 'xCTcrit' .. "'",
       type = 'group',
       order = 3,
       args = {
@@ -537,7 +528,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
         },
         
         fonts = {
@@ -554,7 +545,7 @@ addon.options.args["Frames"] = {
               desc = "Set the font of the frame.",
               values = AceGUIWidgetLSMlists.font,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontSize = {
@@ -564,7 +555,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 6, max = 22, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontOutline = {
@@ -580,7 +571,7 @@ addon.options.args["Frames"] = {
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontJustify = {
@@ -594,7 +585,7 @@ addon.options.args["Frames"] = {
                 ['CENTER'] = "Center",
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -624,6 +615,7 @@ addon.options.args["Frames"] = {
           },
         },
         
+        -- TODO: Move Crits Appearance somewhere else, because other frames use it too
         criticalAppearance = {
           order = 6,
           type = 'group',
@@ -691,7 +683,7 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Enabled",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             scrollableLines = {
               order = 2,
@@ -699,17 +691,55 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 10, max = 60, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
+
         
+        
+        specialTweaks = {
+          order = 9,
+          type = 'group',
+          guiInline = true,
+          name = "Special Tweaks",
+          args = {
+          
+            showSwing = {
+              order = 1,
+              type = 'toggle',
+              name = "Swing Crits",
+              desc = "Show Swing crits in this frame.",
+              get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+            },
+            
+            prefixSwing = {
+              order = 2,
+              type = 'toggle',
+              name = "Swing (Pre)Postfix",
+              desc = "Make Swing crits more visible by adding the prefix and postfix.",
+              get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+            },
+            
+            redirectSwing = {
+              order = 3,
+              type = 'toggle',
+              name = "Redirect Swing",
+              desc = "Sends Swing crits to the \"|cffFFFF00Outgoing|r\" frame. (|cffFF0000Requires:|r \"|cffFFFF00Auto Attack|r\". Useful, see \"|cffFFFF00Auto Attack Prefix|r\")",
+              get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+            },
+            
+          },
+        },
+
       },
     },
     
     damage = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Damage)|r",
-      desc = "Frame Name: '" .. 'xCTdmg' .. "'",
       type = 'group',
       order = 4,
       args = {
@@ -751,7 +781,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
         },
         
         fonts = {
@@ -768,7 +798,7 @@ addon.options.args["Frames"] = {
               desc = "Set the font of the frame.",
               values = AceGUIWidgetLSMlists.font,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontSize = {
@@ -778,7 +808,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 6, max = 22, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontOutline = {
@@ -794,7 +824,7 @@ addon.options.args["Frames"] = {
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontJustify = {
@@ -808,7 +838,7 @@ addon.options.args["Frames"] = {
                 ['CENTER'] = "Center",
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -849,7 +879,7 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Enabled",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             scrollableLines = {
               order = 2,
@@ -857,7 +887,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 10, max = 60, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -867,7 +897,6 @@ addon.options.args["Frames"] = {
     
     healing = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Healing)|r",
-      desc = "Frame Name: '" .. 'xCTheal' .. "'",
       type = 'group',
       order = 5,
       args = {
@@ -909,7 +938,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
         },
         
         fonts = {
@@ -926,7 +955,7 @@ addon.options.args["Frames"] = {
               desc = "Set the font of the frame.",
               values = AceGUIWidgetLSMlists.font,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames() end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontSize = {
@@ -936,7 +965,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 6, max = 22, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames() end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontOutline = {
@@ -952,7 +981,7 @@ addon.options.args["Frames"] = {
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames() end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontJustify = {
@@ -966,7 +995,7 @@ addon.options.args["Frames"] = {
                 ['CENTER'] = "Center",
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -1007,7 +1036,7 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Enabled",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             scrollableLines = {
               order = 2,
@@ -1015,7 +1044,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 10, max = 60, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -1025,7 +1054,6 @@ addon.options.args["Frames"] = {
     
     class = {
       name = "|cffFFFFFFClass Combo Points|r",
-      desc = "Frame Name: '" .. 'xCTclass' .. "'",
       type = 'group',
       order = 6,
       args = {
@@ -1057,7 +1085,7 @@ addon.options.args["Frames"] = {
               desc = "Set the font of the frame.",
               values = AceGUIWidgetLSMlists.font,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontSize = {
@@ -1067,7 +1095,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 6, max = 22, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontOutline = {
@@ -1083,7 +1111,7 @@ addon.options.args["Frames"] = {
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
           },
@@ -1119,7 +1147,6 @@ addon.options.args["Frames"] = {
     
     power = {
       name = "|cffFFFFFFClass Power|r",
-      desc = "Frame Name: '" .. 'xCTpwr' .. "'",
       type = 'group',
       order = 7,
       args = {
@@ -1161,7 +1188,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
         },
         
         fonts = {
@@ -1178,7 +1205,7 @@ addon.options.args["Frames"] = {
               desc = "Set the font of the frame.",
               values = AceGUIWidgetLSMlists.font,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontSize = {
@@ -1188,7 +1215,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 6, max = 22, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontOutline = {
@@ -1204,7 +1231,7 @@ addon.options.args["Frames"] = {
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontJustify = {
@@ -1218,7 +1245,7 @@ addon.options.args["Frames"] = {
                 ['CENTER'] = "Center",
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -1259,7 +1286,7 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Enabled",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             scrollableLines = {
               order = 2,
@@ -1267,7 +1294,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 10, max = 60, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -1277,7 +1304,6 @@ addon.options.args["Frames"] = {
     
     procs = {
       name = "|cffFFFFFFSpecial Effects|r |cff798BDD(Procs)|r",
-      desc = "Frame Name: '" .. 'xCTproc' .. "'",
       type = 'group',
       order = 8,
       args = {
@@ -1319,7 +1345,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
         },
         
         fonts = {
@@ -1336,7 +1362,7 @@ addon.options.args["Frames"] = {
               desc = "Set the font of the frame.",
               values = AceGUIWidgetLSMlists.font,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontSize = {
@@ -1346,7 +1372,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 6, max = 22, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontOutline = {
@@ -1362,7 +1388,7 @@ addon.options.args["Frames"] = {
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontJustify = {
@@ -1376,7 +1402,7 @@ addon.options.args["Frames"] = {
                 ['CENTER'] = "Center",
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -1417,7 +1443,7 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Enabled",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             scrollableLines = {
               order = 2,
@@ -1425,7 +1451,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 10, max = 60, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -1435,7 +1461,6 @@ addon.options.args["Frames"] = {
     
     loot = {
       name = "|cffFFFFFFLoot & Money|r",
-      desc = "Frame Name: '" .. 'xCTloot' .. "'",
       type = 'group',
       order = 9,
       args = {
@@ -1477,7 +1502,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
         },
         
         fonts = {
@@ -1494,7 +1519,7 @@ addon.options.args["Frames"] = {
               desc = "Set the font of the frame.",
               values = AceGUIWidgetLSMlists.font,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontSize = {
@@ -1504,7 +1529,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 6, max = 22, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontOutline = {
@@ -1520,7 +1545,7 @@ addon.options.args["Frames"] = {
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             
             fontJustify = {
@@ -1534,7 +1559,7 @@ addon.options.args["Frames"] = {
                 ['CENTER'] = "Center",
               },
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -1603,7 +1628,7 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Enabled",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
             scrollableLines = {
               order = 2,
@@ -1611,7 +1636,7 @@ addon.options.args["Frames"] = {
               type = 'range',
               min = 10, max = 60, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
           },
         },
@@ -1697,3 +1722,5 @@ addon.options.args["Frames"] = {
     
   },
 }
+
+-- addon.options.args["Profiles"] <-- Set in core.lua

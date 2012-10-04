@@ -100,6 +100,11 @@ addon.DefaultProfile = {
     -- scrollable
       ["enableScrollable"] = false,
       ["scrollableLines"] = 10,
+      
+    -- special tweaks
+      ["showSwing"] = true,
+      ["prefixSwing"] = true,
+      ["redirectSwing"] = false,
     },
     
     damage = {

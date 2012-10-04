@@ -30,4 +30,20 @@ x.colors = {
   -- outgoing
   out_damage = {1,.82,0},
   out_damage_crit = {1,1,0},
+  out_misstype = {.5,.5,.5},
+  dispell_buff = {0,1,.5},
+  dispell_debuff = {1,0,.5},
+  spell_interrupt = {1,.5,0}
+  spell_stolen = {.9,0,.9},
+  party_kill={.2,1,.2},
+}
+
+x.damagecolor = {
+  [1]  = {  1,  1,  0 },  -- physical
+  [2]  = {  1, .9, .5 },  -- holy
+  [4]  = {  1, .5,  0 },  -- fire
+  [8]  = { .3,  1, .3 },  -- nature
+  [16] = { .5,  1,  1 },  -- frost
+  [32] = { .5, .5,  1 },  -- shadow
+  [64] = {  1, .5,  1 },  -- arcane
 }
