@@ -22,6 +22,18 @@ local frameIndex = {
   [8] = "loot",
 }
 
+-- Static Title Lookup
+local frameTitles = {
+  ["general"]   = COMBAT_TEXT_LABEL,
+  ["outgoing"]  = SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE,
+  ["critical"]  = ssub(ssub(TEXT_MODE_A_STRING_RESULT_CRITICAL, "(", ""), ")", ""), -- "(Critical)" --> "Critical"
+  ["damage"]    = DAMAGE,
+  ["healing"]   = SHOW_COMBAT_HEALING,
+  ["power"]     = COMBAT_TEXT_SHOW_ENERGIZE_TEXT,
+  ["procs"]     = COMBAT_TEXT_SHOW_REACTIVES_TEXT,
+  ["loot"]      = LOOT,
+}
+
 function x:UpdateFrames(specificFrame)
 
   for framename, settings in pairs(x.db.profile.frames) do
@@ -49,28 +61,28 @@ function x:UpdateFrames(specificFrame)
       f:SetMinResize(64, 64)
       f:SetMaxResize(768, 768)
       f:SetShadowColor(0, 0, 0, 0)
-      f:SetWidth(x.db.profile.frames[framename].Width)
-      f:SetHeight(x.db.profile.frames[framename].Height)
-      f:SetPoint("CENTER", x.db.profile.frames[framename].X, x.db.profile.frames[framename].Y)
+      f:SetWidth(settings.Width)
+      f:SetHeight(settings.Height)
+      f:SetPoint("CENTER", settings.X, settings.Y)
       f:SetClampedToScreen(true)
-      f:SetClampRectInsets(0, 0, x.db.profile.frames[framename].fontSize, 0)
+      f:SetClampRectInsets(0, 0, settings.fontSize, 0)
       
       
       -- Insert Direction
-      if x.db.profile.frames[framename].insertText then
-        f:SetInsertMode(x.db.profile.frames[framename].insertText)
+      if settings.insertText then
+        f:SetInsertMode(settings.insertText)
       end
       
       -- Font Template
-      f:SetFont(LSM:Fetch("font", x.db.profile.frames[framename].font), x.db.profile.frames[framename].fontSize, ssub(x.db.profile.frames[framename].fontOutline, 2))
-      if x.db.profile.frames[framename].fontJustify then
-        f:SetJustifyH(x.db.profile.frames[framename].fontJustify)
+      f:SetFont(LSM:Fetch("font", settings.font), settings.fontSize, ssub(settings.fontOutline, 2))
+      if settings.fontJustify then
+        f:SetJustifyH(settings.fontJustify)
       end
       
       -- scrolling
-      if x.db.profile.frames[framename].scrollableLines then
-        f:SetMaxLines(x.db.profile.frames[framename].scrollableLines)
-        if x.db.profile.frames[framename].enableScrollable then
+      if settings.scrollableLines then
+        f:SetMaxLines(settings.scrollableLines)
+        if settings.enableScrollable then
           f:EnableMouseWheel(true)
           f:SetScript("OnMouseWheel", function(self, delta)
               if delta > 0 then
@@ -137,4 +149,69 @@ function x:AddMessage(framename, message, colorname)
       secondFrame:AddMessage(message, r, g, b)
     end
   end
+end
+
+local function StartConfigMode()
+  for framename, settings in pairs(x.db.profile.frames) do
+    if settings.enabledFrame then
+      local f = x.frames[framename]
+      f:SetBackdrop( {
+         bgFile   = "Interface/Tooltips/UI-Tooltip-Background",
+        edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+        tile     = false,
+        tileSize = 0,
+        edgeSize = 2,
+        insets = { left = 0, right = 0, top = 0, bottom = 0 }
+                   } )
+      f:SetBackdropColor(.1, .1, .1, .8)
+      f:SetBackdropBorderColor(.1, .1, .1, .5)
+    
+      -- Frame Title
+      f.title = f:CreateFontString(nil, "OVERLAY")
+      f.title:SetPoint("BOTTOM", f, "TOP", 0, 0)
+      f.title = f:SetFont(settings.font, settings.fontSize, settings.fontOutline)
+      f.title:SetText(frameTitles[framename])
+      
+      f.t=f:CreateTexture("ARTWORK")
+      f.t:SetPoint("TOPLEFT", f, "TOPLEFT", 1, -1)
+      f.t:SetPoint("TOPRIGHT", f, "TOPRIGHT", -1, -19)
+      f.t:SetHeight(20)
+      f.t:SetTexture(.5, .5, .5)
+      f.t:SetAlpha(.3)
+
+      f.d=f:CreateTexture("ARTWORK")
+      f.d:SetHeight(16)
+      f.d:SetWidth(16)
+      f.d:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", -1, 1)
+      f.d:SetTexture(.5, .5, .5)
+      f.d:SetAlpha(.3)
+
+      f.tr=f:CreateTitleRegion()
+      f.tr:SetPoint("TOPLEFT", f, "TOPLEFT", 0, 0)
+      f.tr:SetPoint("TOPRIGHT", f, "TOPRIGHT", 0, 0)
+      f.tr:SetHeight(21)
+      
+      
+      -- Moving Settings
+      f:EnableMouse(true)
+      f:RegisterForDrag("LeftButton")
+      f:SetScript("OnDragStart", f.StartSizing)
+      
+      -- TODO: Add option to adjust the number of lines for memory purposes
+      
+      f:SetScript("OnDragStop", f.StopMovingOrSizing)
+      ct.locked = false
+      
+      -- TODO: Show Alignment Grid
+      
+    end
+  end
+end
+
+local function EndConfigMode()
+
+end
+
+function x:ToggleConfigMode()
+
 end
