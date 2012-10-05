@@ -1,9 +1,10 @@
 ## Interface: 50001
-## Title: CONFIG_EXAMPLE
-## Notes: CONFIG_EXAMPLE
+## Title: xCT+ - 3.0 BETA
+## Notes: Thank you for your support!
 ## Author: Dandruff
-## Version: 1.0.0
+## Version: 3.0.0 alpha
 ## RequiredDeps: Blizzard_CombatText
 ## SavedVariables: xCTSavedDB
+
 embeds.xml
 core.lua

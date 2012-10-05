@@ -7,27 +7,23 @@ local sgsub = string.gsub
 addon.engine.DefaultProfile = addon.DefaultProfile
 
 -- Give a Global handle
-GUIConfig = addon.engine
+xCT_Plus = addon.engine
 
 -- Shorten my handle
-local X = GUIConfig
+local X = xCT_Plus
 
 local blankTable = {}
 
 -- invisible copy (orig table, lookup table)
 local function inv_tcopy(t1, t2)
   for k, v in pairs(t2) do
-    if not t1[k] then -- found new key
+    if t1[k] == nil then -- found new key
       t1[k] = t2[k]
     elseif type(t1[k]) == "table" then
       inv_tcopy(t1[k], t2[k])
     end
   end
 end
-
---[==[
-  /run for i,v in pairs(GUIConfig) do print(i,"=", v) end
-]==]
 
 -- Important Addon Event Handlers
 function X:OnInitialize()
@@ -75,10 +71,10 @@ ACD:SetDefaultSize(AddonName, 800, 550)
 AC:RegisterOptionsTable(AddonName, addon.options)
 
 -- Register Slash Commands
-X:RegisterChatCommand("xct", "OpenGUICommand")
+X:RegisterChatCommand("xct", "OpenXCTCommand")
 
 -- Process the slash command ('input' contains whatever follows the slash command)
-function X:OpenGUICommand(input)
+function X:OpenXCTCommand(input)
   if (input == "r") then
     xCTSavedDB = nil
     ReloadUI()

@@ -3,7 +3,7 @@ local ADDON_NAME, addon = ...
 addon.DefaultProfile = {
   frames = {
     general = {
-      ["enabled"] = true,
+      ["enabledFrame"] = true,
       ["secondaryFrame"] = 0,
       ["insertText"] = "bottom",
       
@@ -29,7 +29,7 @@ addon.DefaultProfile = {
     },
     
     outgoing = {
-      ["enabled"] = true,
+      ["enabledFrame"] = true,
       ["secondaryFrame"] = 0,
       ["insertText"] = "bottom",
       
@@ -69,7 +69,7 @@ addon.DefaultProfile = {
     },
     
     critical = {
-      ["enabled"] = true,
+      ["enabledFrame"] = true,
       ["secondaryFrame"] = 0,
       ["insertText"] = "bottom",
     
@@ -108,7 +108,7 @@ addon.DefaultProfile = {
     },
     
     damage = {
-      ["enabled"] = true,
+      ["enabledFrame"] = true,
       ["secondaryFrame"] = 0,
       ["insertText"] = "bottom",
       
@@ -134,7 +134,7 @@ addon.DefaultProfile = {
     },
 
     healing = {
-      ["enabled"] = true,
+      ["enabledFrame"] = true,
       ["secondaryFrame"] = 0,
       ["insertText"] = "bottom",
     
@@ -160,7 +160,7 @@ addon.DefaultProfile = {
     },
     
     class = {
-      ["enabled"] = true,
+      ["enabledFrame"] = true,
       
     -- position
       ["X"] = 0,
@@ -179,7 +179,7 @@ addon.DefaultProfile = {
     },
     
     power = {
-      ["enabled"] = true,
+      ["enabledFrame"] = true,
       ["secondaryFrame"] = 0,
       ["insertText"] = "bottom",
       
@@ -205,7 +205,7 @@ addon.DefaultProfile = {
     },
     
     procs = {
-      ["enabled"] = true,
+      ["enabledFrame"] = true,
       ["secondaryFrame"] = 0,
       ["insertText"] = "bottom",
       
@@ -231,7 +231,7 @@ addon.DefaultProfile = {
     },
     
     loot = {
-      ["enabled"] = true,
+      ["enabledFrame"] = true,
       ["secondaryFrame"] = 0,
       ["insertText"] = "bottom",
       
@@ -270,5 +270,3 @@ addon.DefaultProfile = {
     },
   },
 }
-
-print("LOADED PROFILE")

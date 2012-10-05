@@ -25,7 +25,7 @@ local frameIndex = {
 function x:UpdateFrames(specificFrame)
 
   for framename, settings in pairs(x.db.profile.frames) do
-    if specificFrame and specificFrame == framename then
+    if specificFrame and specificFrame == framename or not specificFrame then
       local f = nil
 
       -- Create the frame (or retrieve it)
@@ -39,7 +39,7 @@ function x:UpdateFrames(specificFrame)
       f:SetTimeVisible(3)
       
       -- TODO: add max lines
-      f:SetMaxLines(64)
+      
       f:SetSpacing(2)
       
       -- Set the position
@@ -67,6 +67,24 @@ function x:UpdateFrames(specificFrame)
         f:SetJustifyH(x.db.profile.frames[framename].fontJustify)
       end
       
+      -- scrolling
+      if x.db.profile.frames[framename].scrollableLines then
+        f:SetMaxLines(x.db.profile.frames[framename].scrollableLines)
+        if x.db.profile.frames[framename].enableScrollable then
+          f:EnableMouseWheel(true)
+          f:SetScript("OnMouseWheel", function(self, delta)
+              if delta > 0 then
+                self:ScrollUp()
+              elseif delta < 0 then
+                self:ScrollDown()
+              end
+            end)
+        else
+          f:EnableMouseWheel(false)
+          f:SetScript("OnMouseWheel", nil)
+        end
+      end
+      
       -- ==================================================
       -- Frame Specific Properties
       -- ==================================================
@@ -86,6 +104,9 @@ function x:AddMessage(framename, message, colorname)
   local frame = x.frames[framename]
   local frameOptions = x.db.profile.frames[framename]
   
+  -- Make sure we have a valid frame
+  if not frameOptions then print("xct+ frame name not found:", framename) return end
+  
   local secondFrameName = frameIndex[frameOptions.secondaryFrame]
   local secondFrame = x.frames[secondFrameName]
   local secondFrameOptions = x.db.profile.frames[secondFrameName]
@@ -93,30 +114,27 @@ function x:AddMessage(framename, message, colorname)
   if frame then
     -- Load the color
     local r, g, b = 1, 1, 1
-    if type(colorname) == table then
+    if type(colorname) == "table" then
       r, g, b = unpack(colorname)
     else
       if not x.colors[colorname] then
-        print("xct says there is no color named:", colorname)
+        print("xct+ says there is no color named:", colorname)
       else
         r, g, b = unpack(x.colors[colorname])
       end
     end
     
     -- make sure the frame is enabled
-    if frameOptions.enabled then
+    if frameOptions.enabledFrame then
       if frameOptions.customColor then      -- check for forced color
         r, g, b = unpack(frameOptions.fontColor or {1, 1, 1})
       end
       frame:AddMessage(message, r, g, b)
-    elseif secondFrame and secondFrameOptions.enabled then 
+    elseif secondFrame and secondFrameOptions.enabledFrame then 
       if secondFrameOptions.customColor then      -- check for forced color
         r, g, b = unpack(secondFrameOptions.fontColor or {1, 1, 1})
       end
       secondFrame:AddMessage(message, r, g, b)
     end
-  
-  else
-    print("xct+ frame name not found:", framename)
   end
 end

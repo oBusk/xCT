@@ -294,7 +294,7 @@ x.combat_events = {
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
             or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
           local color = {PowerBarColor[energy_type].r, PowerBarColor[energy_type].g, PowerBarColor[energy_type].b}
-          x:AddMessage("energy", sformat(format_energy, amount, energy_type), color)
+          x:AddMessage("power", sformat(format_energy, amount, energy_type), color)
         end
       end
     end,
@@ -305,7 +305,7 @@ x.combat_events = {
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
             or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
           local color = {PowerBarColor[energy_type].r, PowerBarColor[energy_type].g, PowerBarColor[energy_type].b}
-          x:AddMessage("energy", sformat(format_energy, amount, energy_type), color)
+          x:AddMessage("power", sformat(format_energy, amount, energy_type), color)
         end
       end
     end,
@@ -361,11 +361,10 @@ x.events = {
   ["UNIT_EXITING_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["PLAYER_ENTERING_WORLD"] = function() x:UpdatePlayer() end,
   
-  ["CHAT_MSG_LOOT"] = function()
+  ["CHAT_MSG_LOOT"] = function(msg)
     --format_loot
     local pM,iQ,iI,iN,iA = select(3, string.find(msg, format_loot))   -- Pre-Message, ItemColor, ItemID, ItemName, ItemAmount
     local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))             -- Item Quality, See "GetAuctionItemClasses()", Item Icon Texture Location
-
     local item       = { }
         item.name    = iN
         item.id      = iI
@@ -375,10 +374,7 @@ x.events = {
         item.icon    = ic
         item.crafted = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
         item.self    = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
-
-        
         -- ShowLootItems(), ShowLootMoney(), ShowTotalItems(), ShowLootCrafted(), ShowLootQuest(), ShowColorBlindMoney(), GetLootQuality()
-        
     if (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
         --if item.crafted and not ShowLootCrafted() then return end
         --if item.type == "Quest" and not ShowLootQuest() then return end
@@ -402,7 +398,7 @@ x.events = {
 
         -- Total items in bag
         if ShowTotalItems() then
-            s=s.."   ("..(GetItemCount(item.id)).. ")"  -- buggy AS HELL :\
+            s=s.."   ("..(GetItemCount(item.id) + 1).. ")"  -- buggy AS HELL :\
         end
     
         -- Add the message
@@ -412,7 +408,7 @@ x.events = {
   
     end,
   
-  ["CHAT_MSG_MONEY"] = function()
+  ["CHAT_MSG_MONEY"] = function(msg)
       local g, s, c = tonumber(msg:match(GOLD_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(SILVER_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(COPPER_AMOUNT:gsub("%%d", "(%%d+)")))
       local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), MONEY .. ": "
       
@@ -435,7 +431,7 @@ x.outgoing_events = {
   ["SPELL_PERIODIC_HEAL"] = function(...)
       if ShowHealing() and ShowHots() then
         -- output = the output frame; list of incoming args
-        local spellId, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
+        local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
         local outputFrame, message, outputColor = "outgoing", amount, "heal_out"
         
         -- TODO: Add Healing Filter
@@ -658,7 +654,7 @@ x.outgoing_events = {
     
   ["SPELL_DISPEL"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect, _, etype = ...
-      local outputFrame, message, outputColor = "outgoing", sformat(format_dispell, ACTION_SPELL_DISPEL, effect), "dispell_debuff"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_DISPEL, effect), "dispell_debuff"
       
       -- Check for buff or debuff (for color)
       if etype == "BUFF" then
@@ -675,7 +671,7 @@ x.outgoing_events = {
     
   ["SPELL_INTERRUPT"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect = ...
-      local outputFrame, message, outputColor = "outgoing", sformat(format_dispell, ACTION_SPELL_INTERRUPT, effect), "spell_interrupt"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_INTERRUPT, effect), "spell_interrupt"
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
@@ -687,7 +683,7 @@ x.outgoing_events = {
     
   ["SPELL_STOLEN"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect = ...
-      local outputFrame, message, outputColor = "outgoing", sformat(format_dispell, ACTION_SPELL_STOLEN, effect), "spell_stolen"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_STOLEN, effect), "spell_stolen"
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
@@ -699,12 +695,14 @@ x.outgoing_events = {
     
   ["PARTY_KILL"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, name = ...
-      local outputFrame, message, outputColor = "outgoing", sformat(format_dispell, ACTION_PARTY_KILL, name), "party_kill"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_PARTY_KILL, name), "party_kill"
       
       -- Color the text according to class that got killed
-      local index = select(2, GetPlayerInfoByGUID(destGUID))
-      if RAID_CLASS_COLORS[index] then
-        outputColor = {RAID_CLASS_COLORS[index].r, RAID_CLASS_COLORS[index].g, RAID_CLASS_COLORS[index].b}
+      if destGUID then
+        local index = select(2, GetPlayerInfoByGUID(destGUID))
+        if RAID_CLASS_COLORS[index] then
+          outputColor = {RAID_CLASS_COLORS[index].r, RAID_CLASS_COLORS[index].g, RAID_CLASS_COLORS[index].b}
+        end
       end
       
       x:AddMessage(outputFrame, message, outputColor)

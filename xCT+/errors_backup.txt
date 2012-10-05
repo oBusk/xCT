@@ -1,0 +1,107 @@
+ssage: ...rface\AddOns\AceGUIConfig_Example\modules\frames.lua:90: attempt to index local 'frameOptions' (a nil value)
+Time: 10/04/12 21:37:18
+Count: 2
+Stack: [C]: ?
+...rface\AddOns\AceGUIConfig_Example\modules\frames.lua:90: in function `AddMessage'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:297: in function `?'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:147: in function <...ns\AceGUIConfig_Example\modules\simplecombattext.lua:136>
+
+
+Message: ...rface\AddOns\AceGUIConfig_Example\modules\frames.lua:90: attempt to index local 'frameOptions' (a nil value)
+Time: 10/04/12 21:38:13
+Count: 4
+Stack: [C]: ?
+...rface\AddOns\AceGUIConfig_Example\modules\frames.lua:90: in function `AddMessage'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:297: in function `?'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:147: in function <...ns\AceGUIConfig_Example\modules\simplecombattext.lua:136>
+
+Locals: 
+
+
+
+
+Message: ...rface\AddOns\AceGUIConfig_Example\modules\frames.lua:90: attempt to index local 'frameOptions' (a nil value)
+Time: 10/04/12 21:41:47
+Count: 6
+Stack: [C]: ?
+...rface\AddOns\AceGUIConfig_Example\modules\frames.lua:90: in function `AddMessage'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:297: in function `?'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:147: in function <...ns\AceGUIConfig_Example\modules\simplecombattext.lua:136>
+
+Locals: 
+
+
+
+
+Message: ...ns\AceGUIConfig_Example\modules\simplecombattext.lua:366: bad argument #1 to 'find' (string expected, got nil)
+Time: 10/04/12 21:44:05
+Count: 8
+Stack: [C]: ?
+[C]: in function `find'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:366: in function `?'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:151: in function <...ns\AceGUIConfig_Example\modules\simplecombattext.lua:136>
+
+Locals: 
+
+
+
+
+
+Message: ...ns\AceGUIConfig_Example\modules\simplecombattext.lua:366: bad argument #1 to 'find' (string expected, got nil)
+Time: 10/04/12 21:44:15
+Count: 12
+Stack: [C]: ?
+[C]: in function `find'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:366: in function `?'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:151: in function <...ns\AceGUIConfig_Example\modules\simplecombattext.lua:136>
+
+Locals: 
+
+
+
+
+
+Message: ...ns\AceGUIConfig_Example\modules\simplecombattext.lua:416: attempt to index global 'msg' (a nil value)
+Time: 10/04/12 21:45:09
+Count: 8
+Stack: [C]: ?
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:416: in function `?'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:151: in function <...ns\AceGUIConfig_Example\modules\simplecombattext.lua:136>
+
+Locals: 
+
+
+
+
+
+
+Message: ...ns\AceGUIConfig_Example\modules\simplecombattext.lua:366: bad argument #1 to 'find' (string expected, got nil)
+Time: 10/04/12 21:45:18
+Count: 16
+Stack: [C]: ?
+[C]: in function `find'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:366: in function `?'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:151: in function <...ns\AceGUIConfig_Example\modules\simplecombattext.lua:136>
+
+Locals: 
+
+
+
+Message: ...ns\AceGUIConfig_Example\modules\simplecombattext.lua:416: attempt to index global 'msg' (a nil value)
+Time: 10/04/12 21:45:50
+Count: 10
+Stack: [C]: ?
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:416: in function `?'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:151: in function <...ns\AceGUIConfig_Example\modules\simplecombattext.lua:136>
+
+Locals: 
+
+
+Message: ...ns\AceGUIConfig_Example\modules\simplecombattext.lua:416: attempt to index global 'msg' (a nil value)
+Time: 10/04/12 21:45:50
+Count: 10
+Stack: [C]: ?
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:416: in function `?'
+...ns\AceGUIConfig_Example\modules\simplecombattext.lua:151: in function <...ns\AceGUIConfig_Example\modules\simplecombattext.lua:136>
+
+Locals: 

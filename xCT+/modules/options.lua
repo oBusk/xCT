@@ -12,7 +12,7 @@ addon.options = {
     xCT_Header = {
       order = 1,
       type = "header",
-      name = "Version: "..(GetAddOnMetadata("xCT", "Version") or "Unknown"),
+      name = "Version: "..(GetAddOnMetadata("xCT+", "Version") or "Unknown"),
       width = "full",
     },
     Enable_xCT = {
@@ -73,10 +73,10 @@ addon.options.args["Frames"] = {
       type = 'group',
       order = 1,
       args = {
-        enabled = {
+        enabledFrame = {
           order = 1,
           type = 'toggle',
-          name = "Enabled",
+          name = "Enable Frame",
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
         },
@@ -231,10 +231,10 @@ addon.options.args["Frames"] = {
       order = 2,
       args = {
       
-        enabled = {
+        enabledFrame = {
           order = 1,
           type = 'toggle',
-          name = "Enabled",
+          name = "Enable Frame",
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
         },
@@ -490,10 +490,10 @@ addon.options.args["Frames"] = {
       type = 'group',
       order = 3,
       args = {
-        enabled = {
+        enabledFrame = {
           order = 1,
           type = 'toggle',
-          name = "Enabled",
+          name = "Enable Frame",
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
         },
@@ -637,8 +637,8 @@ addon.options.args["Frames"] = {
               type = 'input',
               name = "Postfix",
               desc = "Postfix this value to the end when displaying a critical amount.",
-              get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
-              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+              get = function(info) return string_gsub(X.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = string_gsub(value, "||", "|") end,
             },
             
           },
@@ -709,7 +709,7 @@ addon.options.args["Frames"] = {
               order = 1,
               type = 'toggle',
               name = "Swing Crits",
-              desc = "Show Swing crits in this frame.",
+              desc = "Show Swing and Auto Attack crits in this frame.",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -718,7 +718,7 @@ addon.options.args["Frames"] = {
               order = 2,
               type = 'toggle',
               name = "Swing (Pre)Postfix",
-              desc = "Make Swing crits more visible by adding the prefix and postfix.",
+              desc = "Make Swing and Auto Attack crits more visible by adding the prefix and postfix.",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -727,7 +727,7 @@ addon.options.args["Frames"] = {
               order = 3,
               type = 'toggle',
               name = "Redirect Swing",
-              desc = "Sends Swing crits to the \"|cffFFFF00Outgoing|r\" frame. (|cffFF0000Requires:|r \"|cffFFFF00Auto Attack|r\". Useful, see \"|cffFFFF00Auto Attack Prefix|r\")",
+              desc = "Sends Swing crits to the \"|cff798BDDOutgoing|r\" frame. (|cffFF0000Requires:|r \"|cffFFFF00Swing Crits|r\". For other useful options, see: \"|cffFFFF00Swing (Pre)Postfix|r\")",
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
             },
@@ -743,10 +743,10 @@ addon.options.args["Frames"] = {
       type = 'group',
       order = 4,
       args = {
-        enabled = {
+        enabledFrame = {
           order = 1,
           type = 'toggle',
-          name = "Enabled",
+          name = "Enable Frame",
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
         },
@@ -900,10 +900,10 @@ addon.options.args["Frames"] = {
       type = 'group',
       order = 5,
       args = {
-        enabled = {
+        enabledFrame = {
           order = 1,
           type = 'toggle',
-          name = "Enabled",
+          name = "Enable Frame",
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
         },
@@ -1057,10 +1057,10 @@ addon.options.args["Frames"] = {
       type = 'group',
       order = 6,
       args = {
-        enabled = {
+        enabledFrame = {
           order = 1,
           type = 'toggle',
-          name = "Enabled",
+          name = "Enable Frame",
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
         },
@@ -1150,10 +1150,10 @@ addon.options.args["Frames"] = {
       type = 'group',
       order = 7,
       args = {
-        enabled = {
+        enabledFrame = {
           order = 1,
           type = 'toggle',
-          name = "Enabled",
+          name = "Enable Frame",
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
         },
@@ -1307,10 +1307,10 @@ addon.options.args["Frames"] = {
       type = 'group',
       order = 8,
       args = {
-        enabled = {
+        enabledFrame = {
           order = 1,
           type = 'toggle',
-          name = "Enabled",
+          name = "Enable Frame",
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
         },
@@ -1464,10 +1464,11 @@ addon.options.args["Frames"] = {
       type = 'group',
       order = 9,
       args = {
-        enabled = {
+        
+        enabledFrame = {
           order = 1,
           type = 'toggle',
-          name = "Enabled",
+          name = "Enable Frame",
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
         },
@@ -1491,7 +1492,7 @@ addon.options.args["Frames"] = {
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end,
         },
-        
+
         insertText = {
           type = 'select',
           order = 3,

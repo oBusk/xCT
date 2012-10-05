@@ -33,7 +33,7 @@ x.colors = {
   out_misstype = {.5,.5,.5},
   dispell_buff = {0,1,.5},
   dispell_debuff = {1,0,.5},
-  spell_interrupt = {1,.5,0}
+  spell_interrupt = {1,.5,0},
   spell_stolen = {.9,0,.9},
   party_kill={.2,1,.2},
 }
