@@ -32,13 +32,13 @@ addon.options = {
       order = 4,
       type = 'execute',
       name = "Toggle Frames",
-      func = function() end,
+      func = X.ToggleConfigMode,
     },
     ToggleTestMode = {
       order = 4,
       type = 'execute',
       name = "Toggle Test Mode",
-      func = function() end,
+      func = X.ToggleTestMode,
     },
     
   },
@@ -111,7 +111,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-1]) end,
         },
         
         fonts = {
@@ -269,7 +269,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-1]) end,
         },
         
         fonts = {
@@ -528,7 +528,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-1]) end,
         },
         
         fonts = {
@@ -781,7 +781,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-1]) end,
         },
         
         fonts = {
@@ -938,7 +938,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-1]) end,
         },
         
         fonts = {
@@ -1188,7 +1188,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-1]) end,
         },
         
         fonts = {
@@ -1345,7 +1345,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-1]) end,
         },
         
         fonts = {
@@ -1503,7 +1503,7 @@ addon.options.args["Frames"] = {
             ["bottom"] = "Up",
           },
           get = function(info) return X.db.profile.frames[info[#info-1]][info[#info]] end,
-          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
+          set = function(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value; X:UpdateFrames(info[#info-1]) end,
         },
         
         fonts = {

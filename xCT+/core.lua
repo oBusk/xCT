@@ -85,6 +85,8 @@ function X:OpenXCTCommand(input)
     mode = 'Open'
   end
   
-  ACD[mode](ACD, AddonName)
+  if not X.configuring then
+    ACD[mode](ACD, AddonName)
+  end
 end
 

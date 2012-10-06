@@ -10,7 +10,7 @@ addon.DefaultProfile = {
     -- position
       ["X"] = 0,
       ["Y"] = 192,
-      ["Width"] = 256,
+      ["Width"] = 512,
       ["Height"] = 128,
       
     -- fonts
@@ -114,9 +114,9 @@ addon.DefaultProfile = {
       
     -- position
       ["X"] = -448,
-      ["Y"] = -80,
+      ["Y"] = -88, -- -80,
       ["Width"] = 128,
-      ["Height"] = 128,
+      ["Height"] = 144,
       
     -- fonts
       ["font"] = "HOOGE (xCT)",
@@ -140,9 +140,9 @@ addon.DefaultProfile = {
     
     -- positioon
       ["X"] = -448,
-      ["Y"] = 80,
+      ["Y"] = 88,
       ["Width"] = 128,
-      ["Height"] = 128,
+      ["Height"] = 144,
       
     -- fonts
       ["font"] = "HOOGE (xCT)",
@@ -164,7 +164,7 @@ addon.DefaultProfile = {
       
     -- position
       ["X"] = 0,
-      ["Y"] = 96,
+      ["Y"] = 64,
       ["Width"] = 64,
       ["Height"] = 64,
       
@@ -185,7 +185,7 @@ addon.DefaultProfile = {
       
     -- position
       ["X"] = 0,
-      ["Y"] = -192,
+      ["Y"] = -64,
       ["Width"] = 256,
       ["Height"] = 128,
       
@@ -237,8 +237,8 @@ addon.DefaultProfile = {
       
     -- position 
       ["X"] = 0,
-      ["Y"] = 0,
-      ["Width"] = 256,
+      ["Y"] = -224,
+      ["Width"] = 512,
       ["Height"] = 128,
       
     -- fonts
