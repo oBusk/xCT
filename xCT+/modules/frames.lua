@@ -36,7 +36,6 @@ local frameTitles = {
 }
 
 function x:UpdateFrames(specificFrame)
-
   for framename, settings in pairs(x.db.profile.frames) do
     if specificFrame and specificFrame == framename or not specificFrame then
       local f = nil
@@ -49,15 +48,12 @@ function x:UpdateFrames(specificFrame)
       end
       
       --TODO: add time visible
-      f:SetTimeVisible(3)
-      
-      -- TODO: add max lines
-      
-      f:SetSpacing(2)
       
       -- Set the position
+      f:SetSpacing(2)
       f:ClearAllPoints()
       f:SetMovable(true)
+      f:SetTimeVisible(3)
       f:SetResizable(true)
       f:SetMinResize(64, 64)
       f:SetMaxResize(768, 768)
@@ -206,7 +202,6 @@ local function StartConfigMode()
       f.tr:SetPoint("TOPRIGHT", f, "TOPRIGHT", 0, 0)
       f.tr:SetHeight(21)
       
-      
       -- Moving Settings
       f:EnableMouse(true)
       f:RegisterForDrag("LeftButton")
@@ -220,7 +215,6 @@ local function StartConfigMode()
       
       if framename == "class" then
         f.d:Hide()
-        f:EnableMouse(false)
       end
       
     end
