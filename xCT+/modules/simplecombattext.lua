@@ -333,7 +333,7 @@ x.events = {
   ["UNIT_HEALTH"] = function()
       if ShowLowResources() and UnitHealth(x.player.unit) / UnitHealthMax(x.player.unit) <= COMBAT_TEXT_LOW_HEALTH_THRESHOLD then
         if not x.lowHealth then
-          x.AddMessage("general", HEALTH_LOW, "low_health")
+          x:AddMessage("general", HEALTH_LOW, "low_health")
           x.lowHealth = true
         end
       else
@@ -343,7 +343,7 @@ x.events = {
   ["UNIT_MANA"] = function()
       if select(2, UnitPowerType(x.player.unit)) == "MANA" and ShowLowResources() and UnitPower(x.player.unit) / UnitPowerMax(x.player.unit) <= COMBAT_TEXT_LOW_MANA_THRESHOLD then
         if not x.lowMana then
-          x.AddMessage("general", MANA_LOW, "low_mana")
+          x:AddMessage("general", MANA_LOW, "low_mana")
           x.lowMana = true
         end
       else

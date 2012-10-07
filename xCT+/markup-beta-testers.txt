@@ -1,0 +1,44 @@
+<blockquote class="Overlord">PLEASE TAKE NOTE: Confirmed features not in beta
+<ul><li>Healing Spell Filter</li>
+<li>Spam Merger</li>
+<li>Combo Points (Rogues, and other classes)</li>
+<li>Death Knight Runes</li>
+<li>Monk Support</li>
+<li>Theshold limits to filter out lower values</li>
+<li>MEGA DAMAGE abbreviations</li>
+<li>Options to turn off: Killing Blows, Interrupts, Dispels</li>
+<li>Alignment Grid</li></ul></blockquote>
+
+<center>__________________________________________________</center>
+<center><b>Thank You xCT+ Beta Tester!</b></center>
+
+I very much appreciate the help you are giving to me to get my add-on out to the public.  I am writing this guide to help you get started exploring <b>xCT+</b>.  If you feel up to it, feel free to jump right in!  Otherwise I have a short <b>FAQ</b> I would like you to read.  All questions, comments, requests and bug reports should be directed to this thread: <a href="http://www.tukui.org/forums/topic.php?id=24113">http://www.tukui.org/forums/topic.php?id=24113</a>
+<i>(Requires a free membership on www.tukui.org)</i>
+
+<u><b>FAQ – Frequently Asked Questions</b></u>
+<ul><li><i><b>How do I get to xCT+ configuration tool?</b></i></li></ul>
+Type “/xct”.  Please remember that there are a few options still in [<i>Game Menu</i> --> <i>Interface </i>--> <i>Floating Combat Text</i>].  I will probably be moving all of those to the configuration tool.
+
+<ul><li><i><b>Can I get my friend into the beta?</b></i></li></ul>
+I want <b>xCT+</b> to be in a ‘closed’ beta, but anyone can request to receive an invite.  Have him/her obtain a username on www.tukui.org and send a private message to Dandruff.  Obviously, you can just give them the beta yourself, but I would like to be able to push updates to all the testers.
+
+<ul><li><i><b>I have a Lua error, should I report it?</b></i></li></ul>
+All Lua errors should be reported without delay.
+
+<ul><li><i><b>An option does not work as described, what do you want me to do?</b></i></li></ul>
+I personally test most options before I release each version.  You can go ahead and make a post on the forum if you feel that it is not a very obvious one (e.g. you don’t allow xCT+ to show “immunes” but it does it anyway in certain circumstances).
+
+<ul><li><i><b>I can’t seem to find a feature, will you be adding it?</b></i></li></ul>
+Maybe! Make a post, and I will see what I can do!
+
+<ul><li><i><b>Will this Add-On have localization added?</b></i></li></ul>
+Yes.  I am not going to worry about it too much at this time, but I have been planning it at some point in time.
+
+<ul><li><i><b>Does this Add-On employ any code from xCT or xCT+ version 2?</b></i></li></ul>
+The short answer is no.  It was heavily influenced by <b>xCT</b>, but 99% of the add-on has been rewritten from the ground up.  Only the visual style has been ‘<i>copied</i>’.
+
+<ul><li><i><b>When is xCT+ going to be released?</b></i></li></ul>
+I have been shooting for the beginning of November, but I can’t make any promises at this time.
+
+__________________________________________________
+<i>REQUESTING TO BE IN THE BETA WILL AUTOMATICALLY PLACE YOUR NAME IN THE CREDITS OF THIS ADD-ON.  IF YOU DO NOT WANT YOUR NAME THERE, SEND ME A MESSAGE AND I CAN IMMEDIATELY REMOVE IT.</i>

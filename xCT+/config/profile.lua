@@ -43,7 +43,7 @@ addon.DefaultProfile = {
       ["font"] = "HOOGE (xCT)",
       ["fontSize"] = 16,
       ["fontOutline"] = "4MONOCHROMEOUTLINE",
-      ["fontJustify"] = "CENTER",
+      ["fontJustify"] = "RIGHT",
       
     -- font colors
       ["customColor"] = false,
@@ -81,9 +81,9 @@ addon.DefaultProfile = {
       
     -- fonts
       ["font"] = "HOOGE (xCT)",
-      ["fontSize"] = 16,
+      ["fontSize"] = 24,
       ["fontOutline"] = "4MONOCHROMEOUTLINE",
-      ["fontJustify"] = "CENTER",
+      ["fontJustify"] = "RIGHT",
       
     -- font colors
       ["customColor"] = false,
@@ -110,7 +110,7 @@ addon.DefaultProfile = {
     damage = {
       ["enabledFrame"] = true,
       ["secondaryFrame"] = 0,
-      ["insertText"] = "bottom",
+      ["insertText"] = "top",
       
     -- position
       ["X"] = -448,
@@ -122,7 +122,7 @@ addon.DefaultProfile = {
       ["font"] = "HOOGE (xCT)",
       ["fontSize"] = 16,
       ["fontOutline"] = "4MONOCHROMEOUTLINE",
-      ["fontJustify"] = "CENTER",
+      ["fontJustify"] = "RIGHT",
       
     -- font colors
       ["customColor"] = false,
@@ -148,7 +148,7 @@ addon.DefaultProfile = {
       ["font"] = "HOOGE (xCT)",
       ["fontSize"] = 16,
       ["fontOutline"] = "4MONOCHROMEOUTLINE",
-      ["fontJustify"] = "CENTER",
+      ["fontJustify"] = "RIGHT",
       
     -- font colors
       ["customColor"] = false,
@@ -170,7 +170,7 @@ addon.DefaultProfile = {
       
     -- fonts
       ["font"] = "HOOGE (xCT)",
-      ["fontSize"] = 16,
+      ["fontSize"] = 32,
       ["fontOutline"] = "4MONOCHROMEOUTLINE",
       
     -- font colors
@@ -233,7 +233,7 @@ addon.DefaultProfile = {
     loot = {
       ["enabledFrame"] = true,
       ["secondaryFrame"] = 0,
-      ["insertText"] = "bottom",
+      ["insertText"] = "top",
       
     -- position 
       ["X"] = 0,

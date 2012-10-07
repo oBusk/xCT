@@ -26,7 +26,7 @@ addon.options = {
       order = 3,
       type = 'execute',
       name = "Restore Defaults",
-      func = function() end,
+      func = X.RestoreAllDefaults,
     },
     ToggleFrames = {
       order = 4,
@@ -44,16 +44,45 @@ addon.options = {
   },
 }
 
-addon.options.args["General"] = {
-  name = "General",
+addon.options.args["Credits"] = {
+  name = "Credits",
   type = 'group',
+  order = 2,
   args = {
-    check2 = {
+    title = {
+      type = "header",
+      order = 0,
+      name = "Credits and Mentions",
+    },
+    
+    specialThanksTitle = {
+      type = 'description',
       order = 1,
-      type = 'toggle',
-      name = "check 2",
-      get = function(info) return true end,
-      set = function(info, value) end,
+      name = "|cffFFFF00Special Thank You|r",
+    },
+    
+    specialThanksList = {
+      type = 'description',
+      order = 2,
+      name = "  Tukz, Elv, Affli, BuG",
+    },
+    
+    testerTitleSpace = {
+      type = 'description',
+      order = 3,
+      name = " ",
+    },
+    
+    testerTitle = {
+      type = 'description',
+      order = 4,
+      name = "|cffFFFF00Testers|r",
+    },
+    
+    userName1 = {
+      type = 'description',
+      order = 5,
+      name = "  "..UnitName("player"),
     },
   },
 }
@@ -61,17 +90,25 @@ addon.options.args["General"] = {
 addon.options.args["Frames"] = {
   name = "Frames",
   type = 'group',
+  order = 1,
   args = {
   
     Frames_Header = {
       type = "header",
+      order = 1,
       name = "xCT+ Frames",
     },
 
+    Frames_Description = {
+      type = "description",
+      order = 2,
+      name = "Under Construction. Please have fun using the beta!",
+    },
+    
     general = {
       name = "|cffFFFFFFGeneral|r",
       type = 'group',
-      order = 1,
+      order = 10,
       args = {
         enabledFrame = {
           order = 1,
@@ -136,7 +173,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 22, step = 1,
+              min = 6, max = 32, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
@@ -228,7 +265,7 @@ addon.options.args["Frames"] = {
     outgoing = {
       name = "|cffFFFFFFOutgoing|r",
       type = 'group',
-      order = 2,
+      order = 12,
       args = {
       
         enabledFrame = {
@@ -294,7 +331,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 22, step = 1,
+              min = 6, max = 32, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
@@ -488,7 +525,7 @@ addon.options.args["Frames"] = {
     critical = {
       name = "|cffFFFFFFOutgoing|r |cff798BDD(Criticals)|r",
       type = 'group',
-      order = 3,
+      order = 13,
       args = {
         enabledFrame = {
           order = 1,
@@ -553,7 +590,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 22, step = 1,
+              min = 6, max = 32, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
@@ -741,7 +778,7 @@ addon.options.args["Frames"] = {
     damage = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Damage)|r",
       type = 'group',
-      order = 4,
+      order = 14,
       args = {
         enabledFrame = {
           order = 1,
@@ -806,7 +843,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 22, step = 1,
+              min = 6, max = 32, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
@@ -898,7 +935,7 @@ addon.options.args["Frames"] = {
     healing = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Healing)|r",
       type = 'group',
-      order = 5,
+      order = 15,
       args = {
         enabledFrame = {
           order = 1,
@@ -963,7 +1000,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 22, step = 1,
+              min = 6, max = 32, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
@@ -1055,7 +1092,7 @@ addon.options.args["Frames"] = {
     class = {
       name = "|cffFFFFFFClass Combo Points|r",
       type = 'group',
-      order = 6,
+      order = 16,
       args = {
         enabledFrame = {
           order = 1,
@@ -1093,7 +1130,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 22, step = 1,
+              min = 6, max = 32, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
@@ -1148,7 +1185,7 @@ addon.options.args["Frames"] = {
     power = {
       name = "|cffFFFFFFClass Power|r",
       type = 'group',
-      order = 7,
+      order = 17,
       args = {
         enabledFrame = {
           order = 1,
@@ -1213,7 +1250,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 22, step = 1,
+              min = 6, max = 32, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
@@ -1305,7 +1342,7 @@ addon.options.args["Frames"] = {
     procs = {
       name = "|cffFFFFFFSpecial Effects|r |cff798BDD(Procs)|r",
       type = 'group',
-      order = 8,
+      order = 18,
       args = {
         enabledFrame = {
           order = 1,
@@ -1370,7 +1407,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 22, step = 1,
+              min = 6, max = 32, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },
@@ -1462,7 +1499,7 @@ addon.options.args["Frames"] = {
     loot = {
       name = "|cffFFFFFFLoot & Money|r",
       type = 'group',
-      order = 9,
+      order = 19,
       args = {
         
         enabledFrame = {
@@ -1528,7 +1565,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 22, step = 1,
+              min = 6, max = 32, step = 1,
               get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
               set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value; X:UpdateFrames(info[#info-2]) end,
             },

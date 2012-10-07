@@ -47,6 +47,8 @@ function x:UpdateFrames(specificFrame)
         f = CreateFrame("ScrollingMessageFrame", nil, UIParent)
       end
       
+      f.frameName = framename
+      f.settings = settings
       --TODO: add time visible
       
       -- Set the position
@@ -60,12 +62,13 @@ function x:UpdateFrames(specificFrame)
       f:SetShadowColor(0, 0, 0, 0)
       f:SetWidth(settings.Width)
       f:SetHeight(settings.Height)
+      print("Setting", framename, "lines to", settings.Height / settings.fontSize)
+      f:SetMaxLines(settings.Height / settings.fontSize)
       
-      f:SetPoint("CENTER", settings.X, settings.Y)
       f:SetClampedToScreen(true)
+      f:SetPoint("CENTER", settings.X, settings.Y)
       f:SetClampRectInsets(0, 0, settings.fontSize, 0)
-      
-      
+
       -- Insert Direction
       if settings.insertText then
         f:SetInsertMode(settings.insertText)
@@ -73,26 +76,25 @@ function x:UpdateFrames(specificFrame)
       
       -- Font Template
       f:SetFont(LSM:Fetch("font", settings.font), settings.fontSize, ssub(settings.fontOutline, 2))
+
       if settings.fontJustify then
         f:SetJustifyH(settings.fontJustify)
       end
       
       -- scrolling
-      if settings.scrollableLines then
+      if settings.enableScrollable then
         f:SetMaxLines(settings.scrollableLines)
-        if settings.enableScrollable then
-          f:EnableMouseWheel(true)
-          f:SetScript("OnMouseWheel", function(self, delta)
-              if delta > 0 then
-                self:ScrollUp()
-              elseif delta < 0 then
-                self:ScrollDown()
-              end
-            end)
-        else
-          f:EnableMouseWheel(false)
-          f:SetScript("OnMouseWheel", nil)
-        end
+        f:EnableMouseWheel(true)
+        f:SetScript("OnMouseWheel", function(self, delta)
+            if delta > 0 then
+              self:ScrollUp()
+            elseif delta < 0 then
+              self:ScrollDown()
+            end
+          end)
+      else
+        f:EnableMouseWheel(false)
+        f:SetScript("OnMouseWheel", nil)
       end
       
       -- ==================================================
@@ -104,6 +106,20 @@ function x:UpdateFrames(specificFrame)
       end
       
       x.frames[framename] = f
+      
+      
+      -- Send a Test message
+      if specificFrame then
+        f:SetScript("OnUpdate", function(self, e)
+          if self.frameName == "class" then
+            x:AddMessage(self.frameName, "0", self.settings.fontColor or {1,1,0})
+          else
+            x:AddMessage(self.frameName, self.frameName.." test message", self.settings.fontColor or {1,1,1})
+          end
+          self:SetScript("OnUpdate", nil)
+        end)
+      end
+      
     end
   end
 
@@ -396,6 +412,13 @@ function x.EndTestMode()
     frame:Clear()
   end
 end
+
+function x.RestoreAllDefaults()
+  LibStub("AceConfigDialog-3.0"):Close(ADDON_NAME)
+  GameTooltip:Hide()
+  StaticPopup_Show("XCT_PLUS_RESET_SETTINGS")
+end
+
 -- Popups
 StaticPopupDialogs["XCT_PLUS_CONFIGURING"] = {
   text          = "You can now move freely about the cabin.",
@@ -419,6 +442,21 @@ StaticPopupDialogs["XCT_PLUS_TESTMODE"] = {
   
   button1       = SLASH_STOPWATCH_PARAM_STOP1,
   OnAccept      = function() x.EndTestMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
+  hideOnEscape  = true,
+  
+  -- Taint work around
+  preferredIndex = 3,
+}
+
+StaticPopupDialogs["XCT_PLUS_RESET_SETTINGS"] = {
+  text          = "Are your certain you want to erase all your xCT+ settings?",
+  timeout       = 0,
+  whileDead     = 1,
+  
+  button1       = "ERASE ALL!!",
+  button2       = CANCEL,
+  OnAccept      = function() xCTSavedDB = nil; ReloadUI() end,
+  OnCancel      = function() LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
   hideOnEscape  = true,
   
   -- Taint work around
