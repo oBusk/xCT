@@ -16,7 +16,7 @@
 local ADDON_NAME, addon = ...
 
 local LSM = LibStub("LibSharedMedia-3.0");
-local ssub = string.sub
+local ssub, pairs, tostring, math, unpack, print, type = string.sub, pairs, tostring, math, unpack, print, type
 
 -- Shorten my handle
 local x = addon.engine
@@ -347,6 +347,7 @@ local function TestMoreUpdate(self, elapsed)
         if not x.db.profile.frames["outgoing"].enabledFrame then x:Clear("outgoing") return end
         local message = random(60000)
         if x.db.profile.frames["outgoing"].iconsEnabled then
+          local spellID = random(10000)
           message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames["outgoing"].iconsSize)
         end
         x:AddMessage("outgoing", message, x.damagecolor[damageColorLookup[math.random(7)]])
@@ -354,6 +355,7 @@ local function TestMoreUpdate(self, elapsed)
         if not x.db.profile.frames["critical"].enabledFrame then x:Clear("critical") return end
         local message = x.db.profile.frames["critical"].critPrefix..random(80000, 200000)..x.db.profile.frames["critical"].critPostfix
         if x.db.profile.frames["critical"].iconsEnabled then
+          local spellID = random(10000)
           message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames["critical"].iconsSize)
         end
         x:AddMessage("critical", message, x.damagecolor[damageColorLookup[math.random(7)]])

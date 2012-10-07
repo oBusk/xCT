@@ -15,7 +15,7 @@
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
-local sgsub = string.gsub
+local sgsub, pairs, type = string.gsub, pairs, type
 
 -- Load AceStuff
 addon.engine.DefaultProfile = addon.DefaultProfile

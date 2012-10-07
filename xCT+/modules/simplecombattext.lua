@@ -19,7 +19,7 @@ local x = addon.engine
 
 -- up values
 local _, _G = nil, _G
-local sformat, mfloor, sgsub, s_lower = string.format, math.floor, string.gsub, string.lower
+local sformat, mfloor, sgsub, s_lower, string = string.format, math.floor, string.gsub, string.lower, string
 local tostring, tonumber, select, unpack = tostring, tonumber, select, unpack
 
 
@@ -513,7 +513,7 @@ x.outgoing_events = {
         
         -- Check for Pet Swings
         local spellID = 6603
-        if (sourceGUID == UnitGUID("pet")) or sourceFlags == gflags then
+        if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
           if not ShowPetDamage() then return end
           spellID = PET_ATTACK_TEXTURE
         end
@@ -623,7 +623,7 @@ x.outgoing_events = {
       
       -- Check for Pet Swings
       local spellID = 6603
-      if (sourceGUID == UnitGUID("pet")) or sourceFlags == gflags then
+      if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
         if not ShowPetDamage() then return end
         spellID = PET_ATTACK_TEXTURE
       end
@@ -708,7 +708,7 @@ x.outgoing_events = {
     end,
     
   ["PARTY_KILL"] = function(...)
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, name = ...
+      local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, name = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_PARTY_KILL, name), "party_kill"
       
       -- Color the text according to class that got killed
