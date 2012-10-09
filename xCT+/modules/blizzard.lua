@@ -32,13 +32,6 @@ fsTitle:SetFont(defaultFont, defaultSize + 6)
 fsTitle:SetText("xCT+ Combat Text Options")
 fsTitle:SetPoint("TOPLEFT", 16, -90)
 
--- Show Version Number
-local fsVersion = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
-fsVersion:SetFont(defaultFont, 11)
-fsVersion:SetText("|cff5555FFPowered By:|r \124cffFF0000x\124rCT\124cffFFFFFF+\124r (Version "
-  .. GetAddOnMetadata("xCT", "Version")..")")
-fsVersion:SetPoint("BOTTOMRIGHT", -8, 8)
-
 -- Move the Effects and Floating Options
 InterfaceOptionsCombatTextPanelTargetEffects:ClearAllPoints()
 InterfaceOptionsCombatTextPanelTargetEffects:SetPoint("TOPLEFT", 314, -132)

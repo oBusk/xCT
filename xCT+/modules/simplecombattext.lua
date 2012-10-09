@@ -22,15 +22,20 @@ local _, _G = nil, _G
 local sformat, mfloor, sgsub, s_lower, string = string.format, math.floor, string.gsub, string.lower, string
 local tostring, tonumber, select, unpack = tostring, tonumber, select, unpack
 
-
+-- Holds important information about the player [use AddOn:UpdatePlayer()]
 x.player = {
   unit = "player",
-  guid = nil, -- dont get the id until we load
+  guid = nil, -- dont get the guid until we load
   class = "unknown",
   name = "unknown",
   spec = -1,
 }
 
+-- =====================================================
+-- AddOn:UpdatePlayer()
+--    Updates important information about the player we
+--  need inorder to correctly show combat text events.
+-- =====================================================
 function x:UpdatePlayer()
 
   -- Set the Player's Current Playing Unit
@@ -49,8 +54,12 @@ function x:UpdatePlayer()
   
 end
 
-
--- Registers or Updates the combat text event frame
+-- =====================================================
+-- AddOn:UpdateCombatTextEvents(
+--    enable,     [BOOL] - True tp enable the events, false to disable them
+--  )
+--    Registers or updates the combat text event frame
+-- =====================================================
 function x:UpdateCombatTextEvents(enable)
   local f = nil
   
@@ -68,7 +77,6 @@ function x:UpdateCombatTextEvents(enable)
     f:RegisterEvent("UNIT_MANA")
     f:RegisterEvent("PLAYER_REGEN_DISABLED")
     f:RegisterEvent("PLAYER_REGEN_ENABLED")
-    f:RegisterEvent("UNIT_COMBO_POINTS")
     f:RegisterEvent("UNIT_ENTERED_VEHICLE")
     f:RegisterEvent("UNIT_EXITING_VEHICLE")
     f:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -87,6 +95,7 @@ function x:UpdateCombatTextEvents(enable)
     -- Class combo points
     f:RegisterEvent("UNIT_AURA")
     f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
+    f:RegisterEvent("UNIT_COMBO_POINTS")
     
     x.combatEvents = f
     
@@ -97,7 +106,7 @@ function x:UpdateCombatTextEvents(enable)
   end
 end
 
--- helper simple option checks
+-- Fast Boolian Lookups
 local function ShowMissTypes() return COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" end
 local function ShowResistances() return COMBAT_TEXT_SHOW_RESISTANCES == "1" end
 local function ShowHonor() return COMBAT_TEXT_SHOW_HONOR_GAINED == "1" end
@@ -106,8 +115,6 @@ local function ShowReactives() return COMBAT_TEXT_SHOW_REACTIVES == "1" end
 local function ShowLowResources() return COMBAT_TEXT_SHOW_LOW_HEALTH_MANA == "1" end
 local function ShowCombatState() return COMBAT_TEXT_SHOW_COMBAT_STATE == "1" end
 local function ShowFriendlyNames() return COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" end
-
--- ShowImmunes(), ShowMisses()
 local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg end
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
@@ -116,13 +123,9 @@ local function ShowDots() return x.db.profile.frames["outgoing"].enableDotDmg en
 local function ShowHots() return x.db.profile.frames["outgoing"].enableHots end
 local function ShowImmunes() return x.db.profile.frames["outgoing"].enableImmunes end -- outgoing immunes
 local function ShowMisses() return x.db.profile.frames["outgoing"].enableMisses end -- outgoing misses
-
--- ShowSwingCrit(), ShowSwingCritPrefix(), ShowSwingRedirected()
 local function ShowSwingCrit() return x.db.profile.frames["critical"].showSwing end
 local function ShowSwingCritPrefix() return x.db.profile.frames["critical"].prefixSwing end
 local function ShowSwingRedirected() return x.db.profile.frames["critical"].redirectSwing end
-
--- ShowLootItems(), ShowLootMoney(), ShowTotalItems(), ShowLootCrafted(), ShowLootQuest(), ShowColorBlindMoney(), GetLootQuality(), ShowLootIcons(), GetLootIconSize()
 local function ShowLootItems() return x.db.profile.frames["loot"].showItems end
 local function ShowLootMoney() return x.db.profile.frames["loot"].showMoney end
 local function ShowTotalItems() return x.db.profile.frames["loot"].showItemTotal end
@@ -133,7 +136,7 @@ local function GetLootQuality() return x.db.profile.frames["loot"].filterItemQua
 local function ShowLootIcons() return x.db.profile.frames["loot"].iconsEnabled end
 local function GetLootIconSize() return x.db.profile.frames["loot"].iconsSize end
 
--- string formatters
+-- String Formatters
 local format_loot = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
 local format_fade = "-%s"
 local format_gain = "+%s"
@@ -144,9 +147,19 @@ local format_faction = "%s +%s"
 local format_crit = "%s%s%s"
 local format_dispell = "%s: %s"
 
+-- Flag value for special pets and vehicles
 local COMBATLOG_FILTER_MY_VEHICLE = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE,
   COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_GUARDIAN )
 
+-- =====================================================
+-- AddOn:OnCombatTextEvent(
+--    event,     [string] - Name of the event
+--    ...,       [multiple] - args from the combat event
+--  )
+--    This is the event handler and will act like a
+--  switchboard the send the events to where they need
+--  to go.
+-- =====================================================
 function x.OnCombatTextEvent(self, event, ...)
   if event == "COMBAT_LOG_EVENT_UNFILTERED" then
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, srcFlags2, destGUID, destName, destFlags, destFlags2 = select(1, ...)
@@ -167,7 +180,17 @@ function x.OnCombatTextEvent(self, event, ...)
   end
 end
 
--- icon formater
+-- =====================================================
+-- AddOn:GetSpellTextureFormatted(
+--    spellID,     [number] - The spell ID you want the icon for
+--    iconSize,    [number] - The format size of the icon
+--  )
+--  Returns:
+--   message,     [string] - the message contains the formatted icon
+--
+--    Formats an icon quickly for use when outputing to
+--  a combat text frame.
+-- =====================================================
 function x:GetSpellTextureFormatted(spellID, iconSize)
   local message = ""
 

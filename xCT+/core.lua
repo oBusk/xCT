@@ -16,19 +16,18 @@
 local AddonName, addon = ...
 
 local sgsub, pairs, type = string.gsub, pairs, type
-
--- Load AceStuff
-addon.engine.DefaultProfile = addon.DefaultProfile
-
--- Give a Global handle
 xCT_Plus = addon.engine
-
--- Shorten my handle
 local X = xCT_Plus
 
-local blankTable = {}
-
--- invisible copy (orig table, lookup table)
+-- =====================================================
+-- inv_tcopy(
+--    t1,  [table] - Check this table (edited)
+--    t2,  [table] - against this table (NOT edited)
+--  )
+--    Check table 1 against table 2. if a value is found
+--  that is not defined in table 1, copy the default
+--  value from table 2. Will also examine "subtables".
+-- =====================================================
 local function inv_tcopy(t1, t2)
   for k, v in pairs(t2) do
     if t1[k] == nil then -- found new key
@@ -45,43 +44,33 @@ function X:OnInitialize()
     xCTSavedDB = { }
   end
 
-
   self.db = LibStub("AceDB-3.0"):New("xCTSavedDB")
-  addon.options.args["Profiles"] = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
-
-  -- Check Frames
   self.db:GetCurrentProfile()
-
+  
+  addon.options.args["Profiles"] = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
+  
   if not self.db.profile.frames then
     self.db.profile.frames = { }
   end
   
-  inv_tcopy(self.db.profile.frames, self.DefaultProfile.frames)
+  inv_tcopy(self.db.profile.frames, addon.DefaultProfile.frames)
   
   X:UpdatePlayer()
   X:UpdateFrames()
   X:UpdateCombatTextEvents(true)
-  
 end
 
-function X:OnEnable()
-  -- Called when the addon is enabled
-end
-
-function X:OnDisable()
-  -- Called when the addon is disabled
-end
-
-
+-- Unused for now
+function X:OnEnable() end
+function X:OnDisable() end
 
 -- This allows us to create our config dialog
 local AC = LibStub("AceConfig-3.0")
 local ACD = LibStub("AceConfigDialog-3.0")
 local ACR = LibStub("AceConfigRegistry-3.0")
 
-ACD:SetDefaultSize(AddonName, 800, 550)
-
 -- Register the Options
+ACD:SetDefaultSize(AddonName, 800, 550)
 AC:RegisterOptionsTable(AddonName, addon.options)
 
 -- Register Slash Commands
@@ -89,11 +78,6 @@ X:RegisterChatCommand("xct", "OpenXCTCommand")
 
 -- Process the slash command ('input' contains whatever follows the slash command)
 function X:OpenXCTCommand(input)
-  if (input == "r") then
-    xCTSavedDB = nil
-    ReloadUI()
-  end
-  
   local mode = 'Close'
   if not ACD.OpenFrames[AddonName] then
     mode = 'Open'

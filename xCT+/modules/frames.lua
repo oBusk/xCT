@@ -49,6 +49,14 @@ local frameTitles = {
   ["loot"]      = LOOT,
 }
 
+-- =====================================================
+-- AddOn:UpdateFrames(
+--    specificFrame,  [string] - (Optional) the framename
+--  )
+--    If you specify a specificFrame then only that
+--  frame will be updated, otherwise all the frames will
+--  be updated.
+-- =====================================================
 function x:UpdateFrames(specificFrame)
   for framename, settings in pairs(x.db.profile.frames) do
     if specificFrame and specificFrame == framename or not specificFrame then
@@ -110,10 +118,8 @@ function x:UpdateFrames(specificFrame)
         f:EnableMouseWheel(false)
         f:SetScript("OnMouseWheel", nil)
       end
-      
-      -- ==================================================
-      -- Frame Specific Properties
-      -- ==================================================
+
+      -- Special Cases
       if framename == "class" then
         f:SetMaxLines(1)
         f:SetFading(false)
@@ -139,6 +145,14 @@ function x:UpdateFrames(specificFrame)
 
 end
 
+-- =====================================================
+-- AddOn:Clear(
+--    specificFrame,  [string] - (Optional) the framename
+--  )
+--    If you specify a specificFrame then only that
+--  frame will be cleared of its text, otherwise all
+--  the frames will be cleared.
+-- =====================================================
 function x:Clear(specificFrame)
   if not specificFrame then
     for framename, settings in pairs(x.db.profile.frames) do
@@ -151,6 +165,16 @@ function x:Clear(specificFrame)
   end
 end
 
+-- =====================================================
+-- AddOn:AddMessage(
+--    framename,  [string] - the framename
+--    message,    [string] - the pre-formatted message to be sent
+--    colorname,  [string or table] - the name of the color OR a
+--                                    table containing the color
+--                                    e.g. colorname={1,2,3} --r=1,b=2,g=3
+--  )
+--    Sends a message to the framename specified.
+-- =====================================================
 function x:AddMessage(framename, message, colorname)
   local frame = x.frames[framename]
   local frameOptions = x.db.profile.frames[framename]
@@ -190,6 +214,7 @@ function x:AddMessage(framename, message, colorname)
   end
 end
 
+-- Starts the "config mode" so that you can move the frames
 local function StartConfigMode()
   x.configuring = true
 
