@@ -16,7 +16,10 @@
 local ADDON_NAME, addon = ...
 
 local LSM = LibStub("LibSharedMedia-3.0");
-local ssub, pairs, tostring, math, unpack, print, type = string.sub, pairs, tostring, math, unpack, print, type
+-- Setup up values
+local ssub, pairs, tostring, math, unpack, print, type, random, table_insert, format
+  = string.sub, pairs, tostring, math, unpack, print, type, math.random, table.insert, string.format
+random(time()); random(); random(time())
 
 -- Shorten my handle
 local x = addon.engine
@@ -34,6 +37,7 @@ local frameIndex = {
   [6] = "power",
   [7] = "procs",
   [8] = "loot",
+  --[9] = "class",  -- this is not used by redirection
 }
 
 -- Static Title Lookup
@@ -214,6 +218,108 @@ function x:AddMessage(framename, message, colorname)
   end
 end
 
+-- Yep, thats the spam merger... pretty lame
+local dbSpam = { }
+do        -- set up spell merger database
+  for _, fn in pairs(frameIndex) do
+    dbSpam[fn] = { }
+    dbSpam.args[fn] = { }
+  end
+end
+
+-- =====================================================
+-- AddOn:AddSpamMessage(
+--    framename,  [string]            - the framename
+--    mergeID,    [number or string]  - idenitity items to merge, if number
+--                                      then it HAS TO BE the valid spell ID
+--    message,    [number or string]  - the pre-formatted message to be sent,
+--                                      if its not a number, then only the
+--                                      first 'message' value that is sent
+--                                      this mergeID will be used.
+--    colorname,  [string or table]   - the name of the color OR a table
+--                                      containing the color (e.g.
+--                                      colorname={1,2,3} -- r=1, b=2, g=3)
+--  )
+--    Sends a message to the framename specified.
+-- =====================================================
+function x:AddSpamMessage(framename, mergeID, message, colorname)
+  local currentTable = dbSpam[framename]
+  if currentTable then
+    if currentTable[mergeID] then
+      table_insert(currentTable[mergeID], message)
+    else
+      currentTable[mergeID] = { message } 
+    end
+  else
+    print("xct+ frame name not found:", framename)
+  end
+end
+
+local spam_format = "%s%s x%s"
+
+
+-- only update one frame, one merge id at a time
+local function OnSpamUpdate(self, elapsed)
+  if not self.index then self.index = 0 end
+  if self.index > #frameIndex then self.index = 0 end
+
+  local fn = frameIndex[self.index]
+  local settings, spam, args = x.db.profile.frames[fn], dbSpam[fn], dbSpam.args[fn]
+  
+  if not settings.enabledFrame then return end
+  if not args.index then args.index = 0 end
+  if args.index > #spam then args.index = 0 end
+  
+  
+  if #spam > 0 then  -- check zero entries
+    local currentID, total = spam[args.index].id, 0
+    for _, amount in pairs(spam[args.index].merges) do
+      total = total + amount  -- Add all the amounts
+    end
+    local message = format(spam_format, tostring(total), x:GetSpellTextureFormatted(), #merges)
+    x:AddMessage(framename, message, args.colorName)
+  end
+  
+end
+
+
+
+
+local function OnSpamUpdate(elapsed)
+  if not x.lastSpamUpdate then x.lastSpamUpdate = 0 end
+
+  local defaultUpdate = 3
+  -- TODO: get the update time from a list of mergeIDs
+  
+  
+  
+  
+  
+  for framename, settings in pairs(x.db.profile.frames) do
+    
+    if settings.enabledFrame and   true   then -- TODO: Add spamEnabled from options
+      for mergeID, merges in pairs(dbSpam) do
+        
+        if tonumber(mergeID) then -- merge spell
+          local currentID, total = tostring(mergeID), 0
+          for _, amount in pairs(merges) do
+            total = total + amount  -- Add all the amounts
+          end
+          local message = format(spam_format, tostring(total), x:GetSpellTextureFormatted(), #merges)
+          x:AddMessage(framename, message, merges.colorName)
+          
+        else -- merge text
+          local currentKey = tostring(mergeID)
+          
+          
+        end
+      end
+    end
+    
+  end
+  
+end
+
 -- Starts the "config mode" so that you can move the frames
 local function StartConfigMode()
   x.configuring = true
@@ -222,7 +328,7 @@ local function StartConfigMode()
     if settings.enabledFrame then
       local f = x.frames[framename]
       f:SetBackdrop( {
-         bgFile   = "Interface/Tooltips/UI-Tooltip-Background",
+        bgFile   = "Interface/Tooltips/UI-Tooltip-Background",
         edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
         tile     = false,
         tileSize = 0,
@@ -345,9 +451,6 @@ function x:SaveAllFrames()
     settings.Y = math.floor(top - (height / 2) + 0.5)
   end
 end
-
-local random = math.random
-random(time()); random(); random(time())
 
 local damageColorLookup = { [1] = 1, [2] = 2, [3] = 4, [4] = 8, [5] = 16, [6] = 32, [7] = 64, }
 
