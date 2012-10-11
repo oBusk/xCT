@@ -88,7 +88,6 @@ function x:UpdateFrames(specificFrame)
       f:SetShadowColor(0, 0, 0, 0)
       f:SetWidth(settings.Width)
       f:SetHeight(settings.Height)
-      print("Setting", framename, "lines to", settings.Height / settings.fontSize)
       f:SetMaxLines(settings.Height / settings.fontSize)
       
       f:SetClampedToScreen(true)
@@ -218,14 +217,8 @@ function x:AddMessage(framename, message, colorname)
   end
 end
 
--- Yep, thats the spam merger... pretty lame
-local dbSpam = { }
-do        -- set up spell merger database
-  for _, fn in pairs(frameIndex) do
-    dbSpam[fn] = { }
-    dbSpam.args[fn] = { }
-  end
-end
+local spamHeap, spamStack = {}, {}
+local spam_format = "%s%s x%s"
 
 -- =====================================================
 -- AddOn:AddSpamMessage(
@@ -242,83 +235,82 @@ end
 --  )
 --    Sends a message to the framename specified.
 -- =====================================================
-function x:AddSpamMessage(framename, mergeID, message, colorname)
-  local currentTable = dbSpam[framename]
-  if currentTable then
-    if currentTable[mergeID] then
-      table_insert(currentTable[mergeID], message)
-    else
-      currentTable[mergeID] = { message } 
-    end
+function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
+  local heap, stack = spamHeap[framename], spamStack[framename]
+  if heap[mergeID] then
+    heap[mergeID].color = colorname
+    table_insert(heap[mergeID].entries, message)
   else
-    print("xct+ frame name not found:", framename)
+    heap[mergeID] = {
+      last    = 0,          -- last update
+      update  = x.db.profile.spells.merge[mergeID].interval,   -- how often to update
+      entries = {           -- entries to merge
+          message,
+        },        
+      color   = colorname,  -- color
+    }
+    table_insert(stack, mergeID)
   end
 end
 
-local spam_format = "%s%s x%s"
-
-
--- only update one frame, one merge id at a time
-local function OnSpamUpdate(self, elapsed)
-  if not self.index then self.index = 0 end
-  if self.index > #frameIndex then self.index = 0 end
-
-  local fn = frameIndex[self.index]
-  local settings, spam, args = x.db.profile.frames[fn], dbSpam[fn], dbSpam.args[fn]
-  
-  if not settings.enabledFrame then return end
-  if not args.index then args.index = 0 end
-  if args.index > #spam then args.index = 0 end
-  
-  
-  if #spam > 0 then  -- check zero entries
-    local currentID, total = spam[args.index].id, 0
-    for _, amount in pairs(spam[args.index].merges) do
-      total = total + amount  -- Add all the amounts
-    end
-    local message = format(spam_format, tostring(total), x:GetSpellTextureFormatted(), #merges)
-    x:AddMessage(framename, message, args.colorName)
+do
+  for _, frameName in pairs(frameIndex) do
+    spamHeap[frameName] = {}
+    spamStack[frameName] = {}
   end
-  
-end
 
-
-
-
-local function OnSpamUpdate(elapsed)
-  if not x.lastSpamUpdate then x.lastSpamUpdate = 0 end
-
-  local defaultUpdate = 3
-  -- TODO: get the update time from a list of mergeIDs
+  local index = 1
+  local frames = {}
+  local now = 0
   
-  
-  
-  
-  
-  for framename, settings in pairs(x.db.profile.frames) do
+  local function OnSpamUpdate(self, elapsed)
+    now = now + elapsed
     
-    if settings.enabledFrame and   true   then -- TODO: Add spamEnabled from options
-      for mergeID, merges in pairs(dbSpam) do
-        
-        if tonumber(mergeID) then -- merge spell
-          local currentID, total = tostring(mergeID), 0
-          for _, amount in pairs(merges) do
-            total = total + amount  -- Add all the amounts
-          end
-          local message = format(spam_format, tostring(total), x:GetSpellTextureFormatted(), #merges)
-          x:AddMessage(framename, message, merges.colorName)
-          
-        else -- merge text
-          local currentKey = tostring(mergeID)
-          
-          
-        end
+    -- Check to see if we are out of bounds
+    if index > #frameIndex then index = 1 end
+    
+    if not frames[frameIndex[index]] then frames[frameIndex[index]] = 1 end
+    
+    local heap, stack, settings, idIndex = spamHeap[frameIndex[index]], spamStack[frameIndex[index]], x.db.profile.frames[frameIndex[index]], frames[frameIndex[index]]
+    
+    if not settings.enabledFrame then return end
+    
+    if idIndex > #stack then idIndex = 1 end
+    
+    local item = heap[stack[idIndex]]
+    
+    --if item then print(item.last, "+", item.update, "<", now) end
+    if item and item.last + item.update <= now and #item.entries > 0 then
+      item.last = now
+      
+      local total = 0
+      for _, amount in pairs(item.entries) do
+        total = total + amount  -- Add all the amounts
+      end
+      
+      local message = tostring(total) 
+      
+      if #item.entries > 1 then message = message .. " |cffFFFFFFx" .. #item.entries .. "|r" end
+      
+      message = message .. x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize)
+
+      x:AddMessage(frameIndex[index], message, item.color)
+      
+      for k in pairs(item.entries) do
+        item.entries[k] = nil
       end
     end
     
+    frames[frameIndex[index]] = idIndex + 1
+    index = index + 1
   end
   
+  x.merge = CreateFrame("FRAME")
+  x.merge:RegisterEvent("OnUpdate")
+  x.merge:SetScript("OnUpdate",  OnSpamUpdate)
 end
+
+
 
 -- Starts the "config mode" so that you can move the frames
 local function StartConfigMode()

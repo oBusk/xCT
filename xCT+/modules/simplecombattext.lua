@@ -204,7 +204,7 @@ function x:GetSpellTextureFormatted(spellID, iconSize)
       message = " \124T"..x.BLANK_ICON..":"..iconSize..":"..iconSize..":0:0:64:64:5:59:5:59\124t"
     end
   end
-  return message
+  return message -- .. "[" .. spellID .. "]"
 end
 
 -- event handlers for combat text events
@@ -473,10 +473,15 @@ x.outgoing_events = {
         
         -- TODO: Add Healing Filter
         
+        -- Check for merge
+        if x.db.profile.spells.merge[spellID] then
+          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+          return
+        end
+        
         -- Check for Critical
         if critical then 
           message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
-          outputColor = "heal_out"
           outputFrame = "critical"
         end
         
@@ -497,13 +502,18 @@ x.outgoing_events = {
         
         -- TODO: Add Healing Filter
         
+        -- Check for merge
+        if x.db.profile.spells.merge[spellID] then
+          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+          return
+        end
+        
         -- Check for Critical
         if critical then 
           message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
-          outputColor = "heal_out"
           outputFrame = "critical"
         end
-        
+
         -- Add Icons
         if x.db.profile.frames[outputFrame].iconsEnabled then
           message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
@@ -582,20 +592,26 @@ x.outgoing_events = {
     
   ["SPELL_DAMAGE"] = function(...)
       if ShowDamage() then
-        local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
+        local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
         local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
         
-        -- Check for Critical
-        if critical then 
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
-          outputColor = "out_damage"
-          outputFrame = "critical"
-        end
-
+        -- Get special magic color
         if x.damagecolor[spellSchool] then
           outputColor = x.damagecolor[spellSchool]
         else
           outputColor = x.damagecolor[1]
+        end
+        
+        -- Check for merge
+        if x.db.profile.spells.merge[spellID] then
+          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+          return
+        end
+        
+        -- Check for Critical
+        if critical then 
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
+          outputFrame = "critical"
         end
         
         -- Add Icons
@@ -612,19 +628,26 @@ x.outgoing_events = {
         local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
         local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
         
-        -- Check for Critical
-        if critical then 
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
-          outputColor = "out_damage"
-          outputFrame = "critical"
-        end
-        
+        -- Get special magic color
         if x.damagecolor[spellSchool] then
           outputColor = x.damagecolor[spellSchool]
         else
           outputColor = x.damagecolor[1]
         end
         
+        -- Check for merge
+        if x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+          return
+        end
+        
+        -- Check for Critical
+        if critical then 
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
+          outputColor = "out_damage"
+          outputFrame = "critical"
+        end
+
         -- Add Icons
         if x.db.profile.frames[outputFrame].iconsEnabled then
           message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)

@@ -85,31 +85,58 @@ local function OnSpamUpdate(self, elapsed)
 end
 
 
-local dbSpam = { }
+-- Heap
+-- last
+-- update
+-- entries
+-- color
+
+local spamHeap, spamStack = {}, {}
+local spam_format = "%s%s x%s"
+
 do
   for _, frameName in pairs(frameIndex) do
-    dbSpam[frameName] = { }
-    --dbSpam.args[fn] = { }
+    spamHeap[frameName] = {}
+    spamStack[frameName] = {}
   end
-end
 
-
-do
   local index
-  local 
-
-
+  local frames = {}
+  local now = 0
+  
   local function OnSpamUpdate(self, elapsed)
-
+    now = now + elapsed
+    
     -- Check to see if we are out of bounds
     if index > #frameIndex then index = 1 end
     
-    local spam, settings = dbSpam
+    if not frames[frameIndex[index]] then frames[frameIndex[index]] = 1 end
     
+    local heap, stack, settings, idIndex = spamHeap[frameIndex[index]], spamStack[frameIndex[index]], x.db.profile.frames[frameIndex[index]], frames[frameIndex[index]]
     
+    if not settings.enabledFrame then return end
     
+    if idIndex > #stack then idIndex = 1 end
     
-
+    local item = heap[stack[idIndex]]
+    if item and item.last + item.update <= now and #item.entries > 0 then
+      item.update = now
+      
+      for _, amount in pairs(item.entries) do
+        total = total + amount  -- Add all the amounts
+      end
+      local message = tostring(total) .. x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize)
+      if #item.entries > 1 then message = message .. " x" .. #item.entries end
+      
+      x:AddMessage(frameIndex[index], message, item.color)
+      
+      for k in pairs(item.entries) do
+        item.entries[k] = nil
+      end
+    end
+    
+    frames[frameIndex[index]] = idIndex + 1
+    index = index + 1
   end
 end
 

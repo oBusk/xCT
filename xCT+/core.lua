@@ -55,6 +55,12 @@ function X:OnInitialize()
   
   inv_tcopy(self.db.profile.frames, addon.DefaultProfile.frames)
   
+  if not self.db.profile.spells then
+    self.db.profile.spells = { }
+  end
+
+  inv_tcopy(self.db.profile.spells, addon.DefaultProfile.spells)
+  
   X:UpdatePlayer()
   X:UpdateFrames()
   X:UpdateCombatTextEvents(true)

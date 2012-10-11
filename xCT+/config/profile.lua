@@ -12,7 +12,12 @@
  [  ©2012. All Rights Reserved.        ]
  [====================================]]
 
+ -- This file is a static default profile.  After you first profile is created, editing this file will nothing.
 local ADDON_NAME, addon = ...
+
+local function CreateMergeSpellEntry(enabled, interval)
+  return { enabled = enabled, interval = interval or 3 }
+end
 
 addon.DefaultProfile = {
   frames = {
@@ -283,4 +288,47 @@ addon.DefaultProfile = {
       ["filterItemQuality"] = 3,
     },
   },
+
+  spells = {
+    merge = {
+    -- priest 
+      [47666]  = CreateMergeSpellEntry(true),      -- Penance (Damage Effect)
+      [15237]  = CreateMergeSpellEntry(true, .5),  -- Holy Nova (Damage Effect)                  (INSTANT)
+      [589]    = CreateMergeSpellEntry(true),      -- Shadow Word: Pain
+      [34914]  = CreateMergeSpellEntry(true),      -- Vampiric Touch
+      [2944]   = CreateMergeSpellEntry(true),      -- Devouring Plague
+      [63675]  = CreateMergeSpellEntry(true),      -- Improved Devouring Plague
+      [15407]  = CreateMergeSpellEntry(true),      -- Mind Flay
+      [49821]  = CreateMergeSpellEntry(true, 5),   -- Mind Seer (From Derap: first one is the cast)
+      [124469] = CreateMergeSpellEntry(true),      -- Mind Seer (the second one is the debuff that is applied to your target which lets you clip your mind sears like mind flay)
+      [87532]  = CreateMergeSpellEntry(true),      -- Shadowy Apparition
+      [14914]  = CreateMergeSpellEntry(true),      -- Holy Fire
+      
+    -- hunter
+      [2643]   = CreateMergeSpellEntry(true, .5),  -- Multi-Shot                                 (INSTANT)
+      [83077]  = CreateMergeSpellEntry(true, .5),  -- Serpent Sting (Instant Serpent Spread)     (INSTANT)
+      [118253] = CreateMergeSpellEntry(true),      -- Serpent Sting (Tick)
+      [13812]  = CreateMergeSpellEntry(true),      -- Explosive Trap
+      [53301]  = CreateMergeSpellEntry(true),      -- Explosive Shot (3 ticks merged as one)
+      [63468]  = CreateMergeSpellEntry(true),      -- Piercing Shots
+      
+      
+    -- spammy items (old)
+      [109858] = CreateMergeSpellEntry(true, 2.5), -- Speaking of Rage - proc'd by: Vishanka, Jaws of the Earth (Heroic)
+    },
+  
+  },
 }
+
+local merge_default = {
+  enabled  = false, 
+  interval = 3,
+}
+
+local merge_mt = {
+  __index = function(index)
+    return merge_default
+  end,
+}
+
+setmetatable(addon.DefaultProfile.spells.merge, merge_mt)
