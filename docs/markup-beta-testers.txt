@@ -14,7 +14,7 @@ I appreciate your help in getting my add-on out to the public. I am writing this
 
 
 <blockquote class="Overlord"><center>PLEASE TAKE NOTE:</center>
-<b>Confirmed features not in current version:</b> xCTplus_beta_1.zip
+<b>Confirmed features not in current version:</b> xCTplus_3_beta_1.zip
 <ul><li>Healing Spell Filter</li>
 <li>Spam Merger</li>
 <li>Combo Points (Rogues, and other classes)</li>
