@@ -56,3 +56,23 @@ CombatText:SetScript("OnUpdate", nil)
 
 -- Direction does NOT work with xCT+ at all
 InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
+
+
+-- Create a button to delete profiles
+if not xCTCombatTextConfigButton then
+  CreateFrame("Button", "xCTCombatTextConfigButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate")
+end
+
+xCTCombatTextConfigButton:ClearAllPoints()
+xCTCombatTextConfigButton:SetPoint("TOPLEFT", 400, -90)
+xCTCombatTextConfigButton:SetSize(180, 26)
+xCTCombatTextConfigButton:SetText("Show more xCT+ Options")
+xCTCombatTextConfigButton:Show()
+xCTCombatTextConfigButton:SetScript("OnClick", function(self)
+  --if not x.configuring then
+    InterfaceOptionsFrameOkay:Click()
+    LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
+  --end
+end)
+
+

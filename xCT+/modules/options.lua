@@ -71,7 +71,7 @@ addon.options.args["spells"] = {
     spamDesc = {
       type = 'description',
       order = 1,
-      name = "The spam merger is used to combine certain spells together, so that output of your frames is limited to a minimum. Common spells that are combined, include |cff71d5ff|Hspell:42231|h[Hurricane]|h|r, |cff71d5ff|Hspell:85222|h[Light of Dawn]|h|r, |cff71d5ff|Hspell:596|h[Prayer of Healing]|h|r, |cff71d5ff|Hspell:2643|h[Multi-Shot]|h|4r"
+      name = "The spam merger is used to combine certain spells together, so that output of your frames is limited to a minimum. Common spells that are combined, include |cff71d5ff|Hspell:42231|h[Hurricane]|h|r, |cff71d5ff|Hspell:85222|h[Light of Dawn]|h|r, |cff71d5ff|Hspell:596|h[Prayer of Healing]|h|r, |cff71d5ff|Hspell:2643|h[Multi-Shot]|h|4r, and many, many more!"
     },
     
     enableMerger = {
@@ -106,7 +106,7 @@ addon.options.args["Credits"] = {
     specialThanksList = {
       type = 'description',
       order = 2,
-      name = "  Tukz, Elv, Affli, BuG",
+      name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, Nidra, gnangnan, NitZo, Naughtia",
     },
     
     testerTitleSpace = {
@@ -124,7 +124,7 @@ addon.options.args["Credits"] = {
     userName1 = {
       type = 'description',
       order = 5,
-      name = "  "..UnitName("player"),
+      name = "  Alex, BuG, Kkthnxbye, Azilroka, Prizma, schmeebs, Pat, hgwells, JaronofdroW, Fitzbattleaxe",
     },
   },
 }

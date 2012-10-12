@@ -474,7 +474,7 @@ x.outgoing_events = {
         -- TODO: Add Healing Filter
         
         -- Check for merge
-        if x.db.profile.spells.merge[spellID] then
+        if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
           return
         end
@@ -503,7 +503,7 @@ x.outgoing_events = {
         -- TODO: Add Healing Filter
         
         -- Check for merge
-        if x.db.profile.spells.merge[spellID] then
+        if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
           return
         end
@@ -603,7 +603,7 @@ x.outgoing_events = {
         end
         
         -- Check for merge
-        if x.db.profile.spells.merge[spellID] then
+        if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
           return
         end
@@ -636,7 +636,7 @@ x.outgoing_events = {
         end
         
         -- Check for merge
-        if x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+        if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
           return
         end
