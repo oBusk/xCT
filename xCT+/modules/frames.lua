@@ -254,6 +254,51 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
 end
 
 do
+--[================================================================[
+             _____ _______                           ____  
+            / ____|__   __|                         |___ \ 
+      __  _| |       | |_| |_      __   _____ _ __    __) |
+      \ \/ / |       | |_   _|     \ \ / / _ \ '__|  |__ < 
+       >  <| |____   | | |_|        \ V /  __/ |_    ___) |
+      /_/\_\\_____|  |_|             \_/ \___|_(_)  |____/ 
+
+   ___ _ __   __ _ _ __ ___    _ __ ___   ___ _ __ __ _  ___ _ __ 
+  / __| '_ \ / _` | '_ ` _ \  | '_ ` _ \ / _ \ '__/ _` |/ _ \ '__|
+  \__ \ |_) | (_| | | | | | | | | | | | |  __/ | | (_| |  __/ |   
+  |___/ .__/ \__,_|_| |_| |_| |_| |_| |_|\___|_|  \__, |\___|_|   
+      | |                                          __/ |          
+      |_|                                         |___/           
+
+  This is the new spam merger.  Here is how it works:
+  
+  -- On Each Update
+    + Go to the current frame (one frame at a time)
+    
+      - Go to the current spell entry for this frame
+        + if spell entry says its time to update, then update
+        + else do nothing
+        
+      - Get the next spell entry ready for the next time it hits this frame
+      
+    + Get the next frame ready for the next update
+    
+    + Wait for next Update
+  
+      As you can see, I only update one frame per OnUpdate AND only
+    one merge entry gets updated for every frame.  Which means, I will
+    do a maximum of one thing per OnUpdate (and a minimum of nothing).
+    I am hoping that the spell merger will be mostly invisible.
+    
+    
+   -- TODO:  The only thing that I need to figure out is: is the spell
+    merger updating fast enough, or will it feel slugish when there are
+    a lot of items to merge.
+    
+      My best guess is that it does not matter :)
+  
+  ]================================================================]
+
+
   for _, frameName in pairs(frameIndex) do
     spamHeap[frameName] = {}
     spamStack[frameName] = {}
@@ -264,38 +309,58 @@ do
   local now = 0
   
   local function OnSpamUpdate(self, elapsed)
+    -- Update 'now'
     now = now + elapsed
     
     -- Check to see if we are out of bounds
     if index > #frameIndex then index = 1 end
+    if not frames[frameIndex[index]] then
+      frames[frameIndex[index]] = 1
+    end
     
-    if not frames[frameIndex[index]] then frames[frameIndex[index]] = 1 end
+    local heap, stack, settings, idIndex =
+      spamHeap[frameIndex[index]],              -- the heap contains merge entries
+      spamStack[frameIndex[index]],             -- the stack contains lookup values
+      x.db.profile.frames[frameIndex[index]],   -- this frame's settings
+      frames[frameIndex[index]]                 -- this frame's last entry index
+      
+    -- If the frame is not enabled, then dont even worry about it
+    if not settings.enabledFrame then
+      return
+    end
     
-    local heap, stack, settings, idIndex = spamHeap[frameIndex[index]], spamStack[frameIndex[index]], x.db.profile.frames[frameIndex[index]], frames[frameIndex[index]]
+    -- Check to see if we are out of bounds
+    if idIndex > #stack then
+      idIndex = 1
+    end
     
-    if not settings.enabledFrame then return end
-    
-    if idIndex > #stack then idIndex = 1 end
-    
+    -- This item contains a lot of information about what we need to merge
     local item = heap[stack[idIndex]]
     
     --if item then print(item.last, "+", item.update, "<", now) end
     if item and item.last + item.update <= now and #item.entries > 0 then
       item.last = now
       
+      -- Add up all the entries
       local total = 0
       for _, amount in pairs(item.entries) do
         total = total + amount  -- Add all the amounts
       end
       
+      -- String total
       local message = tostring(total) 
-      
+
+      -- Add merge count
       if #item.entries > 1 then message = message .. " |cffFFFFFFx" .. #item.entries .. "|r" end
       
-      message = message .. x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize)
-
+      -- Add Icons
+      if settings.iconsEnabled then
+        message = message .. x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize)
+      end
+    
       x:AddMessage(frameIndex[index], message, item.color)
       
+      -- Clear all the old entries, we dont need them anymore
       for k in pairs(item.entries) do
         item.entries[k] = nil
       end
