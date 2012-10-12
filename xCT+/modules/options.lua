@@ -42,26 +42,54 @@ addon.options = {
       name = "Restore Defaults",
       func = X.RestoreAllDefaults,
     },
-    ToggleFrames = {
-      order = 4,
-      type = 'execute',
-      name = "Toggle Frames",
-      func = X.ToggleConfigMode,
-    },
     ToggleTestMode = {
       order = 4,
       type = 'execute',
       name = "Toggle Test Mode",
       func = X.ToggleTestMode,
     },
+    ToggleFrames = {
+      order = 5,
+      type = 'execute',
+      name = "Toggle Frames",
+      func = X.ToggleConfigMode,
+    },
+  },
+}
+
+addon.options.args["spells"] = {
+  name = "Spam Merger",
+  type = 'group',
+  order = 2,
+  args = {
+    title = {
+      type = "header",
+      order = 0,
+      name = "Spam Settings",
+    },
+    
+    spamDesc = {
+      type = 'description',
+      order = 1,
+      name = "The spam merger is used to combine certain spells together, so that output of your frames is limited to a minimum. Common spells that are combined, include |cff71d5ff|Hspell:42231|h[Hurricane]|h|r, |cff71d5ff|Hspell:85222|h[Light of Dawn]|h|r, |cff71d5ff|Hspell:596|h[Prayer of Healing]|h|r, |cff71d5ff|Hspell:2643|h[Multi-Shot]|h|4r"
+    },
+    
+    enableMerger = {
+      order = 2,
+      type = 'toggle',
+      name = "Enable Merger",
+      get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
+      set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
+    },
     
   },
 }
 
+
 addon.options.args["Credits"] = {
   name = "Credits",
   type = 'group',
-  order = 2,
+  order = 3,
   args = {
     title = {
       type = "header",
