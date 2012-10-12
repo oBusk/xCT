@@ -29,6 +29,8 @@ local function CreateMergeSpellEntry(enabled, interval,  prep)
 end
 
 addon.DefaultProfile = {
+  showStartupText = true,
+
   frames = {
     general = {
       ["enabledFrame"] = true,
@@ -300,7 +302,8 @@ addon.DefaultProfile = {
 
   spells = {
     enableMerger = true,    -- enable/disable spam merger
-  
+    enableMergerDebug = false, -- Shows spell IDs for debugging merged spells
+    
     merge = {
     -- death knight
       [55095]  = CreateMergeSpellEntry(true),      -- Frost Fever

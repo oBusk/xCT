@@ -17,6 +17,8 @@ local X = addon.engine
 local blankTable, unpack, select = {}, unpack, select
 local string_gsub = string.gsub
 
+local NEW = "\124TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:-1\124t"
+
 -- Creating an Config
 addon.options = {
   name = "xCT+ - Configuration Tool",
@@ -29,12 +31,12 @@ addon.options = {
       name = "Version: "..(GetAddOnMetadata("xCT+", "Version") or "Unknown"),
       width = "full",
     },
-    Enable_xCT = {
+    showStartupText = {
       order = 2,
       type = 'toggle',
-      name = "Enable xCT+",
-      get = function(info) return true end,
-      set = function(info, value) end,
+      name = "Startup Message",
+      get = function(info) return X.db.profile.showStartupText end,
+      set = function(info, value) X.db.profile.showStartupText = value end,
     },  
     RestoreDefaults = {
       order = 3,
@@ -58,7 +60,7 @@ addon.options = {
 }
 
 addon.options.args["spells"] = {
-  name = "Spam Merger",
+  name = "Spam Merger" .. NEW,
   type = 'group',
   order = 2,
   args = {
@@ -71,7 +73,7 @@ addon.options.args["spells"] = {
     spamDesc = {
       type = 'description',
       order = 1,
-      name = "The spam merger is used to combine certain spells together, so that output of your frames is limited to a minimum. Common spells that are combined, include |cff71d5ff|Hspell:42231|h[Hurricane]|h|r, |cff71d5ff|Hspell:85222|h[Light of Dawn]|h|r, |cff71d5ff|Hspell:596|h[Prayer of Healing]|h|r, |cff71d5ff|Hspell:2643|h[Multi-Shot]|h|4r, and many, many more!"
+      name = "The spam merger is used to combine certain spells together, so that output of your frames is limited to a minimum. Common spells that are merged include: |cff71d5ff|Hspell:42231|h[Hurricane]|h|r, |cff71d5ff|Hspell:85222|h[Light of Dawn]|h|r, |cff71d5ff|Hspell:596|h[Prayer of Healing]|h|r, |cff71d5ff|Hspell:2643|h[Multi-Shot]|h|4r, and many, many more!"
     },
     
     enableMerger = {
@@ -82,12 +84,38 @@ addon.options.args["spells"] = {
       set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
     },
     
+    enableMergerDebug = {
+      order = 3,
+      type = 'toggle',
+      name = "Show Spell IDs |cffFF0000(DEBUG)|r",
+      get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
+      set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
+    },
+    
+    spellList = {
+      name = "List of Merge Spells",
+      type = 'group',
+      guiInline = true,
+      order = 4,
+      args = {
+        listTitle = {
+          type = "header",
+          order = 0,
+          name = "UNDER CONSTRUCTION",
+        },
+        listDescription = {
+          type = "description",
+          order = 1,
+          name = "In a future update, you will be able to add and remove spells to merge!",
+        },
+      }
+    }
   },
 }
 
 
 addon.options.args["Credits"] = {
-  name = "Credits",
+  name = "Credits" .. NEW,
   type = 'group',
   order = 3,
   args = {
@@ -109,7 +137,7 @@ addon.options.args["Credits"] = {
       name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, Nidra, gnangnan, NitZo, Naughtia",
     },
     
-    testerTitleSpace = {
+    testerTitleSpace1 = {
       type = 'description',
       order = 3,
       name = " ",
@@ -118,13 +146,25 @@ addon.options.args["Credits"] = {
     testerTitle = {
       type = 'description',
       order = 4,
-      name = "|cffFFFF00Testers|r",
+      name = "|cffFFFF00Testers|r (Blame them if something breaks!)",
     },
     
     userName1 = {
       type = 'description',
       order = 5,
-      name = "  Alex, BuG, Kkthnxbye, Azilroka, Prizma, schmeebs, Pat, hgwells, JaronofdroW, Fitzbattleaxe",
+      name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF JaronofdroW|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r",
+    },
+    
+    testerTitleSpace2 = {
+      type = 'description',
+      order = 6,
+      name = " ",
+    },
+    
+    betaTestersOnly = {
+      type = 'description',
+      order = 7,
+      name = "If your name is not in the list above, send me (|cffFF8000Dandruff|r) a PM on tukui.org and I will add you :)",
     },
   },
 }

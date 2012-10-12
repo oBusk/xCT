@@ -15,7 +15,7 @@
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
-local sgsub, pairs, type = string.gsub, pairs, type
+local sgsub, pairs, type, string_format = string.gsub, pairs, type, string.format
 xCT_Plus = addon.engine
 local X = xCT_Plus
 
@@ -64,6 +64,30 @@ function X:OnInitialize()
   X:UpdatePlayer()
   X:UpdateFrames()
   X:UpdateCombatTextEvents(true)
+  X:UpdateSpamSpells()
+  
+  if self.db.profile.showStartupText == nil then
+    self.db.profile.showStartupText = addon.DefaultProfile.showStartupText
+  end
+  
+  if self.db.profile.showStartupText then
+    print("Loaded |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r. To configure, type: |cffFF0000/xct|r")
+  end
+  
+end
+
+function X:UpdateSpamSpells()
+  local spells = addon.options.args.spells.args.spellList.args
+  for spellID in pairs(self.db.profile.spells.merge) do
+    spells[tostring(spellID)] = {
+      order = 3,
+      type = 'toggle',
+      name = GetSpellInfo(spellID),
+      desc = "|cffFF0000ID|r " .. spellID,
+      get = function(info) return self.db.profile.spells.merge[tonumber(info[#info])].enabled end,
+      set = function(info, value) self.db.profile.spells.merge[tonumber(info[#info])].enabled = value end,
+    }
+  end
 end
 
 -- Unused for now

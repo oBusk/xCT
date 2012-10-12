@@ -204,7 +204,12 @@ function x:GetSpellTextureFormatted(spellID, iconSize)
       message = " \124T"..x.BLANK_ICON..":"..iconSize..":"..iconSize..":0:0:64:64:5:59:5:59\124t"
     end
   end
-  return message -- .. "[" .. spellID .. "]"
+  
+  if x.db.profile.spells.enableMergerDebug then
+    message = message .. " |cffFFFFFF[|cffFF0000ID:|r|cffFFFF00" .. spellID .. "|r]|r"
+  end
+  
+  return message
 end
 
 -- event handlers for combat text events
