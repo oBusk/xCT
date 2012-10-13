@@ -34,7 +34,7 @@ addon.options = {
     showStartupText = {
       order = 2,
       type = 'toggle',
-      name = "Startup Message",
+      name = "Startup Message" .. NEW,
       get = function(info) return X.db.profile.showStartupText end,
       set = function(info, value) X.db.profile.showStartupText = value end,
     },  
@@ -75,9 +75,13 @@ addon.options.args["spells"] = {
       order = 1,
       name = "The spam merger is used to combine certain spells together, so that output of your frames is limited to a minimum. Common spells that are merged include: |cff71d5ff|Hspell:42231|h[Hurricane]|h|r, |cff71d5ff|Hspell:85222|h[Light of Dawn]|h|r, |cff71d5ff|Hspell:596|h[Prayer of Healing]|h|r, |cff71d5ff|Hspell:2643|h[Multi-Shot]|h|4r, and many, many more!"
     },
-    
-    enableMerger = {
+    listSpacer0 = {
+      type = "description",
       order = 2,
+      name = " ",
+    },
+    enableMerger = {
+      order = 3,
       type = 'toggle',
       name = "Enable Merger",
       get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
@@ -85,28 +89,50 @@ addon.options.args["spells"] = {
     },
     
     enableMergerDebug = {
-      order = 3,
+      order = 4,
       type = 'toggle',
       name = "Show Spell IDs |cffFF0000(DEBUG)|r",
       get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
       set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
+      width = "full",
     },
-    
+    listSpacer1 = {
+      type = "description",
+      order = 5,
+      name = " ",
+    },
+    listTitle = {
+      type = "description",
+      order = 6,
+      name = "|cffFFFF00>>> UNDER CONSTRUCTION <<<|r",
+      width = "full",
+    },
+    listDescription = {
+      type = "description",
+      order = 7,
+      name = "In a future update, you will be able to add and remove spells to merge!",
+    },
+    listSpacer2 = {
+      type = "description",
+      order = 8,
+      name = " ",
+    },
+    listSpacer3 = {
+      type = "description",
+      order = 8,
+      name = " ",
+    },
     spellList = {
       name = "List of Merge Spells",
       type = 'group',
       guiInline = true,
-      order = 4,
+      order = 9,
       args = {
-        listTitle = {
-          type = "header",
-          order = 0,
-          name = "UNDER CONSTRUCTION",
-        },
-        listDescription = {
+        
+        mergeListDesc = {
           type = "description",
           order = 1,
-          name = "In a future update, you will be able to add and remove spells to merge!",
+          name = "Uncheck a spell if you do not want it merged.",
         },
       }
     }
@@ -146,13 +172,13 @@ addon.options.args["Credits"] = {
     testerTitle = {
       type = 'description',
       order = 4,
-      name = "|cffFFFF00Testers|r (Blame them if something breaks!)",
+      name = "|cffFFFF00Beta Testers|r  (Blame them if something breaks!)",
     },
     
     userName1 = {
       type = 'description',
       order = 5,
-      name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF JaronofdroW|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r",
+      name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF JaronofdroW|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r,|cffAAAAFF Schaduw|r",
     },
     
     testerTitleSpace2 = {

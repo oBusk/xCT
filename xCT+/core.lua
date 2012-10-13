@@ -78,15 +78,17 @@ end
 
 function X:UpdateSpamSpells()
   local spells = addon.options.args.spells.args.spellList.args
-  for spellID in pairs(self.db.profile.spells.merge) do
-    spells[tostring(spellID)] = {
-      order = 3,
-      type = 'toggle',
-      name = GetSpellInfo(spellID),
-      desc = "|cffFF0000ID|r " .. spellID,
-      get = function(info) return self.db.profile.spells.merge[tonumber(info[#info])].enabled end,
-      set = function(info, value) self.db.profile.spells.merge[tonumber(info[#info])].enabled = value end,
-    }
+  for spellID, entry in pairs(self.db.profile.spells.merge) do
+    if entry.class == X.player.class then
+      spells[tostring(spellID)] = {
+        order = 3,
+        type = 'toggle',
+        name = GetSpellInfo(spellID),
+        desc = "|cffFF0000ID|r " .. spellID,
+        get = function(info) return self.db.profile.spells.merge[tonumber(info[#info])].enabled end,
+        set = function(info, value) self.db.profile.spells.merge[tonumber(info[#info])].enabled = value end,
+      }
+    end
   end
 end
 

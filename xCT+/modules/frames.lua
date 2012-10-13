@@ -53,6 +53,19 @@ local frameTitles = {
   ["loot"]      = LOOT,
 }
 
+local function autoClearFrame_OnUpdate(self, elasped)
+  if not self.last then self.last = 0 end
+  self.last = self.last + elasped
+  
+  if self.last > 4 then
+    x:Clear(self.name)
+    self:UnregisterEvent("OnUpdate")
+    self:SetScript("OnUpdate", nil)
+    self.f.timer = nil
+  end
+end
+
+
 -- =====================================================
 -- AddOn:UpdateFrames(
 --    specificFrame,  [string] - (Optional) the framename
@@ -136,6 +149,16 @@ function x:UpdateFrames(specificFrame)
         f:SetScript("OnUpdate", function(self, e)
           if self.frameName == "class" then
             x:AddMessage(self.frameName, "0", self.settings.fontColor or {1,1,0})
+            
+            if not self.timer then
+              self.timer = CreateFrame("FRAME")
+              self.timer.name = self.frameName
+              self.timer.f = self
+              self.timer:RegisterEvent("OnUpdate")
+              self.timer:SetScript("OnUpdate", autoClearFrame_OnUpdate)
+            else
+              self.timer.last = 0
+            end
           else
             x:AddMessage(self.frameName, self.frameName.." test message", self.settings.fontColor or {1,1,1})
           end
