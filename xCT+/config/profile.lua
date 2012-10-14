@@ -399,8 +399,12 @@ addon.DefaultProfile = {
     
     -- rogue
       [51723]  = CreateMergeSpellEntry("ROGUE", true, .5),        -- Fan of Knives                              (INSTANT)
-      [2818]   = CreateMergeSpellEntry("ROGUE", true),            -- Deadly Poison
+      [113780] = CreateMergeSpellEntry("ROGUE", true, .5),        -- Deadly Poison                              (INSTANT)
+      [2818]   = CreateMergeSpellEntry("ROGUE", true),            -- Deadly Poison (DOT)
       [8680]   = CreateMergeSpellEntry("ROGUE", true),            -- Wound Poison
+      [112974] = CreateMergeSpellEntry("ROGUE", true),            -- Leeching Poison
+      [121411] = CreateMergeSpellEntry("ROGUE", true, .5),        -- Crimson Tempest                            (INSTANT)
+      [122233] = CreateMergeSpellEntry("ROGUE", true),            -- Crimson Tempest (DOT)
       
     -- shaman (damage)
       [421]    = CreateMergeSpellEntry("SHAMAN", true, .5),       -- Chain Lightning                            (INSTANT)
