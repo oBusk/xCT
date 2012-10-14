@@ -17,7 +17,8 @@ local X = addon.engine
 local blankTable, unpack, select = {}, unpack, select
 local string_gsub = string.gsub
 
-local NEW = "\124TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:-1\124t"
+-- New Icon "!"
+local NEW = X.new
 
 -- Creating an Config
 addon.options = {
@@ -138,7 +139,6 @@ addon.options.args["spells"] = {
     }
   },
 }
-
 
 addon.options.args["Credits"] = {
   name = "Credits" .. NEW,
@@ -1869,4 +1869,3 @@ addon.options.args["Frames"] = {
   },
 }
 
--- addon.options.args["Profiles"] <-- Set in core.lua

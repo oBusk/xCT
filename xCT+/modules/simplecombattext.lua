@@ -406,7 +406,11 @@ x.events = {
   ["CHAT_MSG_LOOT"] = function(msg)
     --format_loot
     local pM,iQ,iI,iN,iA = select(3, string.find(msg, format_loot))   -- Pre-Message, ItemColor, ItemID, ItemName, ItemAmount
-    local qq,_,_,tt,_,_,_,ic = select(3, GetItemInfo(iI))             -- Item Quality, See "GetAuctionItemClasses()", Item Icon Texture Location
+    local qq,_,_,tt,st,_,_,ic = select(3, GetItemInfo(iI))             -- Item Quality, See "GetAuctionItemClasses()", Item Icon Texture Location
+    
+    -- Item filter
+    if x.db.profile.spells.items[tt] and x.db.profile.spells.items[tt][st] == false then return end
+    
     local item       = { }
         item.name    = iN
         item.id      = iI

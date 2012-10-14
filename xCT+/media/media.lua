@@ -17,6 +17,7 @@ local ADDON_NAME, addon = ...
 -- Textures
 local x = addon.engine
 x.BLANK_ICON = "Interface\\AddOns\\" .. ADDON_NAME .. "\\media\\blank"
+x.new = "\124TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:0:0:0:-1\124t"
 
 -- Fonts
 local LSM = LibStub("LibSharedMedia-3.0")

@@ -332,6 +332,8 @@ do
   local now = 0
   
   local function OnSpamUpdate(self, elapsed)
+    if not x.db then return end
+  
     -- Update 'now'
     now = now + elapsed
     

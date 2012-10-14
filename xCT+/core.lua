@@ -15,7 +15,7 @@
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
-local sgsub, pairs, type, string_format = string.gsub, pairs, type, string.format
+local sgsub, pairs, type, string_format, table_insert = string.gsub, pairs, type, string.format, table.insert
 xCT_Plus = addon.engine
 local X = xCT_Plus
 
@@ -65,6 +65,7 @@ function X:OnInitialize()
   X:UpdateFrames()
   X:UpdateCombatTextEvents(true)
   X:UpdateSpamSpells()
+  X:UpdateItemTypes()
   
   if self.db.profile.showStartupText == nil then
     self.db.profile.showStartupText = addon.DefaultProfile.showStartupText
@@ -90,6 +91,98 @@ function X:UpdateSpamSpells()
       }
     end
   end
+end
+
+function X:UpdateItemTypes()
+	local itemTypes = { GetAuctionItemClasses() }
+  
+  local allTypes = {
+    order = 100,
+    name = "Filter Item Types" .. X.new,
+    type = 'group',
+    childGroups = "select",
+    args = { },
+  }
+  
+	for i, itype in ipairs(itemTypes) do
+    local subtypes = { GetAuctionItemSubClasses(i) }
+		local group = {
+      order = i,
+      name = itype,
+      type = 'group',
+      args = { },
+    }
+    
+    if self.db.profile.spells.items[itype] == nil then
+      self.db.profile.spells.items[itype] = { }
+    end
+    
+    if #subtypes > 0 then
+      group.args['enableHeader'] = {
+        order = 100,
+        type = 'header',
+        name = "",
+        width = "full",
+      }
+      
+      group.args['disableAll'] = {
+        order = 101,
+        type = 'execute',
+        name = "|cffDDDD00Enable All|r",
+        width = "half",
+        func = function()
+            for key in pairs(self.db.profile.spells.items[itype]) do
+              self.db.profile.spells.items[itype][key] = true
+            end
+          end,
+      }
+      
+      group.args['enableAll'] = {
+        order = 102,
+        type = 'execute',
+        name = "|cffDD0000Disable All|r",
+        width = "half",
+        func = function()
+            for key in pairs(self.db.profile.spells.items[itype]) do
+              self.db.profile.spells.items[itype][key] = false
+            end
+          end,
+      }
+    else
+    
+      -- Quest Items... maybe others
+      if self.db.profile.spells.items[itype][itype] == nil then
+        self.db.profile.spells.items[itype][itype] = true
+      end
+      
+      group.args[itype] = {
+        order = j,
+        type = 'toggle',
+        name = "Enable",
+        get = function(info) return self.db.profile.spells.items[itype][itype] end,
+        set = function(info, value) self.db.profile.spells.items[itype][itype] = value end, 
+      }
+      
+    end
+    
+		for j, subtype in ipairs(subtypes) do
+      if self.db.profile.spells.items[itype][subtype] == nil then
+        self.db.profile.spells.items[itype][subtype] = true
+      end
+      group.args[subtype] = {
+        order = j,
+        type = 'toggle',
+        name = subtype,
+        get = function(info) return self.db.profile.spells.items[itype][subtype] end,
+        set = function(info, value) self.db.profile.spells.items[itype][subtype] = value end, 
+      }
+		end
+    
+    allTypes.args[itype] = group
+	end
+  
+  
+  addon.options.args["Frames"].args["loot"].args["typeFilter"] = allTypes
 end
 
 -- Unused for now
