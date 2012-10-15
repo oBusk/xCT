@@ -135,8 +135,10 @@ addon.options.args["spells"] = {
           order = 1,
           name = "Uncheck a spell if you do not want it merged.",
         },
-      }
-    }
+        
+      },
+    },
+    
   },
 }
 

@@ -452,9 +452,7 @@ addon.DefaultProfile = {
       [109858] = CreateMergeSpellEntry("ITEM", true, 2.5),        -- Speaking of Rage - proc'd by: Vishanka, Jaws of the Earth (Heroic)
     },
   
-    items = {
-    
-    },
+    items = { },
   
   },
 }
