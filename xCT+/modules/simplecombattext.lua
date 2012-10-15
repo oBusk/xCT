@@ -93,9 +93,13 @@ function x:UpdateCombatTextEvents(enable)
     f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     
     -- Class combo points
+    f:RegisterEvent("UNIT_POWER") -- monk
     f:RegisterEvent("UNIT_AURA")
     f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
     f:RegisterEvent("UNIT_COMBO_POINTS")
+    f:RegisterEvent("PLAYER_TARGET_CHANGED")
+    
+    
     
     x.combatEvents = f
     
@@ -115,6 +119,8 @@ local function ShowReactives() return COMBAT_TEXT_SHOW_REACTIVES == "1" end
 local function ShowLowResources() return COMBAT_TEXT_SHOW_LOW_HEALTH_MANA == "1" end
 local function ShowCombatState() return COMBAT_TEXT_SHOW_COMBAT_STATE == "1" end
 local function ShowFriendlyNames() return COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" end
+local function ShowComboPoints() return x.player.class == "ROGUE" and COMBAT_TEXT_SHOW_COMBO_POINTS == "1" end
+local function ShowMonkComboPoints() return x.player.class == "MONK" end
 local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg end
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
@@ -210,6 +216,35 @@ function x:GetSpellTextureFormatted(spellID, iconSize)
   end
   
   return message
+end
+
+
+-- =====================================================
+-- Combo Points
+-- =====================================================
+local function UpdateRogueComboPoints()
+  if ShowComboPoints() then
+    local comboPoints, outputColor = GetComboPoints(x.player.unit, "target"), "combo_points"
+    if comboPoints == MAX_COMBO_POINTS then outputColor = "combo_points_max" end
+    if comboPoints > 0 then
+      x.cpUpdated = true
+      x:AddMessage("class", comboPoints, outputColor)
+    elseif x.cpUpdated then
+      x.cpUpdated = false
+      x:AddMessage("class", " ", outputColor)
+    end
+  end
+end
+
+local function UpdateMonkComboPoints(unit, powertype)
+  if ShowMonkComboPoints() and unit == x.player.unit and powertype == "LIGHT_FORCE" then
+    local currentPower = UnitPower(x.player.unit, SPELL_POWER_LIGHT_FORCE)
+    if currentPower == 0 then
+      x:AddMessage("class", " ", "combo_points")
+    else
+      x:AddMessage("class", currentPower, "combo_points")
+    end
+  end
 end
 
 -- event handlers for combat text events
@@ -396,8 +431,16 @@ x.events = {
   ["PLAYER_REGEN_ENABLED"] = function() if ShowCombatState() then x:AddMessage("general", sformat(format_fade, LEAVING_COMBAT), "combat_end") end end,
   ["PLAYER_REGEN_DISABLED"] = function() if ShowCombatState() then x:AddMessage("general", sformat(format_gain, ENTERING_COMBAT), "combat_begin") end end,
   
-  -- TODO: Finish Combo Points and Runes
-  ["UNIT_COMBO_POINTS"] = function() end,
+  ["UNIT_POWER"] = function(unit, powerType) UpdateMonkComboPoints(unit, powerType) end,
+  
+  ["UNIT_COMBO_POINTS"] = function() UpdateRogueComboPoints() end,
+  ["PLAYER_TARGET_CHANGED"] = function() UpdateRogueComboPoints() end,
+  
+  ["UNIT_AURA"] = function(unit) end,
+  
+  
+  
+  -- TODO: Finish Runes
   ["RUNE_POWER_UPDATE"] = function() end,
   ["UNIT_ENTERED_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["UNIT_EXITING_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,

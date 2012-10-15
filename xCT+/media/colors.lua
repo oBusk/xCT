@@ -49,7 +49,10 @@ x.colors = {
   dispell_debuff = {1,0,.5},
   spell_interrupt = {1,.5,0},
   spell_stolen = {.9,0,.9},
-  party_kill={.2,1,.2},
+  party_kill = {.2,1,.2},
+  
+  combo_points = {1,.82,0},
+  combo_points_max = {0,.82,1},
 }
 
 x.damagecolor = {
