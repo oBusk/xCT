@@ -403,7 +403,7 @@ end
 
 
 -- Starts the "config mode" so that you can move the frames
-local function StartConfigMode()
+function x.StartConfigMode()
   x.configuring = true
 
   for framename, settings in pairs(x.db.profile.frames) do
@@ -464,7 +464,7 @@ local function StartConfigMode()
   end
 end
 
-local function EndConfigMode()
+function x.EndConfigMode()
   x.configuring = false
   
   for framename, settings in pairs(x.db.profile.frames) do
@@ -508,7 +508,7 @@ function x.ToggleConfigMode()
     StaticPopup_Show("XCT_PLUS_CONFIGURING")
     
     
-    StartConfigMode()
+    x.StartConfigMode()
   end
 end
 
@@ -653,8 +653,8 @@ StaticPopupDialogs["XCT_PLUS_CONFIGURING"] = {
   
   button1       = SAVE_CHANGES,
   button2       = CANCEL,
-  OnAccept      = function() x:SaveAllFrames(); EndConfigMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
-  OnCancel      = function() x:UpdateFrames(); EndConfigMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
+  OnAccept      = function() x:SaveAllFrames(); x.EndConfigMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
+  OnCancel      = function() x:UpdateFrames(); x.EndConfigMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
   hideOnEscape  = false,
   
   -- Taint work around

@@ -20,6 +20,7 @@ xCT_Plus = addon.engine
 local X = xCT_Plus
 
 -- =====================================================
+-- Invisible Table Copy Functio, by me :)
 -- inv_tcopy(
 --    t1,  [table] - Check this table (edited)
 --    t2,  [table] - against this table (NOT edited)
@@ -32,7 +33,7 @@ local function inv_tcopy(t1, t2)
   for k, v in pairs(t2) do
     if t1[k] == nil then -- found new key
       t1[k] = t2[k]
-    elseif type(t1[k]) == "table" then
+    elseif type(t1[k]) == 'table' then
       inv_tcopy(t1[k], t2[k])
     end
   end
@@ -44,10 +45,14 @@ function X:OnInitialize()
     xCTSavedDB = { }
   end
 
-  self.db = LibStub("AceDB-3.0"):New("xCTSavedDB")
+  self.db = LibStub('AceDB-3.0'):New('xCTSavedDB')
+  self.db.RegisterCallback(self, 'OnProfileChanged', 'RefreshConfig')
+  self.db.RegisterCallback(self, 'OnProfileCopied', 'RefreshConfig')
+  self.db.RegisterCallback(self, 'OnProfileReset', 'RefreshConfig')
+  
   self.db:GetCurrentProfile()
   
-  addon.options.args["Profiles"] = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
+  addon.options.args['Profiles'] = LibStub('AceDBOptions-3.0'):GetOptionsTable(self.db)
   
   if not self.db.profile.frames then
     self.db.profile.frames = { }
@@ -77,6 +82,10 @@ function X:OnInitialize()
   
 end
 
+function X:RefreshConfig()
+  X:UpdateFrames()
+end
+
 function X:UpdateSpamSpells()
   local spells = addon.options.args.spells.args.spellList.args
   for spellID, entry in pairs(self.db.profile.spells.merge) do
@@ -93,6 +102,7 @@ function X:UpdateSpamSpells()
   end
 end
 
+-- Because of Localization, I have to dynamically create the lists
 function X:UpdateItemTypes()
 	local itemTypes = { GetAuctionItemClasses() }
   
@@ -190,19 +200,38 @@ function X:OnEnable() end
 function X:OnDisable() end
 
 -- This allows us to create our config dialog
-local AC = LibStub("AceConfig-3.0")
-local ACD = LibStub("AceConfigDialog-3.0")
-local ACR = LibStub("AceConfigRegistry-3.0")
+local AC = LibStub('AceConfig-3.0')
+local ACD = LibStub('AceConfigDialog-3.0')
+local ACR = LibStub('AceConfigRegistry-3.0')
 
 -- Register the Options
 ACD:SetDefaultSize(AddonName, 800, 550)
 AC:RegisterOptionsTable(AddonName, addon.options)
 
 -- Register Slash Commands
-X:RegisterChatCommand("xct", "OpenXCTCommand")
+X:RegisterChatCommand('xct', 'OpenXCTCommand')
 
 -- Process the slash command ('input' contains whatever follows the slash command)
 function X:OpenXCTCommand(input)
+  if string.lower(input):match('lock') then
+    if X.configuring then
+      print("|cffFF0000x|r|cffFFFF00CT+|r  Frames have been saved. Please fasten your seat belts.")
+      x.EndConfigMode()
+    else
+      print("|cffFF0000x|r|cffFFFF00CT+|r  You are now free to move about the cabin.")
+      x.StartConfigMode()
+    end
+    
+    -- return before you can do anything else
+    return
+  end
+  
+  if string.lower(input) == 'help' then
+      print("|cffFF0000x|r|cffFFFF00CT+|r  Commands:")
+      print("      |cffFF0000/xct lock|r - Locks and unlocks the frame movers.")
+  end
+  
+  -- Open/Close the config menu
   local mode = 'Close'
   if not ACD.OpenFrames[AddonName] then
     mode = 'Open'
