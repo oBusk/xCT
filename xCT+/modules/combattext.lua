@@ -37,7 +37,6 @@ x.player = {
 --  need inorder to correctly show combat text events.
 -- =====================================================
 function x:UpdatePlayer()
-
   -- Set the Player's Current Playing Unit
   if UnitHasVehicleUI("player") then
     x.player.unit = "vehicle"
@@ -50,8 +49,10 @@ function x:UpdatePlayer()
   x.player.name   = UnitName("player")
   x.player.class  = select(2, UnitClass("player"))
   x.player.guid   = UnitGUID("player")
-  x.player.spec   = GetSpecialization(false, false, GetActiveSpecGroup(false, false))
   
+  local activeTalentGroup = GetActiveSpecGroup(false, false)
+   x.player.spec = GetSpecialization(false, false, activeTalentGroup)
+
 end
 
 -- =====================================================
@@ -231,6 +232,8 @@ function x:GetSpellTextureFormatted(spellID, iconSize)
   
   return message
 end
+
+-- " \124T".."Interface\Icons\inv_gloves_mail_challengehunter_d_01"..":".."20"..":".."20"..":0:0:64:64:5:59:5:59\124t"
 
 
 -- =====================================================
@@ -478,11 +481,14 @@ x.events = {
   
   ["UNIT_AURA"] = function(unit) end,
 
+  
+  
   -- TODO: Finish Runes
   ["RUNE_POWER_UPDATE"] = function() end,
   ["UNIT_ENTERED_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["UNIT_EXITING_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
-  ["PLAYER_ENTERING_WORLD"] = function() x:UpdatePlayer() end,
+  ["PLAYER_ENTERING_WORLD"] = function() x:UpdatePlayer(); x:UpdateComboPointOptions() end,
+  ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); x:UpdateComboPointOptions(true) end,
   
   ["CHAT_MSG_LOOT"] = function(msg)
     --format_loot

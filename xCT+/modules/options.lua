@@ -35,7 +35,7 @@ addon.options = {
     showStartupText = {
       order = 2,
       type = 'toggle',
-      name = "Startup Message" .. NEW,
+      name = "Startup Message",
       get = function(info) return X.db.profile.showStartupText end,
       set = function(info, value) X.db.profile.showStartupText = value end,
     },  
@@ -61,7 +61,7 @@ addon.options = {
 }
 
 addon.options.args["spells"] = {
-  name = "Spam Merger" .. NEW,
+  name = "Spam Merger",
   type = 'group',
   order = 2,
   args = {
@@ -1200,7 +1200,7 @@ addon.options.args["Frames"] = {
     },
     
     class = {
-      name = "|cffFFFFFFClass Combo Points|r",
+      name = "|cffFFFFFFClass Combo Points|r" .. NEW,
       type = 'group',
       order = 16,
       args = {
@@ -1607,7 +1607,7 @@ addon.options.args["Frames"] = {
     },
     
     loot = {
-      name = "|cffFFFFFFLoot & Money|r",
+      name = "|cffFFFFFFLoot & Money|r" .. NEW,
       type = 'group',
       order = 19,
       args = {

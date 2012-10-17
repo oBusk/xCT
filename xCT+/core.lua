@@ -46,6 +46,7 @@ function X:OnInitialize()
   end
 
   self.db = LibStub('AceDB-3.0'):New('xCTSavedDB')
+  self.db:RegisterDefaults(addon.defaults)
   self.db.RegisterCallback(self, 'OnProfileChanged', 'RefreshConfig')
   self.db.RegisterCallback(self, 'OnProfileCopied', 'RefreshConfig')
   self.db.RegisterCallback(self, 'OnProfileReset', 'RefreshConfig')
@@ -54,7 +55,7 @@ function X:OnInitialize()
   
   addon.options.args['Profiles'] = LibStub('AceDBOptions-3.0'):GetOptionsTable(self.db)
   
-  if not self.db.profile.frames then
+  --[==[if not self.db.profile.frames then
     self.db.profile.frames = { }
   end
   
@@ -65,16 +66,13 @@ function X:OnInitialize()
   end
 
   inv_tcopy(self.db.profile.spells, addon.DefaultProfile.spells)
+  ]==]
   
   X:UpdatePlayer()
   X:UpdateFrames()
   X:UpdateCombatTextEvents(true)
   X:UpdateSpamSpells()
   X:UpdateItemTypes()
-  
-  if self.db.profile.showStartupText == nil then
-    self.db.profile.showStartupText = addon.DefaultProfile.showStartupText
-  end
   
   if self.db.profile.showStartupText then
     print("Loaded |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r. To configure, type: |cffFF0000/xct|r")
@@ -84,6 +82,9 @@ end
 
 function X:RefreshConfig()
   X:UpdateFrames()
+  X:UpdateSpamSpells()
+  X:UpdateItemTypes()
+  collectgarbage()
 end
 
 function X:UpdateSpamSpells()
@@ -195,6 +196,92 @@ function X:UpdateItemTypes()
   addon.options.args["Frames"].args["loot"].args["typeFilter"] = allTypes
 end
 
+
+function X:UpdateComboPointOptions(force)
+  if X.LOADED_COMBO_POINTS_OPTIONS and not force then return end
+
+  local myClass, offset = X.player.class, 1
+  
+  local comboSpells = {
+    order = 100,
+    name = "Tracking Spells" .. X.new,
+    type = 'group',
+    guiInline = true,
+    args = { },
+  }
+  
+  local haveAllSpec = false
+  
+  -- Add "All Specializations" Entries
+  for name in pairs(X.db.profile.spells.combo[myClass]) do
+  
+    if not tonumber(name) then
+      if not haveAllSpec then
+        haveAllSpec = true
+        comboSpells.args['allSpecsHeader'] = {
+          order = 0,
+          type = 'header',
+          name = "All Specializations",
+          width = "full",
+        }
+      end
+      comboSpells.args['entry' .. offset] = {
+        order = offset,
+        type = 'toggle',
+        name = name,
+        get = function(info) return self.db.profile.spells.combo[myClass][name] end,
+        set = function(info, value) self.db.profile.spells.combo[myClass][name] = value end, 
+      }
+      offset = offset + 1
+    end
+  end
+  
+  -- Add the each spec
+  for spec in ipairs(X.db.profile.spells.combo[myClass]) do
+    local haveSpec = false
+    for index, entry in pairs(X.db.profile.spells.combo[myClass][spec] or { }) do
+      if not haveSpec then
+        haveSpec = true
+        local mySpecName = select(2, GetSpecializationInfo(spec)) or "Tree " .. spec
+        
+        comboSpells.args['mySpecHeader' .. offset] = {
+            order = offset,
+            type = 'header',
+            name = "Specialization: " .. mySpecName,
+            width = "full",
+          }
+        offset = offset + 1
+      end
+    
+      if tonumber(index) then
+        comboSpells.args['entry' .. offset] = {
+          order = offset,
+          type = 'toggle',
+          name = GetSpellInfo(entry.id),
+          desc = "Unit to track: |cffFF0000" .. entry.unit,
+          get = function(info) return self.db.profile.spells.combo[myClass][spec][index].enabled end,
+          set = function(info, value) self.db.profile.spells.combo[myClass][spec][index].enabled = value end, 
+        }
+      else
+        -- Special Combo Point ( Unit Power )
+        comboSpells.args['entry' .. offset] = {
+          order = offset,
+          type = 'toggle',
+          name = index,
+          get = function(info) return self.db.profile.spells.combo[myClass][spec][index] end,
+          set = function(info, value) self.db.profile.spells.combo[myClass][spec][index] = value end, 
+        }
+      end
+      
+      offset = offset + 1
+    end
+  end
+  
+  addon.options.args["Frames"].args["class"].args["tracker"] = comboSpells
+  
+  X.LOADED_COMBO_POINTS_OPTIONS = true
+end
+
 -- Unused for now
 function X:OnEnable() end
 function X:OnDisable() end
@@ -215,20 +302,35 @@ X:RegisterChatCommand('xct', 'OpenXCTCommand')
 function X:OpenXCTCommand(input)
   if string.lower(input):match('lock') then
     if X.configuring then
+      X:SaveAllFrames()
+      X.EndConfigMode()
       print("|cffFF0000x|r|cffFFFF00CT+|r  Frames have been saved. Please fasten your seat belts.")
-      x.EndConfigMode()
     else
+      X.StartConfigMode()
       print("|cffFF0000x|r|cffFFFF00CT+|r  You are now free to move about the cabin.")
-      x.StartConfigMode()
+      print("      |cffFF0000/xct lock|r      - Saves your frames")
+      print("      |cffFF0000/xct cancel|r  - Cancels all your recent frame movements")
     end
     
     -- return before you can do anything else
     return
   end
   
+  if string.lower(input):match('cancel') then
+    if X.configuring then
+      X:UpdateFrames();
+      X.EndConfigMode()
+      print("|cffFF0000x|r|cffFFFF00CT+|r  There is nothing to cancel.")
+    else
+      print("|cffFF0000x|r|cffFFFF00CT+|r  There is nothing to cancel.")
+    end
+    return
+  end
+  
   if string.lower(input) == 'help' then
-      print("|cffFF0000x|r|cffFFFF00CT+|r  Commands:")
-      print("      |cffFF0000/xct lock|r - Locks and unlocks the frame movers.")
+    print("|cffFF0000x|r|cffFFFF00CT+|r  Commands:")
+    print("      |cffFF0000/xct lock|r - Locks and unlocks the frame movers.")
+    return
   end
   
   -- Open/Close the config menu

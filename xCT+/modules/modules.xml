@@ -2,6 +2,6 @@
   <Script file="blizzard.lua"/>
   <Script file="frames.lua"/>
   <Script file="messages.lua"/>
-  <Script file="simplecombattext.lua"/>
+  <Script file="combattext.lua"/>
   <Script file="options.lua"/>
 </Ui>
