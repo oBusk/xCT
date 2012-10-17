@@ -6,7 +6,7 @@ xCT+ Beta - Tester Invitation
 <center>__________________________________________________</center>
 
 <center>Here is your link to download the current version of xCT+ beta:</center>
-<center><a href="http://www.tukui.org/storage/download.php?file=63xCTplus_3_beta_1.zip">http://www.tukui.org/storage/download.php?file=63xCTplus_3_beta_1.zip</a></center>
+<center><a href="http://www.tukui.org/storage/download.php?file=638xCTplus_3_beta_2.zip">http://www.tukui.org/storage/download.php?file=638xCTplus_3_beta_2.zip</a></center>
 <center><i>(Updates will be pushed by PMs until otherwise announced).</i></center>
 
 I appreciate your help in getting my add-on out to the public. I am writing this guide to help you get started exploring <b>xCT+</b>. If you feel up to it, feel free to jump right in!  Otherwise, here is a short <b>FAQ</b>.  All questions, comments, requests, and bug reports should be directed to this thread: <a href="http://www.tukui.org/forums/topic.php?id=24113">http://www.tukui.org/forums/topic.php?id=24113</a>
@@ -14,9 +14,8 @@ I appreciate your help in getting my add-on out to the public. I am writing this
 
 
 <blockquote class="Overlord"><center>PLEASE TAKE NOTE:</center>
-<b>Confirmed features not in current version:</b> xCTplus_3_beta_1.zip
+<b>Confirmed features not in current version:</b> xCTplus_3_beta_2.zip
 <ul><li>Healing Spell Filter</li>
-<li>Spam Merger</li>
 <li>Combo Points (Rogues, and other classes)</li>
 <li>Death Knight Runes</li>
 <li>Monk Support</li>
