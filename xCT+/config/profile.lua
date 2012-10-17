@@ -28,6 +28,10 @@ local function CreateMergeSpellEntry(class, enabled, interval,  prep)
   return { class = class, enabled = enabled, interval = interval or 3, prep or 0.5 }
 end
 
+local function CreateComboSpellEntry(default, spellID, watchUnit)
+  return { id = spellID, unit = watchUnit or "player", enabled = default or true}
+end
+
 addon.DefaultProfile = {
   showStartupText = true,
 
@@ -301,8 +305,113 @@ addon.DefaultProfile = {
   },
 
   spells = {
-    enableMerger = true,    -- enable/disable spam merger
-    enableMergerDebug = false, -- Shows spell IDs for debugging merged spells
+    enableMerger = true,        -- enable/disable spam merger
+    enableMergerDebug = false,  -- Shows spell IDs for debugging merged spells
+    
+    combo = {
+      ["DEATHKNIGHT"] = {
+        [1] = {                                         -- Blood
+          CreateComboSpellEntry(true, 49222),           --   Bone Shield
+        },
+        [2] = { },    -- Frost
+        [3] = {                                         -- Unholy
+          CreateComboSpellEntry(true, 91342, "pet"),    --   Shadow Infusion
+        },
+      },
+      
+      ["DRUID"] = {
+        [1] = {                                         -- Balance
+          CreateComboSpellEntry(true, 81192),           --   Lunar Shower
+        },
+        [2] = { [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true, },    -- Feral
+        [3] = { },    -- Guardian
+        [4] = { },    -- Restoration
+      },
+    
+      ["HUNTER"] = {
+        [1] = {                                         -- Beast Mastery
+          CreateComboSpellEntry(true, 19615, "pet"),    --   Frenzy Effect
+        },
+        [2] = {                                         -- Marksman
+          CreateComboSpellEntry(true, 82925),           --   Ready, Set, Aim...
+        },
+        [3] = {                                         -- Survival
+          CreateComboSpellEntry(true, 56453),           --   Lock 'n Load
+        },
+      },
+      
+      ["MAGE"] = {
+        [1] = { },    -- Arcane
+        [2] = { },    -- Fire
+        [3] = { },    -- Frost
+      },
+      
+      ["MONK"] = {
+        [LIGHT_FORCE] = true,
+        
+        -- DO NOT USE - MONKS GET CHI
+        [1] = { },    -- Brewmaster
+        [2] = { },    -- Mistweaver
+        [3] = { },    -- Windwalker
+      },
+      
+      ["PALADIN"] = {
+        [HOLY_POWER] = true,
+      
+        -- DO NOT USE - PALADINS GET HOLY POWER
+        [1] = { },    -- Holy
+        [2] = { },    -- Protection
+        [3] = { },    -- Retribution
+      },
+      
+      ["PRIEST"] = {
+        [1] = {                                         -- Discipline
+          CreateComboSpellEntry(true, 81661),           --   Evangelism
+        },    
+        [2] = {                                         -- Holy
+          CreateComboSpellEntry(true, 63735),           --   Serendipity
+        },    
+        -- DO NOT USE - SHADOW PRIEST GET SHADOW ORBS
+        [3] = { [SHADOW_ORBS] = true },    -- Shadow
+      },
+      
+      ["ROGUE"] = {
+        [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
+      
+        -- DO NOT USE - ROGUES GET COMBO POINTS
+        [1] = { },    -- Assassination
+        [2] = { },    -- Combat
+        [3] = { },    -- Subtlety
+      },
+
+      ["SHAMAN"] = {
+        [1] = { },    -- Elemental
+        [2] = {                                         -- Enhancement
+          CreateComboSpellEntry(true, 53817),           --   Maelstrom Weapon
+        },
+        [3] = {                                         -- Restoration
+          CreateComboSpellEntry(true, 53390),           --   Tidal Waves
+        },
+      },
+
+      ["WARLOCK"] = {
+        -- DO NOT USE - AFFLICTION WARLOCKS GET SOUL SHARDS
+        [1]  = { [SOUL_SHARDS] = true },
+        
+        -- DO NOT USE - DEMONOLOGY WARLOCKS GET DEMONIC FURY
+        [2]  = { [DEMONIC_FURY] = true },
+        
+        -- DO NOT USE - DESTRUCTION WARLOCKS GET BURNING EMBERS
+        [3] = { [BURNING_EMBERS] = true },
+      },
+      
+      ["WARRIOR"] = {
+        [1] = { },    -- Arms
+        [2] = { },    -- Fury
+        [3] = { },    -- Protection
+      },
+      
+    },
     
     merge = {
     -- death knight
