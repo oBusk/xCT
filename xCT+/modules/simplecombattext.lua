@@ -119,8 +119,8 @@ local function ShowReactives() return COMBAT_TEXT_SHOW_REACTIVES == "1" end
 local function ShowLowResources() return COMBAT_TEXT_SHOW_LOW_HEALTH_MANA == "1" end
 local function ShowCombatState() return COMBAT_TEXT_SHOW_COMBAT_STATE == "1" end
 local function ShowFriendlyNames() return COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" end
-local function ShowComboPoints() return x.player.class == "ROGUE" and COMBAT_TEXT_SHOW_COMBO_POINTS == "1" end
-local function ShowMonkComboPoints() return x.player.class == "MONK" end
+--local function ShowComboPoints() return x.player.class == "ROGUE" and COMBAT_TEXT_SHOW_COMBO_POINTS == "1" end
+--local function ShowMonkComboPoints() return x.player.class == "MONK" end
 local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg end
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
@@ -141,6 +141,20 @@ local function ShowColorBlindMoney() return x.db.profile.frames["loot"].colorBli
 local function GetLootQuality() return x.db.profile.frames["loot"].filterItemQuality end
 local function ShowLootIcons() return x.db.profile.frames["loot"].iconsEnabled end
 local function GetLootIconSize() return x.db.profile.frames["loot"].iconsSize end
+
+
+local function ShowRogueComboPoints() return x.db.profile.spells.combo["ROGUE"][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "ROGUE" end
+local function ShowFeralComboPoints() return x.db.profile.spells.combo["DRUID"][2][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "DRUID" and x.player.spec == 2 end
+
+local function ShowMonkChi() return x.db.profile.spells.combo["MONK"][LIGHT_FORCE] and x.player.class == "MONK" end
+local function ShowPaladinHolyPower() return x.db.profile.spells.combo["PALADIN"][HOLY_POWER] and x.player.class == "PALADIN" end
+local function ShowPriestShadowOrbs() return x.db.profile.spells.combo["PRIEST"][3][SHADOW_ORBS] and x.player.class == "PRIEST" and x.player.spec == 3 end
+
+local function ShowWarlockSoulShards() return x.db.profile.spells.combo["WARLOCK"][1][SOUL_SHARDS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 1 end
+local function ShowWarlockDemonicFury() return x.db.profile.spells.combo["WARLOCK"][2][DEMONIC_FURY] and x.player.class == "WARLOCK" and x.player.spec == 2 end
+local function ShowWarlockBurningEmbers() return x.db.profile.spells.combo["WARLOCK"][3][BURNING_EMBERS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 3 end
+
+
 
 -- String Formatters
 local format_loot = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
@@ -222,8 +236,8 @@ end
 -- =====================================================
 -- Combo Points
 -- =====================================================
-local function UpdateRogueComboPoints()
-  if ShowComboPoints() then
+local function UpdateComboPoints()
+  if ShowRogueComboPoints() or ShowFeralComboPoints() then
     local comboPoints, outputColor = GetComboPoints(x.player.unit, "target"), "combo_points"
     if comboPoints == MAX_COMBO_POINTS then outputColor = "combo_points_max" end
     if comboPoints > 0 then
@@ -236,15 +250,41 @@ local function UpdateRogueComboPoints()
   end
 end
 
-local function UpdateMonkComboPoints(unit, powertype)
-  if ShowMonkComboPoints() and unit == x.player.unit and powertype == "LIGHT_FORCE" then
-    local currentPower = UnitPower(x.player.unit, SPELL_POWER_LIGHT_FORCE)
-    if currentPower == 0 then
-      x:AddMessage("class", " ", "combo_points")
-    else
-      x:AddMessage("class", currentPower, "combo_points")
+
+
+
+local function UpdateUnitPower(unit, powertype)
+  if unit == x.player.unit then
+    local value
+    
+    if powertype == "LIGHT_FORCE" and ShowMonkChi() then
+      value = UnitPower(x.player.unit, SPELL_POWER_LIGHT_FORCE)
+    elseif powertype == "HOLY_POWER" and ShowPaladinHolyPower() then
+      value = UnitPower(x.player.unit, SPELL_POWER_HOLY_POWER)
+    elseif powertype == "SHADOW_ORBS" and ShowPriestShadowOrbs() then
+      value = UnitPower(x.player.unit, SPELL_POWER_SHADOW_ORBS)
+    elseif powertype == "SOUL_SHARDS" and ShowWarlockSoulShards() then
+      value = UnitPower(x.player.unit, SPELL_POWER_SOUL_SHARDS)
+    elseif powertype == "DEMONIC_FURY" and ShowWarlockDemonicFury() then
+      value = math.floor(UnitPower(x.player.unit, SPELL_POWER_DEMONIC_FURY) / 100)
+    elseif powertype == "BURNING_EMBERS" and ShowWarlockBurningEmbers() then
+      value = UnitPower(x.player.unit, SPELL_POWER_BURNING_EMBERS) / 10
     end
+  
+    if value then
+      if value < 1 then
+        if value == 0 then
+          x:AddMessage("class", " ", "combo_points")
+        else
+          x:AddMessage("class", "0", "combo_points")
+        end
+      else
+        x:AddMessage("class", math.floor(value), "combo_points")
+      end
+    end
+    
   end
+
 end
 
 -- event handlers for combat text events
@@ -431,15 +471,13 @@ x.events = {
   ["PLAYER_REGEN_ENABLED"] = function() if ShowCombatState() then x:AddMessage("general", sformat(format_fade, LEAVING_COMBAT), "combat_end") end end,
   ["PLAYER_REGEN_DISABLED"] = function() if ShowCombatState() then x:AddMessage("general", sformat(format_gain, ENTERING_COMBAT), "combat_begin") end end,
   
-  ["UNIT_POWER"] = function(unit, powerType) UpdateMonkComboPoints(unit, powerType) end,
+  ["UNIT_POWER"] = function(unit, powerType) UpdateUnitPower(unit, powerType) end,
   
-  ["UNIT_COMBO_POINTS"] = function() UpdateRogueComboPoints() end,
-  ["PLAYER_TARGET_CHANGED"] = function() UpdateRogueComboPoints() end,
+  ["UNIT_COMBO_POINTS"] = function() UpdateComboPoints() end,
+  ["PLAYER_TARGET_CHANGED"] = function() UpdateComboPoints() end,
   
   ["UNIT_AURA"] = function(unit) end,
-  
-  
-  
+
   -- TODO: Finish Runes
   ["RUNE_POWER_UPDATE"] = function() end,
   ["UNIT_ENTERED_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
