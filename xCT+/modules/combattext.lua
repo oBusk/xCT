@@ -603,19 +603,22 @@ x.outgoing_events = {
         -- output = the output frame; list of incoming args
         local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
         local outputFrame, message, outputColor = "outgoing", amount, "heal_out"
+        local merged = false
         
         -- TODO: Add Healing Filter
         
         -- Check for merge
         if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+          merged = true
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
-          return
         end
         
         -- Check for Critical
-        if critical then 
+        if critical then    -- Let all crits through
           message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
           outputFrame = "critical"
+        elseif merged then  -- return merged, non-crits
+          return
         end
         
         -- Add Icons
@@ -632,19 +635,22 @@ x.outgoing_events = {
         -- output = the output frame; list of incoming args
         local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
         local outputFrame, message, outputColor = "outgoing", amount, "heal_out"
+        local merged = false
         
         -- TODO: Add Healing Filter
         
         -- Check for merge
         if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+          merged = true
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
-          return
         end
         
         -- Check for Critical
-        if critical then 
+        if critical then    -- Let all crits through
           message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
           outputFrame = "critical"
+        elseif merged then  -- return merged, non-crits
+          return
         end
 
         -- Add Icons
@@ -727,6 +733,7 @@ x.outgoing_events = {
       if ShowDamage() then
         local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
         local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
+        local merged = false
         
         -- Get special magic color
         if x.damagecolor[spellSchool] then
@@ -737,14 +744,16 @@ x.outgoing_events = {
         
         -- Check for merge
         if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+          merged = true
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
-          return
         end
         
         -- Check for Critical
-        if critical then 
+        if critical then    -- Let all crits through
           message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
           outputFrame = "critical"
+        elseif merged then  -- return merged, non-crits
+          return
         end
         
         -- Add Icons
@@ -760,6 +769,7 @@ x.outgoing_events = {
       if ShowDamage() then
         local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
         local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
+        local merged = false
         
         -- Get special magic color
         if x.damagecolor[spellSchool] then
@@ -770,15 +780,17 @@ x.outgoing_events = {
         
         -- Check for merge
         if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+          merged = true
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
-          return
         end
         
         -- Check for Critical
-        if critical then 
+        if critical then    -- Let all crits through
           message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
           outputColor = "out_damage"
           outputFrame = "critical"
+        elseif merged then  -- return merged, non-crits
+          return
         end
 
         -- Add Icons
