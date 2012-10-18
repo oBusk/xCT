@@ -258,9 +258,23 @@ function X:UpdateComboPointOptions(force)
           order = offset,
           type = 'toggle',
           name = GetSpellInfo(entry.id),
-          desc = "Unit to track: |cffFF0000" .. entry.unit,
+          desc = "Unit to track: |cffFF0000" .. entry.unit .. "|r\nSpell ID: |cffFF0000" .. entry.id .. "|r",
           get = function(info) return self.db.profile.spells.combo[myClass][spec][index].enabled end,
-          set = function(info, value) self.db.profile.spells.combo[myClass][spec][index].enabled = value end, 
+          set = function(info, value)
+              if value == true then
+                for key, entry in pairs(self.db.profile.spells.combo[myClass][spec]) do
+                  if type(entry) == "table" then
+                    entry.enabled = false
+                  else
+                    self.db.profile.spells.combo[myClass][spec][key] = false
+                  end
+                end
+              end
+              self.db.profile.spells.combo[myClass][spec][index].enabled = value
+              
+              -- Update tracker
+              X:UpdateComboTracker()
+            end, 
         }
       else
         -- Special Combo Point ( Unit Power )
@@ -269,7 +283,21 @@ function X:UpdateComboPointOptions(force)
           type = 'toggle',
           name = index,
           get = function(info) return self.db.profile.spells.combo[myClass][spec][index] end,
-          set = function(info, value) self.db.profile.spells.combo[myClass][spec][index] = value end, 
+          set = function(info, value)
+              if value == true then
+                for key, entry in pairs(self.db.profile.spells.combo[myClass][spec]) do
+                  if type(entry) == "table" then
+                    entry.enabled = false
+                  else
+                    self.db.profile.spells.combo[myClass][spec][key] = false
+                  end
+                end
+              end
+              self.db.profile.spells.combo[myClass][spec][index] = value
+              
+              -- Update tracker
+              X:UpdateComboTracker()
+            end, 
         }
       end
       
@@ -280,7 +308,23 @@ function X:UpdateComboPointOptions(force)
   addon.options.args["Frames"].args["class"].args["tracker"] = comboSpells
   
   X.LOADED_COMBO_POINTS_OPTIONS = true
+  
+  X:UpdateComboTracker()
 end
+
+function X:UpdateComboTracker()
+  local myClass, mySpec = X.player.class, X.player.spec
+  X.TrackingEntry = nil
+  
+  if not mySpec or mySpec < 1 then return end  -- under Level 10 probably, I don't know what to do :P
+
+  for i, entry in pairs(X.db.profile.spells.combo[myClass][mySpec]) do
+    if type(entry) == "table" and entry.enabled then
+      X.TrackingEntry = entry
+    end
+  end
+end
+
 
 -- Unused for now
 function X:OnEnable() end

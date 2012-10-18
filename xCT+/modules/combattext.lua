@@ -161,6 +161,7 @@ local function ShowWarlockBurningEmbers() return x.db.profile.spells.combo["WARL
 local format_loot = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
 local format_fade = "-%s"
 local format_gain = "+%s"
+local format_gain_rune = "%s +%s %s"
 local format_resist = "-%s (%s %s)"
 local format_energy = "+%s %s"
 local format_honor = sgsub(COMBAT_TEXT_HONOR_GAINED, "%%s", "+%%s")
@@ -253,9 +254,6 @@ local function UpdateComboPoints()
   end
 end
 
-
-
-
 local function UpdateUnitPower(unit, powertype)
   if unit == x.player.unit then
     local value
@@ -289,6 +287,37 @@ local function UpdateUnitPower(unit, powertype)
   end
 
 end
+
+
+local function UpdateAuraTracking(unit)
+  local entry = x.TrackingEntry
+  
+  if entry then
+    if unit == entry.unit then
+      local i, name, _, icon, count, _, _, _, _, _, _, spellId = 1, UnitBuff(entry.unit, 1)
+      
+      while name do
+        if entry.id == spellId then
+          break
+        end
+        i = i + 1;
+        name, _, icon, count, _, _, _, _, _, _, spellId = UnitBuff(entry.unit, i)
+      end
+      
+      if name and count > 0 then
+        x:AddMessage("class", count, "combo_points")
+      else
+        x:AddMessage("class", " ", "combo_points")
+      end
+        
+    -- Fix issue of not reseting when unit disapears (e.g. dismiss pet)
+    elseif not UnitExists(entry.unit) then
+      x:AddMessage("class", " ", "combo_points")
+    end
+  end
+
+end
+
 
 -- event handlers for combat text events
 x.combat_events = {
@@ -479,16 +508,24 @@ x.events = {
   ["UNIT_COMBO_POINTS"] = function() UpdateComboPoints() end,
   ["PLAYER_TARGET_CHANGED"] = function() UpdateComboPoints() end,
   
-  ["UNIT_AURA"] = function(unit) end,
+  ["UNIT_AURA"] = function(unit) UpdateAuraTracking(unit) end,
 
   
-  
-  -- TODO: Finish Runes
-  ["RUNE_POWER_UPDATE"] = function() end,
+  -- function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
+  ["RUNE_POWER_UPDATE"] = function(slot)
+      if GetRuneCooldown(slot) ~= 0 then return end
+      local runeType = GetRuneType(slot);
+      if runeType then
+        local message = sformat(format_gain_rune, x.runeIcons[runeType], COMBAT_TEXT_RUNE[runeType], x.runeIcons[runeType])
+        --x:AddMessage("power", message, x.runecolors[runeType])
+        x:AddSpamMessage("power", runeType, message, x.runecolors[runeType], 1)
+      end
+    end,
+    
   ["UNIT_ENTERED_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["UNIT_EXITING_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["PLAYER_ENTERING_WORLD"] = function() x:UpdatePlayer(); x:UpdateComboPointOptions() end,
-  ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); x:UpdateComboPointOptions(true) end,
+  ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); X:UpdateComboTracker() end,    -- x:UpdateComboPointOptions(true) end,
   
   ["CHAT_MSG_LOOT"] = function(msg)
     --format_loot

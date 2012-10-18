@@ -29,7 +29,7 @@ local function CreateMergeSpellEntry(class, enabled, interval,  prep)
 end
 
 local function CreateComboSpellEntry(default, spellID, watchUnit)
-  return { id = spellID, unit = watchUnit or "player", enabled = default or true}
+  return { id = spellID, unit = watchUnit or "player", enabled = default}
 end
 
 addon.defaults = {
@@ -371,9 +371,12 @@ addon.defaults = {
           },    
           [2] = {                                         -- Holy
             CreateComboSpellEntry(true, 63735),           --   Serendipity
+            CreateComboSpellEntry(false, 114255),         --   Surge of Light
           },    
           -- DO NOT USE - SHADOW PRIEST GET SHADOW ORBS
-          [3] = { [SHADOW_ORBS] = true },    -- Shadow
+          [3] = {                                         -- Shadow
+            [SHADOW_ORBS] = true,
+          },    
         },
         
         ["ROGUE"] = {
@@ -484,9 +487,9 @@ addon.defaults = {
         
       -- priest (damage)
         [47666]  = CreateMergeSpellEntry("PRIEST", true),           -- Penance (Damage Effect)
-        [15237]  = CreateMergeSpellEntry("PRIEST", true, .5),       -- Holy Nova (Damage Effect)                  (INSTANT)
+        [132157] = CreateMergeSpellEntry("PRIEST", true, .5),       -- Holy Nova (Damage Effect)                  (INSTANT)
         [589]    = CreateMergeSpellEntry("PRIEST", true),           -- Shadow Word: Pain
-        [34914]  = CreateMergeSpellEntry("PRIEST", true),           -- Vampiric Touch
+        [34914]  = CreateMergeSpellEntry("PRIEST", true),           -- Vampiric Touch 
         [2944]   = CreateMergeSpellEntry("PRIEST", true),           -- Devouring Plague
         [15407]  = CreateMergeSpellEntry("PRIEST", true),           -- Mind Flay
         [49821]  = CreateMergeSpellEntry("PRIEST", true),           -- Mind Seer (From Derap: first one is the cast)
@@ -567,17 +570,3 @@ addon.defaults = {
     },
   },
 }
-
---[==[
-local merge_default = {
-  enabled  = false, 
-  interval = 3,
-}
-
-local merge_mt = {
-  __index = function(index)
-    return merge_default
-  end,
-}
-
-setmetatable(addon.DefaultProfile.spells.merge, merge_mt)]==]

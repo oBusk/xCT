@@ -64,3 +64,10 @@ x.damagecolor = {
   [32] = { .5, .5,  1 },  -- shadow
   [64] = {  1, .5,  1 },  -- arcane
 }
+
+x.runecolors = {
+	[1] = {1, 0, 0},      -- Blood
+	[2] = {0, 0.5, 0},    -- Unholy
+	[3] = {0, 1, 1},      -- Frost
+	[4] = {0.8, 0.1, 1},  -- Death
+}

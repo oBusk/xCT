@@ -266,7 +266,7 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
   else
     heap[mergeID] = {
       last    = 0,          -- last update
-      update  = x.db.profile.spells.merge[mergeID].interval,   -- how often to update
+      update  = interval or x.db.profile.spells.merge[mergeID].interval,   -- how often to update
       entries = {           -- entries to merge
           message,
         },        
@@ -369,6 +369,7 @@ do
       -- Add up all the entries
       local total = 0
       for _, amount in pairs(item.entries) do
+        if not tonumber(amount) then total = amount; break end
         total = total + amount  -- Add all the amounts
       end
       
