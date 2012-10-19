@@ -268,7 +268,7 @@ local function UpdateUnitPower(unit, powertype)
     elseif powertype == "SOUL_SHARDS" and ShowWarlockSoulShards() then
       value = UnitPower(x.player.unit, SPELL_POWER_SOUL_SHARDS)
     elseif powertype == "DEMONIC_FURY" and ShowWarlockDemonicFury() then
-      value = math.floor(UnitPower(x.player.unit, SPELL_POWER_DEMONIC_FURY) / 100)
+      value = mfloor(UnitPower(x.player.unit, SPELL_POWER_DEMONIC_FURY) / 100)
     elseif powertype == "BURNING_EMBERS" and ShowWarlockBurningEmbers() then
       value = UnitPower(x.player.unit, SPELL_POWER_BURNING_EMBERS) / 10
     end
@@ -281,7 +281,7 @@ local function UpdateUnitPower(unit, powertype)
           x:AddMessage("class", "0", "combo_points")
         end
       else
-        x:AddMessage("class", math.floor(value), "combo_points")
+        x:AddMessage("class", mfloor(value), "combo_points")
       end
     end
   end

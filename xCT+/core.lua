@@ -15,7 +15,8 @@
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
-local sgsub, pairs, type, string_format, table_insert = string.gsub, pairs, type, string.format, table.insert
+local sgsub, ipairs, pairs, type, string_format, table_insert, print, tostring, tonumber, select, string_lower, collectgarbage =
+  string.gsub, ipairs, pairs, type, string.format, table.insert, print, tostring, tonumber, select, string.lower, collectgarbage
 
 -- Local Handle to the Engine
 local X = addon.engine
@@ -73,8 +74,7 @@ end
 
 -- Updates item filter list
 function X:UpdateItemTypes()
-  -- Because of Localization, I have to dynamically create the lists
-	local itemTypes = { GetAuctionItemClasses() }
+  local itemTypes = { GetAuctionItemClasses() }
   
   local allTypes = {
     order = 100,
@@ -84,11 +84,11 @@ function X:UpdateItemTypes()
     args = { },
   }
   
-	for i, itype in ipairs(itemTypes) do
+  for i, itype in ipairs(itemTypes) do
     local subtypes = { GetAuctionItemSubClasses(i) }
     
     -- Page for the MAIN ITEM GROUP
-		local group = {
+    local group = {
       order = i,
       name = itype,
       type = 'group',
@@ -131,38 +131,33 @@ function X:UpdateItemTypes()
           end,
       }
     else
-    
       -- Quest Items... maybe others
       if self.db.profile.spells.items[itype][itype] == nil then
         self.db.profile.spells.items[itype][itype] = true
       end
-      
       group.args[itype] = {
-        order = j,
+        order = 1,
         type = 'toggle',
         name = "Enable",
         get = function(info) return self.db.profile.spells.items[itype][itype] end,
-        set = function(info, value) self.db.profile.spells.items[itype][itype] = value end, 
+        set = function(info, value) self.db.profile.spells.items[itype][itype] = value end,
       }
-      
     end
-    
-    
+
     -- add all the SUBITEMS
-		for j, subtype in ipairs(subtypes) do
+    for j, subtype in ipairs(subtypes) do
       group.args[subtype] = {
         order = j,
         type = 'toggle',
         name = subtype,
         get = function(info) return self.db.profile.spells.items[itype][subtype] end,
-        set = function(info, value) self.db.profile.spells.items[itype][subtype] = value end, 
+        set = function(info, value) self.db.profile.spells.items[itype][subtype] = value end,
       }
-		end
+    end
     
     allTypes.args[itype] = group
-	end
-  
-  
+  end
+
   addon.options.args["Frames"].args["loot"].args["typeFilter"] = allTypes
 end
 
@@ -312,7 +307,7 @@ X:RegisterChatCommand('xct', 'OpenXCTCommand')
 
 -- Process the slash command ('input' contains whatever follows the slash command)
 function X:OpenXCTCommand(input)
-  if string.lower(input):match('lock') then
+  if string_lower(input):match('lock') then
     if X.configuring then
       X:SaveAllFrames()
       X.EndConfigMode()
@@ -328,7 +323,7 @@ function X:OpenXCTCommand(input)
     return
   end
   
-  if string.lower(input):match('cancel') then
+  if string_lower(input):match('cancel') then
     if X.configuring then
       X:UpdateFrames();
       X.EndConfigMode()
@@ -339,7 +334,7 @@ function X:OpenXCTCommand(input)
     return
   end
   
-  if string.lower(input) == 'help' then
+  if string_lower(input) == 'help' then
     print("|cffFF0000x|r|cffFFFF00CT+|r  Commands:")
     print("      |cffFF0000/xct lock|r - Locks and unlocks the frame movers.")
     return

@@ -1,0 +1,250 @@
+________________________________________
+function X:OnInitialize()	<.\..\xCT+\core.lua:25,48> (68 instructions, 272 bytes at 00478790)
+	[27]	GETGLOBAL	1 -2	; LibStub
+	[35]	GETGLOBAL	2 -2	; LibStub
+function X:UpdateSpamSpells()	<.\..\xCT+\core.lua:59,73> (46 instructions, 184 bytes at 00589290)
+	[66]	GETGLOBAL	9 -15	; GetSpellInfo
+function X:UpdateItemTypes()	<.\..\xCT+\core.lua:76,162> (130 instructions, 520 bytes at 00478D88)
+	[77]	GETGLOBAL	2 -1	; GetAuctionItemClasses
+	[88]	GETGLOBAL	9 -12	; GetAuctionItemSubClasses
+function X:UpdateComboPointOptions(force)	<.\..\xCT+\core.lua:165,276> (206 instructions, 824 bytes at 0047F120)
+	[207]	GETGLOBAL	17 -30	; GetSpecializationInfo
+	[223]	GETGLOBAL	18 -34	; GetSpellInfo
+________________________________________
+main <.\..\xCT+\init.lua:0,0> (12 instructions, 48 bytes at 00301848)
+	[18]	SETGLOBAL	2 -6	; xCT_Plus
+________________________________________
+________________________________________
+________________________________________
+________________________________________
+function(message, scrollFunction, r, g, b, displayType, isStaggered)	<.\..\xCT+\modules\blizzard.lua:19,23> (18 instructions, 72 bytes at 00478670)
+	[20]	GETGLOBAL	7 -1	; COMBAT_TEXT_TO_ANIMATE
+	[20]	GETGLOBAL	8 -1	; COMBAT_TEXT_TO_ANIMATE
+	[21]	GETGLOBAL	8 -2	; CombatText_RemoveMessage
+function(self)	<.\..\xCT+\modules\blizzard.lua:71,76> (10 instructions, 40 bytes at 005C8B20)
+	[73]	GETGLOBAL	1 -1	; InterfaceOptionsFrameOkay
+	[74]	GETGLOBAL	1 -3	; LibStub
+________________________________________
+function x:UpdatePlayer()	<.\..\xCT+\modules\combattext.lua:41,58> (51 instructions, 204 bytes at 007C16F0)
+	[43]	GETGLOBAL	1 -1	; UnitHasVehicleUI
+	[48]	GETGLOBAL	1 -5	; CombatTextSetActiveUnit
+	[51]	GETGLOBAL	2 -7	; UnitName
+	[52]	GETGLOBAL	4 -10	; UnitClass
+	[53]	GETGLOBAL	2 -12	; UnitGUID
+	[55]	GETGLOBAL	1 -13	; GetActiveSpecGroup
+	[56]	GETGLOBAL	3 -15	; GetSpecialization
+function x:UpdateCombatTextEvents(enable)	<.\..\xCT+\modules\combattext.lua:66,114> (84 instructions, 336 bytes at 00658C48)
+	[73]	GETGLOBAL	3 -3	; CreateFrame
+function ShowMissTypes()	<.\..\xCT+\modules\combattext.lua:119,119> (7 instructions, 28 bytes at 007CED40)
+	[119]	GETGLOBAL	0 -1	; COMBAT_TEXT_SHOW_DODGE_PARRY_MISS
+function ShowResistances()	<.\..\xCT+\modules\combattext.lua:120,120> (7 instructions, 28 bytes at 007CEAA0)
+	[120]	GETGLOBAL	0 -1	; COMBAT_TEXT_SHOW_RESISTANCES
+function ShowHonor()	<.\..\xCT+\modules\combattext.lua:121,121> (7 instructions, 28 bytes at 007CEB48)
+	[121]	GETGLOBAL	0 -1	; COMBAT_TEXT_SHOW_HONOR_GAINED
+function ShowFaction()	<.\..\xCT+\modules\combattext.lua:122,122> (7 instructions, 28 bytes at 006588E0)
+	[122]	GETGLOBAL	0 -1	; COMBAT_TEXT_SHOW_REPUTATION
+function ShowReactives()	<.\..\xCT+\modules\combattext.lua:123,123> (7 instructions, 28 bytes at 006585E8)
+	[123]	GETGLOBAL	0 -1	; COMBAT_TEXT_SHOW_REACTIVES
+function ShowLowResources()	<.\..\xCT+\modules\combattext.lua:124,124> (7 instructions, 28 bytes at 007CE128)
+	[124]	GETGLOBAL	0 -1	; COMBAT_TEXT_SHOW_LOW_HEALTH_MANA
+function ShowCombatState()	<.\..\xCT+\modules\combattext.lua:125,125> (7 instructions, 28 bytes at 007CE1A8)
+	[125]	GETGLOBAL	0 -1	; COMBAT_TEXT_SHOW_COMBAT_STATE
+function ShowFriendlyNames()	<.\..\xCT+\modules\combattext.lua:126,126> (7 instructions, 28 bytes at 007CFD10)
+	[126]	GETGLOBAL	0 -1	; COMBAT_TEXT_SHOW_FRIENDLY_NAMES
+function ShowRogueComboPoints()	<.\..\xCT+\modules\combattext.lua:148,148> (19 instructions, 76 bytes at 0065F018)
+	[148]	GETGLOBAL	1 -6	; COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT
+function ShowFeralComboPoints()	<.\..\xCT+\modules\combattext.lua:149,149> (25 instructions, 100 bytes at 0065F120)
+	[149]	GETGLOBAL	1 -7	; COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT
+function ShowMonkChi()	<.\..\xCT+\modules\combattext.lua:150,150> (19 instructions, 76 bytes at 0065F178)
+	[150]	GETGLOBAL	1 -6	; LIGHT_FORCE
+function ShowPaladinHolyPower()	<.\..\xCT+\modules\combattext.lua:151,151> (19 instructions, 76 bytes at 0065F280)
+	[151]	GETGLOBAL	1 -6	; HOLY_POWER
+function ShowPriestShadowOrbs()	<.\..\xCT+\modules\combattext.lua:152,152> (25 instructions, 100 bytes at 0065F388)
+	[152]	GETGLOBAL	1 -7	; SHADOW_ORBS
+function ShowWarlockSoulShards()	<.\..\xCT+\modules\combattext.lua:153,153> (25 instructions, 100 bytes at 00661DD0)
+	[153]	GETGLOBAL	1 -7	; SOUL_SHARDS_POWER
+function ShowWarlockDemonicFury()	<.\..\xCT+\modules\combattext.lua:154,154> (25 instructions, 100 bytes at 00661E28)
+	[154]	GETGLOBAL	1 -7	; DEMONIC_FURY
+function ShowWarlockBurningEmbers()	<.\..\xCT+\modules\combattext.lua:155,155> (25 instructions, 100 bytes at 00661E80)
+	[155]	GETGLOBAL	1 -7	; BURNING_EMBERS_POWER
+function x.OnCombatTextEvent(self, event, ...)	<.\..\xCT+\modules\combattext.lua:186,204> (60 instructions, 240 bytes at 00661ED8)
+	[189]	GETGLOBAL	14 -5	; UnitGUID
+function x:GetSpellTextureFormatted(spellID, iconSize)	<.\..\xCT+\modules\combattext.lua:217,236> (50 instructions, 200 bytes at 00661F30)
+	[220]	GETGLOBAL	4 -2	; PET_ATTACK_TEXTURE
+	[221]	GETGLOBAL	5 -2	; PET_ATTACK_TEXTURE
+	[223]	GETGLOBAL	4 -6	; GetSpellTexture
+function UpdateComboPoints()	<.\..\xCT+\modules\combattext.lua:241,253> (43 instructions, 172 bytes at 00661F88)
+	[243]	GETGLOBAL	0 -1	; GetComboPoints
+	[244]	GETGLOBAL	2 -6	; MAX_COMBO_POINTS
+function UpdateUnitPower(unit, powertype)	<.\..\xCT+\modules\combattext.lua:258,288> (121 instructions, 484 bytes at 00661FE0)
+	[263]	GETGLOBAL	3 -4	; UnitPower
+	[263]	GETGLOBAL	5 -5	; SPELL_POWER_LIGHT_FORCE
+	[265]	GETGLOBAL	3 -4	; UnitPower
+	[265]	GETGLOBAL	5 -7	; SPELL_POWER_HOLY_POWER
+	[267]	GETGLOBAL	3 -4	; UnitPower
+	[267]	GETGLOBAL	5 -9	; SPELL_POWER_SHADOW_ORBS
+	[269]	GETGLOBAL	3 -4	; UnitPower
+	[269]	GETGLOBAL	5 -11	; SPELL_POWER_SOUL_SHARDS
+	[271]	GETGLOBAL	4 -4	; UnitPower
+	[271]	GETGLOBAL	6 -13	; SPELL_POWER_DEMONIC_FURY
+	[273]	GETGLOBAL	3 -4	; UnitPower
+	[273]	GETGLOBAL	5 -16	; SPELL_POWER_BURNING_EMBERS
+function UpdateAuraTracking(unit)	<.\..\xCT+\modules\combattext.lua:293,319> (65 instructions, 260 bytes at 00662038)
+	[298]	GETGLOBAL	3 -4	; UnitBuff
+	[305]	GETGLOBAL	14 -4	; UnitBuff
+	[315]	GETGLOBAL	2 -11	; UnitExists
+function()	<.\..\xCT+\modules\combattext.lua:357,357> (11 instructions, 44 bytes at 006623A8)
+	[357]	GETGLOBAL	3 -3	; MISS
+function()	<.\..\xCT+\modules\combattext.lua:358,358> (11 instructions, 44 bytes at 00662400)
+	[358]	GETGLOBAL	3 -3	; DODGE
+function()	<.\..\xCT+\modules\combattext.lua:359,359> (11 instructions, 44 bytes at 00662458)
+	[359]	GETGLOBAL	3 -3	; PARRY
+function()	<.\..\xCT+\modules\combattext.lua:360,360> (11 instructions, 44 bytes at 006624B0)
+	[360]	GETGLOBAL	3 -3	; EVADE
+function()	<.\..\xCT+\modules\combattext.lua:361,361> (11 instructions, 44 bytes at 00662508)
+	[361]	GETGLOBAL	3 -3	; IMMUNE
+function()	<.\..\xCT+\modules\combattext.lua:362,362> (11 instructions, 44 bytes at 00662560)
+	[362]	GETGLOBAL	3 -3	; DEFLECT
+function()	<.\..\xCT+\modules\combattext.lua:363,363> (11 instructions, 44 bytes at 006625B8)
+	[363]	GETGLOBAL	3 -3	; REFLECT
+function()	<.\..\xCT+\modules\combattext.lua:365,365> (11 instructions, 44 bytes at 00662610)
+	[365]	GETGLOBAL	3 -3	; MISS
+function()	<.\..\xCT+\modules\combattext.lua:366,366> (11 instructions, 44 bytes at 00662668)
+	[366]	GETGLOBAL	3 -3	; DODGE
+function()	<.\..\xCT+\modules\combattext.lua:367,367> (11 instructions, 44 bytes at 006626C0)
+	[367]	GETGLOBAL	3 -3	; PARRY
+function()	<.\..\xCT+\modules\combattext.lua:368,368> (11 instructions, 44 bytes at 00662718)
+	[368]	GETGLOBAL	3 -3	; EVADE
+function()	<.\..\xCT+\modules\combattext.lua:369,369> (11 instructions, 44 bytes at 00662770)
+	[369]	GETGLOBAL	3 -3	; IMMUNE
+function()	<.\..\xCT+\modules\combattext.lua:370,370> (11 instructions, 44 bytes at 006627C8)
+	[370]	GETGLOBAL	3 -3	; DEFLECT
+function()	<.\..\xCT+\modules\combattext.lua:371,371> (11 instructions, 44 bytes at 00662820)
+	[371]	GETGLOBAL	3 -3	; REFLECT
+function(amount, resisted)	<.\..\xCT+\modules\combattext.lua:373,383> (36 instructions, 144 bytes at 00662878)
+	[376]	GETGLOBAL	8 -3	; RESIST
+	[381]	GETGLOBAL	5 -3	; RESIST
+function(amount, resisted)	<.\..\xCT+\modules\combattext.lua:384,394> (36 instructions, 144 bytes at 00662928)
+	[387]	GETGLOBAL	8 -3	; BLOCK
+	[392]	GETGLOBAL	5 -3	; BLOCK
+function(amount, resisted)	<.\..\xCT+\modules\combattext.lua:395,405> (36 instructions, 144 bytes at 006629D8)
+	[398]	GETGLOBAL	8 -3	; ABSORB
+	[403]	GETGLOBAL	5 -3	; ABSORB
+function(amount, resisted)	<.\..\xCT+\modules\combattext.lua:406,416> (36 instructions, 144 bytes at 00662A88)
+	[409]	GETGLOBAL	8 -3	; RESIST
+	[414]	GETGLOBAL	5 -3	; RESIST
+function(amount, resisted)	<.\..\xCT+\modules\combattext.lua:417,427> (36 instructions, 144 bytes at 00662B38)
+	[420]	GETGLOBAL	8 -3	; BLOCK
+	[425]	GETGLOBAL	5 -3	; BLOCK
+function(amount, resisted)	<.\..\xCT+\modules\combattext.lua:428,438> (36 instructions, 144 bytes at 00662BE8)
+	[431]	GETGLOBAL	8 -3	; ABSORB
+	[436]	GETGLOBAL	5 -3	; ABSORB
+function(amount, energy_type)	<.\..\xCT+\modules\combattext.lua:439,449> (44 instructions, 176 bytes at 00662C98)
+	[445]	GETGLOBAL	3 -9	; PowerBarColor
+	[445]	GETGLOBAL	4 -9	; PowerBarColor
+	[445]	GETGLOBAL	5 -9	; PowerBarColor
+function(amount, energy_type)	<.\..\xCT+\modules\combattext.lua:450,460> (44 instructions, 176 bytes at 00662CF0)
+	[456]	GETGLOBAL	3 -9	; PowerBarColor
+	[456]	GETGLOBAL	4 -9	; PowerBarColor
+	[456]	GETGLOBAL	5 -9	; PowerBarColor
+function(amount)	<.\..\xCT+\modules\combattext.lua:467,472> (25 instructions, 100 bytes at 00679148)
+	[470]	GETGLOBAL	7 -4	; HONOR
+function()	<.\..\xCT+\modules\combattext.lua:485,494> (34 instructions, 136 bytes at 00679250)
+	[486]	GETGLOBAL	0 -1	; UnitHealth
+	[486]	GETGLOBAL	1 -4	; UnitHealthMax
+	[486]	GETGLOBAL	1 -5	; COMBAT_TEXT_LOW_HEALTH_THRESHOLD
+	[488]	GETGLOBAL	3 -9	; HEALTH_LOW
+function()	<.\..\xCT+\modules\combattext.lua:495,504> (44 instructions, 176 bytes at 006792A8)
+	[496]	GETGLOBAL	2 -2	; UnitPowerType
+	[496]	GETGLOBAL	0 -6	; UnitPower
+	[496]	GETGLOBAL	1 -7	; UnitPowerMax
+	[496]	GETGLOBAL	1 -8	; COMBAT_TEXT_LOW_MANA_THRESHOLD
+	[498]	GETGLOBAL	3 -12	; MANA_LOW
+function(slot)	<.\..\xCT+\modules\combattext.lua:505,513> (33 instructions, 132 bytes at 00679300)
+	[506]	GETGLOBAL	1 -1	; GetRuneCooldown
+	[507]	GETGLOBAL	1 -3	; GetRuneType
+	[509]	GETGLOBAL	5 -5	; COMBAT_TEXT_RUNE
+function()	<.\..\xCT+\modules\combattext.lua:515,515> (14 instructions, 56 bytes at 00679358)
+	[515]	GETGLOBAL	5 -3	; LEAVING_COMBAT
+function()	<.\..\xCT+\modules\combattext.lua:516,516> (14 instructions, 56 bytes at 006793B0)
+	[516]	GETGLOBAL	5 -3	; ENTERING_COMBAT
+function(msg)	<.\..\xCT+\modules\combattext.lua:527,576> (174 instructions, 696 bytes at 006796C8)
+	[530]	GETGLOBAL	8 -3	; GetItemInfo
+	[542]	GETGLOBAL	15 -17	; LOOT_ITEM_CREATED_SELF
+	[543]	GETGLOBAL	15 -22	; LOOT_ITEM_PUSHED_SELF
+	[543]	GETGLOBAL	15 -23	; LOOT_ITEM_SELF
+	[543]	GETGLOBAL	15 -17	; LOOT_ITEM_CREATED_SELF
+	[549]	GETGLOBAL	15 -25	; GetItemQualityColor
+	[568]	GETGLOBAL	21 -37	; GetItemCount
+function(msg)	<.\..\xCT+\modules\combattext.lua:577,593> (103 instructions, 412 bytes at 00679720)
+	[578]	GETGLOBAL	4 -2	; GOLD_AMOUNT
+	[578]	GETGLOBAL	5 -6	; SILVER_AMOUNT
+	[578]	GETGLOBAL	6 -7	; COPPER_AMOUNT
+	[579]	GETGLOBAL	5 -11	; MONEY
+	[586]	GETGLOBAL	7 -17	; GetCoinTextureString
+function(...)	<.\..\xCT+\modules\combattext.lua:663,698> (90 instructions, 360 bytes at 00679828)
+	[686]	GETGLOBAL	23 -10	; UnitGUID
+	[688]	GETGLOBAL	22 -12	; PET_ATTACK_TEXTURE
+function(...)	<.\..\xCT+\modules\combattext.lua:801,824> (66 instructions, 264 bytes at 00679988)
+	[813]	GETGLOBAL	17 -5	; UnitGUID
+	[815]	GETGLOBAL	16 -7	; PET_ATTACK_TEXTURE
+function(...)	<.\..\xCT+\modules\combattext.lua:853,868> (38 instructions, 152 bytes at 00679A90)
+	[855]	GETGLOBAL	22 -2	; ACTION_SPELL_DISPEL
+function(...)	<.\..\xCT+\modules\combattext.lua:869,879> (35 instructions, 140 bytes at 00679AE8)
+	[871]	GETGLOBAL	20 -2	; ACTION_SPELL_INTERRUPT
+function(...)	<.\..\xCT+\modules\combattext.lua:880,890> (35 instructions, 140 bytes at 00679B40)
+	[882]	GETGLOBAL	20 -2	; ACTION_SPELL_STOLEN
+function(...)	<.\..\xCT+\modules\combattext.lua:891,904> (39 instructions, 156 bytes at 00679B98)
+	[893]	GETGLOBAL	13 -2	; ACTION_PARTY_KILL
+	[897]	GETGLOBAL	15 -5	; GetPlayerInfoByGUID
+	[898]	GETGLOBAL	14 -6	; RAID_CLASS_COLORS
+	[899]	GETGLOBAL	15 -6	; RAID_CLASS_COLORS
+	[899]	GETGLOBAL	16 -6	; RAID_CLASS_COLORS
+	[899]	GETGLOBAL	17 -6	; RAID_CLASS_COLORS
+________________________________________
+function x:UpdateFrames(specificFrame)	<.\..\xCT+\modules\frames.lua:77,172> (151 instructions, 604 bytes at 00391788)
+	[86]	GETGLOBAL	8 -4	; CreateFrame
+	[86]	GETGLOBAL	11 -6	; UIParent
+function(self, e)	<.\..\xCT+\modules\frames.lua:149,166> (63 instructions, 252 bytes at 00399420)
+	[154]	GETGLOBAL	2 -10	; CreateFrame
+function OnSpamUpdate(self, elapsed)	<.\..\xCT+\modules\frames.lua:334,397> (138 instructions, 552 bytes at 00397F00)
+	[372]	GETGLOBAL	13 -10	; tonumber
+function x.ToggleConfigMode()	<.\..\xCT+\modules\frames.lua:499,514> (22 instructions, 88 bytes at 003986A8)
+	[504]	GETGLOBAL	0 -2	; LibStub
+	[507]	GETGLOBAL	0 -5	; GameTooltip
+	[509]	GETGLOBAL	0 -7	; StaticPopup_Show
+function x:SaveAllFrames()	<.\..\xCT+\modules\frames.lua:516,536> (53 instructions, 212 bytes at 003990B0)
+	[526]	GETGLOBAL	9 -8	; GetScreenWidth
+	[526]	GETGLOBAL	10 -9	; GetScreenHeight
+function TestMoreUpdate(self, elapsed)	<.\..\xCT+\modules\frames.lua:540,606> (494 instructions, 1976 bytes at 003992B0)
+	[541]	GETGLOBAL	2 -1	; InCombatLockdown
+	[556]	GETGLOBAL	5 -20	; COMBAT_TEXT_LABEL
+	[578]	GETGLOBAL	2 -42	; COMBAT_TEXT_SHOW_FRIENDLY_NAMES
+	[579]	GETGLOBAL	5 -44	; UnitName
+	[585]	GETGLOBAL	2 -53	; UnitPowerType
+	[599]	GETGLOBAL	5 -61	; ERR_SPELL_COOLDOWN
+	[602]	GETGLOBAL	5 -63	; MONEY
+	[602]	GETGLOBAL	7 -65	; GetCoinTextureString
+function x.ToggleTestMode()	<.\..\xCT+\modules\frames.lua:608,630> (46 instructions, 184 bytes at 00635048)
+	[625]	GETGLOBAL	0 -12	; LibStub
+	[626]	GETGLOBAL	0 -15	; GameTooltip
+	[627]	GETGLOBAL	0 -17	; StaticPopup_Show
+function x.RestoreAllDefaults()	<.\..\xCT+\modules\frames.lua:643,647> (13 instructions, 52 bytes at 0063C1B0)
+	[644]	GETGLOBAL	0 -1	; LibStub
+	[645]	GETGLOBAL	0 -4	; GameTooltip
+	[646]	GETGLOBAL	0 -6	; StaticPopup_Show
+OnAccept      = function()	<.\..\xCT+\modules\frames.lua:657,657> (13 instructions, 52 bytes at 0063C208)
+	[657]	GETGLOBAL	0 -3	; LibStub
+OnCancel      = function()	<.\..\xCT+\modules\frames.lua:658,658> (13 instructions, 52 bytes at 0063C2B8)
+	[658]	GETGLOBAL	0 -3	; LibStub
+OnAccept      = function()	<.\..\xCT+\modules\frames.lua:671,671> (10 instructions, 40 bytes at 0063C368)
+	[671]	GETGLOBAL	0 -2	; LibStub
+OnAccept      = function()	<.\..\xCT+\modules\frames.lua:685,685> (4 instructions, 16 bytes at 0063C418)
+	[685]	SETGLOBAL	0 -1	; xCTSavedDB
+	[685]	GETGLOBAL	0 -2	; ReloadUI
+OnCancel      = function()	<.\..\xCT+\modules\frames.lua:686,686> (7 instructions, 28 bytes at 0063C470)
+	[686]	GETGLOBAL	0 -1	; LibStub
+________________________________________
+========================================
+ DUMP FINISHED
+========================================
