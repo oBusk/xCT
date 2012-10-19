@@ -1,23 +1,12 @@
-xCT+ Beta - Tester Invitation
-
-
 <center>__________________________________________________</center>
 <center><b>xCT+ - Beta Update (Version 3)</b></center>
 <center>__________________________________________________</center>
 
 <center>Here is your link to download the current version of xCT+ beta:</center>
-<center><a href="http://www.tukui.org/storage/download.php?file=638xCTplus_3_beta_2.zip">http://www.tukui.org/storage/download.php?file=638xCTplus_3_beta_2.zip</a></center>
-
-This version of xCT+ adds:
-<ul><li>Combo Points (Rogues, and other classes)</li>
-<li>Death Knight Runes</li>
-<li>New Slash Commands:
-<ul><pre>/xct help        # Displays list of commands
-/xct lock        # Unlocks the frames, type again to Lock and Save frames
-/xct cancel      # Locks the frames and cancels changes</pre></ul></li>
-<li>Bug Fixes</li>
-</ul>
-
-<b><u>Request</u>:</b> Since I am now tracking Chi points, I would like to check off the Monk. If anyone with a highlevel Monk could assist me in getting the Spell ID's of spammy spells, please let me know!
-
+<center><a href="http://www.tukui.org/storage/download.php?file=962xCTplus_3_beta_3.zip">http://www.tukui.org/storage/download.php?file=962xCTplus_3_beta_3.zip</a></center>
+.
+I need some information so that I can make sure xCT+ is properly tested; I have two requests:
+<ol><li><b>Let me know which class(es) you are testing with.</b></li>
+<li><b>Anyone with a high level Monk that can assist me in getting the Spell ID's of spammy spells, please let me know!</b></li></ol>
+.
 Thank you! I hope you are enjoying the beta :)
