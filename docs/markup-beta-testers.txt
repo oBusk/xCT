@@ -6,18 +6,20 @@ xCT+ Beta - Tester Invitation
 <center>__________________________________________________</center>
 
 <center>Here is your link to download the current version of xCT+ beta:</center>
-<center><a href="http://www.tukui.org/storage/download.php?file=638xCTplus_3_beta_2.zip">http://www.tukui.org/storage/download.php?file=638xCTplus_3_beta_2.zip</a></center>
+<center><a href="http://www.tukui.org/storage/download.php?file=962xCTplus_3_beta_3.zip">http://www.tukui.org/storage/download.php?file=962xCTplus_3_beta_3.zip</a></center>
 <center><i>(Updates will be pushed by PMs until otherwise announced).</i></center>
+
+<b><u>Please let me know:</u></b>
+<ol><li>Which classes you will be using xCT+ with.</li><li>If you have a high level monk and/or know most of your spells.</li></ol>
+.
 
 I appreciate your help in getting my add-on out to the public. I am writing this guide to help you get started exploring <b>xCT+</b>. If you feel up to it, feel free to jump right in!  Otherwise, here is a short <b>FAQ</b>.  All questions, comments, requests, and bug reports should be directed to this thread: <a href="http://www.tukui.org/forums/topic.php?id=24113">http://www.tukui.org/forums/topic.php?id=24113</a>
 
 
 
 <blockquote class="Overlord"><center>PLEASE TAKE NOTE:</center>
-<b>Confirmed features not in current version:</b> xCTplus_3_beta_2.zip
+<b>Confirmed features not in current version:</b> xCTplus_3_beta_3.zip
 <ul><li>Healing Spell Filter</li>
-<li>Combo Points (Rogues, and other classes)</li>
-<li>Death Knight Runes</li>
 <li>Monk Support</li>
 <li>Theshold limits to filter out lower values</li>
 <li>MEGA DAMAGE abbreviations</li>
