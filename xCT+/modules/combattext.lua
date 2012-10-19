@@ -22,7 +22,9 @@ local _, _G = nil, _G
 local sformat, mfloor, sgsub, s_lower, string = string.format, math.floor, string.gsub, string.lower, string
 local tostring, tonumber, select, unpack = tostring, tonumber, select, unpack
 
--- Holds important information about the player [use AddOn:UpdatePlayer()]
+--[=====================================================[
+ Holds player info; use AddOn:UpdatePlayer()
+--]=====================================================]
 x.player = {
   unit = "player",
   guid = nil, -- dont get the guid until we load
@@ -31,11 +33,11 @@ x.player = {
   spec = -1,
 }
 
--- =====================================================
--- AddOn:UpdatePlayer()
---    Updates important information about the player we
---  need inorder to correctly show combat text events.
--- =====================================================
+--[=====================================================[
+ AddOn:UpdatePlayer()
+    Updates important information about the player we
+  need inorder to correctly show combat text events.
+--]=====================================================]
 function x:UpdatePlayer()
   -- Set the Player's Current Playing Unit
   if UnitHasVehicleUI("player") then
@@ -55,12 +57,12 @@ function x:UpdatePlayer()
 
 end
 
--- =====================================================
--- AddOn:UpdateCombatTextEvents(
---    enable,     [BOOL] - True tp enable the events, false to disable them
---  )
---    Registers or updates the combat text event frame
--- =====================================================
+--[=====================================================[
+ AddOn:UpdateCombatTextEvents(
+    enable,     [BOOL] - True tp enable the events, false to disable them
+  )
+    Registers or updates the combat text event frame
+--]=====================================================]
 function x:UpdateCombatTextEvents(enable)
   local f = nil
   
@@ -111,7 +113,9 @@ function x:UpdateCombatTextEvents(enable)
   end
 end
 
--- Fast Boolian Lookups
+--[=====================================================[
+ Fast Boolian Lookups
+--]=====================================================]
 local function ShowMissTypes() return COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" end
 local function ShowResistances() return COMBAT_TEXT_SHOW_RESISTANCES == "1" end
 local function ShowHonor() return COMBAT_TEXT_SHOW_HONOR_GAINED == "1" end
@@ -120,8 +124,6 @@ local function ShowReactives() return COMBAT_TEXT_SHOW_REACTIVES == "1" end
 local function ShowLowResources() return COMBAT_TEXT_SHOW_LOW_HEALTH_MANA == "1" end
 local function ShowCombatState() return COMBAT_TEXT_SHOW_COMBAT_STATE == "1" end
 local function ShowFriendlyNames() return COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" end
---local function ShowComboPoints() return x.player.class == "ROGUE" and COMBAT_TEXT_SHOW_COMBO_POINTS == "1" end
---local function ShowMonkComboPoints() return x.player.class == "MONK" end
 local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg end
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
@@ -143,21 +145,18 @@ local function GetLootQuality() return x.db.profile.frames["loot"].filterItemQua
 local function ShowLootIcons() return x.db.profile.frames["loot"].iconsEnabled end
 local function GetLootIconSize() return x.db.profile.frames["loot"].iconsSize end
 
-
 local function ShowRogueComboPoints() return x.db.profile.spells.combo["ROGUE"][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "ROGUE" end
 local function ShowFeralComboPoints() return x.db.profile.spells.combo["DRUID"][2][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "DRUID" and x.player.spec == 2 end
-
 local function ShowMonkChi() return x.db.profile.spells.combo["MONK"][LIGHT_FORCE] and x.player.class == "MONK" end
 local function ShowPaladinHolyPower() return x.db.profile.spells.combo["PALADIN"][HOLY_POWER] and x.player.class == "PALADIN" end
 local function ShowPriestShadowOrbs() return x.db.profile.spells.combo["PRIEST"][3][SHADOW_ORBS] and x.player.class == "PRIEST" and x.player.spec == 3 end
-
 local function ShowWarlockSoulShards() return x.db.profile.spells.combo["WARLOCK"][1][SOUL_SHARDS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 1 end
 local function ShowWarlockDemonicFury() return x.db.profile.spells.combo["WARLOCK"][2][DEMONIC_FURY] and x.player.class == "WARLOCK" and x.player.spec == 2 end
 local function ShowWarlockBurningEmbers() return x.db.profile.spells.combo["WARLOCK"][3][BURNING_EMBERS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 3 end
 
-
-
--- String Formatters
+--[=====================================================[
+ String Formatters
+--]=====================================================]
 local format_loot = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
 local format_fade = "-%s"
 local format_gain = "+%s"
@@ -169,19 +168,21 @@ local format_faction = "%s +%s"
 local format_crit = "%s%s%s"
 local format_dispell = "%s: %s"
 
--- Flag value for special pets and vehicles
+--[=====================================================[
+ Flag value for special pets and vehicles
+--]=====================================================]
 local COMBATLOG_FILTER_MY_VEHICLE = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE,
   COMBATLOG_OBJECT_REACTION_FRIENDLY, COMBATLOG_OBJECT_CONTROL_PLAYER, COMBATLOG_OBJECT_TYPE_GUARDIAN )
 
--- =====================================================
--- AddOn:OnCombatTextEvent(
---    event,     [string] - Name of the event
---    ...,       [multiple] - args from the combat event
---  )
---    This is the event handler and will act like a
---  switchboard the send the events to where they need
---  to go.
--- =====================================================
+--[=====================================================[
+ AddOn:OnCombatTextEvent(
+    event,     [string] - Name of the event
+    ...,       [multiple] - args from the combat event
+  )
+    This is the event handler and will act like a
+  switchboard the send the events to where they need
+  to go.
+--]=====================================================]
 function x.OnCombatTextEvent(self, event, ...)
   if event == "COMBAT_LOG_EVENT_UNFILTERED" then
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, srcFlags2, destGUID, destName, destFlags, destFlags2 = select(1, ...)
@@ -202,17 +203,17 @@ function x.OnCombatTextEvent(self, event, ...)
   end
 end
 
--- =====================================================
--- AddOn:GetSpellTextureFormatted(
---    spellID,     [number] - The spell ID you want the icon for
---    iconSize,    [number] - The format size of the icon
---  )
---  Returns:
---   message,     [string] - the message contains the formatted icon
---
---    Formats an icon quickly for use when outputing to
---  a combat text frame.
--- =====================================================
+--[=====================================================[
+ AddOn:GetSpellTextureFormatted(
+    spellID,     [number] - The spell ID you want the icon for
+    iconSize,    [number] - The format size of the icon
+  )
+  Returns:
+   message,     [string] - the message contains the formatted icon
+
+    Formats an icon quickly for use when outputing to
+  a combat text frame.
+--]=====================================================]
 function x:GetSpellTextureFormatted(spellID, iconSize)
   local message = ""
 
@@ -234,12 +235,9 @@ function x:GetSpellTextureFormatted(spellID, iconSize)
   return message
 end
 
--- " \124T".."Interface\Icons\inv_gloves_mail_challengehunter_d_01"..":".."20"..":".."20"..":0:0:64:64:5:59:5:59\124t"
-
-
--- =====================================================
--- Combo Points
--- =====================================================
+--[=====================================================[
+ Combo Points - Rogues / Feral
+--]=====================================================]
 local function UpdateComboPoints()
   if ShowRogueComboPoints() or ShowFeralComboPoints() then
     local comboPoints, outputColor = GetComboPoints(x.player.unit, "target"), "combo_points"
@@ -254,10 +252,13 @@ local function UpdateComboPoints()
   end
 end
 
+--[=====================================================[
+ Combo Points - Class Power Types
+--]=====================================================]
 local function UpdateUnitPower(unit, powertype)
   if unit == x.player.unit then
     local value
-    
+
     if powertype == "LIGHT_FORCE" and ShowMonkChi() then
       value = UnitPower(x.player.unit, SPELL_POWER_LIGHT_FORCE)
     elseif powertype == "HOLY_POWER" and ShowPaladinHolyPower() then
@@ -271,7 +272,7 @@ local function UpdateUnitPower(unit, powertype)
     elseif powertype == "BURNING_EMBERS" and ShowWarlockBurningEmbers() then
       value = UnitPower(x.player.unit, SPELL_POWER_BURNING_EMBERS) / 10
     end
-  
+
     if value then
       if value < 1 then
         if value == 0 then
@@ -283,12 +284,12 @@ local function UpdateUnitPower(unit, powertype)
         x:AddMessage("class", math.floor(value), "combo_points")
       end
     end
-    
   end
-
 end
 
-
+--[=====================================================[
+ Combo Points - Class Aura Types
+--]=====================================================]
 local function UpdateAuraTracking(unit)
   local entry = x.TrackingEntry
   
@@ -315,11 +316,11 @@ local function UpdateAuraTracking(unit)
       x:AddMessage("class", " ", "combo_points")
     end
   end
-
 end
 
-
--- event handlers for combat text events
+--[=====================================================[
+ Event handlers - Combat Text Events
+--]=====================================================]
 x.combat_events = {
   ["DAMAGE"] = function(amount) x:AddMessage("damage", sformat(format_fade, amount), "damage") end,
   ["DAMAGE_CRIT"] = function(amount) x:AddMessage("damage", sformat(format_fade, amount), "damage_crit") end,
@@ -351,6 +352,7 @@ x.combat_events = {
   
   -- TODO: Add filter?
   ["SPELL_CAST"] = function(spell_name) x:AddMessage("procs", spell_name, "spell_cast") end,
+  ["SPELL_ACTIVE"] = function(spellname) if ShowReactives() then x:AddMessage("general", spellname, "spell_reactive") end end,
   
   ["MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "misstype_generic") end end,
   ["DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "misstype_generic") end end,
@@ -367,9 +369,7 @@ x.combat_events = {
   ["SPELL_IMMUNE"] = function() if ShowMissTypes() then x:AddMessage("damage", IMMUNE, "misstype_generic") end end,
   ["SPELL_DEFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", DEFLECT, "misstype_generic") end end,
   ["SPELL_REFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", REFLECT, "misstype_generic") end end,
-  
-  ["SPELL_ACTIVE"] = function(spellname) if ShowReactives() then x:AddMessage("general", spellname, "spell_reactive") end end,
-  
+
   ["RESIST"] = function(amount, resisted)
       if resisted then
         if ShowResistances() then
@@ -478,6 +478,9 @@ x.combat_events = {
     end,
 }
 
+--[=====================================================[
+ Event handlers - General Events
+--]=====================================================]
 x.events = {
   ["UNIT_HEALTH"] = function()
       if ShowLowResources() and UnitHealth(x.player.unit) / UnitHealthMax(x.player.unit) <= COMBAT_TEXT_LOW_HEALTH_THRESHOLD then
@@ -499,19 +502,6 @@ x.events = {
         x.lowMana = false
       end
     end,
-  
-  ["PLAYER_REGEN_ENABLED"] = function() if ShowCombatState() then x:AddMessage("general", sformat(format_fade, LEAVING_COMBAT), "combat_end") end end,
-  ["PLAYER_REGEN_DISABLED"] = function() if ShowCombatState() then x:AddMessage("general", sformat(format_gain, ENTERING_COMBAT), "combat_begin") end end,
-  
-  ["UNIT_POWER"] = function(unit, powerType) UpdateUnitPower(unit, powerType) end,
-  
-  ["UNIT_COMBO_POINTS"] = function() UpdateComboPoints() end,
-  ["PLAYER_TARGET_CHANGED"] = function() UpdateComboPoints() end,
-  
-  ["UNIT_AURA"] = function(unit) UpdateAuraTracking(unit) end,
-
-  
-  -- function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
   ["RUNE_POWER_UPDATE"] = function(slot)
       if GetRuneCooldown(slot) ~= 0 then return end
       local runeType = GetRuneType(slot);
@@ -522,6 +512,13 @@ x.events = {
       end
     end,
     
+  ["PLAYER_REGEN_ENABLED"] = function() if ShowCombatState() then x:AddMessage("general", sformat(format_fade, LEAVING_COMBAT), "combat_end") end end,
+  ["PLAYER_REGEN_DISABLED"] = function() if ShowCombatState() then x:AddMessage("general", sformat(format_gain, ENTERING_COMBAT), "combat_begin") end end,
+  ["UNIT_POWER"] = function(unit, powerType) UpdateUnitPower(unit, powerType) end,
+  ["UNIT_COMBO_POINTS"] = function() UpdateComboPoints() end,
+  ["PLAYER_TARGET_CHANGED"] = function() UpdateComboPoints() end,
+  ["UNIT_AURA"] = function(unit) UpdateAuraTracking(unit) end,
+
   ["UNIT_ENTERED_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["UNIT_EXITING_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["PLAYER_ENTERING_WORLD"] = function() x:UpdatePlayer(); x:UpdateComboPointOptions() end,
@@ -577,7 +574,6 @@ x.events = {
   
   
     end,
-  
   ["CHAT_MSG_MONEY"] = function(msg)
       local g, s, c = tonumber(msg:match(GOLD_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(SILVER_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(COPPER_AMOUNT:gsub("%%d", "(%%d+)")))
       local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), MONEY .. ": "
@@ -597,6 +593,9 @@ x.events = {
     end,
 }
 
+--[=====================================================[
+ Event handlers - Combat Log Unfiltered Events
+--]=====================================================]
 x.outgoing_events = {
   ["SPELL_PERIODIC_HEAL"] = function(...)
       if ShowHealing() and ShowHots() then
@@ -629,7 +628,6 @@ x.outgoing_events = {
         x:AddMessage(outputFrame, message, outputColor)
       end
     end,
-    
   ["SPELL_HEAL"] = function(...)
       if ShowHealing() then
         -- output = the output frame; list of incoming args
@@ -698,7 +696,6 @@ x.outgoing_events = {
         x:AddMessage(outputFrame, message, outputColor)
       end
     end,
-
   ["RANGE_DAMAGE"] = function(...)
       if ShowDamage() then
         local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, amount, _, _, _, _, _, critical = ...
@@ -764,7 +761,6 @@ x.outgoing_events = {
         x:AddMessage(outputFrame, message, outputColor)
       end
     end,
-    
   ["SPELL_PERIODIC_DAMAGE"] = function(...)
       if ShowDamage() then
         local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
@@ -826,7 +822,6 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
   ["SPELL_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
       local outputFrame, message, outputColor = "outgoing", _G[missType], "out_misstype"
@@ -841,7 +836,6 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
   ["RANGE_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
       local outputFrame, message, outputColor = "outgoing", _G[missType], "out_misstype"
@@ -856,7 +850,6 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
   ["SPELL_DISPEL"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect, _, etype = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_DISPEL, effect), "dispell_debuff"
@@ -873,7 +866,6 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
   ["SPELL_INTERRUPT"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_INTERRUPT, effect), "spell_interrupt"
@@ -885,7 +877,6 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
   ["SPELL_STOLEN"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_STOLEN, effect), "spell_stolen"
@@ -897,7 +888,6 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
   ["PARTY_KILL"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, name = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_PARTY_KILL, name), "party_kill"

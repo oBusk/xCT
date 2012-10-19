@@ -16,70 +16,37 @@
 local AddonName, addon = ...
 
 local sgsub, pairs, type, string_format, table_insert = string.gsub, pairs, type, string.format, table.insert
-xCT_Plus = addon.engine
-local X = xCT_Plus
 
--- =====================================================
--- Invisible Table Copy Functio, by me :)
--- inv_tcopy(
---    t1,  [table] - Check this table (edited)
---    t2,  [table] - against this table (NOT edited)
---  )
---    Check table 1 against table 2. if a value is found
---  that is not defined in table 1, copy the default
---  value from table 2. Will also examine "subtables".
--- =====================================================
-local function inv_tcopy(t1, t2)
-  for k, v in pairs(t2) do
-    if t1[k] == nil then -- found new key
-      t1[k] = t2[k]
-    elseif type(t1[k]) == 'table' then
-      inv_tcopy(t1[k], t2[k])
-    end
-  end
-end
+-- Local Handle to the Engine
+local X = addon.engine
 
--- Important Addon Event Handlers
+-- Handle Addon Initialized
 function X:OnInitialize()
-  if not xCTSavedDB then
-    xCTSavedDB = { }
-  end
-
+  -- Load the Data Base
   self.db = LibStub('AceDB-3.0'):New('xCTSavedDB')
   self.db:RegisterDefaults(addon.defaults)
   self.db.RegisterCallback(self, 'OnProfileChanged', 'RefreshConfig')
   self.db.RegisterCallback(self, 'OnProfileCopied', 'RefreshConfig')
   self.db.RegisterCallback(self, 'OnProfileReset', 'RefreshConfig')
-  
   self.db:GetCurrentProfile()
   
+  -- Add the profile options to my dialog config
   addon.options.args['Profiles'] = LibStub('AceDBOptions-3.0'):GetOptionsTable(self.db)
   
-  --[==[if not self.db.profile.frames then
-    self.db.profile.frames = { }
-  end
-  
-  inv_tcopy(self.db.profile.frames, addon.DefaultProfile.frames)
-  
-  if not self.db.profile.spells then
-    self.db.profile.spells = { }
-  end
-
-  inv_tcopy(self.db.profile.spells, addon.DefaultProfile.spells)
-  ]==]
-  
+  -- Perform xCT+ Update
   X:UpdatePlayer()
   X:UpdateFrames()
   X:UpdateCombatTextEvents(true)
   X:UpdateSpamSpells()
   X:UpdateItemTypes()
   
+  -- Everything got Initialized, show Startup Text
   if self.db.profile.showStartupText then
     print("Loaded |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r. To configure, type: |cffFF0000/xct|r")
   end
-  
 end
 
+-- Profile Updated, need to refresh important stuff 
 function X:RefreshConfig()
   X:UpdateFrames()
   X:UpdateSpamSpells()
@@ -87,6 +54,7 @@ function X:RefreshConfig()
   collectgarbage()
 end
 
+-- Gets spammy spells from the database and creates options
 function X:UpdateSpamSpells()
   local spells = addon.options.args.spells.args.spellList.args
   for spellID, entry in pairs(self.db.profile.spells.merge) do
@@ -103,8 +71,9 @@ function X:UpdateSpamSpells()
   end
 end
 
--- Because of Localization, I have to dynamically create the lists
+-- Updates item filter list
 function X:UpdateItemTypes()
+  -- Because of Localization, I have to dynamically create the lists
 	local itemTypes = { GetAuctionItemClasses() }
   
   local allTypes = {
@@ -117,18 +86,18 @@ function X:UpdateItemTypes()
   
 	for i, itype in ipairs(itemTypes) do
     local subtypes = { GetAuctionItemSubClasses(i) }
+    
+    -- Page for the MAIN ITEM GROUP
 		local group = {
       order = i,
       name = itype,
       type = 'group',
       args = { },
     }
-    
-    if self.db.profile.spells.items[itype] == nil then
-      self.db.profile.spells.items[itype] = { }
-    end
-    
+
+    -- the footer for the current MAIN ITEM GROUP
     if #subtypes > 0 then
+      -- Separator for the TOP toggle switches, and the BOTTOM enable/disable buttons
       group.args['enableHeader'] = {
         order = 100,
         type = 'header',
@@ -136,6 +105,7 @@ function X:UpdateItemTypes()
         width = "full",
       }
       
+      -- Button to DISABLE all
       group.args['disableAll'] = {
         order = 101,
         type = 'execute',
@@ -148,6 +118,7 @@ function X:UpdateItemTypes()
           end,
       }
       
+      -- Button to ENABLE all
       group.args['enableAll'] = {
         order = 102,
         type = 'execute',
@@ -176,10 +147,9 @@ function X:UpdateItemTypes()
       
     end
     
+    
+    -- add all the SUBITEMS
 		for j, subtype in ipairs(subtypes) do
-      if self.db.profile.spells.items[itype][subtype] == nil then
-        self.db.profile.spells.items[itype][subtype] = true
-      end
       group.args[subtype] = {
         order = j,
         type = 'toggle',
@@ -196,7 +166,7 @@ function X:UpdateItemTypes()
   addon.options.args["Frames"].args["loot"].args["typeFilter"] = allTypes
 end
 
-
+-- Update the combo point list
 function X:UpdateComboPointOptions(force)
   if X.LOADED_COMBO_POINTS_OPTIONS and not force then return end
 
@@ -209,15 +179,12 @@ function X:UpdateComboPointOptions(force)
     guiInline = true,
     args = { },
   }
-  
-  local haveAllSpec = false
-  
+
   -- Add "All Specializations" Entries
   for name in pairs(X.db.profile.spells.combo[myClass]) do
   
     if not tonumber(name) then
-      if not haveAllSpec then
-        haveAllSpec = true
+      if not comboSpells.args['allSpecsHeader'] then
         comboSpells.args['allSpecsHeader'] = {
           order = 0,
           type = 'header',
@@ -254,6 +221,7 @@ function X:UpdateComboPointOptions(force)
       end
     
       if tonumber(index) then
+        -- Class Combo Points ( UNIT_AURA Tracking)
         comboSpells.args['entry' .. offset] = {
           order = offset,
           type = 'toggle',
@@ -364,7 +332,7 @@ function X:OpenXCTCommand(input)
     if X.configuring then
       X:UpdateFrames();
       X.EndConfigMode()
-      print("|cffFF0000x|r|cffFFFF00CT+|r  There is nothing to cancel.")
+      print("|cffFF0000x|r|cffFFFF00CT+|r  canceled frame move.")
     else
       print("|cffFF0000x|r|cffFFFF00CT+|r  There is nothing to cancel.")
     end
