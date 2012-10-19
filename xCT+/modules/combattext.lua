@@ -443,7 +443,7 @@ x.combat_events = {
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
             or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
           local color = {PowerBarColor[energy_type].r, PowerBarColor[energy_type].g, PowerBarColor[energy_type].b}
-          x:AddMessage("power", sformat(format_energy, amount, energy_type), color)
+          x:AddMessage("power", sformat(format_energy, amount, _G[energy_type]), color)
         end
       end
     end,
@@ -454,7 +454,7 @@ x.combat_events = {
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
             or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
           local color = {PowerBarColor[energy_type].r, PowerBarColor[energy_type].g, PowerBarColor[energy_type].b}
-          x:AddMessage("power", sformat(format_energy, amount, energy_type), color)
+          x:AddMessage("power", sformat(format_energy, amount, _G[energy_type]), color)
         end
       end
     end,
@@ -525,7 +525,7 @@ x.events = {
   ["UNIT_ENTERED_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["UNIT_EXITING_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["PLAYER_ENTERING_WORLD"] = function() x:UpdatePlayer(); x:UpdateComboPointOptions() end,
-  ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); X:UpdateComboTracker() end,    -- x:UpdateComboPointOptions(true) end,
+  ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); x:UpdateComboTracker() end,    -- x:UpdateComboPointOptions(true) end,
   
   ["CHAT_MSG_LOOT"] = function(msg)
     --format_loot

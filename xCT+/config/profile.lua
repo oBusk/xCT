@@ -491,6 +491,7 @@ addon.defaults = {
         [589]    = CreateMergeSpellEntry("PRIEST", true),           -- Shadow Word: Pain
         [34914]  = CreateMergeSpellEntry("PRIEST", true),           -- Vampiric Touch 
         [2944]   = CreateMergeSpellEntry("PRIEST", true),           -- Devouring Plague
+        [127626] = CreateMergeSpellEntry("PRIEST", true, 6.5),      -- Devouring Plague (Poison?)
         [15407]  = CreateMergeSpellEntry("PRIEST", true),           -- Mind Flay
         [49821]  = CreateMergeSpellEntry("PRIEST", true),           -- Mind Seer (From Derap: first one is the cast)
         [124469] = CreateMergeSpellEntry("PRIEST", true),           -- Mind Seer (the second one is the debuff that is applied to your target which lets you clip your mind sears like mind flay)
