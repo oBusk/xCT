@@ -88,7 +88,10 @@ local function AssignTalentTree()
   if ct.combowindow then
     ct.classcomboUnit = "player" -- most of the time, this is the player
     
-    if ct.myclass == "WARLOCK" then
+    if ct.myclass == "MONK" then
+      ct.combowindow = true
+      
+    elseif ct.myclass == "WARLOCK" then
       if ct.myspec == 1 then      -- Affliction
         ct.classcomboIDs = {
           [32386] = true,         -- Shadow Embrace (Rank 1)
@@ -2219,7 +2222,27 @@ end
 
 -- Stack Tracker
 function loadstacktracker()
-  if ct.combowindow then
+  if ct.myclass == "MONK" then
+    xCTclass:SetMaxLines(1)
+    
+    local xCTstacks = CreateFrame("Frame")
+    
+    local track = function(self, event, unit, powerType)
+        if unit == ct.classcomboUnit and powerType == "LIGHT_FORCE" then
+          local currentPower = UnitPower(ct.classcomboUnit, SPELL_POWER_LIGHT_FORCE)
+          
+          if currentPower == 0 then
+            xCTclass:AddMessage(" ", 1, .82, 0)
+          else
+            xCTclass:AddMessage(currentPower, 1, .82, 0)
+          end
+        end
+      end
+    
+    xCTstacks:RegisterEvent("UNIT_POWER")
+    xCTstacks:SetScript("OnEvent", track)
+  
+  elseif ct.combowindow then
     xCTclass:SetMaxLines(1)
     local unpack, select, time = unpack, select, time
     local xCTstacks = CreateFrame("Frame")
