@@ -488,6 +488,21 @@ elseif ct.myclass == "ROGUE" then
       -- Add spells for all rogues here (example below)
       --ct.critfilter[# Spell ID] = true
     end
+
+elseif ct.myclass == "MONK" then  -- Thanks johnis007 for getting it started!
+--Damage Spells
+    if ct.mergeaoespam then
+        ct.aoespam[113656] = true -- Fists of Furry
+        ct.aoespam[107270] = true -- Spinning Crane Kick
+    end
+--Healing Spells
+    if ct.healingout and ct.mergeaoespam then
+        ct.aoespam[117640] = true -- Spinning Crane Kick (Healing Part)
+        ct.aoespam[119611] = true -- Renewing Mist
+        ct.aoespam[115175] = true -- Soothing Mist
+        ct.aoespam[132120] = true -- Enveloping Mist
+        ct.aoespam[116670] = true -- Uplift
+    end
 end
 
 --[[  Spammy Items and Procs that affect multiple classes  ]]
