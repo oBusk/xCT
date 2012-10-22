@@ -32,6 +32,9 @@ local function CreateComboSpellEntry(default, spellID, watchUnit)
   return { id = spellID, unit = watchUnit or "player", enabled = default}
 end
 
+-- LOCALIZATION
+local COMBO = COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT  -- "Combo Points"
+
 addon.defaults = {
   profile = {
     showStartupText = true,
@@ -324,7 +327,7 @@ addon.defaults = {
           [1] = {                                         -- Balance
             CreateComboSpellEntry(true, 81192),           --   Lunar Shower
           },
-          [2] = { [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true, },    -- Feral
+          [2] = { [COMBO] = true, },    -- Feral
           [3] = { },    -- Guardian
           [4] = { },    -- Restoration
         },
@@ -380,7 +383,7 @@ addon.defaults = {
         },
         
         ["ROGUE"] = {
-          [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
+          [COMBO] = true,
         
           -- DO NOT USE - ROGUES GET COMBO POINTS
           [1] = { },    -- Assassination
@@ -469,7 +472,11 @@ addon.defaults = {
         [11113]  = CreateMergeSpellEntry("MAGE", true),             -- Blast Wave
         [83619]  = CreateMergeSpellEntry("MAGE", true, .5),         -- Flame Orb                                  (INSTANT)
         [120]    = CreateMergeSpellEntry("MAGE", true),             -- Cone of Cold
-        
+      
+      -- monk (damage)
+      
+      -- monk (healing)
+      
       -- paladin (damage)
         [81297]  = CreateMergeSpellEntry("PALADIN", true),          -- Consecration
         [53385]  = CreateMergeSpellEntry("PALADIN", true),          -- Divine Storm
