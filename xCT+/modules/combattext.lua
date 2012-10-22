@@ -318,6 +318,33 @@ local function UpdateAuraTracking(unit)
   end
 end
 
+function x:QuickClassFrameUpdate()
+  local entry = x.TrackingEntry
+  if entry and UnitExists(entry.unit) then
+    -- Update Buffs
+    UpdateAuraTracking(entry.unit)
+    
+    -- Update Unit's Power
+    if ShowMonkChi() then
+      UpdateUnitPower(entry.unit, "LIGHT_FORCE")
+    elseif ShowPaladinHolyPower() then
+      UpdateUnitPower(entry.unit, "HOLY_POWER")
+    elseif ShowPriestShadowOrbs() then
+      UpdateUnitPower(entry.unit, "SHADOW_ORBS")
+      print("DEBUG: Set Shadow Orbs")
+    elseif ShowWarlockSoulShards() then
+      UpdateUnitPower(entry.unit, "SOUL_SHARDS")
+    elseif ShowWarlockDemonicFury() then
+      UpdateUnitPower(entry.unit, "DEMONIC_FURY")
+    elseif ShowWarlockBurningEmbers() then
+      UpdateUnitPower(entry.unit, "BURNING_EMBERS")
+    end
+  else
+    -- Update Combo Points
+    UpdateComboPoints()
+  end
+end
+
 --[=====================================================[
  Event handlers - Combat Text Events
 --]=====================================================]
@@ -561,7 +588,7 @@ x.events = {
         -- Amount Looted
         s=s.." x "..item.amount
     
-        -- Items purchased seem to get to your bags faster than looted items
+        -- Purchased/quest items seem to get to your bags faster than looted items
 
         -- Total items in bag
         if ShowTotalItems() then

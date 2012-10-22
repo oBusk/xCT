@@ -286,6 +286,8 @@ function X:UpdateComboTracker()
       X.TrackingEntry = entry
     end
   end
+  
+  X:QuickClassFrameUpdate()
 end
 
 
