@@ -474,9 +474,16 @@ addon.defaults = {
         [120]    = CreateMergeSpellEntry("MAGE", true),             -- Cone of Cold
       
       -- monk (damage)
-      
+        [113656] = CreateMergeSpellEntry("MONK", true),             -- Fists of Fury                              (Instant w/ every 1s for 4s)
+        [107270] = CreateMergeSpellEntry("MONK", true, 2.5),        -- Spinning Crane Kick                        (Over 2s)
+
       -- monk (healing)
-      
+        [117640] = CreateMergeSpellEntry("MONK", true, 2.5),        -- Spinning Crane Kick (Heal)                 (Over 2s)
+        [119611] = CreateMergeSpellEntry("MONK", true, 6),          -- Renewing Mist                              (Every 3s for 18s)
+        [115175] = CreateMergeSpellEntry("MONK", true, 4.5),        -- Soothing Mist                              (Every 1s for 8s)
+        [132120] = CreateMergeSpellEntry("MONK", true, 6),          -- Enveloping Mist                            (Every 1s for 6s)
+        [116670] = CreateMergeSpellEntry("MONK", true, .5),         -- Uplift                                     (INSTANT)
+        
       -- paladin (damage)
         [81297]  = CreateMergeSpellEntry("PALADIN", true),          -- Consecration
         [53385]  = CreateMergeSpellEntry("PALADIN", true),          -- Divine Storm
