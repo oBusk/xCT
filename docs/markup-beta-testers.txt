@@ -20,7 +20,7 @@ I appreciate your help in getting my add-on out to the public. I am writing this
 <blockquote class="Overlord"><center>PLEASE TAKE NOTE:</center>
 <b>Confirmed features not in current version:</b> xCTplus_3_beta_3.zip
 <ul><li>Healing Spell Filter</li>
-<li>Monk Support</li>
+<li>Monk Support (Only Chi works currently)</li>
 <li>Theshold limits to filter out lower values</li>
 <li>MEGA DAMAGE abbreviations</li>
 <li>Options to turn off: Killing Blows, Interrupts, Dispels</li>
