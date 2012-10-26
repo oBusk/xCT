@@ -23,6 +23,11 @@ local X = addon.engine
 
 -- Handle Addon Initialized
 function X:OnInitialize()
+  if xCT or ct and ct.myname and ct.myclass then
+    print("|cffFF0000WARNING:|r xCT+ cannot load. Please disable xCT in order to use xCT+.")
+    return
+  end
+
   -- Load the Data Base
   self.db = LibStub('AceDB-3.0'):New('xCTSavedDB')
   self.db:RegisterDefaults(addon.defaults)

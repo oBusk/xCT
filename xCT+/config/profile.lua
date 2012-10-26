@@ -446,6 +446,8 @@ addon.defaults = {
         [779]    = CreateMergeSpellEntry("DRUID", true, .5),        -- Swipe (Bear)                               (INSTANT)
         [33745]  = CreateMergeSpellEntry("DRUID", true),            -- Lacerate
         [1079]   = CreateMergeSpellEntry("DRUID", true),            -- Rip
+        [106830] = CreateMergeSpellEntry("DRUID", true, 4),         -- Thrash (Cat)
+        [77758]  = CreateMergeSpellEntry("DRUID", true, 4),         -- Thrash (Bear)
       
       -- druid (healing)
         [774]    = CreateMergeSpellEntry("DRUID", true),            -- Rejuvenation
