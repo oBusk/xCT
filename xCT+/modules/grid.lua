@@ -1,0 +1,107 @@
+--[[   ____    ______      
+      /\  _`\ /\__  _\   __
+ __  _\ \ \/\_\/_/\ \/ /_\ \___ 
+/\ \/'\\ \ \/_/_ \ \ \/\___  __\
+\/>  </ \ \ \L\ \ \ \ \/__/\_\_/
+ /\_/\_\ \ \____/  \ \_\  \/_/
+ \//\/_/  \/___/    \/_/
+ 
+ [=====================================]
+ [  Author: Dandruff @ Whisperwind-US  ]
+ [  xCT+ Version 3.x.x                 ]
+ [  ©2012. All Rights Reserved.        ]
+ [====================================]]
+
+local ADDON_NAME, addon = ...
+
+
+-- Shorten my handle
+local x = addon.engine
+local AlignGrid
+
+do 
+  AlignGrid = CreateFrame('Frame', nil, UIParent)
+  AlignGrid:SetAllPoints(UIParent)
+  local boxSize = 32
+  
+  -- Get the current screen resolution, Mid-points, and the total number of lines
+  local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+  local midX, midY = ResX / 2, ResY / 2
+  local iLinesLeftRight, iLinesTopBottom = midX / boxSize , midY / boxSize
+  
+  -- Vertical Bars
+  for i = 1, iLinesLeftRight do
+    -- Vertical Bars to the Left of the Center
+    local tt1 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
+    if i % 4 == 0 then
+        tt1:SetTexture(.3, .3, .3, .8) 
+    elseif i % 2 == 0 then
+        tt1:SetTexture(.1, .1, .1, .8) 
+    else
+        tt1:SetTexture(0, 0, 0, .8) 
+    end
+    tt1:SetPoint('TOP', AlignGrid, 'TOP', -i * boxSize, 0)
+    tt1:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -i * boxSize, 0)
+    tt1:SetWidth(1)
+    
+    -- Vertical Bars to the Right of the Center
+    local tt2 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
+    if i % 4 == 0 then
+        tt2:SetTexture(.3, .3, .3, .8) 
+    elseif i % 2 == 0 then
+        tt2:SetTexture(.1, .1, .1, .8) 
+    else
+        tt2:SetTexture(0, 0, 0, .8) 
+    end
+    tt2:SetPoint('TOP', AlignGrid, 'TOP', i * boxSize + 1, 0)
+    tt2:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', i * boxSize + 1, 0)
+    tt2:SetWidth(1)
+  end
+  
+  -- Horizontal Bars
+  for i = 1, iLinesTopBottom do
+    -- Horizontal Bars to the Below of the Center
+    local tt3 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
+    if i % 4 == 0 then
+        tt3:SetTexture(.3, .3, .3, .8)
+    elseif i % 2 == 0 then
+        tt3:SetTexture(.1, .1, .1, .8) 
+    else
+        tt3:SetTexture(0, 0, 0, .8) 
+    end
+    tt3:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize + 1)
+    tt3:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize + 1)
+    tt3:SetHeight(1)
+    
+    -- Horizontal Bars to the Above of the Center
+    local tt4 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
+    if i % 4 == 0 then
+        tt4:SetTexture(.3, .3, .3, .8) 
+    elseif i % 2 == 0 then
+        tt4:SetTexture(.1, .1, .1, .8) 
+    else
+        tt4:SetTexture(0, 0, 0, .8) 
+    end
+    tt4:SetPoint('LEFT', AlignGrid, 'LEFT', 0, i * boxSize)
+    tt4:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, i * boxSize)
+    tt4:SetHeight(1)
+  end
+  
+  --Create the Vertical Middle Bar
+  local tta = AlignGrid:CreateTexture(nil, 'BACKGROUND')
+  tta:SetTexture(1, 0, 0, .6)
+  tta:SetPoint('TOP', AlignGrid, 'TOP', 0, 0)
+  tta:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', 0, 0)
+  tta:SetWidth(2)
+  
+  --Create the Horizontal Middle Bar
+  local ttb = AlignGrid:CreateTexture(nil, 'BACKGROUND')
+  ttb:SetTexture(1, 0, 0, .6)
+  ttb:SetPoint('LEFT', AlignGrid, 'LEFT', 0, 0)
+  ttb:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, 0)
+  ttb:SetHeight(2)
+  
+  AlignGrid:Hide()
+end
+
+x.AlignGrid = AlignGrid

@@ -74,18 +74,37 @@ end
 
 -- Updates item filter list
 function X:UpdateItemTypes()
+
+  -- check to see if this is the first time we are loading this version
+  local first = false
+  if not self.db.profile.spells.items.version then
+    self.db.profile.spells.items.version = 1
+    first = true
+  end
+
+
   local itemTypes = { GetAuctionItemClasses() }
   
   local allTypes = {
     order = 100,
-    name = "Filter Item Types" .. X.new,
+    name = "Always Show Filter" .. X.new,
     type = 'group',
     childGroups = "select",
-    args = { },
+    args = {
+      secondaryFrame = {
+          type = 'description',
+          order = 0,
+          name = "These options allow you to bypass the loot item filter and always show a item from any category, reguardless of the quality.\n",
+        },
+    },
   }
   
   for i, itype in ipairs(itemTypes) do
     local subtypes = { GetAuctionItemSubClasses(i) }
+    
+    if self.db.profile.spells.items[itype] == nil then
+      self.db.profile.spells.items[itype] = { }
+    end
     
     -- Page for the MAIN ITEM GROUP
     local group = {
@@ -132,9 +151,10 @@ function X:UpdateItemTypes()
       }
     else
       -- Quest Items... maybe others
-      if self.db.profile.spells.items[itype][itype] == nil then
-        self.db.profile.spells.items[itype][itype] = true
+      if first or self.db.profile.spells.items[itype][itype] == nil then
+        self.db.profile.spells.items[itype][itype] = false
       end
+      
       group.args[itype] = {
         order = 1,
         type = 'toggle',
@@ -146,6 +166,10 @@ function X:UpdateItemTypes()
 
     -- add all the SUBITEMS
     for j, subtype in ipairs(subtypes) do
+      if first or self.db.profile.spells.items[itype][subtype] == nil then
+        self.db.profile.spells.items[itype][subtype] = false
+      end
+    
       group.args[subtype] = {
         order = j,
         type = 'toggle',
@@ -169,7 +193,7 @@ function X:UpdateComboPointOptions(force)
   
   local comboSpells = {
     order = 100,
-    name = "Tracking Spells" .. X.new,
+    name = "Tracking Spells",
     type = 'group',
     guiInline = true,
     args = { },
@@ -245,6 +269,7 @@ function X:UpdateComboPointOptions(force)
           order = offset,
           type = 'toggle',
           name = index,
+          desc = "Unit Power",
           get = function(info) return self.db.profile.spells.combo[myClass][spec][index] end,
           set = function(info, value)
               if value == true then
@@ -303,6 +328,9 @@ local ACR = LibStub('AceConfigRegistry-3.0')
 -- Register the Options
 ACD:SetDefaultSize(AddonName, 800, 550)
 AC:RegisterOptionsTable(AddonName, addon.options)
+AC:RegisterOptionsTable(AddonName.."Blizzard", X.blizzardOptions)
+ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
+
 
 -- Register Slash Commands
 X:RegisterChatCommand('xct', 'OpenXCTCommand')

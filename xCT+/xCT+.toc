@@ -4,6 +4,7 @@
 ## Author: Dandruff
 ## Version: 3.0.0 beta 3
 ## RequiredDeps: Blizzard_CombatText
+## OptionalDeps: xCT
 ## SavedVariables: xCTSavedDB
 
 embeds.xml

@@ -38,7 +38,7 @@ local COMBO = COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT  -- "Combo Points"
 addon.defaults = {
   profile = {
     showStartupText = true,
-
+    
     frames = {
       general = {
         ["enabledFrame"] = true,
@@ -64,6 +64,11 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        
+      -- special tweaks
+        ["showInterrupts"] = true,
+        ["showDispells"] = true,
+        ["showPartyKills"] = true,
       },
       
       outgoing = {
@@ -476,13 +481,20 @@ addon.defaults = {
       -- monk (damage)
         [113656] = CreateMergeSpellEntry("MONK", true),             -- Fists of Fury                              (Instant w/ every 1s for 4s)
         [107270] = CreateMergeSpellEntry("MONK", true, 2.5),        -- Spinning Crane Kick                        (Over 2s)
-
+        [128531] = CreateMergeSpellEntry("MONK", true, 4),          -- Blackout Kick (DoT)                        (Every 1s for 4s)
+        [117418] = CreateMergeSpellEntry("MONK", true, 4),          -- Fists of Fury                              (Every 1s for 4s)
+        
       -- monk (healing)
         [117640] = CreateMergeSpellEntry("MONK", true, 2.5),        -- Spinning Crane Kick (Heal)                 (Over 2s)
         [119611] = CreateMergeSpellEntry("MONK", true, 6),          -- Renewing Mist                              (Every 3s for 18s)
         [115175] = CreateMergeSpellEntry("MONK", true, 4.5),        -- Soothing Mist                              (Every 1s for 8s)
+        [125953] = CreateMergeSpellEntry("MONK", true, 4.5),        -- Soothing Mist (Statue)                     (Every 1s for 8s)
         [132120] = CreateMergeSpellEntry("MONK", true, 6),          -- Enveloping Mist                            (Every 1s for 6s)
         [116670] = CreateMergeSpellEntry("MONK", true, .5),         -- Uplift                                     (INSTANT)
+        [117895] = CreateMergeSpellEntry("MONK", true, 3),          -- Eminence (Monk)
+        [126890] = CreateMergeSpellEntry("MONK", true, 3),          -- Eminence (Statue)
+        [127722] = CreateMergeSpellEntry("MONK", true, 3),          -- Serpent's Zeal
+        [128591] = CreateMergeSpellEntry("MONK", true, 3),          -- Blackout Kick (Heal??)
         
       -- paladin (damage)
         [81297]  = CreateMergeSpellEntry("PALADIN", true),          -- Consecration
@@ -498,6 +510,8 @@ addon.defaults = {
         [85222]  = CreateMergeSpellEntry("PALADIN", true),          -- Light of Dawn
         [82327]  = CreateMergeSpellEntry("PALADIN", true),          -- Holy Radiance
         [20167]  = CreateMergeSpellEntry("PALADIN", true),          -- Seal of Insight (Heal)
+        [121129] = CreateMergeSpellEntry("PALADIN", true, .5),      -- Daybreak                                   (INSTANT)
+        [119952] = CreateMergeSpellEntry("PALADIN", true, 6.5),     -- Arcing Light                               (Every 2s for 17.5s)
         
       -- priest (damage)
         [47666]  = CreateMergeSpellEntry("PRIEST", true),           -- Penance (Damage Effect)
@@ -524,7 +538,11 @@ addon.defaults = {
         [33110]  = CreateMergeSpellEntry("PRIEST", true),           -- Prayer of Mending
         [63544]  = CreateMergeSpellEntry("PRIEST", true),           -- Rapid Renewal
         [88686]  = CreateMergeSpellEntry("PRIEST", true, 6),        -- Holy Word: Sanctuary                       (every 2 sec for 30 sec)
-      
+        [121148] = CreateMergeSpellEntry("PRIEST", true, 5),        -- Cascade                                    (INSTANT... over 5ish)
+        [110745] = CreateMergeSpellEntry("PRIEST", true, 3),        -- Divine Star                                (INSTANT... over 3ish)
+        [120692] = CreateMergeSpellEntry("PRIEST", true, 3),        -- Halo                                       (INSTANT... over 3ish)
+        [7001]   = CreateMergeSpellEntry("PRIEST", true, 4),        -- Light Well                                 (every 2s for 6s)
+        
       -- rogue
         [51723]  = CreateMergeSpellEntry("ROGUE", true, .5),        -- Fan of Knives                              (INSTANT)
         [113780] = CreateMergeSpellEntry("ROGUE", true, .5),        -- Deadly Poison                              (INSTANT)
@@ -580,6 +598,8 @@ addon.defaults = {
         [109858] = CreateMergeSpellEntry("ITEM", true, 2.5),        -- Speaking of Rage - proc'd by: Vishanka, Jaws of the Earth (Heroic)
       },
     
+      -- yes this is supposed to be blank :P
+      -- it is dynamically generated in core.lua
       items = { },
     
     },

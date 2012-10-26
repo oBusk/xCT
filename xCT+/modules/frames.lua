@@ -467,6 +467,7 @@ end
 
 function x.EndConfigMode()
   x.configuring = false
+  x.AlignGrid:Hide()
   
   for framename, settings in pairs(x.db.profile.frames) do
     local f = x.frames[framename]
@@ -508,7 +509,7 @@ function x.ToggleConfigMode()
     
     StaticPopup_Show("XCT_PLUS_CONFIGURING")
     
-    
+    x.AlignGrid:Show()
     x.StartConfigMode()
   end
 end

@@ -75,4 +75,16 @@ xCTCombatTextConfigButton:SetScript("OnClick", function(self)
   --end
 end)
 
-
+x.blizzardOptions = {
+  name = "|cffFF0000x|rCT+ - e|cffFF0000X|rtreme Combat Text",
+  handler = X,
+  type = 'group',
+  args = {
+    showConfig = {
+      order = 1,
+      type = 'execute',
+      name = "Show Config",
+      func = function() InterfaceOptionsFrameOkay:Click(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME); GameMenuButtonContinue:Click() end,
+    },
+  },
+}

@@ -180,7 +180,7 @@ addon.options.args["Credits"] = {
     userName1 = {
       type = 'description',
       order = 5,
-      name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF Jaron|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r,|cffAAAAFF Schaduw|r,|cff8080EE sylenced|r,|cffAAAAFF kaleidoscope|r,|cff8080EE Killatones|r,|cffAAAAFF Trokko|r,|cff8080EE Yperia|r,|cffAAAAFF Edoc|r,|cff8080EE Cazart|r,|cffAAAAFF Nevah|r,|cff8080EE Refrakt|r,|cffAAAAFF Thakah|r",
+      name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF Jaron|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r,|cffAAAAFF Schaduw|r,|cff8080EE sylenced|r,|cffAAAAFF kaleidoscope|r,|cff8080EE Killatones|r,|cffAAAAFF Trokko|r,|cff8080EE Yperia|r,|cffAAAAFF Edoc|r,|cff8080EE Cazart|r,|cffAAAAFF Nevah|r,|cff8080EE Refrakt|r,|cffAAAAFF Thakah|r,|cff8080EE johnis007|r",
     },
     
     testerTitleSpace2 = {
@@ -198,7 +198,7 @@ addon.options.args["Credits"] = {
 }
 
 addon.options.args["Frames"] = {
-  name = "Frames",
+  name = "Frames" .. X.new,
   type = 'group',
   order = 1,
   args = {
@@ -212,13 +212,21 @@ addon.options.args["Frames"] = {
     Frames_Description = {
       type = "description",
       order = 2,
-      name = "Under Construction. Please have fun using the beta!",
+      name = "Unfortunately I cannot display all the options for combat text in this configuration tool alone. Blizzard has a few tweaks you might want to look at. For performance reasons, I am leaving them there for the time being. I hope you are enjoying the |cffFF0000x|rCT+ beta!",
     },
     
+    blizzardOptions = {
+      order = 3,
+      type = 'execute',
+      name = "More Blizzard Options",
+      func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
+    },
+
     general = {
-      name = "|cffFFFFFFGeneral|r",
+      name = "|cffFFFFFFGeneral|r" .. X.new,
+      desc = "|cffFFFF00New:|r Added some special tweaks",
       type = 'group',
-      order = 10,
+      order = 11,
       args = {
         enabledFrame = {
           order = 1,
@@ -368,6 +376,40 @@ addon.options.args["Frames"] = {
             },
           },
         },
+
+        specialTweaks = {
+          order = 7,
+          type = 'group',
+          guiInline = true,
+          name = "Special Tweaks" .. X.new,
+          args = {
+            showInterrupts = {
+              order = 1,
+              type = 'toggle',
+              name = "Interrupts",
+              desc = "Display the spell you successfully interrupted.",
+              get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+            },
+            showDispells = {
+              order = 2,
+              type = 'toggle',
+              name = "Dispell/Steal",
+              desc = "Show the spell that you dispelled or stole.",
+              get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+            },
+            showPartyKills = {
+              order = 3,
+              type = 'toggle',
+              name = "Unit Killed",
+              desc = "Display unit that was killed by your final blow.",
+              get = function(info) return X.db.profile.frames[info[#info-2]][info[#info]] end,
+              set = function(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end,
+            },
+          },
+        },
+        
         
       },
     },
@@ -1200,7 +1242,7 @@ addon.options.args["Frames"] = {
     },
     
     class = {
-      name = "|cffFFFFFFClass Combo Points|r" .. NEW,
+      name = "|cffFFFFFFClass Combo Points|r",
       type = 'group',
       order = 16,
       args = {
@@ -1607,7 +1649,7 @@ addon.options.args["Frames"] = {
     },
     
     loot = {
-      name = "|cffFFFFFFLoot & Money|r" .. NEW,
+      name = "|cffFFFFFFLoot & Money|r",
       type = 'group',
       order = 19,
       args = {

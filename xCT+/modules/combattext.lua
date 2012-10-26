@@ -144,6 +144,9 @@ local function ShowColorBlindMoney() return x.db.profile.frames["loot"].colorBli
 local function GetLootQuality() return x.db.profile.frames["loot"].filterItemQuality end
 local function ShowLootIcons() return x.db.profile.frames["loot"].iconsEnabled end
 local function GetLootIconSize() return x.db.profile.frames["loot"].iconsSize end
+local function ShowInterrupts() return x.db.profile.frames["general"].showInterrupts end
+local function ShowDispells() return x.db.profile.frames["general"].showDispells end
+local function ShowPartyKill() return x.db.profile.frames["general"].showPartyKills end
 
 local function ShowRogueComboPoints() return x.db.profile.spells.combo["ROGUE"][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "ROGUE" end
 local function ShowFeralComboPoints() return x.db.profile.spells.combo["DRUID"][2][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "DRUID" and x.player.spec == 2 end
@@ -557,7 +560,10 @@ x.events = {
     local qq,_,_,tt,st,_,_,ic = select(3, GetItemInfo(iI))             -- Item Quality, See "GetAuctionItemClasses()", Item Icon Texture Location
     
     -- Item filter
-    if x.db.profile.spells.items[tt] and x.db.profile.spells.items[tt][st] == false then return end
+    local freeTicketToDisneyland = false 
+    if x.db.profile.spells.items[tt] and x.db.profile.spells.items[tt][st] == true then
+      freeTicketToDisneyland = true
+    end
     
     local item       = { }
         item.name    = iN
@@ -569,7 +575,7 @@ x.events = {
         item.crafted = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
         item.self    = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
         -- ShowLootItems(), ShowLootMoney(), ShowTotalItems(), ShowLootCrafted(), ShowLootQuest(), ShowColorBlindMoney(), GetLootQuality()
-    if (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
+    if freeTicketToDisneyland or (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
         --if item.crafted and not ShowLootCrafted() then return end
         --if item.type == "Quest" and not ShowLootQuest() then return end
         
@@ -878,6 +884,8 @@ x.outgoing_events = {
       x:AddMessage(outputFrame, message, outputColor)
     end,
   ["SPELL_DISPEL"] = function(...)
+      if not ShowDispells() then return end
+  
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect, _, etype = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_DISPEL, effect), "dispell_debuff"
       
@@ -893,18 +901,9 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
-  ["SPELL_INTERRUPT"] = function(...)
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_INTERRUPT, effect), "spell_interrupt"
-      
-      -- Add Icons
-      if x.db.profile.frames[outputFrame].iconsEnabled then
-        message = message .. x:GetSpellTextureFormatted(SpellID, x.db.profile.frames[outputFrame].iconsSize)
-      end
-      
-      x:AddMessage(outputFrame, message, outputColor)
-    end,
   ["SPELL_STOLEN"] = function(...)
+      if not ShowDispells() then return end
+  
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_STOLEN, effect), "spell_stolen"
       
@@ -915,7 +914,22 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
+  ["SPELL_INTERRUPT"] = function(...)
+      if not ShowInterrupts() then return end
+  
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect = ...
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_INTERRUPT, effect), "spell_interrupt"
+      
+      -- Add Icons
+      if x.db.profile.frames[outputFrame].iconsEnabled then
+        message = message .. x:GetSpellTextureFormatted(SpellID, x.db.profile.frames[outputFrame].iconsSize)
+      end
+      
+      x:AddMessage(outputFrame, message, outputColor)
+    end,
   ["PARTY_KILL"] = function(...)
+      if not ShowPartyKill() then return end
+  
       local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, name = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_PARTY_KILL, name), "party_kill"
       
