@@ -503,7 +503,7 @@ addon.defaults = {
         [53385]  = CreateMergeSpellEntry("PALADIN", true),          -- Divine Storm
         [31803]  = CreateMergeSpellEntry("PALADIN", true),          -- Censure
         [42463]  = CreateMergeSpellEntry("PALADIN", true),          -- Seal of Truth
-        [101423] = CreateMergeSpellEntry("PALADIN", true),         -- Seal of Righteousness
+        [101423] = CreateMergeSpellEntry("PALADIN", true),          -- Seal of Righteousness
         [31935]  = CreateMergeSpellEntry("PALADIN", true),          -- Avenger's Shield
 
       -- paladin (healing)
@@ -540,7 +540,7 @@ addon.defaults = {
         [33110]  = CreateMergeSpellEntry("PRIEST", true),           -- Prayer of Mending
         [63544]  = CreateMergeSpellEntry("PRIEST", true),           -- Rapid Renewal
         [88686]  = CreateMergeSpellEntry("PRIEST", true, 6),        -- Holy Word: Sanctuary                       (every 2 sec for 30 sec)
-        [121148] = CreateMergeSpellEntry("PRIEST", true, 5),        -- Cascade                                    (INSTANT... over 5ish)
+        [121148] = CreateMergeSpellEntry("PRIEST", true, 3),        -- Cascade                                    (INSTANT... over 3ish)
         [110745] = CreateMergeSpellEntry("PRIEST", true, 3),        -- Divine Star                                (INSTANT... over 3ish)
         [120692] = CreateMergeSpellEntry("PRIEST", true, 3),        -- Halo                                       (INSTANT... over 3ish)
         [7001]   = CreateMergeSpellEntry("PRIEST", true, 4),        -- Light Well                                 (every 2s for 6s)
