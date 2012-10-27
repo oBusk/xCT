@@ -90,11 +90,14 @@ function x:UpdateFrames(specificFrame)
       f.settings = settings
       --TODO: add time visible
       
+      f:SetFading(true)
+      f:SetFadeDuration(0.3)
+      
       -- Set the position
       f:SetSpacing(2)
       f:ClearAllPoints()
       f:SetMovable(true)
-      f:SetTimeVisible(3)
+      f:SetTimeVisible(5)
       f:SetResizable(true)
       f:SetMinResize(64, 64)
       f:SetMaxResize(768, 768)
@@ -381,7 +384,12 @@ do
       
       -- Add Icons
       if settings.iconsEnabled then
-        message = message .. x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize)
+        -- message = message .. x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize)
+        if settings.fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize)
+        end
       end
     
       x:AddMessage(frameIndex[index], message, item.color)
@@ -508,6 +516,10 @@ function x.ToggleConfigMode()
     GameTooltip:Hide() --Just in case you're mouseovered something and it closes.
     
     StaticPopup_Show("XCT_PLUS_CONFIGURING")
+    
+    if not x.AlignGrid then
+      x:LoadAlignmentGrid()
+    end
     
     x.AlignGrid:Show()
     x.StartConfigMode()

@@ -381,7 +381,14 @@ x.combat_events = {
     end,
   
   -- TODO: Add filter?
-  ["SPELL_CAST"] = function(spell_name) x:AddMessage("procs", spell_name, "spell_cast") end,
+  ["SPELL_CAST"] = function(spell_name)
+      local spellStacks = select(4, UnitAura("player", spell_name))
+      if spellStacks and tonumber(spellStacks) > 1 then
+        spell_name = spell_name .. " |cffFFFFFFx" .. spellStacks .. "|r"
+      end
+      x:AddMessage("procs", spell_name, "spell_cast")
+    end,
+    
   ["SPELL_ACTIVE"] = function(spellname) if ShowReactives() then x:AddMessage("general", spellname, "spell_reactive") end end,
   
   ["MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "misstype_generic") end end,
@@ -655,7 +662,11 @@ x.outgoing_events = {
         
         -- Add Icons
         if x.db.profile.frames[outputFrame].iconsEnabled then
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+          else
+            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          end
         end
         
         x:AddMessage(outputFrame, message, outputColor)
@@ -686,7 +697,11 @@ x.outgoing_events = {
 
         -- Add Icons
         if x.db.profile.frames[outputFrame].iconsEnabled then
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+          else
+            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          end
         end
         
         x:AddMessage(outputFrame, message, outputColor)
@@ -723,7 +738,11 @@ x.outgoing_events = {
         
         -- Add Icons
         if x.db.profile.frames[outputFrame].iconsEnabled then
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+          else
+            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          end
         end
         
         x:AddMessage(outputFrame, message, outputColor)
@@ -752,7 +771,11 @@ x.outgoing_events = {
         
         -- Add Icons
         if x.db.profile.frames[outputFrame].iconsEnabled then
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+          else
+            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          end
         end
         
         x:AddMessage(outputFrame, message, outputColor)
@@ -788,7 +811,11 @@ x.outgoing_events = {
         
         -- Add Icons
         if x.db.profile.frames[outputFrame].iconsEnabled then
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+          else
+            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          end
         end
         
         x:AddMessage(outputFrame, message, outputColor)
@@ -824,7 +851,11 @@ x.outgoing_events = {
 
         -- Add Icons
         if x.db.profile.frames[outputFrame].iconsEnabled then
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+          else
+            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          end
         end
         
         x:AddMessage(outputFrame, message, outputColor)
@@ -850,7 +881,11 @@ x.outgoing_events = {
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
-        message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
       end
       
       x:AddMessage(outputFrame, message, outputColor)
@@ -864,7 +899,11 @@ x.outgoing_events = {
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
-        message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
       end
       
       x:AddMessage(outputFrame, message, outputColor)
@@ -878,7 +917,11 @@ x.outgoing_events = {
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
-        message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
       end
       
       x:AddMessage(outputFrame, message, outputColor)
@@ -896,7 +939,11 @@ x.outgoing_events = {
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
-        message = message .. x:GetSpellTextureFormatted(SpellID, x.db.profile.frames[outputFrame].iconsSize)
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
       end
       
       x:AddMessage(outputFrame, message, outputColor)
@@ -909,7 +956,11 @@ x.outgoing_events = {
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
-        message = message .. x:GetSpellTextureFormatted(SpellID, x.db.profile.frames[outputFrame].iconsSize)
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
       end
       
       x:AddMessage(outputFrame, message, outputColor)
@@ -922,7 +973,11 @@ x.outgoing_events = {
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
-        message = message .. x:GetSpellTextureFormatted(SpellID, x.db.profile.frames[outputFrame].iconsSize)
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
       end
       
       x:AddMessage(outputFrame, message, outputColor)

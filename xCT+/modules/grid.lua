@@ -19,13 +19,16 @@ local ADDON_NAME, addon = ...
 local x = addon.engine
 local AlignGrid
 
-do 
+function x:LoadAlignmentGrid()
   AlignGrid = CreateFrame('Frame', nil, UIParent)
   AlignGrid:SetAllPoints(UIParent)
   local boxSize = 32
   
   -- Get the current screen resolution, Mid-points, and the total number of lines
-  local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+  local ResX, ResY = UIParent:GetWidth(), UIParent:GetHeight()
+  
+  print("Width, Height", ResX, ResY)
+  
   local midX, midY = ResX / 2, ResY / 2
   local iLinesLeftRight, iLinesTopBottom = midX / boxSize , midY / boxSize
   
@@ -102,6 +105,7 @@ do
   ttb:SetHeight(2)
   
   AlignGrid:Hide()
+  
+  x.AlignGrid = AlignGrid
 end
 
-x.AlignGrid = AlignGrid
