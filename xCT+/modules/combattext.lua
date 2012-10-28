@@ -599,7 +599,7 @@ x.events = {
 
   ["UNIT_ENTERED_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["UNIT_EXITING_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
-  ["PLAYER_ENTERING_WORLD"] = function() x:UpdatePlayer(); x:UpdateComboPointOptions() end,
+  ["PLAYER_ENTERING_WORLD"] = function() x:UpdatePlayer(); x:UpdateComboPointOptions(); x:Clear() end,
   ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); x:UpdateComboTracker() end,    -- x:UpdateComboPointOptions(true) end,
   
   ["CHAT_MSG_LOOT"] = function(msg)

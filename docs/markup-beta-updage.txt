@@ -1,12 +1,10 @@
 <center>__________________________________________________</center>
-<center><b>xCT+ - Beta Update (Version 3)</b></center>
+<center><b>xCT+ - Beta Update (Version 4)</b></center>
 <center>__________________________________________________</center>
 
 <center>Here is your link to download the current version of xCT+ beta:</center>
-<center><a href="http://www.tukui.org/storage/download.php?file=962xCTplus_3_beta_3.zip">http://www.tukui.org/storage/download.php?file=962xCTplus_3_beta_3.zip</a></center>
-.
-I need some information so that I can make sure xCT+ is properly tested; I have two requests:
-<ol><li><b>Let me know which class(es) you are testing with.</b></li>
-<li><b>Anyone with a high level Monk that can assist me in getting the Spell ID's of spammy spells, please let me know!</b></li></ol>
-.
+<center><a href="http://www.tukui.org/storage/download.php?file=352xCTplus_3_beta_4.zip">http://www.tukui.org/storage/download.php?file=352xCTplus_3_beta_4.zip</a></center>
+
 Thank you! I hope you are enjoying the beta :)
+
+The Support Forums and Change Log can be found here: <a href="http://www.tukui.org/forums/topic.php?id=24113#post-174883">xCT+ Beta - Support Forum</a>
