@@ -39,6 +39,11 @@ addon.defaults = {
   profile = {
     showStartupText = true,
     
+    frameSettings = {
+      clearLeavingCombat = true,
+      showGrid = true,
+    },
+    
     frames = {
       general = {
         ["enabledFrame"] = true,

@@ -269,7 +269,7 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
   else
     heap[mergeID] = {
       last    = 0,          -- last update
-      update  = interval or x.db.profile.spells.merge[mergeID].interval,   -- how often to update
+      update  = interval or x.db.profile.spells.merge[mergeID].interval or 3,   -- how often to update
       entries = {           -- entries to merge
           message,
         },        
@@ -475,7 +475,7 @@ end
 
 function x.EndConfigMode()
   x.configuring = false
-  x.AlignGrid:Hide()
+  if x.AlignGrid then x.AlignGrid:Hide() end
   
   for framename, settings in pairs(x.db.profile.frames) do
     local f = x.frames[framename]
@@ -517,11 +517,13 @@ function x.ToggleConfigMode()
     
     StaticPopup_Show("XCT_PLUS_CONFIGURING")
     
-    if not x.AlignGrid then
-      x:LoadAlignmentGrid()
+    if x.db.profile.frameSettings.showGrid then
+      if not x.AlignGrid then
+        x:LoadAlignmentGrid()
+      end
+      x.AlignGrid:Show()
     end
-    
-    x.AlignGrid:Show()
+
     x.StartConfigMode()
   end
 end

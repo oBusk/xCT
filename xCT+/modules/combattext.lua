@@ -19,7 +19,7 @@ local x = addon.engine
 
 -- up values
 local _, _G = nil, _G
-local sformat, mfloor, sgsub, s_lower, string = string.format, math.floor, string.gsub, string.lower, string
+local sformat, mfloor, sgsub, s_lower, string, tinsert = string.format, math.floor, string.gsub, string.lower, string, table.insert
 local tostring, tonumber, select, unpack = tostring, tonumber, select, unpack
 
 --[=====================================================[
@@ -156,6 +156,8 @@ local function ShowPriestShadowOrbs() return x.db.profile.spells.combo["PRIEST"]
 local function ShowWarlockSoulShards() return x.db.profile.spells.combo["WARLOCK"][1][SOUL_SHARDS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 1 end
 local function ShowWarlockDemonicFury() return x.db.profile.spells.combo["WARLOCK"][2][DEMONIC_FURY] and x.player.class == "WARLOCK" and x.player.spec == 2 end
 local function ShowWarlockBurningEmbers() return x.db.profile.spells.combo["WARLOCK"][3][BURNING_EMBERS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 3 end
+
+local function ClearWhenLeavingCombat() return x.db.profile.frameSettings.clearLeavingCombat end
 
 --[=====================================================[
  String Formatters
@@ -345,6 +347,34 @@ function x:QuickClassFrameUpdate()
   else
     -- Update Combo Points
     UpdateComboPoints()
+  end
+end
+
+
+-- This frame was created to make sure I always display the correct number of an item in your bag
+local function LootFrame_OnUpdate(self, elapsed)
+  local removeItems = { }
+  for i, item in ipairs(self.items) do
+    item.t = item.t + elapsed
+    
+    -- Time to wait before showing a looted item
+    if item.t > 0.5 then
+      local s = item.message
+      s = s.."  |cffFFFFFF(x"..(GetItemCount(item.id)).. ")|r"
+      x:AddMessage("loot", s, {item.r, item.g, item.b})
+      
+      removeItems[i] = true
+    end
+    
+  end
+  
+  for k in pairs(removeItems) do
+    self.items[k] = nil
+  end
+  
+  if #self.items < 1 then
+    self:UnregisterEvent("OnUpdate")
+    self.isRunning = false
   end
 end
 
@@ -549,8 +579,19 @@ x.events = {
       end
     end,
     
-  ["PLAYER_REGEN_ENABLED"] = function() if ShowCombatState() then x:AddMessage("general", sformat(format_fade, LEAVING_COMBAT), "combat_end") end end,
-  ["PLAYER_REGEN_DISABLED"] = function() if ShowCombatState() then x:AddMessage("general", sformat(format_gain, ENTERING_COMBAT), "combat_begin") end end,
+  ["PLAYER_REGEN_ENABLED"] = function()
+      if ClearWhenLeavingCombat() then
+        x:Clear()
+      end
+      if ShowCombatState() then
+        x:AddMessage("general", sformat(format_fade, LEAVING_COMBAT), "combat_end")
+      end
+    end,
+  ["PLAYER_REGEN_DISABLED"] = function()
+      if ShowCombatState() then
+        x:AddMessage("general", sformat(format_gain, ENTERING_COMBAT), "combat_begin")
+      end
+    end,
   ["UNIT_POWER"] = function(unit, powerType) UpdateUnitPower(unit, powerType) end,
   ["UNIT_COMBO_POINTS"] = function() UpdateComboPoints() end,
   ["PLAYER_TARGET_CHANGED"] = function() UpdateComboPoints() end,
@@ -605,11 +646,31 @@ x.events = {
 
         -- Total items in bag
         if ShowTotalItems() then
-            s=s.."   ("..(GetItemCount(item.id) + 1).. ")"  -- buggy AS HELL :\
+          -- queue the item to wait 1 second before showing
+          if not x.lootUpdater then
+            x.lootUpdater = CreateFrame("FRAME")
+            x.lootUpdater:SetScript("OnUpdate", LootFrame_OnUpdate)
+            x.lootUpdater.isRunning = false
+            x.lootUpdater.items = { }
+          end
+          
+          if not x.lootUpdater.isRunning then
+            x.lootUpdater:RegisterEvent("OnUpdate")
+          end
+          --s=s.."   ("..(GetItemCount(item.id)).. ")"  -- buggy AS HELL :\
+          tinsert(x.lootUpdater.items, {
+              id = item.id,
+              message = s,
+              t = 0,
+              r = r,
+              g = g,
+              b = b,
+            })
+        else
+          -- Add the message
+          x:AddMessage("loot", s, {r, g, b})
         end
-    
-        -- Add the message
-        x:AddMessage("loot", s, {r, g, b})
+        
     end
   
   

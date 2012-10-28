@@ -93,6 +93,7 @@ function X:UpdateItemTypes()
   local allTypes = {
     order = 100,
     name = "Always Show Filter" .. X.new,
+    desc = "|cffFFFF00New:|r Filter changed to whitelist",
     type = 'group',
     childGroups = "select",
     args = {

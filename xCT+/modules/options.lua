@@ -180,7 +180,7 @@ addon.options.args["Credits"] = {
     userName1 = {
       type = 'description',
       order = 5,
-      name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF Jaron|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r,|cffAAAAFF Schaduw|r,|cff8080EE sylenced|r,|cffAAAAFF kaleidoscope|r,|cff8080EE Killatones|r,|cffAAAAFF Trokko|r,|cff8080EE Yperia|r,|cffAAAAFF Edoc|r,|cff8080EE Cazart|r,|cffAAAAFF Nevah|r,|cff8080EE Refrakt|r,|cffAAAAFF Thakah|r,|cff8080EE johnis007|r",
+      name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF Jaron|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r,|cffAAAAFF Schaduw|r,|cff8080EE sylenced|r,|cffAAAAFF kaleidoscope|r,|cff8080EE Killatones|r,|cffAAAAFF Trokko|r,|cff8080EE Yperia|r,|cffAAAAFF Edoc|r,|cff8080EE Cazart|r,|cffAAAAFF Nevah|r,|cff8080EE Refrakt|r,|cffAAAAFF Thakah|r,|cff8080EE johnis007|r,|cffAAAAFF Sgt|r,|cff8080EE NitZo|r",
     },
     
     testerTitleSpace2 = {
@@ -199,6 +199,7 @@ addon.options.args["Credits"] = {
 
 addon.options.args["Frames"] = {
   name = "Frames" .. X.new,
+  desc = "|cffFFFF00New:|r Added some more frame settings",
   type = 'group',
   order = 1,
   args = {
@@ -221,7 +222,39 @@ addon.options.args["Frames"] = {
       name = "More Blizzard Options",
       func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
     },
+    
+    
 
+    frameSettings = {
+      name = "Frame Settings",
+      desc = "|cffFFFF00New:|r Added some special tweaks",
+      type = 'group',
+      order = 4,
+      guiInline = true,
+      args = {
+      
+        clearLeavingCombat = {
+          order = 1,
+          type = 'toggle',
+          name = "Clear Frames When Leaving Combat",
+          desc = "Enable this option if you have problems with 'floating' icons.",
+          width = "full",
+          get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
+          set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
+        },
+        
+        showGrid = {
+          order = 2,
+          type = 'toggle',
+          name = "Show Align Grid",
+          get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
+          set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
+        }
+        
+      },
+    },
+    
+    
     general = {
       name = "|cffFFFFFFGeneral|r" .. X.new,
       desc = "|cffFFFF00New:|r Added some special tweaks",
@@ -1649,7 +1682,8 @@ addon.options.args["Frames"] = {
     },
     
     loot = {
-      name = "|cffFFFFFFLoot & Money|r",
+      name = "|cffFFFFFFLoot & Money|r" .. X.new,
+      desc = "|cffFFFF00New:|r Changed item filter to 'whitelist' |cffFF0000(See submenu)|r",
       type = 'group',
       order = 19,
       args = {

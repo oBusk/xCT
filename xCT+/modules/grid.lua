@@ -14,6 +14,7 @@
 
 local ADDON_NAME, addon = ...
 
+local mfloor = math.floor
 
 -- Shorten my handle
 local x = addon.engine
@@ -25,9 +26,7 @@ function x:LoadAlignmentGrid()
   local boxSize = 32
   
   -- Get the current screen resolution, Mid-points, and the total number of lines
-  local ResX, ResY = UIParent:GetWidth(), UIParent:GetHeight()
-  
-  print("Width, Height", ResX, ResY)
+  local ResX, ResY = mfloor(UIParent:GetWidth() + 0.5), mfloor(UIParent:GetHeight() + 0.5)
   
   local midX, midY = ResX / 2, ResY / 2
   local iLinesLeftRight, iLinesTopBottom = midX / boxSize , midY / boxSize
