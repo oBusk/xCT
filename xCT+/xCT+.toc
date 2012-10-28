@@ -2,7 +2,7 @@
 ## Title: xCT+ - 3.0 BETA
 ## Notes: Thank you for your support!
 ## Author: Dandruff
-## Version: 3.0.0 beta 3
+## Version: 3.0.0 beta 4
 ## RequiredDeps: Blizzard_CombatText
 ## OptionalDeps: xCT
 ## SavedVariables: xCTSavedDB
