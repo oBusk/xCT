@@ -40,12 +40,16 @@ x.player = {
 --]=====================================================]
 function x:UpdatePlayer()
   -- Set the Player's Current Playing Unit
-  if UnitHasVehicleUI("player") then
-    x.player.unit = "vehicle"
+  if x.player.unit == "custom" then
+    --CombatTextSetActiveUnit(x.player.customUnit)
   else
-    x.player.unit = "player"
+    if UnitHasVehicleUI("player") then
+      x.player.unit = "vehicle"
+    else
+      x.player.unit = "player"
+    end
+    CombatTextSetActiveUnit(x.player.unit)
   end
-  CombatTextSetActiveUnit(x.player.unit)
 
   -- Set Player's Information
   x.player.name   = UnitName("player")
@@ -53,8 +57,7 @@ function x:UpdatePlayer()
   x.player.guid   = UnitGUID("player")
   
   local activeTalentGroup = GetActiveSpecGroup(false, false)
-   x.player.spec = GetSpecialization(false, false, activeTalentGroup)
-
+  x.player.spec = GetSpecialization(false, false, activeTalentGroup)
 end
 
 --[=====================================================[
@@ -65,12 +68,11 @@ end
 --]=====================================================]
 function x:UpdateCombatTextEvents(enable)
   local f = nil
-  
   if x.combatEvents then
     x.combatEvents:UnregisterAllEvents()
     f = x.combatEvents
   else
-    f = CreateFrame"FRAME"
+    f = CreateFrame("FRAME")
   end
   
   if enable then
@@ -101,11 +103,8 @@ function x:UpdateCombatTextEvents(enable)
     f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
     f:RegisterEvent("UNIT_COMBO_POINTS")
     f:RegisterEvent("PLAYER_TARGET_CHANGED")
-    
-    
-    
+
     x.combatEvents = f
-    
     f:SetScript("OnEvent", x.OnCombatTextEvent)
   else
     -- Disabled Combat Text
@@ -258,7 +257,7 @@ local function UpdateComboPoints()
 end
 
 --[=====================================================[
- Combo Points - Class Power Types
+  Combo Points - Class Power Types
 --]=====================================================]
 local function UpdateUnitPower(unit, powertype)
   if unit == x.player.unit then
@@ -622,11 +621,8 @@ x.events = {
         item.icon    = ic
         item.crafted = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
         item.self    = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
-        -- ShowLootItems(), ShowLootMoney(), ShowTotalItems(), ShowLootCrafted(), ShowLootQuest(), ShowColorBlindMoney(), GetLootQuality()
-    if freeTicketToDisneyland or (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
-        --if item.crafted and not ShowLootCrafted() then return end
-        --if item.type == "Quest" and not ShowLootQuest() then return end
         
+    if freeTicketToDisneyland or (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
         local r,g,b=GetItemQualityColor(item.quality)
         local s=item.type..": ["..item.name.."] "
         
