@@ -92,14 +92,12 @@ end
 
 -- Updates item filter list
 function X:UpdateItemTypes()
-
   -- check to see if this is the first time we are loading this version
   local first = false
   if not self.db.profile.spells.items.version then
     self.db.profile.spells.items.version = 1
     first = true
   end
-
 
   local itemTypes = { GetAuctionItemClasses() }
   
