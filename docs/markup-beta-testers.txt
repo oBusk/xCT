@@ -6,7 +6,7 @@ xCT+ Beta - Tester Invitation
 <center>__________________________________________________</center>
 
 <center>Here is your link to download the current version of xCT+ beta:</center>
-<center><a href="http://www.tukui.org/storage/download.php?file=962xCTplus_3_beta_3.zip">http://www.tukui.org/storage/download.php?file=962xCTplus_3_beta_3.zip</a></center>
+<center><a href="http://www.tukui.org/storage/download.php?file=352xCTplus_3_beta_4.zip">http://www.tukui.org/storage/download.php?file=352xCTplus_3_beta_4.zip</a></center>
 <center><i>(Updates will be pushed by PMs until otherwise announced).</i></center>
 
 <b><u>Please let me know:</u></b>
@@ -18,13 +18,10 @@ I appreciate your help in getting my add-on out to the public. I am writing this
 
 
 <blockquote class="Overlord"><center>PLEASE TAKE NOTE:</center>
-<b>Confirmed features not in current version:</b> xCTplus_3_beta_3.zip
+<b>Confirmed features not in current version:</b> xCTplus_3_beta_4.zip
 <ul><li>Healing Spell Filter</li>
-<li>Monk Support (Only Chi works currently)</li>
 <li>Theshold limits to filter out lower values</li>
-<li>MEGA DAMAGE abbreviations</li>
-<li>Options to turn off: Killing Blows, Interrupts, Dispels</li>
-<li>Alignment Grid</li></ul></blockquote>
+<li>MEGA DAMAGE abbreviations</li></ul></blockquote>
 
 
 <b><u>FAQ</u> – Frequently Asked Questions</b>

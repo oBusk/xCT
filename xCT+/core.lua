@@ -62,6 +62,19 @@ end
 
 -- Gets spammy spells from the database and creates options
 function X:UpdateSpamSpells()
+  for id, item in pairs(addon.merges) do
+    if item.class == X.player.class then
+      if not self.db.profile.spells.merge[id] then
+        self.db.profile.spells.merge[id] = item
+        self.db.profile.spells.merge[id]['enabled'] = true    -- default all to on
+      else
+      -- update merge setting incase they are outdated
+        self.db.profile.spells.merge[id].interval = item.interval
+        self.db.profile.spells.merge[id].prep = item.prep
+      end
+    end
+  end
+
   local spells = addon.options.args.spells.args.spellList.args
   for spellID, entry in pairs(self.db.profile.spells.merge) do
     if entry.class == X.player.class then
