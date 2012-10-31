@@ -389,6 +389,24 @@ function X:OpenXCTCommand(input)
     return
   end
   
+  if string_lower(input):match('track %w+') then
+    local unit = string_lower(input):match('%s(%w+)')
+    
+    local name = UnitName(unit)
+    
+    if not name then
+      X.player.unit = ""
+    else
+      X.player.unit = "custom"
+      CombatTextSetActiveUnit(unit)
+    end
+    
+    X:UpdatePlayer()
+    print("|cffFF0000x|r|cffFFFF00CT+|r Tracking Unit:", name or "default")
+    
+    return
+  end
+  
   -- Open/Close the config menu
   local mode = 'Close'
   if not ACD.OpenFrames[AddonName] then
@@ -400,3 +418,18 @@ function X:OpenXCTCommand(input)
   end
 end
 
+-- Register Slash Commands
+X:RegisterChatCommand('track', 'TrackXCTCommand')
+function X:TrackXCTCommand(input)
+  local name = UnitName("target")
+    
+  if not name then
+    X.player.unit = ""
+  else
+    X.player.unit = "custom"
+    CombatTextSetActiveUnit("target")
+  end
+  
+  X:UpdatePlayer()
+  print("|cffFF0000x|r|cffFFFF00CT+|r Tracking Unit:", name or "default")
+end
