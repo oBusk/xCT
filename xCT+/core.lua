@@ -60,6 +60,15 @@ function X:RefreshConfig()
   collectgarbage()
 end
 
+-- Spammy Spell Get/Set Functions
+local function SpamSpellGet(info)
+  return self.db.profile.spells.merge[tonumber(info[#info])].enabled
+end
+
+local function SpamSpellSet(info, value)
+  self.db.profile.spells.merge[tonumber(info[#info])].enabled = value
+end
+
 -- Gets spammy spells from the database and creates options
 function X:UpdateSpamSpells()
   for id, item in pairs(addon.merges) do
@@ -78,15 +87,30 @@ function X:UpdateSpamSpells()
   local spells = addon.options.args.spells.args.spellList.args
   for spellID, entry in pairs(self.db.profile.spells.merge) do
     if entry.class == X.player.class then
+      local desc = "|cffFF0000ID:|r [" .. spellID .. "]\n"
+    
+      if entry.interval == 0.5 then
+        desc = desc .. "|cffFF0000Interval:|r Instant" 
+      else
+        desc = desc .. "|cffFF0000Interval:|r Merge every |cffFFFF00" .. tostring(entry.interval) .. "|r seconds"
+      end
+    
       spells[tostring(spellID)] = {
         order = 3,
         type = 'toggle',
         name = GetSpellInfo(spellID),
-        desc = "|cffFF0000ID|r " .. spellID,
-        get = function(info) return self.db.profile.spells.merge[tonumber(info[#info])].enabled end,
-        set = function(info, value) self.db.profile.spells.merge[tonumber(info[#info])].enabled = value end,
+        desc = desc,
+        get = SpamSpellGet,
+        set = SpamSpellSet,
       }
     end
+  end
+end
+
+local function ItemToggleAll(info)
+  local state = (info[#info] == "enableAll")
+  for key in pairs(self.db.profile.spells.items[info[#info-1]]) do
+    self.db.profile.spells.items[info[#info-1]]][key] = state
   end
 end
 
@@ -147,11 +171,7 @@ function X:UpdateItemTypes()
         type = 'execute',
         name = "|cffDDDD00Enable All|r",
         width = "half",
-        func = function()
-            for key in pairs(self.db.profile.spells.items[itype]) do
-              self.db.profile.spells.items[itype][key] = true
-            end
-          end,
+        func = ItemToggleAll,
       }
       
       -- Button to ENABLE all
@@ -160,11 +180,7 @@ function X:UpdateItemTypes()
         type = 'execute',
         name = "|cffDD0000Disable All|r",
         width = "half",
-        func = function()
-            for key in pairs(self.db.profile.spells.items[itype]) do
-              self.db.profile.spells.items[itype][key] = false
-            end
-          end,
+        func = ItemToggleAll,
       }
     else
       -- Quest Items... maybe others
@@ -321,7 +337,7 @@ function X:UpdateComboTracker()
   local myClass, mySpec = X.player.class, X.player.spec
   X.TrackingEntry = nil
   
-  if not mySpec or mySpec < 1 then return end  -- under Level 10 probably, I don't know what to do :P
+  if not mySpec or mySpec < 1 then return end  -- under Level 10 probably or not spec'd, I don't know what to do :P
 
   for i, entry in pairs(X.db.profile.spells.combo[myClass][mySpec]) do
     if type(entry) == "table" and entry.enabled then
@@ -347,7 +363,6 @@ ACD:SetDefaultSize(AddonName, 800, 550)
 AC:RegisterOptionsTable(AddonName, addon.options)
 AC:RegisterOptionsTable(AddonName.."Blizzard", X.blizzardOptions)
 ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
-
 
 -- Register Slash Commands
 X:RegisterChatCommand('xct', 'OpenXCTCommand')

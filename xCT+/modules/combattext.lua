@@ -18,9 +18,8 @@ local ADDON_NAME, addon = ...
 local x = addon.engine
 
 -- up values
-local _, _G = nil, _G
-local sformat, mfloor, sgsub, s_lower, string, tinsert = string.format, math.floor, string.gsub, string.lower, string, table.insert
-local tostring, tonumber, select, unpack = tostring, tonumber, select, unpack
+local _, _G, sformat, mfloor, sgsub, s_lower, string, tinsert, ipairs, pairs, print, tostring, tonumber, select, unpack =
+  nil, _G, string.format, math.floor, string.gsub, string.lower, string, table.insert, ipairs, pairs, print, tostring, tonumber, select, unpack
 
 --[=====================================================[
  Holds player info; use AddOn:UpdatePlayer()
@@ -986,7 +985,7 @@ x.outgoing_events = {
   ["SPELL_DISPEL"] = function(...)
       if not ShowDispells() then return end
   
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect, _, etype = ...
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, spellID, effect, _, etype = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_DISPEL, effect), "dispell_debuff"
       
       -- Check for buff or debuff (for color)
@@ -1008,7 +1007,7 @@ x.outgoing_events = {
   ["SPELL_STOLEN"] = function(...)
       if not ShowDispells() then return end
   
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect = ...
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, spellID, effect = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_STOLEN, effect), "spell_stolen"
       
       -- Add Icons
@@ -1025,7 +1024,7 @@ x.outgoing_events = {
   ["SPELL_INTERRUPT"] = function(...)
       if not ShowInterrupts() then return end
   
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, SpellID, effect = ...
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, spellID, effect = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_INTERRUPT, effect), "spell_interrupt"
       
       -- Add Icons
