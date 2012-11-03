@@ -63,6 +63,9 @@ addon.options = {
 -- Generic Get/Set methods
 local function get0(info) return X.db.profile[info[#info-1]][info[#info]] end
 local function set0(info, value) X.db.profile[info[#info-1]][info[#info]] = value end
+local function set0_update(info, value) X.db.profile[info[#info-1]][info[#info]] = value; X:UpdateFrames() end
+local function getTextIn0(info) return string_gsub(X.db.profile[info[#info-1]][info[#info]], "|", "||") end
+local function setTextIn0(info, value) X.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|") end
 local function get1(info) return X.db.profile.frames[info[#info-1]][info[#info]] end
 local function set1(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end
 local function set1_update(info, value) set1(info, value); X:UpdateFrames(info[#info-1]) end
@@ -75,7 +78,8 @@ local function getTextIn2(info) return string_gsub(X.db.profile.frames[info[#inf
 local function setTextIn2(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = string_gsub(value, "||", "|") end
 
 addon.options.args["spells"] = {
-  name = "Spam Merger",
+  name = "Spam Merger" .. X.new,
+  desc = "|cffFFFF00New:|r Added Mergeable Auto Attack Options|r",
   type = 'group',
   order = 2,
   args = {
@@ -109,42 +113,47 @@ addon.options.args["spells"] = {
       set = set0,
       width = "full",
     },
+    
     listSpacer1 = {
       type = "description",
       order = 5,
       name = " ",
     },
-    listTitle = {
-      type = "description",
-      order = 6,
-      name = "|cffFFFF00>>> UNDER CONSTRUCTION <<<|r",
-      width = "full",
+    
+    mergeSwings = {
+      order = 9,
+      type = 'toggle',
+      name = "Merge Melee Swings",
+      desc = "|cffFF0000ID|r 6603 |cff798BDD(Player Melee)|r\n|cffFF0000ID|r 0 |cff798BDD(Pet Melee)|r",
+      get = get0,
+      set = set0,
     },
-    listDescription = {
-      type = "description",
-      order = 7,
-      name = "In a future update, you will be able to add and remove spells to merge!",
+    
+    mergeRanged = {
+      order = 9,
+      type = 'toggle',
+      name = "Merge Ranged Attacks",
+      desc = "|cffFF0000ID|r 75",
+      get = get0,
+      set = set0,
     },
+    
     listSpacer2 = {
       type = "description",
-      order = 8,
+      order = 10,
       name = " ",
     },
-    listSpacer3 = {
-      type = "description",
-      order = 8,
-      name = " ",
-    },
+    
     spellList = {
-      name = "List of Merge Spells",
+      name = "List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
       guiInline = true,
-      order = 9,
+      order = 20,
       args = {
         mergeListDesc = {
           type = "description",
           order = 1,
-          name = "Uncheck a spell if you do not want it merged.",
+          name = "Uncheck a spell if you do not want it merged. If a spell is not in the list, contact me to add it. See |cffFFFF00Credits|r for contact info.",
         },
       },
     },
@@ -164,7 +173,7 @@ addon.options.args["Credits"] = {
     specialThanksTitle = {
       type = 'description',
       order = 1,
-      name = "|cffFFFF00Special Thank You|r",
+      name = "|cffFFFF00Special Thanks|r",
     },
     specialThanksList = {
       type = 'description',
@@ -179,12 +188,12 @@ addon.options.args["Credits"] = {
     testerTitle = {
       type = 'description',
       order = 4,
-      name = "|cffFFFF00Beta Testers|r  (Blame them if something breaks!)",
+      name = "|cffFFFF00Beta Testers|r",
     },
     userName1 = {
       type = 'description',
       order = 5,
-      name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF Jaron|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r,|cffAAAAFF Schaduw|r,|cff8080EE sylenced|r,|cffAAAAFF kaleidoscope|r,|cff8080EE Killatones|r,|cffAAAAFF Trokko|r,|cff8080EE Yperia|r,|cffAAAAFF Edoc|r,|cff8080EE Cazart|r,|cffAAAAFF Nevah|r,|cff8080EE Refrakt|r,|cffAAAAFF Thakah|r,|cff8080EE johnis007|r,|cffAAAAFF Sgt|r,|cff8080EE NitZo|r",
+      name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF Jaron|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r,|cffAAAAFF Schaduw|r,|cff8080EE sylenced|r,|cffAAAAFF kaleidoscope|r,|cff8080EE Killatones|r,|cffAAAAFF Trokko|r,|cff8080EE Yperia|r,|cffAAAAFF Edoc|r,|cff8080EE Cazart|r,|cffAAAAFF Nevah|r,|cff8080EE Refrakt|r,|cffAAAAFF Thakah|r,|cff8080EE johnis007|r,|cffAAAAFF Sgt|r,|cff8080EE NitZo|r,|cffAAAAFF cptblackgb|r,|cff8080EE pollyzoid|r.",
     },
     testerTitleSpace2 = {
       type = 'description',
@@ -194,14 +203,14 @@ addon.options.args["Credits"] = {
     betaTestersOnly = {
       type = 'description',
       order = 7,
-      name = "If your name is not in the list above, send me (|cffFF8000Dandruff|r) a PM on tukui.org and I will add you :)",
+      name = "Contact Me: (|cffFF8000Dandruff|r) by PM on tukui.org :)",
     },
   },
 }
 
 addon.options.args["Frames"] = {
   name = "Frames" .. X.new,
-  desc = "|cffFFFF00New:|r Added some more frame settings",
+  desc = "|cffFFFF00New:|r Added Damage Abbrivation",
   type = 'group',
   order = 1,
   args = {
@@ -223,7 +232,6 @@ addon.options.args["Frames"] = {
     },
     frameSettings = {
       name = "Frame Settings",
-      desc = "|cffFFFF00New:|r Added some special tweaks",
       type = 'group',
       order = 4,
       guiInline = true,
@@ -244,11 +252,67 @@ addon.options.args["Frames"] = {
           get = get0,
           set = set0,
         },
+        
+        frameStrata = {
+          type = 'select',
+          order = 3,
+          name = "Frame Strata",
+          desc = "The Z-Layer to place the |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frame onto",
+          values = {
+            ["1PARENT"]             = "Parent |cffFF0000(Lowest)|r",
+            ["2BACKGROUND"]         = "Background",
+            ["3LOW"]                = "Low",
+            ["4MEDIUM"]             = "Medium |cffFFFF00(Default)|r",
+            ["5HIGH"]               = "High",
+            ["6DIALOG"]             = "Dialog",
+            ["7FULLSCREEN"]         = "Fullscreen",
+            ["8FULLSCREEN_DIALOG"]  = "Fullscreen Dialog",
+            ["9TOOLTIP"]            = "ToolTip |cffAAFF80(Highest)|r",
+          },
+          get = get0,
+          set = set0_update,
+        },
+        
+      },
+    },
+    
+    megaDamage = {
+      name = "Damage Abbrivation Settings" .. X.new,
+      type = 'group',
+      order = 5,
+      guiInline = true,
+      args = {
+        enableMegaDamage = {
+          order = 1,
+          type = 'toggle',
+          name = "Enable",
+          desc = "Enable Damage Abbrivation",
+          width = "full",
+          get = get0,
+          set = set0,
+        },
+      
+        thousandSymbol = {
+          order = 2,
+          type = 'input',
+          name = "Thousand",
+          desc = "Symbol for: |cffFF0000Thousands|r |cff798BDD(10e+3)|r",
+          get = getTextIn0,
+          set = setTextIn0,
+        },
+        
+        millionSymbol = {
+          order = 3,
+          type = 'input',
+          name = "Million",
+          desc = "Symbol for: |cffFF0000Millions|r |cff798BDD(10e+6)|r",
+          get = getTextIn0,
+          set = setTextIn0,
+        },
       },
     },
     general = {
-      name = "|cffFFFFFFGeneral|r" .. X.new,
-      desc = "|cffFFFF00New:|r Added some special tweaks",
+      name = "|cffFFFFFFGeneral|r",
       type = 'group',
       order = 11,
       args = {
@@ -1663,8 +1727,7 @@ addon.options.args["Frames"] = {
     },
     
     loot = {
-      name = "|cffFFFFFFLoot & Money|r" .. X.new,
-      desc = "|cffFFFF00New:|r Changed item filter to 'whitelist' |cffFF0000(See submenu)|r",
+      name = "|cffFFFFFFLoot & Money|r",
       type = 'group',
       order = 19,
       args = {
@@ -1924,4 +1987,3 @@ addon.options.args["Frames"] = {
     },
   },
 }
-

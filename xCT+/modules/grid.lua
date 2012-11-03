@@ -107,4 +107,3 @@ function x:LoadAlignmentGrid()
   
   x.AlignGrid = AlignGrid
 end
-

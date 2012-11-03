@@ -177,7 +177,7 @@ addon.merges = {
   [51945]  = CreateMergeSpellEntry("SHAMAN"),           -- Earthliving
   [61295]  = CreateMergeSpellEntry("SHAMAN"),           -- Riptide
 
--- warlock
+-- warlock (damage)
   [172]    = CreateMergeSpellEntry("WARLOCK"),          -- Corruption
   [87389]  = CreateMergeSpellEntry("WARLOCK"),          -- Corruption (Soulburn: Seed of Corruption)
   [27243]  = CreateMergeSpellEntry("WARLOCK"),          -- Seed of Corruption (DoT)
@@ -194,7 +194,15 @@ addon.merges = {
   [30213]  = CreateMergeSpellEntry("WARLOCK", .5),      -- Legion Strike (Felguard)                   (INSTANT)
   [89753]  = CreateMergeSpellEntry("WARLOCK"),          -- Felstorm (Felguard)
   [20153]  = CreateMergeSpellEntry("WARLOCK"),          -- Immolation (Infrenal)
-
+  [108371] = CreateMergeSpellEntry("WARLOCK"),          -- Harvest Life
+  [108451] = CreateMergeSpellEntry("WARLOCK"),          -- Soul Link
+  [689]    = CreateMergeSpellEntry("WARLOCK"),          -- Drain Life
+  
+-- warlock (healing)
+  [125314] = CreateMergeSpellEntry("WARLOCK"),          -- Harvest Life
+  [108447] = CreateMergeSpellEntry("WARLOCK"),          -- Soul Link
+  [89653]  = CreateMergeSpellEntry("WARLOCK"),          -- Drain Life
+  
 -- warrior
   [845]    = CreateMergeSpellEntry("WARRIOR", .5),      -- Cleave                                     (INSTANT)
   [46968]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Shockwave                                  (INSTANT)

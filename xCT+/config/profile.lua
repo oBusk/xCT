@@ -41,6 +41,13 @@ addon.defaults = {
     frameSettings = {
       clearLeavingCombat = true,
       showGrid = true,
+      frameStrata = "4MEDIUM",
+    },
+    
+    megaDamage = {
+      enableMegaDamage = false,
+      thousandSymbol = "|cffFF8000K|r ",
+      millionSymbol = "|cffFF0000M|r ",
     },
     
     frames = {
@@ -320,6 +327,9 @@ addon.defaults = {
     spells = {
       enableMerger = true,        -- enable/disable spam merger
       enableMergerDebug = false,  -- Shows spell IDs for debugging merged spells
+      
+      mergeSwings = true,
+      mergeRanged = true,
       
       combo = {
         ["DEATHKNIGHT"] = {
