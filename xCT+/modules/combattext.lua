@@ -802,7 +802,8 @@ x.outgoing_events = {
       if ShowDamage() then
         local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  amount, _, _, _, _, _, critical = ...
         local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
-
+        local merged = false
+        
         -- Check for Pet Swings
         local spellID = 6603
         if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
