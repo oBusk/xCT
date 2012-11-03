@@ -157,6 +157,11 @@ local function ShowWarlockDemonicFury() return x.db.profile.spells.combo["WARLOC
 local function ShowWarlockBurningEmbers() return x.db.profile.spells.combo["WARLOCK"][3][BURNING_EMBERS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 3 end
 
 local function ClearWhenLeavingCombat() return x.db.profile.frameSettings.clearLeavingCombat end
+local function ShowAbbrivatedDamage() return x.db.profile.megaDamage.enableMegaDamage end
+
+local function MergeMeleeSwings() return x.db.profile.spells.mergeSwings end
+local function MergeRangedAttacks() return x.db.profile.spells.mergeRanged end
+
 
 --[=====================================================[
  String Formatters
@@ -221,7 +226,7 @@ end
 function x:GetSpellTextureFormatted(spellID, iconSize)
   local message = ""
 
-  if spellID == PET_ATTACK_TEXTURE then
+  if spellID == 0 then
     message = " \124T"..PET_ATTACK_TEXTURE..":"..iconSize..":"..iconSize..":0:0:64:64:5:59:5:59\124t"
   else
     local icon = GetSpellTexture(spellID)
@@ -335,7 +340,6 @@ function x:QuickClassFrameUpdate()
       UpdateUnitPower(entry.unit, "HOLY_POWER")
     elseif ShowPriestShadowOrbs() then
       UpdateUnitPower(entry.unit, "SHADOW_ORBS")
-      print("DEBUG: Set Shadow Orbs")
     elseif ShowWarlockSoulShards() then
       UpdateUnitPower(entry.unit, "SOUL_SHARDS")
     elseif ShowWarlockDemonicFury() then
@@ -390,21 +394,33 @@ x.combat_events = {
   ["HEAL"] = function(healer_name, amount)
       local message = sformat(format_gain, amount)
       if ShowFriendlyNames() and healer_name then
-        message = healer_name .. " " .. message
+        if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+          message = message .. " " .. healer_name
+        else
+          message = healer_name .. " " .. message
+        end
       end
       x:AddMessage("healing", message, "heal")
     end,
   ["HEAL_CRIT"] = function(healer_name, amount)
       local message = sformat(format_gain, amount)
       if ShowFriendlyNames() and healer_name then
-        message = healer_name .. " " .. message
+        if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+          message = message .. " " .. healer_name
+        else
+          message = healer_name .. " " .. message
+        end
       end
       x:AddMessage("healing", sformat(message, amount), "heal_crit")
     end,
   ["PERIODIC_HEAL"] = function(healer_name, amount)
       local message = sformat(format_gain, amount)
       if ShowFriendlyNames() and healer_name then
-        message = healer_name .. " " .. message
+        if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+          message = message .. " " .. healer_name
+        else
+          message = healer_name .. " " .. message
+        end
       end
       x:AddMessage("healing", sformat(format_gain, amount), "heal_peri")
     end,
@@ -709,9 +725,18 @@ x.outgoing_events = {
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
         end
         
+        -- Abbrivate the message
+        if ShowAbbrivatedDamage() then
+          if (amount / 1000000 >= 1) then
+            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
+          elseif (amount / 1000 >= 1) then
+            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
+          end
+        end
+        
         -- Check for Critical
         if critical then    -- Let all crits through
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
           outputFrame = "critical"
         elseif merged then  -- return merged, non-crits
           return
@@ -744,14 +769,23 @@ x.outgoing_events = {
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
         end
         
+        -- Abbrivate the message
+        if ShowAbbrivatedDamage() then
+          if (amount / 1000000 >= 1) then
+            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
+          elseif (amount / 1000 >= 1) then
+            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
+          end
+        end
+        
         -- Check for Critical
         if critical then    -- Let all crits through
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
           outputFrame = "critical"
         elseif merged then  -- return merged, non-crits
           return
         end
-
+        
         -- Add Icons
         if x.db.profile.frames[outputFrame].iconsEnabled then
           if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
@@ -769,13 +803,31 @@ x.outgoing_events = {
       if ShowDamage() then
         local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  amount, _, _, _, _, _, critical = ...
         local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
+
+        -- Check for Pet Swings
+        local spellID = 6603
+        if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
+          if not ShowPetDamage() then return end
+          spellID = 0
+          critical = nil -- stupid spam fix for hunter pets
+        end
+        
+        -- Abbrivate the message
+        if ShowAbbrivatedDamage() then
+          if (amount / 1000000 >= 1) then
+            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
+          elseif (amount / 1000 >= 1) then
+            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
+          end
+        end
         
         -- Check for Critical
         if critical then
+          
           if not ShowSwingCrit() then return end
           
           if ShowSwingCritPrefix() then
-            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
+            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
           end
           
           if not ShowSwingRedirected() then
@@ -786,13 +838,17 @@ x.outgoing_events = {
         -- Are we filtering Auto Attacks in the Outgoing frame?
         if outputFrame == "outgoing" and not ShowAutoAttack() then return end;
         
-        -- Check for Pet Swings
-        local spellID = 6603
-        if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
-          if not ShowPetDamage() then return end
-          spellID = PET_ATTACK_TEXTURE
+        -- Check for merge
+        if MergeMeleeSwings() then
+          merged = true
+          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
         end
         
+        -- Only show non-merged swings
+        if merged and not critical then
+          return
+        end
+
         -- Add Icons
         if x.db.profile.frames[outputFrame].iconsEnabled then
           if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
@@ -809,21 +865,42 @@ x.outgoing_events = {
       if ShowDamage() then
         local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, amount, _, _, _, _, _, critical = ...
         local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
+        local merged = false
         
         -- Auto Shot is spellId == 75
         local autoShot = spellID == 75
+        
+        -- Abbrivate the message
+        if ShowAbbrivatedDamage() then
+          if (amount / 1000000 >= 1) then
+            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
+          elseif (amount / 1000 >= 1) then
+            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
+          end
+        end
         
         -- Check for Critical
         if critical then
           if autoShot and not ShowSwingCrit()then return end
           
           if not autoShot or autoShot and ShowSwingCritPrefix() then
-            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
+            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
           end
           
           if not autoShot or not ShowSwingRedirected() and autoShot then
             outputFrame = "critical"
           end
+        end
+        
+        -- Check for merge
+        if MergeRangedAttacks() then
+          merged = true
+          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+        end
+        
+        -- Only show non-merged swings
+        if merged and not critical then
+          return
         end
         
         -- Add Icons
@@ -858,9 +935,18 @@ x.outgoing_events = {
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
         end
         
+        -- Abbrivate the Amount
+        if ShowAbbrivatedDamage() then
+          if (amount / 1000000 >= 1) then
+            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
+          elseif (amount / 1000 >= 1) then
+            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
+          end
+        end
+        
         -- Check for Critical
         if critical then    -- Let all crits through
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
           outputFrame = "critical"
         elseif merged then  -- return merged, non-crits
           return
@@ -897,9 +983,18 @@ x.outgoing_events = {
           x:AddSpamMessage("outgoing", spellID, amount, outputColor)
         end
         
+        -- Abbrivate the message
+        if ShowAbbrivatedDamage() then
+          if (amount / 1000000 >= 1) then
+            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
+          elseif (amount / 1000 >= 1) then
+            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
+          end
+        end
+        
         -- Check for Critical
         if critical then    -- Let all crits through
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, amount, x.db.profile.frames["critical"].critPostfix)
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
           outputColor = "out_damage"
           outputFrame = "critical"
         elseif merged then  -- return merged, non-crits

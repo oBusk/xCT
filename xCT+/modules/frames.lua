@@ -17,8 +17,8 @@ local ADDON_NAME, addon = ...
 
 local LSM = LibStub("LibSharedMedia-3.0");
 -- Setup up values
-local ssub, pairs, tostring, math, unpack, print, type, random, table_insert, format, _G
-  = string.sub, pairs, tostring, math, unpack, print, type, math.random, table.insert, string.format, _G
+local ssub, pairs, tostring, math, unpack, print, type, mfloor, random, table_insert, format, _G
+  = string.sub, pairs, tostring, math, unpack, print, type, math.floor, math.random, table.insert, string.format, _G
 random(time()); random(); random(time())
 
 -- Shorten my handle
@@ -93,13 +93,21 @@ function x:UpdateFrames(specificFrame)
       f:SetFading(true)
       f:SetFadeDuration(0.3)
       
+      -- Frame Strata
+      if x.configuring then
+        f:SetFrameStrata("FULLSCREEN_DIALOG")
+      else
+        f:SetFrameStrata(ssub(x.db.profile.frameSettings.frameStrata, 2))
+      end
+      
+      
       -- Set the position
       f:SetSpacing(2)
       f:ClearAllPoints()
       f:SetMovable(true)
       f:SetTimeVisible(5)
       f:SetResizable(true)
-      f:SetMinResize(64, 64)
+      f:SetMinResize(64, 32)
       f:SetMaxResize(768, 768)
       f:SetShadowColor(0, 0, 0, 0)
       f:SetWidth(settings.Width)
@@ -269,7 +277,7 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
   else
     heap[mergeID] = {
       last    = 0,          -- last update
-      update  = interval or x.db.profile.spells.merge[mergeID].interval or 3,   -- how often to update
+      update  = interval or (x.db.profile.spells.merge[mergeID] and x.db.profile.spells.merge[mergeID].interval or 3),   -- how often to update
       entries = {           -- entries to merge
           message,
         },        
@@ -376,9 +384,18 @@ do
         total = total + amount  -- Add all the amounts
       end
       
-      -- String total
-      local message = tostring(total) 
-
+      -- total as a string
+      local message = tostring(total)
+      
+      -- Abbrivate the merged total
+      if tonumber(total) and x.db.profile.megaDamage.enableMegaDamage then
+        if (total / 1000000 >= 1) then
+          message = tostring(mfloor((total + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
+        elseif (total / 1000 >= 1) then
+          message = tostring(mfloor((total + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
+        end
+      end
+      
       -- Add merge count
       if #item.entries > 1 then message = message .. " |cffFFFFFFx" .. #item.entries .. "|r" end
       
@@ -469,6 +486,8 @@ function x.StartConfigMode()
         f.d:Hide()
       end
       
+      f:SetFrameStrata("FULLSCREEN_DIALOG")
+      
     end
   end
 end
@@ -501,6 +520,9 @@ function x.EndConfigMode()
     
     f:SetScript("OnDragStart", nil)
     f:SetScript("OnDragStop", nil)
+    
+    -- Set the Frame Strata
+    f:SetFrameStrata(ssub(x.db.profile.frameSettings.frameStrata, 2))
     
   end
 end
@@ -574,7 +596,11 @@ local function TestMoreUpdate(self, elapsed)
         local message = random(60000)
         if x.db.profile.frames["outgoing"].iconsEnabled then
           local spellID = random(10000)
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames["outgoing"].iconsSize)
+          if x.db.profile.frames["outgoing"].fontJustify == "LEFT" then
+            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames["outgoing"].iconsSize) .. "  " .. message
+          else
+            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames["outgoing"].iconsSize)
+          end
         end
         x:AddMessage("outgoing", message, x.damagecolor[damageColorLookup[math.random(7)]])
       elseif self == x.frames["critical"] and random(2) % 2 == 0 then
@@ -582,7 +608,11 @@ local function TestMoreUpdate(self, elapsed)
         local message = x.db.profile.frames["critical"].critPrefix..random(80000, 200000)..x.db.profile.frames["critical"].critPostfix
         if x.db.profile.frames["critical"].iconsEnabled then
           local spellID = random(10000)
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames["critical"].iconsSize)
+          if x.db.profile.frames["critical"].fontJustify == "LEFT" then
+            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames["critical"].iconsSize) .. "  " .. message
+          else
+            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames["critical"].iconsSize)
+          end
         end
         x:AddMessage("critical", message, x.damagecolor[damageColorLookup[math.random(7)]])
       elseif self == x.frames["damage"] and random(2) % 2 == 0 then
@@ -609,10 +639,10 @@ local function TestMoreUpdate(self, elapsed)
           self.testCombo = 1
         end
         x:AddMessage("class", tostring(self.testCombo), {1, .82, 0})
-      elseif self == x.frames["procs"] and random(4) % 4 == 0 then
+      elseif self == x.frames["procs"] and random(8) % 8 == 0 then
         if not x.db.profile.frames["procs"].enabledFrame then x:Clear("procs") return end
         x:AddMessage("procs", ERR_SPELL_COOLDOWN, {1, 1, 0})
-      elseif self == x.frames["loot"] and random(3) % 3 == 0 then
+      elseif self == x.frames["loot"] and random(8) % 8 == 0 then
         if not x.db.profile.frames["loot"].enabledFrame then x:Clear("loot") return end
         x:AddMessage("loot", MONEY .. ": " .. GetCoinTextureString(random(1000000)), {1, 1, 0}) -- yellow
       end
@@ -663,7 +693,7 @@ end
 
 -- Popups
 StaticPopupDialogs["XCT_PLUS_CONFIGURING"] = {
-  text          = "You can now move freely about the cabin.",
+  text          = "You may now move freely about the cabin.",
   timeout       = 0,
   whileDead     = 1,
   
@@ -691,11 +721,11 @@ StaticPopupDialogs["XCT_PLUS_TESTMODE"] = {
 }
 
 StaticPopupDialogs["XCT_PLUS_RESET_SETTINGS"] = {
-  text          = "Are your certain you want to erase all your xCT+ settings?",
+  text          = "Are your certain you want to erase |cffFF0000ALL|r your xCT+ settings?",
   timeout       = 0,
   whileDead     = 1,
   
-  button1       = "ERASE ALL!!",
+  button1       = "|cffFF0000ERASE ALL!!|r",
   button2       = CANCEL,
   OnAccept      = function() xCTSavedDB = nil; ReloadUI() end,
   OnCancel      = function() LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,

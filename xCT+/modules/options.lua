@@ -97,37 +97,42 @@ addon.options.args["spells"] = {
       set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
       width = "full",
     },
+    
     listSpacer1 = {
       type = "description",
       order = 5,
       name = " ",
     },
-    listTitle = {
-      type = "description",
-      order = 6,
-      name = "|cffFFFF00>>> UNDER CONSTRUCTION <<<|r",
-      width = "full",
+    
+    mergeSwings = {
+      order = 9,
+      type = 'toggle',
+      name = "Merge Melee Swings",
+      desc = "|cffFF0000ID|r 6603 |cff798BDD(Player Melee)|r\n|cffFF0000ID|r 0 |cff798BDD(Pet Melee)|r",
+      get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
+      set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
     },
-    listDescription = {
-      type = "description",
-      order = 7,
-      name = "In a future update, you will be able to add and remove spells to merge!",
+    
+    mergeRanged = {
+      order = 9,
+      type = 'toggle',
+      name = "Merge Ranged Attacks",
+      desc = "|cffFF0000ID|r 75",
+      get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
+      set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
     },
+    
     listSpacer2 = {
       type = "description",
-      order = 8,
+      order = 10,
       name = " ",
     },
-    listSpacer3 = {
-      type = "description",
-      order = 8,
-      name = " ",
-    },
+    
     spellList = {
-      name = "List of Merge Spells",
+      name = "List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
       guiInline = true,
-      order = 9,
+      order = 20,
       args = {
         
         mergeListDesc = {
@@ -199,7 +204,7 @@ addon.options.args["Credits"] = {
 
 addon.options.args["Frames"] = {
   name = "Frames" .. X.new,
-  desc = "|cffFFFF00New:|r Added some more frame settings",
+  desc = "|cffFFFF00New:|r Added Damage Abbrivation",
   type = 'group',
   order = 1,
   args = {
@@ -227,7 +232,6 @@ addon.options.args["Frames"] = {
 
     frameSettings = {
       name = "Frame Settings",
-      desc = "|cffFFFF00New:|r Added some special tweaks",
       type = 'group',
       order = 4,
       guiInline = true,
@@ -249,7 +253,64 @@ addon.options.args["Frames"] = {
           name = "Show Align Grid",
           get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
           set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
-        }
+        },
+        
+        frameStrata = {
+          type = 'select',
+          order = 3,
+          name = "Frame Strata",
+          desc = "The Z-Layer to place the |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frame onto",
+          values = {
+            ["1PARENT"]             = "Parent |cffFF0000(Lowest)|r",
+            ["2BACKGROUND"]         = "Background",
+            ["3LOW"]                = "Low",
+            ["4MEDIUM"]             = "Medium |cffFFFF00(Default)|r",
+            ["5HIGH"]               = "High",
+            ["6DIALOG"]             = "Dialog",
+            ["7FULLSCREEN"]         = "Fullscreen",
+            ["8FULLSCREEN_DIALOG"]  = "Fullscreen Dialog",
+            ["9TOOLTIP"]            = "ToolTip |cffAAFF80(Highest)|r",
+          },
+          get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
+          set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value; X:UpdateFrames() end,
+        },
+        
+      },
+    },
+    
+    megaDamage = {
+      name = "Damage Abbrivation Settings" .. X.new,
+      type = 'group',
+      order = 5,
+      guiInline = true,
+      args = {
+        enableMegaDamage = {
+          order = 1,
+          type = 'toggle',
+          name = "Enable",
+          desc = "Enable Damage Abbrivation",
+          width = "full",
+          get = function(info) return X.db.profile[info[#info-1]][info[#info]] end,
+          set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = value end,
+        },
+      
+        thousandSymbol = {
+          order = 2,
+          type = 'input',
+          name = "Thousand",
+          desc = "Symbol for: |cffFF0000Thousands|r |cff798BDD(10e+3)|r",
+          get = function(info) return string_gsub(X.db.profile[info[#info-1]][info[#info]], "|", "||") end,
+          set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|") end,
+        },
+        
+        millionSymbol = {
+          order = 3,
+          type = 'input',
+          name = "Million",
+          desc = "Symbol for: |cffFF0000Millions|r |cff798BDD(10e+6)|r",
+          get = function(info) return string_gsub(X.db.profile[info[#info-1]][info[#info]], "|", "||") end,
+          set = function(info, value) X.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|") end,
+        },
         
       },
     },
