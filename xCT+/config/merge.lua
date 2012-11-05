@@ -17,17 +17,16 @@ local ADDON_NAME, addon = ...
 -- =====================================================
 -- CreateMergeSpellEntry(
 --    class,       [string] - class name that spell belongs to
---    enabled,       [bool] - whether or not this spell is enabled
 --    interval,       [int] - How often to update merged data (in seconds)
 --    prep,           [int] - The minimum time to wait to update merged data
 --  )
 --    Creates a merge settings entry for a spell.
 -- =====================================================
-local function CreateMergeSpellEntry(class, interval,  prep)
+local function CreateMergeSpellEntry(class, interval, prep)
   return {
          class = class,
       interval = interval   or 3,
-          prep = prep       or 0.5,
+          prep = prep       or 0,
     }
 end
 
@@ -92,6 +91,8 @@ addon.merges = {
   [107270] = CreateMergeSpellEntry("MONK", 2.5),        -- Spinning Crane Kick                        (Over 2s)
   [128531] = CreateMergeSpellEntry("MONK", 4),          -- Blackout Kick (DoT)                        (Every 1s for 4s)
   [117418] = CreateMergeSpellEntry("MONK", 4),          -- Fists of Fury                              (Every 1s for 4s)
+  [121253] = CreateMergeSpellEntry("MONK", .5),         -- Keg Smash                                  (INSTANT)
+  [115181] = CreateMergeSpellEntry("MONK", .5),         -- Breath of Fire                             (INSTANT)
   
 -- monk (healing)
   [117640] = CreateMergeSpellEntry("MONK", 2.5),        -- Spinning Crane Kick (Heal)                 (Over 2s)

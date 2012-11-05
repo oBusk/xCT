@@ -178,7 +178,7 @@ addon.options.args["Credits"] = {
     specialThanksList = {
       type = 'description',
       order = 2,
-      name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, Nidra, gnangnan, NitZo, Naughtia",
+      name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, Nidra, gnangnan, NitZo, Naughtia, Derap",
     },
     testerTitleSpace1 = {
       type = 'description',
