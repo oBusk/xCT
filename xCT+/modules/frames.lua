@@ -17,8 +17,8 @@ local ADDON_NAME, addon = ...
 
 local LSM = LibStub("LibSharedMedia-3.0");
 -- Setup up values
-local ssub, pairs, tostring, math, unpack, print, type, mfloor, random, table_insert, format, _G
-  = string.sub, pairs, tostring, math, unpack, print, type, math.floor, math.random, table.insert, string.format, _G
+local ssub, pairs, tonumber, tostring, math, unpack, print, type, mfloor, random, table_insert, format, _G
+  = string.sub, pairs, tonumber, tostring, math, unpack, print, type, math.floor, math.random, table.insert, string.format, _G
 random(time()); random(); random(time())
 
 -- Shorten my handle
