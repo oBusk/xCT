@@ -719,9 +719,11 @@ x.outgoing_events = {
         -- TODO: Add Healing Filter
         
         -- Check for merge
-        if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-          merged = true
-          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+        if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled and
+          if critical and not MERGE_CRITICALS or not critical then
+            merged = true
+            x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+          end
         end
         
         -- Abbrivate the message
@@ -734,9 +736,18 @@ x.outgoing_events = {
         end
         
         -- Check for Critical
-        if critical then    -- Let all crits through
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
-          outputFrame = "critical"
+        if critical then
+          if MERGE_CRITICALS and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+            -- Merge this critical entry
+            x:AddSpamMessage("critical", spellID, amount, outputColor)
+            
+            -- We are done, after we check for criticals. We don't need to do anything else.
+            return 
+          else
+            -- Don't merge criticals
+            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
+            outputFrame = "critical"
+          end
         elseif merged then  -- return merged, non-crits
           return
         end
