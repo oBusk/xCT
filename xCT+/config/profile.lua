@@ -76,6 +76,11 @@ addon.defaults = {
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         
+      -- fading text
+        ["enableFade"] = true,
+        ["fadeTime"] = 0.3,
+        ["visibilityTime"] = 5,
+        
       -- special tweaks
         ["showInterrupts"] = true,
         ["showDispells"] = true,
@@ -112,6 +117,11 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        
+      -- fading text
+        ["enableFade"] = true,
+        ["fadeTime"] = 0.3,
+        ["visibilityTime"] = 5,
         
       -- special tweaks
         ["enableOutDmg"] = true,
@@ -157,6 +167,11 @@ addon.defaults = {
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         
+      -- fading text
+        ["enableFade"] = true,
+        ["fadeTime"] = 0.3,
+        ["visibilityTime"] = 5,
+        
       -- special tweaks
         ["showSwing"] = true,
         ["prefixSwing"] = true,
@@ -187,6 +202,11 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        
+      -- fading text
+        ["enableFade"] = true,
+        ["fadeTime"] = 0.3,
+        ["visibilityTime"] = 5,
       },
 
       healing = {
@@ -213,6 +233,11 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        
+      -- fading text
+        ["enableFade"] = true,
+        ["fadeTime"] = 0.3,
+        ["visibilityTime"] = 5,
       },
       
       class = {
@@ -258,6 +283,11 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        
+      -- fading text
+        ["enableFade"] = true,
+        ["fadeTime"] = 0.3,
+        ["visibilityTime"] = 5,
       },
       
       procs = {
@@ -284,6 +314,11 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        
+      -- fading text
+        ["enableFade"] = true,
+        ["fadeTime"] = 0.3,
+        ["visibilityTime"] = 5,
       },
       
       loot = {
@@ -314,6 +349,11 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        
+      -- fading text
+        ["enableFade"] = true,
+        ["fadeTime"] = 0.3,
+        ["visibilityTime"] = 5,
         
       -- special tweaks
         ["showItems"] = true,
@@ -447,6 +487,8 @@ addon.defaults = {
         
       },
       
+      -- yes this is supposed to be blank :P
+      -- it is generated in merge.lua
       merge = { },
     
       -- yes this is supposed to be blank :P

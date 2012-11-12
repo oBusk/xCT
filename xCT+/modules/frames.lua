@@ -92,6 +92,7 @@ function x:UpdateFrames(specificFrame)
       
       f:SetFading(true)
       f:SetFadeDuration(0.3)
+      f:SetTimeVisible(5)
       
       -- Frame Strata
       if x.configuring then
@@ -105,7 +106,6 @@ function x:UpdateFrames(specificFrame)
       f:SetSpacing(2)
       f:ClearAllPoints()
       f:SetMovable(true)
-      f:SetTimeVisible(5)
       f:SetResizable(true)
       f:SetMinResize(64, 32)
       f:SetMaxResize(768, 768)
@@ -145,7 +145,14 @@ function x:UpdateFrames(specificFrame)
         f:EnableMouseWheel(false)
         f:SetScript("OnMouseWheel", nil)
       end
-
+      
+      -- fading
+      if settings.enableFade ~= nil then
+        f:SetFading(settings.enableFade)
+        f:SetFadeDuration(settings.fadeTime)
+        f:SetTimeVisible(settings.visibilityTime)
+      end
+      
       -- Special Cases
       if framename == "class" then
         f:SetMaxLines(1)
@@ -153,8 +160,7 @@ function x:UpdateFrames(specificFrame)
       end
       
       x.frames[framename] = f
-      
-      
+
       -- Send a Test message
       if specificFrame then
         f:SetScript("OnUpdate", function(self, e)
@@ -173,10 +179,15 @@ function x:UpdateFrames(specificFrame)
           else
             x:AddMessage(self.frameName, self.frameName.." test message", self.settings.fontColor or {1,1,1})
           end
-          self:SetScript("OnUpdate", nil)
+          if x.testing then
+            self.lastUpdate = 0
+            self:SetScript("OnUpdate", x.TestMoreUpdate)
+          else
+            self:SetScript("OnUpdate", nil)
+          end
         end)
       end
-      
+
     end
   end
 
@@ -574,7 +585,7 @@ end
 
 local damageColorLookup = { [1] = 1, [2] = 2, [3] = 4, [4] = 8, [5] = 16, [6] = 32, [7] = 64, }
 
-local function TestMoreUpdate(self, elapsed)
+function x.TestMoreUpdate(self, elapsed)
   if InCombatLockdown() then
     self:SetScript("OnUpdate", nil)
   else
@@ -589,7 +600,7 @@ local function TestMoreUpdate(self, elapsed)
       self.lastUpdate = 0
       
       if self == x.frames["general"] and random(3) % 3 == 0 then
-        if not x.db.profile.frames["outgoing"].enabledFrame then x:Clear("general") return end
+        if not x.db.profile.frames["general"].enabledFrame then x:Clear("general") return end
         x:AddMessage("general", COMBAT_TEXT_LABEL, {random(255) / 255, random(255) / 255, random(255) / 255})
       elseif self == x.frames["outgoing"] then
         if not x.db.profile.frames["outgoing"].enabledFrame then x:Clear("outgoing") return end
@@ -662,8 +673,9 @@ function x.ToggleTestMode()
       -- Start the Test more
       for framename, settings in pairs(x.db.profile.frames) do
         local frame = x.frames[framename]
+        frame.nextUpdate = nil
         frame.lastUpdate = 0
-        frame:SetScript("OnUpdate", TestMoreUpdate)
+        frame:SetScript("OnUpdate", x.TestMoreUpdate)
       end
       
       -- Test more Popup

@@ -262,7 +262,7 @@ addon.options.args["Credits"] = {
 
 addon.options.args["Frames"] = {
   name = "Frames" .. X.new,
-  desc = "|cffFFFF00New:|r Added Damage Abbrivation",
+  desc = "|cffFFFF00New:|r Added Damage Abbrivation\n|cffFFFF00New:|r All Frames have |cff798BDDFading Text|r Options",
   type = 'group',
   order = 1,
   args = {
@@ -508,9 +508,43 @@ addon.options.args["Frames"] = {
             },
           },
         },
+        
+        fading = {
+          order = 7,
+          type = 'group',
+          guiInline = true,
+          name = "Fading Text" .. X.new,
+          args = {
+            enableFade = {
+              order = 1,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+            },
+            fadeTime = {
+              order = 2,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+            },
+            visibilityTime = {
+              order = 3,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+            },
+          },
+        },
 
         specialTweaks = {
-          order = 7,
+          order = 8,
           type = 'group',
           guiInline = true,
           name = "Special Tweaks" .. X.new,
@@ -745,8 +779,42 @@ addon.options.args["Frames"] = {
           },
         },
         
-        specialTweaks = {
+        fading = {
           order = 8,
+          type = 'group',
+          guiInline = true,
+          name = "Fading Text" .. X.new,
+          args = {
+            enableFade = {
+              order = 1,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+            },
+            fadeTime = {
+              order = 2,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+            },
+            visibilityTime = {
+              order = 3,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+            },
+          },
+        },
+        
+        specialTweaks = {
+          order = 9,
           type = 'group',
           guiInline = true,
           name = "Special Tweaks",
@@ -1033,10 +1101,42 @@ addon.options.args["Frames"] = {
           },
         },
 
-        
+        fading = {
+          order = 9,
+          type = 'group',
+          guiInline = true,
+          name = "Fading Text" .. X.new,
+          args = {
+            enableFade = {
+              order = 1,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+            },
+            fadeTime = {
+              order = 2,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+            },
+            visibilityTime = {
+              order = 3,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+            },
+          },
+        },
         
         specialTweaks = {
-          order = 9,
+          order = 10,
           type = 'group',
           guiInline = true,
           name = "Special Tweaks",
@@ -1229,6 +1329,40 @@ addon.options.args["Frames"] = {
           },
         },
         
+        fading = {
+          order = 7,
+          type = 'group',
+          guiInline = true,
+          name = "Fading Text" .. X.new,
+          args = {
+            enableFade = {
+              order = 1,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+            },
+            fadeTime = {
+              order = 2,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+            },
+            visibilityTime = {
+              order = 3,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+            },
+          },
+        },
+        
       },
     },
     
@@ -1380,6 +1514,40 @@ addon.options.args["Frames"] = {
               name = "Number of Lines",
               type = 'range',
               min = 10, max = 60, step = 1,
+              get = get2,
+              set = set2_update,
+            },
+          },
+        },
+        
+        fading = {
+          order = 7,
+          type = 'group',
+          guiInline = true,
+          name = "Fading Text" .. X.new,
+          args = {
+            enableFade = {
+              order = 1,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+            },
+            fadeTime = {
+              order = 2,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+            },
+            visibilityTime = {
+              order = 3,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
             },
@@ -1636,6 +1804,40 @@ addon.options.args["Frames"] = {
           },
         },
         
+        fading = {
+          order = 7,
+          type = 'group',
+          guiInline = true,
+          name = "Fading Text" .. X.new,
+          args = {
+            enableFade = {
+              order = 1,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+            },
+            fadeTime = {
+              order = 2,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+            },
+            visibilityTime = {
+              order = 3,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+            },
+          },
+        },
+        
       },
     },
     
@@ -1787,6 +1989,40 @@ addon.options.args["Frames"] = {
               name = "Number of Lines",
               type = 'range',
               min = 10, max = 60, step = 1,
+              get = get2,
+              set = set2_update,
+            },
+          },
+        },
+        
+        fading = {
+          order = 7,
+          type = 'group',
+          guiInline = true,
+          name = "Fading Text" .. X.new,
+          args = {
+            enableFade = {
+              order = 1,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+            },
+            fadeTime = {
+              order = 2,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+            },
+            visibilityTime = {
+              order = 3,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
             },
@@ -1979,8 +2215,42 @@ addon.options.args["Frames"] = {
           },
         },
         
-        specialTweaks = {
+        fading = {
           order = 8,
+          type = 'group',
+          guiInline = true,
+          name = "Fading Text" .. X.new,
+          args = {
+            enableFade = {
+              order = 1,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+            },
+            fadeTime = {
+              order = 2,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+            },
+            visibilityTime = {
+              order = 3,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+            },
+          },
+        },
+        
+        specialTweaks = {
+          order = 9,
           type = 'group',
           guiInline = true,
           name = "Special Tweaks",
