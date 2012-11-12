@@ -62,11 +62,11 @@ end
 
 -- Spammy Spell Get/Set Functions
 local function SpamSpellGet(info)
-  return self.db.profile.spells.merge[tonumber(info[#info])].enabled
+  return X.db.profile.spells.merge[tonumber(info[#info])].enabled
 end
 
 local function SpamSpellSet(info, value)
-  self.db.profile.spells.merge[tonumber(info[#info])].enabled = value
+  X.db.profile.spells.merge[tonumber(info[#info])].enabled = value
 end
 
 -- Gets spammy spells from the database and creates options
@@ -87,22 +87,25 @@ function X:UpdateSpamSpells()
   local spells = addon.options.args.spells.args.spellList.args
   for spellID, entry in pairs(self.db.profile.spells.merge) do
     if entry.class == X.player.class then
-      local desc = "|cffFF0000ID:|r [" .. spellID .. "]\n"
-    
-      if entry.interval == 0.5 then
-        desc = desc .. "|cffFF0000Interval:|r Instant" 
-      else
-        desc = desc .. "|cffFF0000Interval:|r Merge every |cffFFFF00" .. tostring(entry.interval) .. "|r seconds"
+      local name = GetSpellInfo(spellID)
+      if name then
+        local desc = "|cffFF0000ID:|r [" .. spellID .. "]\n"
+      
+        if entry.interval == 0.5 then
+          desc = desc .. "|cffFF0000Interval:|r Instant" 
+        else
+          desc = desc .. "|cffFF0000Interval:|r Merge every |cffFFFF00" .. tostring(entry.interval) .. "|r seconds"
+        end
+      
+        spells[tostring(spellID)] = {
+          order = 3,
+          type = 'toggle',
+          name = name,
+          desc = desc,
+          get = SpamSpellGet,
+          set = SpamSpellSet,
+        }
       end
-    
-      spells[tostring(spellID)] = {
-        order = 3,
-        type = 'toggle',
-        name = GetSpellInfo(spellID),
-        desc = desc,
-        get = SpamSpellGet,
-        set = SpamSpellSet,
-      }
     end
   end
 end
@@ -110,7 +113,7 @@ end
 local function ItemToggleAll(info)
   local state = (info[#info] == "enableAll")
   for key in pairs(self.db.profile.spells.items[info[#info-1]]) do
-    self.db.profile.spells.items[info[#info-1]]][key] = state
+    self.db.profile.spells.items[info[#info-1]][key] = state
   end
 end
 
@@ -226,7 +229,7 @@ function X:UpdateComboPointOptions(force)
   
   local comboSpells = {
     order = 100,
-    name = "Tracking Spells",
+    name = "Tracking Spells |cffFFFFFF(Choose one per specialization)|r",
     type = 'group',
     guiInline = true,
     args = { },
@@ -244,6 +247,8 @@ function X:UpdateComboPointOptions(force)
           width = "full",
         }
       end
+      
+      -- TODO: Create generic functions for get/set to save on upvalue memory
       comboSpells.args['entry' .. offset] = {
         order = offset,
         type = 'toggle',
@@ -266,7 +271,7 @@ function X:UpdateComboPointOptions(force)
         comboSpells.args['mySpecHeader' .. offset] = {
             order = offset,
             type = 'header',
-            name = "Specialization: " .. mySpecName,
+            name = "Specialization: |cff798BDD" .. mySpecName .. "|r",
             width = "full",
           }
         offset = offset + 1
@@ -274,6 +279,8 @@ function X:UpdateComboPointOptions(force)
     
       if tonumber(index) then
         -- Class Combo Points ( UNIT_AURA Tracking)
+        
+        -- TODO: Create generic functions for get/set to save on upvalue memory
         comboSpells.args['entry' .. offset] = {
           order = offset,
           type = 'toggle',
@@ -298,6 +305,8 @@ function X:UpdateComboPointOptions(force)
         }
       else
         -- Special Combo Point ( Unit Power )
+        
+        -- TODO: Create generic functions for get/set to save on upvalue memory
         comboSpells.args['entry' .. offset] = {
           order = offset,
           type = 'toggle',

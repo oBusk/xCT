@@ -70,7 +70,8 @@ addon.merges = {
   [13812]  = CreateMergeSpellEntry("HUNTER"),           -- Explosive Trap
   [53301]  = CreateMergeSpellEntry("HUNTER"),           -- Explosive Shot (3 ticks merged as one)
   [63468]  = CreateMergeSpellEntry("HUNTER"),           -- Piercing Shots
-
+  [3674]   = CreateMergeSpellEntry("HUNTER", 4),        -- Black Arrow                                (Every 2s for 20s)
+  
 -- mage
   [44461]  = CreateMergeSpellEntry("MAGE", .5),         -- Living Bomb                                (INSTANT)
   [44457]  = CreateMergeSpellEntry("MAGE", 4),          -- Living Bomb (DOT)                          (over 8 seconds)

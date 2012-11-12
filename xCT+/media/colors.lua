@@ -35,6 +35,7 @@ x.colors = {
   aura_end = {.5,.5,.5},
   aura_start_harm = {1,.1,.1},
   honor = {.1,.1,1},
+  faction_sub = {1,.1,.1},
   spell_reactive = {1,.82,0},
   low_health = {1,.1,.1},
   low_mana = {1,.1,.1},

@@ -80,6 +80,8 @@ addon.defaults = {
         ["showInterrupts"] = true,
         ["showDispells"] = true,
         ["showPartyKills"] = true,
+        ["showBuffs"] = true,
+        ["showDebuffs"] = true,
       },
       
       outgoing = {
@@ -330,6 +332,12 @@ addon.defaults = {
       
       mergeSwings = true,
       mergeRanged = true,
+      
+      -- Only one of these can be true
+      mergeDontMergeCriticals = true,
+      mergeCriticalsWithOutgoing = false,
+      mergeCriticalsByThemselves = false,
+      
       
       combo = {
         ["DEATHKNIGHT"] = {

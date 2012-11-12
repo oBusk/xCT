@@ -64,6 +64,8 @@ addon.options = {
 local function get0(info) return X.db.profile[info[#info-1]][info[#info]] end
 local function set0(info, value) X.db.profile[info[#info-1]][info[#info]] = value end
 local function set0_update(info, value) X.db.profile[info[#info-1]][info[#info]] = value; X:UpdateFrames() end
+local function get0_1(info) return X.db.profile[info[#info-2]][info[#info]] end
+local function set0_1(info, value) X.db.profile[info[#info-2]][info[#info]] = value end
 local function getTextIn0(info) return string_gsub(X.db.profile[info[#info-1]][info[#info]], "|", "||") end
 local function setTextIn0(info, value) X.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|") end
 local function get1(info) return X.db.profile.frames[info[#info-1]][info[#info]] end
@@ -77,9 +79,17 @@ local function setColor2(info, r, g, b) X.db.profile.frames[info[#info-2]][info[
 local function getTextIn2(info) return string_gsub(X.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end
 local function setTextIn2(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = string_gsub(value, "||", "|") end
 
+local function setSpecialCriticalOptions(info, value)
+  X.db.profile[info[#info-2]].mergeCriticalsWithOutgoing = false
+  X.db.profile[info[#info-2]].mergeCriticalsByThemselves = false
+  X.db.profile[info[#info-2]].mergeDontMergeCriticals = false
+
+  X.db.profile[info[#info-2]][info[#info]] = true
+end
+
 addon.options.args["spells"] = {
   name = "Spam Merger" .. X.new,
-  desc = "|cffFFFF00New:|r Added Mergeable Auto Attack Options|r",
+  desc = "|cffFFFF00New:|r Added More Mergeable Options|r",
   type = 'group',
   order = 2,
   args = {
@@ -111,7 +121,6 @@ addon.options.args["spells"] = {
       name = "Show Spell IDs |cffFF0000(DEBUG)|r",
       get = get0,
       set = set0,
-      width = "full",
     },
     
     listSpacer1 = {
@@ -120,28 +129,71 @@ addon.options.args["spells"] = {
       name = " ",
     },
     
-    mergeSwings = {
-      order = 9,
-      type = 'toggle',
-      name = "Merge Melee Swings",
-      desc = "|cffFF0000ID|r 6603 |cff798BDD(Player Melee)|r\n|cffFF0000ID|r 0 |cff798BDD(Pet Melee)|r",
-      get = get0,
-      set = set0,
-    },
-    
-    mergeRanged = {
-      order = 9,
-      type = 'toggle',
-      name = "Merge Ranged Attacks",
-      desc = "|cffFF0000ID|r 75",
-      get = get0,
-      set = set0,
-    },
-    
-    listSpacer2 = {
-      type = "description",
-      order = 10,
-      name = " ",
+    mergeOptions = {
+      name = "Merge Options" .. X.new,
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = {
+      
+        listSpacer0 = {
+          type = "description",
+          order = 0,
+          name = "|cff798BDDMerge Auto-Attack Options|r:",
+        },
+      
+        mergeSwings = {
+          order = 1,
+          type = 'toggle',
+          name = "Merge Melee Swings",
+          desc = "|cffFF0000ID|r 6603 |cff798BDD(Player Melee)|r\n|cffFF0000ID|r 0 |cff798BDD(Pet Melee)|r",
+          get = get0_1,
+          set = set0_1,
+        },
+        
+        mergeRanged = {
+          order = 2,
+          type = 'toggle',
+          name = "Merge Ranged Attacks",
+          desc = "|cffFF0000ID|r 75",
+          get = get0_1,
+          set = set0_1,
+        },
+        
+        listSpacer1 = {
+          type = "description",
+          order = 3,
+          name = "\n|cff798BDDMerge Critical Hit Options|r (Choose one):",
+        },
+        
+        mergeDontMergeCriticals = {
+          order = 4,
+          type = 'toggle',
+          name = "Don't Merge Crits",
+          desc = "Crits will not get merged in the critical frame, but they will be included in the outgoing total. |cffFFFF00(Default)|r",
+          get = get0_1,
+          set = setSpecialCriticalOptions,
+        },
+        
+        mergeCriticalsWithOutgoing = {
+          order = 5,
+          type = 'toggle',
+          name = "Merge Crits with Outgoing",
+          desc = "Crits will be merged, but the total merged amount in the outgoing frame includes crits.",
+          get = get0_1,
+          set = setSpecialCriticalOptions,
+        },
+        
+        mergeCriticalsByThemselves = {
+          order = 6,
+          type = 'toggle',
+          name = "Merge Crits by Themselves",
+          desc = "Crits will be merged and the total merged amount in the outgoing frame |cffFF0000DOES NOT|r include crits.",
+          get = get0_1,
+          set = setSpecialCriticalOptions,
+        },
+
+      },
     },
     
     spellList = {
@@ -178,7 +230,7 @@ addon.options.args["Credits"] = {
     specialThanksList = {
       type = 'description',
       order = 2,
-      name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, Nidra, gnangnan, NitZo, Naughtia, Derap",
+      name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, Nidra, gnangnan, NitZo, Naughtia, Derap, sortokk, ckaotik.",
     },
     testerTitleSpace1 = {
       type = 'description',
@@ -257,7 +309,7 @@ addon.options.args["Frames"] = {
           type = 'select',
           order = 3,
           name = "Frame Strata",
-          desc = "The Z-Layer to place the |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frame onto",
+          desc = "The Z-Layer to place the |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frame onto. If you find that another addon is in front of |cffFF0000x|rCT+ frames, try increasing the Frame Strata.",
           values = {
             ["1PARENT"]             = "Parent |cffFF0000(Lowest)|r",
             ["2BACKGROUND"]         = "Background",
@@ -311,8 +363,10 @@ addon.options.args["Frames"] = {
         },
       },
     },
+
     general = {
-      name = "|cffFFFFFFGeneral|r",
+      name = "|cffFFFFFFGeneral|r" .. X.new,
+      desc = "|cffFFFF00New:|r Added more Special Tweaks",
       type = 'group',
       order = 11,
       args = {
@@ -482,6 +536,22 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Unit Killed",
               desc = "Display unit that was killed by your final blow.",
+              get = get2,
+              set = set2,
+            },
+            showBuffs = {
+              order = 4,
+              type = 'toggle',
+              name = "Buff Gains/Fades",
+              desc = "Display the names of helpful auras |cff00FF00(Buffs)|r that you gain and lose.",
+              get = get2,
+              set = set2,
+            },
+            showDebuffs = {
+              order = 5,
+              type = 'toggle',
+              name = "Debuff Gains/Fades",
+              desc = "Display the names of harmful auras |cffFF0000(Debuffs)|r that you gain and lose.",
               get = get2,
               set = set2,
             },
