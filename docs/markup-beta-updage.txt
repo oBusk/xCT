@@ -1,10 +1,12 @@
 <center>__________________________________________________</center>
-<center><b>xCT+ - Beta Update (Version 4)</b></center>
+<center><b>xCT+ - Beta Update (Version 5)</b></center>
 <center>__________________________________________________</center>
 
 <center>Here is your link to download the current version of xCT+ beta:</center>
-<center><a href="http://www.tukui.org/storage/download.php?file=352xCTplus_3_beta_4.zip">http://www.tukui.org/storage/download.php?file=352xCTplus_3_beta_4.zip</a></center>
+<center><a href="http://www.tukui.org/storage/download.php?file=391xCTplus_3_beta_5.zip">http://www.tukui.org/storage/download.php?file=391xCTplus_3_beta_5.zip</a></center>
 
-Thank you! I hope you are enjoying the beta :)
+This update is expected to be the last beta! That means I should be rolling out with the RC1 to the general public before the month is out! Please take this time to let me know of any final bugs or last minute features you would like to see in xCT+.
 
-The Support Forums and Change Log can be found here: <a href="http://www.tukui.org/forums/topic.php?id=24113#post-174883">xCT+ Beta - Support Forum</a>
+The Support Forums and Change Log can be found here: <a href="http://www.tukui.org/forums/topic.php?id=24113#post-176533">xCT+ Beta - Support Forum</a>
+
+Thank you so much for investing your personal time testing this addon! I can't tell you how much I appreciate it. :)
