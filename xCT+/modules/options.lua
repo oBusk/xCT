@@ -280,7 +280,7 @@ addon.options.args["Frames"] = {
       order = 3,
       type = 'execute',
       name = "More Blizzard Options",
-      func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
+      func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameTab1:Click(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
     },
     frameSettings = {
       name = "Frame Settings",
