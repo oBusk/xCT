@@ -112,8 +112,8 @@ end
 
 local function ItemToggleAll(info)
   local state = (info[#info] == "enableAll")
-  for key in pairs(self.db.profile.spells.items[info[#info-1]]) do
-    self.db.profile.spells.items[info[#info-1]][key] = state
+  for key in pairs(x.db.profile.spells.items[info[#info-1]]) do
+    x.db.profile.spells.items[info[#info-1]][key] = state
   end
 end
 
