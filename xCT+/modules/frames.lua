@@ -372,7 +372,7 @@ do
       frames[frameIndex[index]]                 -- this frame's last entry index
       
     -- If the frame is not enabled, then dont even worry about it
-    if not settings.enabledFrame then
+    if not settings.enabledFrame and settings.secondaryFrame == 0 then
       index = index + 1  -- heh, still need to iterate to the next frame :P
       return
     end
@@ -406,6 +406,11 @@ do
         elseif (total / 1000 >= 1) then
           message = tostring(mfloor((total + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
         end
+      end
+      
+      -- Add critical Prefix and Postfix
+      if frameIndex[index] == "critical" then
+        message = format("%s%s%s", x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
       end
       
       -- Add merge count

@@ -715,6 +715,7 @@ x.events = {
         x:Clear("outgoing")
         x:Clear("critical")
         x:Clear("loot")
+        x:Clear("power")
       end
       if ShowCombatState() then
         x:AddMessage("general", sformat(format_fade, LEAVING_COMBAT), "combat_end")
