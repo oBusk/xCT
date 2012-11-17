@@ -54,7 +54,7 @@ addon.merges = {
   [1079]   = CreateMergeSpellEntry("DRUID"),            -- Rip
   [106830] = CreateMergeSpellEntry("DRUID", 4),         -- Thrash (Cat)
   [77758]  = CreateMergeSpellEntry("DRUID", 4),         -- Thrash (Bear)
-  [106996] = CreateMergeSpellEntry("DRUID"),            -- Astral Storm                               (Every 1s for 10s)
+  [106998] = CreateMergeSpellEntry("DRUID"),            -- Astral Storm                               (Every 1s for 10s)
 
 -- druid (healing)
   [774]    = CreateMergeSpellEntry("DRUID"),            -- Rejuvenation
