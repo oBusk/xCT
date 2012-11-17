@@ -36,11 +36,11 @@ function x:LoadAlignmentGrid()
     -- Vertical Bars to the Left of the Center
     local tt1 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
     if i % 4 == 0 then
-        tt1:SetTexture(.3, .3, .3, .8) 
+        tt1:SetTexture(.9, .9, .1, .6) 
     elseif i % 2 == 0 then
-        tt1:SetTexture(.1, .1, .1, .8) 
+        tt1:SetTexture(.4, .4, .4, .6) 
     else
-        tt1:SetTexture(0, 0, 0, .8) 
+        tt1:SetTexture(.4, .4, .4, .4) 
     end
     tt1:SetPoint('TOP', AlignGrid, 'TOP', -i * boxSize, 0)
     tt1:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -i * boxSize, 0)
@@ -49,11 +49,11 @@ function x:LoadAlignmentGrid()
     -- Vertical Bars to the Right of the Center
     local tt2 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
     if i % 4 == 0 then
-        tt2:SetTexture(.3, .3, .3, .8) 
+        tt2:SetTexture(.9, .9, .1, .6) 
     elseif i % 2 == 0 then
-        tt2:SetTexture(.1, .1, .1, .8) 
+        tt2:SetTexture(.4, .4, .4, .6) 
     else
-        tt2:SetTexture(0, 0, 0, .8) 
+        tt2:SetTexture(.4, .4, .4, .4) 
     end
     tt2:SetPoint('TOP', AlignGrid, 'TOP', i * boxSize + 1, 0)
     tt2:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', i * boxSize + 1, 0)
@@ -65,11 +65,11 @@ function x:LoadAlignmentGrid()
     -- Horizontal Bars to the Below of the Center
     local tt3 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
     if i % 4 == 0 then
-        tt3:SetTexture(.3, .3, .3, .8)
+        tt3:SetTexture(.9, .9, .1, .6) 
     elseif i % 2 == 0 then
-        tt3:SetTexture(.1, .1, .1, .8) 
+        tt3:SetTexture(.4, .4, .4, .6) 
     else
-        tt3:SetTexture(0, 0, 0, .8) 
+        tt3:SetTexture(.4, .4, .4, .4) 
     end
     tt3:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize + 1)
     tt3:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize + 1)
@@ -78,11 +78,11 @@ function x:LoadAlignmentGrid()
     -- Horizontal Bars to the Above of the Center
     local tt4 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
     if i % 4 == 0 then
-        tt4:SetTexture(.3, .3, .3, .8) 
+        tt4:SetTexture(.9, .9, .1, .6) 
     elseif i % 2 == 0 then
-        tt4:SetTexture(.1, .1, .1, .8) 
+        tt4:SetTexture(.4, .4, .4, .6) 
     else
-        tt4:SetTexture(0, 0, 0, .8) 
+        tt4:SetTexture(.4, .4, .4, .4) 
     end
     tt4:SetPoint('LEFT', AlignGrid, 'LEFT', 0, i * boxSize)
     tt4:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, i * boxSize)

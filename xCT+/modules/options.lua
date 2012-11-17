@@ -22,10 +22,17 @@ local NEW = X.new
 
 -- Creating an Config
 addon.options = {
-  name = "xCT+ - Configuration Tool",
+  -- Add a place for the user to grab
+  name = "                                                                                                                                  ",
   handler = X,
   type = 'group',
   args = {
+    xCT_Title = {
+      order = 0,
+      type = "description",
+      fontSize = "large",
+      name = "|cffFF0000x|rCT|cffFFFF00+|r |cff798BDDConfiguration Tool|r",
+    },
     xCT_Header = {
       order = 1,
       type = "header",
@@ -88,7 +95,7 @@ local function setSpecialCriticalOptions(info, value)
 end
 
 addon.options.args["spells"] = {
-  name = "Spam Merger" .. X.new,
+  name = "Spam Merger",
   desc = "|cffFFFF00New:|r Added More Mergeable Options|r",
   type = 'group',
   order = 2,
@@ -101,7 +108,8 @@ addon.options.args["spells"] = {
     spamDesc = {
       type = 'description',
       order = 1,
-      name = "The spam merger is used to combine certain spells together, so that output of your frames is limited to a minimum. Common spells that are merged include: |cff71d5ff|Hspell:42231|h[Hurricane]|h|r, |cff71d5ff|Hspell:85222|h[Light of Dawn]|h|r, |cff71d5ff|Hspell:596|h[Prayer of Healing]|h|r, |cff71d5ff|Hspell:2643|h[Multi-Shot]|h|4r, and many, many more!"
+      fontSize = "medium",
+      name = "The spam merger is used to combine certain spells together, so that output of your frames is limited to a minimum. Common spells that are merged include: |cff71d5ff|Hspell:42231|h[Hurricane]|h|r, |cff71d5ff|Hspell:85222|h[Light of Dawn]|h|r, |cff71d5ff|Hspell:596|h[Prayer of Healing]|h|r, |cff71d5ff|Hspell:2643|h[Multi-Shot]|h|4r, and many, many more!",
     },
     listSpacer0 = {
       type = "description",
@@ -118,6 +126,7 @@ addon.options.args["spells"] = {
     enableMergerDebug = {
       order = 4,
       type = 'toggle',
+      width = "double",
       name = "Show Spell IDs |cffFF0000(DEBUG)|r",
       get = get0,
       set = set0,
@@ -130,7 +139,7 @@ addon.options.args["spells"] = {
     },
     
     mergeOptions = {
-      name = "Merge Options" .. X.new,
+      name = "Merge Options",
       type = 'group',
       guiInline = true,
       order = 11,
@@ -213,7 +222,7 @@ addon.options.args["spells"] = {
 }
 
 addon.options.args["Credits"] = {
-  name = "Credits" .. NEW,
+  name = "Credits",
   type = 'group',
   order = 3,
   args = {
@@ -226,10 +235,12 @@ addon.options.args["Credits"] = {
       type = 'description',
       order = 1,
       name = "|cffFFFF00Special Thanks|r",
+      fontSize = "large",
     },
     specialThanksList = {
       type = 'description',
       order = 2,
+      fontSize = "medium",
       name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, Nidra, gnangnan, NitZo, Naughtia, Derap, sortokk, ckaotik.",
     },
     testerTitleSpace1 = {
@@ -241,10 +252,12 @@ addon.options.args["Credits"] = {
       type = 'description',
       order = 4,
       name = "|cffFFFF00Beta Testers|r",
+      fontSize = "large",
     },
     userName1 = {
       type = 'description',
       order = 5,
+      fontSize = "medium",
       name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF Jaron|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r,|cffAAAAFF Schaduw|r,|cff8080EE sylenced|r,|cffAAAAFF kaleidoscope|r,|cff8080EE Killatones|r,|cffAAAAFF Trokko|r,|cff8080EE Yperia|r,|cffAAAAFF Edoc|r,|cff8080EE Cazart|r,|cffAAAAFF Nevah|r,|cff8080EE Refrakt|r,|cffAAAAFF Thakah|r,|cff8080EE johnis007|r,|cffAAAAFF Sgt|r,|cff8080EE NitZo|r,|cffAAAAFF cptblackgb|r,|cff8080EE pollyzoid|r.",
     },
     testerTitleSpace2 = {
@@ -261,7 +274,7 @@ addon.options.args["Credits"] = {
 }
 
 addon.options.args["Frames"] = {
-  name = "Frames" .. X.new,
+  name = "Frames",
   desc = "|cffFFFF00New:|r Added Damage Abbrivation\n|cffFFFF00New:|r All Frames have |cff798BDDFading Text|r Options",
   type = 'group',
   order = 1,
@@ -274,12 +287,14 @@ addon.options.args["Frames"] = {
     Frames_Description = {
       type = "description",
       order = 2,
-      name = "Unfortunately I cannot display all the options for combat text in this configuration tool alone. Blizzard has a few tweaks you might want to look at. For performance reasons, I am leaving them there for the time being. I hope you are enjoying the |cffFF0000x|rCT+ beta!",
+      name = "Unfortunately, I cannot display all the options for combat text in this configuration tool. Blizzard has a few tweaks you might want to look at. For performance reasons, I am leaving them there for the time being.",
+      fontSize = "medium",
     },
     blizzardOptions = {
       order = 3,
       type = 'execute',
-      name = "More Blizzard Options",
+      name = "More Blizzard Options...",
+      width = "double",
       func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameTab1:Click(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
     },
     frameSettings = {
@@ -329,7 +344,7 @@ addon.options.args["Frames"] = {
     },
     
     megaDamage = {
-      name = "Damage Abbrivation Settings" .. X.new,
+      name = "Damage Abbrivation Settings",
       type = 'group',
       order = 5,
       guiInline = true,
@@ -365,7 +380,7 @@ addon.options.args["Frames"] = {
     },
 
     general = {
-      name = "|cffFFFFFFGeneral|r" .. X.new,
+      name = "|cffFFFFFFGeneral|r",
       desc = "|cffFFFF00New:|r Added more Special Tweaks",
       type = 'group',
       order = 11,
@@ -513,7 +528,7 @@ addon.options.args["Frames"] = {
           order = 7,
           type = 'group',
           guiInline = true,
-          name = "Fading Text" .. X.new,
+          name = "Fading Text",
           args = {
             enableFade = {
               order = 1,
@@ -547,7 +562,7 @@ addon.options.args["Frames"] = {
           order = 8,
           type = 'group',
           guiInline = true,
-          name = "Special Tweaks" .. X.new,
+          name = "Special Tweaks",
           args = {
             showInterrupts = {
               order = 1,
@@ -783,7 +798,7 @@ addon.options.args["Frames"] = {
           order = 8,
           type = 'group',
           guiInline = true,
-          name = "Fading Text" .. X.new,
+          name = "Fading Text",
           args = {
             enableFade = {
               order = 1,
@@ -1105,7 +1120,7 @@ addon.options.args["Frames"] = {
           order = 9,
           type = 'group',
           guiInline = true,
-          name = "Fading Text" .. X.new,
+          name = "Fading Text",
           args = {
             enableFade = {
               order = 1,
@@ -1333,7 +1348,7 @@ addon.options.args["Frames"] = {
           order = 7,
           type = 'group',
           guiInline = true,
-          name = "Fading Text" .. X.new,
+          name = "Fading Text",
           args = {
             enableFade = {
               order = 1,
@@ -1524,7 +1539,7 @@ addon.options.args["Frames"] = {
           order = 7,
           type = 'group',
           guiInline = true,
-          name = "Fading Text" .. X.new,
+          name = "Fading Text",
           args = {
             enableFade = {
               order = 1,
@@ -1808,7 +1823,7 @@ addon.options.args["Frames"] = {
           order = 7,
           type = 'group',
           guiInline = true,
-          name = "Fading Text" .. X.new,
+          name = "Fading Text",
           args = {
             enableFade = {
               order = 1,
@@ -1999,7 +2014,7 @@ addon.options.args["Frames"] = {
           order = 7,
           type = 'group',
           guiInline = true,
-          name = "Fading Text" .. X.new,
+          name = "Fading Text",
           args = {
             enableFade = {
               order = 1,
@@ -2219,7 +2234,7 @@ addon.options.args["Frames"] = {
           order = 8,
           type = 'group',
           guiInline = true,
-          name = "Fading Text" .. X.new,
+          name = "Fading Text",
           args = {
             enableFade = {
               order = 1,

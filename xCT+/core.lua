@@ -84,7 +84,7 @@ function X:UpdateSpamSpells()
     if entry.class == X.player.class then
       local name = GetSpellInfo(spellID)
       if name then
-        local desc = "|cffFF0000ID:|r [" .. spellID .. "]\n"
+        local desc = "|cffFF0000ID:|r |cff798BDD" .. spellID .. "|r\n"
       
         if entry.interval == 0.5 then
           desc = desc .. "|cffFF0000Interval:|r Instant" 
@@ -130,7 +130,7 @@ function X:UpdateItemTypes()
   
   local allTypes = {
     order = 100,
-    name = "Always Show Filter" .. X.new,
+    name = "Always Show Filter",
     desc = "|cffFFFF00New:|r Filter changed to whitelist",
     type = 'group',
     childGroups = "select",
