@@ -714,6 +714,7 @@ x.events = {
         -- only clear frames with icons
         x:Clear("outgoing")
         x:Clear("critical")
+        x:Clear("loot")
       end
       if ShowCombatState() then
         x:AddMessage("general", sformat(format_fade, LEAVING_COMBAT), "combat_end")
@@ -737,7 +738,7 @@ x.events = {
   ["CHAT_MSG_LOOT"] = function(msg)
     --format_loot
     local pM,iQ,iI,iN,iA = select(3, string.find(msg, format_loot))   -- Pre-Message, ItemColor, ItemID, ItemName, ItemAmount
-    local qq,_,_,tt,st,_,_,ic = select(3, GetItemInfo(iI))             -- Item Quality, See "GetAuctionItemClasses()", Item Icon Texture Location
+    local qq,_,_,tt,st,_,_,ic = select(3, GetItemInfo(iI))             -- Item Quality, See "GetAuctionItemClasses()" For Type and Subtype, Item Icon Texture Location
     
     -- Item filter
     local freeTicketToDisneyland = false 
@@ -754,8 +755,9 @@ x.events = {
         item.icon    = ic
         item.crafted = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
         item.self    = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
-        
-    if freeTicketToDisneyland or (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
+    
+    -- Only let self looted items go through the "Always Show" filter
+    if (freeTicketToDisneyland and item.self) or (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
         local r,g,b=GetItemQualityColor(item.quality)
         local s=item.type..": ["..item.name.."] "
         
