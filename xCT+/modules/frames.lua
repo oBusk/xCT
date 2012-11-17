@@ -373,6 +373,7 @@ do
       
     -- If the frame is not enabled, then dont even worry about it
     if not settings.enabledFrame then
+      index = index + 1  -- heh, still need to iterate to the next frame :P
       return
     end
     
