@@ -15,8 +15,8 @@
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
-local sgsub, ipairs, pairs, type, string_format, table_insert, print, tostring, tonumber, select, string_lower, collectgarbage =
-  string.gsub, ipairs, pairs, type, string.format, table.insert, print, tostring, tonumber, select, string.lower, collectgarbage
+local sgsub, ipairs, pairs, type, string_format, table_insert, print, tostring, tonumber, select, string_lower, collectgarbage, match =
+  string.gsub, ipairs, pairs, type, string.format, table.insert, print, tostring, tonumber, select, string.lower, collectgarbage, string.match
 
 -- Local Handle to the Engine
 local X = addon.engine
@@ -61,13 +61,8 @@ function X:RefreshConfig()
 end
 
 -- Spammy Spell Get/Set Functions
-local function SpamSpellGet(info)
-  return X.db.profile.spells.merge[tonumber(info[#info])].enabled
-end
-
-local function SpamSpellSet(info, value)
-  X.db.profile.spells.merge[tonumber(info[#info])].enabled = value
-end
+local function SpamSpellGet(info) return X.db.profile.spells.merge[tonumber(info[#info])].enabled end
+local function SpamSpellSet(info, value) X.db.profile.spells.merge[tonumber(info[#info])].enabled = value end
 
 -- Gets spammy spells from the database and creates options
 function X:UpdateSpamSpells()
@@ -116,6 +111,11 @@ local function ItemToggleAll(info)
     X.db.profile.spells.items[info[#info-1]][key] = state
   end
 end
+
+local function getIF_1(info) return X.db.profile.spells.items[info[#info - 1]][info[#info]] end
+local function setIF_1(info, value) X.db.profile.spells.items[info[#info - 1]][info[#info]] = value end
+local function getIF_2(info) return X.db.profile.spells.items[info[#info - 1]][info[#info - 1]] end
+local function setIF_2(info, value) X.db.profile.spells.items[info[#info - 1]][info[#info - 1]] = value end
 
 -- Updates item filter list
 function X:UpdateItemTypes()
@@ -195,8 +195,8 @@ function X:UpdateItemTypes()
         order = 1,
         type = 'toggle',
         name = "Enable",
-        get = function(info) return self.db.profile.spells.items[itype][itype] end,
-        set = function(info, value) self.db.profile.spells.items[itype][itype] = value end,
+        get = getIF_2,
+        set = setIF_2,
       }
     end
 
@@ -210,8 +210,8 @@ function X:UpdateItemTypes()
         order = j,
         type = 'toggle',
         name = subtype,
-        get = function(info) return self.db.profile.spells.items[itype][subtype] end,
-        set = function(info, value) self.db.profile.spells.items[itype][subtype] = value end,
+        get = getIF_1, --function(info) return self.db.profile.spells.items[itype][subtype] end,
+        set = setIF_1, --function(info, value) self.db.profile.spells.items[itype][subtype] = value end,
       }
     end
     
@@ -221,10 +221,44 @@ function X:UpdateItemTypes()
   addon.options.args["Frames"].args["loot"].args["typeFilter"] = allTypes
 end
 
+local function getCP_1(info) return X.db.profile.spells.combo[X.player.class][info[#info]] end
+local function setCP_1(info, value) X.db.profile.spells.combo[X.player.class][info[#info]] = value end
+
+local function getCP_2(info)
+  local spec, index = match(info[#info], "(%d+),(.+)")
+  local value = X.db.profile.spells.combo[X.player.class][tonumber(spec)][tonumber(index) or index]
+  if type(value) == "table" then
+    return value.enabled
+  else
+    return value
+  end
+end
+local function setCP_2(info, value)
+  local spec, index = match(info[#info], "(%d+),(.+)")
+  
+  if value == true then
+    for key, entry in pairs(X.db.profile.spells.combo[X.player.class][tonumber(spec)]) do
+      if type(entry) == "table" then
+        entry.enabled = false
+      else
+        X.db.profile.spells.combo[X.player.class][tonumber(spec)][key] = false
+      end
+    end
+  end
+  
+  if tonumber(index) then   -- it is a spell ID
+    X.db.profile.spells.combo[X.player.class][tonumber(spec)][tonumber(index)].enabled = value
+  else                      -- it is a unit's power
+    X.db.profile.spells.combo[X.player.class][tonumber(spec)][index] = value
+  end
+  
+  -- Update tracker
+  X:UpdateComboTracker()
+end
+
 -- Update the combo point list
 function X:UpdateComboPointOptions(force)
   if X.LOADED_COMBO_POINTS_OPTIONS and not force then return end
-
   local myClass, offset = X.player.class, 1
   
   local comboSpells = {
@@ -237,7 +271,6 @@ function X:UpdateComboPointOptions(force)
 
   -- Add "All Specializations" Entries
   for name in pairs(X.db.profile.spells.combo[myClass]) do
-  
     if not tonumber(name) then
       if not comboSpells.args['allSpecsHeader'] then
         comboSpells.args['allSpecsHeader'] = {
@@ -247,14 +280,12 @@ function X:UpdateComboPointOptions(force)
           width = "full",
         }
       end
-      
-      -- TODO: Create generic functions for get/set to save on upvalue memory
-      comboSpells.args['entry' .. offset] = {
+      comboSpells.args[name] = {
         order = offset,
         type = 'toggle',
         name = name,
-        get = function(info) return self.db.profile.spells.combo[myClass][name] end,
-        set = function(info, value) self.db.profile.spells.combo[myClass][name] = value end, 
+        get = getCP_1,
+        set = setCP_1,
       }
       offset = offset + 1
     end
@@ -268,7 +299,7 @@ function X:UpdateComboPointOptions(force)
         haveSpec = true
         local mySpecName = select(2, GetSpecializationInfo(spec)) or "Tree " .. spec
         
-        comboSpells.args['mySpecHeader' .. offset] = {
+        comboSpells.args["title" .. tostring(spec)] = {
             order = offset,
             type = 'header',
             name = "Specialization: |cff798BDD" .. mySpecName .. "|r",
@@ -279,55 +310,23 @@ function X:UpdateComboPointOptions(force)
     
       if tonumber(index) then
         -- Class Combo Points ( UNIT_AURA Tracking)
-        
-        -- TODO: Create generic functions for get/set to save on upvalue memory
-        comboSpells.args['entry' .. offset] = {
+        comboSpells.args[tostring(spec) .. "," .. tostring(index)] = {
           order = offset,
           type = 'toggle',
           name = GetSpellInfo(entry.id),
           desc = "Unit to track: |cffFF0000" .. entry.unit .. "|r\nSpell ID: |cffFF0000" .. entry.id .. "|r",
-          get = function(info) return self.db.profile.spells.combo[myClass][spec][index].enabled end,
-          set = function(info, value)
-              if value == true then
-                for key, entry in pairs(self.db.profile.spells.combo[myClass][spec]) do
-                  if type(entry) == "table" then
-                    entry.enabled = false
-                  else
-                    self.db.profile.spells.combo[myClass][spec][key] = false
-                  end
-                end
-              end
-              self.db.profile.spells.combo[myClass][spec][index].enabled = value
-              
-              -- Update tracker
-              X:UpdateComboTracker()
-            end, 
+          get = getCP_2,
+          set = setCP_2,
         }
       else
         -- Special Combo Point ( Unit Power )
-        
-        -- TODO: Create generic functions for get/set to save on upvalue memory
-        comboSpells.args['entry' .. offset] = {
+        comboSpells.args[tostring(spec) .. "," .. tostring(index)] = {
           order = offset,
           type = 'toggle',
           name = index,
           desc = "Unit Power",
-          get = function(info) return self.db.profile.spells.combo[myClass][spec][index] end,
-          set = function(info, value)
-              if value == true then
-                for key, entry in pairs(self.db.profile.spells.combo[myClass][spec]) do
-                  if type(entry) == "table" then
-                    entry.enabled = false
-                  else
-                    self.db.profile.spells.combo[myClass][spec][key] = false
-                  end
-                end
-              end
-              self.db.profile.spells.combo[myClass][spec][index] = value
-              
-              -- Update tracker
-              X:UpdateComboTracker()
-            end, 
+          get = getCP_2,
+          set = setCP_2,
         }
       end
       
