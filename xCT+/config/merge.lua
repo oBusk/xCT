@@ -32,12 +32,18 @@ end
 
 -- List of Spells that need to be merged
 addon.merges = {
--- death knight
+-- death knight (damage)
   [55095]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Frost Fever
   [55078]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Blood Plague
   [48721]  = CreateMergeSpellEntry("DEATHKNIGHT", .5),  -- Blood Boil                                 (INSTANT)
   [49184]  = CreateMergeSpellEntry("DEATHKNIGHT", .5),  -- Howling Blast                              (INSTANT)
   [52212]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Death and Decay
+  [55050]  = CreateMergeSpellEntry("DEATHKNIGHT", .5),  -- Heart Strike                               (INSTANT)
+  
+-- death knight (healing) 
+  [53365]  = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Unholy Strength
+  [81280]  = CreateMergeSpellEntry("DEATHKNIGHT", .5),  -- Blood Burst                                (INSTANT)
+  [119980] = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Conversion
   
 -- druid (damage)
   [8921]   = CreateMergeSpellEntry("DRUID"),            -- Moonfire
@@ -111,8 +117,9 @@ addon.merges = {
 -- paladin (damage)
   [81297]  = CreateMergeSpellEntry("PALADIN"),          -- Consecration
   [53385]  = CreateMergeSpellEntry("PALADIN"),          -- Divine Storm
-  [31803]  = CreateMergeSpellEntry("PALADIN"),          -- Censure
+  [31803]  = CreateMergeSpellEntry("PALADIN", 6),       -- Censure
   [42463]  = CreateMergeSpellEntry("PALADIN"),          -- Seal of Truth
+  [88263]  = CreateMergeSpellEntry("PALADIN"),          -- Hammer of Righteous
   [101423] = CreateMergeSpellEntry("PALADIN"),          -- Seal of Righteousness
   [31935]  = CreateMergeSpellEntry("PALADIN"),          -- Avenger's Shield
 
@@ -183,15 +190,19 @@ addon.merges = {
 -- warlock (damage)
   [172]    = CreateMergeSpellEntry("WARLOCK"),          -- Corruption
   [87389]  = CreateMergeSpellEntry("WARLOCK"),          -- Corruption (Soulburn: Seed of Corruption)
+  [131740] = CreateMergeSpellEntry("WARLOCK"),          -- Corruption
   [27243]  = CreateMergeSpellEntry("WARLOCK"),          -- Seed of Corruption (DoT)
   [27285]  = CreateMergeSpellEntry("WARLOCK", .5),      -- Seed of Corruption (Explosion)             (INSTANT)
   [87385]  = CreateMergeSpellEntry("WARLOCK", .5),      -- Seed of Corruption (Explosion Soulburned)  (INSTANT)
-  [30108]  = CreateMergeSpellEntry("WARLOCK"),          -- Unstable Affliction
-  [348]    = CreateMergeSpellEntry("WARLOCK"),          -- Immolate
+  [30108]  = CreateMergeSpellEntry("WARLOCK"),          -- Unstable Affliction (Spec: Destruction)
+  [131737] = CreateMergeSpellEntry("WARLOCK"),          -- Unstable Affliction (Spec: Affliction)
+  [348]    = CreateMergeSpellEntry("WARLOCK"),          -- Immolate (Spec: Destruction)
+  [108686] = CreateMergeSpellEntry("WARLOCK"),          -- Immolate (Spec: Affliction)
   [50590]  = CreateMergeSpellEntry("WARLOCK"),          -- Immolation (Aura)
-  [980]    = CreateMergeSpellEntry("WARLOCK"),          -- Agony
-  [42223]  = CreateMergeSpellEntry("WARLOCK"),          -- Rain of Fire
-  [104233] = CreateMergeSpellEntry("WARLOCK", 4),       -- Rain of Fire (PVP?)                        (Every 1s for 8s)
+  [980]    = CreateMergeSpellEntry("WARLOCK"),          -- Agony (Spec: Destruction)
+  [131736] = CreateMergeSpellEntry("WARLOCK"),          -- Agony (Spec: Affliction)
+  [42223]  = CreateMergeSpellEntry("WARLOCK"),          -- Rain of Fire (Spec: Destruction)
+  [104233] = CreateMergeSpellEntry("WARLOCK", 4),       -- Rain of Fire (Spec: Affliction)            (Every 1s for 8s)
   [5857]   = CreateMergeSpellEntry("WARLOCK"),          -- Hellfire
   [47897]  = CreateMergeSpellEntry("WARLOCK"),          -- Shadowflame
   [47960]  = CreateMergeSpellEntry("WARLOCK"),          -- Shadowflame (DOT)
