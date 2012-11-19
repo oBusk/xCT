@@ -414,7 +414,9 @@ do
       end
       
       -- Add merge count
-      if #item.entries > 1 then message = message .. " |cffFFFFFFx" .. #item.entries .. "|r" end
+      if #item.entries > 1 then
+        message = message .. " |cffFFFFFFx" .. #item.entries .. "|r"
+      end
       
       -- Add Icons
       if settings.iconsEnabled then
@@ -573,19 +575,25 @@ function x:SaveAllFrames()
   
     local width   = frame:GetWidth()
     local height  = frame:GetHeight()
-    settings.Width   = width
-    settings.Height  = height
+    --settings.Width   = width
+    --settings.Height  = height
+    
+    settings.Width   = mfloor(width)
+    settings.Height  = mfloor(height)
     
     -- Calculate the center of the screen
     local ResX, ResY = GetScreenWidth(), GetScreenHeight()
     local midX, midY = ResX / 2, ResY / 2
     
     -- Calculate the Top/Left of a frame relative to the center
-    local left, top = math.floor(frame:GetLeft() - midX + 1), math.floor(frame:GetTop() - midY + 1)
+    local left, top = mfloor(frame:GetLeft() - midX + 1), mfloor(frame:GetTop() - midY + 1)
     
     -- Calculate get the center of the screen from the left/top
-    settings.X = math.floor(left + (width / 2) + 0.5)
-    settings.Y = math.floor(top - (height / 2) + 0.5)
+    --settings.X = mfloor(left + (width / 2) + 0.5)
+    --settings.Y = mfloor(top - (height / 2) + 0.5)
+    
+    settings.X = mfloor(left + (width / 2))
+    settings.Y = mfloor(top - (height / 2))
   end
 end
 

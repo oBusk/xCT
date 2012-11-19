@@ -106,7 +106,7 @@ function X:UpdateSpamSpells()
 end
 
 local function ItemToggleAll(info)
-  local state = (info[#info] == "enableAll")
+  local state = (info[#info] == "disableAll")
   for key in pairs(X.db.profile.spells.items[info[#info-1]]) do
     X.db.profile.spells.items[info[#info-1]][key] = state
   end

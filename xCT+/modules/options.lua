@@ -94,6 +94,9 @@ local function setSpecialCriticalOptions(info, value)
   X.db.profile[info[#info-2]][info[#info]] = true
 end
 
+-- Apply to All variables
+local miscFont, miscFontOutline;
+
 addon.options.args["spells"] = {
   name = "Spam Merger",
   desc = "|cffFFFF00New:|r Added More Mergeable Options|r",
@@ -378,6 +381,78 @@ addon.options.args["Frames"] = {
         },
       },
     },
+    
+    
+    miscFonts = {
+      order = 6,
+      type = 'group',
+      guiInline = true,
+      name = "Global Frame Settings",
+      args = {
+        font = {
+          type = 'select', dialogControl = 'LSM30_Font',
+          order = 1,
+          name = "Font",
+          desc = "Set the font of the frame.",
+          values = AceGUIWidgetLSMlists.font,
+          get = function(info) return miscFont end,
+          set = function(info, value) miscFont = value end,
+        },
+        
+        applyFont = {
+          type = 'execute',
+          order = 2,
+          name = "Apply To All",
+          func = function()
+            if miscFont then
+              for framename, settings in pairs(X.db.profile.frames) do
+                settings.font = miscFont
+              end
+              X:UpdateFrames()
+            end
+          end,
+        },
+        
+        spacer1 = {
+          type = 'description',
+          order = 3,
+          name = "",
+        },
+        
+        fontOutline = {
+          type = 'select',
+          order = 4,
+          name = "Font Outline",
+          desc = "Set the font outline.",
+          values = {
+            ['1NONE'] = "None",
+            ['2OUTLINE'] = 'OUTLINE',
+            -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+            -- http://us.battle.net/wow/en/forum/topic/6470967362
+            --['3MONOCHROME'] = 'MONOCHROME',
+            ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
+            ['5THICKOUTLINE'] = 'THICKOUTLINE',
+          },
+          get = function(info) return miscFontOutline end,
+          set = function(info, value) miscFontOutline = value end,
+        },
+        
+        applyFontOutline = {
+          type = 'execute',
+          order = 5,
+          name = "Apply To All",
+          func = function()
+            if miscFontOutline then
+              for framename, settings in pairs(X.db.profile.frames) do
+                settings.fontOutline = miscFontOutline
+              end
+              X:UpdateFrames()
+            end
+          end,
+        },
+        
+      },
+    },
 
     general = {
       name = "|cffFFFFFFGeneral|r",
@@ -455,7 +530,9 @@ addon.options.args["Frames"] = {
               values = {
                 ['1NONE'] = "None",
                 ['2OUTLINE'] = 'OUTLINE',
-                ['3MONOCHROME'] = 'MONOCHROME',
+                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+                -- http://us.battle.net/wow/en/forum/topic/6470967362
+                --['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -693,7 +770,9 @@ addon.options.args["Frames"] = {
               values = {
                 ['1NONE'] = "None",
                 ['2OUTLINE'] = 'OUTLINE',
-                ['3MONOCHROME'] = 'MONOCHROME',
+                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+                -- http://us.battle.net/wow/en/forum/topic/6470967362
+                --['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -986,7 +1065,9 @@ addon.options.args["Frames"] = {
               values = {
                 ['1NONE'] = "None",
                 ['2OUTLINE'] = 'OUTLINE',
-                ['3MONOCHROME'] = 'MONOCHROME',
+                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+                -- http://us.battle.net/wow/en/forum/topic/6470967362
+                --['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -1271,7 +1352,9 @@ addon.options.args["Frames"] = {
               values = {
                 ['1NONE'] = "None",
                 ['2OUTLINE'] = 'OUTLINE',
-                ['3MONOCHROME'] = 'MONOCHROME',
+                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+                -- http://us.battle.net/wow/en/forum/topic/6470967362
+                --['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -1462,7 +1545,9 @@ addon.options.args["Frames"] = {
               values = {
                 ['1NONE'] = "None",
                 ['2OUTLINE'] = 'OUTLINE',
-                ['3MONOCHROME'] = 'MONOCHROME',
+                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+                -- http://us.battle.net/wow/en/forum/topic/6470967362
+                --['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -1626,7 +1711,9 @@ addon.options.args["Frames"] = {
               values = {
                 ['1NONE'] = "None",
                 ['2OUTLINE'] = 'OUTLINE',
-                ['3MONOCHROME'] = 'MONOCHROME',
+                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+                -- http://us.battle.net/wow/en/forum/topic/6470967362
+                --['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -1746,7 +1833,9 @@ addon.options.args["Frames"] = {
               values = {
                 ['1NONE'] = "None",
                 ['2OUTLINE'] = 'OUTLINE',
-                ['3MONOCHROME'] = 'MONOCHROME',
+                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+                -- http://us.battle.net/wow/en/forum/topic/6470967362
+                --['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -1937,7 +2026,9 @@ addon.options.args["Frames"] = {
               values = {
                 ['1NONE'] = "None",
                 ['2OUTLINE'] = 'OUTLINE',
-                ['3MONOCHROME'] = 'MONOCHROME',
+                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+                -- http://us.battle.net/wow/en/forum/topic/6470967362
+                --['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -2129,7 +2220,9 @@ addon.options.args["Frames"] = {
               values = {
                 ['1NONE'] = "None",
                 ['2OUTLINE'] = 'OUTLINE',
-                ['3MONOCHROME'] = 'MONOCHROME',
+                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+                -- http://us.battle.net/wow/en/forum/topic/6470967362
+                --['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },

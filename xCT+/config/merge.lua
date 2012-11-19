@@ -191,6 +191,7 @@ addon.merges = {
   [50590]  = CreateMergeSpellEntry("WARLOCK"),          -- Immolation (Aura)
   [980]    = CreateMergeSpellEntry("WARLOCK"),          -- Agony
   [42223]  = CreateMergeSpellEntry("WARLOCK"),          -- Rain of Fire
+  [104233] = CreateMergeSpellEntry("WARLOCK", 4),       -- Rain of Fire (PVP?)                        (Every 1s for 8s)
   [5857]   = CreateMergeSpellEntry("WARLOCK"),          -- Hellfire
   [47897]  = CreateMergeSpellEntry("WARLOCK"),          -- Shadowflame
   [47960]  = CreateMergeSpellEntry("WARLOCK"),          -- Shadowflame (DOT)
@@ -200,6 +201,9 @@ addon.merges = {
   [108371] = CreateMergeSpellEntry("WARLOCK"),          -- Harvest Life
   [108451] = CreateMergeSpellEntry("WARLOCK"),          -- Soul Link
   [689]    = CreateMergeSpellEntry("WARLOCK"),          -- Drain Life
+  [108685] = CreateMergeSpellEntry("WARLOCK", .5),      -- Conflagrate                                (INSTANT)
+  [114654] = CreateMergeSpellEntry("WARLOCK", .5),      -- Incinerate                                 (INSTANT)
+  [103103] = CreateMergeSpellEntry("WARLOCK", 4),       -- Malefic Grasp                              (Every 1s for 4s)
   
 -- warlock (healing)
   [125314] = CreateMergeSpellEntry("WARLOCK"),          -- Harvest Life

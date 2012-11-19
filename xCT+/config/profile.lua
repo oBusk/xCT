@@ -46,8 +46,8 @@ addon.defaults = {
     
     megaDamage = {
       enableMegaDamage = false,
-      thousandSymbol = "|cffFF8000K|r ",
-      millionSymbol = "|cffFF0000M|r ",
+      thousandSymbol = "|cffFF8000K|r",
+      millionSymbol = "|cffFF0000M|r",
     },
     
     frames = {
