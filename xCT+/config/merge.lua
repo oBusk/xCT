@@ -18,7 +18,7 @@ local ADDON_NAME, addon = ...
 -- CreateMergeSpellEntry(
 --    class,       [string] - class name that spell belongs to
 --    interval,       [int] - How often to update merged data (in seconds)
---    prep,           [int] - The minimum time to wait to update merged data
+--    prep,           [int] - The minimum time to wait to update merged data (NOT USED YET)
 --  )
 --    Creates a merge settings entry for a spell.
 -- =====================================================
@@ -30,6 +30,9 @@ local function CreateMergeSpellEntry(class, interval, prep)
     }
 end
 
+-- Filter These Spells Remove
+-- [1949] - Damage to Self
+
 -- List of Spells that need to be merged
 addon.merges = {
 -- death knight (damage)
@@ -39,6 +42,7 @@ addon.merges = {
   [49184]  = CreateMergeSpellEntry("DEATHKNIGHT", .5),  -- Howling Blast                              (INSTANT)
   [52212]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Death and Decay
   [55050]  = CreateMergeSpellEntry("DEATHKNIGHT", .5),  -- Heart Strike                               (INSTANT)
+  [91776]  = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Claw (Army of the Dead's Auto-Attack)      (http://www.wowhead.com/spell=42650#comments:id=989522)
   
 -- death knight (healing) 
   [53365]  = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Unholy Strength
@@ -188,38 +192,44 @@ addon.merges = {
   [61295]  = CreateMergeSpellEntry("SHAMAN"),           -- Riptide
 
 -- warlock (damage)
+  [980]    = CreateMergeSpellEntry("WARLOCK"),          -- Agony
+  [131737] = CreateMergeSpellEntry("WARLOCK"),          -- Agony (Malefic Grasp)
+  [103967] = CreateMergeSpellEntry("WARLOCK", .5),      -- Carrion Swarm                              (INSTANT)
+  [124915] = CreateMergeSpellEntry("WARLOCK", .5),      -- Chaos Wave                                 (INSTANT)
+  [108685] = CreateMergeSpellEntry("WARLOCK", .5),      -- Conflagrate                                (INSTANT)
   [172]    = CreateMergeSpellEntry("WARLOCK"),          -- Corruption
   [87389]  = CreateMergeSpellEntry("WARLOCK"),          -- Corruption (Soulburn: Seed of Corruption)
-  [131740] = CreateMergeSpellEntry("WARLOCK"),          -- Corruption
+  [131740] = CreateMergeSpellEntry("WARLOCK"),          -- Corruption (Malefic Grasp)
+  [689]    = CreateMergeSpellEntry("WARLOCK"),          -- Drain Life
+  [89753]  = CreateMergeSpellEntry("WARLOCK"),          -- Felstorm (Felguard)
+  [104318] = CreateMergeSpellEntry("WARLOCK"),          -- Firebolt (Wild Imps)
+  [86040]  = CreateMergeSpellEntry("WARLOCK"),          -- Hand of Gul'dan (Shadowflame)
+  [108371] = CreateMergeSpellEntry("WARLOCK"),          -- Harvest Life
+  [5857]   = CreateMergeSpellEntry("WARLOCK"),          -- Hellfire
+  [348]    = CreateMergeSpellEntry("WARLOCK"),          -- Immolate
+  [108686] = CreateMergeSpellEntry("WARLOCK"),          -- Immolate (Malefic Grasp)
+  [20153]  = CreateMergeSpellEntry("WARLOCK"),          -- Immolation (Infrenal)
+  [129476] = CreateMergeSpellEntry("WARLOCK"),          -- Immolation Aura
+  [114654] = CreateMergeSpellEntry("WARLOCK", .5),      -- Incinerate                                 (INSTANT)
+  [30213]  = CreateMergeSpellEntry("WARLOCK", .5),      -- Legion Strike (Felguard)                   (INSTANT)
+  [103103] = CreateMergeSpellEntry("WARLOCK", 4),       -- Malefic Grasp                              (Every 1s for 4s)
+  [103988] = CreateMergeSpellEntry("WARLOCK"),          -- Melee (Auto-Attack for Metamorphosis)
+  [42223]  = CreateMergeSpellEntry("WARLOCK", 4),       -- Rain of Fire (Affliction)                  (Every 1s for 8s)
+  [104233] = CreateMergeSpellEntry("WARLOCK", 4),       -- Rain of Fire (Destruction)                 (Every 1s for 8s)
   [27243]  = CreateMergeSpellEntry("WARLOCK"),          -- Seed of Corruption (DoT)
   [27285]  = CreateMergeSpellEntry("WARLOCK", .5),      -- Seed of Corruption (Explosion)             (INSTANT)
   [87385]  = CreateMergeSpellEntry("WARLOCK", .5),      -- Seed of Corruption (Explosion Soulburned)  (INSTANT)
-  [30108]  = CreateMergeSpellEntry("WARLOCK"),          -- Unstable Affliction (Spec: Destruction)
-  [131737] = CreateMergeSpellEntry("WARLOCK"),          -- Unstable Affliction (Spec: Affliction)
-  [348]    = CreateMergeSpellEntry("WARLOCK"),          -- Immolate (Spec: Destruction)
-  [108686] = CreateMergeSpellEntry("WARLOCK"),          -- Immolate (Spec: Affliction)
-  [50590]  = CreateMergeSpellEntry("WARLOCK"),          -- Immolation (Aura)
-  [980]    = CreateMergeSpellEntry("WARLOCK"),          -- Agony (Spec: Destruction)
-  [131736] = CreateMergeSpellEntry("WARLOCK"),          -- Agony (Spec: Affliction)
-  [42223]  = CreateMergeSpellEntry("WARLOCK"),          -- Rain of Fire (Spec: Destruction)
-  [104233] = CreateMergeSpellEntry("WARLOCK", 4),       -- Rain of Fire (Spec: Affliction)            (Every 1s for 8s)
-  [5857]   = CreateMergeSpellEntry("WARLOCK"),          -- Hellfire
-  [47897]  = CreateMergeSpellEntry("WARLOCK"),          -- Shadowflame
   [47960]  = CreateMergeSpellEntry("WARLOCK"),          -- Shadowflame (DOT)
-  [30213]  = CreateMergeSpellEntry("WARLOCK", .5),      -- Legion Strike (Felguard)                   (INSTANT)
-  [89753]  = CreateMergeSpellEntry("WARLOCK"),          -- Felstorm (Felguard)
-  [20153]  = CreateMergeSpellEntry("WARLOCK"),          -- Immolation (Infrenal)
-  [108371] = CreateMergeSpellEntry("WARLOCK"),          -- Harvest Life
   [108451] = CreateMergeSpellEntry("WARLOCK"),          -- Soul Link
-  [689]    = CreateMergeSpellEntry("WARLOCK"),          -- Drain Life
-  [108685] = CreateMergeSpellEntry("WARLOCK", .5),      -- Conflagrate                                (INSTANT)
-  [114654] = CreateMergeSpellEntry("WARLOCK", .5),      -- Incinerate                                 (INSTANT)
-  [103103] = CreateMergeSpellEntry("WARLOCK", 4),       -- Malefic Grasp                              (Every 1s for 4s)
-  
+  [30108]  = CreateMergeSpellEntry("WARLOCK"),          -- Unstable Affliction
+  [131736] = CreateMergeSpellEntry("WARLOCK"),          -- Unstable Affliction (Malefic Grasp)
+
 -- warlock (healing)
-  [125314] = CreateMergeSpellEntry("WARLOCK"),          -- Harvest Life
-  [108447] = CreateMergeSpellEntry("WARLOCK"),          -- Soul Link
   [89653]  = CreateMergeSpellEntry("WARLOCK"),          -- Drain Life
+  [125314] = CreateMergeSpellEntry("WARLOCK"),          -- Harvest Life
+  [63106]  = CreateMergeSpellEntry("WARLOCK"),          -- Siphon Life
+  [108366] = CreateMergeSpellEntry("WARLOCK"),          -- Soul Leech
+  [108447] = CreateMergeSpellEntry("WARLOCK"),          -- Soul Link
   
 -- warrior
   [845]    = CreateMergeSpellEntry("WARRIOR", .5),      -- Cleave                                     (INSTANT)
