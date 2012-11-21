@@ -238,6 +238,9 @@ addon.defaults = {
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
+        
+      -- special tweaks
+        ["enableClassNames"] = true,
       },
       
       class = {

@@ -122,6 +122,7 @@ local function ShowReactives() return COMBAT_TEXT_SHOW_REACTIVES == "1" end
 local function ShowLowResources() return COMBAT_TEXT_SHOW_LOW_HEALTH_MANA == "1" end
 local function ShowCombatState() return COMBAT_TEXT_SHOW_COMBAT_STATE == "1" end
 local function ShowFriendlyNames() return COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" end
+local function ShowColoredFriendlyNames() return x.db.profile.frames["healing"].enableClassNames end
 local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg end
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
@@ -462,6 +463,13 @@ x.combat_events = {
       message = sformat(format_gain, message)
       
       if ShowFriendlyNames() and healer_name then
+        if ShowColoredFriendlyNames() then
+          local _, class = UnitClass(healer_name)
+          if (class) then
+            healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+          end
+        end
+      
         if x.db.profile.frames["healing"].fontJustify == "LEFT" then
           message = message .. " " .. healer_name
         else
@@ -485,13 +493,20 @@ x.combat_events = {
       message = sformat(format_gain, message)
       
       if ShowFriendlyNames() and healer_name then
+        if ShowColoredFriendlyNames() then
+          local _, class = UnitClass(healer_name)
+          if (class) then
+            healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+          end
+        end
+      
         if x.db.profile.frames["healing"].fontJustify == "LEFT" then
           message = message .. " " .. healer_name
         else
           message = healer_name .. " " .. message
         end
       end
-      x:AddMessage("healing", sformat(message, amount), "heal_crit")
+      x:AddMessage("healing", message, "heal_crit")
     end,
   ["PERIODIC_HEAL"] = function(healer_name, amount)
       local message = amount
@@ -508,13 +523,20 @@ x.combat_events = {
       message = sformat(format_gain, message)
       
       if ShowFriendlyNames() and healer_name then
+        if ShowColoredFriendlyNames() then
+          local _, class = UnitClass(healer_name)
+          if (class) then
+            healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+          end
+        end
+      
         if x.db.profile.frames["healing"].fontJustify == "LEFT" then
           message = message .. " " .. healer_name
         else
           message = healer_name .. " " .. message
         end
       end
-      x:AddMessage("healing", sformat(format_gain, amount), "heal_peri")
+      x:AddMessage("healing", message, "heal_peri")
     end,
   
   -- TODO: Add filter?
@@ -1041,7 +1063,7 @@ x.outgoing_events = {
         -- Check for merge
         if MergeRangedAttacks() then
           merged = true
-          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+          x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
         end
         
         -- Only show non-merged swings
@@ -1183,7 +1205,7 @@ x.outgoing_events = {
     
   ["SWING_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  missType = ...
-      local outputFrame, message, outputColor = "outgoing", _G[missType], "out_misstype"
+      local outputFrame, message, outputColor = "outgoing", _G["COMBAT_TEXT_"..missType], "out_misstype"
       
       -- Are we filtering Auto Attacks in the Outgoing frame?
       if not ShowAutoAttack() then return end;

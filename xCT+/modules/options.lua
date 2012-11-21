@@ -1654,6 +1654,25 @@ addon.options.args["Frames"] = {
           },
         },
         
+        specialTweaks = {
+          order = 8,
+          type = 'group',
+          guiInline = true,
+          name = "Special Tweaks",
+          args = {
+            enableClassNames = {
+              order = 1,
+              type = 'toggle',
+              name = "Color Class Names",
+              desc = "Color healer names by class. \n\n|cffFF0000Requires:|r Healer in |cffAAAAFFParty|r or |cffFF8000Raid|r",
+              width="double",
+              get = get2,
+              set = set2,
+            },
+            
+          },
+        },
+        
       },
     },
     
