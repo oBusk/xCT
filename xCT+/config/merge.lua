@@ -82,6 +82,8 @@ addon.merges = {
   [53301]  = CreateMergeSpellEntry("HUNTER"),           -- Explosive Shot (3 ticks merged as one)
   [63468]  = CreateMergeSpellEntry("HUNTER"),           -- Piercing Shots
   [3674]   = CreateMergeSpellEntry("HUNTER", 4),        -- Black Arrow                                (Every 2s for 20s)
+  [131900] = CreateMergeSpellEntry("HUNTER", 6),        -- A Murder of Crows                          (Over 30s)
+  [120699] = CreateMergeSpellEntry("HUNTER", 4),        -- Lynx Rush                                  (9x over 4s)
   
 -- mage
   [44461]  = CreateMergeSpellEntry("MAGE", .5),         -- Living Bomb                                (INSTANT)
@@ -169,11 +171,11 @@ addon.merges = {
 -- rogue
   [51723]  = CreateMergeSpellEntry("ROGUE", .5),        -- Fan of Knives                              (INSTANT)
   [113780] = CreateMergeSpellEntry("ROGUE", .5),        -- Deadly Poison                              (INSTANT)
-  [2818]   = CreateMergeSpellEntry("ROGUE"),            -- Deadly Poison (DOT)
+  [2818]   = CreateMergeSpellEntry("ROGUE"),            -- Deadly Poison (DoT)
   [8680]   = CreateMergeSpellEntry("ROGUE"),            -- Wound Poison
   [112974] = CreateMergeSpellEntry("ROGUE"),            -- Leeching Poison
   [121411] = CreateMergeSpellEntry("ROGUE", .5),        -- Crimson Tempest                            (INSTANT)
-  [122233] = CreateMergeSpellEntry("ROGUE"),            -- Crimson Tempest (DOT)
+  [122233] = CreateMergeSpellEntry("ROGUE"),            -- Crimson Tempest (DoT)
   
 -- shaman (damage)
   [421]    = CreateMergeSpellEntry("SHAMAN", .5),       -- Chain Lightning                            (INSTANT)
@@ -183,14 +185,26 @@ addon.merges = {
   [8187]   = CreateMergeSpellEntry("SHAMAN"),           -- Magma Totem
   [8050]   = CreateMergeSpellEntry("SHAMAN"),           -- Flame Shock
   [25504]  = CreateMergeSpellEntry("SHAMAN", .5),       -- Windfury Attack                            (INSTANT)
-
+  [120687] = CreateMergeSpellEntry("SHAMAN", .5),       -- Stormlash (Stormlash Totem)                (INSTANT)
+  [10444]  = CreateMergeSpellEntry("SHAMAN"),           -- Flametongue Attack
+  [58879]  = CreateMergeSpellEntry("SHAMAN"),           -- Spirit Hunt (Spirit Wolves)
+  [26364]  = CreateMergeSpellEntry("SHAMAN"),           -- Lightning Shield (Static Shock)
+  [114074] = CreateMergeSpellEntry("SHAMAN", .5),       -- Lava Beam                                  (INSTANT)
+  
 -- shaman (healing)
   [73921]  = CreateMergeSpellEntry("SHAMAN"),           -- Healing Rain
   [1064]   = CreateMergeSpellEntry("SHAMAN", .5),       -- Chain Heal                                 (INSTANT)
   [52042]  = CreateMergeSpellEntry("SHAMAN"),           -- Healing Stream Totem
   [51945]  = CreateMergeSpellEntry("SHAMAN"),           -- Earthliving
   [61295]  = CreateMergeSpellEntry("SHAMAN"),           -- Riptide
-
+  [114083] = CreateMergeSpellEntry("SHAMAN"),           -- Restorative Mists (Ascendance)
+  [114911] = CreateMergeSpellEntry("SHAMAN", .5),       -- Ancestral Guidance                         (INSTANT)
+  
+-- shaman (special)
+  -- 32175 & 32176 Stormstrike (Merge Two Hits Together)
+  -- 115357 & 115360 Stormblast (Merge together)
+  -- 114089 & 114093 Wind Lash (Ascendance)
+  
 -- warlock (damage)
   [980]    = CreateMergeSpellEntry("WARLOCK"),          -- Agony
   [131737] = CreateMergeSpellEntry("WARLOCK"),          -- Agony (Malefic Grasp)

@@ -646,7 +646,11 @@ function x.TestMoreUpdate(self, elapsed)
       elseif self == x.frames["healing"] and random(2) % 2 == 0 then
         if not x.db.profile.frames["healing"].enabledFrame then x:Clear("healing") return end
         if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
-          x:AddMessage("healing", UnitName("player") .. " +"..random(90000), {.1, ((random(3) + 1) * 63) / 255, .1})
+          if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+            x:AddMessage("healing", "+"..random(90000) .. " "..UnitName("player"), {.1, ((random(3) + 1) * 63) / 255, .1})
+          else
+            x:AddMessage("healing", UnitName("player") .. " +"..random(90000), {.1, ((random(3) + 1) * 63) / 255, .1})
+          end
         else
           x:AddMessage("healing", "+"..random(90000), {.1, ((random(3) + 1) * 63) / 255, .1})
         end
