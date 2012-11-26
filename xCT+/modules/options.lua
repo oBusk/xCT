@@ -95,7 +95,7 @@ local function setSpecialCriticalOptions(info, value)
 end
 
 -- Apply to All variables
-local miscFont, miscFontOutline;
+local miscFont, miscFontOutline, miscEnableCustomFade;
 
 addon.options.args["spells"] = {
   name = "Spam Merger",
@@ -267,10 +267,16 @@ addon.options.args["Credits"] = {
       order = 6,
       name = " ",
     },
-    betaTestersOnly = {
+    contactTitle = {
       type = 'description',
       order = 7,
-      name = "Contact Me: (|cffFF8000Dandruff|r) by PM on tukui.org :)",
+      name = "|cffFFFF00Contact Me|r",
+      fontSize = "large",
+    },
+    contactStep1 = {
+      type = 'description',
+      order = 8,
+      name = "1. GitHub: |cff22FF80https://github.com/dandruff/xCT|r\n\n2. Send a PM to |cffFF8000Dandruff|r on http://tukui.org",
     },
   },
 }
@@ -445,6 +451,37 @@ addon.options.args["Frames"] = {
             if miscFontOutline then
               for framename, settings in pairs(x.db.profile.frames) do
                 settings.fontOutline = miscFontOutline
+              end
+              x:UpdateFrames()
+            end
+          end,
+        },
+        
+        spacer2 = {
+          type = 'description',
+          order = 6,
+          name = "",
+        },
+        
+        customFade = {
+          type = 'toggle',
+          order = 7,
+          name = "Use Custom Fade",
+          desc = "Allows you to customize the fade time of each frame.",
+          get = function(info) return miscEnableCustomFade end,
+          set = function(info, value) miscEnableCustomFade = value end,
+        },
+        
+        applyCustomFade = {
+          type = 'execute',
+          order = 8,
+          name = "Apply To All",
+          func = function()
+            if miscEnableCustomFade ~= nil then
+              for framename, settings in pairs(x.db.profile.frames) do
+                if settings.enableCustomFade ~= nil then
+                  settings.enableCustomFade = miscEnableCustomFade
+                end
               end
               x:UpdateFrames()
             end
