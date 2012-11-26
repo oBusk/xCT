@@ -16,6 +16,7 @@
 local ADDON_NAME, addon = ...
 
 local LSM = LibStub("LibSharedMedia-3.0");
+
 -- Setup up values
 local ssub, pairs, tonumber, tostring, math, unpack, print, type, mfloor, random, table_insert, format, _G
   = string.sub, pairs, tonumber, tostring, math, unpack, print, type, math.floor, math.random, table.insert, string.format, _G
@@ -88,19 +89,13 @@ function x:UpdateFrames(specificFrame)
       
       f.frameName = framename
       f.settings = settings
-      --TODO: add time visible
-      
-      f:SetFading(true)
-      f:SetFadeDuration(0.3)
-      f:SetTimeVisible(5)
-      
+
       -- Frame Strata
       if x.configuring then
         f:SetFrameStrata("FULLSCREEN_DIALOG")
       else
         f:SetFrameStrata(ssub(x.db.profile.frameSettings.frameStrata, 2))
       end
-      
       
       -- Set the position
       f:SetSpacing(2)
@@ -147,10 +142,13 @@ function x:UpdateFrames(specificFrame)
       end
       
       -- fading
-      if settings.enableFade ~= nil then
+      if settings.enableCustomFade then
         f:SetFading(settings.enableFade)
         f:SetFadeDuration(settings.fadeTime)
         f:SetTimeVisible(settings.visibilityTime)
+      else
+        f:SetFading(true)
+        f:SetTimeVisible(3)
       end
       
       -- Special Cases

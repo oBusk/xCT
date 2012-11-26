@@ -77,7 +77,7 @@ end)
 
 x.blizzardOptions = {
   name = "|cffFF0000x|rCT+ - e|cffFF0000X|rtreme Combat Text",
-  handler = X,
+  handler = x,
   type = 'group',
   args = {
     showConfig = {

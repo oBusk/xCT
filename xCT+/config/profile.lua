@@ -39,9 +39,9 @@ addon.defaults = {
     showStartupText = true,
     
     frameSettings = {
-      clearLeavingCombat = true,
+      clearLeavingCombat = false,
       showGrid = true,
-      frameStrata = "4MEDIUM",
+      frameStrata = "5HIGH",
     },
     
     megaDamage = {
@@ -63,8 +63,8 @@ addon.defaults = {
         ["Height"] = 128,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 16,
+        ["font"] = "Homespun (xCT+)",
+        ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
 
@@ -77,6 +77,7 @@ addon.defaults = {
         ["scrollableLines"] = 10,
         
       -- fading text
+        ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -101,8 +102,8 @@ addon.defaults = {
         ["Height"] = 320,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 16,
+        ["font"] = "Homespun (xCT+)",
+        ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
         
@@ -119,6 +120,7 @@ addon.defaults = {
         ["scrollableLines"] = 10,
         
       -- fading text
+        ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -146,8 +148,8 @@ addon.defaults = {
         ["Height"] = 128,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 24,
+        ["font"] = "Homespun (xCT+)",
+        ["fontSize"] = 30,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
         
@@ -168,6 +170,7 @@ addon.defaults = {
         ["scrollableLines"] = 10,
         
       -- fading text
+        ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -190,8 +193,8 @@ addon.defaults = {
         ["Height"] = 144,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 16,
+        ["font"] = "Homespun (xCT+)",
+        ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
         
@@ -204,6 +207,7 @@ addon.defaults = {
         ["scrollableLines"] = 10,
         
       -- fading text
+        ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -221,8 +225,8 @@ addon.defaults = {
         ["Height"] = 144,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 16,
+        ["font"] = "Homespun (xCT+)",
+        ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
         
@@ -235,6 +239,7 @@ addon.defaults = {
         ["scrollableLines"] = 10,
         
       -- fading text
+        ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -253,8 +258,8 @@ addon.defaults = {
         ["Height"] = 64,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 32,
+        ["font"] = "Homespun (xCT+)",
+        ["fontSize"] = 30,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         
       -- font colors
@@ -274,8 +279,8 @@ addon.defaults = {
         ["Height"] = 128,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 16,
+        ["font"] = "Homespun (xCT+)",
+        ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
         
@@ -288,6 +293,7 @@ addon.defaults = {
         ["scrollableLines"] = 10,
         
       -- fading text
+        ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -305,8 +311,8 @@ addon.defaults = {
         ["Height"] = 128,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 16,
+        ["font"] = "Homespun (xCT+)",
+        ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
         
@@ -319,6 +325,7 @@ addon.defaults = {
         ["scrollableLines"] = 10,
         
       -- fading text
+        ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -336,8 +343,8 @@ addon.defaults = {
         ["Height"] = 128,
         
       -- fonts
-        ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 16,
+        ["font"] = "Homespun (xCT+)",
+        ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
         
@@ -354,6 +361,7 @@ addon.defaults = {
         ["scrollableLines"] = 10,
         
       -- fading text
+        ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,

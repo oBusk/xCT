@@ -13,18 +13,18 @@
  [====================================]]
 
 local ADDON_NAME, addon = ...
-local X = addon.engine
+local x = addon.engine
 local blankTable, unpack, select = {}, unpack, select
 local string_gsub = string.gsub
 
 -- New Icon "!"
-local NEW = X.new
+local NEW = x.new
 
 -- Creating an Config
 addon.options = {
   -- Add a place for the user to grab
   name = "                                                                                                                                  ",
-  handler = X,
+  handler = x,
   type = 'group',
   args = {
     xCT_Title = {
@@ -43,55 +43,55 @@ addon.options = {
       order = 2,
       type = 'toggle',
       name = "Startup Message",
-      get = function(info) return X.db.profile.showStartupText end,
-      set = function(info, value) X.db.profile.showStartupText = value end,
+      get = function(info) return x.db.profile.showStartupText end,
+      set = function(info, value) x.db.profile.showStartupText = value end,
     },  
     RestoreDefaults = {
       order = 3,
       type = 'execute',
       name = "Restore Defaults",
-      func = X.RestoreAllDefaults,
+      func = x.RestoreAllDefaults,
     },
     ToggleTestMode = {
       order = 4,
       type = 'execute',
       name = "Toggle Test Mode",
-      func = X.ToggleTestMode,
+      func = x.ToggleTestMode,
     },
     ToggleFrames = {
       order = 5,
       type = 'execute',
       name = "Toggle Frames",
-      func = X.ToggleConfigMode,
+      func = x.ToggleConfigMode,
     },
   },
 }
 
 -- Generic Get/Set methods
-local function get0(info) return X.db.profile[info[#info-1]][info[#info]] end
-local function set0(info, value) X.db.profile[info[#info-1]][info[#info]] = value end
-local function set0_update(info, value) X.db.profile[info[#info-1]][info[#info]] = value; X:UpdateFrames() end
-local function get0_1(info) return X.db.profile[info[#info-2]][info[#info]] end
-local function set0_1(info, value) X.db.profile[info[#info-2]][info[#info]] = value end
-local function getTextIn0(info) return string_gsub(X.db.profile[info[#info-1]][info[#info]], "|", "||") end
-local function setTextIn0(info, value) X.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|") end
-local function get1(info) return X.db.profile.frames[info[#info-1]][info[#info]] end
-local function set1(info, value) X.db.profile.frames[info[#info-1]][info[#info]] = value end
-local function set1_update(info, value) set1(info, value); X:UpdateFrames(info[#info-1]) end
-local function get2(info) return X.db.profile.frames[info[#info-2]][info[#info]] end
-local function set2(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = value end
-local function set2_update(info, value) set2(info, value); X:UpdateFrames(info[#info-2]) end
-local function getColor2(info) return unpack(X.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end
-local function setColor2(info, r, g, b) X.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end
-local function getTextIn2(info) return string_gsub(X.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end
-local function setTextIn2(info, value) X.db.profile.frames[info[#info-2]][info[#info]] = string_gsub(value, "||", "|") end
+local function get0(info) return x.db.profile[info[#info-1]][info[#info]] end
+local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = value end
+local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames() end
+local function get0_1(info) return x.db.profile[info[#info-2]][info[#info]] end
+local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value end
+local function getTextIn0(info) return string_gsub(x.db.profile[info[#info-1]][info[#info]], "|", "||") end
+local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|") end
+local function get1(info) return x.db.profile.frames[info[#info-1]][info[#info]] end
+local function set1(info, value) x.db.profile.frames[info[#info-1]][info[#info]] = value end
+local function set1_update(info, value) set1(info, value); x:UpdateFrames(info[#info-1]) end
+local function get2(info) return x.db.profile.frames[info[#info-2]][info[#info]] end
+local function set2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = value end
+local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#info-2]) end
+local function getColor2(info) return unpack(x.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end
+local function setColor2(info, r, g, b) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end
+local function getTextIn2(info) return string_gsub(x.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end
+local function setTextIn2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = string_gsub(value, "||", "|") end
 
 local function setSpecialCriticalOptions(info, value)
-  X.db.profile[info[#info-2]].mergeCriticalsWithOutgoing = false
-  X.db.profile[info[#info-2]].mergeCriticalsByThemselves = false
-  X.db.profile[info[#info-2]].mergeDontMergeCriticals = false
+  x.db.profile[info[#info-2]].mergeCriticalsWithOutgoing = false
+  x.db.profile[info[#info-2]].mergeCriticalsByThemselves = false
+  x.db.profile[info[#info-2]].mergeDontMergeCriticals = false
 
-  X.db.profile[info[#info-2]][info[#info]] = true
+  x.db.profile[info[#info-2]][info[#info]] = true
 end
 
 -- Apply to All variables
@@ -99,7 +99,6 @@ local miscFont, miscFontOutline;
 
 addon.options.args["spells"] = {
   name = "Spam Merger",
-  desc = "|cffFFFF00New:|r Added More Mergeable Options|r",
   type = 'group',
   order = 2,
   args = {
@@ -232,7 +231,7 @@ addon.options.args["Credits"] = {
     title = {
       type = "header",
       order = 0,
-      name = "Credits and Mentions",
+      name = "Credits",
     },
     specialThanksTitle = {
       type = 'description',
@@ -278,7 +277,6 @@ addon.options.args["Credits"] = {
 
 addon.options.args["Frames"] = {
   name = "Frames",
-  desc = "|cffFFFF00New:|r Added Damage Abbrivation\n|cffFFFF00New:|r All Frames have |cff798BDDFading Text|r Options",
   type = 'group',
   order = 1,
   args = {
@@ -297,6 +295,7 @@ addon.options.args["Frames"] = {
       order = 3,
       type = 'execute',
       name = "More Blizzard Options...",
+      desc = "Opens: |cffFF0000Game Menu|r --> |cffFF0000Interface|r --> |cffFF0000Floating Combat Text|r",
       width = "double",
       func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameTab1:Click(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
     },
@@ -309,7 +308,7 @@ addon.options.args["Frames"] = {
         clearLeavingCombat = {
           order = 1,
           type = 'toggle',
-          name = "Clear Frames When Leaving Combat",
+          name = "Clear Frames When Leaving Combat (|cff798BDDRecommended:|r If editing |cffFFFF00Fading Text|r)",
           desc = "Enable this option if you have problems with 'floating' icons.",
           width = "full",
           get = get0,
@@ -319,6 +318,7 @@ addon.options.args["Frames"] = {
           order = 2,
           type = 'toggle',
           name = "Show Align Grid",
+          desc = "Shows a grid after you |cffFFFF00Toggle Frames|r to help you align |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames better.",
           get = get0,
           set = set0,
         },
@@ -327,13 +327,13 @@ addon.options.args["Frames"] = {
           type = 'select',
           order = 3,
           name = "Frame Strata",
-          desc = "The Z-Layer to place the |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frame onto. If you find that another addon is in front of |cffFF0000x|rCT+ frames, try increasing the Frame Strata.",
+          desc = "The Z-Layer to place the |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames onto. If you find that another addon is in front of |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames, try increasing the Frame Strata.",
           values = {
             ["1PARENT"]             = "Parent |cffFF0000(Lowest)|r",
             ["2BACKGROUND"]         = "Background",
             ["3LOW"]                = "Low",
-            ["4MEDIUM"]             = "Medium |cffFFFF00(Default)|r",
-            ["5HIGH"]               = "High",
+            ["4MEDIUM"]             = "Medium",
+            ["5HIGH"]               = "High |cffFFFF00(Default)|r",
             ["6DIALOG"]             = "Dialog",
             ["7FULLSCREEN"]         = "Fullscreen",
             ["8FULLSCREEN_DIALOG"]  = "Fullscreen Dialog",
@@ -405,10 +405,10 @@ addon.options.args["Frames"] = {
           name = "Apply To All",
           func = function()
             if miscFont then
-              for framename, settings in pairs(X.db.profile.frames) do
+              for framename, settings in pairs(x.db.profile.frames) do
                 settings.font = miscFont
               end
-              X:UpdateFrames()
+              x:UpdateFrames()
             end
           end,
         },
@@ -443,10 +443,10 @@ addon.options.args["Frames"] = {
           name = "Apply To All",
           func = function()
             if miscFontOutline then
-              for framename, settings in pairs(X.db.profile.frames) do
+              for framename, settings in pairs(x.db.profile.frames) do
                 settings.fontOutline = miscFontOutline
               end
-              X:UpdateFrames()
+              x:UpdateFrames()
             end
           end,
         },
@@ -456,7 +456,6 @@ addon.options.args["Frames"] = {
 
     general = {
       name = "|cffFFFFFFGeneral|r",
-      desc = "|cffFFFF00New:|r Added more Special Tweaks",
       type = 'group',
       order = 11,
       args = {
@@ -607,26 +606,47 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            enableFade = {
+            warning = {
+              type = "description",
+              order = 0,
+              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              fontSize = "medium",
+            },
+            warning_spacer = {
+              type = "description",
               order = 1,
+              name = "",
+              fontSize = "medium",
+            },
+            enableCustomFade = {
+              order = 2,
               type = 'toggle',
-              name = "Enabled",
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+            },
+            enableFade = {
+              order = 10,
+              type = 'toggle',
+              name = "Enable Fading",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
             },
             fadeTime = {
-              order = 2,
+              order = 11,
               name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
             },
             visibilityTime = {
-              order = 3,
+              order = 12,
               name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 2, max = 15, step = 1,
               get = get2,
@@ -879,26 +899,47 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            enableFade = {
+            warning = {
+              type = "description",
+              order = 0,
+              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              fontSize = "medium",
+            },
+            warning_spacer = {
+              type = "description",
               order = 1,
+              name = "",
+              fontSize = "medium",
+            },
+            enableCustomFade = {
+              order = 2,
               type = 'toggle',
-              name = "Enabled",
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+            },
+            enableFade = {
+              order = 10,
+              type = 'toggle',
+              name = "Enable Fading",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
             },
             fadeTime = {
-              order = 2,
+              order = 11,
               name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
             },
             visibilityTime = {
-              order = 3,
+              order = 12,
               name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 2, max = 15, step = 1,
               get = get2,
@@ -1196,33 +1237,54 @@ addon.options.args["Frames"] = {
             },
           },
         },
-
+        
         fading = {
           order = 9,
           type = 'group',
           guiInline = true,
           name = "Fading Text",
           args = {
-            enableFade = {
+            warning = {
+              type = "description",
+              order = 0,
+              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              fontSize = "medium",
+            },
+            warning_spacer = {
+              type = "description",
               order = 1,
+              name = "",
+              fontSize = "medium",
+            },
+            enableCustomFade = {
+              order = 2,
               type = 'toggle',
-              name = "Enabled",
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+            },
+            enableFade = {
+              order = 10,
+              type = 'toggle',
+              name = "Enable Fading",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
             },
             fadeTime = {
-              order = 2,
+              order = 11,
               name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
             },
             visibilityTime = {
-              order = 3,
+              order = 12,
               name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 2, max = 15, step = 1,
               get = get2,
@@ -1433,26 +1495,47 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            enableFade = {
+            warning = {
+              type = "description",
+              order = 0,
+              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              fontSize = "medium",
+            },
+            warning_spacer = {
+              type = "description",
               order = 1,
+              name = "",
+              fontSize = "medium",
+            },
+            enableCustomFade = {
+              order = 2,
               type = 'toggle',
-              name = "Enabled",
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+            },
+            enableFade = {
+              order = 10,
+              type = 'toggle',
+              name = "Enable Fading",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
             },
             fadeTime = {
-              order = 2,
+              order = 11,
               name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
             },
             visibilityTime = {
-              order = 3,
+              order = 12,
               name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 2, max = 15, step = 1,
               get = get2,
@@ -1626,26 +1709,47 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            enableFade = {
+            warning = {
+              type = "description",
+              order = 0,
+              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              fontSize = "medium",
+            },
+            warning_spacer = {
+              type = "description",
               order = 1,
+              name = "",
+              fontSize = "medium",
+            },
+            enableCustomFade = {
+              order = 2,
               type = 'toggle',
-              name = "Enabled",
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+            },
+            enableFade = {
+              order = 10,
+              type = 'toggle',
+              name = "Enable Fading",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
             },
             fadeTime = {
-              order = 2,
+              order = 11,
               name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
             },
             visibilityTime = {
-              order = 3,
+              order = 12,
               name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 2, max = 15, step = 1,
               get = get2,
@@ -1693,6 +1797,7 @@ addon.options.args["Frames"] = {
           type = 'description',
           order = 2,
           name = "|cffFF0000Secondary Frame Not Available|r - |cffFFFFFFThis frame cannot output to another frame when it is disabled.",
+          width = "double",
         },
         
         fonts = {
@@ -1933,26 +2038,47 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            enableFade = {
+            warning = {
+              type = "description",
+              order = 0,
+              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              fontSize = "medium",
+            },
+            warning_spacer = {
+              type = "description",
               order = 1,
+              name = "",
+              fontSize = "medium",
+            },
+            enableCustomFade = {
+              order = 2,
               type = 'toggle',
-              name = "Enabled",
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+            },
+            enableFade = {
+              order = 10,
+              type = 'toggle',
+              name = "Enable Fading",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
             },
             fadeTime = {
-              order = 2,
+              order = 11,
               name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
             },
             visibilityTime = {
-              order = 3,
+              order = 12,
               name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 2, max = 15, step = 1,
               get = get2,
@@ -2126,26 +2252,47 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            enableFade = {
+            warning = {
+              type = "description",
+              order = 0,
+              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              fontSize = "medium",
+            },
+            warning_spacer = {
+              type = "description",
               order = 1,
+              name = "",
+              fontSize = "medium",
+            },
+            enableCustomFade = {
+              order = 2,
               type = 'toggle',
-              name = "Enabled",
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+            },
+            enableFade = {
+              order = 10,
+              type = 'toggle',
+              name = "Enable Fading",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
             },
             fadeTime = {
-              order = 2,
+              order = 11,
               name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
             },
             visibilityTime = {
-              order = 3,
+              order = 12,
               name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 2, max = 15, step = 1,
               get = get2,
@@ -2348,26 +2495,47 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            enableFade = {
+            warning = {
+              type = "description",
+              order = 0,
+              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              fontSize = "medium",
+            },
+            warning_spacer = {
+              type = "description",
               order = 1,
+              name = "",
+              fontSize = "medium",
+            },
+            enableCustomFade = {
+              order = 2,
               type = 'toggle',
-              name = "Enabled",
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+            },
+            enableFade = {
+              order = 10,
+              type = 'toggle',
+              name = "Enable Fading",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
             },
             fadeTime = {
-              order = 2,
+              order = 11,
               name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
             },
             visibilityTime = {
-              order = 3,
+              order = 12,
               name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
               min = 2, max = 15, step = 1,
               get = get2,

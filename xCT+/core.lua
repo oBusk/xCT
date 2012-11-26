@@ -19,10 +19,10 @@ local sgsub, ipairs, pairs, type, string_format, table_insert, print, tostring, 
   string.gsub, ipairs, pairs, type, string.format, table.insert, print, tostring, tonumber, select, string.lower, collectgarbage, string.match
 
 -- Local Handle to the Engine
-local X = addon.engine
+local x = addon.engine
 
 -- Handle Addon Initialized
-function X:OnInitialize()
+function x:OnInitialize()
   if xCT or ct and ct.myname and ct.myclass then
     print("|cffFF0000WARNING:|r xCT+ cannot load. Please disable xCT in order to use xCT+.")
     return
@@ -40,11 +40,11 @@ function X:OnInitialize()
   addon.options.args['Profiles'] = LibStub('AceDBOptions-3.0'):GetOptionsTable(self.db)
   
   -- Perform xCT+ Update
-  X:UpdatePlayer()
-  X:UpdateFrames()
-  X:UpdateCombatTextEvents(true)
-  X:UpdateSpamSpells()
-  X:UpdateItemTypes()
+  x:UpdatePlayer()
+  x:UpdateFrames()
+  x:UpdateCombatTextEvents(true)
+  x:UpdateSpamSpells()
+  x:UpdateItemTypes()
   
   -- Everything got Initialized, show Startup Text
   if self.db.profile.showStartupText then
@@ -53,21 +53,21 @@ function X:OnInitialize()
 end
 
 -- Profile Updated, need to refresh important stuff 
-function X:RefreshConfig()
-  X:UpdateFrames()
-  X:UpdateSpamSpells()
-  X:UpdateItemTypes()
+function x:RefreshConfig()
+  x:UpdateFrames()
+  x:UpdateSpamSpells()
+  x:UpdateItemTypes()
   collectgarbage()
 end
 
 -- Spammy Spell Get/Set Functions
-local function SpamSpellGet(info) return X.db.profile.spells.merge[tonumber(info[#info])].enabled end
-local function SpamSpellSet(info, value) X.db.profile.spells.merge[tonumber(info[#info])].enabled = value end
+local function SpamSpellGet(info) return x.db.profile.spells.merge[tonumber(info[#info])].enabled end
+local function SpamSpellSet(info, value) x.db.profile.spells.merge[tonumber(info[#info])].enabled = value end
 
 -- Gets spammy spells from the database and creates options
-function X:UpdateSpamSpells()
+function x:UpdateSpamSpells()
   for id, item in pairs(addon.merges) do
-    if item.class == X.player.class then
+    if item.class == x.player.class then
       if not self.db.profile.spells.merge[id] then
         self.db.profile.spells.merge[id] = item
         self.db.profile.spells.merge[id]['enabled'] = true    -- default all to on
@@ -81,15 +81,15 @@ function X:UpdateSpamSpells()
 
   local spells = addon.options.args.spells.args.spellList.args
   for spellID, entry in pairs(self.db.profile.spells.merge) do
-    if entry.class == X.player.class then
+    if entry.class == x.player.class then
       local name = GetSpellInfo(spellID)
       if name then
-        local desc = "|cffFF0000ID:|r |cff798BDD" .. spellID .. "|r\n"
+        local desc = "|cffFF0000ID|r |cff798BDD" .. spellID .. "|r\n"
       
-        if entry.interval == 0.5 then
-          desc = desc .. "|cffFF0000Interval:|r Instant" 
+        if entry.interval <= 0.5 then
+          desc = desc .. "|cffFF0000Interval|r Instant" 
         else
-          desc = desc .. "|cffFF0000Interval:|r Merge every |cffFFFF00" .. tostring(entry.interval) .. "|r seconds"
+          desc = desc .. "|cffFF0000Interval|r Merge every |cffFFFF00" .. tostring(entry.interval) .. "|r seconds"
         end
       
         spells[tostring(spellID)] = {
@@ -107,18 +107,18 @@ end
 
 local function ItemToggleAll(info)
   local state = (info[#info] == "disableAll")
-  for key in pairs(X.db.profile.spells.items[info[#info-1]]) do
-    X.db.profile.spells.items[info[#info-1]][key] = state
+  for key in pairs(x.db.profile.spells.items[info[#info-1]]) do
+    x.db.profile.spells.items[info[#info-1]][key] = state
   end
 end
 
-local function getIF_1(info) return X.db.profile.spells.items[info[#info - 1]][info[#info]] end
-local function setIF_1(info, value) X.db.profile.spells.items[info[#info - 1]][info[#info]] = value end
-local function getIF_2(info) return X.db.profile.spells.items[info[#info - 1]][info[#info - 1]] end
-local function setIF_2(info, value) X.db.profile.spells.items[info[#info - 1]][info[#info - 1]] = value end
+local function getIF_1(info) return x.db.profile.spells.items[info[#info - 1]][info[#info]] end
+local function setIF_1(info, value) x.db.profile.spells.items[info[#info - 1]][info[#info]] = value end
+local function getIF_2(info) return x.db.profile.spells.items[info[#info - 1]][info[#info - 1]] end
+local function setIF_2(info, value) x.db.profile.spells.items[info[#info - 1]][info[#info - 1]] = value end
 
 -- Updates item filter list
-function X:UpdateItemTypes()
+function x:UpdateItemTypes()
   -- check to see if this is the first time we are loading this version
   local first = false
   if not self.db.profile.spells.items.version then
@@ -221,12 +221,12 @@ function X:UpdateItemTypes()
   addon.options.args["Frames"].args["loot"].args["typeFilter"] = allTypes
 end
 
-local function getCP_1(info) return X.db.profile.spells.combo[X.player.class][info[#info]] end
-local function setCP_1(info, value) X.db.profile.spells.combo[X.player.class][info[#info]] = value end
+local function getCP_1(info) return x.db.profile.spells.combo[x.player.class][info[#info]] end
+local function setCP_1(info, value) x.db.profile.spells.combo[x.player.class][info[#info]] = value end
 
 local function getCP_2(info)
   local spec, index = match(info[#info], "(%d+),(.+)")
-  local value = X.db.profile.spells.combo[X.player.class][tonumber(spec)][tonumber(index) or index]
+  local value = x.db.profile.spells.combo[x.player.class][tonumber(spec)][tonumber(index) or index]
   if type(value) == "table" then
     return value.enabled
   else
@@ -237,29 +237,29 @@ local function setCP_2(info, value)
   local spec, index = match(info[#info], "(%d+),(.+)")
   
   if value == true then
-    for key, entry in pairs(X.db.profile.spells.combo[X.player.class][tonumber(spec)]) do
+    for key, entry in pairs(x.db.profile.spells.combo[x.player.class][tonumber(spec)]) do
       if type(entry) == "table" then
         entry.enabled = false
       else
-        X.db.profile.spells.combo[X.player.class][tonumber(spec)][key] = false
+        x.db.profile.spells.combo[x.player.class][tonumber(spec)][key] = false
       end
     end
   end
   
   if tonumber(index) then   -- it is a spell ID
-    X.db.profile.spells.combo[X.player.class][tonumber(spec)][tonumber(index)].enabled = value
+    x.db.profile.spells.combo[x.player.class][tonumber(spec)][tonumber(index)].enabled = value
   else                      -- it is a unit's power
-    X.db.profile.spells.combo[X.player.class][tonumber(spec)][index] = value
+    x.db.profile.spells.combo[x.player.class][tonumber(spec)][index] = value
   end
   
   -- Update tracker
-  X:UpdateComboTracker()
+  x:UpdateComboTracker()
 end
 
 -- Update the combo point list
-function X:UpdateComboPointOptions(force)
-  if X.LOADED_COMBO_POINTS_OPTIONS and not force then return end
-  local myClass, offset = X.player.class, 1
+function x:UpdateComboPointOptions(force)
+  if x.LOADED_COMBO_POINTS_OPTIONS and not force then return end
+  local myClass, offset = x.player.class, 1
   
   local comboSpells = {
     order = 100,
@@ -270,7 +270,7 @@ function X:UpdateComboPointOptions(force)
   }
 
   -- Add "All Specializations" Entries
-  for name in pairs(X.db.profile.spells.combo[myClass]) do
+  for name in pairs(x.db.profile.spells.combo[myClass]) do
     if not tonumber(name) then
       if not comboSpells.args['allSpecsHeader'] then
         comboSpells.args['allSpecsHeader'] = {
@@ -292,9 +292,9 @@ function X:UpdateComboPointOptions(force)
   end
   
   -- Add the each spec
-  for spec in ipairs(X.db.profile.spells.combo[myClass]) do
+  for spec in ipairs(x.db.profile.spells.combo[myClass]) do
     local haveSpec = false
-    for index, entry in pairs(X.db.profile.spells.combo[myClass][spec] or { }) do
+    for index, entry in pairs(x.db.profile.spells.combo[myClass][spec] or { }) do
       if not haveSpec then
         haveSpec = true
         local mySpecName = select(2, GetSpecializationInfo(spec)) or "Tree " .. spec
@@ -336,30 +336,30 @@ function X:UpdateComboPointOptions(force)
   
   addon.options.args["Frames"].args["class"].args["tracker"] = comboSpells
   
-  X.LOADED_COMBO_POINTS_OPTIONS = true
+  x.LOADED_COMBO_POINTS_OPTIONS = true
   
-  X:UpdateComboTracker()
+  x:UpdateComboTracker()
 end
 
-function X:UpdateComboTracker()
-  local myClass, mySpec = X.player.class, X.player.spec
-  X.TrackingEntry = nil
+function x:UpdateComboTracker()
+  local myClass, mySpec = x.player.class, x.player.spec
+  x.TrackingEntry = nil
   
   if not mySpec or mySpec < 1 then return end  -- under Level 10 probably or not spec'd, I don't know what to do :P
 
-  for i, entry in pairs(X.db.profile.spells.combo[myClass][mySpec]) do
+  for i, entry in pairs(x.db.profile.spells.combo[myClass][mySpec]) do
     if type(entry) == "table" and entry.enabled then
-      X.TrackingEntry = entry
+      x.TrackingEntry = entry
     end
   end
   
-  X:QuickClassFrameUpdate()
+  x:QuickClassFrameUpdate()
 end
 
 
 -- Unused for now
-function X:OnEnable() end
-function X:OnDisable() end
+function x:OnEnable() end
+function x:OnDisable() end
 
 -- This allows us to create our config dialog
 local AC = LibStub('AceConfig-3.0')
@@ -369,21 +369,21 @@ local ACR = LibStub('AceConfigRegistry-3.0')
 -- Register the Options
 ACD:SetDefaultSize(AddonName, 800, 550)
 AC:RegisterOptionsTable(AddonName, addon.options)
-AC:RegisterOptionsTable(AddonName.."Blizzard", X.blizzardOptions)
+AC:RegisterOptionsTable(AddonName.."Blizzard", x.blizzardOptions)
 ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
 
 -- Register Slash Commands
-X:RegisterChatCommand('xct', 'OpenXCTCommand')
+x:RegisterChatCommand('xct', 'OpenxCTCommand')
 
 -- Process the slash command ('input' contains whatever follows the slash command)
-function X:OpenXCTCommand(input)
+function x:OpenxCTCommand(input)
   if string_lower(input):match('lock') then
-    if X.configuring then
-      X:SaveAllFrames()
-      X.EndConfigMode()
+    if x.configuring then
+      x:SaveAllFrames()
+      x.EndConfigMode()
       print("|cffFF0000x|r|cffFFFF00CT+|r  Frames have been saved. Please fasten your seat belts.")
     else
-      X.StartConfigMode()
+      x.StartConfigMode()
       print("|cffFF0000x|r|cffFFFF00CT+|r  You are now free to move about the cabin.")
       print("      |cffFF0000/xct lock|r      - Saves your frames")
       print("      |cffFF0000/xct cancel|r  - Cancels all your recent frame movements")
@@ -394,9 +394,9 @@ function X:OpenXCTCommand(input)
   end
   
   if string_lower(input):match('cancel') then
-    if X.configuring then
-      X:UpdateFrames();
-      X.EndConfigMode()
+    if x.configuring then
+      x:UpdateFrames();
+      x.EndConfigMode()
       print("|cffFF0000x|r|cffFFFF00CT+|r  canceled frame move.")
     else
       print("|cffFF0000x|r|cffFFFF00CT+|r  There is nothing to cancel.")
@@ -416,13 +416,13 @@ function X:OpenXCTCommand(input)
     local name = UnitName(unit)
     
     if not name then
-      X.player.unit = ""
+      x.player.unit = ""
     else
-      X.player.unit = "custom"
+      x.player.unit = "custom"
       CombatTextSetActiveUnit(unit)
     end
     
-    X:UpdatePlayer()
+    x:UpdatePlayer()
     print("|cffFF0000x|r|cffFFFF00CT+|r Tracking Unit:", name or "default")
     
     return
@@ -434,23 +434,23 @@ function X:OpenXCTCommand(input)
     mode = 'Open'
   end
   
-  if not X.configuring then
+  if not x.configuring then
     ACD[mode](ACD, AddonName)
   end
 end
 
 -- Register Slash Commands
-X:RegisterChatCommand('track', 'TrackXCTCommand')
-function X:TrackXCTCommand(input)
+x:RegisterChatCommand('track', 'TrackxCTCommand')
+function x:TrackxCTCommand(input)
   local name = UnitName("target")
     
   if not name then
-    X.player.unit = ""
+    x.player.unit = ""
   else
-    X.player.unit = "custom"
+    x.player.unit = "custom"
     CombatTextSetActiveUnit("target")
   end
   
-  X:UpdatePlayer()
+  x:UpdatePlayer()
   print("|cffFF0000x|r|cffFFFF00CT+|r Tracking Unit:", name or "default")
 end
