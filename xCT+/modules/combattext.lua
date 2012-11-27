@@ -18,8 +18,8 @@ local ADDON_NAME, addon = ...
 local x = addon.engine
 
 -- up values
-local _, _G, sformat, mfloor, sgsub, s_lower, string, tinsert, ipairs, pairs, print, tostring, tonumber, select, unpack =
-  nil, _G, string.format, math.floor, string.gsub, string.lower, string, table.insert, ipairs, pairs, print, tostring, tonumber, select, unpack
+local _, _G, sformat, mfloor, ssub, sgsub, s_upper, s_lower, string, tinsert, ipairs, pairs, print, tostring, tonumber, select, unpack =
+  nil, _G, string.format, math.floor, string.sub, string.gsub, string.upper, string.lower, string, table.insert, ipairs, pairs, print, tostring, tonumber, select, unpack
 
 --[=====================================================[
  Holds player info; use AddOn:UpdatePlayer()
@@ -181,6 +181,13 @@ local format_faction_add = "%s +%s"
 local format_faction_sub = "%s %s"
 local format_crit = "%s%s%s"
 local format_dispell = "%s: %s"
+
+--[=====================================================[
+ Capitalize Locals
+--]=====================================================]
+local XCT_STOLE = string.upper(string.sub(ACTION_SPELL_STOLEN, 1, 1))..string.sub(ACTION_SPELL_STOLEN, 2)
+local XCT_KILLED = string.upper(string.sub(ACTION_PARTY_KILL, 1, 1))..string.sub(ACTION_PARTY_KILL, 2)
+local XCT_DISPELLED = string.upper(string.sub(ACTION_SPELL_DISPEL, 1, 1))..string.sub(ACTION_SPELL_DISPEL, 2)
 
 --[=====================================================[
  Flag value for special pets and vehicles
@@ -755,7 +762,15 @@ x.events = {
 
   ["UNIT_ENTERED_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["UNIT_EXITING_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
-  ["PLAYER_ENTERING_WORLD"] = function() x:UpdatePlayer(); x:UpdateComboPointOptions(); x:Clear() end,
+  ["PLAYER_ENTERING_WORLD"] = function()
+      x:UpdatePlayer()
+      x:UpdateComboPointOptions()
+      x:Clear()
+      
+      -- Lazy Coding (Clear up messy libraries... yuck!)
+      collectgarbage()
+    end,
+    
   ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); x:UpdateComboTracker() end,    -- x:UpdateComboPointOptions(true) end,
   
   ["CHAT_MSG_LOOT"] = function(msg)
@@ -1271,7 +1286,7 @@ x.outgoing_events = {
       if not ShowDispells() then return end
   
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, spellID, effect, _, etype = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_DISPEL, effect), "dispell_debuff"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_DISPELLED, effect), "dispell_debuff"
       
       -- Check for buff or debuff (for color)
       if etype == "BUFF" then
@@ -1291,9 +1306,9 @@ x.outgoing_events = {
     end,
   ["SPELL_STOLEN"] = function(...)
       if not ShowDispells() then return end
-  
+      
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, spellID, effect = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_STOLEN, effect), "spell_stolen"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_STOLE, effect), "spell_stolen"
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
@@ -1310,7 +1325,7 @@ x.outgoing_events = {
       if not ShowInterrupts() then return end
   
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, spellID, effect = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_SPELL_INTERRUPT, effect), "spell_interrupt"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, INTERRUPTED, effect), "spell_interrupt"
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
@@ -1327,7 +1342,7 @@ x.outgoing_events = {
       if not ShowPartyKill() then return end
   
       local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, name = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, ACTION_PARTY_KILL, name), "party_kill"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_KILLED, name), "party_kill"
       
       -- Color the text according to class that got killed
       if destGUID then

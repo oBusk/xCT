@@ -740,7 +740,7 @@ StaticPopupDialogs["XCT_PLUS_TESTMODE"] = {
   timeout       = 0,
   whileDead     = 1,
   
-  button1       = SLASH_STOPWATCH_PARAM_STOP1,
+  button1       = "Stop",
   OnAccept      = function() x.EndTestMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
   hideOnEscape  = true,
   

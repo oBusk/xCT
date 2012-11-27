@@ -287,21 +287,21 @@ addon.options.args["Frames"] = {
   order = 1,
   args = {
     Frames_Header = {
-      type = "header",
+      type = "description",
       order = 1,
-      name = "xCT+ Frames",
+      name = "|cff798BDDWelcome to|r |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r|cff798BDD Version 3!|r\n",
+      fontSize = "large",
     },
     Frames_Description = {
       type = "description",
       order = 2,
-      name = "Unfortunately, I cannot display all the options for combat text in this configuration tool. Blizzard has a few tweaks you might want to look at. For performance reasons, I am leaving them there for the time being.",
-      fontSize = "medium",
+      name = "Unfortunately, I cannot display all the options for |cff10FF50Floating Combat Text|r in this configuration tool. Blizzard has a few tweaks you might want to look at. For performance reasons, I am leaving them there for the time being.\n\n",
     },
     blizzardOptions = {
       order = 3,
       type = 'execute',
       name = "More Blizzard Options...",
-      desc = "Opens: |cffFF0000Game Menu|r --> |cffFF0000Interface|r --> |cffFF0000Floating Combat Text|r",
+      desc = "Opens: |cffFFA000Game Menu|r --> |cffFF7000Interface|r --> |cffFF3000Floating Combat Text|r",
       width = "double",
       func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameTab1:Click(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
     },
@@ -395,6 +395,13 @@ addon.options.args["Frames"] = {
       guiInline = true,
       name = "Global Frame Settings",
       args = {
+        miscDesc = {
+          type = "description",
+          order = 0,
+          name = "Click |cffFFFF00Set All|r to apply setting to all |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames.\n",
+        },
+        
+        
         font = {
           type = 'select', dialogControl = 'LSM30_Font',
           order = 1,
@@ -408,7 +415,8 @@ addon.options.args["Frames"] = {
         applyFont = {
           type = 'execute',
           order = 2,
-          name = "Apply To All",
+          name = "Set All",
+          width = "half",
           func = function()
             if miscFont then
               for framename, settings in pairs(x.db.profile.frames) do
@@ -446,7 +454,8 @@ addon.options.args["Frames"] = {
         applyFontOutline = {
           type = 'execute',
           order = 5,
-          name = "Apply To All",
+          name = "Set All",
+          width = "half",
           func = function()
             if miscFontOutline then
               for framename, settings in pairs(x.db.profile.frames) do
@@ -475,7 +484,8 @@ addon.options.args["Frames"] = {
         applyCustomFade = {
           type = 'execute',
           order = 8,
-          name = "Apply To All",
+          name = "Set All",
+          width = "half",
           func = function()
             if miscEnableCustomFade ~= nil then
               for framename, settings in pairs(x.db.profile.frames) do
@@ -643,22 +653,11 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            warning = {
-              type = "description",
-              order = 0,
-              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              fontSize = "medium",
-            },
-            warning_spacer = {
-              type = "description",
-              order = 1,
-              name = "",
-              fontSize = "medium",
-            },
             enableCustomFade = {
               order = 2,
               type = 'toggle',
               name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -936,22 +935,11 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            warning = {
-              type = "description",
-              order = 0,
-              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              fontSize = "medium",
-            },
-            warning_spacer = {
-              type = "description",
-              order = 1,
-              name = "",
-              fontSize = "medium",
-            },
             enableCustomFade = {
               order = 2,
               type = 'toggle',
               name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -1281,22 +1269,11 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            warning = {
-              type = "description",
-              order = 0,
-              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              fontSize = "medium",
-            },
-            warning_spacer = {
-              type = "description",
-              order = 1,
-              name = "",
-              fontSize = "medium",
-            },
             enableCustomFade = {
               order = 2,
               type = 'toggle',
               name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -1532,22 +1509,11 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            warning = {
-              type = "description",
-              order = 0,
-              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              fontSize = "medium",
-            },
-            warning_spacer = {
-              type = "description",
-              order = 1,
-              name = "",
-              fontSize = "medium",
-            },
             enableCustomFade = {
               order = 2,
               type = 'toggle',
               name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -1746,22 +1712,11 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            warning = {
-              type = "description",
-              order = 0,
-              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              fontSize = "medium",
-            },
-            warning_spacer = {
-              type = "description",
-              order = 1,
-              name = "",
-              fontSize = "medium",
-            },
             enableCustomFade = {
               order = 2,
               type = 'toggle',
               name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -2075,22 +2030,11 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            warning = {
-              type = "description",
-              order = 0,
-              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              fontSize = "medium",
-            },
-            warning_spacer = {
-              type = "description",
-              order = 1,
-              name = "",
-              fontSize = "medium",
-            },
             enableCustomFade = {
               order = 2,
               type = 'toggle',
               name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -2289,22 +2233,11 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            warning = {
-              type = "description",
-              order = 0,
-              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              fontSize = "medium",
-            },
-            warning_spacer = {
-              type = "description",
-              order = 1,
-              name = "",
-              fontSize = "medium",
-            },
             enableCustomFade = {
               order = 2,
               type = 'toggle',
               name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
               width = 'full',
               get = get2,
               set = set2_update,
@@ -2532,22 +2465,11 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fading Text",
           args = {
-            warning = {
-              type = "description",
-              order = 0,
-              name = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              fontSize = "medium",
-            },
-            warning_spacer = {
-              type = "description",
-              order = 1,
-              name = "",
-              fontSize = "medium",
-            },
             enableCustomFade = {
               order = 2,
               type = 'toggle',
               name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
               width = 'full',
               get = get2,
               set = set2_update,

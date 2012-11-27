@@ -58,7 +58,7 @@ addon.defaults = {
         
       -- position
         ["X"] = 0,
-        ["Y"] = 192,
+        ["Y"] = 224,
         ["Width"] = 512,
         ["Height"] = 128,
         
@@ -196,7 +196,7 @@ addon.defaults = {
         ["font"] = "Homespun (xCT+)",
         ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
-        ["fontJustify"] = "RIGHT",
+        ["fontJustify"] = "LEFT",
         
       -- font colors
         ["customColor"] = false,
@@ -219,16 +219,16 @@ addon.defaults = {
         ["insertText"] = "bottom",
       
       -- positioon
-        ["X"] = -448,
+        ["X"] = -320,
         ["Y"] = 88,
-        ["Width"] = 128,
+        ["Width"] = 384,
         ["Height"] = 144,
         
       -- fonts
         ["font"] = "Homespun (xCT+)",
         ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
-        ["fontJustify"] = "RIGHT",
+        ["fontJustify"] = "LEFT",
         
       -- font colors
         ["customColor"] = false,
@@ -258,8 +258,8 @@ addon.defaults = {
         ["Height"] = 64,
         
       -- fonts
-        ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 30,
+        ["font"] = "HOOGE (xCT)",
+        ["fontSize"] = 32,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         
       -- font colors
@@ -302,11 +302,11 @@ addon.defaults = {
       procs = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
-        ["insertText"] = "bottom",
+        ["insertText"] = "top",
         
       -- position
         ["X"] = -256,
-        ["Y"] = 0,
+        ["Y"] = -64,
         ["Width"] = 256,
         ["Height"] = 128,
         
