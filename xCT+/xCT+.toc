@@ -1,8 +1,8 @@
-## Interface: 50001
-## Title: xCT+ - 3.0 BETA
-## Notes: Thank you for your support!
-## Author: Dandruff
-## Version: 3.0.0 beta 5
+## Interface: 50100
+## Title: xCT+
+## Notes: An Add-On that enhances and out-performs the default Floating Combat Text!
+## Author: Dandruff (Dluffy-Emerald Dream US)
+## Version: 3.0.1
 ## RequiredDeps: Blizzard_CombatText
 ## OptionalDeps: xCT
 ## SavedVariables: xCTSavedDB
