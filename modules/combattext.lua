@@ -151,7 +151,7 @@ local function ShowDebuffs() return x.db.profile.frames["general"].showDebuffs e
 
 local function ShowRogueComboPoints() return x.db.profile.spells.combo["ROGUE"][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "ROGUE" end
 local function ShowFeralComboPoints() return x.db.profile.spells.combo["DRUID"][2][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "DRUID" and x.player.spec == 2 end
-local function ShowMonkChi() return x.db.profile.spells.combo["MONK"][LIGHT_FORCE] and x.player.class == "MONK" end
+local function ShowMonkChi() return x.db.profile.spells.combo["MONK"][CHI] and x.player.class == "MONK" end
 local function ShowPaladinHolyPower() return x.db.profile.spells.combo["PALADIN"][HOLY_POWER] and x.player.class == "PALADIN" end
 local function ShowPriestShadowOrbs() return x.db.profile.spells.combo["PRIEST"][3][SHADOW_ORBS] and x.player.class == "PRIEST" and x.player.spec == 3 end
 local function ShowWarlockSoulShards() return x.db.profile.spells.combo["WARLOCK"][1][SOUL_SHARDS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 1 end
@@ -280,8 +280,8 @@ local function UpdateUnitPower(unit, powertype)
   if unit == x.player.unit then
     local value
 
-    if powertype == "LIGHT_FORCE" and ShowMonkChi() then
-      value = UnitPower(x.player.unit, SPELL_POWER_LIGHT_FORCE)
+    if powertype == "CHI" and ShowMonkChi() then
+      value = UnitPower(x.player.unit, SPELL_POWER_CHI)
     elseif powertype == "HOLY_POWER" and ShowPaladinHolyPower() then
       value = UnitPower(x.player.unit, SPELL_POWER_HOLY_POWER)
     elseif powertype == "SHADOW_ORBS" and ShowPriestShadowOrbs() then

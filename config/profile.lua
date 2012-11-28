@@ -429,7 +429,7 @@ addon.defaults = {
         },
         
         ["MONK"] = {
-          [LIGHT_FORCE] = true,
+          [CHI] = true,
           
           -- DO NOT USE - MONKS GET CHI
           [1] = { },    -- Brewmaster
