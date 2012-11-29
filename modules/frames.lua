@@ -434,6 +434,9 @@ do
       end
     end
     
+    -- clean up variables
+    heap, stack, settings, idIndex, item = nil, nil, nil, nil, nil
+    
     frames[frameIndex[index]] = idIndex + 1
     index = index + 1
   end
@@ -573,8 +576,6 @@ function x:SaveAllFrames()
   
     local width   = frame:GetWidth()
     local height  = frame:GetHeight()
-    --settings.Width   = width
-    --settings.Height  = height
     
     settings.Width   = mfloor(width)
     settings.Height  = mfloor(height)
@@ -587,9 +588,6 @@ function x:SaveAllFrames()
     local left, top = mfloor(frame:GetLeft() - midX + 1), mfloor(frame:GetTop() - midY + 1)
     
     -- Calculate get the center of the screen from the left/top
-    --settings.X = mfloor(left + (width / 2) + 0.5)
-    --settings.Y = mfloor(top - (height / 2) + 0.5)
-    
     settings.X = mfloor(left + (width / 2))
     settings.Y = mfloor(top - (height / 2))
   end
@@ -645,9 +643,13 @@ function x.TestMoreUpdate(self, elapsed)
         if not x.db.profile.frames["healing"].enabledFrame then x:Clear("healing") return end
         if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
           if x.db.profile.frames["healing"].fontJustify == "LEFT" then
-            x:AddMessage("healing", "+"..random(90000) .. " "..UnitName("player"), {.1, ((random(3) + 1) * 63) / 255, .1})
+            local name = UnitName("player")
+            if x.db.profile.frames["healing"].enableClassNames then
+              name = sformat("|c%s%s|r", RAID_CLASS_COLORS[select(2,UnitClass("player"))], name)
+            end
+            x:AddMessage("healing", "+"..random(90000) .. " "..name, {.1, ((random(3) + 1) * 63) / 255, .1})
           else
-            x:AddMessage("healing", UnitName("player") .. " +"..random(90000), {.1, ((random(3) + 1) * 63) / 255, .1})
+            x:AddMessage("healing", name .. " +"..random(90000), {.1, ((random(3) + 1) * 63) / 255, .1})
           end
         else
           x:AddMessage("healing", "+"..random(90000), {.1, ((random(3) + 1) * 63) / 255, .1})
@@ -721,7 +723,7 @@ end
 
 -- Popups
 StaticPopupDialogs["XCT_PLUS_CONFIGURING"] = {
-  text          = "You may now move freely about the cabin.",
+  text          = "Configuring xCT+\nType: |cffFF0000/xct lock|r to save changes",
   timeout       = 0,
   whileDead     = 1,
   
