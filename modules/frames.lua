@@ -60,7 +60,6 @@ local function autoClearFrame_OnUpdate(self, elasped)
   
   if self.last > 4 then
     x:Clear(self.name)
-    self:UnregisterEvent("OnUpdate")
     self:SetScript("OnUpdate", nil)
     self.f.timer = nil
   end
@@ -169,7 +168,6 @@ function x:UpdateFrames(specificFrame)
               self.timer = CreateFrame("FRAME")
               self.timer.name = self.frameName
               self.timer.f = self
-              self.timer:RegisterEvent("OnUpdate")
               self.timer:SetScript("OnUpdate", autoClearFrame_OnUpdate)
             else
               self.timer.last = 0
@@ -434,15 +432,11 @@ do
       end
     end
     
-    -- clean up variables
-    heap, stack, settings, idIndex, item = nil, nil, nil, nil, nil
-    
     frames[frameIndex[index]] = idIndex + 1
     index = index + 1
   end
   
   x.merge = CreateFrame("FRAME")
-  x.merge:RegisterEvent("OnUpdate")
   x.merge:SetScript("OnUpdate",  OnSpamUpdate)
 end
 

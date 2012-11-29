@@ -388,7 +388,7 @@ local function LootFrame_OnUpdate(self, elapsed)
   end
   
   if #self.items < 1 then
-    self:UnregisterEvent("OnUpdate")
+    self:SetScript("OnUpdate", nil)
     self.isRunning = false
   end
 end
@@ -796,49 +796,48 @@ x.events = {
     
     -- Only let self looted items go through the "Always Show" filter
     if (freeTicketToDisneyland and item.self) or (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
-        local r,g,b=GetItemQualityColor(item.quality)
-        local s=item.type..": ["..item.name.."] "
-        
-        if ShowColorBlindMoney() then
-            s = item.type.." (".. _G["ITEM_QUALITY"..item.quality.."_DESC"] .."): ["..item.name.."] "
-        end
-        
-        -- Add the Texture
-        if not ShowLootIcons() then
-            s=s.."\124T"..item.icon..":"..GetLootIconSize()..":"..GetLootIconSize()..":0:0:64:64:5:59:5:59\124t"
-        end
-    
-        -- Amount Looted
-        s=s.." x "..item.amount
-    
-        -- Purchased/quest items seem to get to your bags faster than looted items
+      local r, g, b = GetItemQualityColor(item.quality)
+      local s = item.type..": ["..item.name.."] "
+      
+      if ShowColorBlindMoney() then
+        s = item.type.." (".. _G["ITEM_QUALITY"..item.quality.."_DESC"] .."): ["..item.name.."] "
+      end
+      
+      -- Add the Texture
+      if not ShowLootIcons() then
+        s = s .. "\124T" .. item.icon .. ":" .. GetLootIconSize() .. ":" .. GetLootIconSize() .. ":0:0:64:64:5:59:5:59\124t"
+      end
+  
+      -- Amount Looted
+      s = s .. " x " .. item.amount
+  
+      -- Purchased/quest items seem to get to your bags faster than looted items
 
-        -- Total items in bag
-        if ShowTotalItems() then
-          -- queue the item to wait 1 second before showing
-          if not x.lootUpdater then
-            x.lootUpdater = CreateFrame("FRAME")
-            x.lootUpdater:SetScript("OnUpdate", LootFrame_OnUpdate)
-            x.lootUpdater.isRunning = false
-            x.lootUpdater.items = { }
-          end
-          
-          if not x.lootUpdater.isRunning then
-            x.lootUpdater:RegisterEvent("OnUpdate")
-          end
-          --s=s.."   ("..(GetItemCount(item.id)).. ")"  -- buggy AS HELL :\
-          tinsert(x.lootUpdater.items, {
-              id = item.id,
-              message = s,
-              t = 0,
-              r = r,
-              g = g,
-              b = b,
-            })
-        else
-          -- Add the message
-          x:AddMessage("loot", s, {r, g, b})
+      -- Total items in bag
+      if ShowTotalItems() then
+        -- queue the item to wait 1 second before showing
+        if not x.lootUpdater then
+          x.lootUpdater = CreateFrame("FRAME")
+          x.lootUpdater.isRunning = false
+          x.lootUpdater.items = { }
         end
+        
+        if not x.lootUpdater.isRunning then
+          x.lootUpdater:SetScript("OnUpdate", LootFrame_OnUpdate)
+        end
+        
+        tinsert(x.lootUpdater.items, {
+            id = item.id,
+            message = s,
+            t = 0,
+            r = r,
+            g = g,
+            b = b,
+          })
+      else
+        -- Add the message
+        x:AddMessage("loot", s, {r, g, b})
+      end
         
     end
   

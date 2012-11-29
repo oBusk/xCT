@@ -383,7 +383,8 @@ function x:OpenxCTCommand(input)
       x.EndConfigMode()
       print("|cffFF0000x|r|cffFFFF00CT+|r  Frames have been saved. Please fasten your seat belts.")
     else
-      x.StartConfigMode()
+      x.ToggleConfigMode()
+      
       print("|cffFF0000x|r|cffFFFF00CT+|r  You are now free to move about the cabin.")
       print("      |cffFF0000/xct lock|r      - Saves your frames")
       print("      |cffFF0000/xct cancel|r  - Cancels all your recent frame movements")
