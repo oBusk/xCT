@@ -85,6 +85,7 @@ function x:UpdateCombatTextEvents(enable)
     f:RegisterEvent("UNIT_EXITING_VEHICLE")
     f:RegisterEvent("PLAYER_ENTERING_WORLD")
     f:RegisterEvent("PLAYER_TARGET_CHANGED")
+    f:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
     
     -- if runes
     f:RegisterEvent("RUNE_POWER_UPDATE")
@@ -166,6 +167,8 @@ local function MergeRangedAttacks() return x.db.profile.spells.mergeRanged end
 local function MergeCriticalsWithOutgoing() return x.db.profile.spells.mergeCriticalsWithOutgoing end
 local function MergeCriticalsByThemselves() return x.db.profile.spells.mergeCriticalsByThemselves end
 local function MergeDontMergeCriticals() return x.db.profile.spells.mergeDontMergeCriticals end
+
+local function IsBearForm() return GetShapeshiftForm() == 1 and x.player.class == "DRUID" end
 
 --[=====================================================[
  String Formatters
@@ -547,7 +550,7 @@ x.combat_events = {
     end,
   
   -- TODO: Add filter?
-  ["SPELL_CAST"] = function(spell_name)
+  ["SPELL_ACTIVE"] = function(spell_name)
       local spellStacks = select(4, UnitAura("player", spell_name))
       if spellStacks and tonumber(spellStacks) > 1 then
         spell_name = spell_name .. " |cffFFFFFFx" .. spellStacks .. "|r"
@@ -555,7 +558,7 @@ x.combat_events = {
       x:AddMessage("procs", spell_name, "spell_cast")
     end,
     
-  ["SPELL_ACTIVE"] = function(spellname) if ShowReactives() then x:AddMessage("general", spellname, "spell_reactive") end end,
+  ["SPELL_CAST"] = function(spellname) if ShowReactives() then x:AddMessage("procs", spellname, "spell_reactive") end end,
   
   ["MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "misstype_generic") end end,
   ["DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "misstype_generic") end end,
@@ -641,7 +644,7 @@ x.combat_events = {
     end,
   ["ENERGIZE"] = function(amount, energy_type)
       if amount > 0 then
-        if energy_type and energy_type == "MANA"
+        if energy_type and (energy_type == "MANA" and not IsBearForm()) -- do not show mana in bear form (Leader of the Pack)                                     
             or energy_type == "RAGE" or energy_type == "FOCUS"
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
             or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
@@ -662,7 +665,7 @@ x.combat_events = {
     end,
   ["PERIODIC_ENERGIZE"] = function(amount, energy_type)
       if amount > 0 then
-        if energy_type and energy_type == "MANA"
+        if energy_type and (energy_type == "MANA" and not IsBearForm()) -- do not show mana in bear form (Leader of the Pack)
             or energy_type == "RAGE" or energy_type == "FOCUS"
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
             or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
@@ -860,6 +863,13 @@ x.events = {
       
       x:AddMessage("loot", o, {1, 1, 0}) -- yellow
     end,
+    
+    ["SPELL_ACTIVATION_OVERLAY_GLOW_SHOW"] = function(spellID)
+        if spellID == 32379 then  -- Shadow Word: Death
+          local name = GetSpellInfo(spellID)
+          x:AddMessage("procs", name, "spell_cast")
+        end
+      end,
 }
 
 --[=====================================================[

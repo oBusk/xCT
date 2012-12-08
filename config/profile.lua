@@ -38,6 +38,20 @@ addon.defaults = {
   profile = {
     showStartupText = true,
     
+    blizzardFCT = {
+      blizzardHeadNumbers = false,
+      enabled = false,
+      font = "Homespun (xCT+)",
+      fontSize = 32,
+      fontOutline = "4MONOCHROMEOUTLINE",
+      vars = {
+        ["CombatLogPeriodicSpells"] = 1,
+        ["PetMeleeDamage"] = 1,
+        ["CombatDamage"] = 1,
+        ["CombatHealing"] = 1,
+      },
+    },
+    
     frameSettings = {
       clearLeavingCombat = false,
       showGrid = true,

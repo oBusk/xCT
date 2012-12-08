@@ -288,29 +288,107 @@ addon.options.args["Frames"] = {
   args = {
     Frames_Header = {
       type = "description",
-      order = 1,
+      order = 0,
       name = "|cff798BDDWelcome to|r |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r|cff798BDD Version 3!|r\n",
       fontSize = "large",
     },
-    Frames_Description = {
-      type = "description",
-      order = 2,
-      name = "Unfortunately, I cannot display all the options for |cff10FF50Floating Combat Text|r in this configuration tool. Blizzard has a few tweaks you might want to look at. For performance reasons, I am leaving them there for the time being.\n\n",
-    },
-    blizzardOptions = {
+    blizzardFCT = {
+      name = "Blizzard's Floating Combat Text |cff798BDD(Head Numbers)|r",
+      type = 'group',
       order = 3,
-      type = 'execute',
-      name = "More Blizzard Options...",
-      desc = "Opens: |cffFFA000Game Menu|r --> |cffFF7000Interface|r --> |cffFF3000Floating Combat Text|r",
-      width = "double",
-      func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameTab1:Click(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
+      guiInline = true,
+      args = {
+        --[==[Frames_Description = {
+          type = "description",
+          order = 0,
+          name = "Unfortunately, I cannot display all the options for |cff10FF50Floating Combat Text|r in this configuration tool. Blizzard has a few tweaks you might want to look at. For performance reasons, I am leaving them there for the time being.\n\n",
+        },]==]
+        blizzardHeadNumbers = {
+          order = 1,
+          type = 'toggle',
+          name = "Show Head Numbers",
+          desc = "Enable this option if you still want to see Blizzard's 'head numbers'.",
+          get = get0,
+          set = set0_update,
+        },
+        blizzardOptions = {
+          order = 2,
+          type = 'execute',
+          name = "More Blizzard Options...",
+          desc = "Opens: |cffFFA000Game Menu|r --> |cffFF7000Interface|r --> |cffFF3000Floating Combat Text|r",
+          width = "double",
+          func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameTab1:Click(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
+        },
+        
+        enabled = {
+          order = 20,
+          type = 'toggle',
+          name = "Customize Font",
+          get = get0,
+          set = set0_update,
+        },
+        font = {
+          type = 'select', dialogControl = 'LSM30_Font',
+          order = 21,
+          name = "Blizzard's FCT Font",
+          desc = "Set the font Blizzard's head numbers (|cffFFFF00Default:|r Friz Quadrata TT)",
+          values = AceGUIWidgetLSMlists.font,
+          get = get0,
+          set = set0_update,
+        },
+        
+        -- Not Working
+        --[==[fontSize = {
+          order = 22,
+          name = "Font Size",
+          desc = "Set the font size Blizzard's head numbers. |cffFF0000Requires:|r Full client restart, |cffFF0000NOT|r just logging off!",
+          type = 'range',
+          min = 6, max = 32, step = 1,
+          get = get0,
+          set = set0_update,
+        },
+        fontOutline = {
+          type = 'select',
+          order = 23,
+          name = "Font Outline",
+          desc = "Set the font outline Blizzard's head numbers. |cffFF0000Requires:|r Full client restart, |cffFF0000NOT|r just logging off!",
+          values = {
+            ['1NONE'] = "None",
+            ['2OUTLINE'] = 'OUTLINE',
+            -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+            -- http://us.battle.net/wow/en/forum/topic/6470967362
+            --['3MONOCHROME'] = 'MONOCHROME',
+            ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
+            ['5THICKOUTLINE'] = 'THICKOUTLINE',
+          },
+          get = get0,
+          set = set0_update,
+        },]==]
+        
+        --[==[title1 = {
+          order = 30,
+          type = "description",
+          name = "\n|cffFF0000NOTICE:|r |cffFFFF00Settings below require a full client restart.|r",
+          fontSize = "large",
+        },]==]
+        title2 = {
+          order = 31,
+          type = "description",
+          name = "Some changes above might require a full |cffFFFF00Client Restart|r (completely exit out of WoW). Do not |cffFF0000Alt+F4|r or |cffFF0000Command+Q|r or your settings might not save. Use '|cff798BDD/exit|r' to close the client.",
+          fontSize = "small",
+        },
+      },
     },
+    
+    
+    
     frameSettings = {
       name = "Frame Settings",
       type = 'group',
       order = 4,
       guiInline = true,
       args = {
+        
         clearLeavingCombat = {
           order = 1,
           type = 'toggle',

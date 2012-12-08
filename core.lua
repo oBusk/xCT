@@ -173,7 +173,7 @@ function x:UpdateItemTypes()
         order = 101,
         type = 'execute',
         name = "|cffDDDD00Enable All|r",
-        width = "half",
+        --width = "half",
         func = ItemToggleAll,
       }
       
@@ -182,7 +182,7 @@ function x:UpdateItemTypes()
         order = 102,
         type = 'execute',
         name = "|cffDD0000Disable All|r",
-        width = "half",
+        --width = "half",
         func = ItemToggleAll,
       }
     else

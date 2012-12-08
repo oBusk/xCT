@@ -84,6 +84,7 @@ addon.merges = {
   [3674]   = CreateMergeSpellEntry("HUNTER", 4),        -- Black Arrow                                (Every 2s for 20s)
   [131900] = CreateMergeSpellEntry("HUNTER", 6),        -- A Murder of Crows                          (Over 30s)
   [120699] = CreateMergeSpellEntry("HUNTER", 4),        -- Lynx Rush                                  (9x over 4s)
+  [120361] = CreateMergeSpellEntry("HUNTER", 4),        -- Barrage                                    (Channeled over 3s) 4 to be safe :P
   
 -- mage
   [44461]  = CreateMergeSpellEntry("MAGE", .5),         -- Living Bomb                                (INSTANT)
@@ -190,6 +191,8 @@ addon.merges = {
   [58879]  = CreateMergeSpellEntry("SHAMAN"),           -- Spirit Hunt (Spirit Wolves)
   [26364]  = CreateMergeSpellEntry("SHAMAN"),           -- Lightning Shield (Static Shock)
   [114074] = CreateMergeSpellEntry("SHAMAN", .5),       -- Lava Beam                                  (INSTANT)
+  [114738] = CreateMergeSpellEntry("SHAMAN", .5),       -- Lava Beam (Mastery)                        (INSTANT)
+  [45297]  = CreateMergeSpellEntry("SHAMAN", .5),       -- Chain Lightning (Mastery)                  (INSTANT)
   
 -- shaman (healing)
   [73921]  = CreateMergeSpellEntry("SHAMAN"),           -- Healing Rain

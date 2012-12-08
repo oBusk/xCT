@@ -18,8 +18,8 @@ local ADDON_NAME, addon = ...
 local LSM = LibStub("LibSharedMedia-3.0");
 
 -- Setup up values
-local ssub, pairs, tonumber, tostring, math, unpack, print, type, mfloor, random, table_insert, format, _G
-  = string.sub, pairs, tonumber, tostring, math, unpack, print, type, math.floor, math.random, table.insert, string.format, _G
+local ssub, sformat, pairs, tonumber, tostring, math, unpack, print, type, mfloor, random, table_insert, format, _G
+  = string.sub, string.format, pairs, tonumber, tostring, math, unpack, print, type, math.floor, math.random, table.insert, string.format, _G
 random(time()); random(); random(time())
 
 -- Shorten my handle
@@ -75,6 +75,10 @@ end
 --  be updated.
 -- =====================================================
 function x:UpdateFrames(specificFrame)
+  -- Update Head Numbers and FCT Font Settings
+  if not specificFrame then self:UpdateHeadNumbers(); x:UpdateBlizzardFCT() end
+  
+  -- Update the frames
   for framename, settings in pairs(x.db.profile.frames) do
     if specificFrame and specificFrame == framename or not specificFrame then
       local f = nil
@@ -154,7 +158,7 @@ function x:UpdateFrames(specificFrame)
       if framename == "class" then
         f:SetMaxLines(1)
         f:SetFading(false)
-      end
+      end      
       
       x.frames[framename] = f
 
@@ -639,7 +643,7 @@ function x.TestMoreUpdate(self, elapsed)
           if x.db.profile.frames["healing"].fontJustify == "LEFT" then
             local name = UnitName("player")
             if x.db.profile.frames["healing"].enableClassNames then
-              name = sformat("|c%s%s|r", RAID_CLASS_COLORS[select(2,UnitClass("player"))], name)
+              name = sformat("|c%s%s|r", RAID_CLASS_COLORS[select(2,UnitClass("player"))].colorStr, name)
             end
             x:AddMessage("healing", "+"..random(90000) .. " "..name, {.1, ((random(3) + 1) * 63) / 255, .1})
           else
@@ -650,8 +654,8 @@ function x.TestMoreUpdate(self, elapsed)
         end
       elseif self == x.frames["power"]  and random(4) % 4 == 0 then
         if not x.db.profile.frames["power"].enabledFrame then x:Clear("power") return end
-        local _, powerToken, r, g, b = UnitPowerType("player")
-        x:AddMessage("power", "+"..random(500).." ".._G[powerToken], { r, g, b })
+        local _, powerToken = UnitPowerType("player")
+        x:AddMessage("power", "+"..random(500).." ".._G[powerToken], { PowerBarColor[powerToken].r, PowerBarColor[powerToken].g, PowerBarColor[powerToken].b })
       elseif self == x.frames["class"] and random(4) % 4 == 0 then
         if not x.db.profile.frames["class"].enabledFrame then x:Clear("class") return end
         if not self.testCombo then
