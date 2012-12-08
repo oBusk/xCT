@@ -15,7 +15,7 @@
 local ADDON_NAME, addon = ...
 local x = addon.engine
 local blankTable, unpack, select = {}, unpack, select
-local string_gsub = string.gsub
+local string_gsub, pairs = string.gsub, pairs
 
 -- New Icon "!"
 local NEW = x.new
