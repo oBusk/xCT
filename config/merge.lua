@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandruff @ Whisperwind-US  ]
  [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  ï¿½2012. All Rights Reserved.        ]
  [====================================]]
  
 local ADDON_NAME, addon = ...
@@ -138,6 +138,7 @@ addon.merges = {
   [20167]  = CreateMergeSpellEntry("PALADIN"),          -- Seal of Insight (Heal)
   [121129] = CreateMergeSpellEntry("PALADIN", .5),      -- Daybreak                                   (INSTANT)
   [119952] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light                               (Every 2s for 17.5s)
+  [114163] = CreateMergeSpellEntry("PALADIN", 5),       -- Eternal Flame				      (Every 3s for 30s)
   
 -- priest (damage)
   [47666]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Damage Effect)
