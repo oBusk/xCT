@@ -431,7 +431,7 @@ addon.options.args["Frames"] = {
     },
     
     megaDamage = {
-      name = "Damage Abbrivation Settings",
+      name = "Damage Abbreviation Settings",
       type = 'group',
       order = 5,
       guiInline = true,
@@ -440,7 +440,7 @@ addon.options.args["Frames"] = {
           order = 1,
           type = 'toggle',
           name = "Enable",
-          desc = "Enable Damage Abbrivation",
+          desc = "Enable Damage Abbreviation",
           width = "full",
           get = get0,
           set = set0,

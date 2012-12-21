@@ -160,7 +160,7 @@ local function ShowWarlockDemonicFury() return x.db.profile.spells.combo["WARLOC
 local function ShowWarlockBurningEmbers() return x.db.profile.spells.combo["WARLOCK"][3][BURNING_EMBERS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 3 end
 
 local function ClearWhenLeavingCombat() return x.db.profile.frameSettings.clearLeavingCombat end
-local function ShowAbbrivatedDamage() return x.db.profile.megaDamage.enableMegaDamage end
+local function ShowAbbreviatedDamage() return x.db.profile.megaDamage.enableMegaDamage end
 
 local function MergeMeleeSwings() return x.db.profile.spells.mergeSwings end
 local function MergeRangedAttacks() return x.db.profile.spells.mergeRanged end
@@ -401,76 +401,21 @@ end
 --]=====================================================]
 x.combat_events = {
   ["DAMAGE"] = function(amount)
-      local message = amount
-      
-      -- Abbrivate the message
-      if ShowAbbrivatedDamage() then
-        if (amount >= 1000000) then
-          message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-        elseif (amount >= 1000) then
-          message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-        end
-      end
-      
-      x:AddMessage("damage", sformat(format_fade, message), "damage")
+      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount)), "damage")
     end,
   ["DAMAGE_CRIT"] = function(amount)
-      local message = amount
-      
-      -- Abbrivate the message
-      if ShowAbbrivatedDamage() then
-        if (amount >= 1000000) then
-          message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-        elseif (amount >= 1000) then
-          message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-        end
-      end
-      
-      x:AddMessage("damage", sformat(format_fade, message), "damage_crit")
+      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount)), "damage_crit")
     end,
   ["SPELL_DAMAGE"] = function(amount)
-      local message = amount
-      
-      -- Abbrivate the message
-      if ShowAbbrivatedDamage() then
-        if (amount >= 1000000) then
-          message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-        elseif (amount >= 1000) then
-          message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-        end
-      end
-      
-      x:AddMessage("damage", sformat(format_fade, message), "spell_damage")
+      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount)), "spell_damage")
     end,
   ["SPELL_DAMAGE_CRIT"] = function(amount)
-      local message = amount
-      
-      -- Abbrivate the message
-      if ShowAbbrivatedDamage() then
-        if (amount >= 1000000) then
-          message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-        elseif (amount >= 1000) then
-          message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-        end
-      end
-      
-      x:AddMessage("damage", sformat(format_fade, message), "spell_damage_crit")
+      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount)), "spell_damage_crit")
     end,
   
   -- TODO: Add thresholds
   ["HEAL"] = function(healer_name, amount)
-      local message = amount
-  
-      -- Abbrivate the message
-      if ShowAbbrivatedDamage() then
-        if (amount >= 1000000) then
-          message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-        elseif (amount >= 1000) then
-          message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-        end
-      end
-      
-      message = sformat(format_gain, message)
+      local message = sformat(format_gain, x:Abbreviate(amount))
       
       if ShowFriendlyNames() and healer_name then
         if ShowColoredFriendlyNames() then
@@ -489,18 +434,7 @@ x.combat_events = {
       x:AddMessage("healing", message, "heal")
     end,
   ["HEAL_CRIT"] = function(healer_name, amount)
-      local message = amount
-  
-      -- Abbrivate the message
-      if ShowAbbrivatedDamage() then
-        if (amount >= 1000000) then
-          message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-        elseif (amount >= 1000) then
-          message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-        end
-      end
-      
-      message = sformat(format_gain, message)
+      local message = sformat(format_gain, x:Abbreviate(amount))
       
       if ShowFriendlyNames() and healer_name then
         if ShowColoredFriendlyNames() then
@@ -519,18 +453,7 @@ x.combat_events = {
       x:AddMessage("healing", message, "heal_crit")
     end,
   ["PERIODIC_HEAL"] = function(healer_name, amount)
-      local message = amount
-  
-      -- Abbrivate the message
-      if ShowAbbrivatedDamage() then
-        if (amount >= 1000000) then
-          message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-        elseif (amount >= 1000) then
-          message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-        end
-      end
-      
-      message = sformat(format_gain, message)
+      local message = sformat(format_gain, x:Abbreviate(amount))
       
       if ShowFriendlyNames() and healer_name then
         if ShowColoredFriendlyNames() then
@@ -546,6 +469,7 @@ x.combat_events = {
           message = healer_name .. " " .. message
         end
       end
+      
       x:AddMessage("healing", message, "heal_peri")
     end,
   
@@ -557,7 +481,7 @@ x.combat_events = {
       end
       x:AddMessage("procs", spell_name, "spell_cast")
     end,
-    
+
   ["SPELL_CAST"] = function(spellname) if ShowReactives() then x:AddMessage("procs", spellname, "spell_reactive") end end,
   
   ["MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "misstype_generic") end end,
@@ -579,9 +503,9 @@ x.combat_events = {
   ["RESIST"] = function(amount, resisted)
       if resisted then
         if ShowResistances() then
-          x:AddMessage("damage", sformat(format_resist, amount, RESIST, resisted), "resist_generic")
+          x:AddMessage("damage", sformat(format_resist, x:Abbreviate(amount), RESIST, x:Abbreviate(resisted)), "resist_generic")
         else
-          x:AddMessage("damage", amount, "damage")
+          x:AddMessage("damage", x:Abbreviate(amount), "damage")
         end
       elseif ShowResistances() then
         x:AddMessage("damage", RESIST, "misstype_generic")
@@ -590,9 +514,9 @@ x.combat_events = {
   ["BLOCK"] = function(amount, resisted)
       if resisted then
         if ShowResistances() then
-          x:AddMessage("damage", sformat(format_resist, amount, BLOCK, resisted), "resist_generic")
+          x:AddMessage("damage", sformat(format_resist, x:Abbreviate(amount), BLOCK, x:Abbreviate(resisted)), "resist_generic")
         else
-          x:AddMessage("damage", amount, "damage")
+          x:AddMessage("damage", x:Abbreviate(amount), "damage")
         end
       elseif ShowResistances() then
         x:AddMessage("damage", BLOCK, "misstype_generic")
@@ -601,9 +525,9 @@ x.combat_events = {
   ["ABSORB"] = function(amount, resisted)
       if resisted then
         if ShowResistances() then
-          x:AddMessage("damage", sformat(format_resist, amount, ABSORB, resisted), "resist_generic")
+          x:AddMessage("damage", sformat(format_resist, x:Abbreviate(amount), ABSORB, x:Abbreviate(resisted)), "resist_generic")
         else
-          x:AddMessage("damage", amount, "damage")
+          x:AddMessage("damage", x:Abbreviate(amount), "damage")
         end
       elseif ShowResistances() then
         x:AddMessage("damage", ABSORB, "misstype_generic")
@@ -612,9 +536,9 @@ x.combat_events = {
   ["SPELL_RESIST"] = function(amount, resisted)
       if resisted then
         if ShowResistances() then
-          x:AddMessage("damage", sformat(format_resist, amount, RESIST, resisted), "resist_spell")
+          x:AddMessage("damage", sformat(format_resist, x:Abbreviate(amount), RESIST, x:Abbreviate(resisted)), "resist_spell")
         else
-          x:AddMessage("damage", amount, "damage")
+          x:AddMessage("damage", x:Abbreviate(amount), "damage")
         end
       elseif ShowResistances() then
         x:AddMessage("damage", RESIST, "misstype_generic")
@@ -623,9 +547,9 @@ x.combat_events = {
   ["SPELL_BLOCK"] = function(amount, resisted)
       if resisted then
         if ShowResistances() then
-          x:AddMessage("damage", sformat(format_resist, amount, BLOCK, resisted), "resist_spell")
+          x:AddMessage("damage", sformat(format_resist, x:Abbreviate(amount), BLOCK, x:Abbreviate(resisted)), "resist_spell")
         else
-          x:AddMessage("damage", amount, "damage")
+          x:AddMessage("damage", x:Abbreviate(amount), "damage")
         end
       elseif ShowResistances() then
         x:AddMessage("damage", BLOCK, "misstype_generic")
@@ -634,9 +558,9 @@ x.combat_events = {
   ["SPELL_ABSORB"] = function(amount, resisted)
       if resisted then
         if ShowResistances() then
-          x:AddMessage("damage", sformat(format_resist, amount, ABSORB, resisted), "resist_spell")
+          x:AddMessage("damage", sformat(format_resist, x:Abbreviate(amount), ABSORB, x:Abbreviate(resisted)), "resist_spell")
         else
-          x:AddMessage("damage", amount, "damage")
+          x:AddMessage("damage", x:Abbreviate(amount), "damage")
         end
       elseif ShowResistances() then
         x:AddMessage("damage", ABSORB, "misstype_generic")
@@ -648,16 +572,7 @@ x.combat_events = {
             or energy_type == "RAGE" or energy_type == "FOCUS"
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
             or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
-          local message, color = amount, {PowerBarColor[energy_type].r, PowerBarColor[energy_type].g, PowerBarColor[energy_type].b}
-          
-          -- Abbrivate the message
-          if ShowAbbrivatedDamage() then
-            if (amount >= 1000000) then
-              message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-            elseif (amount >= 1000) then
-              message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-            end
-          end
+          local message, color = x:Abbreviate(amount), {PowerBarColor[energy_type].r, PowerBarColor[energy_type].g, PowerBarColor[energy_type].b}
 
           x:AddMessage("power", sformat(format_energy, message, _G[energy_type]), color)
         end
@@ -669,18 +584,9 @@ x.combat_events = {
             or energy_type == "RAGE" or energy_type == "FOCUS"
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
             or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
-          local message, color = amount, {PowerBarColor[energy_type].r, PowerBarColor[energy_type].g, PowerBarColor[energy_type].b}
-          
-          -- Abbrivate the message
-          if ShowAbbrivatedDamage() then
-            if (amount >= 1000000) then
-              message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-            elseif (amount >= 1000) then
-              message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-            end
-          end
-          
-          x:AddMessage("power", sformat(format_energy, amount, _G[energy_type]), color)
+          local message, color = x:Abbreviate(amount), {PowerBarColor[energy_type].r, PowerBarColor[energy_type].g, PowerBarColor[energy_type].b}
+
+          x:AddMessage("power", sformat(format_energy, message, _G[energy_type]), color)
         end
       end
     end,
@@ -694,15 +600,15 @@ x.combat_events = {
   ["HONOR_GAINED"] = function(amount)
       local num = mfloor(tonumber(amount) or 0)
       if num > 0 and ShowHonor() then
-        x:AddMessage("general", sformat(format_honor, HONOR, amount), "honor")
+        x:AddMessage("general", sformat(format_honor, HONOR, x:Abbreviate(amount)), "honor")
       end
     end,
   ["FACTION"] = function(faction, amount)
       local num = mfloor(tonumber(amount) or 0)
       if num > 0 and ShowFaction() then
-        x:AddMessage("general", sformat(format_faction_add, faction, amount), "honor")
+        x:AddMessage("general", sformat(format_faction_add, faction, x:Abbreviate(amount)), "honor")
       elseif num < 0 and ShowFaction() then
-        x:AddMessage("general", sformat(format_faction_sub, faction, amount), "faction_sub")
+        x:AddMessage("general", sformat(format_faction_sub, faction, x:Abbreviate(amount)), "faction_sub")
       end
     end,
 }
@@ -784,24 +690,24 @@ x.events = {
     local pM,iQ,iI,iN,iA = select(3, string.find(msg, format_loot))   -- Pre-Message, ItemColor, ItemID, ItemName, ItemAmount
     local qq,_,_,tt,st,_,_,ic = select(3, GetItemInfo(iI))            -- Item Quality, See "GetAuctionItemClasses()" For Type and Subtype, Item Icon Texture Location
     
-    -- Item filter
-    local freeTicketToDisneyland = false 
+    -- Item White-List Filter
+    local listed = false 
     if x.db.profile.spells.items[tt] and x.db.profile.spells.items[tt][st] == true then
-      freeTicketToDisneyland = true
+      listed = true
     end
     
-    local item       = { }
-        item.name    = iN
-        item.id      = iI
-        item.amount  = tonumber(iA) or 1
-        item.quality = qq
-        item.type    = tt
-        item.icon    = ic
-        item.crafted = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
-        item.self    = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
+    local item     = { }
+      item.name    = iN
+      item.id      = iI
+      item.amount  = tonumber(iA) or 1
+      item.quality = qq
+      item.type    = tt
+      item.icon    = ic
+      item.crafted = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
+      item.self    = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
     
     -- Only let self looted items go through the "Always Show" filter
-    if (freeTicketToDisneyland and item.self) or (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
+    if (listed and item.self) or (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
       local r, g, b = GetItemQualityColor(item.quality)
       local s = item.type..": ["..item.name.."] "
       
@@ -867,12 +773,12 @@ x.events = {
       x:AddMessage("loot", o, {1, 1, 0}) -- yellow
     end,
     
-    ["SPELL_ACTIVATION_OVERLAY_GLOW_SHOW"] = function(spellID)
-        if spellID == 32379 then  -- Shadow Word: Death
-          local name = GetSpellInfo(spellID)
-          x:AddMessage("procs", name, "spell_cast")
-        end
-      end,
+  ["SPELL_ACTIVATION_OVERLAY_GLOW_SHOW"] = function(spellID)
+      if spellID == 32379 then  -- Shadow Word: Death
+        local name = GetSpellInfo(spellID)
+        x:AddMessage("procs", name, "spell_cast")
+      end
+    end,
 }
 
 --[=====================================================[
@@ -880,354 +786,298 @@ x.events = {
 --]=====================================================]
 x.outgoing_events = {
   ["SPELL_PERIODIC_HEAL"] = function(...)
-      if ShowHealing() and ShowHots() then
-        -- output = the output frame; list of incoming args
-        local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
-        local outputFrame, message, outputColor = "outgoing", amount, "heal_out"
-        local merged = false
-        
-        -- TODO: Add Healing Filter
+      if not ShowHealing() or not ShowHots() then return end
+      
+      local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
+      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "heal_out"
+      local merged = false
+      
+      -- TODO: Add Healing Filter
 
-        -- Check for merge
-        if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-          if critical and not MergeCriticalsByThemselves() or not critical then
-            merged = true
-            x:AddSpamMessage("outgoing", spellID, amount, outputColor)
-          end
+      -- Check for merge
+      if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+        if critical and not MergeCriticalsByThemselves() or not critical then
+          merged = true
+          x:AddSpamMessage("outgoing", spellID, message, outputColor)
         end
-        
-        -- Abbrivate the message
-        if ShowAbbrivatedDamage() then
-          if (amount >= 1000000) then
-            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-          elseif (amount >= 1000) then
-            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-          end
-        end
-        
-        -- MergeCriticalsWithOutgoing, MergeCriticalsByThemselves, MergeDontMergeCriticals
-        
-        
-        -- Check for Critical
-        if critical then
-          if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-            -- Merge this critical entry
-            x:AddSpamMessage("critical", spellID, amount, outputColor)
-            
-            -- We are done, after we check for criticals. We don't need to do anything else.
-            return 
-          else
-            -- Don't merge criticals
-            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
-            outputFrame = "critical"
-          end
-        elseif merged then  -- return merged, non-crits
-          return
-        end
-        
-        -- Add Icons
-        if x.db.profile.frames[outputFrame].iconsEnabled then
-          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
-          else
-            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
-          end
-        end
-        
-        x:AddMessage(outputFrame, message, outputColor)
       end
+      
+      -- Check for Critical
+      if critical then
+        if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+          -- Merge this critical entry
+          x:AddSpamMessage("critical", spellID, message, outputColor)
+          
+          -- We are done, after we check for criticals. We don't need to do anything else.
+          return 
+        else
+          -- Don't merge criticals
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
+          outputFrame = "critical"
+        end
+      elseif merged then  -- return merged, non-crits
+        return
+      end
+      
+      -- Add Icons
+      if x.db.profile.frames[outputFrame].iconsEnabled then
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
+      end
+      
+      x:AddMessage(outputFrame, message, outputColor)
     end,
+    
   ["SPELL_HEAL"] = function(...)
-      if ShowHealing() then
-        -- output = the output frame; list of incoming args
-        local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
-        local outputFrame, message, outputColor = "outgoing", amount, "heal_out"
-        local merged = false
-        
-        -- TODO: Add Healing Filter
-        
-        -- Check for merge
-        if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-          if critical and not MergeCriticalsByThemselves() or not critical then
-            merged = true
-            x:AddSpamMessage("outgoing", spellID, amount, outputColor)
-          end
+      if not ShowHealing() then return end
+
+      local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
+      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "heal_out"
+      local merged = false
+      
+      -- TODO: Add Healing Filter
+      
+      -- Check for merge
+      if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+        if critical and not MergeCriticalsByThemselves() or not critical then
+          merged = true
+          x:AddSpamMessage("outgoing", spellID, message, outputColor)
         end
-        
-        -- Abbrivate the message
-        if ShowAbbrivatedDamage() then
-          if (amount >= 1000000) then
-            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-          elseif (amount >= 1000) then
-            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-          end
-        end
-        
-                -- Check for Critical
-        if critical then
-          if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-            -- Merge this critical entry
-            x:AddSpamMessage("critical", spellID, amount, outputColor)
-            
-            -- We are done, after we check for criticals. We don't need to do anything else.
-            return 
-          else
-            -- Don't merge criticals
-            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
-            outputFrame = "critical"
-          end
-        elseif merged then  -- return merged, non-crits
-          return
-        end
-        
-        -- Add Icons
-        if x.db.profile.frames[outputFrame].iconsEnabled then
-          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
-          else
-            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
-          end
-        end
-        
-        x:AddMessage(outputFrame, message, outputColor)
       end
+
+      -- Check for Critical
+      if critical then
+        if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+          -- Merge this critical entry
+          x:AddSpamMessage("critical", spellID, message, outputColor)
+          
+          -- We are done, after we check for criticals. We don't need to do anything else.
+          return 
+        else
+          -- Don't merge criticals
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
+          outputFrame = "critical"
+        end
+      elseif merged then  -- return merged, non-crits
+        return
+      end
+      
+      -- Add Icons
+      if x.db.profile.frames[outputFrame].iconsEnabled then
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
+      end
+      
+      x:AddMessage(outputFrame, message, outputColor)
     end,
     
   ["SWING_DAMAGE"] = function(...)
-      if ShowDamage() then
-        local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  amount, _, _, _, _, _, critical = ...
-        local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
-        local merged = false
+      if not ShowDamage() then return end
+      
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  amount, _, _, _, _, _, critical = ...
+      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
+      local merged = false
+      
+      -- Check for Pet Swings
+      local spellID = 6603
+      if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
+        if not ShowPetDamage() then return end
+        spellID = 0
+        critical = nil -- stupid spam fix for hunter pets
+      end
+      
+      -- Check for Critical
+      if critical then
         
-        -- Check for Pet Swings
-        local spellID = 6603
-        if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
-          if not ShowPetDamage() then return end
-          spellID = 0
-          critical = nil -- stupid spam fix for hunter pets
+        if not ShowSwingCrit() then return end
+        
+        if ShowSwingCritPrefix() then
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
         end
         
-        -- Abbrivate the message
-        if ShowAbbrivatedDamage() then
-          if (amount >= 1000000) then
-            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-          elseif (amount >= 1000) then
-            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-          end
+        if not ShowSwingRedirected() then
+          outputFrame = "critical"
         end
-        
-        -- Check for Critical
-        if critical then
-          
-          if not ShowSwingCrit() then return end
-          
-          if ShowSwingCritPrefix() then
-            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
-          end
-          
-          if not ShowSwingRedirected() then
-            outputFrame = "critical"
-          end
-        end
-        
-        -- Are we filtering Auto Attacks in the Outgoing frame?
-        if outputFrame == "outgoing" and not ShowAutoAttack() then return end;
-        
-        -- Check for merge
-        if MergeMeleeSwings() then
-          merged = true
-          x:AddSpamMessage("outgoing", spellID, amount, outputColor)
-        end
-        
-        -- Only show non-merged swings
-        if merged and not critical then
-          return
-        end
+      end
+      
+      -- Are we filtering Auto Attacks in the Outgoing frame?
+      if outputFrame == "outgoing" and not ShowAutoAttack() then return end;
+      
+      -- Check for merge
+      if MergeMeleeSwings() then
+        merged = true
+        x:AddSpamMessage("outgoing", spellID, message, outputColor)
+      end
+      
+      -- Only show non-merged swings
+      if merged and not critical then
+        return
+      end
 
-        -- Add Icons
-        if x.db.profile.frames[outputFrame].iconsEnabled then
-          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
-          else
-            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
-          end
+      -- Add Icons
+      if x.db.profile.frames[outputFrame].iconsEnabled then
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
         end
-        
-        x:AddMessage(outputFrame, message, outputColor)
       end
+      
+      x:AddMessage(outputFrame, message, outputColor)
     end,
+    
   ["RANGE_DAMAGE"] = function(...)
-      if ShowDamage() then
-        local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, amount, _, _, _, _, _, critical = ...
-        local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
-        local merged = false
+      if not ShowDamage() then return end
+      
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, amount, _, _, _, _, _, critical = ...
+      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
+      local merged = false
+      
+      -- Auto Shot is spellId == 75
+      local autoShot = spellID == 75
+
+      -- Check for Critical
+      if critical then
+        if autoShot and not ShowSwingCrit()then return end
         
-        -- Auto Shot is spellId == 75
-        local autoShot = spellID == 75
-        
-        -- Abbrivate the message
-        if ShowAbbrivatedDamage() then
-          if (amount >= 1000000) then
-            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-          elseif (amount >= 1000) then
-            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-          end
+        if not autoShot or autoShot and ShowSwingCritPrefix() then
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
         end
         
-        -- Check for Critical
-        if critical then
-          if autoShot and not ShowSwingCrit()then return end
-          
-          if not autoShot or autoShot and ShowSwingCritPrefix() then
-            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
-          end
-          
-          if not autoShot or not ShowSwingRedirected() and autoShot then
-            outputFrame = "critical"
-          end
+        if not autoShot or not ShowSwingRedirected() and autoShot then
+          outputFrame = "critical"
         end
-        
-        -- Check for merge
-        if MergeRangedAttacks() then
-          merged = true
-          x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
-        end
-        
-        -- Only show non-merged swings
-        if merged and not critical then
-          return
-        end
-        
-        -- Add Icons
-        if x.db.profile.frames[outputFrame].iconsEnabled then
-          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
-          else
-            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
-          end
-        end
-        
-        x:AddMessage(outputFrame, message, outputColor)
       end
+      
+      -- Check for merge
+      if MergeRangedAttacks() then
+        merged = true
+        x:AddSpamMessage(outputFrame, spellID, message, outputColor, 6)
+      end
+      
+      -- Only show non-merged swings
+      if merged and not critical then
+        return
+      end
+      
+      -- Add Icons
+      if x.db.profile.frames[outputFrame].iconsEnabled then
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
+      end
+      
+      x:AddMessage(outputFrame, message, outputColor)
     end,
     
   ["SPELL_DAMAGE"] = function(...)
-      if ShowDamage() then
-        local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
-        local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
-        local merged = false
-        
-        -- Get special magic color
-        if x.damagecolor[spellSchool] then
-          outputColor = x.damagecolor[spellSchool]
-        else
-          outputColor = x.damagecolor[1]
-        end
-        
-        -- Check for merge
-        if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-          if critical and not MergeCriticalsByThemselves() or not critical then
-            merged = true
-            x:AddSpamMessage("outgoing", spellID, amount, outputColor)
-          end
-        end
-        
-        -- Abbrivate the Amount
-        if ShowAbbrivatedDamage() then
-          if (amount >= 1000000) then
-            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-          elseif (amount >= 1000) then
-            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-          end
-        end
-        
-        -- Check for Critical
-        if critical then
-          if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-            -- Merge this critical entry
-            x:AddSpamMessage("critical", spellID, amount, outputColor)
-            
-            -- We are done, after we check for criticals. We don't need to do anything else.
-            return 
-          else
-            -- Don't merge criticals
-            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
-            outputFrame = "critical"
-          end
-        elseif merged then  -- return merged, non-crits
-          return
-        end
-        
-        -- Add Icons
-        if x.db.profile.frames[outputFrame].iconsEnabled then
-          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
-          else
-            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
-          end
-        end
-        
-        x:AddMessage(outputFrame, message, outputColor)
+      if not ShowDamage() then return end
+      
+      local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
+      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
+      local merged = false
+      
+      -- Get special magic color
+      if x.damagecolor[spellSchool] then
+        outputColor = x.damagecolor[spellSchool]
+      else
+        outputColor = x.damagecolor[1]
       end
-    end,
-  ["SPELL_PERIODIC_DAMAGE"] = function(...)
-      if ShowDamage() then
-        local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
-        local outputFrame, message, outputColor = "outgoing", amount, "out_damage"
-        local merged = false
-        
-        -- Get special magic color
-        if x.damagecolor[spellSchool] then
-          outputColor = x.damagecolor[spellSchool]
-        else
-          outputColor = x.damagecolor[1]
+      
+      -- Check for merge
+      if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+        if critical and not MergeCriticalsByThemselves() or not critical then
+          merged = true
+          x:AddSpamMessage("outgoing", spellID, message, outputColor)
         end
-        
-        -- Check for merge
-        if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-          if critical and not MergeCriticalsByThemselves() or not critical then
-            merged = true
-            x:AddSpamMessage("outgoing", spellID, amount, outputColor)
-          end
-        end
-        
-        -- Abbrivate the message
-        if ShowAbbrivatedDamage() then
-          if (amount >= 1000000) then
-            message = tostring(mfloor((amount + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
-          elseif (amount >= 1000) then
-            message = tostring(mfloor((amount + 500) / 1000)) .. x.db.profile.megaDamage.thousandSymbol
-          end
-        end
-        
-        -- Check for Critical
-        if critical then
-          if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-            -- Merge this critical entry
-            x:AddSpamMessage("critical", spellID, amount, outputColor)
-            
-            -- We are done, after we check for criticals. We don't need to do anything else.
-            return 
-          else
-            -- Don't merge criticals
-            message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
-            outputFrame = "critical"
-          end
-        elseif merged then  -- return merged, non-crits
-          return
-        end
+      end
 
-        -- Add Icons
-        if x.db.profile.frames[outputFrame].iconsEnabled then
-          if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-            message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
-          else
-            message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
-          end
+      -- Check for Critical
+      if critical then
+        if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+          -- Merge this critical entry
+          x:AddSpamMessage("critical", spellID, message, outputColor)
+          
+          -- We are done, after we check for criticals. We don't need to do anything else.
+          return 
+        else
+          -- Don't merge criticals
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
+          outputFrame = "critical"
         end
-        
-        x:AddMessage(outputFrame, message, outputColor)
+      elseif merged then  -- return merged, non-crits
+        return
       end
+      
+      -- Add Icons
+      if x.db.profile.frames[outputFrame].iconsEnabled then
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
+      end
+      
+      x:AddMessage(outputFrame, message, outputColor)
+    end,
+    
+  ["SPELL_PERIODIC_DAMAGE"] = function(...)
+      if not ShowDamage() then return end
+      
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
+      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
+      local merged = false
+      
+      -- Get special magic color
+      if x.damagecolor[spellSchool] then
+        outputColor = x.damagecolor[spellSchool]
+      else
+        outputColor = x.damagecolor[1]
+      end
+      
+      -- Check for merge
+      if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+        if critical and not MergeCriticalsByThemselves() or not critical then
+          merged = true
+          x:AddSpamMessage("outgoing", spellID, message, outputColor)
+        end
+      end
+
+      -- Check for Critical
+      if critical then
+        if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+          -- Merge this critical entry
+          x:AddSpamMessage("critical", spellID, message, outputColor)
+          
+          -- We are done, after we check for criticals. We don't need to do anything else.
+          return 
+        else
+          -- Don't merge criticals
+          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
+          outputFrame = "critical"
+        end
+      elseif merged then  -- return merged, non-crits
+        return
+      end
+
+      -- Add Icons
+      if x.db.profile.frames[outputFrame].iconsEnabled then
+        if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
+          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+        else
+          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+        end
+      end
+      
+      x:AddMessage(outputFrame, message, outputColor)
     end,
     
   ["SWING_MISSED"] = function(...)
@@ -1258,6 +1108,7 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
+    
   ["SPELL_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
       local outputFrame, message, outputColor = "outgoing", _G[missType], "out_misstype"
@@ -1276,6 +1127,7 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
+    
   ["RANGE_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
       local outputFrame, message, outputColor = "outgoing", _G[missType], "out_misstype"
@@ -1294,6 +1146,7 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
+    
   ["SPELL_DISPEL"] = function(...)
       if not ShowDispells() then return end
   
@@ -1316,6 +1169,7 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
+    
   ["SPELL_STOLEN"] = function(...)
       if not ShowDispells() then return end
       
@@ -1333,6 +1187,7 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
+    
   ["SPELL_INTERRUPT"] = function(...)
       if not ShowInterrupts() then return end
   
@@ -1350,6 +1205,7 @@ x.outgoing_events = {
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
+    
   ["PARTY_KILL"] = function(...)
       if not ShowPartyKill() then return end
   

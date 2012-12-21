@@ -214,12 +214,12 @@ function x:Clear(specificFrame)
 end
 
 -- =====================================================
--- AddOn:Abbrivate(
---    amount,   [int] - the amount to abbrivate
+-- AddOn:Abbreviate(
+--    amount,   [int] - the amount to abbreviate
 --  )
---    Abbrivates the specified amount.
+--    Abbreviates the specified amount.
 -- =====================================================
-function x:Abbrivate(amount)
+function x:Abbreviate(amount)
   local message = tostring(amount)
   if self.db.profile.megaDamage.enableMegaDamage then
     if (amount >= 1000000) then
@@ -417,7 +417,7 @@ do
       -- total as a string
       local message = tostring(total)
       
-      -- Abbrivate the merged total
+      -- Abbreviate the merged total
       if tonumber(total) and x.db.profile.megaDamage.enableMegaDamage then
         if (total / 1000000 >= 1) then
           message = tostring(mfloor((total + 500000) / 1000000)) .. x.db.profile.megaDamage.millionSymbol
@@ -630,7 +630,7 @@ function x.TestMoreUpdate(self, elapsed)
         x:AddMessage("general", COMBAT_TEXT_LABEL, {random(255) / 255, random(255) / 255, random(255) / 255})
       elseif self == x.frames["outgoing"] then
         if not x.db.profile.frames["outgoing"].enabledFrame then x:Clear("outgoing") return end
-        local message = x:Abbrivate(random(60000))
+        local message = x:Abbreviate(random(60000))
         if x.db.profile.frames["outgoing"].iconsEnabled then
           local spellID = random(10000)
           if x.db.profile.frames["outgoing"].fontJustify == "LEFT" then
@@ -642,7 +642,7 @@ function x.TestMoreUpdate(self, elapsed)
         x:AddMessage("outgoing", message, x.damagecolor[damageColorLookup[math.random(7)]])
       elseif self == x.frames["critical"] and random(2) % 2 == 0 then
         if not x.db.profile.frames["critical"].enabledFrame then x:Clear("critical") return end
-        local message = x.db.profile.frames["critical"].critPrefix..x:Abbrivate(random(80000, 200000))..x.db.profile.frames["critical"].critPostfix
+        local message = x.db.profile.frames["critical"].critPrefix..x:Abbreviate(random(80000, 200000))..x.db.profile.frames["critical"].critPostfix
         if x.db.profile.frames["critical"].iconsEnabled then
           local spellID = random(10000)
           if x.db.profile.frames["critical"].fontJustify == "LEFT" then
@@ -654,7 +654,7 @@ function x.TestMoreUpdate(self, elapsed)
         x:AddMessage("critical", message, x.damagecolor[damageColorLookup[math.random(7)]])
       elseif self == x.frames["damage"] and random(2) % 2 == 0 then
         if not x.db.profile.frames["damage"].enabledFrame then x:Clear("damage") return end
-        x:AddMessage("damage", "-"..x:Abbrivate(random(100000)), {1, random(100) / 255, random(100) / 255})
+        x:AddMessage("damage", "-"..x:Abbreviate(random(100000)), {1, random(100) / 255, random(100) / 255})
       elseif self == x.frames["healing"] and random(2) % 2 == 0 then
         if not x.db.profile.frames["healing"].enabledFrame then x:Clear("healing") return end
         if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
@@ -663,17 +663,17 @@ function x.TestMoreUpdate(self, elapsed)
             name = sformat("|c%s%s|r", RAID_CLASS_COLORS[select(2,UnitClass("player"))].colorStr, name)
           end
           if x.db.profile.frames["healing"].fontJustify == "LEFT" then
-            x:AddMessage("healing", "+"..x:Abbrivate(random(90000)) .. " "..name, {.1, ((random(3) + 1) * 63) / 255, .1})
+            x:AddMessage("healing", "+"..x:Abbreviate(random(90000)) .. " "..name, {.1, ((random(3) + 1) * 63) / 255, .1})
           else
-            x:AddMessage("healing", name .. " +"..x:Abbrivate(random(90000)), {.1, ((random(3) + 1) * 63) / 255, .1})
+            x:AddMessage("healing", name .. " +"..x:Abbreviate(random(90000)), {.1, ((random(3) + 1) * 63) / 255, .1})
           end
         else
-          x:AddMessage("healing", "+"..x:Abbrivate(random(90000)), {.1, ((random(3) + 1) * 63) / 255, .1})
+          x:AddMessage("healing", "+"..x:Abbreviate(random(90000)), {.1, ((random(3) + 1) * 63) / 255, .1})
         end
       elseif self == x.frames["power"]  and random(4) % 4 == 0 then
         if not x.db.profile.frames["power"].enabledFrame then x:Clear("power") return end
         local _, powerToken = UnitPowerType("player")
-        x:AddMessage("power", "+"..x:Abbrivate(random(5000)).." ".._G[powerToken], { PowerBarColor[powerToken].r, PowerBarColor[powerToken].g, PowerBarColor[powerToken].b })
+        x:AddMessage("power", "+"..x:Abbreviate(random(5000)).." ".._G[powerToken], { PowerBarColor[powerToken].r, PowerBarColor[powerToken].g, PowerBarColor[powerToken].b })
       elseif self == x.frames["class"] and random(4) % 4 == 0 then
         if not x.db.profile.frames["class"].enabledFrame then x:Clear("class") return end
         if not self.testCombo then
