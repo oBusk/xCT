@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandruff @ Whisperwind-US  ]
  [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  ï¿½2012. All Rights Reserved.        ]
  [====================================]]
  
 local ADDON_NAME, addon = ...
@@ -129,6 +129,7 @@ addon.merges = {
   [88263]  = CreateMergeSpellEntry("PALADIN"),          -- Hammer of Righteous
   [101423] = CreateMergeSpellEntry("PALADIN"),          -- Seal of Righteousness
   [31935]  = CreateMergeSpellEntry("PALADIN"),          -- Avenger's Shield
+  [114919] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Damage)
 
 -- paladin (healing)
   [94289]  = CreateMergeSpellEntry("PALADIN"),          -- Protector of the Innocent
@@ -137,7 +138,9 @@ addon.merges = {
   [82327]  = CreateMergeSpellEntry("PALADIN"),          -- Holy Radiance
   [20167]  = CreateMergeSpellEntry("PALADIN"),          -- Seal of Insight (Heal)
   [121129] = CreateMergeSpellEntry("PALADIN", .5),      -- Daybreak                                   (INSTANT)
-  [119952] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light                               (Every 2s for 17.5s)
+  [119952] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Heal)                        (Every 2s for 17.5s)
+  [114163] = CreateMergeSpellEntry("PALADIN", 5),       -- Eternal Flame				      (Every 3s for 30s)
+  [86678]  = CreateMergeSpellEntry("PALADIN"),      	  -- Light of the Ancient kings
   
 -- priest (damage)
   [47666]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Damage Effect)
@@ -252,8 +255,12 @@ addon.merges = {
   [845]    = CreateMergeSpellEntry("WARRIOR", .5),      -- Cleave                                     (INSTANT)
   [46968]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Shockwave                                  (INSTANT)
   [6343]   = CreateMergeSpellEntry("WARRIOR", .5),      -- Thunder Clap                               (INSTANT)
+  [6572]   = CreateMergeSpellEntry("WARRIOR", .5),      -- Revenge                                    (INSTANT)
+  [115767] = CreateMergeSpellEntry("WARRIOR", 3),       -- Deep Wounds
   [1680]   = CreateMergeSpellEntry("WARRIOR"),          -- Whirlwind
+  [44949]  = CreateMergeSpellEntry("WARRIOR"),          -- Whirlwind Offhand
   [50622]  = CreateMergeSpellEntry("WARRIOR"),          -- Bladestorm
+  [113344] = CreateMergeSpellEntry("WARRIOR"),          -- Bloodbath
   [52174]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Heroic Leap                                (INSTANT)
   
 -- spammy items (old) ITEM CLASS CURRENTLY DOES NOTHING
