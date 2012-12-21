@@ -100,7 +100,9 @@ addon.merges = {
   [11113]  = CreateMergeSpellEntry("MAGE"),             -- Blast Wave
   [83619]  = CreateMergeSpellEntry("MAGE", .5),         -- Flame Orb                                  (INSTANT)
   [120]    = CreateMergeSpellEntry("MAGE"),             -- Cone of Cold
-
+  [114954] = CreateMergeSpellEntry("MAGE"),             -- Nether Tempest                             (Every 1s for 12s)
+  [114923] = CreateMergeSpellEntry("MAGE"),             -- Nether Tempest (50% to random player)      (Every 1s for 12s)
+  
 -- monk (damage)
   [113656] = CreateMergeSpellEntry("MONK"),             -- Fists of Fury                              (Instant w/ every 1s for 4s)
   [107270] = CreateMergeSpellEntry("MONK", 2.5),        -- Spinning Crane Kick                        (Over 2s)
