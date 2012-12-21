@@ -777,9 +777,12 @@ x.events = {
   ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); x:UpdateComboTracker() end,    -- x:UpdateComboPointOptions(true) end,
   
   ["CHAT_MSG_LOOT"] = function(msg)
+    -- Fixing bug when caging pets
+    if not msg then return end
+  
     --format_loot
     local pM,iQ,iI,iN,iA = select(3, string.find(msg, format_loot))   -- Pre-Message, ItemColor, ItemID, ItemName, ItemAmount
-    local qq,_,_,tt,st,_,_,ic = select(3, GetItemInfo(iI))             -- Item Quality, See "GetAuctionItemClasses()" For Type and Subtype, Item Icon Texture Location
+    local qq,_,_,tt,st,_,_,ic = select(3, GetItemInfo(iI))            -- Item Quality, See "GetAuctionItemClasses()" For Type and Subtype, Item Icon Texture Location
     
     -- Item filter
     local freeTicketToDisneyland = false 
