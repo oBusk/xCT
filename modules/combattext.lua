@@ -173,17 +173,30 @@ local function IsBearForm() return GetShapeshiftForm() == 1 and x.player.class =
 --[=====================================================[
  String Formatters
 --]=====================================================]
-local format_loot = "([^|]*)|cff(%x*)|H[^:]*:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
-local format_fade = "-%s"
-local format_gain = "+%s"
-local format_gain_rune = "%s +%s %s"
-local format_resist = "-%s (%s %s)"
-local format_energy = "+%s %s"
-local format_honor = sgsub(COMBAT_TEXT_HONOR_GAINED, "%%s", "+%%s")
-local format_faction_add = "%s +%s"
-local format_faction_sub = "%s %s"
-local format_crit = "%s%s%s"
-local format_dispell = "%s: %s"
+local format_loot = "([^|]*)|cff(%x*)|H([^:]*):(%d+):%d+:(%d+):[-?%d+:]+|h%[?([^%]]*)%]|h|r?%s?x?(%d*)%.?"
+local format_pet  = sformat("|cff798BDD[%s]:|r %%s (%%s)", sgsub(BATTLE_PET_CAGE_ITEM_NAME," %%s","")) -- [Caged]: Pet Name (Pet Family)
+
+local format_fade         = "-%s"
+local format_gain         = "+%s"
+local format_gain_rune    = "%s +%s %s"
+local format_resist       = "-%s (%s %s)"
+local format_energy       = "+%s %s"
+local format_honor        = sgsub(COMBAT_TEXT_HONOR_GAINED, "%%s", "+%%s")
+local format_faction_add  = "%s +%s"
+local format_faction_sub  = "%s %s"
+local format_crit         = "%s%s%s"
+local format_dispell      = "%s: %s"
+local format_quality      = "ITEM_QUALITY%s_DESC"
+
+local format_loot_icon    = "|T%s:%d:%d:0:0:64:64:5:59:5:59|t"
+local format_lewtz        = "%s%s: [%s]%s%s%%s"
+local format_lewtz_amount = "|cffFFFFFFx%s|r"
+local format_lewtz_total  = " |cffFFFF00(%s)|r"
+local format_lewtz_blind  = " (%s)"
+local format_crafted      = (LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
+local format_looted       = (LOOT_ITEM_SELF:gsub("%%.*", ""))
+local format_pushed       = (LOOT_ITEM_PUSHED_SELF:gsub("%%.*", ""))
+
 
 --[=====================================================[
  Capitalize Locals
@@ -377,13 +390,9 @@ local function LootFrame_OnUpdate(self, elapsed)
     
     -- Time to wait before showing a looted item
     if item.t > 0.5 then
-      local s = item.message
-      s = s.."  |cffFFFFFF(x"..(GetItemCount(item.id)).. ")|r"
-      x:AddMessage("loot", s, {item.r, item.g, item.b})
-      
+      x:AddMessage("loot", sformat(item.message, sformat(format_lewtz_total, GetItemCount(item.id))), {item.r, item.g, item.b})
       removeItems[i] = true
     end
-    
   end
   
   for k in pairs(removeItems) do
@@ -683,77 +692,79 @@ x.events = {
   ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); x:UpdateComboTracker() end,    -- x:UpdateComboPointOptions(true) end,
   
   ["CHAT_MSG_LOOT"] = function(msg)
-    -- Fixing bug when caging pets
-    if not msg then return end
-  
-    --format_loot
-    local pM,iQ,iI,iN,iA = select(3, string.find(msg, format_loot))   -- Pre-Message, ItemColor, ItemID, ItemName, ItemAmount
-    local qq,_,_,tt,st,_,_,ic = select(3, GetItemInfo(iI))            -- Item Quality, See "GetAuctionItemClasses()" For Type and Subtype, Item Icon Texture Location
-    
-    -- Item White-List Filter
-    local listed = false 
-    if x.db.profile.spells.items[tt] and x.db.profile.spells.items[tt][st] == true then
-      listed = true
-    end
-    
-    local item     = { }
-      item.name    = iN
-      item.id      = iI
-      item.amount  = tonumber(iA) or 1
-      item.quality = qq
-      item.type    = tt
-      item.icon    = ic
-      item.crafted = (pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
-      item.self    = (pM == LOOT_ITEM_PUSHED_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_SELF:gsub("%%.*", "") or pM == LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
-    
-    -- Only let self looted items go through the "Always Show" filter
-    if (listed and item.self) or (ShowLootItems() and item.self and item.quality >= GetLootQuality()) or (item.type == "Quest" and ShowLootQuest() and item.self) or (item.crafted and ShowLootCrafted()) then
-      local r, g, b = GetItemQualityColor(item.quality)
-      local s = item.type..": ["..item.name.."] "
+      -- Format Loot
+      local preMessage, linkColor, linkType, linkID, linkQuality, itemName, amount = select(3, string.find(msg, format_loot))
       
-      if ShowColorBlindMoney() then
-        s = item.type.." (".. _G["ITEM_QUALITY"..item.quality.."_DESC"] .."): ["..item.name.."] "
-      end
-      
-      -- Add the Texture
-      if not ShowLootIcons() then
-        s = s .. "\124T" .. item.icon .. ":" .. GetLootIconSize() .. ":" .. GetLootIconSize() .. ":0:0:64:64:5:59:5:59\124t"
-      end
-  
-      -- Amount Looted
-      s = s .. " x " .. item.amount
-  
-      -- Purchased/quest items seem to get to your bags faster than looted items
-
-      -- Total items in bag
-      if ShowTotalItems() then
-        -- queue the item to wait 1 second before showing
-        if not x.lootUpdater then
-          x.lootUpdater = CreateFrame("FRAME")
-          x.lootUpdater.isRunning = false
-          x.lootUpdater.items = { }
-        end
+      -- Check to see if this is a battle pet
+      if linkType == "battlepet" then
+        local speciesName, speciesIcon, petType = C_PetJournal.GetPetInfoBySpeciesID(linkID)
+        local petTypeName = PET_TYPE_SUFFIX[petType]
+        local message = sformat(format_pet, speciesName, petTypeName)
         
-        if not x.lootUpdater.isRunning then
-          x.lootUpdater:SetScript("OnUpdate", LootFrame_OnUpdate)
-        end
+        local r, g, b = GetItemQualityColor(linkQuality)
         
-        tinsert(x.lootUpdater.items, {
-            id = item.id,
-            message = s,
-            t = 0,
-            r = r,
-            g = g,
-            b = b,
-          })
-      else
         -- Add the message
-        x:AddMessage("loot", s, {r, g, b})
+        x:AddMessage("loot", message, { r, g, b } )
+        return
       end
+    
+      -- Check to see if this is a item
+      if linkType == "item" then
+        local crafted, looted, pushed = (preMessage == format_crafted), (preMessage == format_looted), (preMessage == format_pushed)
         
-    end
-  
-  
+        -- Item Quality, See "GetAuctionItemClasses()" For Type and Subtype, Item Icon Texture Location
+        local itemQuality, _, _, itemType, itemSubtype, _, _, itemTexture = select(3, GetItemInfo(linkID))
+        
+        -- Item White-List Filter
+        local listed = x.db.profile.spells.items[itemType] and (x.db.profile.spells.items[itemType][itemSubtype] == true)
+        
+        -- Fix the Amount of a item looted
+        amount = tonumber(amount) or 1
+        
+        -- Only let self looted items go through the "Always Show" filter
+        if (listed and looted) or (ShowLootItems() and looted and itemQuality >= GetLootQuality()) or (itemType == "Quest" and ShowLootQuest() and looted) or (crafted and ShowLootCrafted()) then
+          local r, g, b = GetItemQualityColor(itemQuality)
+          
+          local message = sformat(format_lewtz,
+              itemType,                                 -- Item Type
+              ShowColorBlindMoney()                     -- Item Quality (Color Blind)
+                and sformat(format_lewtz_blind,
+                              _G[sformat(format_quality,
+                                         itemQuality)]
+                           )
+                or "",
+              itemName,                                 -- Item Name
+              sformat(format_lewtz_amount, amount),     -- Amount Looted
+              ShowLootIcons()                           -- Icon
+                and sformat(format_loot_icon,
+                            itemTexture,
+                            GetLootIconSize(),
+                            GetLootIconSize())
+                or ""
+            )
+            
+          -- Purchased/quest items seem to get to your bags faster than looted items
+          if ShowTotalItems() then
+            if not x.lootUpdater then
+              x.lootUpdater = CreateFrame("FRAME")
+              x.lootUpdater.isRunning = false
+              x.lootUpdater.items = { }
+            end
+            
+            if not x.lootUpdater.isRunning then
+              x.lootUpdater:SetScript("OnUpdate", LootFrame_OnUpdate)
+            end
+            
+            -- Enqueue the item to wait 1 second before showing
+            tinsert(x.lootUpdater.items, { id=linkID, message=message, t=0, r=r, g=g, b=b, })
+          else
+          
+            -- Add the message
+            x:AddMessage("loot", sformat(message, ""), {r, g, b})
+          end
+        end
+      end
+    
     end,
   ["CHAT_MSG_MONEY"] = function(msg)
       local g, s, c = tonumber(msg:match(GOLD_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(SILVER_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(COPPER_AMOUNT:gsub("%%d", "(%%d+)")))
