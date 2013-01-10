@@ -243,7 +243,7 @@ addon.options.args["Credits"] = {
       type = 'description',
       order = 2,
       fontSize = "medium",
-      name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, Nidra, gnangnan, NitZo, Naughtia, Derap, sortokk, ckaotik.",
+      name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, Nidra, gnangnan, NitZo, Naughtia, Derap, sortokk, ckaotik, Cecile.",
     },
     testerTitleSpace1 = {
       type = 'description',
@@ -1843,7 +1843,14 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
+            enableOverHeal = {
+              order = 2,
+              type = 'toggle',
+              name = "Show Overheals",
+              desc = "Show the overhealing you do in your heals. Switch off to not show overheal and make healing less spamming.",
+              get = get2,
+              set = set2,
+            },
           },
         },
         

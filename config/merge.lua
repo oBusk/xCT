@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandruff @ Whisperwind-US  ]
  [  xCT+ Version 3.x.x                 ]
- [  �2012. All Rights Reserved.        ]
+ [  ©2012. All Rights Reserved.        ]
  [====================================]]
  
 local ADDON_NAME, addon = ...
@@ -141,7 +141,7 @@ addon.merges = {
   [20167]  = CreateMergeSpellEntry("PALADIN"),          -- Seal of Insight (Heal)
   [121129] = CreateMergeSpellEntry("PALADIN", .5),      -- Daybreak                                   (INSTANT)
   [119952] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Heal)                        (Every 2s for 17.5s)
-  [114163] = CreateMergeSpellEntry("PALADIN", 5),       -- Eternal Flame				      (Every 3s for 30s)
+  [114163] = CreateMergeSpellEntry("PALADIN", 5),       -- Eternal Flame				                      (Every 3s for 30s)
   [86678]  = CreateMergeSpellEntry("PALADIN"),      	  -- Light of the Ancient kings
   
 -- priest (damage)
@@ -264,6 +264,10 @@ addon.merges = {
   [50622]  = CreateMergeSpellEntry("WARRIOR"),          -- Bladestorm
   [113344] = CreateMergeSpellEntry("WARRIOR"),          -- Bloodbath
   [52174]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Heroic Leap                                (INSTANT)
+  
+  -- Merge Main/Offhand together
+  --[96103]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Raging Blow
+  --[85384]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Raging Blow (Offhand)
   
 -- spammy items (old) ITEM CLASS CURRENTLY DOES NOTHING
   [109858] = CreateMergeSpellEntry("ITEM", 2.5),        -- Speaking of Rage - proc'd by: Vishanka, Jaws of the Earth (Heroic)

@@ -260,6 +260,7 @@ addon.defaults = {
         
       -- special tweaks
         ["enableClassNames"] = true,
+        ["enableOverHeal"] = true,
       },
       
       class = {

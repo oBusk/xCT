@@ -149,6 +149,7 @@ local function ShowDispells() return x.db.profile.frames["general"].showDispells
 local function ShowPartyKill() return x.db.profile.frames["general"].showPartyKills end
 local function ShowBuffs() return x.db.profile.frames["general"].showBuffs end
 local function ShowDebuffs() return x.db.profile.frames["general"].showDebuffs end
+local function ShowOverHealing() return x.db.profile.frames["healing"].enableOverHeal end
 
 local function ShowRogueComboPoints() return x.db.profile.spells.combo["ROGUE"][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "ROGUE" end
 local function ShowFeralComboPoints() return x.db.profile.spells.combo["DRUID"][2][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "DRUID" and x.player.spec == 2 end
@@ -804,7 +805,16 @@ x.outgoing_events = {
       local merged = false
       
       -- TODO: Add Healing Filter
-
+      
+      -- Check for Overhealing
+      if not ShowOverHealing() then
+        local realamount = amount - overhealing
+        if realamount < 1 then
+          return
+        end
+        amount = realamount
+      end
+      
       -- Check for merge
       if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
         if critical and not MergeCriticalsByThemselves() or not critical then
@@ -850,6 +860,15 @@ x.outgoing_events = {
       local merged = false
       
       -- TODO: Add Healing Filter
+      
+      -- Check for Overhealing
+      if not ShowOverHealing() then
+        local realamount = amount - overhealing
+        if realamount < 1 then
+          return
+        end
+        amount = realamount
+      end
       
       -- Check for merge
       if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
