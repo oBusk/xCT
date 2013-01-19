@@ -379,9 +379,6 @@ addon.options.args["Frames"] = {
         },
       },
     },
-    
-    
-    
     frameSettings = {
       name = "Frame Settings",
       type = 'group',
@@ -429,7 +426,6 @@ addon.options.args["Frames"] = {
         
       },
     },
-    
     megaDamage = {
       name = "Damage Abbreviation Settings",
       type = 'group',
@@ -465,8 +461,6 @@ addon.options.args["Frames"] = {
         },
       },
     },
-    
-    
     miscFonts = {
       order = 6,
       type = 'group',
@@ -579,6 +573,7 @@ addon.options.args["Frames"] = {
       },
     },
 
+--[[ XCT+ The Frames: ]]
     general = {
       name = "|cffFFFFFFGeneral|r",
       type = 'group',
@@ -622,8 +617,17 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1_update,
         },
-        fonts = {
+        alpha = {
           order = 4,
+          name = "Frame Alpha",
+          desc = "Sets the alpha of the frame.",
+          type = 'range',
+          min = 0, max = 100, step = 1,
+          get = get1,
+          set = set1_update,
+        },
+        fonts = {
+          order = 10,
           type = 'group',
           guiInline = true,
           name = "Fonts",
@@ -679,7 +683,7 @@ addon.options.args["Frames"] = {
           },
         },
         fontColors = {
-          order = 5,
+          order = 20,
           type = 'group',
           guiInline = true,
           name = "Font Colors",
@@ -700,9 +704,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         scrollable = {
-          order = 6,
+          order = 30,
           type = 'group',
           guiInline = true,
           name = "Scrollable Frame",
@@ -724,9 +727,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fading = {
-          order = 7,
+          order = 40,
           type = 'group',
           guiInline = true,
           name = "Fading Text",
@@ -768,9 +770,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-
         specialTweaks = {
-          order = 8,
+          order = 50,
           type = 'group',
           guiInline = true,
           name = "Special Tweaks",
@@ -817,8 +818,6 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
-        
       },
     },
     
@@ -827,7 +826,6 @@ addon.options.args["Frames"] = {
       type = 'group',
       order = 12,
       args = {
-      
         enabledFrame = {
           order = 1,
           type = 'toggle',
@@ -835,7 +833,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         secondaryFrame = {
           type = 'select',
           order = 2,
@@ -855,7 +852,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-
         insertText = {
           type = 'select',
           order = 3,
@@ -868,9 +864,17 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1_update,
         },
-        
-        fonts = {
+        alpha = {
           order = 4,
+          name = "Frame Alpha",
+          desc = "Sets the alpha of the frame.",
+          type = 'range',
+          min = 0, max = 100, step = 1,
+          get = get1,
+          set = set1_update,
+        },
+        fonts = {
+          order = 10,
           type = 'group',
           guiInline = true,
           name = "Fonts",
@@ -929,9 +933,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fontColors = {
-          order = 5,
+          order = 20,
           type = 'group',
           guiInline = true,
           name = "Font Colors",
@@ -954,9 +957,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         icons = {
-          order = 6,
+          order = 30,
           type = 'group',
           guiInline = true,
           name = "Icons",
@@ -982,9 +984,8 @@ addon.options.args["Frames"] = {
           
           },
         },
-        
         scrollable = {
-          order = 7,
+          order = 40,
           type = 'group',
           guiInline = true,
           name = "Scrollable Frame",
@@ -1006,9 +1007,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fading = {
-          order = 8,
+          order = 50,
           type = 'group',
           guiInline = true,
           name = "Fading Text",
@@ -1050,9 +1050,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         specialTweaks = {
-          order = 9,
+          order = 60,
           type = 'group',
           guiInline = true,
           name = "Special Tweaks",
@@ -1124,7 +1123,6 @@ addon.options.args["Frames"] = {
             
           },
         },
-        
       },
     },
     
@@ -1140,7 +1138,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         secondaryFrame = {
           type = 'select',
           order = 2,
@@ -1160,7 +1157,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         insertText = {
           type = 'select',
           order = 3,
@@ -1173,9 +1169,17 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1_update,
         },
-        
-        fonts = {
+        alpha = {
           order = 4,
+          name = "Frame Alpha",
+          desc = "Sets the alpha of the frame.",
+          type = 'range',
+          min = 0, max = 100, step = 1,
+          get = get1,
+          set = set1_update,
+        },
+        fonts = {
+          order = 10,
           type = 'group',
           guiInline = true,
           name = "Fonts",
@@ -1234,9 +1238,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fontColors = {
-          order = 5,
+          order = 20,
           type = 'group',
           guiInline = true,
           name = "Font Colors",
@@ -1262,12 +1265,11 @@ addon.options.args["Frames"] = {
         
         -- TODO: Move Crits Appearance somewhere else, because other frames use it too
         criticalAppearance = {
-          order = 6,
+          order = 30,
           type = 'group',
           guiInline = true,
           name = "Critical Appearance",
           args = {
-          
             critPrefix = {
               order = 1,
               type = 'input',
@@ -1276,7 +1278,6 @@ addon.options.args["Frames"] = {
               get = getTextIn2,
               set = setTextIn2,
             },
-            
             critPostfix = {
               order = 2,
               type = 'input',
@@ -1285,12 +1286,10 @@ addon.options.args["Frames"] = {
               get = getTextIn2,
               set = setTextIn2,
             },
-            
           },
         },
-        
         icons = {
-          order = 7,
+          order = 40,
           type = 'group',
           guiInline = true,
           name = "Icons",
@@ -1303,7 +1302,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-          
             iconsSize = {
               order = 2,
               name = "Icon Size",
@@ -1313,12 +1311,10 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-          
           },
         },
-        
         scrollable = {
-          order = 8,
+          order = 50,
           type = 'group',
           guiInline = true,
           name = "Scrollable Frame",
@@ -1340,9 +1336,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fading = {
-          order = 9,
+          order = 60,
           type = 'group',
           guiInline = true,
           name = "Fading Text",
@@ -1384,9 +1379,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         specialTweaks = {
-          order = 10,
+          order = 70,
           type = 'group',
           guiInline = true,
           name = "Special Tweaks",
@@ -1421,7 +1415,6 @@ addon.options.args["Frames"] = {
             
           },
         },
-
       },
     },
     
@@ -1437,7 +1430,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         secondaryFrame = {
           type = 'select',
           order = 2,
@@ -1457,7 +1449,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         insertText = {
           type = 'select',
           order = 3,
@@ -1470,14 +1461,21 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1_update,
         },
-        
-        fonts = {
+        alpha = {
           order = 4,
+          name = "Frame Alpha",
+          desc = "Sets the alpha of the frame.",
+          type = 'range',
+          min = 0, max = 100, step = 1,
+          get = get1,
+          set = set1_update,
+        },
+        fonts = {
+          order = 10,
           type = 'group',
           guiInline = true,
           name = "Fonts",
           args = {
-          
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -1487,7 +1485,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontSize = {
               order = 2,
               name = "Font Size",
@@ -1497,7 +1494,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontOutline = {
               type = 'select',
               order = 3,
@@ -1515,7 +1511,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontJustify = {
               type = 'select',
               order = 4,
@@ -1531,14 +1526,12 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fontColors = {
-          order = 5,
+          order = 20,
           type = 'group',
           guiInline = true,
           name = "Font Colors",
           args = {
-          
             customColor = {
               order = 1,
               type = 'toggle',
@@ -1546,7 +1539,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
             fontColor = {
               type = 'color',
               name = "Custom Color",
@@ -1556,9 +1548,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         scrollable = {
-          order = 6,
+          order = 30,
           type = 'group',
           guiInline = true,
           name = "Scrollable Frame",
@@ -1580,9 +1571,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fading = {
-          order = 7,
+          order = 40,
           type = 'group',
           guiInline = true,
           name = "Fading Text",
@@ -1624,7 +1614,6 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
       },
     },
     
@@ -1640,7 +1629,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         secondaryFrame = {
           type = 'select',
           order = 2,
@@ -1660,7 +1648,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         insertText = {
           type = 'select',
           order = 3,
@@ -1673,9 +1660,17 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1_update,
         },
-        
-        fonts = {
+        alpha = {
           order = 4,
+          name = "Frame Alpha",
+          desc = "Sets the alpha of the frame.",
+          type = 'range',
+          min = 0, max = 100, step = 1,
+          get = get1,
+          set = set1_update,
+        },
+        fonts = {
+          order = 10,
           type = 'group',
           guiInline = true,
           name = "Fonts",
@@ -1734,14 +1729,12 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fontColors = {
-          order = 5,
+          order = 20,
           type = 'group',
           guiInline = true,
           name = "Font Colors",
           args = {
-          
             customColor = {
               order = 1,
               type = 'toggle',
@@ -1749,7 +1742,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
             fontColor = {
               type = 'color',
               name = "Custom Color",
@@ -1759,9 +1751,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         scrollable = {
-          order = 6,
+          order = 30,
           type = 'group',
           guiInline = true,
           name = "Scrollable Frame",
@@ -1783,9 +1774,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fading = {
-          order = 7,
+          order = 40,
           type = 'group',
           guiInline = true,
           name = "Fading Text",
@@ -1827,9 +1817,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         specialTweaks = {
-          order = 8,
+          order = 50,
           type = 'group',
           guiInline = true,
           name = "Special Tweaks",
@@ -1853,7 +1842,6 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
       },
     },
     
@@ -1869,21 +1857,27 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         secondaryFrame = {
           type = 'description',
           order = 2,
           name = "|cffFF0000Secondary Frame Not Available|r - |cffFFFFFFThis frame cannot output to another frame when it is disabled.",
           width = "double",
         },
-        
-        fonts = {
+        alpha = {
           order = 3,
+          name = "Frame Alpha",
+          desc = "Sets the alpha of the frame.",
+          type = 'range',
+          min = 0, max = 100, step = 1,
+          get = get1,
+          set = set1_update,
+        },
+        fonts = {
+          order = 10,
           type = 'group',
           guiInline = true,
           name = "Fonts",
           args = {
-          
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -1893,7 +1887,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontSize = {
               order = 2,
               name = "Font Size",
@@ -1903,7 +1896,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontOutline = {
               type = 'select',
               order = 3,
@@ -1921,17 +1913,14 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
           },
         },
-        
         fontColors = {
-          order = 4,
+          order = 20,
           type = 'group',
           guiInline = true,
           name = "Font Colors",
           args = {
-          
             customColor = {
               order = 1,
               type = 'toggle',
@@ -1939,7 +1928,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
             fontColor = {
               type = 'color',
               name = "Custom Color",
@@ -1949,7 +1937,6 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
       },
     },
     
@@ -1965,7 +1952,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         secondaryFrame = {
           type = 'select',
           order = 2,
@@ -1985,7 +1971,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         insertText = {
           type = 'select',
           order = 3,
@@ -1998,14 +1983,21 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1_update,
         },
-        
-        fonts = {
+        alpha = {
           order = 4,
+          name = "Frame Alpha",
+          desc = "Sets the alpha of the frame.",
+          type = 'range',
+          min = 0, max = 100, step = 1,
+          get = get1,
+          set = set1_update,
+        },
+        fonts = {
+          order = 10,
           type = 'group',
           guiInline = true,
           name = "Fonts",
           args = {
-          
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -2015,7 +2007,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontSize = {
               order = 2,
               name = "Font Size",
@@ -2025,7 +2016,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontOutline = {
               type = 'select',
               order = 3,
@@ -2043,7 +2033,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontJustify = {
               type = 'select',
               order = 4,
@@ -2059,14 +2048,12 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fontColors = {
-          order = 5,
+          order = 20,
           type = 'group',
           guiInline = true,
           name = "Font Colors",
           args = {
-          
             customColor = {
               order = 1,
               type = 'toggle',
@@ -2074,7 +2061,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
             fontColor = {
               type = 'color',
               name = "Custom Color",
@@ -2084,9 +2070,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         scrollable = {
-          order = 6,
+          order = 30,
           type = 'group',
           guiInline = true,
           name = "Scrollable Frame",
@@ -2108,9 +2093,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fading = {
-          order = 7,
+          order = 40,
           type = 'group',
           guiInline = true,
           name = "Fading Text",
@@ -2152,7 +2136,6 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
       },
     },
     
@@ -2168,7 +2151,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         secondaryFrame = {
           type = 'select',
           order = 2,
@@ -2188,7 +2170,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         insertText = {
           type = 'select',
           order = 3,
@@ -2201,14 +2182,21 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1_update,
         },
-        
-        fonts = {
+        alpha = {
           order = 4,
+          name = "Frame Alpha",
+          desc = "Sets the alpha of the frame.",
+          type = 'range',
+          min = 0, max = 100, step = 1,
+          get = get1,
+          set = set1_update,
+        },
+        fonts = {
+          order = 10,
           type = 'group',
           guiInline = true,
           name = "Fonts",
           args = {
-          
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -2218,7 +2206,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontSize = {
               order = 2,
               name = "Font Size",
@@ -2228,7 +2215,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontOutline = {
               type = 'select',
               order = 3,
@@ -2246,7 +2232,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontJustify = {
               type = 'select',
               order = 4,
@@ -2262,14 +2247,12 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fontColors = {
-          order = 5,
+          order = 20,
           type = 'group',
           guiInline = true,
           name = "Font Colors",
           args = {
-          
             customColor = {
               order = 1,
               type = 'toggle',
@@ -2277,7 +2260,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
             fontColor = {
               type = 'color',
               name = "Custom Color",
@@ -2287,9 +2269,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         scrollable = {
-          order = 6,
+          order = 30,
           type = 'group',
           guiInline = true,
           name = "Scrollable Frame",
@@ -2311,9 +2292,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fading = {
-          order = 7,
+          order = 40,
           type = 'group',
           guiInline = true,
           name = "Fading Text",
@@ -2355,7 +2335,6 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
       },
     },
     
@@ -2364,7 +2343,6 @@ addon.options.args["Frames"] = {
       type = 'group',
       order = 19,
       args = {
-        
         enabledFrame = {
           order = 1,
           type = 'toggle',
@@ -2372,7 +2350,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-        
         secondaryFrame = {
           type = 'select',
           order = 2,
@@ -2392,7 +2369,6 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1,
         },
-
         insertText = {
           type = 'select',
           order = 3,
@@ -2405,14 +2381,21 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1_update,
         },
-        
-        fonts = {
+        alpha = {
           order = 4,
+          name = "Frame Alpha",
+          desc = "Sets the alpha of the frame.",
+          type = 'range',
+          min = 0, max = 100, step = 1,
+          get = get1,
+          set = set1_update,
+        },
+        fonts = {
+          order = 10,
           type = 'group',
           guiInline = true,
           name = "Fonts",
           args = {
-          
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -2422,7 +2405,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontSize = {
               order = 2,
               name = "Font Size",
@@ -2432,7 +2414,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontOutline = {
               type = 'select',
               order = 3,
@@ -2450,7 +2431,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontJustify = {
               type = 'select',
               order = 4,
@@ -2466,14 +2446,12 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fontColors = {
-          order = 5,
+          order = 20,
           type = 'group',
           guiInline = true,
           name = "Font Colors",
           args = {
-          
             customColor = {
               order = 1,
               type = 'toggle',
@@ -2481,7 +2459,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
             fontColor = {
               type = 'color',
               name = "Custom Color",
@@ -2491,9 +2468,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         icons = {
-          order = 6,
+          order = 30,
           type = 'group',
           guiInline = true,
           name = "Icons",
@@ -2506,7 +2482,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-          
             iconsSize = {
               order = 2,
               name = "Icon Size",
@@ -2516,12 +2491,10 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-          
           },
         },
-        
         scrollable = {
-          order = 7,
+          order = 40,
           type = 'group',
           guiInline = true,
           name = "Scrollable Frame",
@@ -2543,9 +2516,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         fading = {
-          order = 8,
+          order = 50,
           type = 'group',
           guiInline = true,
           name = "Fading Text",
@@ -2587,9 +2559,8 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         specialTweaks = {
-          order = 9,
+          order = 60,
           type = 'group',
           guiInline = true,
           name = "Special Tweaks",

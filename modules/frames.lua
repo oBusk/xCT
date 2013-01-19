@@ -116,6 +116,9 @@ function x:UpdateFrames(specificFrame)
       f:SetPoint("CENTER", settings.X, settings.Y)
       f:SetClampRectInsets(0, 0, settings.fontSize, 0)
 
+      -- Frame Alpha
+      f:SetAlpha(settings.alpha / 100)
+      
       -- Insert Direction
       if settings.insertText then
         f:SetInsertMode(settings.insertText)

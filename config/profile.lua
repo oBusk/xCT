@@ -69,6 +69,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
         
       -- position
         ["X"] = 0,
@@ -108,6 +109,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
         
       -- position
         ["X"] = 448,
@@ -154,6 +156,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
       
       -- position
         ["X"] = 256,
@@ -199,6 +202,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "top",
+        ["alpha"] = 100,
         
       -- position
         ["X"] = -448,
@@ -231,6 +235,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
       
       -- positioon
         ["X"] = -320,
@@ -265,6 +270,7 @@ addon.defaults = {
       
       class = {
         ["enabledFrame"] = true,
+        ["alpha"] = 100,
         
       -- position
         ["X"] = 0,
@@ -286,6 +292,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
+        ["alpha"] = 100,
         
       -- position
         ["X"] = 0,
@@ -318,6 +325,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "top",
+        ["alpha"] = 100,
         
       -- position
         ["X"] = -256,
@@ -350,6 +358,7 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "top",
+        ["alpha"] = 100,
         
       -- position 
         ["X"] = 0,
@@ -485,7 +494,9 @@ addon.defaults = {
         },
 
         ["SHAMAN"] = {
-          [1] = { },    -- Elemental
+          [1] = {                                         -- Elemental
+            CreateComboSpellEntry(true, 88767),           --   Fulmination
+          },    
           [2] = {                                         -- Enhancement
             CreateComboSpellEntry(true, 53817),           --   Maelstrom Weapon
           },
