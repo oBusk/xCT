@@ -190,10 +190,10 @@ local format_dispell      = "%s: %s"
 local format_quality      = "ITEM_QUALITY%s_DESC"
 
 local format_loot_icon    = "|T%s:%d:%d:0:0:64:64:5:59:5:59|t"
-local format_lewtz        = "%s%s: [%s]%s%s%%s"
+local format_lewtz        = "%s%s: %s [%s]%s%%s"
 local format_lewtz_amount = "|cffFFFFFFx%s|r"
 local format_lewtz_total  = " |cffFFFF00(%s)|r"
-local format_lewtz_blind  = " (%s)"
+local format_lewtz_blind  = "(%s)"
 local format_crafted      = (LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
 local format_looted       = (LOOT_ITEM_SELF:gsub("%%.*", ""))
 local format_pushed       = (LOOT_ITEM_PUSHED_SELF:gsub("%%.*", ""))
@@ -398,6 +398,18 @@ local function LootFrame_OnUpdate(self, elapsed)
   
   for k in pairs(removeItems) do
     self.items[k] = nil
+  end
+  
+  if #removeItems > 1 then
+    local index, newList = 1, { }
+    
+    -- Rebalance the Lua list
+    for _, v in pairs(self.items) do
+      newList[index] = v
+      index = index + 1
+    end
+    
+    self.items = newList
   end
   
   if #self.items < 1 then
@@ -725,7 +737,7 @@ x.events = {
         -- Only let self looted items go through the "Always Show" filter
         if (listed and looted) or (ShowLootItems() and looted and itemQuality >= GetLootQuality()) or (itemType == "Quest" and ShowLootQuest() and looted) or (crafted and ShowLootCrafted()) then
           local r, g, b = GetItemQualityColor(itemQuality)
-          
+          -- "%s%s: %s [%s]%s %%s"
           local message = sformat(format_lewtz,
               itemType,                                 -- Item Type
               ShowColorBlindMoney()                     -- Item Quality (Color Blind)
@@ -734,14 +746,14 @@ x.events = {
                                          itemQuality)]
                            )
                 or "",
-              itemName,                                 -- Item Name
-              sformat(format_lewtz_amount, amount),     -- Amount Looted
               ShowLootIcons()                           -- Icon
                 and sformat(format_loot_icon,
                             itemTexture,
                             GetLootIconSize(),
                             GetLootIconSize())
-                or ""
+                or "",
+              itemName,                                 -- Item Name
+              sformat(format_lewtz_amount, amount)      -- Amount Looted
             )
             
           -- Purchased/quest items seem to get to your bags faster than looted items
