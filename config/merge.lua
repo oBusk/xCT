@@ -125,6 +125,7 @@ addon.merges = {
   [128591] = CreateMergeSpellEntry("MONK", 3),          -- Blackout Kick (Heal??)
   
 -- paladin (damage)
+  [122032] = CreateMergeSpellEntry("PALADIN"),          -- Glyph of Mass Exorcism
   [96172]  = CreateMergeSpellEntry("PALADIN"),          -- Mastery: Hand of Light
   [81297]  = CreateMergeSpellEntry("PALADIN"),          -- Consecration
   [53385]  = CreateMergeSpellEntry("PALADIN"),          -- Divine Storm
