@@ -146,15 +146,29 @@ addon.options.args["spells"] = {
       guiInline = true,
       order = 11,
       args = {
-      
         listSpacer0 = {
           type = "description",
-          order = 0,
-          name = "|cff798BDDMerge Auto-Attack Options|r:",
+          order = 1,
+          name = "|cff798BDDMerge Incoming Healing Options|r:",
+        },
+      
+        mergeHealing = {
+          order = 2,
+          type = 'toggle',
+          name = "Merge Healing by Name",
+          desc = "Merges incoming healing by the name of the person that healed you.",
+          get = get0_1,
+          set = set0_1,
+        },
+      
+        listSpacer1 = {
+          type = "description",
+          order = 10,
+          name = "\n|cff798BDDMerge Auto-Attack Options|r:",
         },
       
         mergeSwings = {
-          order = 1,
+          order = 11,
           type = 'toggle',
           name = "Merge Melee Swings",
           desc = "|cffFF0000ID|r 6603 |cff798BDD(Player Melee)|r\n|cffFF0000ID|r 0 |cff798BDD(Pet Melee)|r",
@@ -163,7 +177,7 @@ addon.options.args["spells"] = {
         },
         
         mergeRanged = {
-          order = 2,
+          order = 12,
           type = 'toggle',
           name = "Merge Ranged Attacks",
           desc = "|cffFF0000ID|r 75",
@@ -171,14 +185,14 @@ addon.options.args["spells"] = {
           set = set0_1,
         },
         
-        listSpacer1 = {
+        listSpacer2 = {
           type = "description",
-          order = 3,
+          order = 20,
           name = "\n|cff798BDDMerge Critical Hit Options|r (Choose one):",
         },
         
         mergeDontMergeCriticals = {
-          order = 4,
+          order = 21,
           type = 'toggle',
           name = "Don't Merge Crits",
           desc = "Crits will not get merged in the critical frame, but they will be included in the outgoing total. |cffFFFF00(Default)|r",
@@ -187,7 +201,7 @@ addon.options.args["spells"] = {
         },
         
         mergeCriticalsWithOutgoing = {
-          order = 5,
+          order = 22,
           type = 'toggle',
           name = "Merge Crits with Outgoing",
           desc = "Crits will be merged, but the total merged amount in the outgoing frame includes crits.",
@@ -196,7 +210,7 @@ addon.options.args["spells"] = {
         },
         
         mergeCriticalsByThemselves = {
-          order = 6,
+          order = 23,
           type = 'toggle',
           name = "Merge Crits by Themselves",
           desc = "Crits will be merged and the total merged amount in the outgoing frame |cffFF0000DOES NOT|r include crits.",
@@ -1826,14 +1840,21 @@ addon.options.args["Frames"] = {
             enableClassNames = {
               order = 1,
               type = 'toggle',
-              name = "Color Class Names",
+              name = "Class Color Names",
               desc = "Color healer names by class. \n\n|cffFF0000Requires:|r Healer in |cffAAAAFFParty|r or |cffFF8000Raid|r",
-              width="double",
+              get = get2,
+              set = set2,
+            },
+            enableRealmNames = {
+              order = 2,
+              type = 'toggle',
+              name = "Show Realm Names",
+              desc = "Show incoming healer names with their realm name.",
               get = get2,
               set = set2,
             },
             enableOverHeal = {
-              order = 2,
+              order = 3,
               type = 'toggle',
               name = "Show Overheals",
               desc = "Show the overhealing you do in your heals. Switch off to not show overheal and make healing less spamming.",

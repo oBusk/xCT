@@ -265,6 +265,7 @@ addon.defaults = {
         
       -- special tweaks
         ["enableClassNames"] = true,
+        ["enableRealmNames"] = true,
         ["enableOverHeal"] = true,
       },
       
@@ -404,6 +405,8 @@ addon.defaults = {
     spells = {
       enableMerger = true,        -- enable/disable spam merger
       enableMergerDebug = false,  -- Shows spell IDs for debugging merged spells
+      
+      mergeHealing = true,
       
       mergeSwings = true,
       mergeRanged = true,

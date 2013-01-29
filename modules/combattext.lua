@@ -124,6 +124,7 @@ local function ShowLowResources() return COMBAT_TEXT_SHOW_LOW_HEALTH_MANA == "1"
 local function ShowCombatState() return COMBAT_TEXT_SHOW_COMBAT_STATE == "1" end
 local function ShowFriendlyNames() return COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" end
 local function ShowColoredFriendlyNames() return x.db.profile.frames["healing"].enableClassNames end
+local function ShowHealingRealmNames() return x.db.profile.frames["healing"].enableRealmNames end
 local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg end
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
@@ -163,6 +164,7 @@ local function ShowWarlockBurningEmbers() return x.db.profile.spells.combo["WARL
 local function ClearWhenLeavingCombat() return x.db.profile.frameSettings.clearLeavingCombat end
 local function ShowAbbreviatedDamage() return x.db.profile.megaDamage.enableMegaDamage end
 
+local function MergeIncomingHealing() return x.db.profile.spells.mergeHealing end
 local function MergeMeleeSwings() return x.db.profile.spells.mergeSwings end
 local function MergeRangedAttacks() return x.db.profile.spells.mergeRanged end
 local function MergeCriticalsWithOutgoing() return x.db.profile.spells.mergeCriticalsWithOutgoing end
@@ -188,6 +190,7 @@ local format_faction_sub  = "%s %s"
 local format_crit         = "%s%s%s"
 local format_dispell      = "%s: %s"
 local format_quality      = "ITEM_QUALITY%s_DESC"
+local format_remove_realm = "(%w+)-%w+"
 
 local format_loot_icon    = "|T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_lewtz        = "%s%s: %s [%s]%s%%s"
@@ -439,60 +442,84 @@ x.combat_events = {
   ["HEAL"] = function(healer_name, amount)
       local message = sformat(format_gain, x:Abbreviate(amount))
       
-      if ShowFriendlyNames() and healer_name then
-        if ShowColoredFriendlyNames() then
-          local _, class = UnitClass(healer_name)
-          if (class) then
-            healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+      if not ShowHealingRealmNames() then
+        healer_name = string.match(healer_name, format_remove_realm) or healer_name
+      end
+      
+      if MergeIncomingHealing() then
+        x:AddSpamMessage("healing", healer_name, amount, "heal", 5)
+      else
+        if ShowFriendlyNames() and healer_name then
+          if ShowColoredFriendlyNames() then
+            local _, class = UnitClass(healer_name)
+            if (class) then
+              healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+            end
+          end
+        
+          if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+            message = message .. " " .. healer_name
+          else
+            message = healer_name .. " " .. message
           end
         end
-      
-        if x.db.profile.frames["healing"].fontJustify == "LEFT" then
-          message = message .. " " .. healer_name
-        else
-          message = healer_name .. " " .. message
-        end
+        x:AddMessage("healing", message, "heal")
       end
-      x:AddMessage("healing", message, "heal")
     end,
   ["HEAL_CRIT"] = function(healer_name, amount)
       local message = sformat(format_gain, x:Abbreviate(amount))
       
-      if ShowFriendlyNames() and healer_name then
-        if ShowColoredFriendlyNames() then
-          local _, class = UnitClass(healer_name)
-          if (class) then
-            healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+      if not ShowHealingRealmNames() then
+        healer_name = string.match(healer_name, format_remove_realm) or healer_name
+      end
+      
+      if MergeIncomingHealing() then
+        x:AddSpamMessage("healing", healer_name, amount, "heal", 5)
+      else
+        if ShowFriendlyNames() and healer_name then
+          if ShowColoredFriendlyNames() then
+            local _, class = UnitClass(healer_name)
+            if (class) then
+              healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+            end
+          end
+        
+          if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+            message = message .. " " .. healer_name
+          else
+            message = healer_name .. " " .. message
           end
         end
-      
-        if x.db.profile.frames["healing"].fontJustify == "LEFT" then
-          message = message .. " " .. healer_name
-        else
-          message = healer_name .. " " .. message
-        end
+        x:AddMessage("healing", message, "heal_crit")
       end
-      x:AddMessage("healing", message, "heal_crit")
     end,
   ["PERIODIC_HEAL"] = function(healer_name, amount)
       local message = sformat(format_gain, x:Abbreviate(amount))
       
-      if ShowFriendlyNames() and healer_name then
-        if ShowColoredFriendlyNames() then
-          local _, class = UnitClass(healer_name)
-          if (class) then
-            healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
-          end
-        end
-      
-        if x.db.profile.frames["healing"].fontJustify == "LEFT" then
-          message = message .. " " .. healer_name
-        else
-          message = healer_name .. " " .. message
-        end
+      if not ShowHealingRealmNames() then
+        healer_name = string.match(healer_name, format_remove_realm) or healer_name
       end
       
-      x:AddMessage("healing", message, "heal_peri")
+      if MergeIncomingHealing() then
+        x:AddSpamMessage("healing", healer_name, amount, "heal", 5)
+      else
+        if ShowFriendlyNames() and healer_name then
+          if ShowColoredFriendlyNames() then
+            local _, class = UnitClass(healer_name)
+            if (class) then
+              healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+            end
+          end
+        
+          if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+            message = message .. " " .. healer_name
+          else
+            message = healer_name .. " " .. message
+          end
+        end
+        
+        x:AddMessage("healing", message, "heal_peri")
+      end
     end,
   
   -- TODO: Add filter?

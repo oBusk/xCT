@@ -429,14 +429,32 @@ do
         end
       end
       
+      local format_mergeCount = "%s |cffFFFFFFx%s|r"
+      
       -- Add critical Prefix and Postfix
       if frameIndex[index] == "critical" then
         message = format("%s%s%s", x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
+      
+      -- Show healer name (colored)
+      elseif frameIndex[index] == "healing" then
+        format_mergeCount = "%s |cffFFFF00x%s|r"
+        if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
+          local healerName = stack[idIndex]
+          if x.db.profile.frames["healing"].enableClassNames then
+            local _, class = UnitClass(healerName)
+            if (class) then
+              healerName = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healerName)
+            end
+          end
+          message = sformat("+%s %s", message, healerName)
+        else
+          message = sformat("+%s", message)
+        end
       end
       
       -- Add merge count
       if #item.entries > 1 then
-        message = message .. " |cffFFFFFFx" .. #item.entries .. "|r"
+        message = sformat(format_mergeCount, message, #item.entries)
       end
       
       -- Add Icons
