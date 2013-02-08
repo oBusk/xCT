@@ -103,6 +103,10 @@ addon.defaults = {
         ["showPartyKills"] = true,
         ["showBuffs"] = true,
         ["showDebuffs"] = true,
+        ["showLowManaHealth"] = true,
+        ["showCombatState"] = true,
+        ["showRepChanges"] = true,
+        ["showHonorGains"] = true,
       },
       
       outgoing = {
@@ -206,7 +210,7 @@ addon.defaults = {
         
       -- position
         ["X"] = -448,
-        ["Y"] = -88, -- -80,
+        ["Y"] = -88,
         ["Width"] = 128,
         ["Height"] = 144,
         
@@ -229,6 +233,10 @@ addon.defaults = {
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
+      
+      -- Special Tweaks
+        ["showDodgeParryMiss"] = true,
+        ["showDamageReduction"] = true,
       },
 
       healing = {
@@ -264,6 +272,7 @@ addon.defaults = {
         ["visibilityTime"] = 5,
         
       -- special tweaks
+        ["showFriendlyHealers"] = true,
         ["enableClassNames"] = true,
         ["enableRealmNames"] = true,
         ["enableOverHeal"] = true,
@@ -320,6 +329,10 @@ addon.defaults = {
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
+        
+      -- special tweaks
+        ["showEnergyGains"] = true,
+        ["showPeriodicEnergyGains"] = true,
       },
       
       procs = {

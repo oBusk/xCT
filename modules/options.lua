@@ -67,20 +67,113 @@ addon.options = {
   },
 }
 
+-- A fast C-Var Update routine
+local function cvar_udpate()
+  -- Always have Combat Text Enabled
+  SetCVar("enableCombatText", 1)
+  
+  -- We dont care about "combatTextFloatMode"
+  
+  -- Check: fctLowManaHealth (General Option)
+  if x.db.profile.frames.general.showLowManaHealth then
+    SetCVar("fctLowManaHealth", 1)
+  else
+    SetCVar("fctLowManaHealth", 0)
+  end
+  
+  -- Check: fctAuras (General Option)
+  if x.db.profile.frames.general.showBuffs or x.db.profile.frames.general.showDebuffs then
+    SetCVar("fctAuras", 1)
+  else
+    SetCVar("fctAuras", 0)
+  end
+  
+  -- Check: fctCombatState (General Option)
+  if x.db.profile.frames.general.showCombatState then
+    SetCVar("fctCombatState", 1)
+  else
+    SetCVar("fctCombatState", 0)
+  end
+  
+  -- Check: fctDodgeParryMiss (Damage Option)
+  if x.db.profile.frames.damage.showDodgeParryMiss then
+    SetCVar("fctDodgeParryMiss", 1)
+  else
+    SetCVar("fctDodgeParryMiss", 0)
+  end
+  
+  -- Check: fctDamageReduction (Damage Option)
+  if x.db.profile.frames.damage.showDamageReduction then
+    SetCVar("fctDamageReduction", 1)
+  else
+    SetCVar("fctDamageReduction", 0)
+  end
+  
+  -- Check: fctRepChanges (General Option)
+  if x.db.profile.frames.general.showRepChanges then
+    SetCVar("fctRepChanges", 1)
+  else
+    SetCVar("fctRepChanges", 0)
+  end
+  
+  -- Check: fctHonorGains (General Option)
+  if x.db.profile.frames.damage.showHonorGains then
+    SetCVar("fctHonorGains", 1)
+  else
+    SetCVar("fctHonorGains", 0)
+  end
+  
+  -- Check: fctReactives (Attach to Procs Frame)
+  if x.db.profile.frames.procs.enabledFrame then
+    SetCVar("fctReactives", 1)
+  else
+    SetCVar("fctReactives", 0)
+  end
+  
+  -- Check: fctFriendlyHealers (Healing Option)
+  if x.db.profile.frames.healing.showFriendlyHealers then
+    SetCVar("fctFriendlyHealers", 1)
+  else
+    SetCVar("fctFriendlyHealers", 0)
+  end
+  
+  -- Check: fctComboPoints (COMBO Option)
+  if x.player.class == "ROGUE" and x.db.profile.frames.combo.enabledFrame then
+    SetCVar("fctComboPoints", 1)
+  else
+    SetCVar("fctComboPoints", 0)
+  end
+  
+  -- Check: fctEnergyGains (Power Option)
+  if x.db.profile.frames.power.showEnergyGains then
+    SetCVar("fctEnergyGains", 1)
+  else
+    SetCVar("fctEnergyGains", 0)
+  end
+  
+  -- Check: fctPeriodicEnergyGains (Power Option)
+  if x.db.profile.frames.power.showPeriodicEnergyGains then
+    SetCVar("fctPeriodicEnergyGains", 1)
+  else
+    SetCVar("fctPeriodicEnergyGains", 0)
+  end
+  
+end
+
 -- Generic Get/Set methods
 local function get0(info) return x.db.profile[info[#info-1]][info[#info]] end
-local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = value end
-local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames() end
+local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = value; cvar_udpate() end
+local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames(); cvar_udpate() end
 local function get0_1(info) return x.db.profile[info[#info-2]][info[#info]] end
-local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value end
+local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value; cvar_udpate() end
 local function getTextIn0(info) return string_gsub(x.db.profile[info[#info-1]][info[#info]], "|", "||") end
-local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|") end
+local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|"); cvar_udpate() end
 local function get1(info) return x.db.profile.frames[info[#info-1]][info[#info]] end
-local function set1(info, value) x.db.profile.frames[info[#info-1]][info[#info]] = value end
-local function set1_update(info, value) set1(info, value); x:UpdateFrames(info[#info-1]) end
+local function set1(info, value) x.db.profile.frames[info[#info-1]][info[#info]] = value; cvar_udpate() end
+local function set1_update(info, value) set1(info, value); x:UpdateFrames(info[#info-1]); cvar_udpate() end
 local function get2(info) return x.db.profile.frames[info[#info-2]][info[#info]] end
-local function set2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = value end
-local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#info-2]) end
+local function set2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = value; cvar_udpate() end
+local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); cvar_udpate() end
 local function getColor2(info) return unpack(x.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end
 local function setColor2(info, r, g, b) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end
 local function getTextIn2(info) return string_gsub(x.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end
@@ -827,6 +920,38 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Debuff Gains/Fades",
               desc = "Display the names of harmful auras |cffFF0000(Debuffs)|r that you gain and lose.",
+              get = get2,
+              set = set2,
+            },
+            showLowManaHealth = {
+              order = 6,
+              type = 'toggle',
+              name = "Low Mana/Health",
+              desc = "Displays 'Low Health/Mana' when your health/mana reaches the low threshold.",
+              get = get2,
+              set = set2,
+            },
+            showCombatState = {
+              order = 7,
+              type = 'toggle',
+              name = "Leave/Enter Combat",
+              desc = "Displays when the player is leaving or entering combat.",
+              get = get2,
+              set = set2,
+            },
+            showRepChanges = {
+              order = 8,
+              type = 'toggle',
+              name = "Show Reputation",
+              desc = "Displays your player's reputation gains and losses.",
+              get = get2,
+              set = set2,
+            },
+            showHonorGains = {
+              order = 9,
+              type = 'toggle',
+              name = "Show Honor",
+              desc = "Displays your player's honor gains.",
               get = get2,
               set = set2,
             },
@@ -1628,6 +1753,30 @@ addon.options.args["Frames"] = {
             },
           },
         },
+        specialTweaks = {
+          order = 50,
+          type = 'group',
+          guiInline = true,
+          name = "Special Tweaks",
+          args = {
+            showDodgeParryMiss = {
+              order = 1,
+              type = 'toggle',
+              name = "Show Miss Types",
+              desc = "Displays Dodge, Parry, or Miss when you miss incoming damage.",
+              get = get2,
+              set = set2,
+            },
+            showDamageReduction = {
+              order = 2,
+              type = 'toggle',
+              name = "Show Reductions",
+              desc = "Formats incoming damage to show how much was absorbed.",
+              get = get2,
+              set = set2,
+            },
+          },
+        },
       },
     },
     
@@ -1837,8 +1986,16 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Special Tweaks",
           args = {
-            enableClassNames = {
+            showFriendlyHealers = {
               order = 1,
+              type = 'toggle',
+              name = "Show Names",
+              desc = "Shows the healer names next to incoming heals.",
+              get = get2,
+              set = set2,
+            },
+            enableClassNames = {
+              order = 2,
               type = 'toggle',
               name = "Class Color Names",
               desc = "Color healer names by class. \n\n|cffFF0000Requires:|r Healer in |cffAAAAFFParty|r or |cffFF8000Raid|r",
@@ -1846,7 +2003,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableRealmNames = {
-              order = 2,
+              order = 3,
               type = 'toggle',
               name = "Show Realm Names",
               desc = "Show incoming healer names with their realm name.",
@@ -1854,7 +2011,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableOverHeal = {
-              order = 3,
+              order = 4,
               type = 'toggle',
               name = "Show Overheals",
               desc = "Show the overhealing you do in your heals. Switch off to not show overheal and make healing less spamming.",
@@ -2154,6 +2311,31 @@ addon.options.args["Frames"] = {
               min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
+            },
+          },
+        },
+        specialTweaks = {
+          order = 50,
+          type = 'group',
+          guiInline = true,
+          name = "Special Tweaks",
+          args = {
+            showEnergyGains = {
+              order = 1,
+              type = 'toggle',
+              name = "Show Energy Gains",
+              desc = "Show instant energy gains.",
+              get = get2,
+              set = set2,
+            },
+            showPeriodicEnergyGains = {
+              order = 2,
+              type = 'toggle',
+              name = "Show Periodic Energy Gains",
+              desc = "Show energy gained over time.",
+              get = get2,
+              set = set2,
+              width = "double",
             },
           },
         },
