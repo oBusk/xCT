@@ -35,13 +35,37 @@ fsTitle:SetText("xCT+ Combat Text Options")
 fsTitle:SetPoint("TOPLEFT", 16, -90)
 
 -- Move the Effects and Floating Options
-InterfaceOptionsCombatTextPanelTargetEffects:ClearAllPoints()
+--[[InterfaceOptionsCombatTextPanelTargetEffects:ClearAllPoints()
 InterfaceOptionsCombatTextPanelTargetEffects:SetPoint("TOPLEFT", 314, -132)
 InterfaceOptionsCombatTextPanelEnableFCT:ClearAllPoints()
 InterfaceOptionsCombatTextPanelEnableFCT:SetPoint("TOPLEFT", 18, -132)
 
 InterfaceOptionsCombatTextPanelTargetDamage:ClearAllPoints()
-InterfaceOptionsCombatTextPanelTargetDamage:SetPoint("TOPLEFT", 18, -355)
+InterfaceOptionsCombatTextPanelTargetDamage:SetPoint("TOPLEFT", 18, -355) ]]
+
+
+-- Hide Blizzard Combat Text Toggles
+InterfaceOptionsCombatTextPanelEnableFCT:Hide()
+
+InterfaceOptionsCombatTextPanelTargetEffects:Hide()
+InterfaceOptionsCombatTextPanelOtherTargetEffects:Hide()
+
+InterfaceOptionsCombatTextPanelDodgeParryMiss:Hide()
+InterfaceOptionsCombatTextPanelDamageReduction:Hide()
+InterfaceOptionsCombatTextPanelRepChanges:Hide()
+InterfaceOptionsCombatTextPanelReactiveAbilities:Hide()
+InterfaceOptionsCombatTextPanelFriendlyHealerNames:Hide()
+
+InterfaceOptionsCombatTextPanelCombatState:Hide()
+InterfaceOptionsCombatTextPanelComboPoints:Hide()
+InterfaceOptionsCombatTextPanelLowManaHealth:Hide()
+InterfaceOptionsCombatTextPanelEnergyGains:Hide()
+InterfaceOptionsCombatTextPanelPeriodicEnergyGains:Hide()
+InterfaceOptionsCombatTextPanelHonorGains:Hide()
+InterfaceOptionsCombatTextPanelAuras:Hide()
+
+-- Direction does NOT work with xCT+ at all
+InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
 
 local initCVars = true
 local lastState = false
@@ -114,8 +138,7 @@ CombatText:SetScript("OnLoad", nil)
 CombatText:SetScript("OnEvent", nil)
 CombatText:SetScript("OnUpdate", nil)
 
--- Direction does NOT work with xCT+ at all
-InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
+
 
 
 -- Create a button to delete profiles
@@ -129,12 +152,11 @@ xCTCombatTextConfigButton:SetSize(180, 26)
 xCTCombatTextConfigButton:SetText("|cffFFFFFFMore |r|cffFF0000x|r|cffFFFFFFCT+ Options...|r")
 xCTCombatTextConfigButton:Show()
 xCTCombatTextConfigButton:SetScript("OnClick", function(self)
-  --if not x.configuring then
-    InterfaceOptionsFrameOkay:Click()
-    LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
-  --end
+  InterfaceOptionsFrameOkay:Click()
+  LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
 end)
 
+-- Interface - Addons (Ace3 Blizzard Options)
 x.blizzardOptions = {
   name = "|cffFF0000x|rCT+ - e|cffFF0000X|rtreme Combat Text",
   handler = x,
