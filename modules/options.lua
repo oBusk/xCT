@@ -68,112 +68,142 @@ addon.options = {
 }
 
 -- A fast C-Var Update routine
-local function cvar_udpate()
+x.cvar_udpate = function()
   -- Always have Combat Text Enabled
   SetCVar("enableCombatText", 1)
+  _G["SHOW_COMBAT_TEXT"] = "1"
   
   -- We dont care about "combatTextFloatMode"
-  
+  -- _G["COMBAT_TEXT_FLOAT_MODE"] = 1
+
   -- Check: fctLowManaHealth (General Option)
   if x.db.profile.frames.general.showLowManaHealth then
     SetCVar("fctLowManaHealth", 1)
+    _G["COMBAT_TEXT_SHOW_LOW_HEALTH_MANA"] = "1"
   else
     SetCVar("fctLowManaHealth", 0)
+    _G["COMBAT_TEXT_SHOW_LOW_HEALTH_MANA"] = "0"
   end
   
   -- Check: fctAuras (General Option)
   if x.db.profile.frames.general.showBuffs or x.db.profile.frames.general.showDebuffs then
     SetCVar("fctAuras", 1)
+    _G["COMBAT_TEXT_SHOW_AURAS"] = "1"
+    _G["COMBAT_TEXT_SHOW_AURA_FADE"] = "1"
   else
     SetCVar("fctAuras", 0)
+    _G["COMBAT_TEXT_SHOW_AURAS"] = "0"
+    _G["COMBAT_TEXT_SHOW_AURA_FADE"] = "0"
   end
   
+  -- COMBAT_TEXT_SHOW_COMBAT_STATE
+  --/run print(GetCVar("fctCombatState"))
   -- Check: fctCombatState (General Option)
   if x.db.profile.frames.general.showCombatState then
     SetCVar("fctCombatState", 1)
+    _G["COMBAT_TEXT_SHOW_COMBAT_STATE"] = "1"
   else
     SetCVar("fctCombatState", 0)
+    _G["COMBAT_TEXT_SHOW_COMBAT_STATE"] = "0"
   end
   
   -- Check: fctDodgeParryMiss (Damage Option)
   if x.db.profile.frames.damage.showDodgeParryMiss then
     SetCVar("fctDodgeParryMiss", 1)
+    _G["COMBAT_TEXT_SHOW_DODGE_PARRY_MISS"] = "1"
   else
     SetCVar("fctDodgeParryMiss", 0)
+    _G["COMBAT_TEXT_SHOW_DODGE_PARRY_MISS"] = "0"
   end
   
   -- Check: fctDamageReduction (Damage Option)
   if x.db.profile.frames.damage.showDamageReduction then
     SetCVar("fctDamageReduction", 1)
+    _G["COMBAT_TEXT_SHOW_RESISTANCES"] = "1"
   else
     SetCVar("fctDamageReduction", 0)
+    _G["COMBAT_TEXT_SHOW_RESISTANCES"] = "0"
   end
   
   -- Check: fctRepChanges (General Option)
   if x.db.profile.frames.general.showRepChanges then
     SetCVar("fctRepChanges", 1)
+    _G["COMBAT_TEXT_SHOW_REPUTATION"] = "1"
   else
     SetCVar("fctRepChanges", 0)
+    _G["COMBAT_TEXT_SHOW_REPUTATION"] = "0"
   end
   
   -- Check: fctHonorGains (General Option)
   if x.db.profile.frames.damage.showHonorGains then
     SetCVar("fctHonorGains", 1)
+    _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "1"
   else
     SetCVar("fctHonorGains", 0)
+    _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "0"
   end
   
   -- Check: fctReactives (Attach to Procs Frame)
   if x.db.profile.frames.procs.enabledFrame then
     SetCVar("fctReactives", 1)
+    _G["COMBAT_TEXT_SHOW_REACTIVES"] = "1"
   else
     SetCVar("fctReactives", 0)
+    _G["COMBAT_TEXT_SHOW_REACTIVES"] = "0"
   end
   
   -- Check: fctFriendlyHealers (Healing Option)
   if x.db.profile.frames.healing.showFriendlyHealers then
     SetCVar("fctFriendlyHealers", 1)
+    _G["COMBAT_TEXT_SHOW_FRIENDLY_NAMES"] = "1"
   else
     SetCVar("fctFriendlyHealers", 0)
+    _G["COMBAT_TEXT_SHOW_FRIENDLY_NAMES"] = "0"
   end
   
   -- Check: fctComboPoints (COMBO Option)
   if x.player.class == "ROGUE" and x.db.profile.frames.combo.enabledFrame then
     SetCVar("fctComboPoints", 1)
+    _G["COMBAT_TEXT_SHOW_COMBO_POINTS"] = "1"
   else
     SetCVar("fctComboPoints", 0)
+    _G["COMBAT_TEXT_SHOW_COMBO_POINTS"] = "0"
   end
   
   -- Check: fctEnergyGains (Power Option)
   if x.db.profile.frames.power.showEnergyGains then
     SetCVar("fctEnergyGains", 1)
+    _G["COMBAT_TEXT_SHOW_ENERGIZE"] = "1"
   else
     SetCVar("fctEnergyGains", 0)
+    _G["COMBAT_TEXT_SHOW_ENERGIZE"] = "0"
   end
   
   -- Check: fctPeriodicEnergyGains (Power Option)
   if x.db.profile.frames.power.showPeriodicEnergyGains then
     SetCVar("fctPeriodicEnergyGains", 1)
+    _G["COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE"] = "1"
   else
     SetCVar("fctPeriodicEnergyGains", 0)
+    _G["COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE"] = "0"
   end
   
 end
 
 -- Generic Get/Set methods
 local function get0(info) return x.db.profile[info[#info-1]][info[#info]] end
-local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = value; cvar_udpate() end
-local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames(); cvar_udpate() end
+local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x.cvar_udpate() end
+local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames(); x.cvar_udpate() end
 local function get0_1(info) return x.db.profile[info[#info-2]][info[#info]] end
-local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value; cvar_udpate() end
+local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value; x.cvar_udpate() end
 local function getTextIn0(info) return string_gsub(x.db.profile[info[#info-1]][info[#info]], "|", "||") end
-local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|"); cvar_udpate() end
+local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|"); x.cvar_udpate() end
 local function get1(info) return x.db.profile.frames[info[#info-1]][info[#info]] end
-local function set1(info, value) x.db.profile.frames[info[#info-1]][info[#info]] = value; cvar_udpate() end
-local function set1_update(info, value) set1(info, value); x:UpdateFrames(info[#info-1]); cvar_udpate() end
+local function set1(info, value) x.db.profile.frames[info[#info-1]][info[#info]] = value; x.cvar_udpate() end
+local function set1_update(info, value) set1(info, value); x:UpdateFrames(info[#info-1]); x.cvar_udpate() end
 local function get2(info) return x.db.profile.frames[info[#info-2]][info[#info]] end
-local function set2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = value; cvar_udpate() end
-local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); cvar_udpate() end
+local function set2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = value; x.cvar_udpate() end
+local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_udpate() end
 local function getColor2(info) return unpack(x.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end
 local function setColor2(info, r, g, b) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end
 local function getTextIn2(info) return string_gsub(x.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end

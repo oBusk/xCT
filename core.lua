@@ -46,6 +46,9 @@ function x:OnInitialize()
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
   
+  -- Update combat text engine CVars
+  x.cvar_udpate()
+  
   -- Everything got Initialized, show Startup Text
   if self.db.profile.showStartupText then
     print("Loaded |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r. To configure, type: |cffFF0000/xct|r")
