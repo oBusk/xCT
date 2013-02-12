@@ -419,14 +419,14 @@ addon.options.args["Credits"] = {
 }
 
 addon.options.args["Frames"] = {
-  name = "Frames",
+  name = "|cffFF0000x|r|cffFFFFFFCT|r|cffFFFF00+|r Frames",
   type = 'group',
   order = 1,
   args = {
     Frames_Header = {
       type = "description",
       order = 0,
-      name = "|cff798BDDWelcome to|r |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r|cff798BDD Version 3!|r\n",
+      name = "|cff798BDDWelcome to|r |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r|cff798BDD version 3!|r\n",
       fontSize = "large",
     },
     blizzardFCT = {
@@ -435,6 +435,13 @@ addon.options.args["Frames"] = {
       order = 3,
       guiInline = true,
       args = {
+        title2 = {
+          order = 0,
+          type = "description",
+          name = "Some changes below might require a full |cffFFFF00Client Restart|r (completely exit out of WoW). Do not |cffFF0000Alt+F4|r or |cffFF0000Command+Q|r or your settings might not save. Use '|cff798BDD/exit|r' to close the client.\n",
+          fontSize = "small",
+        },
+      
         --[==[Frames_Description = {
           type = "description",
           order = 0,
@@ -448,14 +455,14 @@ addon.options.args["Frames"] = {
           get = get0,
           set = set0_update,
         },
-        blizzardOptions = {
+        --[==[blizzardOptions = {
           order = 2,
           type = 'execute',
           name = "More Blizzard Options...",
           desc = "Opens: |cffFFA000Game Menu|r --> |cffFF7000Interface|r --> |cffFF3000Floating Combat Text|r",
           width = "double",
           func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameTab1:Click(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
-        },
+        },]==]
         
         enabled = {
           order = 20,
@@ -508,12 +515,6 @@ addon.options.args["Frames"] = {
           name = "\n|cffFF0000NOTICE:|r |cffFFFF00Settings below require a full client restart.|r",
           fontSize = "large",
         },]==]
-        title2 = {
-          order = 31,
-          type = "description",
-          name = "Some changes above might require a full |cffFFFF00Client Restart|r (completely exit out of WoW). Do not |cffFF0000Alt+F4|r or |cffFF0000Command+Q|r or your settings might not save. Use '|cff798BDD/exit|r' to close the client.",
-          fontSize = "small",
-        },
       },
     },
     frameSettings = {

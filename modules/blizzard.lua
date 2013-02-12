@@ -29,10 +29,11 @@ local defaultFont, defaultSize = InterfaceOptionsCombatTextPanelTargetEffectsTex
 
 -- Show Combat Options Title
 local fsTitle = InterfaceOptionsCombatTextPanel:CreateFontString(nil, "OVERLAY")
-fsTitle:SetTextColor(1.00, 0.82, 0.00, 1.00)
-fsTitle:SetFont(defaultFont, defaultSize + 6)
-fsTitle:SetText("xCT+ Combat Text Options")
-fsTitle:SetPoint("TOPLEFT", 16, -90)
+fsTitle:SetTextColor(1.00, 1.00, 1.00, 1.00)
+fsTitle:SetFont(defaultFont, defaultSize)
+fsTitle:SetText("|cff60A0FFPowered By |cffFF0000x|r|cff80F000CT|r+|r")
+--fsTitle:SetPoint("TOPLEFT", 16, -90)
+fsTitle:SetPoint("TOPLEFT", 180, -16)
 
 -- Move the Effects and Floating Options
 --[[InterfaceOptionsCombatTextPanelTargetEffects:ClearAllPoints()
@@ -46,16 +47,13 @@ InterfaceOptionsCombatTextPanelTargetDamage:SetPoint("TOPLEFT", 18, -355) ]]
 
 -- Hide Blizzard Combat Text Toggles
 InterfaceOptionsCombatTextPanelEnableFCT:Hide()
-
 InterfaceOptionsCombatTextPanelTargetEffects:Hide()
 InterfaceOptionsCombatTextPanelOtherTargetEffects:Hide()
-
 InterfaceOptionsCombatTextPanelDodgeParryMiss:Hide()
 InterfaceOptionsCombatTextPanelDamageReduction:Hide()
 InterfaceOptionsCombatTextPanelRepChanges:Hide()
 InterfaceOptionsCombatTextPanelReactiveAbilities:Hide()
 InterfaceOptionsCombatTextPanelFriendlyHealerNames:Hide()
-
 InterfaceOptionsCombatTextPanelCombatState:Hide()
 InterfaceOptionsCombatTextPanelComboPoints:Hide()
 InterfaceOptionsCombatTextPanelLowManaHealth:Hide()
@@ -139,17 +137,15 @@ CombatText:SetScript("OnEvent", nil)
 CombatText:SetScript("OnUpdate", nil)
 
 
-
-
 -- Create a button to delete profiles
 if not xCTCombatTextConfigButton then
   CreateFrame("Button", "xCTCombatTextConfigButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate")
 end
 
 xCTCombatTextConfigButton:ClearAllPoints()
-xCTCombatTextConfigButton:SetPoint("BOTTOMRIGHT", -18, 18)
-xCTCombatTextConfigButton:SetSize(180, 26)
-xCTCombatTextConfigButton:SetText("|cffFFFFFFMore |r|cffFF0000x|r|cffFFFFFFCT+ Options...|r")
+xCTCombatTextConfigButton:SetPoint("TOPLEFT", 16, -80)
+xCTCombatTextConfigButton:SetSize(200, 30)
+xCTCombatTextConfigButton:SetText("|cffFFFFFFGo to the |r|cffFF0000x|r|cff80F000CT|r|cff60A0FF+|r |cffFFFFFFOptions Panel...|r")
 xCTCombatTextConfigButton:Show()
 xCTCombatTextConfigButton:SetScript("OnClick", function(self)
   InterfaceOptionsFrameOkay:Click()
@@ -158,7 +154,7 @@ end)
 
 -- Interface - Addons (Ace3 Blizzard Options)
 x.blizzardOptions = {
-  name = "|cffFF0000x|rCT+ - e|cffFF0000X|rtreme Combat Text",
+  name = "|cffFFFF00Combat Text - |r|cff60A0FFPowered By |cffFF0000x|r|cff80F000CT|r+|r",
   handler = x,
   type = 'group',
   args = {
