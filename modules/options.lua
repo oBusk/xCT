@@ -1229,7 +1229,7 @@ addon.options.args["Frames"] = {
             enableOutDmg = {
               order = 1,
               type = 'toggle',
-              name = "Outgoing Damage",
+              name = "Show Outgoing Damage",
               desc = "Show damage you do.",
               get = get2,
               set = set2,
@@ -1237,7 +1237,7 @@ addon.options.args["Frames"] = {
             enableOutHeal = {
               order = 2,
               type = 'toggle',
-              name = "Outgoing Healing",
+              name = "Show Outgoing Healing",
               desc = "Show healing you do.",
               get = get2,
               set = set2,
@@ -1245,7 +1245,7 @@ addon.options.args["Frames"] = {
             enablePetDmg = {
               order = 3,
               type = 'toggle',
-              name = "Pet Damage",
+              name = "Show Pet Damage",
               desc = "Show your pet's damage.",
               get = get2,
               set = set2,
@@ -1253,7 +1253,7 @@ addon.options.args["Frames"] = {
             enableAutoAttack = {
               order = 4,
               type = 'toggle',
-              name = "AutoAttack",
+              name = "Show Auto Attack",
               desc = "Show your auto attack damage.",
               get = get2,
               set = set2,
@@ -1261,7 +1261,7 @@ addon.options.args["Frames"] = {
             enableDotDmg = {
               order = 5,
               type = 'toggle',
-              name = "DoTs",
+              name = "Show DoTs",
               desc = "Show your Damage-Over-Time (DOT) damage. (|cffFF0000Requires:|r Outgoing Damage)",
               get = get2,
               set = set2,
@@ -1269,7 +1269,7 @@ addon.options.args["Frames"] = {
             enableHots = {
               order = 6,
               type = 'toggle',
-              name = "HoTs",
+              name = "Show HoTs",
               desc = "Show your Heal-Over-Time (HOT) healing. (|cffFF0000Requires:|r Outgoing Healing)",
               get = get2,
               set = set2,
@@ -1277,7 +1277,7 @@ addon.options.args["Frames"] = {
             enableImmunes = {
               order = 7,
               type = 'toggle',
-              name = "Immunes",
+              name = "Show Immunes",
               desc = "Display 'Immune' when your target cannot take damage.",
               get = get2,
               set = set2,
@@ -1285,7 +1285,7 @@ addon.options.args["Frames"] = {
             enableMisses = {
               order = 8,
               type = 'toggle',
-              name = "Miss Types",
+              name = "Show Miss Types",
               desc = "Display 'Miss', 'Dodge', 'Parry' when you miss your target.",
               get = get2,
               set = set2,
@@ -1354,7 +1354,6 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fonts",
           args = {
-          
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -1364,7 +1363,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontSize = {
               order = 2,
               name = "Font Size",
@@ -1374,7 +1372,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontOutline = {
               type = 'select',
               order = 3,
@@ -1392,7 +1389,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-            
             fontJustify = {
               type = 'select',
               order = 4,
@@ -1414,7 +1410,6 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Font Colors",
           args = {
-          
             customColor = {
               order = 1,
               type = 'toggle',
@@ -1422,7 +1417,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
             fontColor = {
               type = 'color',
               name = "Custom Color",
@@ -1432,7 +1426,6 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        
         -- TODO: Move Crits Appearance somewhere else, because other frames use it too
         criticalAppearance = {
           order = 30,
@@ -1555,7 +1548,6 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Special Tweaks",
           args = {
-          
             showSwing = {
               order = 1,
               type = 'toggle',
@@ -1564,7 +1556,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
             prefixSwing = {
               order = 2,
               type = 'toggle',
@@ -1573,16 +1564,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
-            redirectSwing = {
-              order = 3,
-              type = 'toggle',
-              name = "Redirect Swing",
-              desc = "Sends Swing crits to the \"|cff798BDDOutgoing|r\" frame. (|cffFF0000Requires:|r \"|cffFFFF00Swing Crits|r\". For other useful options, see: \"|cffFFFF00Swing (Pre)Postfix|r\")",
-              get = get2,
-              set = set2,
-            },
-            
           },
         },
       },

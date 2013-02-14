@@ -143,7 +143,7 @@ if not xCTCombatTextConfigButton then
 end
 
 xCTCombatTextConfigButton:ClearAllPoints()
-xCTCombatTextConfigButton:SetPoint("TOPLEFT", 16, -80)
+xCTCombatTextConfigButton:SetPoint("TOPRIGHT", -36, -80)
 xCTCombatTextConfigButton:SetSize(200, 30)
 xCTCombatTextConfigButton:SetText("|cffFFFFFFGo to the |r|cffFF0000x|r|cff80F000CT|r|cff60A0FF+|r |cffFFFFFFOptions Panel...|r")
 xCTCombatTextConfigButton:Show()

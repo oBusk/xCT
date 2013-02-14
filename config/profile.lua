@@ -199,7 +199,6 @@ addon.defaults = {
       -- special tweaks
         ["showSwing"] = true,
         ["prefixSwing"] = true,
-        ["redirectSwing"] = false,
       },
       
       damage = {

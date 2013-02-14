@@ -135,7 +135,6 @@ local function ShowImmunes() return x.db.profile.frames["outgoing"].enableImmune
 local function ShowMisses() return x.db.profile.frames["outgoing"].enableMisses end -- outgoing misses
 local function ShowSwingCrit() return x.db.profile.frames["critical"].showSwing end
 local function ShowSwingCritPrefix() return x.db.profile.frames["critical"].prefixSwing end
-local function ShowSwingRedirected() return x.db.profile.frames["critical"].redirectSwing end
 local function ShowLootItems() return x.db.profile.frames["loot"].showItems end
 local function ShowLootMoney() return x.db.profile.frames["loot"].showMoney end
 local function ShowTotalItems() return x.db.profile.frames["loot"].showItemTotal end
@@ -192,6 +191,7 @@ local format_dispell      = "%s: %s"
 local format_quality      = "ITEM_QUALITY%s_DESC"
 local format_remove_realm = "(%w+)-%w+"
 
+local format_spell_icon   = " |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_loot_icon    = "|T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_lewtz        = "%s%s: %s [%s]%s%%s"
 local format_lewtz_amount = "|cffFFFFFFx%s|r"
@@ -250,22 +250,22 @@ end
     iconSize,    [number] - The format size of the icon
   )
   Returns:
-   message,     [string] - the message contains the formatted icon
+    message,     [string] - the message contains the formatted icon
 
     Formats an icon quickly for use when outputing to
   a combat text frame.
 --]=====================================================]
 function x:GetSpellTextureFormatted(spellID, iconSize)
   local message = ""
-
+  
   if spellID == 0 then
-    message = " \124T"..PET_ATTACK_TEXTURE..":"..iconSize..":"..iconSize..":0:0:64:64:5:59:5:59\124t"
+    message = sformat(format_spell_icon, PET_ATTACK_TEXTURE, iconSize, iconSize)
   else
     local icon = GetSpellTexture(spellID)
     if icon then
-      message = " \124T"..icon..":"..iconSize..":"..iconSize..":0:0:64:64:5:59:5:59\124t"
+      message = sformat(format_spell_icon, icon, iconSize, iconSize)
     else
-      message = " \124T"..x.BLANK_ICON..":"..iconSize..":"..iconSize..":0:0:64:64:5:59:5:59\124t"
+      message = sformat(icon, x.BLANK_ICON, iconSize, iconSize)
     end
   end
   
@@ -686,6 +686,7 @@ x.events = {
         x.lowMana = false
       end
     end,
+  
   ["RUNE_POWER_UPDATE"] = function(slot)
       if GetRuneCooldown(slot) ~= 0 then return end
       local runeType = GetRuneType(slot);
@@ -695,7 +696,6 @@ x.events = {
         x:AddSpamMessage("power", runeType, message, x.runecolors[runeType], 1)
       end
     end,
-    
   ["PLAYER_REGEN_ENABLED"] = function()
       if ClearWhenLeavingCombat() then
         -- only clear frames with icons
@@ -715,6 +715,7 @@ x.events = {
     end,
   ["UNIT_POWER"] = function(unit, powerType) UpdateUnitPower(unit, powerType) end,
   ["UNIT_COMBO_POINTS"] = function() UpdateComboPoints() end,
+  
   ["PLAYER_TARGET_CHANGED"] = function() UpdateComboPoints() end,
   ["UNIT_AURA"] = function(unit) UpdateAuraTracking(unit) end,
 
@@ -951,7 +952,7 @@ x.outgoing_events = {
       
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  amount, _, _, _, _, _, critical = ...
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
-      local merged = false
+      local merged, critMessage = false, nil
       
       -- Check for Pet Swings
       local spellID = 6603
@@ -963,15 +964,12 @@ x.outgoing_events = {
       
       -- Check for Critical
       if critical then
-        
-        if not ShowSwingCrit() then return end
-        
-        if ShowSwingCritPrefix() then
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
-        end
-        
-        if not ShowSwingRedirected() then
+        if ShowSwingCrit() then
           outputFrame = "critical"
+
+          if ShowSwingCritPrefix() then
+            critMessage = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
+          end
         end
       end
       
@@ -981,7 +979,7 @@ x.outgoing_events = {
       -- Check for merge
       if MergeMeleeSwings() then
         merged = true
-        x:AddSpamMessage("outgoing", spellID, message, outputColor)
+        x:AddSpamMessage("outgoing", spellID, message, outputColor, 6)
       end
       
       -- Only show non-merged swings
@@ -992,13 +990,13 @@ x.outgoing_events = {
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
         if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+          critMessage = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. (critMessage or message)
         else
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          critMessage = (critMessage or message) .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
         end
       end
       
-      x:AddMessage(outputFrame, message, outputColor)
+      x:AddMessage(outputFrame, (critMessage or message), outputColor)
     end,
     
   ["RANGE_DAMAGE"] = function(...)
@@ -1006,45 +1004,70 @@ x.outgoing_events = {
       
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, amount, _, _, _, _, _, critical = ...
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
-      local merged = false
+      local merged, critMessage = false, nil
       
-      -- Auto Shot is spellId == 75
-      local autoShot = spellID == 75
-
-      -- Check for Critical
+      -- Auto Shot's Spell ID
+      local autoShot = (spellID == 75)
+      
+      -- Check for critical
       if critical then
-        if autoShot and not ShowSwingCrit()then return end
-        
-        if not autoShot or autoShot and ShowSwingCritPrefix() then
-          message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
-        end
-        
-        if not autoShot or not ShowSwingRedirected() and autoShot then
+      
+        -- Check if we should display Auto Shot criticals
+        if not autoShot or autoShot and ShowSwingCrit() then
           outputFrame = "critical"
+        else
+          -- Check if we need to merge this attack in the "outgoing" frame
+          if autoShot and MergeRangedAttacks() and not MergeCriticalsByThemselves() then
+          
+            -- Are we filtering Auto Attacks in the Outgoing frame?
+            if ShowAutoAttack() then
+              -- Send message (amount) to "outgoing"
+              x:AddSpamMessage(outputFrame, spellID, message, outputColor, 6)
+            end
+            
+            -- After the spam merge, there is nothing we need to do
+            return
+          end
+        end
+        
+        -- Check to see if we should format the Auto Shot critical hit
+        if not autoShot or autoShot and ShowSwingCritPrefix() then
+          critMessage = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
         end
       end
       
-      -- Check for merge
-      if MergeRangedAttacks() then
-        merged = true
-        x:AddSpamMessage(outputFrame, spellID, message, outputColor, 6)
+      -- Check for Auto Shot critical merge with normal damage
+      if outputFrame == "critical" and not MergeCriticalsByThemselves() then
+        if not autoShot or autoShot and MergeRangedAttacks() then
+          -- If Criticals With Outgoing, then we need to merge again with the critical frame
+          merged = MergeDontMergeCriticals()
+          
+          -- Are we filtering Auto Attacks in the Outgoing frame?
+          if ShowAutoAttack() then
+            -- Merge with the outgoing damage
+            x:AddSpamMessage("outgoing", spellID, message, outputColor, 6)
+          end
+        end
       end
       
-      -- Only show non-merged swings
-      if merged and not critical then
+      -- Are we filtering Auto Attacks in the Outgoing frame?
+      if not ShowAutoAttack() and outputFrame == "outgoing" then return end
+      
+      if not merged and autoShot and MergeRangedAttacks() then
+        x:AddSpamMessage(outputFrame, spellID, message, outputColor, 6)
         return
       end
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
         if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+          critMessage = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. (critMessage or message)
         else
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          critMessage = (critMessage or message) .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
         end
       end
       
-      x:AddMessage(outputFrame, message, outputColor)
+      x:AddMessage(outputFrame, (critMessage or message), outputColor)
     end,
     
   ["SPELL_DAMAGE"] = function(...)
@@ -1099,7 +1122,7 @@ x.outgoing_events = {
     end,
     
   ["SPELL_PERIODIC_DAMAGE"] = function(...)
-      if not ShowDamage() then return end
+      if not ShowDamage() or not ShowDots() then return end
       
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
