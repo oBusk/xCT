@@ -194,7 +194,7 @@ local format_remove_realm = "(%w+)-%w+"
 local format_spell_icon   = " |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_loot_icon    = "|T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_lewtz        = "%s%s: %s [%s]%s%%s"
-local format_lewtz_amount = "|cffFFFFFFx%s|r"
+local format_lewtz_amount = " |cff798BDDx%s|r"
 local format_lewtz_total  = " |cffFFFF00(%s)|r"
 local format_lewtz_blind  = "(%s)"
 local format_crafted      = (LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
@@ -385,8 +385,9 @@ function x:QuickClassFrameUpdate()
   end
 end
 
-
--- This frame was created to make sure I always display the correct number of an item in your bag
+--[=====================================================[
+ Looted Item - Latency Update Adpation
+--]=====================================================]
 local function LootFrame_OnUpdate(self, elapsed)
   local removeItems = { }
   for i, item in ipairs(self.items) do
@@ -786,6 +787,8 @@ x.events = {
             
           -- Purchased/quest items seem to get to your bags faster than looted items
           if ShowTotalItems() then
+          
+            -- This frame was created to make sure I always display the correct number of an item in your bag
             if not x.lootUpdater then
               x.lootUpdater = CreateFrame("FRAME")
               x.lootUpdater.isRunning = false
@@ -794,6 +797,7 @@ x.events = {
             
             if not x.lootUpdater.isRunning then
               x.lootUpdater:SetScript("OnUpdate", LootFrame_OnUpdate)
+              x.lootUpdater.isRunning = true
             end
             
             -- Enqueue the item to wait 1 second before showing

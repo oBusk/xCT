@@ -24,7 +24,7 @@ local ADDON_NAME, addon = ...
 -- =====================================================
 local function CreateMergeSpellEntry(class, interval, prep)
   return {
-         class = class,
+         class = class      or "ITEM",
       interval = interval   or 3,
           prep = prep       or 0,
     }
@@ -159,7 +159,11 @@ addon.merges = {
   [124469] = CreateMergeSpellEntry("PRIEST"),           -- Mind Seer (the second one is the debuff that is applied to your target which lets you clip your mind sears like mind flay)
   [87532]  = CreateMergeSpellEntry("PRIEST"),           -- Shadowy Apparition
   [14914]  = CreateMergeSpellEntry("PRIEST"),           -- Holy Fire
+  [120696] = CreateMergeSpellEntry("PRIEST", 5),        -- Halo (Damage)                              (INSTANT... over 5ish)
 
+  -- Merge Together:
+  -- 49821 & 124469 - Mind Seer
+  
 -- priest (healing)
   [47750]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Heal)
   [139]    = CreateMergeSpellEntry("PRIEST"),           -- Renew
