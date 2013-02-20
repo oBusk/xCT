@@ -171,6 +171,8 @@ local function MergeCriticalsByThemselves() return x.db.profile.spells.mergeCrit
 local function MergeDontMergeCriticals() return x.db.profile.spells.mergeDontMergeCriticals end
 
 local function IsBearForm() return GetShapeshiftForm() == 1 and x.player.class == "DRUID" end
+local function IsFiltered(spellID) return x.db.profile.spells.filter.spells[spellID] and x.db.profile.spells.filter.spells[spellID].enabled end
+local function IsMerged(spellID) return x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled end
 
 --[=====================================================[
  String Formatters
@@ -848,7 +850,8 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "heal_out"
       local merged = false
       
-      -- TODO: Add Healing Filter
+      -- Spell Specific Filter
+      if IsFiltered(spellID) then return end
       
       -- Check for Overhealing
       if not ShowOverHealing() then
@@ -860,8 +863,8 @@ x.outgoing_events = {
       end
       
       -- Check for merge
-      if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-        if critical and not MergeCriticalsByThemselves() or not critical then
+      if IsMerged(spellID) then
+        if not critical or critical and not MergeCriticalsByThemselves() then
           merged = true
           x:AddSpamMessage("outgoing", spellID, message, outputColor)
         end
@@ -869,7 +872,7 @@ x.outgoing_events = {
       
       -- Check for Critical
       if critical then
-        if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+        if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
           x:AddSpamMessage("critical", spellID, message, outputColor)
           
@@ -903,7 +906,8 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "heal_out"
       local merged = false
       
-      -- TODO: Add Healing Filter
+      -- Spell Specific Filter
+      if IsFiltered(spellID) then return end
       
       -- Check for Overhealing
       if not ShowOverHealing() then
@@ -915,8 +919,8 @@ x.outgoing_events = {
       end
       
       -- Check for merge
-      if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
-        if critical and not MergeCriticalsByThemselves() or not critical then
+      if IsMerged(spellID) then
+        if not critical or critical and not MergeCriticalsByThemselves() then
           merged = true
           x:AddSpamMessage("outgoing", spellID, message, outputColor)
         end
@@ -924,7 +928,7 @@ x.outgoing_events = {
 
       -- Check for Critical
       if critical then
-        if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+        if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
           x:AddSpamMessage("critical", spellID, message, outputColor)
           
@@ -1010,6 +1014,9 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
       local merged, critMessage = false, nil
       
+      -- Spell Specific Filter
+      if IsFiltered(spellID) then return end
+      
       -- Auto Shot's Spell ID
       local autoShot = (spellID == 75)
       
@@ -1081,6 +1088,9 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
       local merged = false
       
+      -- Spell Specific Filter
+      if IsFiltered(spellID) then return end
+      
       -- Get special magic color
       if x.damagecolor[spellSchool] then
         outputColor = x.damagecolor[spellSchool]
@@ -1089,7 +1099,7 @@ x.outgoing_events = {
       end
       
       -- Check for merge
-      if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+      if IsMerged(spellID) then
         if critical and not MergeCriticalsByThemselves() or not critical then
           merged = true
           x:AddSpamMessage("outgoing", spellID, message, outputColor)
@@ -1098,7 +1108,7 @@ x.outgoing_events = {
 
       -- Check for Critical
       if critical then
-        if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+        if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
           x:AddSpamMessage("critical", spellID, message, outputColor)
           
@@ -1132,6 +1142,9 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
       local merged = false
       
+      -- Spell Specific Filter
+      if IsFiltered(spellID) then return end
+      
       -- Get special magic color
       if x.damagecolor[spellSchool] then
         outputColor = x.damagecolor[spellSchool]
@@ -1140,7 +1153,7 @@ x.outgoing_events = {
       end
       
       -- Check for merge
-      if x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+      if IsMerged(spellID) then
         if critical and not MergeCriticalsByThemselves() or not critical then
           merged = true
           x:AddSpamMessage("outgoing", spellID, message, outputColor)
@@ -1149,7 +1162,7 @@ x.outgoing_events = {
 
       -- Check for Critical
       if critical then
-        if not MergeDontMergeCriticals() and x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled then
+        if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
           x:AddSpamMessage("critical", spellID, message, outputColor)
           

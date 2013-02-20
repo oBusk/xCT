@@ -31,9 +31,6 @@ local function CreateComboSpellEntry(default, spellID, watchUnit)
     }
 end
 
--- LOCALIZATION
-local COMBO = COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT  -- "Combo Points"
-
 addon.defaults = {
   profile = {
     showStartupText = true,
@@ -444,7 +441,9 @@ addon.defaults = {
           [1] = {                                         -- Balance
             CreateComboSpellEntry(true, 81192),           --   Lunar Shower
           },
-          [2] = { [COMBO] = true, },    -- Feral
+          [2] = {                                         -- Feral
+            [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
+          }, 
           [3] = { },    -- Guardian
           [4] = { },    -- Restoration
         },
@@ -500,7 +499,7 @@ addon.defaults = {
         },
         
         ["ROGUE"] = {
-          [COMBO] = true,
+          [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
         
           -- DO NOT USE - ROGUES GET COMBO POINTS
           [1] = { },    -- Assassination
@@ -522,13 +521,13 @@ addon.defaults = {
 
         ["WARLOCK"] = {
           -- DO NOT USE - AFFLICTION WARLOCKS GET SOUL SHARDS
-          [1] = { [SOUL_SHARDS] = true },
+          [1] = { [SOUL_SHARDS] = true },                 -- Affliction
           
           -- DO NOT USE - DEMONOLOGY WARLOCKS GET DEMONIC FURY
-          [2] = { [DEMONIC_FURY] = true },
+          [2] = { [DEMONIC_FURY] = true },                -- Demonology
           
           -- DO NOT USE - DESTRUCTION WARLOCKS GET BURNING EMBERS
-          [3] = { [BURNING_EMBERS] = true },
+          [3] = { [BURNING_EMBERS] = true },              -- Destruction
         },
         
         ["WARRIOR"] = {
@@ -547,6 +546,12 @@ addon.defaults = {
       -- it is dynamically generated in core.lua
       items = { },
     
+      -- this is a black list created by the users
+      filter = {
+        buff = { },     -- Used to filter gains/fades of buffs    (Spell Name)
+        debuff = { },   -- Used to filter gains/fades of debuffs  (Spell Name)
+        spells = { },   -- Used to filter outgoing spells         (Spell ID)
+      },
     },
   },
 }

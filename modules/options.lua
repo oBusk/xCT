@@ -360,6 +360,26 @@ addon.options.args["spells"] = {
   },
 }
 
+addon.options.args["spellFilter"] = {
+  name = "Spell Filter",
+  type = "group",
+  order = 1,
+  args = {
+    filterTitle = {
+      type = "header",
+      order = 0,
+      name = "Spell Filter",
+    },
+    filterDesc = {
+      type = 'description',
+      order = 1,
+      fontSize = "medium",
+      name = "|cffFFFFFFThere are three different spell filter |cff798BDDblack lists|r. |cff1AFF1ABuffs|r, |cffFF1A1ADebuffs|r and |cff71d5ffOutgoing Spells|r. For both |cff1AFF1ABuffs|r and |cffFF1A1ADebuffs|r, you need to type the |cffFFFF00Name of the Aura|r (case sensitive). For |cff71d5ffOutgoing Spells|r you need to type the |cffFFFF00Spell ID|r number.|r",
+    },
+    
+  }
+},
+
 addon.options.args["Credits"] = {
   name = "Credits",
   type = 'group',
