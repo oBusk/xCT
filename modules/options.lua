@@ -13,7 +13,7 @@
  [====================================]]
 
 local ADDON_NAME, addon = ...
-local x = addon.engine
+local x, noop = addon.engine, addon.noop
 local blankTable, unpack, select = {}, unpack, select
 local string_gsub, pairs = string.gsub, pairs
 
@@ -220,6 +220,28 @@ end
 -- Apply to All variables
 local miscFont, miscFontOutline, miscEnableCustomFade;
 
+
+-- Spell Filter Methods
+local checkAdd = {
+  listBuffs = true,
+  listDebuffs = true,
+  listSpells = true,
+}
+
+local function getCheckAdd(info) return checkAdd[info[#info-1]] end
+local function setCheckAdd(info, value) checkAdd[info[#info-1]] = value end
+
+local function setSpell(info, value)
+  if checkAdd[info[#info-1]] then
+    -- Add Spell
+    x:AddFilteredSpell(info[#info-1], value)
+  else
+    -- Remove Spell
+    x:RemoveFilteredSpell(info[#info-1], value)
+  end
+end
+
+
 addon.options.args["spells"] = {
   name = "Spam Merger",
   type = 'group',
@@ -361,10 +383,11 @@ addon.options.args["spells"] = {
 }
 
 addon.options.args["spellFilter"] = {
-  name = "Spell Filter",
+  name = "Filters",
   type = "group",
-  order = 1,
+  order = 3,
   args = {
+  
     filterTitle = {
       type = "header",
       order = 0,
@@ -374,11 +397,157 @@ addon.options.args["spellFilter"] = {
       type = 'description',
       order = 1,
       fontSize = "medium",
-      name = "|cffFFFFFFThere are three different spell filter |cff798BDDblack lists|r. |cff1AFF1ABuffs|r, |cffFF1A1ADebuffs|r and |cff71d5ffOutgoing Spells|r. For both |cff1AFF1ABuffs|r and |cffFF1A1ADebuffs|r, you need to type the |cffFFFF00Name of the Aura|r (case sensitive). For |cff71d5ffOutgoing Spells|r you need to type the |cffFFFF00Spell ID|r number.|r",
+      name = "|cffFFFFFFThere are three different spell filter |cff798BDDblacklists|r. |cff1AFF1ABuffs|r, |cffFF1A1ADebuffs|r and |cff71d5ffOutgoing Spells|r. For both |cff1AFF1ABuffs|r and |cffFF1A1ADebuffs|r, you need to type the |cffFFFF00Name of the Aura|r (case sensitive). For |cff71d5ffOutgoing Spells|r you need to type the |cffFFFF00Spell ID|r number.|r",
+    },
+    whitelistBuffs = {
+      order = 2,
+      type = 'toggle',
+      name = "Whitelist |cff1AFF1ABuffs|r",
+      desc = "Filtered auras gains and fades that are |cff1AFF1ABuffs|r will be on a whitelist (opposed to a blacklist).",
+      set = set0,
+      get = get0,
+    },
+    whitelistDebuffs = {
+      order = 3,
+      type = 'toggle',
+      name = "Whitelist |cffFF1A1ADebuffs|r",
+      desc = "Filtered auras gains and fades that are |cff1AFF1ADebuffs|r will be on a whitelist (opposed to a blacklist).",
+      set = set0,
+      get = get0,
+    },
+    whitelistSpells = {
+      order = 4,
+      type = 'toggle',
+      name = "Whitelist |cff71d5ffOutgoing Spells|r",
+      desc = "Filtered |cff71d5ffOutgoing Spells|r will be on a whitelist (opposed to a blacklist).",
+      set = set0,
+      get = get0,
     },
     
-  }
-},
+    trackSpells = {
+      order = 5,
+      type = 'toggle',
+      name = "Track Spells (|cffFF0000DEBUG)|r",
+      desc = "Track incoming |cff1AFF1ABuff|r and |cff1AFF1ADebuff|r names, as well as |cff71d5ffOutgoing Spell|r IDs. |cffFF0000(RECOMMEND FOR TEMPORARY USE ONLY)|r",
+      set = set0,
+      get = get0,
+      
+      disabled = true,
+    },
+    
+    listBuffs = {
+      name = "Filter: |cff1AFF1ABuffs|r",
+      type = 'group',
+      order = 10,
+      guiInline = true,
+      args = {
+        spellName = {
+          order = 1,
+          type = 'input',
+          name = "Aura Name",
+          desc = "The full, case-sensitive name of the |cff1AFF1ABuff|r you want to filter.",
+          set = setSpell,
+          get = noop,
+        },
+        checkAdd = {
+          order = 2,
+          type = 'toggle',
+          name = "Add to list",
+          desc = "Uncheck to remove the aura from the filtered list.",
+          get = getCheckAdd,
+          set = setCheckAdd,
+        },
+        selectTracked = {
+          order = 3,
+          type = 'select',
+          name = "Buffs:",
+          desc = "A list of |cff1AFF1ABuff|r names that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
+          disabled = true,
+        },
+        separator1 = {
+          order = 9,
+          type = 'header',
+          name = "Filtered Buffs |cff798BDD(Uncheck to Disable)|r",
+        },
+      },
+    },
+    
+    listDebuffs = {
+      name = "Filter: |cffFF1A1ADebuffs|r",
+      type = 'group',
+      order = 20,
+      guiInline = true,
+      args = {
+        spellName = {
+          order = 1,
+          type = 'input',
+          name = "Aura Name",
+          desc = "The full, case-sensitive name of the |cff1AFF1ADebuff|r you want to filter.",
+          set = setSpell,
+          get = noop,
+        },
+        checkAdd = {
+          order = 2,
+          type = 'toggle',
+          name = "Add to list",
+          desc = "Uncheck to remove the aura from the filtered list.",
+          get = getCheckAdd,
+          set = setCheckAdd,
+        },
+        selectTracked = {
+          order = 3,
+          type = 'select',
+          name = "Buffs:",
+          desc = "A list of |cff1AFF1ADebuff|r names that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
+          disabled = true,
+        },
+        separator1 = {
+          order = 9,
+          type = 'header',
+          name = "Filtered Debuffs |cff798BDD(Uncheck to Disable)|r",
+        },
+      },
+    },
+    
+    listSpells = {
+      name = "Filter: |cff71d5ffOutgoing Spells|r",
+      type = 'group',
+      order = 30,
+      guiInline = true,
+      args = {
+        spellName = {
+          order = 1,
+          type = 'input',
+          name = "Spell ID",
+          desc = "The spell ID of the |cff71d5ffOutgoing Spell|r you want to filter.",
+          set = setSpell,
+          get = noop,
+        },
+        checkAdd = {
+          order = 2,
+          type = 'toggle',
+          name = "Add to list",
+          desc = "Uncheck to remove the spell from the filtered list.",
+          get = getCheckAdd,
+          set = setCheckAdd,
+        },
+        selectTracked = {
+          order = 3,
+          type = 'select',
+          name = "Spells:",
+          desc = "A list of |cff71d5ffOutgoing Spell|r IDs that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
+          disabled = true,
+        },
+        separator1 = {
+          order = 9,
+          type = 'header',
+          name = "Filtered Spells |cff798BDD(Uncheck to Disable)|r",
+        },
+      },
+    },
+    
+  },
+}
 
 addon.options.args["Credits"] = {
   name = "Credits",

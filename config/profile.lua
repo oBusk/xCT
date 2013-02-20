@@ -12,7 +12,7 @@
  [  ©2012. All Rights Reserved.        ]
  [====================================]]
 
- -- This file is a static default profile.  After you first profile is created, editing this file will nothing.
+ -- This file is a static default profile.  After your first profile is created, editing this file will do nothing.
 local ADDON_NAME, addon = ...
 
 -- =====================================================
@@ -545,13 +545,18 @@ addon.defaults = {
       -- yes this is supposed to be blank :P
       -- it is dynamically generated in core.lua
       items = { },
+    },
     
-      -- this is a black list created by the users
-      filter = {
-        buff = { },     -- Used to filter gains/fades of buffs    (Spell Name)
-        debuff = { },   -- Used to filter gains/fades of debuffs  (Spell Name)
-        spells = { },   -- Used to filter outgoing spells         (Spell ID)
-      },
+    spellFilter = {
+      ["whitelistBuffs"]    = false,
+      ["whitelistDebuffs"]  = false,
+      ["whitelistSpells"]   = false,
+
+      ["trackSpells"]       = false,
+      
+      listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
+      listDebuffs  = { },  -- Used to filter gains/fades of debuffs  (Spell Name)
+      listSpells   = { },  -- Used to filter outgoing spells         (Spell ID)
     },
   },
 }

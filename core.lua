@@ -15,7 +15,7 @@
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
-local sgsub, ipairs, pairs, type, string_format, table_insert, print, tostring, tonumber, select, string_lower, collectgarbage, match =
+local sgsub, ipairs, pairs, type, string_format, table_insert, print, tostring, tonumber, select, string_lower, collectgarbage, string_match =
   string.gsub, ipairs, pairs, type, string.format, table.insert, print, tostring, tonumber, select, string.lower, collectgarbage, string.match
 
 -- Local Handle to the Engine
@@ -228,7 +228,7 @@ local function getCP_1(info) return x.db.profile.spells.combo[x.player.class][in
 local function setCP_1(info, value) x.db.profile.spells.combo[x.player.class][info[#info]] = value end
 
 local function getCP_2(info)
-  local spec, index = match(info[#info], "(%d+),(.+)")
+  local spec, index = string_match(info[#info], "(%d+),(.+)")
   local value = x.db.profile.spells.combo[x.player.class][tonumber(spec)][tonumber(index) or index]
   if type(value) == "table" then
     return value.enabled
@@ -237,7 +237,7 @@ local function getCP_2(info)
   end
 end
 local function setCP_2(info, value)
-  local spec, index = match(info[#info], "(%d+),(.+)")
+  local spec, index = string_match(info[#info], "(%d+),(.+)")
   
   if value == true then
     for key, entry in pairs(x.db.profile.spells.combo[x.player.class][tonumber(spec)]) do
@@ -359,6 +359,102 @@ function x:UpdateComboTracker()
   x:QuickClassFrameUpdate()
 end
 
+-- Get and set methods for the spell filter
+local function getSF(info) return x.db.profile.spellFilter[info[#info-1]][info[#info]] end
+local function setSF(info, value) x.db.profile.spellFilter[info[#info-1]][info[#info]] = true end
+
+-- Update the Buff, Debuff and Spell filter list
+function x:UpdateAuraSpellFilter(specific)
+  local i = 10
+  local buffs, debuffs, spells = addon.options.args.spellFilter.args.listBuffs.args, addon.options.args.spellFilter.args.listDebuffs.args, addon.options.args.spellFilter.args.listSpells.args
+  
+  if not specific or specific == "buffs" then
+    -- Update buffs
+    for name in pairs(x.db.profile.spellFilter.listBuffs) do
+      buffs[name] = {
+        order = i,
+        name = name,
+        type = 'toggle',
+        get = getSF,
+        set = setSF,
+      }
+    end
+  end
+  
+  i = 10
+  
+  -- Update debuffs
+  if not specific or specific == "debuffs" then
+    for name in pairs(x.db.profile.spellFilter.listDebuffs) do
+      debuffs[name] = {
+        order = i,
+        name = name,
+        type = 'toggle',
+        get = getSF,
+        set = setSF,
+      }
+    end
+  end
+  
+  i = 10
+  
+  -- Update spells
+  if not specific or specific == "spells" then
+    for id in pairs(x.db.profile.spellFilter.listSpells) do
+      spells[tostring(id)] = {
+        order = i,
+        name = GetSpellInfo(id),
+        desc = "|cffFF0000ID|r |cff798BDD" .. id .. "|r\n"
+        type = 'toggle',
+        get = getSF,
+        set = setSF,
+      }
+    end
+  end
+  
+end
+
+-- Add and remove Buffs, debuffs, and spells from the filter
+function x:AddFilteredSpell(category, name)
+  if category == "listBuffs" then
+    x.db.profile.spellFilter.listBuffs[name] = true
+    x:UpdateAuraSpellFilter("buffs")
+  elseif category == "listDebuffs" then
+    x.db.profile.spellFilter.listDebuffs[name] = true
+    x:UpdateAuraSpellFilter("debuffs")
+  elseif category == "listSpells" then
+    local spellID = tonumber(string_match(name, "%d+"))
+    if spellID and GetSpellInfo(spellID) then
+      x.db.profile.spellFilter.listSpells[spellID] = true
+      x:UpdateAuraSpellFilter("spells")
+    else
+      print("|cffFF0000x|r|cffFFFF00CT+|r  Could not add invalid Spell ID: |cff798BDD" .. name .. "|r")
+    end
+  else
+    print("|cffFF0000x|r|cffFFFF00CT+|r  |cffFF0000Error:|r Unknown filter type '" .. category .. "'!")
+  end
+end
+
+function x:RemoveFilteredSpell(category, name)
+  if category == "listBuffs" then
+    x.db.profile.spellFilter.listBuffs[name] = nil
+    x:UpdateAuraSpellFilter("buffs")
+  elseif category == "listDebuffs" then
+    x.db.profile.spellFilter.listDebuffs[name] = nil
+    x:UpdateAuraSpellFilter("debuffs")
+  elseif category == "listSpells" then
+    local spellID = tonumber(string_match(name, "%d+"))
+    if spellID and GetSpellInfo(spellID) then
+      x.db.profile.spellFilter.listSpells[spellID] = nil
+      x:UpdateAuraSpellFilter("spells")
+    else
+      print("|cffFF0000x|r|cffFFFF00CT+|r  Could not remove invalid Spell ID: |cff798BDD" .. name .. "|r")
+    end
+    x:UpdateAuraSpellFilter("spells")
+  else
+    print("|cffFF0000x|r|cffFFFF00CT+|r  |cffFF0000Error:|r Unknown filter type '" .. category .. "'!")
+  end
+end
 
 -- Unused for now
 function x:OnEnable() end
@@ -380,7 +476,7 @@ x:RegisterChatCommand('xct', 'OpenxCTCommand')
 
 -- Process the slash command ('input' contains whatever follows the slash command)
 function x:OpenxCTCommand(input)
-  if string_lower(input):match('lock') then
+  if string_match(string_lower(input), 'lock') then
     if x.configuring then
       x:SaveAllFrames()
       x.EndConfigMode()
@@ -397,7 +493,7 @@ function x:OpenxCTCommand(input)
     return
   end
   
-  if string_lower(input):match('cancel') then
+  if string_match(string_lower(input),'cancel') then
     if x.configuring then
       x:UpdateFrames();
       x.EndConfigMode()
@@ -414,8 +510,8 @@ function x:OpenxCTCommand(input)
     return
   end
   
-  if string_lower(input):match('track %w+') then
-    local unit = string_lower(input):match('%s(%w+)')
+  if string_match(string_lower(input), 'track %w+') then
+    local unit = string_match(string_lower(input), '%s(%w+)')
     
     local name = UnitName(unit)
     
