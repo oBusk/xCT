@@ -851,7 +851,7 @@ x.outgoing_events = {
       local merged = false
       
       -- Spell Specific Filter
-      if IsFiltered(spellID) then return end
+      --if IsFiltered(spellID) then return end
       
       -- Check for Overhealing
       if not ShowOverHealing() then
@@ -907,7 +907,7 @@ x.outgoing_events = {
       local merged = false
       
       -- Spell Specific Filter
-      if IsFiltered(spellID) then return end
+      --if IsFiltered(spellID) then return end
       
       -- Check for Overhealing
       if not ShowOverHealing() then
@@ -1015,7 +1015,7 @@ x.outgoing_events = {
       local merged, critMessage = false, nil
       
       -- Spell Specific Filter
-      if IsFiltered(spellID) then return end
+      --if IsFiltered(spellID) then return end
       
       -- Auto Shot's Spell ID
       local autoShot = (spellID == 75)
@@ -1089,7 +1089,7 @@ x.outgoing_events = {
       local merged = false
       
       -- Spell Specific Filter
-      if IsFiltered(spellID) then return end
+      --if IsFiltered(spellID) then return end
       
       -- Get special magic color
       if x.damagecolor[spellSchool] then
@@ -1143,7 +1143,7 @@ x.outgoing_events = {
       local merged = false
       
       -- Spell Specific Filter
-      if IsFiltered(spellID) then return end
+      --if IsFiltered(spellID) then return end
       
       -- Get special magic color
       if x.damagecolor[spellSchool] then

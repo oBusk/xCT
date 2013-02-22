@@ -375,7 +375,7 @@ addon.options.args["spells"] = {
         mergeListDesc = {
           type = "description",
           order = 1,
-          name = "Uncheck a spell if you do not want it merged. If a spell is not in the list, contact me to add it. See |cffFFFF00Credits|r for contact info.",
+          name = "Uncheck a spell if you do not want it merged. If a spell is not in the list, contact me to add it. See |cffFFFF00Credits|r for contact info.\n\n",
         },
       },
     },
@@ -397,31 +397,7 @@ addon.options.args["spellFilter"] = {
       type = 'description',
       order = 1,
       fontSize = "medium",
-      name = "|cffFFFFFFThere are three different spell filter |cff798BDDblacklists|r. |cff1AFF1ABuffs|r, |cffFF1A1ADebuffs|r and |cff71d5ffOutgoing Spells|r. For both |cff1AFF1ABuffs|r and |cffFF1A1ADebuffs|r, you need to type the |cffFFFF00Name of the Aura|r (case sensitive). For |cff71d5ffOutgoing Spells|r you need to type the |cffFFFF00Spell ID|r number.|r",
-    },
-    whitelistBuffs = {
-      order = 2,
-      type = 'toggle',
-      name = "Whitelist |cff1AFF1ABuffs|r",
-      desc = "Filtered auras gains and fades that are |cff1AFF1ABuffs|r will be on a whitelist (opposed to a blacklist).",
-      set = set0,
-      get = get0,
-    },
-    whitelistDebuffs = {
-      order = 3,
-      type = 'toggle',
-      name = "Whitelist |cffFF1A1ADebuffs|r",
-      desc = "Filtered auras gains and fades that are |cff1AFF1ADebuffs|r will be on a whitelist (opposed to a blacklist).",
-      set = set0,
-      get = get0,
-    },
-    whitelistSpells = {
-      order = 4,
-      type = 'toggle',
-      name = "Whitelist |cff71d5ffOutgoing Spells|r",
-      desc = "Filtered |cff71d5ffOutgoing Spells|r will be on a whitelist (opposed to a blacklist).",
-      set = set0,
-      get = get0,
+      name = "|cffFFFFFFThere are three different spell filter blacklists. |cff1AFF1ABuffs|r, |cffFF1A1ADebuffs|r and |cff71d5ffOutgoing Spells|r. For both |cff1AFF1ABuffs|r and |cffFF1A1ADebuffs|r, you need to type the |cffFFFF00Name of the Aura|r (case sensitive). For |cff71d5ffOutgoing Spells|r you need to type the |cffFFFF00Spell ID|r number.|r",
     },
     
     trackSpells = {
@@ -436,13 +412,22 @@ addon.options.args["spellFilter"] = {
     },
     
     listBuffs = {
-      name = "Filter: |cff1AFF1ABuffs|r",
+      name = "|cff798BDDFilter:|r |cff1AFF1ABuffs|r",
       type = 'group',
       order = 10,
       guiInline = true,
       args = {
-        spellName = {
+        whitelistBuffs = {
           order = 1,
+          type = 'toggle',
+          name = "Whitelist",
+          desc = "Filtered auras gains and fades that are |cff1AFF1ABuffs|r will be on a whitelist (opposed to a blacklist).",
+          set = set0_1,
+          get = get0_1,
+          width = "half",
+        },
+        spellName = {
+          order = 2,
           type = 'input',
           name = "Aura Name",
           desc = "The full, case-sensitive name of the |cff1AFF1ABuff|r you want to filter.",
@@ -450,19 +435,21 @@ addon.options.args["spellFilter"] = {
           get = noop,
         },
         checkAdd = {
-          order = 2,
+          order = 3,
           type = 'toggle',
-          name = "Add to list",
+          name = "Add",
           desc = "Uncheck to remove the aura from the filtered list.",
           get = getCheckAdd,
           set = setCheckAdd,
+          width = "half",
         },
         selectTracked = {
-          order = 3,
+          order = 4,
           type = 'select',
           name = "Buffs:",
           desc = "A list of |cff1AFF1ABuff|r names that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
           disabled = true,
+          values = { },
         },
         separator1 = {
           order = 9,
@@ -473,13 +460,22 @@ addon.options.args["spellFilter"] = {
     },
     
     listDebuffs = {
-      name = "Filter: |cffFF1A1ADebuffs|r",
+      name = "|cff798BDDFilter:|r |cffFF1A1ADebuffs|r",
       type = 'group',
       order = 20,
       guiInline = true,
       args = {
-        spellName = {
+        whitelistDebuffs = {
           order = 1,
+          type = 'toggle',
+          name = "Whitelist",
+          desc = "Filtered auras gains and fades that are |cff1AFF1ADebuffs|r will be on a whitelist (opposed to a blacklist).",
+          set = set0_1,
+          get = get0_1,
+          width = "half",
+        },
+        spellName = {
+          order = 2,
           type = 'input',
           name = "Aura Name",
           desc = "The full, case-sensitive name of the |cff1AFF1ADebuff|r you want to filter.",
@@ -487,19 +483,21 @@ addon.options.args["spellFilter"] = {
           get = noop,
         },
         checkAdd = {
-          order = 2,
+          order = 3,
           type = 'toggle',
-          name = "Add to list",
+          name = "Add",
           desc = "Uncheck to remove the aura from the filtered list.",
           get = getCheckAdd,
           set = setCheckAdd,
+          width = "half",
         },
         selectTracked = {
-          order = 3,
+          order = 4,
           type = 'select',
-          name = "Buffs:",
+          name = "Debuffs:",
           desc = "A list of |cff1AFF1ADebuff|r names that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
           disabled = true,
+          values = { },
         },
         separator1 = {
           order = 9,
@@ -510,13 +508,22 @@ addon.options.args["spellFilter"] = {
     },
     
     listSpells = {
-      name = "Filter: |cff71d5ffOutgoing Spells|r",
+      name = "|cff798BDDFilter:|r |cff71d5ffOutgoing Spells|r",
       type = 'group',
       order = 30,
       guiInline = true,
       args = {
-        spellName = {
+        whitelistSpells = {
           order = 1,
+          type = 'toggle',
+          name = "Whitelist",
+          desc = "Filtered |cff71d5ffOutgoing Spells|r will be on a whitelist (opposed to a blacklist).",
+          set = set0_1,
+          get = get0_1,
+          width = "half",
+        },
+        spellName = {
+          order = 2,
           type = 'input',
           name = "Spell ID",
           desc = "The spell ID of the |cff71d5ffOutgoing Spell|r you want to filter.",
@@ -524,19 +531,21 @@ addon.options.args["spellFilter"] = {
           get = noop,
         },
         checkAdd = {
-          order = 2,
+          order = 3,
           type = 'toggle',
-          name = "Add to list",
+          name = "Add",
           desc = "Uncheck to remove the spell from the filtered list.",
           get = getCheckAdd,
           set = setCheckAdd,
+          width = "half",
         },
         selectTracked = {
-          order = 3,
+          order = 4,
           type = 'select',
           name = "Spells:",
           desc = "A list of |cff71d5ffOutgoing Spell|r IDs that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
           disabled = true,
+          values = { },
         },
         separator1 = {
           order = 9,

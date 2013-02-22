@@ -404,7 +404,7 @@ function x:UpdateAuraSpellFilter(specific)
       spells[tostring(id)] = {
         order = i,
         name = GetSpellInfo(id),
-        desc = "|cffFF0000ID|r |cff798BDD" .. id .. "|r\n"
+        desc = "|cffFF0000ID|r |cff798BDD" .. id .. "|r\n",
         type = 'toggle',
         get = getSF,
         set = setSF,

@@ -495,6 +495,7 @@ addon.defaults = {
           -- DO NOT USE - SHADOW PRIEST GET SHADOW ORBS
           [3] = {                                         -- Shadow
             [SHADOW_ORBS] = true,
+            -- 87160 Surge of Darkness
           },    
         },
         
