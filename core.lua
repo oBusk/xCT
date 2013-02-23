@@ -45,6 +45,7 @@ function x:OnInitialize()
   x:UpdateCombatTextEvents(true)
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
+  x:UpdateAuraSpellFilter()
   
   -- Update combat text engine CVars
   x.cvar_udpate()
@@ -360,17 +361,29 @@ function x:UpdateComboTracker()
 end
 
 -- Get and set methods for the spell filter
-local function getSF(info) return x.db.profile.spellFilter[info[#info-1]][info[#info]] end
-local function setSF(info, value) x.db.profile.spellFilter[info[#info-1]][info[#info]] = true end
+local function getSF(info) return x.db.profile.spellFilter[info[#info-2]][info[#info]] end
+local function setSF(info, value) x.db.profile.spellFilter[info[#info-2]][info[#info]] = true end
 
 -- Update the Buff, Debuff and Spell filter list
 function x:UpdateAuraSpellFilter(specific)
   local i = 10
-  local buffs, debuffs, spells = addon.options.args.spellFilter.args.listBuffs.args, addon.options.args.spellFilter.args.listDebuffs.args, addon.options.args.spellFilter.args.listSpells.args
   
   if not specific or specific == "buffs" then
+    -- Redo all the list
+    addon.options.args.spellFilter.args.listBuffs.args.list = {
+      name = "Filtered Buffs |cff798BDD(Uncheck to Disable)|r",
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = { },
+    }
+  
+    local buffs = addon.options.args.spellFilter.args.listBuffs.args.list.args
+    local updated = false
+    
     -- Update buffs
     for name in pairs(x.db.profile.spellFilter.listBuffs) do
+      updated = true
       buffs[name] = {
         order = i,
         name = name,
@@ -379,13 +392,33 @@ function x:UpdateAuraSpellFilter(specific)
         set = setSF,
       }
     end
+    
+    if not updated then
+      buffs["noSpells"] = {
+        order = 1,
+        name = "No items have been added to this list yet.",
+        type = 'description',
+      }
+    end
   end
   
   i = 10
   
   -- Update debuffs
   if not specific or specific == "debuffs" then
+    addon.options.args.spellFilter.args.listDebuffs.args.list = {
+      name = "Filtered Debuffs |cff798BDD(Uncheck to Disable)|r",
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = { },
+    }
+  
+    local debuffs = addon.options.args.spellFilter.args.listDebuffs.args.list.args
+    local updated = false
+    
     for name in pairs(x.db.profile.spellFilter.listDebuffs) do
+      updated = true
       debuffs[name] = {
         order = i,
         name = name,
@@ -394,13 +427,33 @@ function x:UpdateAuraSpellFilter(specific)
         set = setSF,
       }
     end
+    
+    if not updated then
+      debuffs["noSpells"] = {
+        order = 1,
+        name = "No items have been added to this list yet.",
+        type = 'description',
+      }
+    end
   end
   
   i = 10
   
   -- Update spells
   if not specific or specific == "spells" then
+    addon.options.args.spellFilter.args.listSpells.args.list = {
+      name = "Filtered Spells |cff798BDD(Uncheck to Disable)|r",
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = { },
+    }
+  
+    local spells = addon.options.args.spellFilter.args.listSpells.args.list.args
+    local updated = false
+    
     for id in pairs(x.db.profile.spellFilter.listSpells) do
+      updated = true
       spells[tostring(id)] = {
         order = i,
         name = GetSpellInfo(id),
@@ -408,6 +461,14 @@ function x:UpdateAuraSpellFilter(specific)
         type = 'toggle',
         get = getSF,
         set = setSF,
+      }
+    end
+    
+    if not updated then
+      spells["noSpells"] = {
+        order = 1,
+        name = "No items have been added to this list yet.",
+        type = 'description',
       }
     end
   end

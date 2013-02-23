@@ -412,10 +412,10 @@ addon.options.args["spellFilter"] = {
     },
     
     listBuffs = {
-      name = "|cff798BDDFilter:|r |cff1AFF1ABuffs|r",
+      name = "|cffFFFFFFFilter:|r |cff798BDDBuffs|r",
       type = 'group',
       order = 10,
-      guiInline = true,
+      guiInline = false,
       args = {
         whitelistBuffs = {
           order = 1,
@@ -451,19 +451,14 @@ addon.options.args["spellFilter"] = {
           disabled = true,
           values = { },
         },
-        separator1 = {
-          order = 9,
-          type = 'header',
-          name = "Filtered Buffs |cff798BDD(Uncheck to Disable)|r",
-        },
       },
     },
     
     listDebuffs = {
-      name = "|cff798BDDFilter:|r |cffFF1A1ADebuffs|r",
+      name = "|cffFFFFFFFilter:|r |cff798BDDDebuffs|r",
       type = 'group',
       order = 20,
-      guiInline = true,
+      guiInline = false,
       args = {
         whitelistDebuffs = {
           order = 1,
@@ -499,19 +494,14 @@ addon.options.args["spellFilter"] = {
           disabled = true,
           values = { },
         },
-        separator1 = {
-          order = 9,
-          type = 'header',
-          name = "Filtered Debuffs |cff798BDD(Uncheck to Disable)|r",
-        },
       },
     },
     
     listSpells = {
-      name = "|cff798BDDFilter:|r |cff71d5ffOutgoing Spells|r",
+      name = "|cffFFFFFFFilter:|r |cff798BDDOutgoing Spells|r",
       type = 'group',
       order = 30,
-      guiInline = true,
+      guiInline = false,
       args = {
         whitelistSpells = {
           order = 1,
@@ -546,11 +536,6 @@ addon.options.args["spellFilter"] = {
           desc = "A list of |cff71d5ffOutgoing Spell|r IDs that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
           disabled = true,
           values = { },
-        },
-        separator1 = {
-          order = 9,
-          type = 'header',
-          name = "Filtered Spells |cff798BDD(Uncheck to Disable)|r",
         },
       },
     },
