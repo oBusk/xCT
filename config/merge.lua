@@ -111,6 +111,9 @@ addon.merges = {
   [117418] = CreateMergeSpellEntry("MONK", 4),          -- Fists of Fury                              (Every 1s for 4s)
   [121253] = CreateMergeSpellEntry("MONK", .5),         -- Keg Smash                                  (INSTANT)
   [115181] = CreateMergeSpellEntry("MONK", .5),         -- Breath of Fire                             (INSTANT)
+  [124098] = CreateMergeSpellEntry("MONK", 6),          -- Zen Sphere (Damage)                        (2 sec for 16 sec)
+  [125033] = CreateMergeSpellEntry("MONK", .5),         -- Zen Sphere: Detonate (Damage)              (INSTANT)
+  [132467] = CreateMergeSpellEntry("MONK", 6),          -- Chi Wave (Damage)
   
 -- monk (healing)
   [117640] = CreateMergeSpellEntry("MONK", 2.5),        -- Spinning Crane Kick (Heal)                 (Over 2s)
@@ -123,6 +126,12 @@ addon.merges = {
   [126890] = CreateMergeSpellEntry("MONK", 3),          -- Eminence (Statue)
   [127722] = CreateMergeSpellEntry("MONK", 3),          -- Serpent's Zeal
   [128591] = CreateMergeSpellEntry("MONK", 3),          -- Blackout Kick (Heal??)
+  [124040] = CreateMergeSpellEntry("MONK", 5),          -- Chi Torpedo                                (INSTANT)
+  [130654] = CreateMergeSpellEntry("MONK", 3),          -- Chi Burst
+  [115310] = CreateMergeSpellEntry("MONK"),             -- Revival
+  [124081] = CreateMergeSpellEntry("MONK", 6),          -- Zen Sphere (Heal)                          (2 sec for 16 sec)
+  [124101] = CreateMergeSpellEntry("MONK", .5),         -- Zen Sphere: Detonate (Heal)                (INSTANT)
+  [132463] = CreateMergeSpellEntry("MONK", 6),          -- Chi Wave (Heal)
   
 -- paladin (damage)
   [122032] = CreateMergeSpellEntry("PALADIN"),          -- Glyph of Mass Exorcism
@@ -145,7 +154,7 @@ addon.merges = {
   [121129] = CreateMergeSpellEntry("PALADIN", .5),      -- Daybreak                                   (INSTANT)
   [119952] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Heal)                        (Every 2s for 17.5s)
   [114163] = CreateMergeSpellEntry("PALADIN", 5),       -- Eternal Flame				                      (Every 3s for 30s)
-  [86678]  = CreateMergeSpellEntry("PALADIN"),      	  -- Light of the Ancient kings
+  [86678]  = CreateMergeSpellEntry("PALADIN"),          -- Light of the Ancient kings
   
 -- priest (damage)
   [47666]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Damage Effect)
