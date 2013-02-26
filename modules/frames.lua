@@ -43,15 +43,15 @@ local frameIndex = {
 
 -- Static Title Lookup
 local frameTitles = {
-  ["general"]   = COMBAT_TEXT_LABEL,
-  ["outgoing"]  = SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE,
-  ["critical"]  = TEXT_MODE_A_STRING_RESULT_CRITICAL:gsub("%(", ""):gsub("%)", ""), -- "(Critical)" --> "Critical"
-  ["damage"]    = DAMAGE,
-  ["healing"]   = SHOW_COMBAT_HEALING,
-  ["power"]     = COMBAT_TEXT_SHOW_ENERGIZE_TEXT,
-  ["class"]     = COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT,
-  ["procs"]     = COMBAT_TEXT_SHOW_REACTIVES_TEXT,
-  ["loot"]      = LOOT,
+  ["general"]   = "General",                -- COMBAT_TEXT_LABEL,
+  ["outgoing"]  = "Outgoing",               -- SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE,
+  ["critical"]  = "Outgoing (Criticals)",   -- TEXT_MODE_A_STRING_RESULT_CRITICAL:gsub("%(", ""):gsub("%)", ""), -- "(Critical)" --> "Critical"
+  ["damage"]    = "Damage (Incoming)",      -- DAMAGE,
+  ["healing"]   = "Healing (Incoming)",     -- SHOW_COMBAT_HEALING,
+  ["power"]     = "Class Power",            -- COMBAT_TEXT_SHOW_ENERGIZE_TEXT,
+  ["class"]     = "Combo",     -- COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT,
+  ["procs"]     = "Special Effects (Procs)", -- COMBAT_TEXT_SHOW_REACTIVES_TEXT,
+  ["loot"]      = "Loot & Money",           -- LOOT,
 }
 
 local function autoClearFrame_OnUpdate(self, elasped)
@@ -505,8 +505,8 @@ function x.StartConfigMode()
     
       -- Frame Title
       f.title = f:CreateFontString(nil, "OVERLAY")
-      f.title:SetPoint("BOTTOM", f, "TOP", 0, 0)
-      f.title:SetFont(LSM:Fetch("font", settings.font), settings.fontSize, settings.fontOutline)
+      f.title:SetPoint("BOTTOM", f, "TOP", 0, -18)
+      f.title:SetFont(LSM:Fetch("font", settings.font), 10, settings.fontOutline)
       f.title:SetText(frameTitles[framename])
       
       f.t = f:CreateTexture("ARTWORK")

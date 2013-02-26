@@ -171,7 +171,13 @@ local function MergeCriticalsByThemselves() return x.db.profile.spells.mergeCrit
 local function MergeDontMergeCriticals() return x.db.profile.spells.mergeDontMergeCriticals end
 
 local function IsBearForm() return GetShapeshiftForm() == 1 and x.player.class == "DRUID" end
-local function IsFiltered(spellID) return x.db.profile.spells.filter.spells[spellID] and x.db.profile.spells.filter.spells[spellID].enabled end
+local function IsSpellFiltered(spellID)
+  local spell = x.db.profile.spellFilter.listSpells[tostring(spellID)]
+  if x.db.profile.spellFilter.whitelistSpells then
+    return not spell
+  end
+  return spell
+end
 local function IsMerged(spellID) return x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled end
 
 --[=====================================================[
@@ -267,7 +273,7 @@ function x:GetSpellTextureFormatted(spellID, iconSize)
     if icon then
       message = sformat(format_spell_icon, icon, iconSize, iconSize)
     else
-      message = sformat(icon, x.BLANK_ICON, iconSize, iconSize)
+      message = sformat(format_spell_icon, x.BLANK_ICON, iconSize, iconSize)
     end
   end
   
@@ -851,7 +857,7 @@ x.outgoing_events = {
       local merged = false
       
       -- Spell Specific Filter
-      --if IsFiltered(spellID) then return end
+      if IsSpellFiltered(spellID) then return end
       
       -- Check for Overhealing
       if not ShowOverHealing() then
@@ -907,7 +913,7 @@ x.outgoing_events = {
       local merged = false
       
       -- Spell Specific Filter
-      --if IsFiltered(spellID) then return end
+      if IsSpellFiltered(spellID) then return end
       
       -- Check for Overhealing
       if not ShowOverHealing() then
@@ -1015,7 +1021,7 @@ x.outgoing_events = {
       local merged, critMessage = false, nil
       
       -- Spell Specific Filter
-      --if IsFiltered(spellID) then return end
+      if IsSpellFiltered(spellID) then return end
       
       -- Auto Shot's Spell ID
       local autoShot = (spellID == 75)
@@ -1089,7 +1095,7 @@ x.outgoing_events = {
       local merged = false
       
       -- Spell Specific Filter
-      --if IsFiltered(spellID) then return end
+      if IsSpellFiltered(spellID) then return end
       
       -- Get special magic color
       if x.damagecolor[spellSchool] then
@@ -1143,7 +1149,7 @@ x.outgoing_events = {
       local merged = false
       
       -- Spell Specific Filter
-      --if IsFiltered(spellID) then return end
+      if IsSpellFiltered(spellID) then return end
       
       -- Get special magic color
       if x.damagecolor[spellSchool] then

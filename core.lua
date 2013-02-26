@@ -134,8 +134,7 @@ function x:UpdateItemTypes()
   
   local allTypes = {
     order = 100,
-    name = "Always Show Filter",
-    desc = "|cffFFFF00New:|r Filter changed to whitelist",
+    name = "|cffFFFFFFFilter:|r |cff798BDDLoot|r",
     type = 'group',
     childGroups = "select",
     args = {
@@ -222,7 +221,7 @@ function x:UpdateItemTypes()
     allTypes.args[itype] = group
   end
 
-  addon.options.args["Frames"].args["loot"].args["typeFilter"] = allTypes
+  addon.options.args["spellFilter"].args["typeFilter"] = allTypes
 end
 
 local function getCP_1(info) return x.db.profile.spells.combo[x.player.class][info[#info]] end
@@ -362,7 +361,7 @@ end
 
 -- Get and set methods for the spell filter
 local function getSF(info) return x.db.profile.spellFilter[info[#info-2]][info[#info]] end
-local function setSF(info, value) x.db.profile.spellFilter[info[#info-2]][info[#info]] = true end
+local function setSF(info, value) x.db.profile.spellFilter[info[#info-2]][info[#info]] = value end
 
 -- Update the Buff, Debuff and Spell filter list
 function x:UpdateAuraSpellFilter(specific)
@@ -453,10 +452,12 @@ function x:UpdateAuraSpellFilter(specific)
     local updated = false
     
     for id in pairs(x.db.profile.spellFilter.listSpells) do
+      local spellID = tonumber(string_match(id, "%d+"))
+    
       updated = true
-      spells[tostring(id)] = {
+      spells[id] = {
         order = i,
-        name = GetSpellInfo(id),
+        name = GetSpellInfo(spellID),
         desc = "|cffFF0000ID|r |cff798BDD" .. id .. "|r\n",
         type = 'toggle',
         get = getSF,
@@ -486,7 +487,7 @@ function x:AddFilteredSpell(category, name)
   elseif category == "listSpells" then
     local spellID = tonumber(string_match(name, "%d+"))
     if spellID and GetSpellInfo(spellID) then
-      x.db.profile.spellFilter.listSpells[spellID] = true
+      x.db.profile.spellFilter.listSpells[name] = true
       x:UpdateAuraSpellFilter("spells")
     else
       print("|cffFF0000x|r|cffFFFF00CT+|r  Could not add invalid Spell ID: |cff798BDD" .. name .. "|r")
@@ -506,7 +507,7 @@ function x:RemoveFilteredSpell(category, name)
   elseif category == "listSpells" then
     local spellID = tonumber(string_match(name, "%d+"))
     if spellID and GetSpellInfo(spellID) then
-      x.db.profile.spellFilter.listSpells[spellID] = nil
+      x.db.profile.spellFilter.listSpells[name] = nil
       x:UpdateAuraSpellFilter("spells")
     else
       print("|cffFF0000x|r|cffFFFF00CT+|r  Could not remove invalid Spell ID: |cff798BDD" .. name .. "|r")

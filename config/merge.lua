@@ -150,17 +150,17 @@ addon.merges = {
 -- priest (damage)
   [47666]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Damage Effect)
   [132157] = CreateMergeSpellEntry("PRIEST", .5),       -- Holy Nova (Damage Effect)                  (INSTANT)
-  [589]    = CreateMergeSpellEntry("PRIEST"),           -- Shadow Word: Pain
-  [34914]  = CreateMergeSpellEntry("PRIEST"),           -- Vampiric Touch 
+  [589]    = CreateMergeSpellEntry("PRIEST", 6),        -- Shadow Word: Pain
+  [34914]  = CreateMergeSpellEntry("PRIEST", 6),        -- Vampiric Touch 
   [2944]   = CreateMergeSpellEntry("PRIEST"),           -- Devouring Plague
-  [127626] = CreateMergeSpellEntry("PRIEST", 6.5),      -- Devouring Plague (Poison?)
   [15407]  = CreateMergeSpellEntry("PRIEST"),           -- Mind Flay
   [49821]  = CreateMergeSpellEntry("PRIEST"),           -- Mind Seer (From Derap: first one is the cast)
   [124469] = CreateMergeSpellEntry("PRIEST"),           -- Mind Seer (the second one is the debuff that is applied to your target which lets you clip your mind sears like mind flay)
   [87532]  = CreateMergeSpellEntry("PRIEST"),           -- Shadowy Apparition
   [14914]  = CreateMergeSpellEntry("PRIEST"),           -- Holy Fire
   [120696] = CreateMergeSpellEntry("PRIEST", 5),        -- Halo (Damage)                              (INSTANT... over 5ish)
-
+  [15290]  = CreateMergeSpellEntry("PRIEST", 5),        -- Vampiric Embrace (Damage repeated as heals)(over 15s)
+  
   -- Merge Together:
   -- 49821 & 124469 - Mind Seer
   
@@ -180,6 +180,7 @@ addon.merges = {
   [110745] = CreateMergeSpellEntry("PRIEST", 3),        -- Divine Star                                (INSTANT... over 3ish)
   [120692] = CreateMergeSpellEntry("PRIEST", 3),        -- Halo                                       (INSTANT... over 3ish)
   [7001]   = CreateMergeSpellEntry("PRIEST", 4),        -- Light Well                                 (every 2s for 6s)
+  [127626] = CreateMergeSpellEntry("PRIEST", 6.5),      -- Devouring Plague (Heal)
   
 -- rogue
   [51723]  = CreateMergeSpellEntry("ROGUE", .5),        -- Fan of Knives                              (INSTANT)
