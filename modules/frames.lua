@@ -76,7 +76,7 @@ end
 -- =====================================================
 function x:UpdateFrames(specificFrame)
   -- Update Head Numbers and FCT Font Settings
-  if not specificFrame then self:UpdateHeadNumbers(); x:UpdateBlizzardFCT() end
+  if not specificFrame then x:UpdateBlizzardFCT() end
   
   -- Update the frames
   for framename, settings in pairs(x.db.profile.frames) do

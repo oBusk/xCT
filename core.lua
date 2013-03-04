@@ -41,7 +41,10 @@ function x:OnInitialize()
   
   -- Perform xCT+ Update
   x:UpdatePlayer()
-  x:UpdateFrames()
+  
+  -- Delay updating frames until all other addons are loaded!
+  --x:UpdateFrames()
+  
   x:UpdateCombatTextEvents(true)
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
@@ -55,6 +58,14 @@ function x:OnInitialize()
     print("Loaded |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r. To configure, type: |cffFF0000/xct|r")
   end
 end
+
+-- Need to create a handle to update frames when every other addon is done.
+local frameUpdate = CreateFrame("FRAME")
+frameUpdate:RegisterEvent("PLAYER_ENTERING_WORLD")
+frameUpdate:SetScript("OnEvent", function(self)
+  self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+  x:UpdateFrames()
+end)
 
 -- Profile Updated, need to refresh important stuff 
 function x:RefreshConfig()

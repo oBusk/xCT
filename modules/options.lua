@@ -13,12 +13,18 @@
  [====================================]]
 
 local ADDON_NAME, addon = ...
+local LSM = LibStub("LibSharedMedia-3.0")
 local x, noop = addon.engine, addon.noop
 local blankTable, unpack, select = {}, unpack, select
 local string_gsub, pairs = string.gsub, pairs
 
 -- New Icon "!"
 local NEW = x.new
+
+-- Store Localized Strings
+-- To remove: "Changed Target!"
+local XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2 = COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2
+local XCT_CT_INC_1, XCT_CT_INC_3 = COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3
 
 -- Creating an Config
 addon.options = {
@@ -74,7 +80,7 @@ x.cvar_udpate = function()
   _G["SHOW_COMBAT_TEXT"] = "1"
   
   -- We dont care about "combatTextFloatMode"
-  -- _G["COMBAT_TEXT_FLOAT_MODE"] = 1
+  -- _G["COMBAT_TEXT_FLOAT_MODE"] = "1"
 
   -- Check: fctLowManaHealth (General Option)
   if x.db.profile.frames.general.showLowManaHealth then
@@ -96,8 +102,6 @@ x.cvar_udpate = function()
     _G["COMBAT_TEXT_SHOW_AURA_FADE"] = "0"
   end
   
-  -- COMBAT_TEXT_SHOW_COMBAT_STATE
-  --/run print(GetCVar("fctCombatState"))
   -- Check: fctCombatState (General Option)
   if x.db.profile.frames.general.showCombatState then
     SetCVar("fctCombatState", 1)
@@ -162,7 +166,7 @@ x.cvar_udpate = function()
   end
   
   -- Check: fctComboPoints (COMBO Option)
-  if x.player.class == "ROGUE" and x.db.profile.frames.combo.enabledFrame then
+  if x.player.class == "ROGUE" and x.db.profile.frames.class.enabledFrame then
     SetCVar("fctComboPoints", 1)
     _G["COMBAT_TEXT_SHOW_COMBO_POINTS"] = "1"
   else
@@ -188,6 +192,43 @@ x.cvar_udpate = function()
     _G["COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE"] = "0"
   end
   
+  -- Floating Combat Text: Outgoing Damage
+  if x.db.profile.blizzardFCT.CombatDamage then
+    SetCVar("CombatDamage", 1)
+  else
+    SetCVar("CombatDamage", 0)
+  end
+  
+  -- Floating Combat Text: Outgoing Dots and Hots
+  if x.db.profile.blizzardFCT.CombatLogPeriodicSpells then
+    SetCVar("CombatLogPeriodicSpells", 1)
+  else
+    SetCVar("CombatLogPeriodicSpells", 0)
+  end
+  
+  -- Floating Combat Text: Outgoing Pet Damage
+  if x.db.profile.blizzardFCT.PetMeleeDamage then
+    SetCVar("PetMeleeDamage", 1)
+  else
+    SetCVar("PetMeleeDamage", 0)
+  end
+  
+  -- Floating Combat Text: Outgoing Healing
+  if x.db.profile.blizzardFCT.CombatHealing then
+    SetCVar("CombatHealing", 1)
+  else
+    SetCVar("CombatHealing", 0)
+  end
+  
+  -- Floating Combat Text: Threat Changes
+  if x.db.profile.blizzardFCT.CombatThreatChanges then
+    COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2
+    COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = XCT_CT_INC_1, XCT_CT_INC_3
+  else
+    COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = "", "", ""
+    COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = "", ""
+  end
+  
 end
 
 -- Generic Get/Set methods
@@ -208,6 +249,9 @@ local function getColor2(info) return unpack(x.db.profile.frames[info[#info-2]][
 local function setColor2(info, r, g, b) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end
 local function getTextIn2(info) return string_gsub(x.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end
 local function setTextIn2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = string_gsub(value, "||", "|") end
+local function getNumber2(info) return tostring(x.db.profile[info[#info-2]][info[#info]]) end
+local function setNumber2(info, value) if tonumber(value) then x.db.profile[info[#info-2]][info[#info]] = tonumber(value) end end
+
 
 local function setSpecialCriticalOptions(info, value)
   x.db.profile[info[#info-2]].mergeCriticalsWithOutgoing = false
@@ -387,20 +431,15 @@ addon.options.args["spellFilter"] = {
   type = "group",
   order = 3,
   args = {
-  
-    filterTitle = {
-      type = "header",
-      order = 0,
-      name = "Spell Filter",
-    },
-    filterDesc = {
+    filterSpacer1 = {
       type = 'description',
       order = 1,
       fontSize = "medium",
-      name = "|cffFFFFFFThere are three different spell filter blacklists. |cff1AFF1ABuffs|r, |cffFF1A1ADebuffs|r and |cff71d5ffOutgoing Spells|r. For both |cff1AFF1ABuffs|r and |cffFF1A1ADebuffs|r, you need to type the |cffFFFF00Name of the Aura|r (case sensitive). For |cff71d5ffOutgoing Spells|r you need to type the |cffFFFF00Spell ID|r number.|r",
+      name = "",
     },
     
-    trackSpells = {
+    -- This is a feature option that I will enable when I get more time D:
+    --[[trackSpells = {
       order = 5,
       type = 'toggle',
       name = "Track Spells (|cffFF0000DEBUG)|r",
@@ -409,7 +448,80 @@ addon.options.args["spellFilter"] = {
       get = get0,
       
       disabled = true,
+    },]]
+    
+    filterValues = {
+      name = "Minimal Value Thresholds",
+      type = 'group',
+      order = 10,
+      guiInline = true,
+      args = {
+        listSpacer0 = {
+          type = "description",
+          order = 0,
+          name = "|cff798BDDIncoming Player Power Threshold|r: (Mana, Rage, Energy, etc.)",
+        },
+        
+        filterPowerValue = {
+          order = 1,
+          type = 'input',
+          name = "Incoming Power",
+          desc = "The minimal amount of player's power required inorder for it to be displayed.",
+          set = setNumber2,
+          get = getNumber2,
+        },
+      
+      
+        listSpacer1 = {
+          type = "description",
+          order = 10,
+          name = "|cff798BDDOutgoing Damage and Healing Threshold|r:",
+        },
+        
+        filterOutgoingDamageValue = {
+          order = 11,
+          type = 'input',
+          name = "Outgoing Damage",
+          desc = "The minimal amount of damage required inorder for it to be displayed.",
+          set = setNumber2,
+          get = getNumber2,
+        },
+        
+        filterOutgoingHealingValue = {
+          order = 12,
+          type = 'input',
+          name = "Outgoing Healing",
+          desc = "The minimal amount of healing required inorder for it to be displayed.",
+          set = setNumber2,
+          get = getNumber2,
+        },
+        
+        listSpacer2 = {
+          type = "description",
+          order = 20,
+          name = "|cff798BDDIncoming Damage and Healing Threshold|r:",
+        },
+        
+        filterIncomingDamageValue = {
+          order = 21,
+          type = 'input',
+          name = "Incoming Damage",
+          desc = "The minimal amount of damage required inorder for it to be displayed.",
+          set = setNumber2,
+          get = getNumber2,
+        },
+        
+        filterIncomingHealingValue = {
+          order = 22,
+          type = 'input',
+          name = "Incoming Healing",
+          desc = "The minimal amount of healing required inorder for it to be displayed.",
+          set = setNumber2,
+          get = getNumber2,
+        },
+      },
     },
+    
     
     listBuffs = {
       name = "|cffFFFFFFFilter:|r |cff798BDDBuffs|r",
@@ -447,14 +559,16 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        selectTracked = {
+        
+        -- This is a feature option that I will enable when I get more time D:
+        --[[selectTracked = {
           order = 4,
           type = 'select',
           name = "Buffs:",
           desc = "A list of |cff1AFF1ABuff|r names that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
           disabled = true,
           values = { },
-        },
+        },]]
       },
     },
     
@@ -494,14 +608,16 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        selectTracked = {
+        
+        -- This is a feature option that I will enable when I get more time D:
+        --[[selectTracked = {
           order = 4,
           type = 'select',
           name = "Debuffs:",
           desc = "A list of |cffFF1A1ADebuff|r names that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
           disabled = true,
           values = { },
-        },
+        },]]
       },
     },
     
@@ -541,14 +657,16 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        selectTracked = {
+        
+        -- This is a feature option that I will enable when I get more time D:
+        --[[selectTracked = {
           order = 4,
           type = 'select',
           name = "Spells:",
           desc = "A list of |cff71d5ffOutgoing Spell|r IDs that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
           disabled = true,
           values = { },
-        },
+        },]]
       },
     },
     
@@ -642,14 +760,16 @@ addon.options.args["Frames"] = {
           order = 0,
           name = "Unfortunately, I cannot display all the options for |cff10FF50Floating Combat Text|r in this configuration tool. Blizzard has a few tweaks you might want to look at. For performance reasons, I am leaving them there for the time being.\n\n",
         },]==]
-        blizzardHeadNumbers = {
+        
+        --[==[blizzardHeadNumbers = {
           order = 1,
           type = 'toggle',
           name = "Show Head Numbers",
           desc = "Enable this option if you still want to see Blizzard's 'head numbers'.",
           get = get0,
           set = set0_update,
-        },
+        },]==]
+        
         --[==[blizzardOptions = {
           order = 2,
           type = 'execute',
@@ -673,7 +793,13 @@ addon.options.args["Frames"] = {
           desc = "Set the font Blizzard's head numbers (|cffFFFF00Default:|r Friz Quadrata TT)",
           values = AceGUIWidgetLSMlists.font,
           get = get0,
-          set = set0_update,
+          set = function(info, value)
+            x.db.profile.blizzardFCT.font = value
+            x.db.profile.blizzardFCT.fontName = LSM:Fetch("font", value)
+            
+            --x:UpdateFrames()
+            --x.cvar_udpate()
+          end,
         },
         
         -- Not Working
@@ -710,6 +836,62 @@ addon.options.args["Frames"] = {
           name = "\n|cffFF0000NOTICE:|r |cffFFFF00Settings below require a full client restart.|r",
           fontSize = "large",
         },]==]
+        
+        
+        
+        listSpacer0 = {
+          type = "description",
+          order = 30,
+          name = "|cff798BDDFloating Combat Text Options|r:",
+        },
+        
+        CombatDamage = {
+          order = 31,
+          type = 'toggle',
+          name = "Show Damage",
+          desc = "Enable this option if you want your damage as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
+        },
+        
+        CombatLogPeriodicSpells = {
+          order = 32,
+          type = 'toggle',
+          name = "Show Damage over Time",
+          desc = "Enable this option if you want your DoT's as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
+          disabled = function(info) return not x.db.profile.blizzardFCT.CombatDamage end,
+        },
+        
+        PetMeleeDamage = {
+          order = 33,
+          type = 'toggle',
+          name = "Show Pet Melee Damage",
+          desc = "Enable this option if you want your pet's melee damage as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
+          disabled = function(info) return not x.db.profile.blizzardFCT.CombatDamage end, 
+        },
+        
+        CombatHealing = {
+          order = 34,
+          type = 'toggle',
+          name = "Show Healing",
+          desc = "Enable this option if you want your healing as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
+        },
+        
+        CombatThreatChanges = {
+          order = 35,
+          type = 'toggle',
+          name = "Show Threat Changes",
+          desc = "Enable this option if you want threat changes as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
+        },
+        
       },
     },
     frameSettings = {

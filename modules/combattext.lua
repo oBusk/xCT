@@ -170,6 +170,12 @@ local function MergeCriticalsWithOutgoing() return x.db.profile.spells.mergeCrit
 local function MergeCriticalsByThemselves() return x.db.profile.spells.mergeCriticalsByThemselves end
 local function MergeDontMergeCriticals() return x.db.profile.spells.mergeDontMergeCriticals end
 
+local function FilterPlayerPower(value) return x.db.profile.spellFilter.filterPowerValue > value end
+local function FilterOutgoingDamage(value) return x.db.profile.spellFilter.filterOutgoingDamageValue > value end
+local function FilterOutgoingHealing(value) return x.db.profile.spellFilter.filterOutgoingHealingValue > value end
+local function FilterIncomingDamage(value) return x.db.profile.spellFilter.filterIncomingDamageValue > value end
+local function FilterIncomingHealing(value) return x.db.profile.spellFilter.filterIncomingHealingValue > value end
+
 local function IsBearForm() return GetShapeshiftForm() == 1 and x.player.class == "DRUID" end
 local function IsSpellFiltered(spellID)
   local spell = x.db.profile.spellFilter.listSpells[tostring(spellID)]
@@ -435,20 +441,26 @@ end
 --]=====================================================]
 x.combat_events = {
   ["DAMAGE"] = function(amount)
+      if FilterIncomingDamage(amount) then return end
       x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount)), "damage")
     end,
   ["DAMAGE_CRIT"] = function(amount)
+      if FilterIncomingDamage(amount) then return end
       x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount)), "damage_crit")
     end,
   ["SPELL_DAMAGE"] = function(amount)
+      if FilterIncomingDamage(amount) then return end
       x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount)), "spell_damage")
     end,
   ["SPELL_DAMAGE_CRIT"] = function(amount)
+      if FilterIncomingDamage(amount) then return end
       x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount)), "spell_damage_crit")
     end,
   
   -- TODO: Add thresholds
   ["HEAL"] = function(healer_name, amount)
+      if FilterIncomingHealing(amount) then return end
+  
       local message = sformat(format_gain, x:Abbreviate(amount))
       
       if not ShowHealingRealmNames() then
@@ -476,6 +488,8 @@ x.combat_events = {
       end
     end,
   ["HEAL_CRIT"] = function(healer_name, amount)
+      if FilterIncomingHealing(amount) then return end
+      
       local message = sformat(format_gain, x:Abbreviate(amount))
       
       if not ShowHealingRealmNames() then
@@ -503,6 +517,8 @@ x.combat_events = {
       end
     end,
   ["PERIODIC_HEAL"] = function(healer_name, amount)
+      if FilterIncomingHealing(amount) then return end
+      
       local message = sformat(format_gain, x:Abbreviate(amount))
       
       if not ShowHealingRealmNames() then
@@ -625,7 +641,7 @@ x.combat_events = {
       end
     end,
   ["ENERGIZE"] = function(amount, energy_type)
-      if amount > 0 then
+      if not FilterPlayerPower(tonumber(amount)) then
         if energy_type and (energy_type == "MANA" and not IsBearForm()) -- do not show mana in bear form (Leader of the Pack)                                     
             or energy_type == "RAGE" or energy_type == "FOCUS"
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
@@ -637,7 +653,7 @@ x.combat_events = {
       end
     end,
   ["PERIODIC_ENERGIZE"] = function(amount, energy_type)
-      if amount > 0 then
+      if not FilterPlayerPower(tonumber(amount)) then
         if energy_type and (energy_type == "MANA" and not IsBearForm()) -- do not show mana in bear form (Leader of the Pack)
             or energy_type == "RAGE" or energy_type == "FOCUS"
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
@@ -856,6 +872,9 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "heal_out"
       local merged = false
       
+      -- Filter Ougoing Healing
+      if FilterOutgoingHealing(amount) then return end
+      
       -- Spell Specific Filter
       if IsSpellFiltered(spellID) then return end
       
@@ -911,6 +930,9 @@ x.outgoing_events = {
       local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "heal_out"
       local merged = false
+
+      -- Filter Ougoing Healing
+      if FilterOutgoingHealing(amount) then return end
       
       -- Spell Specific Filter
       if IsSpellFiltered(spellID) then return end
@@ -968,6 +990,9 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
       local merged, critMessage = false, nil
       
+      -- Filter Outgoing Damage
+      if FilterOutgoingDamage(amount) then return end
+      
       -- Check for Pet Swings
       local spellID = 6603
       if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
@@ -1019,6 +1044,9 @@ x.outgoing_events = {
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, amount, _, _, _, _, _, critical = ...
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
       local merged, critMessage = false, nil
+      
+      -- Filter Outgoing Damage
+      if FilterOutgoingDamage(amount) then return end
       
       -- Spell Specific Filter
       if IsSpellFiltered(spellID) then return end
@@ -1094,6 +1122,9 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
       local merged = false
       
+      -- Filter Outgoing Damage
+      if FilterOutgoingDamage(amount) then return end
+      
       -- Spell Specific Filter
       if IsSpellFiltered(spellID) then return end
       
@@ -1147,6 +1178,9 @@ x.outgoing_events = {
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount), "out_damage"
       local merged = false
+      
+      -- Filter Outgoing Damage
+      if FilterOutgoingDamage(amount) then return end
       
       -- Spell Specific Filter
       if IsSpellFiltered(spellID) then return end

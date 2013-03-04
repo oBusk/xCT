@@ -39,14 +39,16 @@ addon.defaults = {
       blizzardHeadNumbers = false,
       enabled = false,
       font = "Homespun (xCT+)",
+      fontName = [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\HOOGE.TTF]],
       fontSize = 32,
       fontOutline = "4MONOCHROMEOUTLINE",
-      vars = {
-        ["CombatLogPeriodicSpells"] = 1,
-        ["PetMeleeDamage"] = 1,
-        ["CombatDamage"] = 1,
-        ["CombatHealing"] = 1,
-      },
+      
+      -- CVars
+      ["CombatThreatChanges"] = false,
+      ["CombatDamage"] = false,
+      ["CombatHealing"] = false,
+      ["PetMeleeDamage"] = false,
+      ["CombatLogPeriodicSpells"] = false,
     },
     
     frameSettings = {
@@ -558,6 +560,13 @@ addon.defaults = {
       listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
       listDebuffs  = { },  -- Used to filter gains/fades of debuffs  (Spell Name)
       listSpells   = { },  -- Used to filter outgoing spells         (Spell ID)
+      
+      -- Minimal Spell Amount
+      filterPowerValue = 0,
+      filterOutgoingDamageValue = 0,
+      filterOutgoingHealingValue = 0,
+      filterIncomingDamageValue = 0,
+      filterIncomingHealingValue = 0,
     },
   },
 }

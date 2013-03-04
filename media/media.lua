@@ -46,7 +46,7 @@ LSM:Register("font", "Homespun (xCT+)", [[Interface\AddOns\]] .. ADDON_NAME .. [
 -- /run print(" \124TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:20:20:0:-1\124t")
 -- /run print(" \124TInterface\\Icons\\inv_stave_2h_pvppandarias1_c_01:20:20:0:-1\124t")
 
-if UnitName("PLAYER") == "Dandruff" then
+if UnitName("PLAYER") == "Dandruff" or UnitName("PLAYER") == "Dandraffbal" then
   local settings = CreateFrame("FRAME")
   settings:RegisterEvent("PLAYER_ENTERING_WORLD")
   settings:SetScript("OnEvent", function(self, event, ...)

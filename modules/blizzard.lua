@@ -65,60 +65,12 @@ InterfaceOptionsCombatTextPanelAuras:Hide()
 -- Direction does NOT work with xCT+ at all
 InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
 
-local initCVars = true
-local lastState = false
+-- FCT Options
+InterfaceOptionsCombatTextPanelTargetDamage:Hide()
+InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
+InterfaceOptionsCombatTextPanelPetDamage:Hide()
+InterfaceOptionsCombatTextPanelHealing:Hide()
 
--- Hide invalid Objects
-function x:UpdateHeadNumbers()
-  if initCVars then
-    lastState = self.db.profile.blizzardFCT.blizzardHeadNumbers
-    SetCVar("CombatLogPeriodicSpells", self.db.profile.blizzardFCT.vars["CombatLogPeriodicSpells"])
-    SetCVar("PetMeleeDamage", self.db.profile.blizzardFCT.vars["PetMeleeDamage"])
-    SetCVar("CombatDamage", self.db.profile.blizzardFCT.vars["CombatDamage"])
-    SetCVar("CombatHealing", self.db.profile.blizzardFCT.vars["CombatHealing"])
-    
-    initCVars = false
-  end
-
-  -- Always hide or show interface objects
-  if self.db.profile.blizzardFCT.blizzardHeadNumbers then
-    InterfaceOptionsCombatTextPanelTargetDamage:Show()
-    InterfaceOptionsCombatTextPanelPeriodicDamage:Show()
-    InterfaceOptionsCombatTextPanelPetDamage:Show()
-    InterfaceOptionsCombatTextPanelHealing:Show()
-  else
-    InterfaceOptionsCombatTextPanelTargetDamage:Hide()
-    InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
-    InterfaceOptionsCombatTextPanelPetDamage:Hide()
-    InterfaceOptionsCombatTextPanelHealing:Hide()
-  end
-
-  -- Update if current state does not equal last state
-  local update = (self.db.profile.blizzardFCT.blizzardHeadNumbers ~= lastState)
-  
-  if update then
-    if self.db.profile.blizzardFCT.blizzardHeadNumbers then
-      SetCVar("CombatLogPeriodicSpells", self.db.profile.blizzardFCT.vars["CombatLogPeriodicSpells"])
-      SetCVar("PetMeleeDamage", self.db.profile.blizzardFCT.vars["PetMeleeDamage"])
-      SetCVar("CombatDamage", self.db.profile.blizzardFCT.vars["CombatDamage"])
-      SetCVar("CombatHealing", self.db.profile.blizzardFCT.vars["CombatHealing"])
-    else
-      -- backup cVars
-      self.db.profile.blizzardFCT.vars["CombatLogPeriodicSpells"] = GetCVar("CombatLogPeriodicSpells")
-      self.db.profile.blizzardFCT.vars["PetMeleeDamage"] = GetCVar("PetMeleeDamage")
-      self.db.profile.blizzardFCT.vars["CombatDamage"] = GetCVar("CombatDamage")
-      self.db.profile.blizzardFCT.vars["CombatHealing"] = GetCVar("CombatHealing")
-      
-      SetCVar("CombatLogPeriodicSpells", 0)
-      SetCVar("PetMeleeDamage", 0)
-      SetCVar("CombatDamage", 0)
-      SetCVar("CombatHealing", 0)
-    end
-    
-    -- our new state
-    lastState = self.db.profile.blizzardFCT.blizzardHeadNumbers
-  end
-end
 
 function x:UpdateBlizzardFCT()
   if self.db.profile.blizzardFCT.enabled then
