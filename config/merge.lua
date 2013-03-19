@@ -86,7 +86,9 @@ addon.merges = {
   [131900] = CreateMergeSpellEntry("HUNTER", 6),        -- A Murder of Crows                          (Over 30s)
   [120699] = CreateMergeSpellEntry("HUNTER", 4),        -- Lynx Rush                                  (9x over 4s)
   [120361] = CreateMergeSpellEntry("HUNTER", 4),        -- Barrage                                    (Channeled over 3s) 4 to be safe :P
-  
+	[121414] = CreateMergeSpellEntry("HUNTER"),        		-- Glaive Toss
+  [120761] = CreateMergeSpellEntry("HUNTER"),						-- Glaive Toss (2)
+	
 -- mage
   [44461]  = CreateMergeSpellEntry("MAGE", .5),         -- Living Bomb                                (INSTANT)
   [44457]  = CreateMergeSpellEntry("MAGE", 4),          -- Living Bomb (DOT)                          (over 8 seconds)
@@ -190,7 +192,8 @@ addon.merges = {
   [120692] = CreateMergeSpellEntry("PRIEST", 3),        -- Halo                                       (INSTANT... over 3ish)
   [7001]   = CreateMergeSpellEntry("PRIEST", 4),        -- Light Well                                 (every 2s for 6s)
   [127626] = CreateMergeSpellEntry("PRIEST", 6.5),      -- Devouring Plague (Heal)
-  
+  [81751]  = CreateMergeSpellEntry("PRIEST", 6),        -- Atonement (Healing you do through damage)
+	
 -- rogue
   [51723]  = CreateMergeSpellEntry("ROGUE", .5),        -- Fan of Knives                              (INSTANT)
   [113780] = CreateMergeSpellEntry("ROGUE", .5),        -- Deadly Poison                              (INSTANT)

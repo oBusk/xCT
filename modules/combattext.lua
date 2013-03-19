@@ -1299,8 +1299,8 @@ x.outgoing_events = {
   ["SPELL_DISPEL"] = function(...)
       if not ShowDispells() then return end
   
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, spellID, effect, _, etype = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_DISPELLED, effect), "dispell_debuff"
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   target, temp1, _,   spellID, effect, _, etype = ...
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_DISPELLED, temp1), "dispell_debuff"
       
       -- Check for buff or debuff (for color)
       if etype == "BUFF" then
@@ -1310,27 +1310,28 @@ x.outgoing_events = {
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
         if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+          message = x:GetSpellTextureFormatted(target, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
         else
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          message = message .. x:GetSpellTextureFormatted(target, x.db.profile.frames[outputFrame].iconsSize)
         end
       end
       
-      x:AddMessage(outputFrame, message, outputColor)
+			x:AddSpamMessage("general", effect, message, outputColor, 0.5)
+      --x:AddMessage(outputFrame, message, outputColor)
     end,
     
   ["SPELL_STOLEN"] = function(...)
       if not ShowDispells() then return end
       
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _, spellID, effect = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_STOLE, effect), "spell_stolen"
+			local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   target, temp1, _,   spellID, effect, _, etype = ...
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_STOLE, temp1), "spell_stolen"
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
         if x.db.profile.frames[outputFrame].fontJustify == "LEFT" then
-          message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
+          message = x:GetSpellTextureFormatted(target, x.db.profile.frames[outputFrame].iconsSize) .. "  " .. message
         else
-          message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames[outputFrame].iconsSize)
+          message = message .. x:GetSpellTextureFormatted(target, x.db.profile.frames[outputFrame].iconsSize)
         end
       end
       
