@@ -184,6 +184,21 @@ local function IsSpellFiltered(spellID)
   end
   return spell
 end
+local function IsBuffFiltered(name)
+  local spell = x.db.profile.spellFilter.listBuffs[name]
+  if x.db.profile.spellFilter.whitelistBuffs then
+    return not spell
+  end
+  return spell
+end
+local function IsDebuffFiltered(name)
+  local spell = x.db.profile.spellFilter.listDebuffs[name]
+  if x.db.profile.spellFilter.whitelistDebuffs then
+    return not spell
+  end
+  return spell
+end
+
 local function IsMerged(spellID) return x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled end
 
 --[=====================================================[
@@ -665,10 +680,10 @@ x.combat_events = {
       end
     end,
 
-  ["SPELL_AURA_END"] = function(spellname) if ShowBuffs() then x:AddMessage("general", sformat(format_fade, spellname), "aura_end") end end,
-  ["SPELL_AURA_START"] = function(spellname) if ShowBuffs() then x:AddMessage("general", sformat(format_gain, spellname), "aura_start") end end,
-  ["SPELL_AURA_END_HARMFUL"] = function(spellname) if ShowDebuffs() then x:AddMessage("general", sformat(format_fade, spellname), "aura_end") end end,
-  ["SPELL_AURA_START_HARMFUL"] = function(spellname) if ShowDebuffs() then x:AddMessage("general", sformat(format_gain, spellname), "aura_start_harm") end end,
+  ["SPELL_AURA_END"] = function(spellname) if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage("general", sformat(format_fade, spellname), "aura_end") end end,
+  ["SPELL_AURA_START"] = function(spellname) if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage("general", sformat(format_gain, spellname), "aura_start") end end,
+  ["SPELL_AURA_END_HARMFUL"] = function(spellname) if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage("general", sformat(format_fade, spellname), "aura_end") end end,
+  ["SPELL_AURA_START_HARMFUL"] = function(spellname) if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage("general", sformat(format_gain, spellname), "aura_start_harm") end end,
   
   -- TODO: Create a merger for faction and honor xp
   ["HONOR_GAINED"] = function(amount)
