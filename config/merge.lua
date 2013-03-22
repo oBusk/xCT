@@ -202,6 +202,7 @@ addon.merges = {
   [112974] = CreateMergeSpellEntry("ROGUE"),            -- Leeching Poison
   [121411] = CreateMergeSpellEntry("ROGUE", .5),        -- Crimson Tempest                            (INSTANT)
   [122233] = CreateMergeSpellEntry("ROGUE"),            -- Crimson Tempest (DoT)
+  [22482]  = CreateMergeSpellEntry("ROGUE", .5),        -- Blade Flurry                               (INSTANT)
   
 -- shaman (damage)
   [421]    = CreateMergeSpellEntry("SHAMAN", .5),       -- Chain Lightning                            (INSTANT)
