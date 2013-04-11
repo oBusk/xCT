@@ -652,8 +652,11 @@ function x.TestMoreUpdate(self, elapsed)
       elseif self == x.frames["outgoing"] then
         if not x.db.profile.frames["outgoing"].enabledFrame then x:Clear("outgoing") return end
         local message = x:Abbreviate(random(60000))
+				if random(5) % 5 == 0 and (x.db.profile.spells.mergeDontMergeCriticals or x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
+					message = sformat("%s |cffFFFFFFx%s|r", message, random(17)+1)
+				end
         if x.db.profile.frames["outgoing"].iconsEnabled then
-          local spellID = random(10000)
+          local spellID = addon.valid[random(#addon.valid)]
           if x.db.profile.frames["outgoing"].fontJustify == "LEFT" then
             message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames["outgoing"].iconsSize) .. "  " .. message
           else
@@ -664,8 +667,11 @@ function x.TestMoreUpdate(self, elapsed)
       elseif self == x.frames["critical"] and random(2) % 2 == 0 then
         if not x.db.profile.frames["critical"].enabledFrame then x:Clear("critical") return end
         local message = x.db.profile.frames["critical"].critPrefix..x:Abbreviate(random(80000, 200000))..x.db.profile.frames["critical"].critPostfix
+				if (random(5) % 5 == 0) and (x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
+					message = sformat("%s |cffFFFFFFx%s|r", message, random(17)+1)
+				end
         if x.db.profile.frames["critical"].iconsEnabled then
-          local spellID = random(10000)
+          local spellID = addon.valid[random(#addon.valid)]
           if x.db.profile.frames["critical"].fontJustify == "LEFT" then
             message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames["critical"].iconsSize) .. "  " .. message
           else
@@ -679,14 +685,19 @@ function x.TestMoreUpdate(self, elapsed)
       elseif self == x.frames["healing"] and random(2) % 2 == 0 then
         if not x.db.profile.frames["healing"].enabledFrame then x:Clear("healing") return end
         if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
-          local name = UnitName("player")
+          local message = UnitName("player")
+					local realm = ""
+					if x.db.profile.frames["healing"].enableRealmNames then realm = "-"..GetRealmName() end
           if x.db.profile.frames["healing"].enableClassNames then
-            name = sformat("|c%s%s|r", RAID_CLASS_COLORS[select(2,UnitClass("player"))].colorStr, name)
+            message = sformat("|c%s%s%s|r", RAID_CLASS_COLORS[select(2,UnitClass("player"))].colorStr, message, realm)
           end
+					if x.db.profile.spells.mergeHealing and random(2) % 2 == 0 then
+						message = sformat("%s |cffFFFF00x%s|r", message, random(17)+1)
+					end
           if x.db.profile.frames["healing"].fontJustify == "LEFT" then
-            x:AddMessage("healing", "+"..x:Abbreviate(random(90000)) .. " "..name, {.1, ((random(3) + 1) * 63) / 255, .1})
+            x:AddMessage("healing", "+"..x:Abbreviate(random(90000)) .. " "..message, {.1, ((random(3) + 1) * 63) / 255, .1})
           else
-            x:AddMessage("healing", name .. " +"..x:Abbreviate(random(90000)), {.1, ((random(3) + 1) * 63) / 255, .1})
+            x:AddMessage("healing", message .. " +"..x:Abbreviate(random(90000)), {.1, ((random(3) + 1) * 63) / 255, .1})
           end
         else
           x:AddMessage("healing", "+"..x:Abbreviate(random(90000)), {.1, ((random(3) + 1) * 63) / 255, .1})
