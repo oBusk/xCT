@@ -146,6 +146,7 @@ addon.merges = {
   [101423] = CreateMergeSpellEntry("PALADIN"),          -- Seal of Righteousness
   [31935]  = CreateMergeSpellEntry("PALADIN"),          -- Avenger's Shield
   [114919] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Damage)
+  [119072] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Wrath                                 (INSTANT)
 
 -- paladin (healing)
   [94289]  = CreateMergeSpellEntry("PALADIN"),          -- Protector of the Innocent
