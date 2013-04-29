@@ -431,7 +431,9 @@ addon.defaults = {
       combo = {
         ["DEATHKNIGHT"] = {
           [1] = {                                         -- Blood
-            CreateComboSpellEntry(true, 49222),           --   Bone Shield
+            CreateComboSpellEntry(false, 49222),          --   Bone Shield
+						CreateComboSpellEntry(true, 114851),          --   Blood Charge
+						CreateComboSpellEntry(false, 50421),          --   Scent of Blood
           },
           [2] = { },    -- Frost
           [3] = {                                         -- Unholy

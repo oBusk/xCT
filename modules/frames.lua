@@ -694,11 +694,7 @@ function x.TestMoreUpdate(self, elapsed)
 					if x.db.profile.spells.mergeHealing and random(2) % 2 == 0 then
 						message = sformat("%s |cffFFFF00x%s|r", message, random(17)+1)
 					end
-          if x.db.profile.frames["healing"].fontJustify == "LEFT" then
-            x:AddMessage("healing", "+"..x:Abbreviate(random(90000)) .. " "..message, {.1, ((random(3) + 1) * 63) / 255, .1})
-          else
-            x:AddMessage("healing", message .. " +"..x:Abbreviate(random(90000)), {.1, ((random(3) + 1) * 63) / 255, .1})
-          end
+					x:AddMessage("healing", "+"..x:Abbreviate(random(90000)) .. " "..message, {.1, ((random(3) + 1) * 63) / 255, .1})
         else
           x:AddMessage("healing", "+"..x:Abbreviate(random(90000)), {.1, ((random(3) + 1) * 63) / 255, .1})
         end
