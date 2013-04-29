@@ -69,6 +69,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
+        ["megaDamage"] = false,
         
       -- position
         ["X"] = 0,
@@ -113,6 +114,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
+        ["megaDamage"] = false,
         
       -- position
         ["X"] = 480,
@@ -160,6 +162,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
+        ["megaDamage"] = false,
       
       -- position
         ["X"] = 256,
@@ -205,6 +208,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "top",
         ["alpha"] = 100,
+        ["megaDamage"] = false,
         
       -- position
         ["X"] = -448,
@@ -242,6 +246,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
+        ["megaDamage"] = false,
       
       -- positioon
         ["X"] = -320,
@@ -301,6 +306,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
+        ["megaDamage"] = false,
         
       -- position
         ["X"] = 0,
@@ -422,11 +428,12 @@ addon.defaults = {
       mergeSwings = true,
       mergeRanged = true,
       
+      mergeDispells = true,
+      
       -- Only one of these can be true
       mergeDontMergeCriticals = true,
       mergeCriticalsWithOutgoing = false,
       mergeCriticalsByThemselves = false,
-      
       
       combo = {
         ["DEATHKNIGHT"] = {
