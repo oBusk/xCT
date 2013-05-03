@@ -156,9 +156,9 @@ local function ShowFeralComboPoints() return x.db.profile.spells.combo["DRUID"][
 local function ShowMonkChi() return x.db.profile.spells.combo["MONK"][CHI] and x.player.class == "MONK" end
 local function ShowPaladinHolyPower() return x.db.profile.spells.combo["PALADIN"][HOLY_POWER] and x.player.class == "PALADIN" end
 local function ShowPriestShadowOrbs() return x.db.profile.spells.combo["PRIEST"][3][SHADOW_ORBS] and x.player.class == "PRIEST" and x.player.spec == 3 end
-local function ShowWarlockSoulShards() return x.db.profile.spells.combo["WARLOCK"][1][SOUL_SHARDS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 1 end
+local function ShowWarlockSoulShards() return x.db.profile.spells.combo["WARLOCK"][1][SOUL_SHARDS] and x.player.class == "WARLOCK" and x.player.spec == 1 end
 local function ShowWarlockDemonicFury() return x.db.profile.spells.combo["WARLOCK"][2][DEMONIC_FURY] and x.player.class == "WARLOCK" and x.player.spec == 2 end
-local function ShowWarlockBurningEmbers() return x.db.profile.spells.combo["WARLOCK"][3][BURNING_EMBERS_POWER] and x.player.class == "WARLOCK" and x.player.spec == 3 end
+local function ShowWarlockBurningEmbers() return x.db.profile.spells.combo["WARLOCK"][3][BURNING_EMBERS] and x.player.class == "WARLOCK" and x.player.spec == 3 end
 
 local function ClearWhenLeavingCombat() return x.db.profile.frameSettings.clearLeavingCombat end
 local function ShowAbbreviatedDamage() return x.db.profile.megaDamage.enableMegaDamage end
@@ -337,9 +337,9 @@ local function UpdateUnitPower(unit, powertype)
     elseif powertype == "SHADOW_ORBS" and ShowPriestShadowOrbs() then
       value = UnitPower(x.player.unit, SPELL_POWER_SHADOW_ORBS)
     elseif powertype == "SOUL_SHARDS" and ShowWarlockSoulShards() then
-      value = UnitPower(x.player.unit, SPELL_POWER_SOUL_SHARDS)
+      value = UnitPower(x.player.unit, SPELL_POWER_SOUL_SHARDS) / 100
     elseif powertype == "DEMONIC_FURY" and ShowWarlockDemonicFury() then
-      value = mfloor(UnitPower(x.player.unit, SPELL_POWER_DEMONIC_FURY) / 100)
+      value = UnitPower(x.player.unit, SPELL_POWER_DEMONIC_FURY) / 100
     elseif powertype == "BURNING_EMBERS" and ShowWarlockBurningEmbers() then
       value = UnitPower(x.player.unit, SPELL_POWER_BURNING_EMBERS) / 10
     end
