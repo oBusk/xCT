@@ -113,7 +113,7 @@ function x:UpdateCombatTextEvents(enable)
 end
 
 --[=====================================================[
- Fast Boolian Lookups
+ Fast Boolean Lookups
 --]=====================================================]
 local function ShowMissTypes() return COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" end
 local function ShowResistances() return COMBAT_TEXT_SHOW_RESISTANCES == "1" end
@@ -472,8 +472,6 @@ x.combat_events = {
       if FilterIncomingDamage(amount) then return end
       x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "spell_damage_crit")
     end,
-  
-  -- TODO: Add thresholds
   ["HEAL"] = function(healer_name, amount)
       if FilterIncomingHealing(amount) then return end
   
@@ -562,8 +560,6 @@ x.combat_events = {
         x:AddMessage("healing", message, "heal_peri")
       end
     end,
-  
-  -- TODO: Add filter?
   ["SPELL_ACTIVE"] = function(spell_name)
       local spellStacks = select(4, UnitAura("player", spell_name))
       if spellStacks and tonumber(spellStacks) > 1 then
