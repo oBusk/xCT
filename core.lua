@@ -45,6 +45,7 @@ function x:OnInitialize()
   -- Delay updating frames until all other addons are loaded!
   --x:UpdateFrames()
   
+	x:UpdateBlizzardFCT()
   x:UpdateCombatTextEvents(true)
   x:UpdateSpamSpells()
   x:UpdateItemTypes()

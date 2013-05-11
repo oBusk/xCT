@@ -33,8 +33,6 @@ x.runeIcons = {
   ]===]
 }
 
-  
-
 -- Fonts
 local LSM = LibStub("LibSharedMedia-3.0")
 LSM:Register("font", "HOOGE (xCT)", [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\HOOGE.TTF]], LSM.LOCALE_BIT_ruRU + LSM.LOCALE_BIT_western)
@@ -44,11 +42,6 @@ LSM:Register("font", "Champagne (BI)", [[Interface\AddOns\]] .. ADDON_NAME .. [[
 LSM:Register("font", "Champagne (B)", [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\Champagne & Limousines Bold.ttf]], LSM.LOCALE_BIT_western)
 LSM:Register("font", "Champagne (I)", [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\Champagne & Limousines Italic.ttf]], LSM.LOCALE_BIT_western)
 LSM:Register("font", "Champagne", [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\Champagne & Limousines.ttf]], LSM.LOCALE_BIT_western)
-
--- /run print(" \124TInterface\\Icons\\inv_gloves_mail_challengehunter_d_01:20:20:0:-1\124t")
--- /run print(" \124TInterface\\Icons\\gloves_mail_challengehunter_d_01:20:20:0:-1\124t")
--- /run print(" \124TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:20:20:0:-1\124t")
--- /run print(" \124TInterface\\Icons\\inv_stave_2h_pvppandarias1_c_01:20:20:0:-1\124t")
 
 if UnitName("PLAYER") == "Dandruff" or UnitName("PLAYER") == "Dandraffbal" then
   local settings = CreateFrame("FRAME")
