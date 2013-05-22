@@ -170,9 +170,13 @@ addon.merges = {
   [124469] = CreateMergeSpellEntry("PRIEST"),           -- Mind Seer (the second one is the debuff that is applied to your target which lets you clip your mind sears like mind flay)
   [87532]  = CreateMergeSpellEntry("PRIEST"),           -- Shadowy Apparition
   [14914]  = CreateMergeSpellEntry("PRIEST"),           -- Holy Fire
-  [120696] = CreateMergeSpellEntry("PRIEST", 5),        -- Halo (Damage)                              (INSTANT... over 5ish)
+  [129250] = CreateMergeSpellEntry("PRIEST", 4),        -- Power Word: Solace
+	[120696] = CreateMergeSpellEntry("PRIEST", 5),        -- Halo (Damage)                              (INSTANT... over 5ish)
   [15290]  = CreateMergeSpellEntry("PRIEST", 5),        -- Vampiric Embrace (Damage repeated as heals)(over 15s)
-  
+  [122128] = CreateMergeSpellEntry("PRIEST", 3),				-- Divine Star (Heal)                         (INSTANT... over 3ish)
+	[33619]  = CreateMergeSpellEntry("PRIEST", 3),        -- Reflective Shield
+	[127628] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Damage)
+	
   -- Merge Together:
   -- 49821 & 124469 - Mind Seer
   
@@ -189,11 +193,14 @@ addon.merges = {
   [63544]  = CreateMergeSpellEntry("PRIEST"),           -- Rapid Renewal
   [88686]  = CreateMergeSpellEntry("PRIEST", 6),        -- Holy Word: Sanctuary                       (every 2 sec for 30 sec)
   [121148] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade                                    (INSTANT... over 3ish)
-  [110745] = CreateMergeSpellEntry("PRIEST", 3),        -- Divine Star                                (INSTANT... over 3ish)
+  [110745] = CreateMergeSpellEntry("PRIEST", 3),        -- Divine Star (Heal)                         (INSTANT... over 3ish)
   [120692] = CreateMergeSpellEntry("PRIEST", 3),        -- Halo                                       (INSTANT... over 3ish)
   [7001]   = CreateMergeSpellEntry("PRIEST", 4),        -- Light Well                                 (every 2s for 6s)
   [127626] = CreateMergeSpellEntry("PRIEST", 6.5),      -- Devouring Plague (Heal)
   [81751]  = CreateMergeSpellEntry("PRIEST", 6),        -- Atonement (Healing you do through damage)
+	[126154] = CreateMergeSpellEntry("PRIEST", 3),        -- Lightspring Renew
+	[120785] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Heal & Damage ??)
+	[127629] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Heal - Shadow Spec)
 	
 -- rogue
   [51723]  = CreateMergeSpellEntry("ROGUE", .5),        -- Fan of Knives                              (INSTANT)
@@ -213,14 +220,14 @@ addon.merges = {
   [8187]   = CreateMergeSpellEntry("SHAMAN"),           -- Magma Totem
   [8050]   = CreateMergeSpellEntry("SHAMAN"),           -- Flame Shock
   [25504]  = CreateMergeSpellEntry("SHAMAN", .5),       -- Windfury Attack                            (INSTANT)
-  [120687] = CreateMergeSpellEntry("SHAMAN", .5),       -- Stormlash (Stormlash Totem)                (INSTANT)
+  [120687] = CreateMergeSpellEntry("SHAMAN"),           -- Stormlash (Stormlash Totem)
   [10444]  = CreateMergeSpellEntry("SHAMAN"),           -- Flametongue Attack
   [58879]  = CreateMergeSpellEntry("SHAMAN"),           -- Spirit Hunt (Spirit Wolves)
   [26364]  = CreateMergeSpellEntry("SHAMAN"),           -- Lightning Shield (Static Shock)
   [114074] = CreateMergeSpellEntry("SHAMAN", .5),       -- Lava Beam                                  (INSTANT)
   [114738] = CreateMergeSpellEntry("SHAMAN", .5),       -- Lava Beam (Mastery)                        (INSTANT)
   [45297]  = CreateMergeSpellEntry("SHAMAN", .5),       -- Chain Lightning (Mastery)                  (INSTANT)
-  
+	
 -- shaman (healing)
   [73921]  = CreateMergeSpellEntry("SHAMAN"),           -- Healing Rain
   [1064]   = CreateMergeSpellEntry("SHAMAN", .5),       -- Chain Heal                                 (INSTANT)
