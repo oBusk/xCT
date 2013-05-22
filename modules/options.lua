@@ -349,8 +349,23 @@ addon.options.args["spells"] = {
           get = get0_1,
           set = set0_1,
         },
+				
+				listSpacer1 = {
+          type = "description",
+          order = 3,
+          name = "\n|cff798BDDMerge Multiple Dispells Options|r:",
+        },
       
-        listSpacer1 = {
+        mergeDispells = {
+          order = 4,
+          type = 'toggle',
+          name = "Merge Dispells by Spell Name",
+          desc = "Merges multiple dispells that you perform together, if the aura name is the same.",
+          get = get0_1,
+          set = set0_1,
+        },
+				
+        listSpacer2 = {
           type = "description",
           order = 10,
           name = "\n|cff798BDDMerge Auto-Attack Options|r:",
@@ -374,7 +389,7 @@ addon.options.args["spells"] = {
           set = set0_1,
         },
         
-        listSpacer2 = {
+        listSpacer3 = {
           type = "description",
           order = 20,
           name = "\n|cff798BDDMerge Critical Hit Options|r (Choose one):",
@@ -942,12 +957,18 @@ addon.options.args["Frames"] = {
       },
     },
     megaDamage = {
-      name = "Damage Abbreviation Settings",
+      name = "Abbreviation Settings",
       type = 'group',
       order = 5,
       guiInline = true,
       args = {
-        enableMegaDamage = {
+				title = {
+					type = "description",
+					order = 0,
+					name = "Abbreviation will help keep your screen uncluttered and readable. You can enable number abbreviation independently on certain frames through their settings pages.",
+				},
+			
+        --[==[enableMegaDamage = {
           order = 1,
           type = 'toggle',
           name = "Enable",
@@ -955,8 +976,8 @@ addon.options.args["Frames"] = {
           width = "full",
           get = get0,
           set = set0,
-        },
-      
+        },]==]
+
         thousandSymbol = {
           order = 2,
           type = 'input',
@@ -973,6 +994,15 @@ addon.options.args["Frames"] = {
           desc = "Symbol for: |cffFF0000Millions|r |cff798BDD(10e+6)|r",
           get = getTextIn0,
           set = setTextIn0,
+        },
+				decimalPoint = {
+          order = 4,
+          type = 'toggle',
+          name = "Enable Single-Decimal Accuracy",
+          desc = "Shows a single decimal when abbreviating the value (e.g. will show |cff798BDD5.9K|r instead of |cff798BDD6K|r).",
+          width = "full",
+          get = get0,
+          set = set0,
         },
       },
     },
@@ -1140,6 +1170,14 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+        },
+				megaDamage = {
+          order = 5,
+          type = 'toggle',
+          name = "Enable Abbreviation",
+					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          get = get1,
+          set = set1,
         },
         fonts = {
           order = 10,
@@ -1419,6 +1457,14 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+        },
+				megaDamage = {
+          order = 5,
+          type = 'toggle',
+          name = "Enable Abbreviation",
+					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          get = get1,
+          set = set1,
         },
         fonts = {
           order = 10,
@@ -1725,6 +1771,14 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1_update,
         },
+				megaDamage = {
+          order = 5,
+          type = 'toggle',
+          name = "Enable Abbreviation",
+					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          get = get1,
+          set = set1,
+        },
         fonts = {
           order = 10,
           type = 'group',
@@ -1998,6 +2052,14 @@ addon.options.args["Frames"] = {
           get = get1,
           set = set1_update,
         },
+				megaDamage = {
+          order = 5,
+          type = 'toggle',
+          name = "Enable Abbreviation",
+					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          get = get1,
+          set = set1,
+        },
         fonts = {
           order = 10,
           type = 'group',
@@ -2220,6 +2282,14 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+        },
+				megaDamage = {
+          order = 5,
+          type = 'toggle',
+          name = "Enable Abbreviation",
+					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          get = get1,
+          set = set1,
         },
         fonts = {
           order = 10,
@@ -2558,6 +2628,14 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+        },
+				megaDamage = {
+          order = 5,
+          type = 'toggle',
+          name = "Enable Abbreviation",
+					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          get = get1,
+          set = set1,
         },
         fonts = {
           order = 10,

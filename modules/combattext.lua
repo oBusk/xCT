@@ -161,7 +161,6 @@ local function ShowWarlockDemonicFury() return x.db.profile.spells.combo["WARLOC
 local function ShowWarlockBurningEmbers() return x.db.profile.spells.combo["WARLOCK"][3][BURNING_EMBERS] and x.player.class == "WARLOCK" and x.player.spec == 3 end
 
 local function ClearWhenLeavingCombat() return x.db.profile.frameSettings.clearLeavingCombat end
-local function ShowAbbreviatedDamage() return x.db.profile.megaDamage.enableMegaDamage end
 
 local function MergeIncomingHealing() return x.db.profile.spells.mergeHealing end
 local function MergeMeleeSwings() return x.db.profile.spells.mergeSwings end

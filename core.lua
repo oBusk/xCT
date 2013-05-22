@@ -36,6 +36,9 @@ function x:OnInitialize()
   self.db.RegisterCallback(self, 'OnProfileReset', 'RefreshConfig')
   self.db:GetCurrentProfile()
   
+	-- Clean up the Profile
+	x:CompatibilityLogic()
+	
   -- Add the profile options to my dialog config
   addon.options.args['Profiles'] = LibStub('AceDBOptions-3.0'):GetOptionsTable(self.db)
   
@@ -68,11 +71,33 @@ frameUpdate:SetScript("OnEvent", function(self)
   x:UpdateFrames()
 end)
 
+-- This function was created as the centeral location for crappy code
+function x:CompatibilityLogic()
+	
+	-- MegaDamage Change (version 3.3.0)
+	if self.db.profile.megaDamage.enableMegaDamage == false then
+		self.db.profile.megaDamage.enableMegaDamage = nil
+	elseif self.db.profile.megaDamage.enableMegaDamage == true then
+		self.db.profile.megaDamage.enableMegaDamage = nil
+		self.db.profile.frames.general.megaDamage = true
+		self.db.profile.frames.outgoing.megaDamage = true
+		self.db.profile.frames.critical.megaDamage = true
+		self.db.profile.frames.damage.megaDamage = true
+		self.db.profile.frames.healing.megaDamage = true
+		self.db.profile.frames.power.megaDamage = true
+	end
+	
+end
+
 -- Profile Updated, need to refresh important stuff 
 function x:RefreshConfig()
+	-- Clean up the Profile
+	x:CompatibilityLogic()
+
   x:UpdateFrames()
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
+	
   collectgarbage()
 end
 

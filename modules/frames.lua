@@ -231,15 +231,21 @@ end
 -- =====================================================
 function x:Abbreviate(amount, frameName)
   local message = tostring(amount)
-  if self.db.profile.megaDamage.enableMegaDamage then
-    if not frameName or frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
-      if (amount >= 1000000) then
-        message = tostring(mfloor((amount + 500000) / 1000000)) .. self.db.profile.megaDamage.millionSymbol
-      elseif (amount >= 1000) then
-        message = tostring(mfloor((amount + 500) / 1000)) .. self.db.profile.megaDamage.thousandSymbol
-      end
-    end
-  end
+	if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
+		if (amount >= 1000000) then
+			if self.db.profile.megaDamage.decimalPoint then
+				message = tostring(mfloor((amount + 50000) / 100000) / 10) .. self.db.profile.megaDamage.millionSymbol
+			else
+				message = tostring(mfloor((amount + 500000) / 1000000)) .. self.db.profile.megaDamage.millionSymbol
+			end
+		elseif (amount >= 1000) then
+			if self.db.profile.megaDamage.decimalPoint then
+				message = tostring(mfloor((amount + 50) / 100) / 10) .. self.db.profile.megaDamage.thousandSymbol
+			else
+				message = tostring(mfloor((amount + 500) / 1000)) .. self.db.profile.megaDamage.thousandSymbol
+			end
+		end
+	end
   return message
 end 
 
@@ -431,7 +437,7 @@ do
       
       -- Abbreviate the merged total
       if tonumber(total) then
-        x:Abbreviate(tonumber(total), frameIndex[index])
+        message = x:Abbreviate(tonumber(total), frameIndex[index])
       end
       
       local format_mergeCount = "%s |cffFFFFFFx%s|r"
