@@ -131,7 +131,15 @@ addon.defaults = {
       -- font colors
         ["customColor"] = false,
         ["fontColor"] = nil,
-        
+        ["standardSpellColor"] = true,
+				["colorPhysical"] = {1.00, 1.00, 0.00},
+				["colorHoly"] = {1.00, 0.90, 0.50},
+				["colorFire"] = {1.00, 0.50, 0.00},
+				["colorNature"] = {0.30, 1.00, 0.30},
+				["colorFrost"] = {0.50, 1.00, 1.00},
+				["colorShadow"] = {0.50, 0.50, 1.00},
+				["colorArcane"] = {1.00, 0.50, 1.00},
+				
       -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,

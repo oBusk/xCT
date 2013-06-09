@@ -201,6 +201,28 @@ end
 
 local function IsMerged(spellID) return x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled end
 
+local function UseStandardSpellColors() return x.db.profile.frames["outgoing"].standardSpellColor end
+local function GetCustomSpellColorFromIndex(index)
+	if index == 1 then
+	  return x.db.profile.frames["outgoing"].colorPhysical
+	elseif index == 2 then
+		return x.db.profile.frames["outgoing"].colorHoly
+	elseif index == 4 then
+		return x.db.profile.frames["outgoing"].colorFire
+	elseif index == 8 then
+		return x.db.profile.frames["outgoing"].colorNature
+	elseif index == 16 then
+		return x.db.profile.frames["outgoing"].colorFrost
+	elseif index == 32 then
+		return x.db.profile.frames["outgoing"].colorShadow
+	elseif index == 64 then
+		return x.db.profile.frames["outgoing"].colorArcane
+	else
+		return x.db.profile.frames["outgoing"].colorPhysical
+	end
+end
+
+
 --[=====================================================[
  String Formatters
 --]=====================================================]
@@ -969,6 +991,8 @@ x.outgoing_events = {
 
       -- Check for Critical
       if critical then
+				outputColor = "heal_out_crit"
+			
         if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
           x:AddSpamMessage("critical", spellID, message, outputColor)
@@ -1020,7 +1044,7 @@ x.outgoing_events = {
       if critical then
         if ShowSwingCrit() then
           outputFrame = "critical"
-
+					outputColor = "out_damage_crit"
           if ShowSwingCritPrefix() then
             critMessage = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, x:Abbreviate(amount, "critical"), x.db.profile.frames["critical"].critPostfix)
           end
@@ -1144,11 +1168,15 @@ x.outgoing_events = {
       if IsSpellFiltered(spellID) then return end
       
       -- Get special magic color
-      if x.damagecolor[spellSchool] then
-        outputColor = x.damagecolor[spellSchool]
-      else
-        outputColor = x.damagecolor[1]
-      end
+			if UseStandardSpellColors() then
+				if x.damagecolor[spellSchool] then
+					outputColor = x.damagecolor[spellSchool]
+				else
+					outputColor = x.damagecolor[1]
+				end
+			else
+				outputColor = GetCustomSpellColorFromIndex(spellSchool)
+			end
       
       -- Check for merge
       if IsMerged(spellID) then
@@ -1201,11 +1229,15 @@ x.outgoing_events = {
       if IsSpellFiltered(spellID) then return end
       
       -- Get special magic color
-      if x.damagecolor[spellSchool] then
-        outputColor = x.damagecolor[spellSchool]
-      else
-        outputColor = x.damagecolor[1]
-      end
+			if UseStandardSpellColors() then
+				if x.damagecolor[spellSchool] then
+					outputColor = x.damagecolor[spellSchool]
+				else
+					outputColor = x.damagecolor[1]
+				end
+			else
+				outputColor = GetCustomSpellColorFromIndex(spellSchool)
+			end
       
       -- Check for merge
       if IsMerged(spellID) then
@@ -1314,7 +1346,7 @@ x.outgoing_events = {
   ["SPELL_DISPEL"] = function(...)
       if not ShowDispells() then return end
   
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   spellID, spellName, _,   dispelSourceID, dispelSourceName, _,  auraType = ...
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_DISPELLED, spellName), "dispell_debuff"
       
       -- Check for buff or debuff (for color)
@@ -1341,7 +1373,7 @@ x.outgoing_events = {
   ["SPELL_STOLEN"] = function(...)
       if not ShowDispells() then return end
       
-			local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   spellID, spellName, _,   dispelSourceID, dispelSourceName, _, auraType = ...
+			local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_STOLE, spellName), "spell_stolen"
       
       -- Add Icons

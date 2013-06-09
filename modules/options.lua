@@ -252,6 +252,7 @@ local function setTextIn2(info, value) x.db.profile.frames[info[#info-2]][info[#
 local function getNumber2(info) return tostring(x.db.profile[info[#info-2]][info[#info]]) end
 local function setNumber2(info, value) if tonumber(value) then x.db.profile[info[#info-2]][info[#info]] = tonumber(value) end end
 
+local function outgoingSpellColorsHidden(info) return x.db.profile.frames["outgoing"].standardSpellColor end
 
 local function setSpecialCriticalOptions(info, value)
   x.db.profile[info[#info-2]].mergeCriticalsWithOutgoing = false
@@ -1532,7 +1533,6 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Font Colors",
           args = {
-          
             customColor = {
               order = 1,
               type = 'toggle',
@@ -1540,7 +1540,6 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
             fontColor = {
               type = 'color',
               name = "Custom Color",
@@ -1548,6 +1547,75 @@ addon.options.args["Frames"] = {
               get = getColor2,
               set = setColor2,
             },
+						spacer1 = {
+							order = 10,
+							type = 'description',
+							name = "",
+						},
+						standardSpellColor = {
+							order = 11,
+							type = 'toggle',
+							name = "Use Standard Spell School Colors",
+							width = 'full',
+							get = get2,
+              set = set2,
+						},
+						colorPhysical = {
+							type = 'color',
+              name = "Physical Damage",
+              order = 12,
+              get = getColor2,
+              set = setColor2,
+							hidden = outgoingSpellColorsHidden,
+						},
+						colorHoly = {
+							type = 'color',
+              name = "Holy Damage",
+              order = 13,
+              get = getColor2,
+              set = setColor2,
+							hidden = outgoingSpellColorsHidden,
+						},
+						colorFire = {
+							type = 'color',
+              name = "Fire Damage",
+              order = 14,
+              get = getColor2,
+              set = setColor2,
+							hidden = outgoingSpellColorsHidden,
+						},
+						colorNature = {
+							type = 'color',
+              name = "Nature Damage",
+              order = 15,
+              get = getColor2,
+              set = setColor2,
+							hidden = outgoingSpellColorsHidden,
+						},
+						colorFrost = {
+							type = 'color',
+              name = "Frost Damage",
+              order = 16,
+              get = getColor2,
+              set = setColor2,
+							hidden = outgoingSpellColorsHidden,
+						},
+						colorShadow = {
+							type = 'color',
+              name = "Shadow Damage",
+              order = 17,
+              get = getColor2,
+              set = setColor2,
+							hidden = outgoingSpellColorsHidden,
+						},
+						colorArcane = {
+							type = 'color',
+              name = "Arcane Damage",
+              order = 18,
+              get = getColor2,
+              set = setColor2,
+							hidden = outgoingSpellColorsHidden,
+						},
           },
         },
         icons = {
