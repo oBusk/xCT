@@ -136,6 +136,7 @@ local function ShowMisses() return x.db.profile.frames["outgoing"].enableMisses 
 local function ShowSwingCrit() return x.db.profile.frames["critical"].showSwing end
 local function ShowSwingCritPrefix() return x.db.profile.frames["critical"].prefixSwing end
 local function ShowLootItems() return x.db.profile.frames["loot"].showItems end
+local function ShowLootItemTypes() return x.db.profile.frames["loot"].showItemTypes end
 local function ShowLootMoney() return x.db.profile.frames["loot"].showMoney end
 local function ShowTotalItems() return x.db.profile.frames["loot"].showItemTotal end
 local function ShowLootCrafted() return x.db.profile.frames["loot"].showCrafted end
@@ -240,7 +241,7 @@ local format_faction_sub  = "%s %s"
 local format_crit         = "%s%s%s"
 local format_dispell      = "%s: %s"
 local format_quality      = "ITEM_QUALITY%s_DESC"
-local format_remove_realm = "(%w+)-%w+"
+local format_remove_realm = "(.*)-.*"
 
 local format_spell_icon   = " |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_loot_icon    = "|T%s:%d:%d:0:0:64:64:5:59:5:59|t"
@@ -825,7 +826,7 @@ x.events = {
           local r, g, b = GetItemQualityColor(itemQuality)
           -- "%s%s: %s [%s]%s %%s"
           local message = sformat(format_lewtz,
-              itemType,                                 -- Item Type
+              ShowLootItemTypes() and itemType or "Item",		-- Item Type
               ShowColorBlindMoney()                     -- Item Quality (Color Blind)
                 and sformat(format_lewtz_blind,
                               _G[sformat(format_quality,

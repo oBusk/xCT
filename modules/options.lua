@@ -3303,24 +3303,32 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Special Tweaks",
           args = {
-            showItems = {
-              order = 1,
-              type = 'toggle',
-              name = "Looted Items",
-              desc = "Displays items that you pick up.",
-              get = get2,
-              set = set2,
-            },
             showMoney = {
-              order = 2,
+              order = 1,
               type = 'toggle',
               name = "Looted Money",
               desc = "Displays money that you pick up.",
               get = get2,
               set = set2,
             },
-            showItemTotal = {
+						showItems = {
+              order = 2,
+              type = 'toggle',
+              name = "Looted Items",
+              desc = "Displays items that you pick up.",
+              get = get2,
+              set = set2,
+            },
+            showItemTypes = {
               order = 3,
+              type = 'toggle',
+              name = "Show Item Types",
+              desc = "Formats the looted message to also include the type of item (e.g. Trade Goods, Armor, Junk, etc.).",
+              get = get2,
+              set = set2,
+            },
+            showItemTotal = {
+              order = 4,
               type = 'toggle',
               name = "Total Items",
               desc = "Displays how many items you have in your bag.",
@@ -3328,7 +3336,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             showCrafted = {
-              order = 4,
+              order = 5,
               type = 'toggle',
               name = "Crafted Items",
               desc = "Displays items that you crafted.",
@@ -3336,7 +3344,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             showQuest = {
-              order = 5,
+              order = 6,
               type = 'toggle',
               name = "Quest Items",
               desc = "Displays items that pertain to a quest.",
@@ -3344,7 +3352,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             colorBlindMoney = {
-              order = 6,
+              order = 7,
               type = 'toggle',
               name = "Color Blind Mode",
               desc = "Displays money using letters G, S, and C instead of icons.",
@@ -3352,7 +3360,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             filterItemQuality = {
-              order = 7,
+              order = 8,
               type = 'select',
               name = "Filter Item Quality",
               desc = "Will not display any items that are below this quality (does not filter Quest or Crafted items).",
