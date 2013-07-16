@@ -148,7 +148,8 @@ addon.merges = {
   [114919] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Damage)
   [119072] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Wrath                                 (INSTANT)
   [86704]  = CreateMergeSpellEntry("PALADIN", .5),      -- Ancient Fury                               (INSTANT)
-
+	[114852] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Prism (Healing on Target, Damage AoE) (ISNTANT)
+	
 -- paladin (healing)
   [94289]  = CreateMergeSpellEntry("PALADIN"),          -- Protector of the Innocent
   [53652]  = CreateMergeSpellEntry("PALADIN"),          -- Beacon of Light
@@ -159,7 +160,8 @@ addon.merges = {
   [119952] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Heal)                        (Every 2s for 17.5s)
   [114163] = CreateMergeSpellEntry("PALADIN", 5),       -- Eternal Flame				                      (Every 3s for 30s)
   [86678]  = CreateMergeSpellEntry("PALADIN"),          -- Light of the Ancient kings
-  
+  [114871] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Prism (Damage on Target, Healing AoE)	(ISNTANT)
+	
 -- priest (damage)
   [47666]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Damage Effect)
   [132157] = CreateMergeSpellEntry("PRIEST", .5),       -- Holy Nova (Damage Effect)                  (INSTANT)
