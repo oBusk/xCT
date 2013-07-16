@@ -418,6 +418,7 @@ addon.defaults = {
         
       -- special tweaks
         ["showItems"] = true,
+        ["showItemTypes"] = true,
         ["showMoney"] = true,
         ["showItemTotal"] = true,
         ["showCrafted"] = true,
