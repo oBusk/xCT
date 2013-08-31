@@ -18,8 +18,17 @@ local ADDON_NAME, addon = ...
 local x = addon.engine
 
 -- up values
-local _, _G, sformat, mfloor, ssub, sgsub, s_upper, s_lower, string, tinsert, ipairs, pairs, print, tostring, tonumber, select, unpack =
-  nil, _G, string.format, math.floor, string.sub, string.gsub, string.upper, string.lower, string, table.insert, ipairs, pairs, print, tostring, tonumber, select, unpack
+local _, _G, sformat, mfloor, ssub, smatch, sgsub, s_upper, s_lower, string, tinsert, ipairs, pairs, print, tostring, tonumber, select, unpack =
+  nil, _G, string.format, math.floor, string.sub, string.match, string.gsub, string.upper, string.lower, string, table.insert, ipairs, pairs, print, tostring, tonumber, select, unpack
+
+--[=====================================================[
+ Holds cached spells, buffs, and debuffs
+--]=====================================================]
+x.spellCache = {
+  buffs = { },
+  debuffs = { },
+  spells = { },
+}
 
 --[=====================================================[
  Holds player info; use AddOn:UpdatePlayer()
@@ -78,7 +87,7 @@ function x:UpdateCombatTextEvents(enable)
     -- Enabled Combat Text
     f:RegisterEvent("COMBAT_TEXT_UPDATE")
     f:RegisterEvent("UNIT_HEALTH")
-    f:RegisterEvent("UNIT_MANA")
+	f:RegisterEvent("UNIT_POWER")
     f:RegisterEvent("PLAYER_REGEN_DISABLED")
     f:RegisterEvent("PLAYER_REGEN_ENABLED")
     f:RegisterEvent("UNIT_ENTERED_VEHICLE")
@@ -98,7 +107,6 @@ function x:UpdateCombatTextEvents(enable)
     f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     
     -- Class combo points
-    f:RegisterEvent("UNIT_POWER") -- monk
     f:RegisterEvent("UNIT_AURA")
     f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
     f:RegisterEvent("UNIT_COMBO_POINTS")
@@ -176,6 +184,7 @@ local function FilterOutgoingDamage(value) return x.db.profile.spellFilter.filte
 local function FilterOutgoingHealing(value) return x.db.profile.spellFilter.filterOutgoingHealingValue > value end
 local function FilterIncomingDamage(value) return x.db.profile.spellFilter.filterIncomingDamageValue > value end
 local function FilterIncomingHealing(value) return x.db.profile.spellFilter.filterIncomingHealingValue > value end
+local function TrackSpells() return x.db.profile.spellFilter.trackSpells end
 
 local function IsBearForm() return GetShapeshiftForm() == 1 and x.player.class == "DRUID" end
 local function IsSpellFiltered(spellID)
@@ -500,7 +509,7 @@ x.combat_events = {
       local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
       
       if not ShowHealingRealmNames() then
-        healer_name = string.match(healer_name, format_remove_realm) or healer_name
+        healer_name = smatch(healer_name, format_remove_realm) or healer_name
       end
       
       if MergeIncomingHealing() then
@@ -529,7 +538,7 @@ x.combat_events = {
       local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
       
       if not ShowHealingRealmNames() then
-        healer_name = string.match(healer_name, format_remove_realm) or healer_name
+        healer_name = smatch(healer_name, format_remove_realm) or healer_name
       end
       
       if MergeIncomingHealing() then
@@ -558,7 +567,7 @@ x.combat_events = {
       local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
       
       if not ShowHealingRealmNames() then
-        healer_name = string.match(healer_name, format_remove_realm) or healer_name
+        healer_name = smatch(healer_name, format_remove_realm) or healer_name
       end
       
       if MergeIncomingHealing() then
@@ -700,9 +709,9 @@ x.combat_events = {
     end,
 
   ["SPELL_AURA_END"] = function(spellname) if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage("general", sformat(format_fade, spellname), "aura_end") end end,
-  ["SPELL_AURA_START"] = function(spellname) if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage("general", sformat(format_gain, spellname), "aura_start") end end,
+  ["SPELL_AURA_START"] = function(spellname) if TrackSpells() then x.spellCache.buffs[spellname] = true end if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage("general", sformat(format_gain, spellname), "aura_start") end end,
   ["SPELL_AURA_END_HARMFUL"] = function(spellname) if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage("general", sformat(format_fade, spellname), "aura_end") end end,
-  ["SPELL_AURA_START_HARMFUL"] = function(spellname) if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage("general", sformat(format_gain, spellname), "aura_start_harm") end end,
+  ["SPELL_AURA_START_HARMFUL"] = function(spellname) if TrackSpells() then x.spellCache.debuffs[spellname] = true end if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage("general", sformat(format_gain, spellname), "aura_start_harm") end end,
   
   -- TODO: Create a merger for faction and honor xp
   ["HONOR_GAINED"] = function(amount)
@@ -735,7 +744,10 @@ x.events = {
         x.lowHealth = false
       end
     end,
-  ["UNIT_MANA"] = function()
+  ["UNIT_POWER"] = function(unit, powerType)
+      -- Update for Class Combo Points
+      UpdateUnitPower(unit, powerType)
+  
       if select(2, UnitPowerType(x.player.unit)) == "MANA" and ShowLowResources() and UnitPower(x.player.unit) / UnitPowerMax(x.player.unit) <= COMBAT_TEXT_LOW_MANA_THRESHOLD then
         if not x.lowMana then
           x:AddMessage("general", MANA_LOW, "low_mana")
@@ -772,7 +784,6 @@ x.events = {
         x:AddMessage("general", sformat(format_gain, ENTERING_COMBAT), "combat_begin")
       end
     end,
-  ["UNIT_POWER"] = function(unit, powerType) UpdateUnitPower(unit, powerType) end,
   ["UNIT_COMBO_POINTS"] = function() UpdateComboPoints() end,
   
   ["PLAYER_TARGET_CHANGED"] = function() UpdateComboPoints() end,
@@ -905,7 +916,10 @@ x.outgoing_events = {
       local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
       local outputFrame, message, outputColor = "outgoing", amount, "heal_out"
       local merged = false
-      
+
+      -- Keep track of spells that go by
+      if TrackSpells() then x.spellCache.spells[spellID] = true end
+
       -- Filter Ougoing Healing
       if FilterOutgoingHealing(amount) then return end
       
@@ -966,6 +980,9 @@ x.outgoing_events = {
       local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
       local outputFrame, message, outputColor = "outgoing", amount, "heal_out"
       local merged = false
+
+      -- Keep track of spells that go by
+      if TrackSpells() then x.spellCache.spells[spellID] = true end
 
       -- Filter Ougoing Healing
       if FilterOutgoingHealing(amount) then return end
@@ -1085,6 +1102,9 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "out_damage"
       local merged, critMessage = false, nil
       
+      -- Keep track of spells that go by
+      if TrackSpells() then x.spellCache.spells[spellID] = true end
+
       -- Filter Outgoing Damage
       if FilterOutgoingDamage(amount) then return end
       
@@ -1162,6 +1182,9 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "out_damage"
       local merged = false
       
+      -- Keep track of spells that go by
+      if TrackSpells() then x.spellCache.spells[spellID] = true end
+
       -- Filter Outgoing Damage
       if FilterOutgoingDamage(amount) then return end
       
@@ -1223,6 +1246,9 @@ x.outgoing_events = {
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "out_damage"
       local merged = false
       
+      -- Keep track of spells that go by
+      if TrackSpells() then x.spellCache.spells[spellID] = true end
+
       -- Filter Outgoing Damage
       if FilterOutgoingDamage(amount) then return end
       

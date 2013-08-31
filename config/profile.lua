@@ -54,6 +54,7 @@ addon.defaults = {
     frameSettings = {
       clearLeavingCombat = false,
       showGrid = true,
+	  showPositions = true,
       frameStrata = "5HIGH",
     },
     
@@ -119,7 +120,7 @@ addon.defaults = {
       -- position
         ["X"] = 480,
         ["Y"] = 0,
-        ["Width"] = 196,
+        ["Width"] = 192,
         ["Height"] = 320,
         
       -- fonts
@@ -132,14 +133,14 @@ addon.defaults = {
         ["customColor"] = false,
         ["fontColor"] = nil,
         ["standardSpellColor"] = true,
-				["colorPhysical"] = {1.00, 1.00, 0.00},
-				["colorHoly"] = {1.00, 0.90, 0.50},
-				["colorFire"] = {1.00, 0.50, 0.00},
-				["colorNature"] = {0.30, 1.00, 0.30},
-				["colorFrost"] = {0.50, 1.00, 1.00},
-				["colorShadow"] = {0.50, 0.50, 1.00},
-				["colorArcane"] = {1.00, 0.50, 1.00},
-				
+		["colorPhysical"] = {1.00, 1.00, 0.00},
+		["colorHoly"] = {1.00, 0.90, 0.50},
+		["colorFire"] = {1.00, 0.50, 0.00},
+		["colorNature"] = {0.30, 1.00, 0.30},
+		["colorFrost"] = {0.50, 1.00, 1.00},
+		["colorShadow"] = {0.50, 0.50, 1.00},
+		["colorArcane"] = {1.00, 0.50, 1.00},
+		
       -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
@@ -431,12 +432,9 @@ addon.defaults = {
     spells = {
       enableMerger = true,        -- enable/disable spam merger
       enableMergerDebug = false,  -- Shows spell IDs for debugging merged spells
-      
       mergeHealing = true,
-      
       mergeSwings = true,
       mergeRanged = true,
-      
       mergeDispells = true,
       
       -- Only one of these can be true
@@ -578,7 +576,7 @@ addon.defaults = {
       listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
       listDebuffs  = { },  -- Used to filter gains/fades of debuffs  (Spell Name)
       listSpells   = { },  -- Used to filter outgoing spells         (Spell ID)
-      
+	  
       -- Minimal Spell Amount
       filterPowerValue = 0,
       filterOutgoingDamageValue = 0,

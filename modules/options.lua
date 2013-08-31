@@ -286,6 +286,47 @@ local function setSpell(info, value)
   end
 end
 
+local function IsTrackSpellsDisabled() return not x.db.profile.spellFilter.trackSpells end
+
+-- Lists that will be used to show tracked spells
+local buffHistory, debuffHistory, spellHistory = { }, { }, { }
+
+local function GetBuffHistory()
+  for i in pairs(buffHistory) do
+    buffHistory[i] = nil
+  end
+  
+  for i in pairs(x.spellCache.buffs) do
+    buffHistory[i] = x:GetSpellTextureFormatted(i, 16).." "..i
+  end
+  
+  return buffHistory
+end
+
+local function GetDebuffHistory()
+  for i in pairs(debuffHistory) do
+    debuffHistory[i] = nil
+  end
+  
+  for i in pairs(x.spellCache.debuffs) do
+    debuffHistory[i] = x:GetSpellTextureFormatted(i, 16).." "..i
+  end
+  
+  return debuffHistory
+end
+
+local function GetSpellHistory()
+  for i in pairs(spellHistory) do
+    spellHistory[i] = nil
+  end
+  
+  for i in pairs(x.spellCache.spells) do
+    local name = GetSpellInfo(i) or "Unknown Spell ID"
+    spellHistory[tostring(i)] = x:GetSpellTextureFormatted(i, 16).." "..name.." (|cff798BDD"..i.."|r)"
+  end
+  
+  return spellHistory
+end
 
 addon.options.args["spells"] = {
   name = "Spam Merger",
@@ -454,18 +495,6 @@ addon.options.args["spellFilter"] = {
       name = "",
     },
     
-    -- This is a feature option that I will enable when I get more time D:
-    --[[trackSpells = {
-      order = 5,
-      type = 'toggle',
-      name = "Track Spells (|cffFF0000DEBUG)|r",
-      desc = "Track incoming |cff1AFF1ABuff|r and |cff1AFF1ADebuff|r names, as well as |cff71d5ffOutgoing Spell|r IDs. |cffFF0000(RECOMMEND FOR TEMPORARY USE ONLY)|r",
-      set = set0,
-      get = get0,
-      
-      disabled = true,
-    },]]
-    
     filterValues = {
       name = "Minimal Value Thresholds",
       type = 'group',
@@ -537,12 +566,37 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
+	
+    spellFilter = {
+      name = "Track Spell History",
+      type = 'group',
+      order = 11,
+      guiInline = true,
+      args = {
+	  
+        -- This is a feature option that I will enable when I get more time D:
+        trackSpells = {
+          order = 1,
+          type = 'toggle',
+          name = "Enable (|cffFF0000DEBUG|r)",
+          desc = "\n\nTrack incoming |cff1AFF1ABuff|r and |cff1AFF1ADebuff|r names, as well as |cff71d5ffOutgoing Spell|r IDs. |cffFF0000(RECOMMEND FOR TEMPORARY USE ONLY)|r\n",
+          set = set0_1,
+          get = get0_1,
+        },
+		
+        description = {
+          type = 'description',
+          order = 2,
+          name = "\n|cffFF0000WARNING:|r This option was designed to help you filter spells more easily. Because of the large |cffFF8000memory requirements|r to hold a list of all the spells you use, this option is meant for temporary use! It is best used during a test Boss pull like in LFR. After you disable this option, you should perform a |cff798BDDUI Reload|r to reclaim the resources (e.g. type: '|cffFFFF00/reload|r').",
+        },
+      },
+    },
     
     
     listBuffs = {
       name = "|cffFFFFFFFilter:|r |cff798BDDBuffs|r",
       type = 'group',
-      order = 10,
+      order = 20,
       guiInline = false,
       args = {
         title = {
@@ -577,21 +631,23 @@ addon.options.args["spellFilter"] = {
         },
         
         -- This is a feature option that I will enable when I get more time D:
-        --[[selectTracked = {
+        selectTracked = {
           order = 4,
           type = 'select',
-          name = "Buffs:",
-          desc = "A list of |cff1AFF1ABuff|r names that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
-          disabled = true,
-          values = { },
-        },]]
+          name = "Buff History:",
+          desc = "A list of |cff1AFF1ABuff|r names that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
+          disabled = IsTrackSpellsDisabled,
+          values = GetBuffHistory,
+		  get = noop,
+		  set = setSpell,
+        },
       },
     },
     
     listDebuffs = {
       name = "|cffFFFFFFFilter:|r |cff798BDDDebuffs|r",
       type = 'group',
-      order = 20,
+      order = 30,
       guiInline = false,
       args = {
         title = {
@@ -626,21 +682,23 @@ addon.options.args["spellFilter"] = {
         },
         
         -- This is a feature option that I will enable when I get more time D:
-        --[[selectTracked = {
+        selectTracked = {
           order = 4,
           type = 'select',
-          name = "Debuffs:",
-          desc = "A list of |cffFF1A1ADebuff|r names that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
-          disabled = true,
-          values = { },
-        },]]
+          name = "Debuff History:",
+          desc = "A list of |cffFF1A1ABuff|r names that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
+          disabled = IsTrackSpellsDisabled,
+          values = GetDebuffHistory,
+		  get = noop,
+		  set = setSpell,
+        },
       },
     },
     
     listSpells = {
       name = "|cffFFFFFFFilter:|r |cff798BDDOutgoing Spells|r",
       type = 'group',
-      order = 30,
+      order = 40,
       guiInline = false,
       args = {
         title = {
@@ -675,14 +733,16 @@ addon.options.args["spellFilter"] = {
         },
         
         -- This is a feature option that I will enable when I get more time D:
-        --[[selectTracked = {
+        selectTracked = {
           order = 4,
           type = 'select',
-          name = "Spells:",
-          desc = "A list of |cff71d5ffOutgoing Spell|r IDs that have been seen. (|cffFF0000Requires:|r |cffFFFF00Track Spells|r)",
-          disabled = true,
-          values = { },
-        },]]
+          name = "Spell History:",
+          desc = "A list of |cff71d5ffOutgoing Spell|r IDs that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
+          disabled = IsTrackSpellsDisabled,
+          values = GetSpellHistory,
+		  get = noop,
+		  set = setSpell,
+        },
       },
     },
     
@@ -926,6 +986,7 @@ addon.options.args["Frames"] = {
           get = get0,
           set = set0,
         },
+		
         showGrid = {
           order = 2,
           type = 'toggle',
@@ -935,9 +996,18 @@ addon.options.args["Frames"] = {
           set = set0,
         },
         
+		showPositions = {
+          order = 3,
+          type = 'toggle',
+          name = "Show Positions",
+          desc = "Shows the locations and sizes of your frames after you |cffFFFF00Toggle Frames|r to help you align |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames better.",
+          get = get0,
+          set = set0,
+        },
+		
         frameStrata = {
           type = 'select',
-          order = 3,
+          order = 4,
           name = "Frame Strata",
           desc = "The Z-Layer to place the |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames onto. If you find that another addon is in front of |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames, try increasing the Frame Strata.",
           values = {
