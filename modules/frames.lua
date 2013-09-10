@@ -298,7 +298,7 @@ function x:AddMessage(framename, message, colorname)
 			r, g, b = unpack(colorname)
 		else
 			if not x.colors[colorname] then
-				print("FRAME:", framename,"	xct+ says there is no color named:", colorname)
+				print("FRAME:", framename,"  xct+ says there is no color named:", colorname)
 			else
 				r, g, b = unpack(x.colors[colorname])
 			end
@@ -319,6 +319,7 @@ function x:AddMessage(framename, message, colorname)
 	end
 end
 
+local spam = { }
 local spamHeap, spamStack = {}, {}
 local spam_format = "%s%s x%s"
 
@@ -348,14 +349,17 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
 			update	= interval or (x.db.profile.spells.merge[mergeID] and x.db.profile.spells.merge[mergeID].interval or 3),	 -- how often to update
 			entries = {					 -- entries to merge
 					message,
-				},				
+				},
 			color	 = colorname,	-- color
 		}
 		table_insert(stack, mergeID)
 	end
+	
+	-- Start the spam merger
+	--spam.isSpamMergerUpdated = true
+	--x.merge:SetScript("OnUpdate", x.OnSpamUpdate)
 end
 
-do
 --[================================================================[
              _____ _______                           ____  
             / ____|__   __|                         |___ \ 
@@ -400,37 +404,41 @@ do
 	
 	]================================================================]
 
-
+do
 	for _, frameName in pairs(frameIndex) do
 		spamHeap[frameName] = {}
 		spamStack[frameName] = {}
 	end
 
-	local index = 1
+	spam.currentIndex = 1
 	local frames = {}
 	local now = 0
 	
-	local function OnSpamUpdate(self, elapsed)
+	-- Looped without any new entries
+	--spam.isSpamMergerUpdated = false
+	--spam.lastUpdateIndex = 0
+	
+	function x.OnSpamUpdate(self, elapsed)
 		if not x.db then return end
 	
 		-- Update 'now'
 		now = now + elapsed
 		
 		-- Check to see if we are out of bounds
-		if index > #frameIndex then index = 1 end
-		if not frames[frameIndex[index]] then
-			frames[frameIndex[index]] = 1
+		if spam.currentIndex > #frameIndex then spam.currentIndex = 1 end
+		if not frames[frameIndex[spam.currentIndex]] then
+			frames[frameIndex[spam.currentIndex]] = 1
 		end
 		
 		local heap, stack, settings, idIndex =
-			spamHeap[frameIndex[index]],							-- the heap contains merge entries
-			spamStack[frameIndex[index]],						 -- the stack contains lookup values
-			x.db.profile.frames[frameIndex[index]],	 -- this frame's settings
-			frames[frameIndex[index]]								 -- this frame's last entry index
-			
+			spamHeap[frameIndex[spam.currentIndex]],			-- the heap contains merge entries
+			spamStack[frameIndex[spam.currentIndex]],			-- the stack contains lookup values
+			x.db.profile.frames[frameIndex[spam.currentIndex]],	-- this frame's settings
+			frames[frameIndex[spam.currentIndex]]				-- this frame's last entry index
+		
 		-- If the frame is not enabled, then dont even worry about it
 		if not settings.enabledFrame and settings.secondaryFrame == 0 then
-			index = index + 1	-- heh, still need to iterate to the next frame :P
+			spam.currentIndex = spam.currentIndex + 1	-- heh, still need to iterate to the next frame :P
 			return
 		end
 		
@@ -441,6 +449,15 @@ do
 		
 		-- This item contains a lot of information about what we need to merge
 		local item = heap[stack[idIndex]]
+		
+		--[==[if item then
+			spam.isSpamMergerUpdated = true
+			spam.lastUpdateIndex = idIndex
+		else
+			if spam.lastUpdateIndex == idIndex and not spam.isSpamMergerUpdated then
+				x.merge:SetScript("OnUpdate", nil)
+			end
+		end]==]
 		
 		--if item then print(item.last, "+", item.update, "<", now) end
 		if item and item.last + item.update <= now and #item.entries > 0 then
@@ -458,17 +475,17 @@ do
 			
 			-- Abbreviate the merged total
 			if tonumber(total) then
-				message = x:Abbreviate(tonumber(total), frameIndex[index])
+				message = x:Abbreviate(tonumber(total), frameIndex[spam.currentIndex])
 			end
 			
 			local format_mergeCount = "%s |cffFFFFFFx%s|r"
 			
 			-- Add critical Prefix and Postfix
-			if frameIndex[index] == "critical" then
+			if frameIndex[spam.currentIndex] == "critical" then
 				message = format("%s%s%s", x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
 			
 			-- Show healer name (colored)
-			elseif frameIndex[index] == "healing" then
+			elseif frameIndex[spam.currentIndex] == "healing" then
 				format_mergeCount = "%s |cffFFFF00x%s|r"
 				if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
 					local healerName = stack[idIndex]
@@ -493,13 +510,13 @@ do
 			if settings.iconsEnabled then
 				-- message = message .. x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize)
 				if settings.fontJustify == "LEFT" then
-					message = x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize) .. "	" .. message
+					message = x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize) .. "  " .. message
 				else
 					message = message .. x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize)
 				end
 			end
 		
-			x:AddMessage(frameIndex[index], message, item.color)
+			x:AddMessage(frameIndex[spam.currentIndex], message, item.color)
 			
 			-- Clear all the old entries, we dont need them anymore
 			for k in pairs(item.entries) do
@@ -507,12 +524,12 @@ do
 			end
 		end
 		
-		frames[frameIndex[index]] = idIndex + 1
-		index = index + 1
+		frames[frameIndex[spam.currentIndex]] = idIndex + 1
+		spam.currentIndex = spam.currentIndex + 1
 	end
 	
 	x.merge = CreateFrame("FRAME")
-	x.merge:SetScript("OnUpdate", OnSpamUpdate)
+	x.merge:SetScript("OnUpdate", x.OnSpamUpdate)
 end
 
 local function Frame_Sizing_OnUpdate(self, e)
@@ -715,6 +732,21 @@ function x.EndConfigMode()
 			f.sizing.d = nil
 		end
 		
+		if f.position then
+			f.position:Hide()
+			f.position = nil
+		end
+		
+		if f.width then
+			f.height:Hide()
+			f.height = nil
+		end
+		
+		if f.height then
+			f.height:Hide()
+			f.height = nil
+		end
+		
 		f:EnableMouse(false)
 		
 		-- Hide the sizing frame
@@ -728,6 +760,8 @@ function x.EndConfigMode()
 		-- Set the Frame Strata
 		f:SetFrameStrata(ssub(x.db.profile.frameSettings.frameStrata, 2))
 	end
+	
+	collectgarbage()
 end
 
 function x.ToggleConfigMode()
@@ -738,7 +772,7 @@ function x.ToggleConfigMode()
 		LibStub("AceConfigDialog-3.0"):Close(ADDON_NAME)
 		
 		-- Thanks Elv :)
-		GameTooltip:Hide() --Just in case you're mouseovered something and it closes.
+		GameTooltip:Hide() -- Just in case you're mouseovered something and it closes.
 		
 		StaticPopup_Show("XCT_PLUS_CONFIGURING")
 		
@@ -757,11 +791,11 @@ function x:SaveAllFrames()
 	for framename, settings in pairs(x.db.profile.frames) do
 		local frame = x.frames[framename]
 	
-		local width	= frame:GetWidth()
+		local width = frame:GetWidth()
 		local height = frame:GetHeight()
 		
 		settings.Width = mfloor(width + .5)
-		settings.Height	= mfloor(height + .5)
+		settings.Height = mfloor(height + .5)
 		
 		-- Calculate the center of the screen
 		local ResX, ResY = GetScreenWidth(), GetScreenHeight()
@@ -777,6 +811,16 @@ function x:SaveAllFrames()
 end
 
 local damageColorLookup = { [1] = 1, [2] = 2, [3] = 4, [4] = 8, [5] = 16, [6] = 32, [7] = 64, }
+
+-- Gets a random spell icon that is NOT an engineering cog wheel
+local function GetRandomSpellID()
+	local icon, spellID
+	repeat
+		spellID = random(100, 80000)
+		icon = select(3, GetSpellInfo(spellID))
+	until icon and icon ~= "Interface\\Icons\\Trade_Engineering"
+	return spellID
+end
 
 function x.TestMoreUpdate(self, elapsed)
 	if InCombatLockdown() then
@@ -810,11 +854,10 @@ function x.TestMoreUpdate(self, elapsed)
 					message = sformat("%s |cffFFFFFFx%s|r", message, random(17)+1)
 				end
 				if x.db.profile.frames["outgoing"].iconsEnabled then
-					local spellID = addon.valid[random(#addon.valid)]
 					if x.db.profile.frames["outgoing"].fontJustify == "LEFT" then
-						message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames["outgoing"].iconsSize) .. "	" .. message
+						message = x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["outgoing"].iconsSize) .. "  " .. message
 					else
-						message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames["outgoing"].iconsSize)
+						message = message .. x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["outgoing"].iconsSize)
 					end
 				end
 				x:AddMessage(output, message, x.damagecolor[damageColorLookup[math.random(7)]])
@@ -829,11 +872,10 @@ function x.TestMoreUpdate(self, elapsed)
 					message = sformat("%s |cffFFFFFFx%s|r", message, random(17)+1)
 				end
 				if x.db.profile.frames["critical"].iconsEnabled then
-					local spellID = addon.valid[random(#addon.valid)]
 					if x.db.profile.frames["critical"].fontJustify == "LEFT" then
-						message = x:GetSpellTextureFormatted(spellID, x.db.profile.frames["critical"].iconsSize) .. "	" .. message
+						message = x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["critical"].iconsSize) .. "  " .. message
 					else
-						message = message .. x:GetSpellTextureFormatted(spellID, x.db.profile.frames["critical"].iconsSize)
+						message = message .. x:GetSpellTextureFormatted(GetRandomSpellID(), x.db.profile.frames["critical"].iconsSize)
 					end
 				end
 				x:AddMessage(output, message, x.damagecolor[damageColorLookup[math.random(7)]])
@@ -864,7 +906,7 @@ function x.TestMoreUpdate(self, elapsed)
 				else
 					x:AddMessage(output, "+"..x:Abbreviate(random(90000),"healing"), {.1, ((random(3) + 1) * 63) / 255, .1})
 				end
-			elseif self == x.frames["power"]	and random(4) % 4 == 0 then
+			elseif self == x.frames["power"] and random(4) % 4 == 0 then
 				local output = "power"
 				if not x.db.profile.frames[output].enabledFrame then
 					x:Clear(output)
@@ -945,44 +987,44 @@ end
 
 -- Popups
 StaticPopupDialogs["XCT_PLUS_CONFIGURING"] = {
-	text					= "Configuring xCT+\nType: |cffFF0000/xct lock|r to save changes",
-	timeout			 = 0,
-	whileDead		 = 1,
+	text			= "Configuring xCT+\nType: |cffFF0000/xct lock|r to save changes",
+	timeout			= 0,
+	whileDead		= 1,
 	
-	button1			 = SAVE_CHANGES,
-	button2			 = CANCEL,
-	OnAccept			= function() x:SaveAllFrames(); x.EndConfigMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
-	OnCancel			= function() x:UpdateFrames(); x.EndConfigMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
+	button1			= SAVE_CHANGES,
+	button2			= CANCEL,
+	OnAccept		= function() x:SaveAllFrames(); x.EndConfigMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
+	OnCancel		= function() x:UpdateFrames(); x.EndConfigMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
 	hideOnEscape	= false,
 	
 	-- Taint work around
-	preferredIndex = 3,
+	preferredIndex	= 3,
 }
 
 StaticPopupDialogs["XCT_PLUS_TESTMODE"] = {
-	text					= "xCT+ Test Mode",
-	timeout			 = 0,
-	whileDead		 = 1,
+	text			= "xCT+ Test Mode",
+	timeout			= 0,
+	whileDead		= 1,
 	
-	button1			 = "Stop",
-	OnAccept			= function() x.EndTestMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
+	button1			= "Stop",
+	OnAccept		= function() x.EndTestMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
 	hideOnEscape	= true,
 	
 	-- Taint work around
-	preferredIndex = 3,
+	preferredIndex	= 3,
 }
 
 StaticPopupDialogs["XCT_PLUS_RESET_SETTINGS"] = {
-	text					= "Are your certain you want to erase |cffFF0000ALL|r your xCT+ settings?",
-	timeout			 = 0,
-	whileDead		 = 1,
+	text			= "Are your certain you want to erase |cffFF0000ALL|r your xCT+ settings?",
+	timeout			= 0,
+	whileDead		= 1,
 	
-	button1			 = "|cffFF0000ERASE ALL!!|r",
-	button2			 = CANCEL,
-	OnAccept			= function() xCTSavedDB = nil; ReloadUI() end,
-	OnCancel			= function() LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
+	button1			= "|cffFF0000ERASE ALL!!|r",
+	button2			= CANCEL,
+	OnAccept		= function() xCTSavedDB = nil; ReloadUI() end,
+	OnCancel		= function() LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
 	hideOnEscape	= true,
 	
 	-- Taint work around
-	preferredIndex = 3,
+	preferredIndex	= 3,
 }

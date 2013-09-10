@@ -52,11 +52,29 @@ addon.options = {
       get = function(info) return x.db.profile.showStartupText end,
       set = function(info, value) x.db.profile.showStartupText = value end,
     },  
-    RestoreDefaults = {
+    --[==[RestoreDefaults = {
       order = 3,
       type = 'execute',
       name = "Restore Defaults",
       func = x.RestoreAllDefaults,
+    },]==]
+    space = {
+      order = 3,
+      type = 'description',
+      name = " ",
+      width = 'half',
+    },
+    space2 = {
+      order = 3,
+      type = 'description',
+      name = " ",
+      width = 'half',
+    },
+    space3 = {
+      order = 3,
+      type = 'description',
+      name = " ",
+      width = 'half',
     },
     ToggleTestMode = {
       order = 4,
@@ -254,6 +272,16 @@ local function setNumber2(info, value) if tonumber(value) then x.db.profile[info
 
 local function outgoingSpellColorsHidden(info) return x.db.profile.frames["outgoing"].standardSpellColor end
 
+local function isFrameEnabled(info) return x.db.profile.frames[info[#info-1]].enabledFrame end
+local function isFrameDisabled(info) return not x.db.profile.frames[info[#info-1]].enabledFrame end
+local function isFrameItemDisabled(info) return not x.db.profile.frames[info[#info-2]].enabledFrame end
+local function isFrameNotScrollable(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].enableScrollable end
+local function isFrameUseCustomFade(info) return not x.db.profile.frames[info[#info-2]].enableCustomFade or isFrameItemDisabled(info) end
+local function isFrameFadingDisabled(info) return isFrameUseCustomFade(info) or not x.db.profile.frames[info[#info-2]].enableFade end
+local function isFrameIconDisabled(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].iconsEnabled end
+local function isFrameCustomColorDisabled(info) return not x.db.profile.frames[info[#info-2]].customColor end
+
+
 local function setSpecialCriticalOptions(info, value)
   x.db.profile[info[#info-2]].mergeCriticalsWithOutgoing = false
   x.db.profile[info[#info-2]].mergeCriticalsByThemselves = false
@@ -360,7 +388,7 @@ addon.options.args["spells"] = {
       order = 4,
       type = 'toggle',
       width = "double",
-      name = "Show Spell IDs |cffFF0000(DEBUG)|r",
+      name = "Show Spell IDs",
       get = get0,
       set = set0,
     },
@@ -391,8 +419,8 @@ addon.options.args["spells"] = {
           get = get0_1,
           set = set0_1,
         },
-				
-				listSpacer1 = {
+        
+        listSpacer1 = {
           type = "description",
           order = 3,
           name = "\n|cff798BDDMerge Multiple Dispells Options|r:",
@@ -406,7 +434,7 @@ addon.options.args["spells"] = {
           get = get0_1,
           set = set0_1,
         },
-				
+        
         listSpacer2 = {
           type = "description",
           order = 10,
@@ -566,24 +594,24 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-	
+  
     spellFilter = {
       name = "Track Spell History",
       type = 'group',
       order = 11,
       guiInline = true,
       args = {
-	  
+    
         -- This is a feature option that I will enable when I get more time D:
         trackSpells = {
           order = 1,
           type = 'toggle',
-          name = "Enable (|cffFF0000DEBUG|r)",
+          name = "Enable History",
           desc = "\n\nTrack incoming |cff1AFF1ABuff|r and |cff1AFF1ADebuff|r names, as well as |cff71d5ffOutgoing Spell|r IDs. |cffFF0000(RECOMMEND FOR TEMPORARY USE ONLY)|r\n",
           set = set0_1,
           get = get0_1,
         },
-		
+    
         description = {
           type = 'description',
           order = 2,
@@ -638,8 +666,8 @@ addon.options.args["spellFilter"] = {
           desc = "A list of |cff1AFF1ABuff|r names that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
           disabled = IsTrackSpellsDisabled,
           values = GetBuffHistory,
-		  get = noop,
-		  set = setSpell,
+          get = noop,
+          set = setSpell,
         },
       },
     },
@@ -653,7 +681,7 @@ addon.options.args["spellFilter"] = {
         title = {
           order = 0,
           type = "description",
-          name = "These options allow you to filter out |cffFF1A1ADebuff|r auras that your player gains or loses.  In order to filter them, you need to type the |cffFFFF00exact name of the aura|r (case sensitive).",
+          name = "These options allow you to filter out |cffFF1A1ADebuff|r auras that your player gains or loses. In order to filter them, you need to type the |cffFFFF00exact name of the aura|r (case sensitive).",
         },
         whitelistDebuffs = {
           order = 1,
@@ -689,8 +717,8 @@ addon.options.args["spellFilter"] = {
           desc = "A list of |cffFF1A1ABuff|r names that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
           disabled = IsTrackSpellsDisabled,
           values = GetDebuffHistory,
-		  get = noop,
-		  set = setSpell,
+          get = noop,
+          set = setSpell,
         },
       },
     },
@@ -740,8 +768,8 @@ addon.options.args["spellFilter"] = {
           desc = "A list of |cff71d5ffOutgoing Spell|r IDs that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
           disabled = IsTrackSpellsDisabled,
           values = GetSpellHistory,
-		  get = noop,
-		  set = setSpell,
+          get = noop,
+          set = setSpell,
         },
       },
     },
@@ -971,7 +999,7 @@ addon.options.args["Frames"] = {
       },
     },
     frameSettings = {
-      name = "Frame Settings",
+      name = "Frame Settings ",
       type = 'group',
       order = 4,
       guiInline = true,
@@ -986,7 +1014,7 @@ addon.options.args["Frames"] = {
           get = get0,
           set = set0,
         },
-		
+
         showGrid = {
           order = 2,
           type = 'toggle',
@@ -996,7 +1024,7 @@ addon.options.args["Frames"] = {
           set = set0,
         },
         
-		showPositions = {
+        showPositions = {
           order = 3,
           type = 'toggle',
           name = "Show Positions",
@@ -1004,7 +1032,7 @@ addon.options.args["Frames"] = {
           get = get0,
           set = set0,
         },
-		
+
         frameStrata = {
           type = 'select',
           order = 4,
@@ -1033,12 +1061,12 @@ addon.options.args["Frames"] = {
       order = 5,
       guiInline = true,
       args = {
-				title = {
-					type = "description",
-					order = 0,
-					name = "Abbreviation will help keep your screen uncluttered and readable. You can enable number abbreviation independently on certain frames through their settings pages.",
-				},
-			
+        title = {
+          type = "description",
+          order = 0,
+          name = "Abbreviation will help keep your screen uncluttered and readable. You can enable number abbreviation independently on certain frames through their settings pages.",
+        },
+      
         --[==[enableMegaDamage = {
           order = 1,
           type = 'toggle',
@@ -1066,7 +1094,7 @@ addon.options.args["Frames"] = {
           get = getTextIn0,
           set = setTextIn0,
         },
-				decimalPoint = {
+        decimalPoint = {
           order = 4,
           type = 'toggle',
           name = "Enable Single-Decimal Accuracy",
@@ -1220,6 +1248,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1,
+          disabled = isFrameEnabled,
         },
         insertText = {
           type = 'select',
@@ -1232,6 +1261,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         alpha = {
           order = 4,
@@ -1241,12 +1271,13 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
-				megaDamage = {
+        megaDamage = {
           order = 5,
           type = 'toggle',
           name = "Enable Abbreviation",
-					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          desc = "Enables shorten number values for this frame so that they are easier to read.",
           get = get1,
           set = set1,
         },
@@ -1264,6 +1295,7 @@ addon.options.args["Frames"] = {
               values = AceGUIWidgetLSMlists.font,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontSize = {
               order = 2,
@@ -1273,6 +1305,7 @@ addon.options.args["Frames"] = {
               min = 6, max = 32, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontOutline = {
               type = 'select',
@@ -1290,6 +1323,7 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontJustify = {
               type = 'select',
@@ -1325,6 +1359,7 @@ addon.options.args["Frames"] = {
               order = 2,
               get = getColor2,
               set = setColor2,
+              disabled = isFrameCustomColorDisabled,
             },
           },
         },
@@ -1340,6 +1375,7 @@ addon.options.args["Frames"] = {
               name = "Enabled",
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             scrollableLines = {
               order = 2,
@@ -1348,6 +1384,7 @@ addon.options.args["Frames"] = {
               min = 10, max = 60, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameNotScrollable,
             },
           },
         },
@@ -1365,6 +1402,7 @@ addon.options.args["Frames"] = {
               width = 'full',
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             enableFade = {
               order = 10,
@@ -1373,6 +1411,7 @@ addon.options.args["Frames"] = {
               desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
+              disabled = isFrameUseCustomFade,
             },
             fadeTime = {
               order = 11,
@@ -1382,6 +1421,7 @@ addon.options.args["Frames"] = {
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
             visibilityTime = {
               order = 12,
@@ -1391,6 +1431,7 @@ addon.options.args["Frames"] = {
               min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
           },
         },
@@ -1507,6 +1548,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1,
+          disabled = isFrameEnabled,
         },
         insertText = {
           type = 'select',
@@ -1519,6 +1561,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         alpha = {
           order = 4,
@@ -1528,12 +1571,13 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
-				megaDamage = {
+        megaDamage = {
           order = 5,
           type = 'toggle',
           name = "Enable Abbreviation",
-					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          desc = "Enables shorten number values for this frame so that they are easier to read.",
           get = get1,
           set = set1,
         },
@@ -1552,6 +1596,7 @@ addon.options.args["Frames"] = {
               values = AceGUIWidgetLSMlists.font,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             
             fontSize = {
@@ -1562,6 +1607,7 @@ addon.options.args["Frames"] = {
               min = 6, max = 32, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             
             fontOutline = {
@@ -1580,6 +1626,7 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             
             fontJustify = {
@@ -1616,76 +1663,77 @@ addon.options.args["Frames"] = {
               order = 2,
               get = getColor2,
               set = setColor2,
+              disabled = isFrameCustomColorDisabled,
             },
-						spacer1 = {
-							order = 10,
-							type = 'description',
-							name = "",
-						},
-						standardSpellColor = {
-							order = 11,
-							type = 'toggle',
-							name = "Use Standard Spell School Colors",
-							width = 'full',
-							get = get2,
+            spacer1 = {
+              order = 10,
+              type = 'description',
+              name = "",
+            },
+            standardSpellColor = {
+              order = 11,
+              type = 'toggle',
+              name = "Use Standard Spell School Colors",
+              width = 'full',
+              get = get2,
               set = set2,
-						},
-						colorPhysical = {
-							type = 'color',
+            },
+            colorPhysical = {
+              type = 'color',
               name = "Physical Damage",
               order = 12,
               get = getColor2,
               set = setColor2,
-							hidden = outgoingSpellColorsHidden,
-						},
-						colorHoly = {
-							type = 'color',
+              hidden = outgoingSpellColorsHidden,
+            },
+            colorHoly = {
+              type = 'color',
               name = "Holy Damage",
               order = 13,
               get = getColor2,
               set = setColor2,
-							hidden = outgoingSpellColorsHidden,
-						},
-						colorFire = {
-							type = 'color',
+              hidden = outgoingSpellColorsHidden,
+            },
+            colorFire = {
+              type = 'color',
               name = "Fire Damage",
               order = 14,
               get = getColor2,
               set = setColor2,
-							hidden = outgoingSpellColorsHidden,
-						},
-						colorNature = {
-							type = 'color',
+              hidden = outgoingSpellColorsHidden,
+            },
+            colorNature = {
+              type = 'color',
               name = "Nature Damage",
               order = 15,
               get = getColor2,
               set = setColor2,
-							hidden = outgoingSpellColorsHidden,
-						},
-						colorFrost = {
-							type = 'color',
+              hidden = outgoingSpellColorsHidden,
+            },
+            colorFrost = {
+              type = 'color',
               name = "Frost Damage",
               order = 16,
               get = getColor2,
               set = setColor2,
-							hidden = outgoingSpellColorsHidden,
-						},
-						colorShadow = {
-							type = 'color',
+              hidden = outgoingSpellColorsHidden,
+            },
+            colorShadow = {
+              type = 'color',
               name = "Shadow Damage",
               order = 17,
               get = getColor2,
               set = setColor2,
-							hidden = outgoingSpellColorsHidden,
-						},
-						colorArcane = {
-							type = 'color',
+              hidden = outgoingSpellColorsHidden,
+            },
+            colorArcane = {
+              type = 'color',
               name = "Arcane Damage",
               order = 18,
               get = getColor2,
               set = setColor2,
-							hidden = outgoingSpellColorsHidden,
-						},
+              hidden = outgoingSpellColorsHidden,
+            },
           },
         },
         icons = {
@@ -1701,6 +1749,7 @@ addon.options.args["Frames"] = {
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
+              disabled = isFrameItemDisabled,
             },
           
             iconsSize = {
@@ -1711,6 +1760,7 @@ addon.options.args["Frames"] = {
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
+              disabled = isFrameIconDisabled,
             },
           
           },
@@ -1727,6 +1777,7 @@ addon.options.args["Frames"] = {
               name = "Enabled",
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             scrollableLines = {
               order = 2,
@@ -1735,6 +1786,7 @@ addon.options.args["Frames"] = {
               min = 10, max = 60, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameNotScrollable,
             },
           },
         },
@@ -1752,6 +1804,7 @@ addon.options.args["Frames"] = {
               width = 'full',
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             enableFade = {
               order = 10,
@@ -1760,6 +1813,7 @@ addon.options.args["Frames"] = {
               desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
+              disabled = isFrameUseCustomFade,
             },
             fadeTime = {
               order = 11,
@@ -1769,6 +1823,7 @@ addon.options.args["Frames"] = {
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
             visibilityTime = {
               order = 12,
@@ -1778,6 +1833,7 @@ addon.options.args["Frames"] = {
               min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
           },
         },
@@ -1887,6 +1943,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1,
+          disabled = isFrameEnabled,
         },
         insertText = {
           type = 'select',
@@ -1899,6 +1956,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         alpha = {
           order = 4,
@@ -1908,12 +1966,13 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
-				megaDamage = {
+        megaDamage = {
           order = 5,
           type = 'toggle',
           name = "Enable Abbreviation",
-					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          desc = "Enables shorten number values for this frame so that they are easier to read.",
           get = get1,
           set = set1,
         },
@@ -1931,6 +1990,7 @@ addon.options.args["Frames"] = {
               values = AceGUIWidgetLSMlists.font,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontSize = {
               order = 2,
@@ -1940,6 +2000,7 @@ addon.options.args["Frames"] = {
               min = 6, max = 32, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontOutline = {
               type = 'select',
@@ -1957,6 +2018,7 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontJustify = {
               type = 'select',
@@ -1992,6 +2054,7 @@ addon.options.args["Frames"] = {
               order = 2,
               get = getColor2,
               set = setColor2,
+              disabled = isFrameCustomColorDisabled,
             },
           },
         },
@@ -2009,6 +2072,7 @@ addon.options.args["Frames"] = {
               desc = "Prefix this value to the beginning when displaying a critical amount.",
               get = getTextIn2,
               set = setTextIn2,
+              disabled = isFrameItemDisabled,
             },
             critPostfix = {
               order = 2,
@@ -2017,6 +2081,7 @@ addon.options.args["Frames"] = {
               desc = "Postfix this value to the end when displaying a critical amount.",
               get = getTextIn2,
               set = setTextIn2,
+              disabled = isFrameItemDisabled,
             },
           },
         },
@@ -2033,6 +2098,7 @@ addon.options.args["Frames"] = {
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
+              disabled = isFrameItemDisabled,
             },
             iconsSize = {
               order = 2,
@@ -2042,11 +2108,12 @@ addon.options.args["Frames"] = {
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
+              disabled = isFrameIconDisabled,
             },
           },
         },
         scrollable = {
-          order = 50,
+          order = 30,
           type = 'group',
           guiInline = true,
           name = "Scrollable Frame",
@@ -2057,6 +2124,7 @@ addon.options.args["Frames"] = {
               name = "Enabled",
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             scrollableLines = {
               order = 2,
@@ -2065,11 +2133,12 @@ addon.options.args["Frames"] = {
               min = 10, max = 60, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameNotScrollable,
             },
           },
         },
         fading = {
-          order = 60,
+          order = 40,
           type = 'group',
           guiInline = true,
           name = "Fading Text",
@@ -2082,6 +2151,7 @@ addon.options.args["Frames"] = {
               width = 'full',
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             enableFade = {
               order = 10,
@@ -2090,6 +2160,7 @@ addon.options.args["Frames"] = {
               desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
+              disabled = isFrameUseCustomFade,
             },
             fadeTime = {
               order = 11,
@@ -2099,6 +2170,7 @@ addon.options.args["Frames"] = {
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
             visibilityTime = {
               order = 12,
@@ -2108,6 +2180,7 @@ addon.options.args["Frames"] = {
               min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
           },
         },
@@ -2168,6 +2241,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1,
+          disabled = isFrameEnabled,
         },
         insertText = {
           type = 'select',
@@ -2180,6 +2254,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         alpha = {
           order = 4,
@@ -2189,12 +2264,13 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
-				megaDamage = {
+        megaDamage = {
           order = 5,
           type = 'toggle',
           name = "Enable Abbreviation",
-					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          desc = "Enables shorten number values for this frame so that they are easier to read.",
           get = get1,
           set = set1,
         },
@@ -2212,6 +2288,7 @@ addon.options.args["Frames"] = {
               values = AceGUIWidgetLSMlists.font,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontSize = {
               order = 2,
@@ -2221,6 +2298,7 @@ addon.options.args["Frames"] = {
               min = 6, max = 32, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontOutline = {
               type = 'select',
@@ -2238,6 +2316,7 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontJustify = {
               type = 'select',
@@ -2273,6 +2352,7 @@ addon.options.args["Frames"] = {
               order = 2,
               get = getColor2,
               set = setColor2,
+              disabled = isFrameCustomColorDisabled,
             },
           },
         },
@@ -2288,6 +2368,7 @@ addon.options.args["Frames"] = {
               name = "Enabled",
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             scrollableLines = {
               order = 2,
@@ -2296,6 +2377,7 @@ addon.options.args["Frames"] = {
               min = 10, max = 60, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameNotScrollable,
             },
           },
         },
@@ -2313,6 +2395,7 @@ addon.options.args["Frames"] = {
               width = 'full',
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             enableFade = {
               order = 10,
@@ -2321,6 +2404,7 @@ addon.options.args["Frames"] = {
               desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
+              disabled = isFrameUseCustomFade,
             },
             fadeTime = {
               order = 11,
@@ -2330,6 +2414,7 @@ addon.options.args["Frames"] = {
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
             visibilityTime = {
               order = 12,
@@ -2339,6 +2424,7 @@ addon.options.args["Frames"] = {
               min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
           },
         },
@@ -2399,6 +2485,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1,
+          disabled = isFrameEnabled,
         },
         insertText = {
           type = 'select',
@@ -2411,6 +2498,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         alpha = {
           order = 4,
@@ -2420,12 +2508,13 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
-				megaDamage = {
+        megaDamage = {
           order = 5,
           type = 'toggle',
           name = "Enable Abbreviation",
-					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          desc = "Enables shorten number values for this frame so that they are easier to read.",
           get = get1,
           set = set1,
         },
@@ -2435,7 +2524,6 @@ addon.options.args["Frames"] = {
           guiInline = true,
           name = "Fonts",
           args = {
-          
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -2444,8 +2532,8 @@ addon.options.args["Frames"] = {
               values = AceGUIWidgetLSMlists.font,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
-            
             fontSize = {
               order = 2,
               name = "Font Size",
@@ -2454,8 +2542,8 @@ addon.options.args["Frames"] = {
               min = 6, max = 32, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
-            
             fontOutline = {
               type = 'select',
               order = 3,
@@ -2472,8 +2560,8 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
-            
             fontJustify = {
               type = 'select',
               order = 4,
@@ -2508,6 +2596,7 @@ addon.options.args["Frames"] = {
               order = 2,
               get = getColor2,
               set = setColor2,
+              disabled = isFrameCustomColorDisabled,
             },
           },
         },
@@ -2523,6 +2612,7 @@ addon.options.args["Frames"] = {
               name = "Enabled",
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             scrollableLines = {
               order = 2,
@@ -2531,6 +2621,7 @@ addon.options.args["Frames"] = {
               min = 10, max = 60, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameNotScrollable,
             },
           },
         },
@@ -2548,6 +2639,7 @@ addon.options.args["Frames"] = {
               width = 'full',
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             enableFade = {
               order = 10,
@@ -2556,6 +2648,7 @@ addon.options.args["Frames"] = {
               desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
+              disabled = isFrameUseCustomFade,
             },
             fadeTime = {
               order = 11,
@@ -2565,6 +2658,7 @@ addon.options.args["Frames"] = {
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
             visibilityTime = {
               order = 12,
@@ -2574,6 +2668,7 @@ addon.options.args["Frames"] = {
               min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
           },
         },
@@ -2646,6 +2741,7 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         fonts = {
           order = 10,
@@ -2661,6 +2757,7 @@ addon.options.args["Frames"] = {
               values = AceGUIWidgetLSMlists.font,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontSize = {
               order = 2,
@@ -2670,6 +2767,7 @@ addon.options.args["Frames"] = {
               min = 6, max = 32, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontOutline = {
               type = 'select',
@@ -2687,6 +2785,7 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
           },
         },
@@ -2709,6 +2808,7 @@ addon.options.args["Frames"] = {
               order = 2,
               get = getColor2,
               set = setColor2,
+              disabled = isFrameCustomColorDisabled,
             },
           },
         },
@@ -2745,6 +2845,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1,
+          disabled = isFrameEnabled,
         },
         insertText = {
           type = 'select',
@@ -2757,6 +2858,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         alpha = {
           order = 4,
@@ -2766,12 +2868,13 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
-				megaDamage = {
+        megaDamage = {
           order = 5,
           type = 'toggle',
           name = "Enable Abbreviation",
-					desc = "Enables shorten number values for this frame so that they are easier to read.",
+          desc = "Enables shorten number values for this frame so that they are easier to read.",
           get = get1,
           set = set1,
         },
@@ -2789,6 +2892,7 @@ addon.options.args["Frames"] = {
               values = AceGUIWidgetLSMlists.font,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontSize = {
               order = 2,
@@ -2798,6 +2902,7 @@ addon.options.args["Frames"] = {
               min = 6, max = 32, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontOutline = {
               type = 'select',
@@ -2815,6 +2920,7 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontJustify = {
               type = 'select',
@@ -2850,6 +2956,7 @@ addon.options.args["Frames"] = {
               order = 2,
               get = getColor2,
               set = setColor2,
+              disabled = isFrameCustomColorDisabled,
             },
           },
         },
@@ -2865,6 +2972,7 @@ addon.options.args["Frames"] = {
               name = "Enabled",
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             scrollableLines = {
               order = 2,
@@ -2873,6 +2981,7 @@ addon.options.args["Frames"] = {
               min = 10, max = 60, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameNotScrollable,
             },
           },
         },
@@ -2890,6 +2999,7 @@ addon.options.args["Frames"] = {
               width = 'full',
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             enableFade = {
               order = 10,
@@ -2898,6 +3008,7 @@ addon.options.args["Frames"] = {
               desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
+              disabled = isFrameUseCustomFade,
             },
             fadeTime = {
               order = 11,
@@ -2907,6 +3018,7 @@ addon.options.args["Frames"] = {
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
             visibilityTime = {
               order = 12,
@@ -2916,6 +3028,7 @@ addon.options.args["Frames"] = {
               min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
           },
         },
@@ -2977,6 +3090,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1,
+          disabled = isFrameEnabled,
         },
         insertText = {
           type = 'select',
@@ -2989,6 +3103,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         alpha = {
           order = 4,
@@ -2998,6 +3113,7 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         fonts = {
           order = 10,
@@ -3013,6 +3129,7 @@ addon.options.args["Frames"] = {
               values = AceGUIWidgetLSMlists.font,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontSize = {
               order = 2,
@@ -3022,6 +3139,7 @@ addon.options.args["Frames"] = {
               min = 6, max = 32, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontOutline = {
               type = 'select',
@@ -3039,6 +3157,7 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontJustify = {
               type = 'select',
@@ -3074,6 +3193,7 @@ addon.options.args["Frames"] = {
               order = 2,
               get = getColor2,
               set = setColor2,
+              disabled = isFrameCustomColorDisabled,
             },
           },
         },
@@ -3089,6 +3209,7 @@ addon.options.args["Frames"] = {
               name = "Enabled",
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             scrollableLines = {
               order = 2,
@@ -3097,6 +3218,7 @@ addon.options.args["Frames"] = {
               min = 10, max = 60, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameNotScrollable,
             },
           },
         },
@@ -3114,6 +3236,7 @@ addon.options.args["Frames"] = {
               width = 'full',
               get = get2,
               set = set2_update,
+              disabled = isFrameNotScrollable,
             },
             enableFade = {
               order = 10,
@@ -3122,6 +3245,7 @@ addon.options.args["Frames"] = {
               desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
+              disabled = isFrameUseCustomFade,
             },
             fadeTime = {
               order = 11,
@@ -3131,6 +3255,7 @@ addon.options.args["Frames"] = {
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
             visibilityTime = {
               order = 12,
@@ -3140,6 +3265,7 @@ addon.options.args["Frames"] = {
               min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
           },
         },
@@ -3176,6 +3302,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1,
+          disabled = isFrameEnabled,
         },
         insertText = {
           type = 'select',
@@ -3188,6 +3315,7 @@ addon.options.args["Frames"] = {
           },
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         alpha = {
           order = 4,
@@ -3197,6 +3325,7 @@ addon.options.args["Frames"] = {
           min = 0, max = 100, step = 1,
           get = get1,
           set = set1_update,
+          disabled = isFrameDisabled,
         },
         fonts = {
           order = 10,
@@ -3212,6 +3341,7 @@ addon.options.args["Frames"] = {
               values = AceGUIWidgetLSMlists.font,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontSize = {
               order = 2,
@@ -3221,6 +3351,7 @@ addon.options.args["Frames"] = {
               min = 6, max = 32, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontOutline = {
               type = 'select',
@@ -3238,6 +3369,7 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             fontJustify = {
               type = 'select',
@@ -3251,6 +3383,7 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
           },
         },
@@ -3273,6 +3406,7 @@ addon.options.args["Frames"] = {
               order = 2,
               get = getColor2,
               set = setColor2,
+              disabled = isFrameCustomColorDisabled,
             },
           },
         },
@@ -3289,6 +3423,7 @@ addon.options.args["Frames"] = {
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
+              disabled = isFrameItemDisabled,
             },
             iconsSize = {
               order = 2,
@@ -3298,6 +3433,7 @@ addon.options.args["Frames"] = {
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
+              disabled = isFrameIconDisabled,
             },
           },
         },
@@ -3313,6 +3449,7 @@ addon.options.args["Frames"] = {
               name = "Enabled",
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             scrollableLines = {
               order = 2,
@@ -3321,6 +3458,7 @@ addon.options.args["Frames"] = {
               min = 10, max = 60, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameNotScrollable,
             },
           },
         },
@@ -3338,6 +3476,7 @@ addon.options.args["Frames"] = {
               width = 'full',
               get = get2,
               set = set2_update,
+              disabled = isFrameItemDisabled,
             },
             enableFade = {
               order = 10,
@@ -3346,6 +3485,7 @@ addon.options.args["Frames"] = {
               desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               get = get2,
               set = set2_update,
+              disabled = isFrameUseCustomFade,
             },
             fadeTime = {
               order = 11,
@@ -3355,6 +3495,7 @@ addon.options.args["Frames"] = {
               min = 0, max = 2, step = .1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
             visibilityTime = {
               order = 12,
@@ -3364,6 +3505,7 @@ addon.options.args["Frames"] = {
               min = 2, max = 15, step = 1,
               get = get2,
               set = set2_update,
+              disabled = isFrameFadingDisabled,
             },
           },
         },
@@ -3381,7 +3523,7 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-						showItems = {
+            showItems = {
               order = 2,
               type = 'toggle',
               name = "Looted Items",

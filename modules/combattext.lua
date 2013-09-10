@@ -87,7 +87,7 @@ function x:UpdateCombatTextEvents(enable)
     -- Enabled Combat Text
     f:RegisterEvent("COMBAT_TEXT_UPDATE")
     f:RegisterEvent("UNIT_HEALTH")
-	f:RegisterEvent("UNIT_POWER")
+    f:RegisterEvent("UNIT_POWER")
     f:RegisterEvent("PLAYER_REGEN_DISABLED")
     f:RegisterEvent("PLAYER_REGEN_ENABLED")
     f:RegisterEvent("UNIT_ENTERED_VEHICLE")

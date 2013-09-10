@@ -36,9 +36,9 @@ function x:OnInitialize()
   self.db.RegisterCallback(self, 'OnProfileReset', 'RefreshConfig')
   self.db:GetCurrentProfile()
   
-	-- Clean up the Profile
-	x:CompatibilityLogic()
-	
+  -- Clean up the Profile
+  x:CompatibilityLogic()
+
   -- Add the profile options to my dialog config
   addon.options.args['Profiles'] = LibStub('AceDBOptions-3.0'):GetOptionsTable(self.db)
   
@@ -48,7 +48,7 @@ function x:OnInitialize()
   -- Delay updating frames until all other addons are loaded!
   --x:UpdateFrames()
   
-	x:UpdateBlizzardFCT()
+  x:UpdateBlizzardFCT()
   x:UpdateCombatTextEvents(true)
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
@@ -73,7 +73,6 @@ end)
 
 -- This function was created as the centeral location for crappy code
 function x:CompatibilityLogic()
-	
 	-- MegaDamage Change (version 3.3.0)
 	if self.db.profile.megaDamage.enableMegaDamage == false then
 		self.db.profile.megaDamage.enableMegaDamage = nil
@@ -86,7 +85,6 @@ function x:CompatibilityLogic()
 		self.db.profile.frames.healing.megaDamage = true
 		self.db.profile.frames.power.megaDamage = true
 	end
-	
 end
 
 -- Profile Updated, need to refresh important stuff 
@@ -580,6 +578,7 @@ function x:OpenxCTCommand(input)
       x:SaveAllFrames()
       x.EndConfigMode()
       print("|cffFF0000x|r|cffFFFF00CT+|r  Frames have been saved. Please fasten your seat belts.")
+      StaticPopup_Hide("XCT_PLUS_CONFIGURING")
     else
       x.ToggleConfigMode()
       
