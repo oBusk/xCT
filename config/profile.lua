@@ -49,6 +49,7 @@ addon.defaults = {
       ["CombatHealing"] = false,
       ["PetMeleeDamage"] = false,
       ["CombatLogPeriodicSpells"] = false,
+      ["CombatHealingAbsorbTarget"] = false, 
     },
     
     frameSettings = {
@@ -133,14 +134,14 @@ addon.defaults = {
         ["customColor"] = false,
         ["fontColor"] = nil,
         ["standardSpellColor"] = true,
-		["colorPhysical"] = {1.00, 1.00, 0.00},
-		["colorHoly"] = {1.00, 0.90, 0.50},
-		["colorFire"] = {1.00, 0.50, 0.00},
-		["colorNature"] = {0.30, 1.00, 0.30},
-		["colorFrost"] = {0.50, 1.00, 1.00},
-		["colorShadow"] = {0.50, 0.50, 1.00},
-		["colorArcane"] = {1.00, 0.50, 1.00},
-		
+        ["colorPhysical"] = {1.00, 1.00, 0.00},
+        ["colorHoly"] = {1.00, 0.90, 0.50},
+        ["colorFire"] = {1.00, 0.50, 0.00},
+        ["colorNature"] = {0.30, 1.00, 0.30},
+        ["colorFrost"] = {0.50, 1.00, 1.00},
+        ["colorShadow"] = {0.50, 0.50, 1.00},
+        ["colorArcane"] = {1.00, 0.50, 1.00},
+        
       -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
@@ -288,6 +289,7 @@ addon.defaults = {
         ["enableClassNames"] = true,
         ["enableRealmNames"] = true,
         ["enableOverHeal"] = true,
+        ["enableSelfAbsorbs"] = true,
       },
       
       class = {
@@ -446,8 +448,8 @@ addon.defaults = {
         ["DEATHKNIGHT"] = {
           [1] = {                                         -- Blood
             CreateComboSpellEntry(false, 49222),          --   Bone Shield
-						CreateComboSpellEntry(true, 114851),          --   Blood Charge
-						CreateComboSpellEntry(false, 50421),          --   Scent of Blood
+            CreateComboSpellEntry(true, 114851),          --   Blood Charge
+            CreateComboSpellEntry(false, 50421),          --   Scent of Blood
           },
           [2] = { },    -- Frost
           [3] = {                                         -- Unholy
@@ -576,7 +578,7 @@ addon.defaults = {
       listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
       listDebuffs  = { },  -- Used to filter gains/fades of debuffs  (Spell Name)
       listSpells   = { },  -- Used to filter outgoing spells         (Spell ID)
-	  
+
       -- Minimal Spell Amount
       filterPowerValue = 0,
       filterOutgoingDamageValue = 0,

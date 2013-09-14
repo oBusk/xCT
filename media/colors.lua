@@ -22,6 +22,7 @@ x.colors = {
   damage_crit = {1,.1,.1},
   spell_damage = {.75,.3,.85},
   spell_damage_crit = {.75,.3,.85},
+  shield = {.60,.65,1},
   heal = {.1,.75,.1},
   heal_crit = {.1,1,.1},
   heal_peri = {.1,.5,.1},

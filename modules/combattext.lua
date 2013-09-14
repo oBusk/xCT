@@ -503,6 +503,32 @@ x.combat_events = {
       if FilterIncomingDamage(amount) then return end
       x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "spell_damage_crit")
     end,
+  ["ABSORB_ADDED"] = function(healer_name, amount)
+      local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
+      
+      if not ShowHealingRealmNames() then
+        healer_name = smatch(healer_name, format_remove_realm) or healer_name
+      end
+      
+      -- TODO: Add merge shields
+      
+      if ShowFriendlyNames() and healer_name then
+        if ShowColoredFriendlyNames() then
+          local _, class = UnitClass(healer_name)
+          if (class) then
+            healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+          end
+        end
+      
+        if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+          message = message .. " " .. healer_name
+        else
+          message = healer_name .. " " .. message
+        end
+      end
+      
+      x:AddMessage("healing", message, "shield")
+    end,
   ["HEAL"] = function(healer_name, amount)
       if FilterIncomingHealing(amount) then return end
   

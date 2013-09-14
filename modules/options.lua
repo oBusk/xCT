@@ -183,6 +183,15 @@ x.cvar_udpate = function()
     _G["COMBAT_TEXT_SHOW_FRIENDLY_NAMES"] = "0"
   end
   
+  -- Check: CombatHealingAbsorbSelf (Healing Option)
+  if x.db.profile.frames.healing.enableSelfAbsorbs then
+    SetCVar("CombatHealingAbsorbSelf", 1)
+    _G["SHOW_COMBAT_HEALING_ABSORB_SELF"] = "1"
+  else
+    SetCVar("CombatHealingAbsorbSelf", 0)
+    _G["SHOW_COMBAT_HEALING_ABSORB_SELF"] = "0"
+  end
+  
   -- Check: fctComboPoints (COMBO Option)
   if x.player.class == "ROGUE" and x.db.profile.frames.class.enabledFrame then
     SetCVar("fctComboPoints", 1)
@@ -236,6 +245,13 @@ x.cvar_udpate = function()
     SetCVar("CombatHealing", 1)
   else
     SetCVar("CombatHealing", 0)
+  end
+  
+  -- Floating Combat Text: Outgoing Absorbs
+  if x.db.profile.blizzardFCT.CombatHealingAbsorbTarget then
+    SetCVar("CombatHealingAbsorbTarget", 1)
+  else
+    SetCVar("CombatHealingAbsorbTarget", 0)
   end
   
   -- Floating Combat Text: Threat Changes
@@ -852,11 +868,67 @@ addon.options.args["Frames"] = {
       order = 3,
       guiInline = true,
       args = {
-        title2 = {
-          order = 0,
+        
+        listSpacer0 = {
           type = "description",
-          name = "Some changes below might require a full |cffFFFF00Client Restart|r (completely exit out of WoW). Do not |cffFF0000Alt+F4|r or |cffFF0000Command+Q|r or your settings might not save. Use '|cff798BDD/exit|r' to close the client.\n",
-          fontSize = "small",
+          order = 1,
+          name = "\n|cff798BDDFloating Combat Text Options|r:",
+        },
+        
+        CombatDamage = {
+          order = 2,
+          type = 'toggle',
+          name = "Show Damage",
+          desc = "Enable this option if you want your damage as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
+        },
+        
+        CombatLogPeriodicSpells = {
+          order = 3,
+          type = 'toggle',
+          name = "Show Damage over Time",
+          desc = "Enable this option if you want your DoT's as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
+          disabled = function(info) return not x.db.profile.blizzardFCT.CombatDamage end,
+        },
+        
+        PetMeleeDamage = {
+          order = 4,
+          type = 'toggle',
+          name = "Show Pet Melee Damage",
+          desc = "Enable this option if you want your pet's melee damage as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
+          disabled = function(info) return not x.db.profile.blizzardFCT.CombatDamage end, 
+        },
+        
+        CombatHealing = {
+          order = 5,
+          type = 'toggle',
+          name = "Show Healing",
+          desc = "Enable this option if you want your healing as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
+        },
+        
+        CombatHealingAbsorbTarget = {
+          order = 6,
+          type = 'toggle',
+          name = "Show Absorbs",
+          desc = "Enable this option if you want your aborbs as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
+        },
+        
+        CombatThreatChanges = {
+          order = 7,
+          type = 'toggle',
+          name = "Show Threat Changes",
+          desc = "Enable this option if you want threat changes as Floating Combat Text.",
+          get = get0,
+          set = set0_update,
         },
       
         --[==[Frames_Description = {
@@ -883,16 +955,24 @@ addon.options.args["Frames"] = {
           func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameTab1:Click(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
         },]==]
         
+        
+        listSpacer1 = {
+          type = "description",
+          order = 10,
+          name = "\n\n|cff798BDDFloating Combat Text Font|r:",
+        },
+        
         enabled = {
-          order = 20,
+          order = 11,
           type = 'toggle',
-          name = "Customize Font",
+          name = "Customize",
           get = get0,
           set = set0_update,
         },
+        
         font = {
           type = 'select', dialogControl = 'LSM30_Font',
-          order = 21,
+          order = 12,
           name = "Blizzard's FCT Font",
           desc = "Set the font Blizzard's head numbers (|cffFFFF00Default:|r Friz Quadrata TT)",
           values = AceGUIWidgetLSMlists.font,
@@ -904,6 +984,7 @@ addon.options.args["Frames"] = {
             --x:UpdateFrames()
             --x.cvar_udpate()
           end,
+          disabled = function(info) return not x.db.profile.blizzardFCT.enabled end,
         },
         
         -- Not Working
@@ -941,59 +1022,11 @@ addon.options.args["Frames"] = {
           fontSize = "large",
         },]==]
         
-        
-        
-        listSpacer0 = {
+        title2 = {
+          order = 20,
           type = "description",
-          order = 30,
-          name = "|cff798BDDFloating Combat Text Options|r:",
-        },
-        
-        CombatDamage = {
-          order = 31,
-          type = 'toggle',
-          name = "Show Damage",
-          desc = "Enable this option if you want your damage as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-        },
-        
-        CombatLogPeriodicSpells = {
-          order = 32,
-          type = 'toggle',
-          name = "Show Damage over Time",
-          desc = "Enable this option if you want your DoT's as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-          disabled = function(info) return not x.db.profile.blizzardFCT.CombatDamage end,
-        },
-        
-        PetMeleeDamage = {
-          order = 33,
-          type = 'toggle',
-          name = "Show Pet Melee Damage",
-          desc = "Enable this option if you want your pet's melee damage as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-          disabled = function(info) return not x.db.profile.blizzardFCT.CombatDamage end, 
-        },
-        
-        CombatHealing = {
-          order = 34,
-          type = 'toggle',
-          name = "Show Healing",
-          desc = "Enable this option if you want your healing as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-        },
-        
-        CombatThreatChanges = {
-          order = 35,
-          type = 'toggle',
-          name = "Show Threat Changes",
-          desc = "Enable this option if you want threat changes as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
+          name = "\n\n|cffA0A0A0Some changes might require a full|r |cffD0D000Client Restart|r |cffA0A0A0(completely exit out of WoW). Do not|r |cffD00000Alt+F4|r |cffA0A0A0or|r |cffD00000Command+Q|r |cffA0A0A0or your settings might not save. Use '|r|cff798BDD/exit|r|cffA0A0A0' to close the client.|r",
+          fontSize = "small",
         },
         
       },
@@ -2707,6 +2740,14 @@ addon.options.args["Frames"] = {
               type = 'toggle',
               name = "Show Overheals",
               desc = "Show the overhealing you do in your heals. Switch off to not show overheal and make healing less spamming.",
+              get = get2,
+              set = set2,
+            },
+            enableSelfAbsorbs = {
+              order = 5,
+              type = 'toggle',
+              name = "Show Absorbs",
+              desc = "Shows incoming absorbs.",
               get = get2,
               set = set2,
             },

@@ -55,7 +55,7 @@ addon.merges = {
   [5570]   = CreateMergeSpellEntry("DRUID"),            -- Insect Swarm
   [42231]  = CreateMergeSpellEntry("DRUID"),            -- Hurricane
   [50288]  = CreateMergeSpellEntry("DRUID"),            -- Starfall
-  [78777]  = CreateMergeSpellEntry("DRUID"),            -- Wild Mushroom: Detonate	
+  [78777]  = CreateMergeSpellEntry("DRUID", 0.5),       -- Wild Mushroom: Detonate                    (INSTANT)
   [61391]  = CreateMergeSpellEntry("DRUID", .5),        -- Typhoon                                    (INSTANT)
   [1822]   = CreateMergeSpellEntry("DRUID"),            -- Rake
   [62078]  = CreateMergeSpellEntry("DRUID", .5),        -- Swipe (Cat)                                (INSTANT)
@@ -73,6 +73,7 @@ addon.merges = {
   [33763]  = CreateMergeSpellEntry("DRUID"),            -- Lifebloom
   [44203]  = CreateMergeSpellEntry("DRUID"),            -- Tranquility
   [81269]  = CreateMergeSpellEntry("DRUID"),            -- Swiftmend (Efflorescence)
+  [102792] = CreateMergeSpellEntry("DRUID", .5),        -- Wild Mushroom: Bloom                       (INSTANT)
 
 -- hunter
   [2643]   = CreateMergeSpellEntry("HUNTER", .5),       -- Multi-Shot                                 (INSTANT)
@@ -86,9 +87,9 @@ addon.merges = {
   [131900] = CreateMergeSpellEntry("HUNTER", 6),        -- A Murder of Crows                          (Over 30s)
   [120699] = CreateMergeSpellEntry("HUNTER", 4),        -- Lynx Rush                                  (9x over 4s)
   [120361] = CreateMergeSpellEntry("HUNTER", 4),        -- Barrage                                    (Channeled over 3s) 4 to be safe :P
-	[121414] = CreateMergeSpellEntry("HUNTER"),        		-- Glaive Toss
-  [120761] = CreateMergeSpellEntry("HUNTER"),						-- Glaive Toss (2)
-	
+  [121414] = CreateMergeSpellEntry("HUNTER"),           -- Glaive Toss (Initial Damage)
+  [120761] = CreateMergeSpellEntry("HUNTER"),           -- Glaive Toss (Damage over Time effect)
+
 -- mage
   [44461]  = CreateMergeSpellEntry("MAGE", .5),         -- Living Bomb                                (INSTANT)
   [44457]  = CreateMergeSpellEntry("MAGE", 4),          -- Living Bomb (DOT)                          (over 8 seconds)
@@ -134,7 +135,7 @@ addon.merges = {
   [124081] = CreateMergeSpellEntry("MONK", 6),          -- Zen Sphere (Heal)                          (2 sec for 16 sec)
   [124101] = CreateMergeSpellEntry("MONK", .5),         -- Zen Sphere: Detonate (Heal)                (INSTANT)
   [132463] = CreateMergeSpellEntry("MONK", 6),          -- Chi Wave (Heal)
-  
+
 -- paladin (damage)
   [122032] = CreateMergeSpellEntry("PALADIN"),          -- Glyph of Mass Exorcism
   [96172]  = CreateMergeSpellEntry("PALADIN"),          -- Mastery: Hand of Light
@@ -148,8 +149,8 @@ addon.merges = {
   [114919] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Damage)
   [119072] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Wrath                                 (INSTANT)
   [86704]  = CreateMergeSpellEntry("PALADIN", .5),      -- Ancient Fury                               (INSTANT)
-	[114852] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Prism (Healing on Target, Damage AoE) (ISNTANT)
-	
+  [114852] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Prism (Healing on Target, Damage AoE) (ISNTANT)
+
 -- paladin (healing)
   [94289]  = CreateMergeSpellEntry("PALADIN"),          -- Protector of the Innocent
   [53652]  = CreateMergeSpellEntry("PALADIN"),          -- Beacon of Light
@@ -161,7 +162,7 @@ addon.merges = {
   [114163] = CreateMergeSpellEntry("PALADIN", 5),       -- Eternal Flame				                      (Every 3s for 30s)
   [86678]  = CreateMergeSpellEntry("PALADIN"),          -- Light of the Ancient kings
   [114871] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Prism (Damage on Target, Healing AoE)	(ISNTANT)
-	
+
 -- priest (damage)
   [47666]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Damage Effect)
   [132157] = CreateMergeSpellEntry("PRIEST", .5),       -- Holy Nova (Damage Effect)                  (INSTANT)
@@ -174,15 +175,15 @@ addon.merges = {
   [87532]  = CreateMergeSpellEntry("PRIEST"),           -- Shadowy Apparition
   [14914]  = CreateMergeSpellEntry("PRIEST"),           -- Holy Fire
   [129250] = CreateMergeSpellEntry("PRIEST", 4),        -- Power Word: Solace
-	[120696] = CreateMergeSpellEntry("PRIEST", 5),        -- Halo (Damage)                              (INSTANT... over 5ish)
+  [120696] = CreateMergeSpellEntry("PRIEST", 5),        -- Halo (Damage)                              (INSTANT... over 5ish)
   [15290]  = CreateMergeSpellEntry("PRIEST", 5),        -- Vampiric Embrace (Damage repeated as heals)(over 15s)
-  [122128] = CreateMergeSpellEntry("PRIEST", 3),				-- Divine Star (Heal)                         (INSTANT... over 3ish)
-	[33619]  = CreateMergeSpellEntry("PRIEST", 3),        -- Reflective Shield
-	[127628] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Damage)
-	
+  [122128] = CreateMergeSpellEntry("PRIEST", 3),        -- Divine Star (Heal)                         (INSTANT... over 3ish)
+  [33619]  = CreateMergeSpellEntry("PRIEST", 3),        -- Reflective Shield
+  [127628] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Damage)
+
   -- Merge Together:
   -- 49821 & 124469 - Mind Seer
-  
+
 -- priest (healing)
   [47750]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Heal)
   [139]    = CreateMergeSpellEntry("PRIEST"),           -- Renew

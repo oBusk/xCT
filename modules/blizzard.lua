@@ -61,6 +61,7 @@ InterfaceOptionsCombatTextPanelEnergyGains:Hide()
 InterfaceOptionsCombatTextPanelPeriodicEnergyGains:Hide()
 InterfaceOptionsCombatTextPanelHonorGains:Hide()
 InterfaceOptionsCombatTextPanelAuras:Hide()
+InterfaceOptionsCombatTextPanelHealingAbsorbSelf:Hide()
 
 -- Direction does NOT work with xCT+ at all
 InterfaceOptionsCombatTextPanelFCTDropDown:Hide()
@@ -70,6 +71,7 @@ InterfaceOptionsCombatTextPanelTargetDamage:Hide()
 InterfaceOptionsCombatTextPanelPeriodicDamage:Hide()
 InterfaceOptionsCombatTextPanelPetDamage:Hide()
 InterfaceOptionsCombatTextPanelHealing:Hide()
+InterfaceOptionsCombatTextPanelHealingAbsorbTarget:Hide()
 
 function x:UpdateBlizzardFCT()
   if self.db.profile.blizzardFCT.enabled then
