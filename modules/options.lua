@@ -286,7 +286,7 @@ local function setTextIn2(info, value) x.db.profile.frames[info[#info-2]][info[#
 local function getNumber2(info) return tostring(x.db.profile[info[#info-2]][info[#info]]) end
 local function setNumber2(info, value) if tonumber(value) then x.db.profile[info[#info-2]][info[#info]] = tonumber(value) end end
 
-local function outgoingSpellColorsHidden(info) return x.db.profile.frames["outgoing"].standardSpellColor end
+local function outgoingSpellColorsHidden(info) return not x.db.profile.frames["outgoing"].standardSpellColor end
 
 local function isFrameEnabled(info) return x.db.profile.frames[info[#info-1]].enabledFrame end
 local function isFrameDisabled(info) return not x.db.profile.frames[info[#info-1]].enabledFrame end
@@ -1698,15 +1698,15 @@ addon.options.args["Frames"] = {
               set = setColor2,
               disabled = isFrameCustomColorDisabled,
             },
-            spacer1 = {
+            listSpacer1 = {
+              type = "description",
               order = 10,
-              type = 'description',
-              name = "",
+              name = "\n\n|cff798BDDCustom Spell Colors|r:",
             },
             standardSpellColor = {
               order = 11,
               type = 'toggle',
-              name = "Use Standard Spell School Colors",
+              name = "Use Custom Spell School Colors",
               width = 'full',
               get = get2,
               set = set2,
@@ -1717,7 +1717,7 @@ addon.options.args["Frames"] = {
               order = 12,
               get = getColor2,
               set = setColor2,
-              hidden = outgoingSpellColorsHidden,
+              disabled = outgoingSpellColorsHidden,
             },
             colorHoly = {
               type = 'color',
@@ -1725,7 +1725,7 @@ addon.options.args["Frames"] = {
               order = 13,
               get = getColor2,
               set = setColor2,
-              hidden = outgoingSpellColorsHidden,
+              disabled = outgoingSpellColorsHidden,
             },
             colorFire = {
               type = 'color',
@@ -1733,7 +1733,7 @@ addon.options.args["Frames"] = {
               order = 14,
               get = getColor2,
               set = setColor2,
-              hidden = outgoingSpellColorsHidden,
+              disabled = outgoingSpellColorsHidden,
             },
             colorNature = {
               type = 'color',
@@ -1741,7 +1741,7 @@ addon.options.args["Frames"] = {
               order = 15,
               get = getColor2,
               set = setColor2,
-              hidden = outgoingSpellColorsHidden,
+              disabled = outgoingSpellColorsHidden,
             },
             colorFrost = {
               type = 'color',
@@ -1749,7 +1749,7 @@ addon.options.args["Frames"] = {
               order = 16,
               get = getColor2,
               set = setColor2,
-              hidden = outgoingSpellColorsHidden,
+              disabled = outgoingSpellColorsHidden,
             },
             colorShadow = {
               type = 'color',
@@ -1757,7 +1757,7 @@ addon.options.args["Frames"] = {
               order = 17,
               get = getColor2,
               set = setColor2,
-              hidden = outgoingSpellColorsHidden,
+              disabled = outgoingSpellColorsHidden,
             },
             colorArcane = {
               type = 'color',
@@ -1765,7 +1765,7 @@ addon.options.args["Frames"] = {
               order = 18,
               get = getColor2,
               set = setColor2,
-              hidden = outgoingSpellColorsHidden,
+              disabled = outgoingSpellColorsHidden,
             },
           },
         },

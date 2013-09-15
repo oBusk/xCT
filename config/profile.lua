@@ -133,7 +133,7 @@ addon.defaults = {
       -- font colors
         ["customColor"] = false,
         ["fontColor"] = nil,
-        ["standardSpellColor"] = true,
+        ["standardSpellColor"] = false,
         ["colorPhysical"] = {1.00, 1.00, 0.00},
         ["colorHoly"] = {1.00, 0.90, 0.50},
         ["colorFire"] = {1.00, 0.50, 0.00},

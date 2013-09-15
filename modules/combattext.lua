@@ -211,7 +211,7 @@ end
 
 local function IsMerged(spellID) return x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled end
 
-local function UseStandardSpellColors() return x.db.profile.frames["outgoing"].standardSpellColor end
+local function UseStandardSpellColors() return not x.db.profile.frames["outgoing"].standardSpellColor end
 local function GetCustomSpellColorFromIndex(index)
 	if index == 1 then
 	  return x.db.profile.frames["outgoing"].colorPhysical
