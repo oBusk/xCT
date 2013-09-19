@@ -151,7 +151,8 @@ function x:UpdateSpamSpells()
     if entry.class == x.player.class or entry.class == "ALL" or entry.class == "ITEM" then
       local name = GetSpellInfo(spellID)
       if name then
-        local desc = getSpellDescription(spellID) .. "\n\n|cffFF0000ID|r |cff798BDD" .. spellID .. "|r"
+		local spellDesc = getSpellDescription(spellID) or "No Description"
+        local desc = spellDesc .. "\n\n|cffFF0000ID|r |cff798BDD" .. spellID .. "|r"
         
         if entry.interval <= 0.5 then
           desc = desc .. "\n|cffFF0000Interval|r Instant" 
@@ -169,7 +170,6 @@ function x:UpdateSpamSpells()
             set = SpamSpellSet,
           }
         elseif entry.class == "ALL" or entry.class == "ITEM" then
-          print("Adding Item", spellID, GetSpellInfo(spellID))
           items[tostring(spellID)] = {
             order = 3,
             type = 'toggle',
