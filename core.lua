@@ -73,30 +73,56 @@ end)
 
 -- This function was created as the centeral location for crappy code
 function x:CompatibilityLogic()
-	-- MegaDamage Change (version 3.3.0)
-	if self.db.profile.megaDamage.enableMegaDamage == false then
-		self.db.profile.megaDamage.enableMegaDamage = nil
-	elseif self.db.profile.megaDamage.enableMegaDamage == true then
-		self.db.profile.megaDamage.enableMegaDamage = nil
-		self.db.profile.frames.general.megaDamage = true
-		self.db.profile.frames.outgoing.megaDamage = true
-		self.db.profile.frames.critical.megaDamage = true
-		self.db.profile.frames.damage.megaDamage = true
-		self.db.profile.frames.healing.megaDamage = true
-		self.db.profile.frames.power.megaDamage = true
-	end
+    -- MegaDamage Change (version 3.3.0)
+    if self.db.profile.megaDamage.enableMegaDamage == false then
+        self.db.profile.megaDamage.enableMegaDamage = nil
+    elseif self.db.profile.megaDamage.enableMegaDamage == true then
+        self.db.profile.megaDamage.enableMegaDamage = nil
+        self.db.profile.frames.general.megaDamage = true
+        self.db.profile.frames.outgoing.megaDamage = true
+        self.db.profile.frames.critical.megaDamage = true
+        self.db.profile.frames.damage.megaDamage = true
+        self.db.profile.frames.healing.megaDamage = true
+        self.db.profile.frames.power.megaDamage = true
+    end
 end
 
 -- Profile Updated, need to refresh important stuff 
 function x:RefreshConfig()
-	-- Clean up the Profile
-	x:CompatibilityLogic()
+    -- Clean up the Profile
+    x:CompatibilityLogic()
 
   x:UpdateFrames()
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
-	
+    
   collectgarbage()
+end
+
+-- Get's the spell description from a tooltip
+local getSpellDescription
+do
+  local cache = {}
+  local scanner = CreateFrame("GameTooltip")
+  scanner:SetOwner(WorldFrame, "ANCHOR_NONE")
+  local lcache, rcache = {}, {}
+  for i = 1, 4 do
+    lcache[i], rcache[i] = scanner:CreateFontString(), scanner:CreateFontString()
+    lcache[i]:SetFontObject(GameFontNormal); rcache[i]:SetFontObject(GameFontNormal)
+    scanner:AddFontStrings(lcache[i], rcache[i])
+  end
+  function getSpellDescription(spellId)
+    if cache[spellId] then return cache[spellId] end
+    scanner:ClearLines()
+    scanner:SetHyperlink("spell:"..spellId)
+    for i = scanner:NumLines(), 1, -1 do
+      local desc = lcache[i] and lcache[i]:GetText()
+      if desc then
+        cache[spellId] = desc
+        return desc
+      end
+    end
+  end
 end
 
 -- Spammy Spell Get/Set Functions
@@ -106,7 +132,7 @@ local function SpamSpellSet(info, value) x.db.profile.spells.merge[tonumber(info
 -- Gets spammy spells from the database and creates options
 function x:UpdateSpamSpells()
   for id, item in pairs(addon.merges) do
-    if item.class == x.player.class then
+    if item.class == x.player.class or item.class == "ALL" or item.class == "ITEM" then
       if not self.db.profile.spells.merge[id] then
         self.db.profile.spells.merge[id] = item
         self.db.profile.spells.merge[id]['enabled'] = true    -- default all to on
@@ -119,26 +145,40 @@ function x:UpdateSpamSpells()
   end
 
   local spells = addon.options.args.spells.args.spellList.args
+  local items = addon.options.args.spells.args.itemList.args
+  
   for spellID, entry in pairs(self.db.profile.spells.merge) do
-    if entry.class == x.player.class then
+    if entry.class == x.player.class or entry.class == "ALL" or entry.class == "ITEM" then
       local name = GetSpellInfo(spellID)
       if name then
-        local desc = "|cffFF0000ID|r |cff798BDD" .. spellID .. "|r\n"
-      
+        local desc = getSpellDescription(spellID) .. "\n\n|cffFF0000ID|r |cff798BDD" .. spellID .. "|r"
+        
         if entry.interval <= 0.5 then
-          desc = desc .. "|cffFF0000Interval|r Instant" 
+          desc = desc .. "\n|cffFF0000Interval|r Instant" 
         else
-          desc = desc .. "|cffFF0000Interval|r Merge every |cffFFFF00" .. tostring(entry.interval) .. "|r seconds"
+          desc = desc .. "\n|cffFF0000Interval|r Merge every |cffFFFF00" .. tostring(entry.interval) .. "|r seconds"
         end
-      
-        spells[tostring(spellID)] = {
-          order = 3,
-          type = 'toggle',
-          name = name,
-          desc = desc,
-          get = SpamSpellGet,
-          set = SpamSpellSet,
-        }
+        
+        if entry.class == x.player.class then
+          spells[tostring(spellID)] = {
+            order = 3,
+            type = 'toggle',
+            name = name,
+            desc = desc,
+            get = SpamSpellGet,
+            set = SpamSpellSet,
+          }
+        elseif entry.class == "ALL" or entry.class == "ITEM" then
+          print("Adding Item", spellID, GetSpellInfo(spellID))
+          items[tostring(spellID)] = {
+            order = 3,
+            type = 'toggle',
+            name = name,
+            desc = desc,
+            get = SpamSpellGet,
+            set = SpamSpellSet,
+          }
+        end
       end
     end
   end

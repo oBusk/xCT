@@ -372,7 +372,7 @@ local function UpdateUnitPower(unit, powertype)
     elseif powertype == "DEMONIC_FURY" and ShowWarlockDemonicFury() then
       value = UnitPower(x.player.unit, SPELL_POWER_DEMONIC_FURY) / 100
     elseif powertype == "BURNING_EMBERS" and ShowWarlockBurningEmbers() then
-      value = UnitPower(x.player.unit, SPELL_POWER_BURNING_EMBERS) / 10
+      value = UnitPower(x.player.unit, SPELL_POWER_BURNING_EMBERS)
     end
 
     if value then
@@ -1035,8 +1035,8 @@ x.outgoing_events = {
 
       -- Check for Critical
       if critical then
-				outputColor = "heal_out_crit"
-			
+        outputColor = "heal_out_crit"
+        
         if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
           x:AddSpamMessage("critical", spellID, message, outputColor)
@@ -1088,7 +1088,7 @@ x.outgoing_events = {
       if critical then
         if ShowSwingCrit() then
           outputFrame = "critical"
-					outputColor = "out_damage_crit"
+          outputColor = "out_damage_crit"
           if ShowSwingCritPrefix() then
             critMessage = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, x:Abbreviate(amount, "critical"), x.db.profile.frames["critical"].critPostfix)
           end
@@ -1218,15 +1218,15 @@ x.outgoing_events = {
       if IsSpellFiltered(spellID) then return end
       
       -- Get special magic color
-			if UseStandardSpellColors() then
-				if x.damagecolor[spellSchool] then
-					outputColor = x.damagecolor[spellSchool]
-				else
-					outputColor = x.damagecolor[1]
-				end
-			else
-				outputColor = GetCustomSpellColorFromIndex(spellSchool)
-			end
+      if UseStandardSpellColors() then
+        if x.damagecolor[spellSchool] then
+          outputColor = x.damagecolor[spellSchool]
+        else
+          outputColor = x.damagecolor[1]
+        end
+      else
+        outputColor = GetCustomSpellColorFromIndex(spellSchool)
+      end
       
       -- Check for merge
       if IsMerged(spellID) then
@@ -1282,15 +1282,15 @@ x.outgoing_events = {
       if IsSpellFiltered(spellID) then return end
       
       -- Get special magic color
-			if UseStandardSpellColors() then
-				if x.damagecolor[spellSchool] then
-					outputColor = x.damagecolor[spellSchool]
-				else
-					outputColor = x.damagecolor[1]
-				end
-			else
-				outputColor = GetCustomSpellColorFromIndex(spellSchool)
-			end
+      if UseStandardSpellColors() then
+        if x.damagecolor[spellSchool] then
+          outputColor = x.damagecolor[spellSchool]
+        else
+          outputColor = x.damagecolor[1]
+        end
+      else
+        outputColor = GetCustomSpellColorFromIndex(spellSchool)
+      end
       
       -- Check for merge
       if IsMerged(spellID) then
@@ -1426,7 +1426,7 @@ x.outgoing_events = {
   ["SPELL_STOLEN"] = function(...)
       if not ShowDispells() then return end
       
-			local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_STOLE, spellName), "spell_stolen"
       
       -- Add Icons

@@ -530,7 +530,7 @@ addon.defaults = {
 
         ["SHAMAN"] = {
           [1] = {                                         -- Elemental
-            CreateComboSpellEntry(true, 88767),           --   Fulmination
+            CreateComboSpellEntry(true, 324),             --   Fulmination
           },    
           [2] = {                                         -- Enhancement
             CreateComboSpellEntry(true, 53817),           --   Maelstrom Weapon

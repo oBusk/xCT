@@ -35,9 +35,13 @@ end
 
 -- List of Spells that need to be merged
 addon.merges = {
--- items (legendaty cloaks)
-  --[148008] = CreateMergeSpellEntry("ITEM"),           -- legedary cloak
 
+-- items (legendary cloaks)
+  [147891] = CreateMergeSpellEntry("ITEM", 3.5),         -- Legedary Cloak (Melee - dmg over 3s)
+  [148008] = CreateMergeSpellEntry("ITEM", 3.5),         -- Legedary Cloak (Caster - dmg over 3s)
+  [148009] = CreateMergeSpellEntry("ITEM", 5),           -- Legedary Cloak (Healer - heal over 10s)
+  [149276] = CreateMergeSpellEntry("ITEM", 3.5),         -- Legedary Cloak (Hunter - dmg over 3s)
+  
 -- death knight (damage)
   [55095]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Frost Fever
   [55078]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Blood Plague
@@ -244,7 +248,8 @@ addon.merges = {
   [51945]  = CreateMergeSpellEntry("SHAMAN"),           -- Earthliving
   [61295]  = CreateMergeSpellEntry("SHAMAN"),           -- Riptide
   [114083] = CreateMergeSpellEntry("SHAMAN"),           -- Restorative Mists (Ascendance)
-  [114911] = CreateMergeSpellEntry("SHAMAN", .5),       -- Ancestral Guidance                         (INSTANT)
+  [114911] = CreateMergeSpellEntry("SHAMAN", 5),        -- Ancestral Guidance                         (INSTANT)
+  [114942] = CreateMergeSpellEntry("SHAMAN", 4),        -- Healing Tide Totem
   
 -- shaman (special)
   -- 32175 & 32176 Stormstrike (Merge Two Hits Together)
@@ -308,5 +313,5 @@ addon.merges = {
   --[85384]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Raging Blow (Offhand)
   
 -- spammy items (old) ITEM CLASS CURRENTLY DOES NOTHING
-  [109858] = CreateMergeSpellEntry("ITEM", 2.5),        -- Speaking of Rage - proc'd by: Vishanka, Jaws of the Earth (Heroic)
+  --[109858] = CreateMergeSpellEntry("ITEM", 2.5),        -- Speaking of Rage - proc'd by: Vishanka, Jaws of the Earth (Heroic)
 }

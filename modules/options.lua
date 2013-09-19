@@ -158,8 +158,8 @@ x.cvar_udpate = function()
   
   -- Check: fctHonorGains (General Option)
   if x.db.profile.frames.damage.showHonorGains then
-    SetCVar("fctHonorGains", 1)
-    _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "1"
+    SetCVar("fctHonorGains", 0)
+    _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "0"
   else
     SetCVar("fctHonorGains", 0)
     _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "0"
@@ -520,7 +520,23 @@ addon.options.args["spells"] = {
         mergeListDesc = {
           type = "description",
           order = 1,
-          name = "Uncheck a spell if you do not want it merged. If a spell is not in the list, contact me to add it. See |cffFFFF00Credits|r for contact info.\n\n",
+          fontSize = "small",
+          name = "Uncheck a spell if you do not want it merged. Contact me to add new spells. See |cffFFFF00Credits|r for contact info.\n\n",
+        },
+      },
+    },
+    
+    itemList = {
+      name = "List of Mergeable Items",
+      type = 'group',
+      guiInline = true,
+      order = 21,
+      args = {
+        mergeListDesc = {
+          type = "description",
+          order = 1,
+          fontSize = "small",
+          name = "Uncheck am item if you do not want it merged. Contact me to add new items. See |cffFFFF00Credits|r for contact info.\n\n",
         },
       },
     },
