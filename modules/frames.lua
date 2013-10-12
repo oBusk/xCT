@@ -180,7 +180,7 @@ function x:UpdateFrames(specificFrame)
 			
 			-- Font Template
 			f:SetFont(LSM:Fetch("font", settings.font), settings.fontSize, ssub(settings.fontOutline, 2))
-
+			
 			if settings.fontJustify then
 				f:SetJustifyH(settings.fontJustify)
 			end
@@ -495,7 +495,11 @@ do
 							healerName = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healerName)
 						end
 					end
-					message = sformat("+%s %s", message, healerName)
+					if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+						message = sformat("+%s %s", message, healerName)
+					else
+						message = sformat("%s +%s", healerName, message)
+					end
 				else
 					message = sformat("+%s", message)
 				end

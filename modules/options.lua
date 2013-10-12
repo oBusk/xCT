@@ -377,22 +377,6 @@ addon.options.args["spells"] = {
   type = 'group',
   order = 2,
   args = {
-    title = {
-      type = "header",
-      order = 0,
-      name = "Spam Settings",
-    },
-    spamDesc = {
-      type = 'description',
-      order = 1,
-      fontSize = "medium",
-      name = "The spam merger is used to combine certain spells together, so that output of your frames is limited to a minimum. Common spells that are merged include: |cff71d5ff|Hspell:42231|h[Hurricane]|h|r, |cff71d5ff|Hspell:85222|h[Light of Dawn]|h|r, |cff71d5ff|Hspell:596|h[Prayer of Healing]|h|r, |cff71d5ff|Hspell:2643|h[Multi-Shot]|h|4r, and many, many more!",
-    },
-    listSpacer0 = {
-      type = "description",
-      order = 2,
-      name = " ",
-    },
     enableMerger = {
       order = 3,
       type = 'toggle',
@@ -434,6 +418,7 @@ addon.options.args["spells"] = {
           desc = "Merges incoming healing by the name of the person that healed you.",
           get = get0_1,
           set = set0_1,
+          width = 'double',
         },
         
         listSpacer1 = {
@@ -449,6 +434,7 @@ addon.options.args["spells"] = {
           desc = "Merges multiple dispells that you perform together, if the aura name is the same.",
           get = get0_1,
           set = set0_1,
+          width = 'double',
         },
         
         listSpacer2 = {
@@ -493,7 +479,7 @@ addon.options.args["spells"] = {
         mergeCriticalsWithOutgoing = {
           order = 22,
           type = 'toggle',
-          name = "Merge Crits with Outgoing",
+          name = "Crits with Outgoing",
           desc = "Crits will be merged, but the total merged amount in the outgoing frame includes crits.",
           get = get0_1,
           set = setSpecialCriticalOptions,
@@ -502,7 +488,7 @@ addon.options.args["spells"] = {
         mergeCriticalsByThemselves = {
           order = 23,
           type = 'toggle',
-          name = "Merge Crits by Themselves",
+          name = "Crits by Themselves",
           desc = "Crits will be merged and the total merged amount in the outgoing frame |cffFF0000DOES NOT|r include crits.",
           get = get0_1,
           set = setSpecialCriticalOptions,
@@ -512,11 +498,34 @@ addon.options.args["spells"] = {
     },
     
     spellList = {
-      name = "List of Mergeable Spells |cff798BDD(Class Specific)|r",
+      name = "Specific Class", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
-      guiInline = true,
       order = 20,
       args = {
+        title = {
+          type = 'description',
+          order = 0,
+          name = "List of Mergeable Spells |cff798BDD(Class Specific)|r",
+          fontSize = "large",
+          width = "double",
+        },
+        
+        checkAll = {
+          type = 'execute',
+          order = 0.1,
+          name = "Check",
+          desc = "Check all the class specific merge spells.",
+          width = "half",
+        },
+        
+        uncheckAll = {
+          type = 'execute',
+          order = 0.2,
+          name = "Uncheck",
+          desc = "Uncheck all the class specific merge spells.",
+          width = "half",
+        },
+        
         mergeListDesc = {
           type = "description",
           order = 1,
@@ -527,16 +536,15 @@ addon.options.args["spells"] = {
     },
     
     itemList = {
-      name = "List of Mergeable Items",
+      name = "Spells |cff798BDD(All Classes)|r",
       type = 'group',
-      guiInline = true,
       order = 21,
       args = {
         mergeListDesc = {
           type = "description",
           order = 1,
           fontSize = "small",
-          name = "Uncheck am item if you do not want it merged. Contact me to add new items. See |cffFFFF00Credits|r for contact info.\n\n",
+          name = "Uncheck an item if you do not want it merged. Contact me to add new items. See |cffFFFF00Credits|r for contact info.\n\n",
         },
       },
     },
@@ -575,7 +583,6 @@ addon.options.args["spellFilter"] = {
           set = setNumber2,
           get = getNumber2,
         },
-      
       
         listSpacer1 = {
           type = "description",
@@ -671,10 +678,40 @@ addon.options.args["spellFilter"] = {
           desc = "Filtered auras gains and fades that are |cff1AFF1ABuffs|r will be on a whitelist (opposed to a blacklist).",
           set = set0_1,
           get = get0_1,
-          width = "full",
+          width = "half",
         },
-        spellName = {
+        
+        spacer1 = {
           order = 2,
+          type = 'description',
+          name = "",
+          width = "normal",
+        },
+        
+        spacer2 = {
+          order = 2,
+          type = 'description',
+          name = "",
+          width = "half",
+        },
+        
+        enableAll = {
+          order = 3,
+          type = 'execute',
+          name = "Check All",
+          width = "half",
+        },
+        
+        test2 = {
+          order = 4,
+          type = 'execute',
+          name = "Uncheck All",
+          width = "half",
+        },
+        
+        
+        spellName = {
+          order = 6,
           type = 'input',
           name = "Aura Name",
           desc = "The full, case-sensitive name of the |cff1AFF1ABuff|r you want to filter.",
@@ -682,7 +719,7 @@ addon.options.args["spellFilter"] = {
           get = noop,
         },
         checkAdd = {
-          order = 3,
+          order = 7,
           type = 'toggle',
           name = "Remove",
           desc = "Check to remove the aura from the filtered list.",
@@ -692,7 +729,7 @@ addon.options.args["spellFilter"] = {
         
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
-          order = 4,
+          order = 8,
           type = 'select',
           name = "Buff History:",
           desc = "A list of |cff1AFF1ABuff|r names that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",

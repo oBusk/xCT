@@ -42,6 +42,33 @@ addon.merges = {
   [148009] = CreateMergeSpellEntry("ITEM", 5),           -- Legedary Cloak (Healer - heal over 10s)
   [149276] = CreateMergeSpellEntry("ITEM", 3.5),         -- Legedary Cloak (Hunter - dmg over 3s)
   
+  -- Trinket: Kardris' Toxic Totem (Based on class and spec)
+  [146061] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Physical, Melee)
+  [146063] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Holy Dmg, ?????)
+  [146064] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Arcane Boomkin)
+  [146065] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Shadow, Lock/Priest)
+  [146067] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Fire, Frost Mage)
+  [146069] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Physical, Hunter)
+  [146071] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Nature, Ele Shaman)
+  [146070] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Arcane Mage)
+  [146075] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Nature, Monk)
+  [146177] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Holy, Healing)
+  [146178] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Nature, Healing)
+  
+  -- Trinket: Thok's Acid-Grooved Tooth (Based on class and spec)
+  [146137] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Physical, Melee)
+  [146157] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Holy Dmg, ?????)
+  [146158] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Arcane Boomkin)
+  [146159] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Shadow, Lock/Priest)
+  [146160] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Fire, Frost Mage)
+  [146162] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Physical, Hunter)
+  [146166] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Physical Mage)
+  [146171] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Nature, Ele)
+  [148234] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Holy, Healing)
+  [148235] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Nature, Healing)
+  
+  
+  
 -- death knight (damage)
   [55095]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Frost Fever
   [55078]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Blood Plague
@@ -113,6 +140,7 @@ addon.merges = {
   [120]    = CreateMergeSpellEntry("MAGE"),             -- Cone of Cold
   [114954] = CreateMergeSpellEntry("MAGE"),             -- Nether Tempest                             (Every 1s for 12s)
   [114923] = CreateMergeSpellEntry("MAGE"),             -- Nether Tempest (50% to random player)      (Every 1s for 12s)
+  [148022] = CreateMergeSpellEntry("MAGE", 4),          -- Icicle (Frost Mastery)                     (Could not find an actual time)
   
 -- monk (damage)
   [113656] = CreateMergeSpellEntry("MONK"),             -- Fists of Fury                              (Instant w/ every 1s for 4s)
@@ -126,7 +154,8 @@ addon.merges = {
   [132467] = CreateMergeSpellEntry("MONK", 6),          -- Chi Wave (Damage)
   [148187] = CreateMergeSpellEntry("MONK", 2.5),        -- Rushing Jade Wind (Damage)                 (Duplicated SCK healing interval)
   [124255] = CreateMergeSpellEntry("MONK", 6),          -- Stagger/Staffelung
-  
+  [148135] = CreateMergeSpellEntry("MONK", 3),          -- Chi Burst (Damage)
+
 -- monk (healing)
   [117640] = CreateMergeSpellEntry("MONK", 2.5),        -- Spinning Crane Kick (Heal)                 (Over 2s)
   [119611] = CreateMergeSpellEntry("MONK", 6),          -- Renewing Mist                              (Every 3s for 18s)
