@@ -19,14 +19,16 @@ local ADDON_NAME, addon = ...
 --    class,       [string] - class name that spell belongs to
 --    interval,       [int] - How often to update merged data (in seconds)
 --    prep,           [int] - The minimum time to wait to update merged data (NOT USED YET)
+--    desc,        [string] - A short, helpful qualifier (1-2 words)
 --  )
 --    Creates a merge settings entry for a spell.
 -- =====================================================
-local function CreateMergeSpellEntry(class, interval, prep)
+local function CreateMergeSpellEntry(class, interval, desc, prep)
   return {
          class = class      or "ITEM",
       interval = interval   or 3,
           prep = prep       or 0,
+          desc = desc,
     }
 end
 
@@ -37,35 +39,35 @@ end
 addon.merges = {
 
 -- items (legendary cloaks)
-  [147891] = CreateMergeSpellEntry("ITEM", 3.5),         -- Legedary Cloak (Melee - dmg over 3s)
-  [148008] = CreateMergeSpellEntry("ITEM", 3.5),         -- Legedary Cloak (Caster - dmg over 3s)
-  [148009] = CreateMergeSpellEntry("ITEM", 5),           -- Legedary Cloak (Healer - heal over 10s)
-  [149276] = CreateMergeSpellEntry("ITEM", 3.5),         -- Legedary Cloak (Hunter - dmg over 3s)
+  [147891] = CreateMergeSpellEntry("ITEM", 3.5, "Legedary Cloak for Melee"),    -- Legedary Cloak (Melee - dmg over 3s)
+  [148008] = CreateMergeSpellEntry("ITEM", 3.5, "Legedary Cloak for Casters"),  -- Legedary Cloak (Caster - dmg over 3s)
+  [148009] = CreateMergeSpellEntry("ITEM", 5,   "Legedary Cloak for Healers"),  -- Legedary Cloak (Healer - heal over 10s)
+  [149276] = CreateMergeSpellEntry("ITEM", 3.5, "Legedary Cloak for Hunters"),  -- Legedary Cloak (Hunter - dmg over 3s)
   
   -- Trinket: Kardris' Toxic Totem (Based on class and spec)
-  [146061] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Physical, Melee)
-  [146063] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Holy Dmg, ?????)
-  [146064] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Arcane Boomkin)
-  [146065] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Shadow, Lock/Priest)
-  [146067] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Fire, Frost Mage)
-  [146069] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Physical, Hunter)
-  [146071] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Nature, Ele Shaman)
-  [146070] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Arcane Mage)
-  [146075] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Nature, Monk)
-  [146177] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Holy, Healing)
-  [146178] = CreateMergeSpellEntry("ITEM", 5),           -- Multi-Strike (Nature, Healing)
+  [146061] = CreateMergeSpellEntry("ITEM", 5, "Physical Damage (Melee)"),            -- Multi-Strike (Physical, Melee)
+  [146063] = CreateMergeSpellEntry("ITEM", 5, "Holy Damage"),                        -- Multi-Strike (Holy Dmg, ?????)
+  [146064] = CreateMergeSpellEntry("ITEM", 5, "Arcane Damage (Balance Druids)"),     -- Multi-Strike (Arcane Boomkin)
+  [146065] = CreateMergeSpellEntry("ITEM", 5, "Shadow Damage (Priests, Warlocks)"),  -- Multi-Strike (Shadow, Lock/Priest)
+  [146067] = CreateMergeSpellEntry("ITEM", 5, "Fire, Frost Damage (Mages)"),         -- Multi-Strike (Fire, Frost Mage)
+  [146069] = CreateMergeSpellEntry("ITEM", 5, "Physical Damage (Hunters)"),          -- Multi-Strike (Physical, Hunter)
+  [146071] = CreateMergeSpellEntry("ITEM", 5, "Nature Damage (Elemental Shamans)"),  -- Multi-Strike (Nature, Ele Shaman)
+  [146070] = CreateMergeSpellEntry("ITEM", 5, "Arcane Damage (Mages)"),              -- Multi-Strike (Arcane Mage)
+  [146075] = CreateMergeSpellEntry("ITEM", 5, "Nature Damage (Windwalker Monks)"),   -- Multi-Strike (Nature, Monk)
+  [146177] = CreateMergeSpellEntry("ITEM", 5, "Holy Healing (Priest, Paladin)"),     -- Multi-Strike (Holy, Healing)
+  [146178] = CreateMergeSpellEntry("ITEM", 5, "Nature Healing (Druid, Monk)"),       -- Multi-Strike (Nature, Healing)
   
   -- Trinket: Thok's Acid-Grooved Tooth (Based on class and spec)
-  [146137] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Physical, Melee)
-  [146157] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Holy Dmg, ?????)
-  [146158] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Arcane Boomkin)
-  [146159] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Shadow, Lock/Priest)
-  [146160] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Fire, Frost Mage)
-  [146162] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Physical, Hunter)
-  [146166] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Physical Mage)
-  [146171] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Nature, Ele)
-  [148234] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Holy, Healing)
-  [148235] = CreateMergeSpellEntry("ITEM", .5),          -- Cleave (Nature, Healing)
+  [146137] = CreateMergeSpellEntry("ITEM", .5, "Physical Damage (Melee)"),           -- Cleave (Physical, Melee)
+  [146157] = CreateMergeSpellEntry("ITEM", .5, "Holy Damage"),                       -- Cleave (Holy Dmg, ?????)
+  [146158] = CreateMergeSpellEntry("ITEM", .5, "Arcane Damage (Balance Druids)"),    -- Cleave (Arcane Boomkin)
+  [146159] = CreateMergeSpellEntry("ITEM", .5, "Shadow Damage (Priests, Warlocks)"), -- Cleave (Shadow, Lock/Priest)
+  [146160] = CreateMergeSpellEntry("ITEM", .5, "Fire, Frost Damage (Mages)"),        -- Cleave (Fire, Frost Mage)
+  [146162] = CreateMergeSpellEntry("ITEM", .5, "Physical Damage (Hunters)"),         -- Cleave (Physical, Hunter)
+  [146166] = CreateMergeSpellEntry("ITEM", .5, "Arcane Damage (Mages)"),             -- Cleave (Arcane Mage)
+  [146171] = CreateMergeSpellEntry("ITEM", .5, "Nature Damage (Elemental Shamans)"), -- Cleave (Nature, Ele)
+  [148234] = CreateMergeSpellEntry("ITEM", .5, "Holy Healing (Priests, Paladins)"),  -- Cleave (Holy, Healing)
+  [148235] = CreateMergeSpellEntry("ITEM", .5, "Nature Healing (Monks, Druids)"),    -- Cleave (Nature, Healing)
   
   
   

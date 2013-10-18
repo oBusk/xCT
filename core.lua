@@ -98,7 +98,7 @@ function x:RefreshConfig()
     
   collectgarbage()
 end
-
+--[[
 -- Get's the spell description from a tooltip
 local getSpellDescription
 do
@@ -106,7 +106,7 @@ do
   local scanner = CreateFrame("GameTooltip")
   scanner:SetOwner(WorldFrame, "ANCHOR_NONE")
   local lcache, rcache = {}, {}
-  for i = 1, 4 do
+  for i = 1, 5 do
     lcache[i], rcache[i] = scanner:CreateFontString(), scanner:CreateFontString()
     lcache[i]:SetFontObject(GameFontNormal); rcache[i]:SetFontObject(GameFontNormal)
     scanner:AddFontStrings(lcache[i], rcache[i])
@@ -115,14 +115,58 @@ do
     if cache[spellId] then return cache[spellId] end
     scanner:ClearLines()
     scanner:SetHyperlink("spell:"..spellId)
-    for i = scanner:NumLines(), 1, -1 do
+    print("NumLines:", scanner:NumLines())
+	for i = scanner:NumLines(), 1, -1 do
       local desc = lcache[i] and lcache[i]:GetText()
       if desc then
+		if desc == "Requires Ranged Weapon" then
+			desc = GetSpellDescription(spellId)
+			desc = desc:gsub("$[A-Za-z0-9]+", "|cffFFFF00(Unknown Value)|r")
+		end
+		print(desc)
         cache[spellId] = desc
         return desc
       end
     end
   end
+end
+]]
+
+local getSpellDescription
+do
+	local Descriptions, description = { }, nil
+	local tooltip = CreateFrame('GameTooltip')
+	tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
+	
+	-- Add FontStrings to the tooltip
+	local LeftStrings, temporaryRight = {}, nil
+	for i = 1, 5 do
+		LeftStrings[i] = tooltip:CreateFontString()
+		temporaryRight = tooltip:CreateFontString()
+		LeftStrings[i]:SetFontObject(GameFontNormal)
+		temporaryRight:SetFontObject(GameFontNormal)
+		tooltip:AddFontStrings(LeftStrings[i], temporaryRight)
+	end
+	
+	function getSpellDescription(spellID)
+		if Descriptions[spellID] then
+			return Descriptions[spellID]
+		end
+		
+		tooltip:SetSpellByID(spellID)
+		
+		description = ""
+		if LeftStrings[tooltip:NumLines()] then
+			description = LeftStrings[ tooltip:NumLines() ]:GetText()
+		end
+		
+		if description == "" then
+			description = "No Description"
+		end
+		
+		Descriptions[spellID] = description
+		return description
+	end
 end
 
 -- Spammy Spell Get/Set Functions
@@ -140,6 +184,7 @@ function x:UpdateSpamSpells()
       -- update merge setting incase they are outdated
         self.db.profile.spells.merge[id].interval = item.interval
         self.db.profile.spells.merge[id].prep = item.prep
+        self.db.profile.spells.merge[id].desc = item.desc
       end
     end
   end
@@ -151,8 +196,14 @@ function x:UpdateSpamSpells()
     if entry.class == x.player.class or entry.class == "ALL" or entry.class == "ITEM" then
       local name = GetSpellInfo(spellID)
       if name then
-		local spellDesc = getSpellDescription(spellID) or "No Description"
-        local desc = spellDesc .. "\n\n|cffFF0000ID|r |cff798BDD" .. spellID .. "|r"
+        local spellDesc = getSpellDescription(spellID) or "No Description"
+        local desc = ""
+        
+        if entry.desc then
+          desc = "|cff9F3ED5" .. entry.desc .. "|r\n\n"
+        end
+        
+        desc = desc .. spellDesc .. "\n\n|cffFF0000ID|r |cff798BDD" .. spellID .. "|r"
         
         if entry.interval <= 0.5 then
           desc = desc .. "\n|cffFF0000Interval|r Instant" 

@@ -498,7 +498,7 @@ addon.options.args["spells"] = {
     },
     
     spellList = {
-      name = "Specific Class", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
+      name = "Class Specific Spells", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
       order = 20,
       args = {
@@ -509,6 +509,8 @@ addon.options.args["spells"] = {
           fontSize = "large",
           width = "double",
         },
+        
+        --[[  TODO: Add Check all and uncheck all buttons
         
         checkAll = {
           type = 'execute',
@@ -524,7 +526,7 @@ addon.options.args["spells"] = {
           name = "Uncheck",
           desc = "Uncheck all the class specific merge spells.",
           width = "half",
-        },
+        },]]
         
         mergeListDesc = {
           type = "description",
@@ -536,10 +538,17 @@ addon.options.args["spells"] = {
     },
     
     itemList = {
-      name = "Spells |cff798BDD(All Classes)|r",
+      name = "Items and Spells for All Classes",
       type = 'group',
       order = 21,
       args = {
+        title = {
+          type = 'description',
+          order = 0,
+          name = "List of Mergeable Spells |cff798BDD(Items)|r",
+          fontSize = "large",
+          width = "double",
+        },
         mergeListDesc = {
           type = "description",
           order = 1,
