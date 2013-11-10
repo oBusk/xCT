@@ -325,16 +325,16 @@ local spam_format = "%s%s x%s"
 
 -- =====================================================
 -- AddOn:AddSpamMessage(
---		framename,	[string]						- the framename
+--		framename,		[string]			- the framename
 --		mergeID,		[number or string]	- idenitity items to merge, if number
---																			then it HAS TO BE the valid spell ID
+--												then it HAS TO BE the valid spell ID
 --		message,		[number or string]	- the pre-formatted message to be sent,
---																			if its not a number, then only the
---																			first 'message' value that is sent
---																			this mergeID will be used.
---		colorname,	[string or table]	 - the name of the color OR a table
---																			containing the color (e.g.
---																			colorname={1,2,3} -- r=1, b=2, g=3)
+--												if its not a number, then only the
+--												first 'message' value that is sent
+--												this mergeID will be used.
+--		colorname,		[string or table]	- the name of the color OR a table
+--												containing the color (e.g.
+--												colorname={1,2,3} -- r=1, b=2, g=3)
 --	)
 --		Sends a message to the framename specified.
 -- =====================================================
@@ -345,12 +345,12 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
 		table_insert(heap[mergeID].entries, message)
 	else
 		heap[mergeID] = {
-			last		= 0,					-- last update
+			last	= 0,			-- last update
 			update	= interval or (x.db.profile.spells.merge[mergeID] and x.db.profile.spells.merge[mergeID].interval or 3),	 -- how often to update
-			entries = {					 -- entries to merge
+			entries = {				-- entries to merge
 					message,
 				},
-			color	 = colorname,	-- color
+			color	= colorname,	-- color
 		}
 		table_insert(stack, mergeID)
 	end

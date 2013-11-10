@@ -210,7 +210,6 @@ addon.merges = {
   [34914]  = CreateMergeSpellEntry("PRIEST", 6),        -- Vampiric Touch 
   [2944]   = CreateMergeSpellEntry("PRIEST"),           -- Devouring Plague
   [15407]  = CreateMergeSpellEntry("PRIEST"),           -- Mind Flay
-  [49821]  = CreateMergeSpellEntry("PRIEST"),           -- Mind Seer (From Derap: first one is the cast)
   [124469] = CreateMergeSpellEntry("PRIEST"),           -- Mind Seer (the second one is the debuff that is applied to your target which lets you clip your mind sears like mind flay)
   [87532]  = CreateMergeSpellEntry("PRIEST"),           -- Shadowy Apparition
   [14914]  = CreateMergeSpellEntry("PRIEST"),           -- Holy Fire
@@ -220,9 +219,7 @@ addon.merges = {
   [122128] = CreateMergeSpellEntry("PRIEST", 3),        -- Divine Star (Heal)                         (INSTANT... over 3ish)
   [33619]  = CreateMergeSpellEntry("PRIEST", 3),        -- Reflective Shield
   [127628] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Damage)
-
-  -- Merge Together:
-  -- 49821 & 124469 - Mind Seer
+  [49821]  = CreateMergeSpellEntry("PRIEST"),           -- Mind Seer                                  (Merged w/ Secondary Spell)
 
 -- priest (healing)
   [47750]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Heal)
@@ -242,10 +239,10 @@ addon.merges = {
   [7001]   = CreateMergeSpellEntry("PRIEST", 4),        -- Light Well                                 (every 2s for 6s)
   [127626] = CreateMergeSpellEntry("PRIEST", 6.5),      -- Devouring Plague (Heal)
   [81751]  = CreateMergeSpellEntry("PRIEST", 6),        -- Atonement (Healing you do through damage)
-	[126154] = CreateMergeSpellEntry("PRIEST", 3),        -- Lightspring Renew
-	[120785] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Heal & Damage ??)
-	[127629] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Heal - Shadow Spec)
-	
+  [126154] = CreateMergeSpellEntry("PRIEST", 3),        -- Lightspring Renew
+  [120785] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Heal & Damage ??)
+  [127629] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Heal - Shadow Spec)
+
 -- rogue
   [51723]  = CreateMergeSpellEntry("ROGUE", .5),        -- Fan of Knives                              (INSTANT)
   [113780] = CreateMergeSpellEntry("ROGUE", .5),        -- Deadly Poison                              (INSTANT)
@@ -255,7 +252,7 @@ addon.merges = {
   [121411] = CreateMergeSpellEntry("ROGUE", .5),        -- Crimson Tempest                            (INSTANT)
   [122233] = CreateMergeSpellEntry("ROGUE"),            -- Crimson Tempest (DoT)
   [22482]  = CreateMergeSpellEntry("ROGUE", .5),        -- Blade Flurry                               (INSTANT)
-  
+
 -- shaman (damage)
   [421]    = CreateMergeSpellEntry("SHAMAN", .5),       -- Chain Lightning                            (INSTANT)
   [8349]   = CreateMergeSpellEntry("SHAMAN"),           -- Fire Nova
@@ -271,7 +268,7 @@ addon.merges = {
   [114074] = CreateMergeSpellEntry("SHAMAN", .5),       -- Lava Beam                                  (INSTANT)
   [114738] = CreateMergeSpellEntry("SHAMAN", .5),       -- Lava Beam (Mastery)                        (INSTANT)
   [45297]  = CreateMergeSpellEntry("SHAMAN", .5),       -- Chain Lightning (Mastery)                  (INSTANT)
-	
+
 -- shaman (healing)
   [73921]  = CreateMergeSpellEntry("SHAMAN"),           -- Healing Rain
   [1064]   = CreateMergeSpellEntry("SHAMAN", .5),       -- Chain Heal                                 (INSTANT)
@@ -281,12 +278,10 @@ addon.merges = {
   [114083] = CreateMergeSpellEntry("SHAMAN"),           -- Restorative Mists (Ascendance)
   [114911] = CreateMergeSpellEntry("SHAMAN", 5),        -- Ancestral Guidance                         (INSTANT)
   [114942] = CreateMergeSpellEntry("SHAMAN", 4),        -- Healing Tide Totem
-  
--- shaman (special)
-  -- 32175 & 32176 Stormstrike (Merge Two Hits Together)
-  -- 115357 & 115360 Stormblast (Merge together)
-  -- 114089 & 114093 Wind Lash (Ascendance)
-  
+  [32176]  = CreateMergeSpellEntry("SHAMAN"),           -- Stormstrike                                (Merged w/ Off-Hand)
+  [115360] = CreateMergeSpellEntry("SHAMAN"),           -- Stormblast                                 (Merged w/ Off-Hand)
+  [114093] = CreateMergeSpellEntry("SHAMAN"),           -- Wind Lash (Ascendance)                     (Merged w/ Off-Hand)
+
 -- warlock (damage)
   [980]    = CreateMergeSpellEntry("WARLOCK"),          -- Agony
   [131737] = CreateMergeSpellEntry("WARLOCK"),          -- Agony (Malefic Grasp)
@@ -338,11 +333,19 @@ addon.merges = {
   [50622]  = CreateMergeSpellEntry("WARRIOR"),          -- Bladestorm
   [113344] = CreateMergeSpellEntry("WARRIOR"),          -- Bloodbath
   [52174]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Heroic Leap                                (INSTANT)
-  
-  -- Merge Main/Offhand together
-  --[96103]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Raging Blow
-  --[85384]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Raging Blow (Offhand)
-  
--- spammy items (old) ITEM CLASS CURRENTLY DOES NOTHING
-  --[109858] = CreateMergeSpellEntry("ITEM", 2.5),        -- Speaking of Rage - proc'd by: Vishanka, Jaws of the Earth (Heroic)
+  [96103]  = CreateMergeSpellEntry("WARRIOR"),          -- Raging Blow                                (Merged w/ Off-Hand)
+}
+
+
+addon.merge2h = {
+	-- Priest (Damage)
+	[124469] = 49821,		-- Mind Seer
+	
+	-- Shaman (damage)
+	[32176]  = 32175,		-- Stormstrike
+	[115360] = 115357,		-- Stormblast
+	[114093] = 114089,		-- Wind Lash (Ascendance)
+	
+	-- Warrior
+	[85384] = 96103,		-- Raging Blow
 }
