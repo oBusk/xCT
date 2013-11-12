@@ -22,3 +22,10 @@ xCT_Plus = addon.engine
 
 -- No Operation
 addon.noop = noop
+
+-- Work around for http://us.battle.net/wow/en/forum/topic/10388639018
+hooksecurefunc("StaticPopup_Show", function(popup)
+  if(popup == "ADDON_ACTION_FORBIDDEN") then
+    StaticPopup_Hide(popup);
+  end
+end)

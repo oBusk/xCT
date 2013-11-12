@@ -209,7 +209,19 @@ local function IsDebuffFiltered(name)
   return spell
 end
 
-local function IsMerged(spellID) return x.db.profile.spells.enableMerger and x.db.profile.spells.merge[spellID] and x.db.profile.spells.merge[spellID].enabled end
+local function IsMerged(spellID)
+	return ( x.db.profile.spells.enableMerger ) and
+		(	-- Check to see if it is a merged spell
+			x.db.profile.spells.merge[spellID]
+			and x.db.profile.spells.merge[spellID].enabled
+		)
+		or
+		(	-- Check to see if it is a two hand weapon
+			addon.merge2h[spellID] and
+			x.db.profile.spells.merge[addon.merge2h[spellID]] and
+			x.db.profile.spells.merge[addon.merge2h[spellID]].enabled
+		)
+end
 
 local function UseStandardSpellColors() return not x.db.profile.frames["outgoing"].standardSpellColor end
 local function GetCustomSpellColorFromIndex(index)
