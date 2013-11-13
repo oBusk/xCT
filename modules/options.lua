@@ -52,6 +52,14 @@ addon.options = {
       get = function(info) return x.db.profile.showStartupText end,
       set = function(info, value) x.db.profile.showStartupText = value end,
     },  
+    hideConfig = {
+      order = 3,
+      type = 'toggle',
+      name = "Hide Config in Combat",
+      desc = "This option helps prevent UI taints by closing the config when you enter combat.\n\n|cffFF8000Highly Recommended Enabled|r",
+      get = function(info) return x.db.profile.hideConfig end,
+      set = function(info, value) x.db.profile.hideConfig = value; if not value then StaticPopup_Show("XCT_PLUS_HIDE_IN_COMBAT") end end,
+    },
     --[==[RestoreDefaults = {
       order = 3,
       type = 'execute',
@@ -59,12 +67,12 @@ addon.options = {
       func = x.RestoreAllDefaults,
     },]==]
     space = {
-      order = 3,
+      order = 10,
       type = 'description',
       name = " ",
       width = 'half',
     },
-    space2 = {
+    --[==[space2 = {
       order = 3,
       type = 'description',
       name = " ",
@@ -75,15 +83,15 @@ addon.options = {
       type = 'description',
       name = " ",
       width = 'half',
-    },
+    },]==]
     ToggleTestMode = {
-      order = 4,
+      order = 11,
       type = 'execute',
       name = "Toggle Test Mode",
       func = x.ToggleTestMode,
     },
     ToggleFrames = {
-      order = 5,
+      order = 12,
       type = 'execute',
       name = "Toggle Frames",
       func = x.ToggleConfigMode,
@@ -1158,8 +1166,8 @@ addon.options.args["Frames"] = {
       args = {
         title = {
           type = "description",
-          order = 0,
-          name = "Abbreviation will help keep your screen uncluttered and readable. You can enable number abbreviation independently on certain frames through their settings pages.",
+          order = 10,
+          name = "\nAbbreviation will help keep your screen uncluttered and readable. You can enable number abbreviation independently on certain frames through their settings pages.",
         },
       
         --[==[enableMegaDamage = {
@@ -1192,9 +1200,8 @@ addon.options.args["Frames"] = {
         decimalPoint = {
           order = 4,
           type = 'toggle',
-          name = "Enable Single-Decimal Accuracy",
+          name = "Single Decimal",
           desc = "Shows a single decimal when abbreviating the value (e.g. will show |cff798BDD5.9K|r instead of |cff798BDD6K|r).",
-          width = "full",
           get = get0,
           set = set0,
         },

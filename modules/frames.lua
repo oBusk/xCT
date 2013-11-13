@@ -1032,3 +1032,17 @@ StaticPopupDialogs["XCT_PLUS_RESET_SETTINGS"] = {
 	-- Taint work around
 	preferredIndex	= 3,
 }
+
+StaticPopupDialogs["XCT_PLUS_HIDE_IN_COMBAT"] = {
+	text			= "|cffFFFF00Disable the|r |cff798BDDHide Config in Combat|r|cffFFFF00 feature?|r\n\n\n|cffFF0000WARNING:|r By disabling this protection you risk |cffFF8000tainting|r your UI. In some cases, you will need to type: '|cff798BDD/reload|r' in order to change |cff10FF40glyphs|r or |cff10FF40talents|r and to place |cff10FF40world markers|r.\n",
+	timeout			= 0,
+	whileDead		= 1,
+	
+	button1			= CONTINUE,
+	button2			= REVERT,
+	OnAccept		= x.noop,
+	OnCancel		= function() x.db.profile.hideConfig = true; x:RefreshConfig() end,
+	
+	-- Taint work around
+	preferredIndex	= 3,
+}

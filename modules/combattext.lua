@@ -806,6 +806,8 @@ x.events = {
       end
     end,
   ["PLAYER_REGEN_ENABLED"] = function()
+      x.inCombat = false
+	  x:CombatStateChanged()
       if ClearWhenLeavingCombat() then
         -- only clear frames with icons
         x:Clear("outgoing")
@@ -818,6 +820,8 @@ x.events = {
       end
     end,
   ["PLAYER_REGEN_DISABLED"] = function()
+      x.inCombat = true
+	  x:CombatStateChanged()
       if ShowCombatState() then
         x:AddMessage("general", sformat(format_gain, ENTERING_COMBAT), "combat_begin")
       end

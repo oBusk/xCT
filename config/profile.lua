@@ -34,6 +34,7 @@ end
 addon.defaults = {
   profile = {
     showStartupText = true,
+    hideConfig = true,
     
     blizzardFCT = {
       blizzardHeadNumbers = false,

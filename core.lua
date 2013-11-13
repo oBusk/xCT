@@ -662,6 +662,31 @@ ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
 -- Register Slash Commands
 x:RegisterChatCommand('xct', 'OpenxCTCommand')
 
+-- Close Config when entering combat
+local lastConfigState = false
+function x:CombatStateChanged()
+  if x.db.profile.hideConfig then
+    if self.inCombat then
+      if ACD.OpenFrames[AddonName] then
+        lastConfigState = true
+        ACD:Close(AddonName)
+      end
+    else
+      if lastConfigState then
+        ACD:Open(AddonName)
+      end
+      lastConfigState = false
+    end
+  end
+end
+
+-- Force Config Page to refresh
+function x:RefreshConfig()
+  if ACD.OpenFrames[AddonName] then
+    ACR:NotifyChange(AddonName)
+  end
+end
+
 -- Process the slash command ('input' contains whatever follows the slash command)
 function x:OpenxCTCommand(input)
   if string_match(string_lower(input), 'lock') then
