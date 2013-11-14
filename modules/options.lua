@@ -227,6 +227,20 @@ x.cvar_udpate = function()
     _G["COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE"] = "0"
   end
   
+  -- Floating Combat Text: Effects
+  if x.db.profile.blizzardFCT.fctSpellMechanics then
+    SetCVar("fctSpellMechanics", 1)
+  else
+    SetCVar("fctSpellMechanics", 0)
+  end
+  
+  -- Floating Combat Text: Effects (Others)
+  if x.db.profile.blizzardFCT.fctSpellMechanicsOther then
+    SetCVar("fctSpellMechanicsOther", 1)
+  else
+    SetCVar("fctSpellMechanicsOther", 0)
+  end
+  
   -- Floating Combat Text: Outgoing Damage
   if x.db.profile.blizzardFCT.CombatDamage then
     SetCVar("CombatDamage", 1)
@@ -1000,7 +1014,27 @@ addon.options.args["Frames"] = {
           get = get0,
           set = set0_update,
         },
-      
+        
+        -- Floating Combat Text Effects
+        fctSpellMechanics = {
+          order = 8,
+          type = 'toggle',
+          name = "Show Effects",
+          desc = "Enable this option if you want to see your snares and roots.",
+          get = get0,
+          set = set0_update,
+        },
+        
+        fctSpellMechanicsOther = {
+          order = 9,
+          type = 'toggle',
+          name = "Show Other's Effects",
+          desc = "Enable this option if you want to see other player's snares and roots too.",
+          get = get0,
+          set = set0_update,
+          disabled = function(info) return not x.db.profile.blizzardFCT.fctSpellMechanics end, 
+        },
+        
         --[==[Frames_Description = {
           type = "description",
           order = 0,

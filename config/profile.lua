@@ -50,20 +50,22 @@ addon.defaults = {
       ["CombatHealing"] = false,
       ["PetMeleeDamage"] = false,
       ["CombatLogPeriodicSpells"] = false,
-      ["CombatHealingAbsorbTarget"] = false, 
+      ["CombatHealingAbsorbTarget"] = false,
+      ["fctSpellMechanics"] = false,
+      ["fctSpellMechanicsOther"] = false,
     },
     
     frameSettings = {
       clearLeavingCombat = false,
       showGrid = true,
-	  showPositions = true,
+      showPositions = true,
       frameStrata = "5HIGH",
     },
     
     megaDamage = {
       thousandSymbol = "|cffFF8000K|r",
       millionSymbol = "|cffFF0000M|r",
-			decimalPoint = true,
+      decimalPoint = true,
     },
     
     frames = {

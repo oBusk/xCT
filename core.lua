@@ -663,7 +663,7 @@ ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
 x:RegisterChatCommand('xct', 'OpenxCTCommand')
 
 -- Close Config when entering combat
-local lastConfigState = false
+local lastConfigState, shownWarning = false, false
 function x:CombatStateChanged()
   if x.db.profile.hideConfig then
     if self.inCombat then
@@ -676,6 +676,7 @@ function x:CombatStateChanged()
         ACD:Open(AddonName)
       end
       lastConfigState = false
+	  shownWarning = false
     end
   end
 end
@@ -748,8 +749,16 @@ function x:OpenxCTCommand(input)
     mode = 'Open'
   end
   
-  if not x.configuring then
-    ACD[mode](ACD, AddonName)
+  if x.inCombat and x.db.profile.hideConfig then
+    if not shownWarning then
+      print("|cffFF0000x|r|cffFFFF00CT+|r will open the Configuration Tool after combat.")
+      shownWarning = true
+      lastConfigState = true
+    end
+  else
+    if not x.configuring then
+      ACD[mode](ACD, AddonName)
+    end
   end
 end
 
