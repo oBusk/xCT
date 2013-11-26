@@ -35,25 +35,42 @@ addon.options = {
   args = {
     xCT_Title = {
       order = 0,
-      type = "description",
-      fontSize = "large",
+      type = 'description',
+      fontSize = 'large',
       name = "|cffFF0000x|rCT|cffFFFF00+|r |cff798BDDConfiguration Tool|r",
+      width = 'double',
     },
-    xCT_Header = {
+
+    spacer0 = {
       order = 1,
+      type = 'description',
+      name = "",
+      width = 'half',
+    },
+
+    helpfulTip = {
+      order = 2,
+      type = 'description',
+      fontSize = 'medium',
+      name = "If there is a certain spell or buff that you don't want to see, consider adding it to a filter.",
+      width = 'double',
+    },
+
+    xCT_Header = {
+      order = 10,
       type = "header",
       name = "Version: "..(GetAddOnMetadata("xCT+", "Version") or "Unknown"),
       width = "full",
     },
     showStartupText = {
-      order = 2,
+      order = 11,
       type = 'toggle',
       name = "Startup Message",
       get = function(info) return x.db.profile.showStartupText end,
       set = function(info, value) x.db.profile.showStartupText = value end,
     },  
     hideConfig = {
-      order = 3,
+      order = 12,
       type = 'toggle',
       name = "Hide Config in Combat",
       desc = "This option helps prevent UI taints by closing the config when you enter combat.\n\n|cffFF8000Highly Recommended Enabled|r",
@@ -66,35 +83,41 @@ addon.options = {
       name = "Restore Defaults",
       func = x.RestoreAllDefaults,
     },]==]
-    space = {
-      order = 10,
+    space2 = {
+      order = 20,
       type = 'description',
       name = " ",
       width = 'half',
     },
-    --[==[space2 = {
+    --[==[space3 = {
       order = 3,
       type = 'description',
       name = " ",
       width = 'half',
     },
-    space3 = {
+    space4 = {
       order = 3,
       type = 'description',
       name = " ",
       width = 'half',
     },]==]
     ToggleTestMode = {
-      order = 11,
+      order = 21,
       type = 'execute',
       name = "Toggle Test Mode",
       func = x.ToggleTestMode,
     },
     ToggleFrames = {
-      order = 12,
+      order = 22,
       type = 'execute',
       name = "Toggle Frames",
       func = x.ToggleConfigMode,
+    },
+
+    hiddenObjectShhhhhh = {
+      order = 9001,
+      type = 'description',
+      name = function(info) x:OnAddonConfigRefreshed() return "" end,
     },
   },
 }
@@ -328,9 +351,19 @@ local function setSpecialCriticalOptions(info, value)
   x.db.profile[info[#info-2]][info[#info]] = true
 end
 
+local function setFormating(info, value)
+  x.db.profile.spells.formatAbbreviate = false
+  x.db.profile.spells.formatGroups = false
+
+  x.db.profile.spells[info[#info]] = true
+end
+
+local function getDBSpells(info)
+  return x.db.profile.spells[info[#info]]
+end
+
 -- Apply to All variables
 local miscFont, miscFontOutline, miscEnableCustomFade;
-
 
 -- Spell Filter Methods
 local checkAdd = {
@@ -342,13 +375,29 @@ local checkAdd = {
 local function getCheckAdd(info) return checkAdd[info[#info-1]] end
 local function setCheckAdd(info, value) checkAdd[info[#info-1]] = value end
 
+local function trim(s)
+  return ( s:gsub("^%s*(.-)%s*$", "%1") )
+end
+
+-- For each 'c' separated value in 's' (string) do 'f(value, ...)'
+local function foreach(input, comma, func, ...)
+  local pattern = ("[^%s]+"):format(comma)
+  local s, e = 0, 0
+  while e do
+    s, e = input:find(pattern, e + 1)
+    if s and e then
+      func(trim(input:sub(s, e)), ...)
+    end
+  end
+end
+
 local function setSpell(info, value)
   if not checkAdd[info[#info-1]] then
     -- Add Spell
-    x:AddFilteredSpell(info[#info-1], value)
+    foreach(value, ';', x.AddFilteredSpell, info[#info-1])
   else
     -- Remove Spell
-    x:RemoveFilteredSpell(info[#info-1], value)
+    foreach(value, ';', x.RemoveFilteredSpell, info[#info-1])
   end
 end
 
@@ -399,27 +448,6 @@ addon.options.args["spells"] = {
   type = 'group',
   order = 2,
   args = {
-    enableMerger = {
-      order = 3,
-      type = 'toggle',
-      name = "Enable Merger",
-      get = get0,
-      set = set0,
-    },
-    enableMergerDebug = {
-      order = 4,
-      type = 'toggle',
-      width = "double",
-      name = "Show Spell IDs",
-      get = get0,
-      set = set0,
-    },
-    
-    listSpacer1 = {
-      type = "description",
-      order = 5,
-      name = " ",
-    },
     
     mergeOptions = {
       name = "Merge Options",
@@ -427,14 +455,32 @@ addon.options.args["spells"] = {
       guiInline = true,
       order = 11,
       args = {
-        listSpacer0 = {
-          type = "description",
+
+        enableMerger = {
           order = 1,
-          name = "|cff798BDDMerge Incoming Healing Options|r:",
+          type = 'toggle',
+          name = "Enable Merger",
+          get = get0_1,
+          set = set0_1,
+        },
+        enableMergerDebug = {
+          order = 2,
+          type = 'toggle',
+          width = "double",
+          name = "Show Spell IDs",
+          get = get0_1,
+          set = set0_1,
+        },
+
+        listSpacer1 = {
+          type = "description",
+          order = 10,
+          name = "\n|cff798BDDMerge Incoming Healing|r:",
+          fontSize = 'large',
         },
       
         mergeHealing = {
-          order = 2,
+          order = 11,
           type = 'toggle',
           name = "Merge Healing by Name",
           desc = "Merges incoming healing by the name of the person that healed you.",
@@ -443,14 +489,15 @@ addon.options.args["spells"] = {
           width = 'double',
         },
         
-        listSpacer1 = {
+        listSpacer2 = {
           type = "description",
-          order = 3,
-          name = "\n|cff798BDDMerge Multiple Dispells Options|r:",
+          order = 20,
+          name = "\n|cff798BDDMerge Multiple Dispells|r:",
+          fontSize = 'large',
         },
       
         mergeDispells = {
-          order = 4,
+          order = 21,
           type = 'toggle',
           name = "Merge Dispells by Spell Name",
           desc = "Merges multiple dispells that you perform together, if the aura name is the same.",
@@ -459,14 +506,15 @@ addon.options.args["spells"] = {
           width = 'double',
         },
         
-        listSpacer2 = {
+        listSpacer3 = {
           type = "description",
-          order = 10,
-          name = "\n|cff798BDDMerge Auto-Attack Options|r:",
+          order = 30,
+          name = "\n|cff798BDDMerge Auto-Attacks|r:",
+          fontSize = 'large',
         },
       
         mergeSwings = {
-          order = 11,
+          order = 31,
           type = 'toggle',
           name = "Merge Melee Swings",
           desc = "|cffFF0000ID|r 6603 |cff798BDD(Player Melee)|r\n|cffFF0000ID|r 0 |cff798BDD(Pet Melee)|r",
@@ -475,7 +523,7 @@ addon.options.args["spells"] = {
         },
         
         mergeRanged = {
-          order = 12,
+          order = 32,
           type = 'toggle',
           name = "Merge Ranged Attacks",
           desc = "|cffFF0000ID|r 75",
@@ -483,37 +531,41 @@ addon.options.args["spells"] = {
           set = set0_1,
         },
         
-        listSpacer3 = {
+        listSpacer4 = {
           type = "description",
-          order = 20,
-          name = "\n|cff798BDDMerge Critical Hit Options|r (Choose one):",
+          order = 40,
+          name = "\n|cff798BDDMerge Critical Hits|r (Choose one):",
+          fontSize = 'large',
         },
         
         mergeDontMergeCriticals = {
-          order = 21,
+          order = 41,
           type = 'toggle',
-          name = "Don't Merge Crits",
+          name = "Don't Merge Critical Together",
           desc = "Crits will not get merged in the critical frame, but they will be included in the outgoing total. |cffFFFF00(Default)|r",
           get = get0_1,
           set = setSpecialCriticalOptions,
+          width = 'full',
         },
         
         mergeCriticalsWithOutgoing = {
-          order = 22,
+          order = 42,
           type = 'toggle',
-          name = "Crits with Outgoing",
+          name = "Merge Critical Hits with Outgoing",
           desc = "Crits will be merged, but the total merged amount in the outgoing frame includes crits.",
           get = get0_1,
           set = setSpecialCriticalOptions,
+          width = 'full',
         },
         
         mergeCriticalsByThemselves = {
-          order = 23,
+          order = 43,
           type = 'toggle',
-          name = "Crits by Themselves",
+          name = "Merge Critical Hits by Themselves",
           desc = "Crits will be merged and the total merged amount in the outgoing frame |cffFF0000DOES NOT|r include crits.",
           get = get0_1,
           set = setSpecialCriticalOptions,
+          width = 'full',
         },
 
       },
@@ -604,6 +656,7 @@ addon.options.args["spellFilter"] = {
           type = "description",
           order = 0,
           name = "|cff798BDDIncoming Player Power Threshold|r: (Mana, Rage, Energy, etc.)",
+          fontSize = "large",
         },
         
         filterPowerValue = {
@@ -618,7 +671,8 @@ addon.options.args["spellFilter"] = {
         listSpacer1 = {
           type = "description",
           order = 10,
-          name = "|cff798BDDOutgoing Damage and Healing Threshold|r:",
+          name = "\n|cff798BDDOutgoing Damage and Healing Threshold|r:",
+          fontSize = "large",
         },
         
         filterOutgoingDamageValue = {
@@ -642,7 +696,8 @@ addon.options.args["spellFilter"] = {
         listSpacer2 = {
           type = "description",
           order = 20,
-          name = "|cff798BDDIncoming Damage and Healing Threshold|r:",
+          name = "\n|cff798BDDIncoming Damage and Healing Threshold|r:",
+          fontSize = "large",
         },
         
         filterIncomingDamageValue = {
@@ -709,10 +764,10 @@ addon.options.args["spellFilter"] = {
           desc = "Filtered auras gains and fades that are |cff1AFF1ABuffs|r will be on a whitelist (opposed to a blacklist).",
           set = set0_1,
           get = get0_1,
-          width = "half",
+          width = "full",
         },
         
-        spacer1 = {
+        --[[spacer1 = {
           order = 2,
           type = 'description',
           name = "",
@@ -724,9 +779,9 @@ addon.options.args["spellFilter"] = {
           type = 'description',
           name = "",
           width = "half",
-        },
+        },]]
         
-        enableAll = {
+        --[[enableAll = {
           order = 3,
           type = 'execute',
           name = "Check All",
@@ -738,14 +793,14 @@ addon.options.args["spellFilter"] = {
           type = 'execute',
           name = "Uncheck All",
           width = "half",
-        },
+        },]]
         
         
         spellName = {
           order = 6,
           type = 'input',
           name = "Aura Name",
-          desc = "The full, case-sensitive name of the |cff1AFF1ABuff|r you want to filter.",
+          desc = "The full, case-sensitive name of the |cff1AFF1ABuff|r you want to filter.\n\nYou can add/remove |cff798BDDmultiple|r entries by separating them with a |cffFF8000semicolon|r (e.g. 'Shadowform;Power Word: Fortitude').",
           set = setSpell,
           get = noop,
         },
@@ -935,30 +990,29 @@ addon.options.args["Credits"] = {
   },
 }
 
-addon.options.args["Frames"] = {
-  name = "|cffFF0000x|r|cffFFFFFFCT|r|cffFFFF00+|r Frames",
+addon.options.args["FloatingCombatText"] = {
+  name = "Floating Combat Text",
   type = 'group',
   order = 1,
   args = {
-    Frames_Header = {
-      type = "description",
+    title2 = {
       order = 0,
-      name = "|cff798BDDWelcome to|r |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r|cff798BDD version 3!|r\n",
-      fontSize = "large",
+      type = "description",
+      name = "|cffA0A0A0Some changes might require a full|r |cffD0D000Client Restart|r |cffA0A0A0(completely exit out of WoW). Do not|r |cffD00000Alt+F4|r |cffA0A0A0or|r |cffD00000Command+Q|r |cffA0A0A0or your settings might not save. Use '|r|cff798BDD/exit|r|cffA0A0A0' to close the client.|r\n\n",
+      fontSize = "small",
     },
     blizzardFCT = {
-      name = "Blizzard's Floating Combat Text |cff798BDD(Head Numbers)|r",
+      name = "Blizzard's Floating Combat Text |cffFFFFFF(Head Numbers)|r",
       type = 'group',
-      order = 3,
+      order = 1,
       guiInline = true,
       args = {
-        
         listSpacer0 = {
           type = "description",
           order = 1,
-          name = "\n|cff798BDDFloating Combat Text Options|r:",
+          name = "|cff798BDDFloating Combat Text Options|r:",
+          fontSize = 'large',
         },
-        
         CombatDamage = {
           order = 2,
           type = 'toggle',
@@ -1064,6 +1118,7 @@ addon.options.args["Frames"] = {
           type = "description",
           order = 10,
           name = "\n\n|cff798BDDFloating Combat Text Font|r:",
+          fontSize = 'large',
         },
         
         enabled = {
@@ -1126,30 +1181,30 @@ addon.options.args["Frames"] = {
           fontSize = "large",
         },]==]
         
-        title2 = {
-          order = 20,
-          type = "description",
-          name = "\n\n|cffA0A0A0Some changes might require a full|r |cffD0D000Client Restart|r |cffA0A0A0(completely exit out of WoW). Do not|r |cffD00000Alt+F4|r |cffA0A0A0or|r |cffD00000Command+Q|r |cffA0A0A0or your settings might not save. Use '|r|cff798BDD/exit|r|cffA0A0A0' to close the client.|r",
-          fontSize = "small",
-        },
-        
       },
     },
+  },
+}
+
+addon.options.args["Frames"] = {
+  name = "Frames",
+  type = 'group',
+  order = 0,
+  args = {
+    
+
     frameSettings = {
       name = "Frame Settings ",
       type = 'group',
-      order = 4,
+      order = 1,
       guiInline = true,
       args = {
         
-        clearLeavingCombat = {
+        listSpacer0 = {
+          type = "description",
           order = 1,
-          type = 'toggle',
-          name = "Clear Frames When Leaving Combat (|cff798BDDRecommended:|r If editing |cffFFFF00Fading Text|r)",
-          desc = "Enable this option if you have problems with 'floating' icons.",
-          width = "full",
-          get = get0,
-          set = set0,
+          name = "|cff798BDDWhen Moving the Frames|r:",
+          fontSize = 'large',
         },
 
         showGrid = {
@@ -1170,9 +1225,16 @@ addon.options.args["Frames"] = {
           set = set0,
         },
 
+        listSpacer1 = {
+          type = "description",
+          order = 10,
+          name = "\n|cff798BDDWhen Showing the Frames|r:",
+          fontSize = 'large',
+        },
+
         frameStrata = {
           type = 'select',
-          order = 4,
+          order = 11,
           name = "Frame Strata",
           desc = "The Z-Layer to place the |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames onto. If you find that another addon is in front of |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames, try increasing the Frame Strata.",
           values = {
@@ -1190,41 +1252,83 @@ addon.options.args["Frames"] = {
           set = set0_update,
         },
         
-      },
-    },
-    megaDamage = {
-      name = "Abbreviation Settings",
-      type = 'group',
-      order = 5,
-      guiInline = true,
-      args = {
-        title = {
+        listSpacer2 = {
           type = "description",
-          order = 10,
-          name = "\nAbbreviation will help keep your screen uncluttered and readable. You can enable number abbreviation independently on certain frames through their settings pages.",
+          order = 20,
+          name = "\n|cff798BDDWhen Leaving Combat|r:",
+          fontSize = 'large',
         },
-      
-        --[==[enableMegaDamage = {
-          order = 1,
+
+        clearLeavingCombat = {
+          order = 21,
           type = 'toggle',
-          name = "Enable",
-          desc = "Enable Damage Abbreviation",
+          name = "Clear Frames",
+          desc = "Enable this option if you have problems with 'floating' icons.",
           width = "full",
           get = get0,
           set = set0,
-        },]==]
+        },
 
-        thousandSymbol = {
+      },
+    },
+
+    spacer1 = {
+      type = 'description',
+      name = "\n",
+      order = 2,
+    },
+
+    megaDamage = {
+      name = "Number Format Settings",
+      type = 'group',
+      order = 3,
+      guiInline = true,
+      args = {
+        listSpacer0 = {
+          type = "description",
+          order = 0,
+          name = "|cff798BDDFormat Numbers in the Frames|r (Choose one):",
+          fontSize = 'large',
+        },
+        formatAbbreviate = {
+          type = 'toggle',
+          order = 1,
+          name = "Abbreviate Numbers",
+          set = setFormating,
+          get = getDBSpells,
+        },
+        formatGroups = {
+          type = 'toggle',
           order = 2,
+          name = "Decimal Marks",
+          desc = "Groups decimals and separates them by commas; this allows for better responsiveness when reading numbers.\n\n|cffFF0000EXAMPLE|r |cff798BDD12,890|r",
+          set = setFormating,
+          get = getDBSpells,
+        },
+
+        abbDesc = {
+          type = "description",
+          order = 9,
+          name = "\n\n|cffFFFF00PLEASE NOTE|r |cffAAAAAAFormat settings need to be independently enabled on each frame through its respective settings page.|r",
+          fontSize = 'small',
+        },
+
+        listSpacer1 = {
+          type = "description",
+          order = 10,
+          name = "\n|cff798BDDAdditional Abbreviation Settings|r:",
+          fontSize = 'large',
+        },
+        thousandSymbol = {
+          order = 11,
           type = 'input',
           name = "Thousand",
           desc = "Symbol for: |cffFF0000Thousands|r |cff798BDD(10e+3)|r",
           get = getTextIn0,
           set = setTextIn0,
         },
-        
         millionSymbol = {
-          order = 3,
+          order = 12,
           type = 'input',
           name = "Million",
           desc = "Symbol for: |cffFF0000Millions|r |cff798BDD(10e+6)|r",
@@ -1232,7 +1336,7 @@ addon.options.args["Frames"] = {
           set = setTextIn0,
         },
         decimalPoint = {
-          order = 4,
+          order = 13,
           type = 'toggle',
           name = "Single Decimal",
           desc = "Shows a single decimal when abbreviating the value (e.g. will show |cff798BDD5.9K|r instead of |cff798BDD6K|r).",
@@ -1241,16 +1345,23 @@ addon.options.args["Frames"] = {
         },
       },
     },
+
+    spacer2 = {
+      type = 'description',
+      name = "\n",
+      order = 4,
+    },
+
     miscFonts = {
-      order = 6,
+      order = 5,
       type = 'group',
       guiInline = true,
-      name = "Global Frame Settings",
+      name = "Global Frame Settings |cffFFFFFF(Experimental)|r",
       args = {
         miscDesc = {
           type = "description",
           order = 0,
-          name = "Click |cffFFFF00Set All|r to apply setting to all |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames.\n",
+          name = "The following settings are marked as experimental. They should all work, but they might not be very useful. Expect chanrges or updates to these in the near future.\n\nClick |cffFFFF00Set All|r to apply setting to all |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames.\n",
         },
         
         
@@ -1353,6 +1464,12 @@ addon.options.args["Frames"] = {
       },
     },
 
+    spacer3 = {
+      type = 'description',
+      name = "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+      order = 6,
+    },
+
 --[[ XCT+ The Frames: ]]
     general = {
       name = "|cffFFFFFFGeneral|r",
@@ -1412,8 +1529,8 @@ addon.options.args["Frames"] = {
         megaDamage = {
           order = 5,
           type = 'toggle',
-          name = "Enable Abbreviation",
-          desc = "Enables shorten number values for this frame so that they are easier to read.",
+          name = "Use Number Formatting",
+          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
           get = get1,
           set = set1,
         },
@@ -1712,8 +1829,8 @@ addon.options.args["Frames"] = {
         megaDamage = {
           order = 5,
           type = 'toggle',
-          name = "Enable Abbreviation",
-          desc = "Enables shorten number values for this frame so that they are easier to read.",
+          name = "Use Number Formatting",
+          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
           get = get1,
           set = set1,
         },
@@ -2107,8 +2224,8 @@ addon.options.args["Frames"] = {
         megaDamage = {
           order = 5,
           type = 'toggle',
-          name = "Enable Abbreviation",
-          desc = "Enables shorten number values for this frame so that they are easier to read.",
+          name = "Use Number Formatting",
+          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
           get = get1,
           set = set1,
         },
@@ -2405,8 +2522,8 @@ addon.options.args["Frames"] = {
         megaDamage = {
           order = 5,
           type = 'toggle',
-          name = "Enable Abbreviation",
-          desc = "Enables shorten number values for this frame so that they are easier to read.",
+          name = "Use Number Formatting",
+          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
           get = get1,
           set = set1,
         },
@@ -2649,8 +2766,8 @@ addon.options.args["Frames"] = {
         megaDamage = {
           order = 5,
           type = 'toggle',
-          name = "Enable Abbreviation",
-          desc = "Enables shorten number values for this frame so that they are easier to read.",
+          name = "Use Number Formatting",
+          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
           get = get1,
           set = set1,
         },
@@ -3017,8 +3134,8 @@ addon.options.args["Frames"] = {
         megaDamage = {
           order = 5,
           type = 'toggle',
-          name = "Enable Abbreviation",
-          desc = "Enables shorten number values for this frame so that they are easier to read.",
+          name = "Use Number Formatting",
+          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
           get = get1,
           set = set1,
         },

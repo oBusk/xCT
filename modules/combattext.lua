@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandruff @ Whisperwind-US  ]
  [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Â©2012. All Rights Reserved.        ]
  [====================================]]
 
 local ADDON_NAME, addon = ...
@@ -821,7 +821,7 @@ x.events = {
     end,
   ["PLAYER_REGEN_DISABLED"] = function()
       x.inCombat = true
-	  x:CombatStateChanged()
+      x:CombatStateChanged()
       if ShowCombatState() then
         x:AddMessage("general", sformat(format_gain, ENTERING_COMBAT), "combat_begin")
       end

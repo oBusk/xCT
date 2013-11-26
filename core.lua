@@ -9,14 +9,14 @@
  [=====================================]
  [  Author: Dandruff @ Whisperwind-US  ]
  [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Â©2012. All Rights Reserved.        ]
  [====================================]]
 
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
-local sgsub, ipairs, pairs, type, string_format, table_insert, print, tostring, tonumber, select, string_lower, collectgarbage, string_match =
-  string.gsub, ipairs, pairs, type, string.format, table.insert, print, tostring, tonumber, select, string.lower, collectgarbage, string.match
+local sgsub, ipairs, pairs, type, string_format, table_insert, table_remove, print, tostring, tonumber, select, string_lower, collectgarbage, string_match =
+  string.gsub, ipairs, pairs, type, string.format, table.insert, table.remove, print, tostring, tonumber, select, string.lower, collectgarbage, string.match
 
 -- Local Handle to the Engine
 local x = addon.engine
@@ -98,39 +98,6 @@ function x:RefreshConfig()
     
   collectgarbage()
 end
---[[
--- Get's the spell description from a tooltip
-local getSpellDescription
-do
-  local cache = {}
-  local scanner = CreateFrame("GameTooltip")
-  scanner:SetOwner(WorldFrame, "ANCHOR_NONE")
-  local lcache, rcache = {}, {}
-  for i = 1, 5 do
-    lcache[i], rcache[i] = scanner:CreateFontString(), scanner:CreateFontString()
-    lcache[i]:SetFontObject(GameFontNormal); rcache[i]:SetFontObject(GameFontNormal)
-    scanner:AddFontStrings(lcache[i], rcache[i])
-  end
-  function getSpellDescription(spellId)
-    if cache[spellId] then return cache[spellId] end
-    scanner:ClearLines()
-    scanner:SetHyperlink("spell:"..spellId)
-    print("NumLines:", scanner:NumLines())
-	for i = scanner:NumLines(), 1, -1 do
-      local desc = lcache[i] and lcache[i]:GetText()
-      if desc then
-		if desc == "Requires Ranged Weapon" then
-			desc = GetSpellDescription(spellId)
-			desc = desc:gsub("$[A-Za-z0-9]+", "|cffFFFF00(Unknown Value)|r")
-		end
-		print(desc)
-        cache[spellId] = desc
-        return desc
-      end
-    end
-  end
-end
-]]
 
 local getSpellDescription
 do
@@ -603,7 +570,7 @@ function x:UpdateAuraSpellFilter(specific)
 end
 
 -- Add and remove Buffs, debuffs, and spells from the filter
-function x:AddFilteredSpell(category, name)
+function x.AddFilteredSpell(name, category)
   if category == "listBuffs" then
     x.db.profile.spellFilter.listBuffs[name] = true
     x:UpdateAuraSpellFilter("buffs")
@@ -623,7 +590,7 @@ function x:AddFilteredSpell(category, name)
   end
 end
 
-function x:RemoveFilteredSpell(category, name)
+function x.RemoveFilteredSpell(name, category)
   if category == "listBuffs" then
     x.db.profile.spellFilter.listBuffs[name] = nil
     x:UpdateAuraSpellFilter("buffs")
@@ -642,6 +609,38 @@ function x:RemoveFilteredSpell(category, name)
   else
     print("|cffFF0000x|r|cffFFFF00CT+|r  |cffFF0000Error:|r Unknown filter type '" .. category .. "'!")
   end
+end
+
+-- A helpful set of tips
+local tips = {
+  "On the left list, under the |cffFFFF00Startup Message|r checkbox, you can click on the |cff798BDD+ Buttons|r (XCT_PLUS_CONFIGURING) to show more options.",
+  "If you want to |cff798BDDCombine Frame Outputs|r, disable one of the frames and use the |cffFFFF00Secondary Frame|r option on that frame.",
+  "Only the |cffFFFF00General|r, |cffFF8000Outgoing|r, |cffFFFF00Outgoing (Crits)|r, |cffFF8000Incoming Damage|r and |cffFFFF00Healing|r, and |cffFF8000Class Power|r frames can be abbreviated.",
+  "The |cffFFFF00Hide Config in Combat|r option was added to prevent |cffFFFF00xCT+|r from tainting your UI. It is highly recommended left enabled.",
+  "|cffFFFF00xCT+|r has several different ways it will merge critical hits. You can check them out in |cffFFFF00Spam Merer|r.",
+  "Each frame has a |cffFFFF00Special Tweaks|r section on the bottom of its settings page. All the frames are very customizable.",
+  "If there is a certain spell or buff that you don't want to see, consider adding it to a filter.",
+}
+
+local helpfulList = {}
+local function GetNextTip()
+  if #helpfulList == 0 then
+    local used = {}
+
+    local num
+    while #used ~= #tips do
+      num = securerandom(1, #tips)
+      if not used[num] then
+        used[num] = true
+        table_insert(helpfulList, tips[num])
+      end
+    end    
+  end
+
+  local currentItem = helpfulList[1]
+  table_remove(helpfulList, 1)
+
+  return currentItem
 end
 
 -- Unused for now
@@ -685,6 +684,15 @@ end
 function x:RefreshConfig()
   if ACD.OpenFrames[AddonName] then
     ACR:NotifyChange(AddonName)
+  end
+end
+
+local helpfulLastUpdate = GetTime()
+function x:OnAddonConfigRefreshed()
+  if GetTime() - helpfulLastUpdate > 30 then
+    helpfulLastUpdate = GetTime()
+    addon.options.args.helpfulTip.name = GetNextTip()
+    x:RefreshConfig()
   end
 end
 
@@ -751,7 +759,7 @@ function x:OpenxCTCommand(input)
   
   if x.inCombat and x.db.profile.hideConfig then
     if not shownWarning then
-      print("|cffFF0000x|r|cffFFFF00CT+|r will open the Configuration Tool after combat.")
+      print("|cffFF0000x|r|cffFFFF00CT+|r will open the |cff798BDDConfiguration Tool|r after combat.")
       shownWarning = true
       lastConfigState = true
     end

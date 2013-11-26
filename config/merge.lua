@@ -118,7 +118,7 @@ addon.merges = {
   [3674]   = CreateMergeSpellEntry("HUNTER", 4),        -- Black Arrow                                (Every 2s for 20s)
   [13812]  = CreateMergeSpellEntry("HUNTER"),           -- Explosive Trap
   [53301]  = CreateMergeSpellEntry("HUNTER"),           -- Explosive Shot (3 ticks merged as one)
-  [121414] = CreateMergeSpellEntry("HUNTER"),           -- Glaive Toss (Initial Damage)               (Merged with DoT)
+  [121414] = CreateMergeSpellEntry("HUNTER", 6),        -- Glaive Toss (Initial Damage)               (Merged with DoT)
   [120699] = CreateMergeSpellEntry("HUNTER", 4),        -- Lynx Rush                                  (9x over 4s)
   [2643]   = CreateMergeSpellEntry("HUNTER", .5),       -- Multi-Shot                                 (INSTANT)
   [63468]  = CreateMergeSpellEntry("HUNTER"),           -- Piercing Shots
@@ -317,45 +317,45 @@ addon.merges = {
 
 
 addon.merge2h = {
-	-- Hunter (Damage)
-	[118253] = 83077,		-- Serpent Sting (Tick)
-	[120761] = 121414,		-- Glaive Toss
-	
-	-- Mage (Damage)
-	[44457]  = 44461,		-- Living Bomb (DOT)
-	[114923] = 114954,		-- Nether Tempest (50% to random player)
-	
-	-- Monk (Damage)
-	[117418] = 113656,		-- Fists of Fury
-	[125033] = 124098,		-- Zen Sphere: Detonate (Damage)
-	
-	-- Monk (Healing)
-	[126890] = 117895,		-- Eminence (Statue)
-	[125953] = 115175,		-- Soothing Mist (Statue)
-	[124101] = 124081,		-- Zen Sphere: Detonate (Heal)
-	
-	-- Priest (Damage)
-	[124469] = 49821,		-- Mind Sear
-	
-	-- Rogue (Damage)
-	[122233] = 121411,		-- Crimson Tempest (DoT)
-	[2818]   = 113780,		-- Deadly Poison (DoT)
+  -- Hunter (Damage)
+  [118253] = 83077,    -- Serpent Sting (Tick)
+  [120761] = 121414,   -- Glaive Toss
+  
+  -- Mage (Damage)
+  [44457]  = 44461,    -- Living Bomb (DOT)
+  [114923] = 114954,   -- Nether Tempest (50% to random player)
+  
+  -- Monk (Damage)
+  [117418] = 113656,   -- Fists of Fury
+  [125033] = 124098,   -- Zen Sphere: Detonate (Damage)
+  
+  -- Monk (Healing)
+  [126890] = 117895,   -- Eminence (Statue)
+  [125953] = 115175,   -- Soothing Mist (Statue)
+  [124101] = 124081,   -- Zen Sphere: Detonate (Heal)
+  
+  -- Priest (Damage)
+  [124469] = 49821,    -- Mind Sear
+  
+  -- Rogue (Damage)
+  [122233] = 121411,   -- Crimson Tempest (DoT)
+  [2818]   = 113780,   -- Deadly Poison (DoT)
 
-	-- Shaman (damage)
-	[45297]  = 421,			-- Chain Lightning (Mastery)
-	[114738] = 114074,		-- Lava Beam (Mastery)
-	[32176]  = 32175,		-- Stormstrike
-	[115360] = 115357,		-- Stormblast
-	[114093] = 114089,		-- Wind Lash (Ascendance)
-	
-	-- Warlock (Damage)
-	[131737] = 980,			-- Agony (Malefic Grasp)
-	[131740] = 172,			-- Corruption (Malefic Grasp)
-	[131736] = 30108,		-- Unstable Affliction (Malefic Grasp)
-	[27285]  = 27243,		-- Seed of Corruption (Explosion)
-	[87385]  = 27243,		-- Seed of Corruption (Explosion Soulburned)
-	
-	-- Warrior
-	[85384]  = 96103,		-- Raging Blow
-	[44949]  = 1680,		-- Whirlwind (Offhand)
+  -- Shaman (damage)
+  [45297]  = 421,      -- Chain Lightning (Mastery)
+  [114738] = 114074,   -- Lava Beam (Mastery)
+  [32176]  = 32175,    -- Stormstrike
+  [115360] = 115357,   -- Stormblast
+  [114093] = 114089,   -- Wind Lash (Ascendance)
+  
+  -- Warlock (Damage)
+  [131737] = 980,      -- Agony (Malefic Grasp)
+  [131740] = 172,      -- Corruption (Malefic Grasp)
+  [131736] = 30108,    -- Unstable Affliction (Malefic Grasp)
+  [27285]  = 27243,    -- Seed of Corruption (Explosion)
+  [87385]  = 27243,    -- Seed of Corruption (Explosion Soulburned)
+  
+  -- Warrior
+  [85384]  = 96103,    -- Raging Blow
+  [44949]  = 1680,     -- Whirlwind (Offhand)
 }

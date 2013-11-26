@@ -433,7 +433,7 @@ addon.defaults = {
         ["filterItemQuality"] = 3,
       },
     },
-
+    
     spells = {
       enableMerger = true,        -- enable/disable spam merger
       enableMergerDebug = false,  -- Shows spell IDs for debugging merged spells
@@ -446,6 +446,10 @@ addon.defaults = {
       mergeDontMergeCriticals = true,
       mergeCriticalsWithOutgoing = false,
       mergeCriticalsByThemselves = false,
+      
+      -- Abbreviate or Groups Settings
+      formatAbbreviate = true,
+      formatGroups = false,
       
       combo = {
         ["DEATHKNIGHT"] = {

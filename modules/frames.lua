@@ -18,8 +18,8 @@ local ADDON_NAME, addon = ...
 local LSM = LibStub("LibSharedMedia-3.0");
 
 -- Setup up values
-local ssub, sformat, pairs, tonumber, tostring, math, unpack, print, type, mfloor, random, table_insert, format, _G, select
-	= string.sub, string.format, pairs, tonumber, tostring, math, unpack, print, type, math.floor, math.random, table.insert, string.format, _G, select
+local ssub, sformat, sgsub, pairs, tonumber, tostring, math, unpack, print, type, mfloor, random, table_insert, format, _G, select
+	= string.sub, string.format, string.gsub, pairs, tonumber, tostring, math, unpack, print, type, math.floor, math.random, table.insert, string.format, _G, select
 
 -- Start the Random Machine!	
 random(time()); random(); random(time())
@@ -137,6 +137,7 @@ function x:UpdateFrames(specificFrame)
 					f:SetFading(false)
 				end
 				
+				
 				f.sizing = CreateFrame("Frame", "xCT_Plus"..framename.."SizingFrame", f)
 				f.sizing.parent = f
 				f.sizing:SetHeight(16)
@@ -253,17 +254,25 @@ end
 function x:Abbreviate(amount, frameName)
 	local message = tostring(amount)
 	if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
-		if (amount >= 1000000) then
-			if self.db.profile.megaDamage.decimalPoint then
-				message = tostring(mfloor((amount + 50000) / 100000) / 10) .. self.db.profile.megaDamage.millionSymbol
-			else
-				message = tostring(mfloor((amount + 500000) / 1000000)) .. self.db.profile.megaDamage.millionSymbol
+		if self.db.profile.spells.formatAbbreviate then
+			if (amount >= 1000000) then
+				if self.db.profile.megaDamage.decimalPoint then
+					message = tostring(mfloor((amount + 50000) / 100000) / 10) .. self.db.profile.megaDamage.millionSymbol
+				else
+					message = tostring(mfloor((amount + 500000) / 1000000)) .. self.db.profile.megaDamage.millionSymbol
+				end
+			elseif (amount >= 1000) then
+				if self.db.profile.megaDamage.decimalPoint then
+					message = tostring(mfloor((amount + 50) / 100) / 10) .. self.db.profile.megaDamage.thousandSymbol
+				else
+					message = tostring(mfloor((amount + 500) / 1000)) .. self.db.profile.megaDamage.thousandSymbol
+				end
 			end
-		elseif (amount >= 1000) then
-			if self.db.profile.megaDamage.decimalPoint then
-				message = tostring(mfloor((amount + 50) / 100) / 10) .. self.db.profile.megaDamage.thousandSymbol
-			else
-				message = tostring(mfloor((amount + 500) / 1000)) .. self.db.profile.megaDamage.thousandSymbol
+		else
+			local k
+			while true do
+				message, k = sgsub(message, '^(-?%d+)(%d%d%d)', '%1,%2')
+				if (k==0) then break end
 			end
 		end
 	end
@@ -273,10 +282,10 @@ end
 -- =====================================================
 -- AddOn:AddMessage(
 --		framename,	[string] - the framename
---		message,		[string] - the pre-formatted message to be sent
+--		message,	[string] - the pre-formatted message to be sent
 --		colorname,	[string or table] - the name of the color OR a
---																		table containing the color
---																		e.g. colorname={1,2,3} --r=1,b=2,g=3
+--										table containing the color
+--										e.g. colorname={1,2,3} --r=1,b=2,g=3
 --	)
 --		Sends a message to the framename specified.
 -- =====================================================
@@ -319,7 +328,6 @@ function x:AddMessage(framename, message, colorname)
 	end
 end
 
-local spam = { }
 local spamHeap, spamStack = {}, {}
 local spam_format = "%s%s x%s"
 
@@ -339,6 +347,13 @@ local spam_format = "%s%s x%s"
 --		Sends a message to the framename specified.
 -- =====================================================
 function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
+	
+	-- Check for a Secondary Spell ID
+	local secondarySpellID = addon.merge2h[mergeID]
+	if secondarySpellID then
+		mergeID = secondarySpellID
+	end
+
 	local heap, stack = spamHeap[framename], spamStack[framename]
 	if heap[mergeID] then
 		heap[mergeID].color = colorname
@@ -354,10 +369,7 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
 		}
 		table_insert(stack, mergeID)
 	end
-	
-	-- Start the spam merger
-	--spam.isSpamMergerUpdated = true
-	--x.merge:SetScript("OnUpdate", x.OnSpamUpdate)
+
 end
 
 --[================================================================[
@@ -401,8 +413,8 @@ end
 		a lot of items to merge.
 		
 			My best guess is that it does not matter :)
-	
-	]================================================================]
+
+  ]================================================================]
 
 do
 	for _, frameName in pairs(frameIndex) do
@@ -410,13 +422,9 @@ do
 		spamStack[frameName] = {}
 	end
 
-	spam.currentIndex = 1
+	local index = 1
 	local frames = {}
 	local now = 0
-	
-	-- Looped without any new entries
-	--spam.isSpamMergerUpdated = false
-	--spam.lastUpdateIndex = 0
 	
 	function x.OnSpamUpdate(self, elapsed)
 		if not x.db then return end
@@ -425,20 +433,20 @@ do
 		now = now + elapsed
 		
 		-- Check to see if we are out of bounds
-		if spam.currentIndex > #frameIndex then spam.currentIndex = 1 end
-		if not frames[frameIndex[spam.currentIndex]] then
-			frames[frameIndex[spam.currentIndex]] = 1
+		if index > #frameIndex then index = 1 end
+		if not frames[frameIndex[index]] then
+			frames[frameIndex[index]] = 1
 		end
 		
 		local heap, stack, settings, idIndex =
-			spamHeap[frameIndex[spam.currentIndex]],			-- the heap contains merge entries
-			spamStack[frameIndex[spam.currentIndex]],			-- the stack contains lookup values
-			x.db.profile.frames[frameIndex[spam.currentIndex]],	-- this frame's settings
-			frames[frameIndex[spam.currentIndex]]				-- this frame's last entry index
+			spamHeap[frameIndex[index]],			-- the heap contains merge entries
+			spamStack[frameIndex[index]],			-- the stack contains lookup values
+			x.db.profile.frames[frameIndex[index]],	-- this frame's settings
+			frames[frameIndex[index]]				-- this frame's last entry index
 		
 		-- If the frame is not enabled, then dont even worry about it
 		if not settings.enabledFrame and settings.secondaryFrame == 0 then
-			spam.currentIndex = spam.currentIndex + 1	-- heh, still need to iterate to the next frame :P
+			index = index + 1	-- heh, still need to iterate to the next frame :P
 			return
 		end
 		
@@ -449,15 +457,6 @@ do
 		
 		-- This item contains a lot of information about what we need to merge
 		local item = heap[stack[idIndex]]
-		
-		--[==[if item then
-			spam.isSpamMergerUpdated = true
-			spam.lastUpdateIndex = idIndex
-		else
-			if spam.lastUpdateIndex == idIndex and not spam.isSpamMergerUpdated then
-				x.merge:SetScript("OnUpdate", nil)
-			end
-		end]==]
 		
 		--if item then print(item.last, "+", item.update, "<", now) end
 		if item and item.last + item.update <= now and #item.entries > 0 then
@@ -475,17 +474,17 @@ do
 			
 			-- Abbreviate the merged total
 			if tonumber(total) then
-				message = x:Abbreviate(tonumber(total), frameIndex[spam.currentIndex])
+				message = x:Abbreviate(tonumber(total), frameIndex[index])
 			end
 			
 			local format_mergeCount = "%s |cffFFFFFFx%s|r"
 			
 			-- Add critical Prefix and Postfix
-			if frameIndex[spam.currentIndex] == "critical" then
+			if frameIndex[index] == "critical" then
 				message = format("%s%s%s", x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
 			
 			-- Show healer name (colored)
-			elseif frameIndex[spam.currentIndex] == "healing" then
+			elseif frameIndex[index] == "healing" then
 				format_mergeCount = "%s |cffFFFF00x%s|r"
 				if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
 					local healerName = stack[idIndex]
@@ -520,7 +519,7 @@ do
 				end
 			end
 		
-			x:AddMessage(frameIndex[spam.currentIndex], message, item.color)
+			x:AddMessage(frameIndex[index], message, item.color)
 			
 			-- Clear all the old entries, we dont need them anymore
 			for k in pairs(item.entries) do
@@ -528,8 +527,8 @@ do
 			end
 		end
 		
-		frames[frameIndex[spam.currentIndex]] = idIndex + 1
-		spam.currentIndex = spam.currentIndex + 1
+		frames[frameIndex[index]] = idIndex + 1
+		index = index + 1
 	end
 	
 	x.merge = CreateFrame("FRAME")
@@ -721,6 +720,21 @@ function x.EndConfigMode()
 		
 		f:SetBackdrop(nil)
 		
+		-- Remove Scripts
+		f:SetScript("OnEnter", nil)
+		f:SetScript("OnLeave", nil)
+		
+		f.moving:SetScript("OnMouseDown", nil)
+		f.moving:SetScript("OnMouseUp", nil)
+		f.moving:SetScript("OnEnter", nil)
+		f.moving:SetScript("OnLeave", nil)
+		
+		f.sizing:SetScript("OnMouseDown", nil)
+		f.sizing:SetScript("OnMouseUp", nil)
+		f.sizing:SetScript("OnEnter", nil)
+		f.sizing:SetScript("OnLeave", nil)
+		
+		-- Clean up visual items
 		if f.title then
 			f.title:Hide()
 			f.title = nil
@@ -742,8 +756,8 @@ function x.EndConfigMode()
 		end
 		
 		if f.width then
-			f.height:Hide()
-			f.height = nil
+			f.width:Hide()
+			f.width = nil
 		end
 		
 		if f.height then
