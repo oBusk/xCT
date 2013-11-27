@@ -303,7 +303,7 @@ addon.merges = {
   [108447] = CreateMergeSpellEntry("WARLOCK"),          -- Soul Link
 
 -- warrior
-  [50622]  = CreateMergeSpellEntry("WARRIOR"),          -- Bladestorm
+  [50622]  = CreateMergeSpellEntry("WARRIOR"),          -- Bladestorm                                 (Merged with Offhand)
   [113344] = CreateMergeSpellEntry("WARRIOR"),          -- Bloodbath
   [845]    = CreateMergeSpellEntry("WARRIOR", .5),      -- Cleave                                     (INSTANT)
   [115767] = CreateMergeSpellEntry("WARRIOR", 3),       -- Deep Wounds
@@ -358,4 +358,5 @@ addon.merge2h = {
   -- Warrior
   [85384]  = 96103,    -- Raging Blow
   [44949]  = 1680,     -- Whirlwind (Offhand)
+  [95738] = 50622,     -- Bladestorm (Offhand)
 }
