@@ -18,6 +18,28 @@ local AddonName, addon = ...
 local sgsub, ipairs, pairs, type, string_format, table_insert, table_remove, print, tostring, tonumber, select, string_lower, collectgarbage, string_match =
   string.gsub, ipairs, pairs, type, string.format, table.insert, table.remove, print, tostring, tonumber, select, string.lower, collectgarbage, string.match
 
+-- compares a tables values
+local function tableCompare(t1, t2)
+  local equal = true
+
+  -- nil check
+  if not t1 or not t2 then
+    if not t1 and not t2 then
+      return true
+    else
+      return false
+    end
+  end
+
+  for i,v in pairs(t1) do
+    if t2[i] ~= v then
+      equal = false
+      break;
+    end
+  end
+  return equal
+end
+
 -- Local Handle to the Engine
 local x = addon.engine
 
@@ -53,6 +75,7 @@ function x:OnInitialize()
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
   x:UpdateAuraSpellFilter()
+  x.GenerateColorOptions()
   
   -- Update combat text engine CVars
   x.cvar_udpate()
@@ -355,22 +378,34 @@ end
 -- Update the combo point list
 function x:UpdateComboPointOptions(force)
   if x.LOADED_COMBO_POINTS_OPTIONS and not force then return end
-  local myClass, offset = x.player.class, 1
+  local myClass, offset = x.player.class, 2
   
   local comboSpells = {
     order = 100,
-    name = "Tracking Spells |cffFFFFFF(Choose one per specialization)|r",
+    name = "Special Tweaks",
     type = 'group',
-    guiInline = true,
-    args = { },
+    args = {
+      specialTweaks = {
+        type = 'description',
+        order = 0,
+        name = "|cff798BDDSpecial Tweaks|r:",
+        fontSize = 'large',
+      },
+      specialTweaksDesc = {
+        type = 'description',
+        order = 1,
+        name = "|cffFFFFFF(Choose one per specialization)|r\n",
+        fontSize = 'small',
+      },
+    },
   }
-
+  
   -- Add "All Specializations" Entries
   for name in pairs(x.db.profile.spells.combo[myClass]) do
     if not tonumber(name) then
       if not comboSpells.args['allSpecsHeader'] then
         comboSpells.args['allSpecsHeader'] = {
-          order = 0,
+          order = 2,
           type = 'header',
           name = "All Specializations",
           width = "full",
@@ -611,15 +646,218 @@ function x.RemoveFilteredSpell(name, category)
   end
 end
 
+local colorNameDB = { }
+function x.LookupColorByName(name)
+  if colorNameDB[name] then
+    return colorNameDB[name].color
+  else
+    return
+  end
+end
+
+local getColorDB = function(info)
+  local enabled = string_match(info[#info], "(.*)_enabled")
+  local color = string_match(info[#info], "(.*)_color")
+  if info[#info-1] == 'fontColors' then
+    if enabled then
+      return x.db.profile.frames[info[#info-2]].colors[enabled].enabled
+    elseif color then
+      return unpack(x.db.profile.frames[info[#info-2]].colors[color].color or x.db.profile.frames[info[#info-2]].colors[color].default)
+    end
+  elseif info[#info-2] == 'fontColors' then
+    if enabled then
+      return x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[enabled].enabled
+    elseif color then
+      return unpack(x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].color or x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].default)
+    end
+  elseif info[#info-3] == 'fontColors' then
+    if enabled then
+      return x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[enabled].enabled
+    elseif color then
+      return unpack(x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].color or x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].default)
+    end
+  end
+end
+
+local setColorDB = function(info, r, g, b)
+  local enabled = string_match(info[#info], "(.*)_enabled")
+  local color = string_match(info[#info], "(.*)_color")
+  if info[#info-1] == 'fontColors' then
+    if enabled then
+      x.db.profile.frames[info[#info-2]].colors[enabled].enabled = r
+    elseif color then
+      x.db.profile.frames[info[#info-2]].colors[color].color = { r, g, b }
+    end
+  elseif info[#info-2] == 'fontColors' then
+    if enabled then
+      x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[enabled].enabled = r
+    elseif color then
+      x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].color = { r, g, b }
+    end
+  elseif info[#info-3] == 'fontColors' then
+    if enabled then
+      x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[enabled].enabled = r
+    elseif color then
+      x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].color = { r, g, b }
+    end
+  end
+end
+
+local funcColorReset = function(info)
+  local color = string_match(info[#info], "(.*)_reset")
+  if info[#info-1] == 'fontColors' then
+    x.db.profile.frames[info[#info-2]].colors[color].color = x.db.profile.frames[info[#info-2]].colors[color].default
+  elseif info[#info-2] == 'fontColors' then
+    x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].color = x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].default
+  elseif info[#info-3] == 'fontColors' then
+    x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].color = x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].default
+  end
+end
+
+local funcColorHidden = function(info)
+  local color = string_match(info[#info], "(.*)_color")
+  if info[#info-1] == 'fontColors' then
+    return not x.db.profile.frames[info[#info-2]].colors[color].enabled
+  elseif info[#info-2] == 'fontColors' then
+    return not x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].enabled
+  elseif info[#info-3] == 'fontColors' then
+    return not x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].enabled
+  end
+end
+
+local funcColorResetHidden = function(info)
+  local color = string_match(info[#info], "(.*)_reset")
+  if info[#info-1] == 'fontColors' then
+    return not x.db.profile.frames[info[#info-2]].colors[color].enabled or
+      tableCompare(x.db.profile.frames[info[#info-2]].colors[color].color, x.db.profile.frames[info[#info-2]].colors[color].default)
+  elseif info[#info-2] == 'fontColors' then
+    return not x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].enabled or
+      tableCompare(x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].color, x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].default)
+  elseif info[#info-3] == 'fontColors' then
+    return not x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].color or
+      tableCompare(x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].color, x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].default)
+  end
+end
+
+local function GenerateColorOptionsTable_Entry(colorName, settings, options, index)
+  -- Clean the DB of any old/removed values
+  if not settings.desc then return end
+
+  -- Check for nil colors and set them to the default
+  if not settings.color or not unpack(settings.color) then
+    -- This needs to be a new table apperently
+    settings.color = { unpack(settings.default) }
+  end
+
+  -- Cache this color into a quick lookup
+  colorNameDB[colorName] = settings
+  options[colorName.."_enabled"] = {
+    order = index,
+    type = 'toggle',
+    name = settings.desc,
+    get = getColorDB,
+    set = setColorDB,
+    desc = "Enable a custom color for |cff798BDD"..settings.desc.."|r.",
+  }
+  options[colorName.."_color"] = {
+    order = index + 1,
+    type = 'color',
+    name = "Color",
+    get = getColorDB,
+    set = setColorDB,
+    desc = "Change the color for |cff798BDD"..settings.desc.."|r.",
+    hidden = funcColorHidden,
+  }
+  options[colorName.."_reset"] = {
+    type = 'execute',
+    order = index + 2,
+    name = "Reset",
+    width = 'half',
+    func = funcColorReset,
+    desc = "Resets |cff798BDD"..settings.desc.."|r back to the default color.",
+    hidden = funcColorResetHidden,
+  }
+  options["spacer"..index] = {
+    order = index + 3,
+    type = 'description',
+    fontSize = 'small',
+    width = 'full',
+    name = '',
+  }
+end
+
+local function GenerateColorOptionsTable(colorName, settings, options, index)
+  if settings.colors then
+    -- Multiple Layers of colors on the inside
+    --[[options['spacer'..index] = {
+      type = 'description',
+      order = index,
+      name = '\n',
+      fontSize = 'small',
+    }]]
+    options[colorName] = {
+      order = index + 1,
+      type = 'group',
+      guiInline = true,
+      name = settings.desc,
+      args = { },
+    }
+    index = index + 1
+    for currentColorName, currentColorSettings in pairs(settings.colors) do
+      GenerateColorOptionsTable_Entry(currentColorName, currentColorSettings, options[colorName].args, index)
+      index = index + 4
+    end
+  else
+    -- Just this color
+    GenerateColorOptionsTable_Entry(colorName, settings, options, index)
+    index = index + 4
+  end
+  return index
+end
+
+-- Generate Colors for each Frame
+function x.GenerateColorOptions()
+  for name, settings in pairs(x.db.profile.frames) do
+    local options = addon.options.args.Frames.args[name]
+    if settings.colors then
+      local index = 1
+
+      -- Do Single Colors First
+      for colorName, colorSettings in pairs(settings.colors) do
+        --[[print("Table:", colorName, "= {")
+        for key, value in pairs(colorSettings) do
+          print("", key, '=', value)
+        end
+        print("}")]]
+        if not colorSettings.colors then
+          index = GenerateColorOptionsTable(colorName, colorSettings, options.args.fontColors.args, index) + 1
+        end
+      end
+
+      -- Then Do Color Groups with multiple settings
+      for colorName, colorSettings in pairs(settings.colors) do
+        --[[print("Table:", colorName, "= {")
+        for key, value in pairs(colorSettings) do
+          print("", key, '=', value)
+        end
+        print("}")]]
+        if colorSettings.colors then
+          index = GenerateColorOptionsTable(colorName, colorSettings, options.args.fontColors.args, index) + 1
+        end
+      end
+    end
+  end
+end
+
 -- A helpful set of tips
 local tips = {
-  "On the left list, under the |cffFFFF00Startup Message|r checkbox, you can click on the |cff798BDD+ Buttons|r (XCT_PLUS_CONFIGURING) to show more options.",
+  "On the left list, under the |cffFFFF00Startup Message|r checkbox, you can click on the |cff798BDD+ Buttons|r (plus) to show more options.",
   "If you want to |cff798BDDCombine Frame Outputs|r, disable one of the frames and use the |cffFFFF00Secondary Frame|r option on that frame.",
   "Only the |cffFFFF00General|r, |cffFF8000Outgoing|r, |cffFFFF00Outgoing (Crits)|r, |cffFF8000Incoming Damage|r and |cffFFFF00Healing|r, and |cffFF8000Class Power|r frames can be abbreviated.",
   "The |cffFFFF00Hide Config in Combat|r option was added to prevent |cffFFFF00xCT+|r from tainting your UI. It is highly recommended left enabled.",
   "|cffFFFF00xCT+|r has several different ways it will merge critical hits. You can check them out in |cffFFFF00Spam Merer|r.",
-  "Each frame has a |cffFFFF00Special Tweaks|r section on the bottom of its settings page. All the frames are very customizable.",
-  "If there is a certain spell or buff that you don't want to see, consider adding it to a filter.",
+  "Each frame has a |cffFFFF00Special Tweaks|r section; select a frame and select the drop-down box to find it.",
+  "If there is a certain |cff798BDDSpell|r, |cff798BDDBuff|r, or |cff798BDDDebuff|r that you don't want to see, consider adding it to a |cff798BDDFilter|r.",
 }
 
 local helpfulList = {}
@@ -629,12 +867,12 @@ local function GetNextTip()
 
     local num
     while #used ~= #tips do
-      num = securerandom(1, #tips)
+      num = random(1, #tips)
       if not used[num] then
         used[num] = true
         table_insert(helpfulList, tips[num])
       end
-    end    
+    end
   end
 
   local currentItem = helpfulList[1]
@@ -648,6 +886,7 @@ function x:OnEnable() end
 function x:OnDisable() end
 
 -- This allows us to create our config dialog
+local AceGUI = LibStub("AceGUI-3.0")
 local AC = LibStub('AceConfig-3.0')
 local ACD = LibStub('AceConfigDialog-3.0')
 local ACR = LibStub('AceConfigRegistry-3.0')
@@ -672,7 +911,7 @@ function x:CombatStateChanged()
       end
     else
       if lastConfigState then
-        ACD:Open(AddonName)
+        ACD:Open(AddonName, x.myContainer)
       end
       lastConfigState = false
 	  shownWarning = false
@@ -751,6 +990,14 @@ function x:OpenxCTCommand(input)
     return
   end
   
+
+  -- Setup a Custom Container for our Config Dialog
+  if not x.myContainer then
+    x.myContainer = AceGUI:Create("Frame")
+    x.myContainer:Hide()
+    x.myContainer.content:GetParent():SetMinResize(800, 300)
+  end
+
   -- Open/Close the config menu
   local mode = 'Close'
   if not ACD.OpenFrames[AddonName] then
@@ -765,7 +1012,7 @@ function x:OpenxCTCommand(input)
     end
   else
     if not x.configuring then
-      ACD[mode](ACD, AddonName)
+      ACD[mode](ACD, AddonName, x.myContainer)
     end
   end
 end

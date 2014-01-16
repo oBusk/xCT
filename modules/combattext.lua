@@ -212,8 +212,8 @@ end
 local function IsMerged(spellID)
 	return ( x.db.profile.spells.enableMerger ) and
 		(	-- Check to see if it is a merged spell
-			x.db.profile.spells.merge[spellID]
-			and x.db.profile.spells.merge[spellID].enabled
+			x.db.profile.spells.merge[spellID] and
+			x.db.profile.spells.merge[spellID].enabled
 		)
 		or
 		(	-- Check to see if it is a two hand weapon
@@ -226,21 +226,21 @@ end
 local function UseStandardSpellColors() return not x.db.profile.frames["outgoing"].standardSpellColor end
 local function GetCustomSpellColorFromIndex(index)
 	if index == 1 then
-	  return x.db.profile.frames["outgoing"].colorPhysical
+    return x.LookupColorByName('SpellSchool_Physical')
 	elseif index == 2 then
-		return x.db.profile.frames["outgoing"].colorHoly
+    return x.LookupColorByName('SpellSchool_Holy')
 	elseif index == 4 then
-		return x.db.profile.frames["outgoing"].colorFire
+    return x.LookupColorByName('SpellSchool_Fire')
 	elseif index == 8 then
-		return x.db.profile.frames["outgoing"].colorNature
+    return x.LookupColorByName('SpellSchool_Nature')
 	elseif index == 16 then
-		return x.db.profile.frames["outgoing"].colorFrost
+    return x.LookupColorByName('SpellSchool_Frost')
 	elseif index == 32 then
-		return x.db.profile.frames["outgoing"].colorShadow
+    return x.LookupColorByName('SpellSchool_Shadow')
 	elseif index == 64 then
-		return x.db.profile.frames["outgoing"].colorArcane
+    return x.LookupColorByName('SpellSchool_Arcane')
 	else
-		return x.db.profile.frames["outgoing"].colorPhysical
+    return x.LookupColorByName('SpellSchool_Physical')
 	end
 end
 
@@ -354,8 +354,8 @@ end
 --]=====================================================]
 local function UpdateComboPoints()
   if ShowRogueComboPoints() or ShowFeralComboPoints() then
-    local comboPoints, outputColor = GetComboPoints(x.player.unit, "target"), "combo_points"
-    if comboPoints == MAX_COMBO_POINTS then outputColor = "combo_points_max" end
+    local comboPoints, outputColor = GetComboPoints(x.player.unit, "target"), "comboPoints"
+    if comboPoints == MAX_COMBO_POINTS then outputColor = "comboPointsMax" end
     if comboPoints > 0 then
       x.cpUpdated = true
       x:AddMessage("class", comboPoints, outputColor)
@@ -390,12 +390,12 @@ local function UpdateUnitPower(unit, powertype)
     if value then
       if value < 1 then
         if value == 0 then
-          x:AddMessage("class", " ", "combo_points")
+          x:AddMessage("class", " ", "comboPoints")
         else
-          x:AddMessage("class", "0", "combo_points")
+          x:AddMessage("class", "0", "comboPoints")
         end
       else
-        x:AddMessage("class", mfloor(value), "combo_points")
+        x:AddMessage("class", mfloor(value), "comboPoints")
       end
     end
   end
@@ -420,14 +420,14 @@ local function UpdateAuraTracking(unit)
       end
       
       if name and count > 0 then
-        x:AddMessage("class", count, "combo_points")
+        x:AddMessage("class", count, "comboPoints")
       else
-        x:AddMessage("class", " ", "combo_points")
+        x:AddMessage("class", " ", "comboPoints")
       end
         
     -- Fix issue of not reseting when unit disapears (e.g. dismiss pet)
     elseif not UnitExists(entry.unit) then
-      x:AddMessage("class", " ", "combo_points")
+      x:AddMessage("class", " ", "comboPoints")
     end
   end
 end
@@ -501,19 +501,19 @@ end
 x.combat_events = {
   ["DAMAGE"] = function(amount)
       if FilterIncomingDamage(amount) then return end
-      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "damage")
+      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "damageTaken")
     end,
   ["DAMAGE_CRIT"] = function(amount)
       if FilterIncomingDamage(amount) then return end
-      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "damage_crit")
+      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "damageTakenCritical")
     end,
   ["SPELL_DAMAGE"] = function(amount)
       if FilterIncomingDamage(amount) then return end
-      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "spell_damage")
+      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "spellDamageTaken")
     end,
   ["SPELL_DAMAGE_CRIT"] = function(amount)
       if FilterIncomingDamage(amount) then return end
-      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "spell_damage_crit")
+      x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "spellDamageTakenCritical")
     end,
   ["ABSORB_ADDED"] = function(healer_name, amount)
       local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
@@ -539,7 +539,7 @@ x.combat_events = {
         end
       end
       
-      x:AddMessage("healing", message, "shield")
+      x:AddMessage("healing", message, "shieldTaken")
     end,
   ["HEAL"] = function(healer_name, amount)
       if FilterIncomingHealing(amount) then return end
@@ -551,7 +551,7 @@ x.combat_events = {
       end
       
       if MergeIncomingHealing() then
-        x:AddSpamMessage("healing", healer_name, amount, "heal", 5)
+        x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
       else
         if ShowFriendlyNames() and healer_name then
           if ShowColoredFriendlyNames() then
@@ -567,7 +567,7 @@ x.combat_events = {
             message = healer_name .. " " .. message
           end
         end
-        x:AddMessage("healing", message, "heal")
+        x:AddMessage("healing", message, "healingTaken")
       end
     end,
   ["HEAL_CRIT"] = function(healer_name, amount)
@@ -580,7 +580,7 @@ x.combat_events = {
       end
       
       if MergeIncomingHealing() then
-        x:AddSpamMessage("healing", healer_name, amount, "heal", 5)
+        x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
       else
         if ShowFriendlyNames() and healer_name then
           if ShowColoredFriendlyNames() then
@@ -596,7 +596,7 @@ x.combat_events = {
             message = healer_name .. " " .. message
           end
         end
-        x:AddMessage("healing", message, "heal_crit")
+        x:AddMessage("healing", message, "healingTakenCritical")
       end
     end,
   ["PERIODIC_HEAL"] = function(healer_name, amount)
@@ -609,7 +609,7 @@ x.combat_events = {
       end
       
       if MergeIncomingHealing() then
-        x:AddSpamMessage("healing", healer_name, amount, "heal", 5)
+        x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
       else
         if ShowFriendlyNames() and healer_name then
           if ShowColoredFriendlyNames() then
@@ -626,34 +626,46 @@ x.combat_events = {
           end
         end
         
-        x:AddMessage("healing", message, "heal_peri")
+        x:AddMessage("healing", message, "healingTakenPeriodic")
       end
     end,
-  ["SPELL_ACTIVE"] = function(spell_name)
-      local spellStacks = select(4, UnitAura("player", spell_name))
+  ["SPELL_ACTIVE"] = function(spellName)
+      local message = spellName
+      
+      -- Add Stacks
+      local icon, spellStacks = select(3, UnitAura("player", spellName))
       if spellStacks and tonumber(spellStacks) > 1 then
-        spell_name = spell_name .. " |cffFFFFFFx" .. spellStacks .. "|r"
+        message = spellName .. " |cffFFFFFFx" .. spellStacks .. "|r"
       end
-      x:AddMessage("procs", spell_name, "spell_cast")
-    end,
 
-  ["SPELL_CAST"] = function(spellname) if ShowReactives() then x:AddMessage("procs", spellname, "spell_reactive") end end,
+      -- Add Icons
+      if icon and x.db.profile.frames["procs"].iconsEnabled then
+        if x.db.profile.frames["procs"].fontJustify == "LEFT" then
+          message = sformat(format_spell_icon, icon, iconSize, iconSize) .. "  " .. message
+        else
+          message = message .. sformat(format_spell_icon, icon, iconSize, iconSize)
+        end
+      end
+
+      x:AddMessage("procs", message, "spellProc")
+    end,
+  ["SPELL_CAST"] = function(spellName) if ShowReactives() then x:AddMessage("procs", spellName, "spellReactive") end end,
   
-  ["MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "misstype_generic") end end,
-  ["DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "misstype_generic") end end,
-  ["PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "misstype_generic") end end,
-  ["EVADE"] = function() if ShowMissTypes() then x:AddMessage("damage", EVADE, "misstype_generic") end end,
-  ["IMMUNE"] = function() if ShowMissTypes() then x:AddMessage("damage", IMMUNE, "misstype_generic") end end,
-  ["DEFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", DEFLECT, "misstype_generic") end end,
-  ["REFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", REFLECT, "misstype_generic") end end,
+  ["MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "missTypeMiss") end end,
+  ["DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "missTypeDodge") end end,
+  ["PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "missTypeParry") end end,
+  ["EVADE"] = function() if ShowMissTypes() then x:AddMessage("damage", EVADE, "missTypeEvade") end end,
+  ["IMMUNE"] = function() if ShowMissTypes() then x:AddMessage("damage", IMMUNE, "missTypeImmune") end end,
+  ["DEFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", DEFLECT, "missTypeDeflect") end end,
+  ["REFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", REFLECT, "missTypeReflect") end end,
   
-  ["SPELL_MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "misstype_generic") end end,
-  ["SPELL_DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "misstype_generic") end end,
-  ["SPELL_PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "misstype_generic") end end,
-  ["SPELL_EVADE"] = function() if ShowMissTypes() then x:AddMessage("damage", EVADE, "misstype_generic") end end,
-  ["SPELL_IMMUNE"] = function() if ShowMissTypes() then x:AddMessage("damage", IMMUNE, "misstype_generic") end end,
-  ["SPELL_DEFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", DEFLECT, "misstype_generic") end end,
-  ["SPELL_REFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", REFLECT, "misstype_generic") end end,
+  ["SPELL_MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "missTypeMiss") end end,
+  ["SPELL_DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "missTypeDodge") end end,
+  ["SPELL_PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "missTypeParry") end end,
+  ["SPELL_EVADE"] = function() if ShowMissTypes() then x:AddMessage("damage", EVADE, "missTypeEvade") end end,
+  ["SPELL_IMMUNE"] = function() if ShowMissTypes() then x:AddMessage("damage", IMMUNE, "missTypeImmune") end end,
+  ["SPELL_DEFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", DEFLECT, "missTypeDeflect") end end,
+  ["SPELL_REFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", REFLECT, "missTypeReflect") end end,
 
   ["RESIST"] = function(amount, resisted)
       if resisted then
@@ -663,7 +675,7 @@ x.combat_events = {
           x:AddMessage("damage", x:Abbreviate(amount,"damage"), "damage")
         end
       elseif ShowResistances() then
-        x:AddMessage("damage", RESIST, "misstype_generic")
+        x:AddMessage("damage", RESIST, "missTypeResist")
       end
     end,
   ["BLOCK"] = function(amount, resisted)
@@ -674,7 +686,7 @@ x.combat_events = {
           x:AddMessage("damage", x:Abbreviate(amount,"damage"), "damage")
         end
       elseif ShowResistances() then
-        x:AddMessage("damage", BLOCK, "misstype_generic")
+        x:AddMessage("damage", BLOCK, "missTypeBlock")
       end
     end,
   ["ABSORB"] = function(amount, resisted)
@@ -685,7 +697,7 @@ x.combat_events = {
           x:AddMessage("damage", x:Abbreviate(amount,"damage"), "damage")
         end
       elseif ShowResistances() then
-        x:AddMessage("damage", ABSORB, "misstype_generic")
+        x:AddMessage("damage", ABSORB, "missTypeAbsorb")
       end
     end,
   ["SPELL_RESIST"] = function(amount, resisted)
@@ -696,7 +708,7 @@ x.combat_events = {
           x:AddMessage("damage", x:Abbreviate(amount,"damage"), "damage")
         end
       elseif ShowResistances() then
-        x:AddMessage("damage", RESIST, "misstype_generic")
+        x:AddMessage("damage", RESIST, "missTypeResist")
       end
     end,
   ["SPELL_BLOCK"] = function(amount, resisted)
@@ -707,7 +719,7 @@ x.combat_events = {
           x:AddMessage("damage", x:Abbreviate(amount,"damage"), "damage")
         end
       elseif ShowResistances() then
-        x:AddMessage("damage", BLOCK, "misstype_generic")
+        x:AddMessage("damage", BLOCK, "missTypeBlock")
       end
     end,
   ["SPELL_ABSORB"] = function(amount, resisted)
@@ -718,7 +730,7 @@ x.combat_events = {
           x:AddMessage("damage", x:Abbreviate(amount,"damage"), "damage")
         end
       elseif ShowResistances() then
-        x:AddMessage("damage", ABSORB, "misstype_generic")
+        x:AddMessage("damage", ABSORB, "missTypeAbsorb")
       end
     end,
   ["ENERGIZE"] = function(amount, energy_type)
@@ -746,24 +758,24 @@ x.combat_events = {
       end
     end,
 
-  ["SPELL_AURA_END"] = function(spellname) if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage("general", sformat(format_fade, spellname), "aura_end") end end,
-  ["SPELL_AURA_START"] = function(spellname) if TrackSpells() then x.spellCache.buffs[spellname] = true end if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage("general", sformat(format_gain, spellname), "aura_start") end end,
-  ["SPELL_AURA_END_HARMFUL"] = function(spellname) if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage("general", sformat(format_fade, spellname), "aura_end") end end,
-  ["SPELL_AURA_START_HARMFUL"] = function(spellname) if TrackSpells() then x.spellCache.debuffs[spellname] = true end if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage("general", sformat(format_gain, spellname), "aura_start_harm") end end,
+  ["SPELL_AURA_END"] = function(spellname) if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage('general', sformat(format_fade, spellname), 'buffsFaded') end end,
+  ["SPELL_AURA_START"] = function(spellname) if TrackSpells() then x.spellCache.buffs[spellname] = true end if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage('general', sformat(format_gain, spellname), 'buffsGained') end end,
+  ["SPELL_AURA_END_HARMFUL"] = function(spellname) if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage('general', sformat(format_fade, spellname), 'debuffsFaded') end end,
+  ["SPELL_AURA_START_HARMFUL"] = function(spellname) if TrackSpells() then x.spellCache.debuffs[spellname] = true end if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage('general', sformat(format_gain, spellname), 'debuffsGained') end end,
   
   -- TODO: Create a merger for faction and honor xp
   ["HONOR_GAINED"] = function(amount)
       local num = mfloor(tonumber(amount) or 0)
       if num > 0 and ShowHonor() then
-        x:AddMessage("general", sformat(format_honor, HONOR, x:Abbreviate(amount,"general")), "honor")
+        x:AddMessage('general', sformat(format_honor, HONOR, x:Abbreviate(amount,"general")), 'honorGains')
       end
     end,
   ["FACTION"] = function(faction, amount)
       local num = mfloor(tonumber(amount) or 0)
       if num > 0 and ShowFaction() then
-        x:AddMessage("general", sformat(format_faction_add, faction, x:Abbreviate(amount,"general")), "honor")
+        x:AddMessage('general', sformat(format_faction_add, faction, x:Abbreviate(amount,'general')), 'reputationGain')
       elseif num < 0 and ShowFaction() then
-        x:AddMessage("general", sformat(format_faction_sub, faction, x:Abbreviate(amount,"general")), "faction_sub")
+        x:AddMessage('general', sformat(format_faction_sub, faction, x:Abbreviate(amount,'general')), 'reputationLoss')
       end
     end,
 }
@@ -775,7 +787,7 @@ x.events = {
   ["UNIT_HEALTH"] = function()
       if ShowLowResources() and UnitHealth(x.player.unit) / UnitHealthMax(x.player.unit) <= COMBAT_TEXT_LOW_HEALTH_THRESHOLD then
         if not x.lowHealth then
-          x:AddMessage("general", HEALTH_LOW, "low_health")
+          x:AddMessage('general', HEALTH_LOW, 'lowResourcesHealth')
           x.lowHealth = true
         end
       else
@@ -788,14 +800,13 @@ x.events = {
   
       if select(2, UnitPowerType(x.player.unit)) == "MANA" and ShowLowResources() and UnitPower(x.player.unit) / UnitPowerMax(x.player.unit) <= COMBAT_TEXT_LOW_MANA_THRESHOLD then
         if not x.lowMana then
-          x:AddMessage("general", MANA_LOW, "low_mana")
+          x:AddMessage('general', MANA_LOW, 'lowResourcesMana')
           x.lowMana = true
         end
       else
         x.lowMana = false
       end
     end,
-  
   ["RUNE_POWER_UPDATE"] = function(slot)
       if GetRuneCooldown(slot) ~= 0 then return end
       local runeType = GetRuneType(slot);
@@ -807,23 +818,23 @@ x.events = {
     end,
   ["PLAYER_REGEN_ENABLED"] = function()
       x.inCombat = false
-	  x:CombatStateChanged()
+      x:CombatStateChanged()
       if ClearWhenLeavingCombat() then
         -- only clear frames with icons
-        x:Clear("outgoing")
-        x:Clear("critical")
-        x:Clear("loot")
-        x:Clear("power")
+        x:Clear('outgoing')
+        x:Clear('critical')
+        x:Clear('loot')
+        x:Clear('power')
       end
       if ShowCombatState() then
-        x:AddMessage("general", sformat(format_fade, LEAVING_COMBAT), "combat_end")
+        x:AddMessage('general', sformat(format_fade, LEAVING_COMBAT), 'combatLeaving')
       end
     end,
   ["PLAYER_REGEN_DISABLED"] = function()
       x.inCombat = true
       x:CombatStateChanged()
       if ShowCombatState() then
-        x:AddMessage("general", sformat(format_gain, ENTERING_COMBAT), "combat_begin")
+        x:AddMessage('general', sformat(format_gain, ENTERING_COMBAT), 'combatEntering')
       end
     end,
   ["UNIT_COMBO_POINTS"] = function() UpdateComboPoints() end,
@@ -920,7 +931,6 @@ x.events = {
           end
         end
       end
-    
     end,
   ["CHAT_MSG_MONEY"] = function(msg)
       local g, s, c = tonumber(msg:match(GOLD_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(SILVER_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(COPPER_AMOUNT:gsub("%%d", "(%%d+)")))
@@ -943,7 +953,7 @@ x.events = {
   ["SPELL_ACTIVATION_OVERLAY_GLOW_SHOW"] = function(spellID)
       if spellID == 32379 then  -- Shadow Word: Death
         local name = GetSpellInfo(spellID)
-        x:AddMessage("procs", name, "spell_cast")
+        x:AddMessage("procs", name, "spellProc")
       end
     end,
 }
@@ -956,7 +966,7 @@ x.outgoing_events = {
       if not ShowHealing() or not ShowHots() then return end
       
       local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
-      local outputFrame, message, outputColor = "outgoing", amount, "heal_out"
+      local outputFrame, message, outputColor = "outgoing", amount, "healingOutPeriodic"
       local merged = false
 
       -- Keep track of spells that go by
@@ -1020,7 +1030,7 @@ x.outgoing_events = {
       if not ShowHealing() then return end
 
       local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical = select(12, ...)
-      local outputFrame, message, outputColor = "outgoing", amount, "heal_out"
+      local outputFrame, message, outputColor = "outgoing", amount, "healingOut"
       local merged = false
 
       -- Keep track of spells that go by
@@ -1051,7 +1061,7 @@ x.outgoing_events = {
 
       -- Check for Critical
       if critical then
-        outputColor = "heal_out_crit"
+        outputColor = "healingOutCritical"
         
         if not MergeDontMergeCriticals() and IsMerged(spellID) then
           -- Merge this critical entry
@@ -1086,7 +1096,7 @@ x.outgoing_events = {
       if not ShowDamage() then return end
       
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  amount, _, _, _, _, _, critical = ...
-      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "out_damage"
+      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "genericDamage"
       local merged, critMessage = false, nil
       
       -- Filter Outgoing Damage
@@ -1104,7 +1114,6 @@ x.outgoing_events = {
       if critical then
         if ShowSwingCrit() then
           outputFrame = "critical"
-          outputColor = "out_damage_crit"
           if ShowSwingCritPrefix() then
             critMessage = sformat(format_crit, x.db.profile.frames["critical"].critPrefix, x:Abbreviate(amount, "critical"), x.db.profile.frames["critical"].critPostfix)
           end
@@ -1141,7 +1150,7 @@ x.outgoing_events = {
       if not ShowDamage() then return end
       
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, amount, _, _, _, _, _, critical = ...
-      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "out_damage"
+      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "genericDamage"
       local merged, critMessage = false, nil
       
       -- Keep track of spells that go by
@@ -1221,7 +1230,7 @@ x.outgoing_events = {
       if not ShowDamage() then return end
       
       local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
-      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "out_damage"
+      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "genericDamage"
       local merged = false
       
       -- Keep track of spells that go by
@@ -1234,15 +1243,7 @@ x.outgoing_events = {
       if IsSpellFiltered(spellID) then return end
       
       -- Get special magic color
-      if UseStandardSpellColors() then
-        if x.damagecolor[spellSchool] then
-          outputColor = x.damagecolor[spellSchool]
-        else
-          outputColor = x.damagecolor[1]
-        end
-      else
-        outputColor = GetCustomSpellColorFromIndex(spellSchool)
-      end
+      outputColor = GetCustomSpellColorFromIndex(spellSchool)
       
       -- Check for merge
       if IsMerged(spellID) then
@@ -1285,7 +1286,7 @@ x.outgoing_events = {
       if not ShowDamage() or not ShowDots() then return end
       
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical = ...
-      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "out_damage"
+      local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "genericDamage"
       local merged = false
       
       -- Keep track of spells that go by
@@ -1298,15 +1299,7 @@ x.outgoing_events = {
       if IsSpellFiltered(spellID) then return end
       
       -- Get special magic color
-      if UseStandardSpellColors() then
-        if x.damagecolor[spellSchool] then
-          outputColor = x.damagecolor[spellSchool]
-        else
-          outputColor = x.damagecolor[1]
-        end
-      else
-        outputColor = GetCustomSpellColorFromIndex(spellSchool)
-      end
+      outputColor = GetCustomSpellColorFromIndex(spellSchool)
       
       -- Check for merge
       if IsMerged(spellID) then
@@ -1347,7 +1340,7 @@ x.outgoing_events = {
     
   ["SWING_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  missType = ...
-      local outputFrame, message, outputColor = "outgoing", _G["COMBAT_TEXT_"..missType], "out_misstype"
+      local outputFrame, message, outputColor = "outgoing", _G["COMBAT_TEXT_"..missType], "misstypesOut"
       
       -- Are we filtering Auto Attacks in the Outgoing frame?
       if not ShowAutoAttack() then return end;
@@ -1376,7 +1369,7 @@ x.outgoing_events = {
     
   ["SPELL_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
-      local outputFrame, message, outputColor = "outgoing", _G[missType], "out_misstype"
+      local outputFrame, message, outputColor = "outgoing", _G[missType], "misstypesOut"
       
       if missType == "IMMUNE" and not ShowImmunes() then return end
       if missType ~= "IMMUNE" and not ShowMisses() then return end
@@ -1395,7 +1388,7 @@ x.outgoing_events = {
     
   ["RANGE_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
-      local outputFrame, message, outputColor = "outgoing", _G[missType], "out_misstype"
+      local outputFrame, message, outputColor = "outgoing", _G[missType], "misstypesOut"
       
       if missType == "IMMUNE" and not ShowImmunes() then return end
       if missType ~= "IMMUNE" and not ShowMisses() then return end
@@ -1416,11 +1409,11 @@ x.outgoing_events = {
       if not ShowDispells() then return end
   
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_DISPELLED, spellName), "dispell_debuff"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_DISPELLED, spellName), "dispellDebuffs"
       
       -- Check for buff or debuff (for color)
       if auraType == "BUFF" then
-        outputColor = "dispell_buff"
+        outputColor = "dispellBuffs"
       end
       
       -- Add Icons
@@ -1443,7 +1436,7 @@ x.outgoing_events = {
       if not ShowDispells() then return end
       
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_STOLE, spellName), "spell_stolen"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_STOLE, spellName), "dispellStolen"
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
@@ -1461,7 +1454,7 @@ x.outgoing_events = {
       if not ShowInterrupts() then return end
   
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _,  spellID, effect = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, INTERRUPTED, effect), "spell_interrupt"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, INTERRUPTED, effect), "interrupts"
       
       -- Add Icons
       if x.db.profile.frames[outputFrame].iconsEnabled then
@@ -1479,7 +1472,7 @@ x.outgoing_events = {
       if not ShowPartyKill() then return end
   
       local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, name = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_KILLED, name), "party_kill"
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_KILLED, name), "killingBlow"
       
       -- Color the text according to class that got killed
       if destGUID then

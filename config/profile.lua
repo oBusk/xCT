@@ -89,8 +89,50 @@ addon.defaults = {
         ["fontJustify"] = "CENTER",
 
       -- font colors
-        ["customColor"] = false,
-        ["fontColor"] = nil,
+        colors = {
+          ["interrupts"]   = { enabled = false, desc = "Interrupts",     default = { 1.00, 0.50, 0.00 } },
+          ["killingBlow"]  = { enabled = false, desc = "Killing Blows",  default = { 0.20, 1.00, 0.20 } },
+          ["honorGains"]   = { enabled = false, desc = "Honor Gained",   default = { 0.10, 0.10, 1.00 } },
+
+          ["auras"] = {
+            enabled = false, desc = "Buffs and Debuffs",
+            colors = {
+              ["buffsGained"]        = { enabled = false, desc = "Buffs Gained",       default = { 1.00, 0.50, 0.50 } },
+              ["buffsFaded"]         = { enabled = false, desc = "Buffs Faded",        default = { 0.50, 0.50, 0.50 } },
+              ["debuffsGained"]      = { enabled = false, desc = "Debuffs Gained",     default = { 1.00, 0.10, 0.10 } },
+              ["debuffsFaded"]       = { enabled = false, desc = "Debuffs Faded",      default = { 0.50, 0.50, 0.50 } },
+            },
+          },
+          ["dispells"] = {
+            enabled = false, desc = "Dispell Buffs and Debuffs",
+            colors = {
+              ["dispellBuffs"]       = { enabled = false, desc = "Buffs",              default = { 0.00, 1.00, 0.50 } },
+              ["dispellDebuffs"]     = { enabled = false, desc = "Debuffs",            default = { 1.00, 0.00, 0.50 } },
+              ["dispellStolen"]      = { enabled = false, desc = "Spell Stolen",       default = { 0.31, 0.71, 1.00 } },
+            },
+          },
+          ["reputation"] = {
+            enabled = false, desc = "Reputation",
+            colors = {
+              ["reputationGain"]     = { enabled = false, desc = "Reputation Gained",  default = { 0.10, 0.10, 1.00 } },
+              ["reputationLoss"]     = { enabled = false, desc = "Reputation Lost",    default = { 1.00, 0.10, 0.10 } },
+            },
+          },
+          ["combat"] = {
+            enabled = false, desc = "Combat Status",
+            colors = {
+              ["combatEntering"]     = { enabled = false, desc = "Entering Combat",    default = { 1.00, 0.10, 0.10 } },
+              ["combatLeaving"]      = { enabled = false, desc = "Leaving Combat",     default = { 0.10, 1.00, 0.10 } },
+            },
+          },
+          ["lowResources"] = {
+            enabled = false, desc = "Low Resources",
+            colors = {
+              ["lowResourcesHealth"] = { enabled = false, desc = "Low Health",         default = { 1.00, 0.10, 0.10 } },
+              ["lowResourcesMana"]   = { enabled = false, desc = "Low Mana",           default = { 1.00, 0.10, 0.10 } },
+            },
+          },
+        },
         
       -- scrollable
         ["enableScrollable"] = false,
@@ -134,17 +176,32 @@ addon.defaults = {
         ["fontJustify"] = "RIGHT",
         
       -- font colors
-        ["customColor"] = false,
-        ["fontColor"] = nil,
-        ["standardSpellColor"] = false,
-        ["colorPhysical"] = {1.00, 1.00, 0.00},
-        ["colorHoly"] = {1.00, 0.90, 0.50},
-        ["colorFire"] = {1.00, 0.50, 0.00},
-        ["colorNature"] = {0.30, 1.00, 0.30},
-        ["colorFrost"] = {0.50, 1.00, 1.00},
-        ["colorShadow"] = {0.50, 0.50, 1.00},
-        ["colorArcane"] = {1.00, 0.50, 1.00},
-        
+        colors = {
+          ['genericDamage']         = { enabled = false, desc = "Generic Damage",   default = { 1.00, 0.82, 0.00 } },
+          ['misstypesOut']          = { enabled = false, desc = "Missed",           default = { 0.50, 0.50, 0.50 } },
+          
+          ["spellSchools"] = {
+            enabled = false, desc = "Spell School Colors",
+            colors = {
+              ['SpellSchool_Physical']  = { enabled = false, desc = "Physical Damage",  default = { 1.00, 1.00, 0.00 } },
+              ['SpellSchool_Holy']      = { enabled = false, desc = "Holy Damage",      default = { 1.00, 0.90, 0.50 } },
+              ['SpellSchool_Fire']      = { enabled = false, desc = "Fire Damage",      default = { 1.00, 0.50, 0.00 } },
+              ['SpellSchool_Nature']    = { enabled = false, desc = "Nature Damage",    default = { 0.30, 1.00, 0.30 } },
+              ['SpellSchool_Frost']     = { enabled = false, desc = "Frost Damage",     default = { 0.50, 1.00, 1.00 } },
+              ['SpellSchool_Shadow']    = { enabled = false, desc = "Shadow Damage",    default = { 0.50, 0.50, 1.00 } },
+              ['SpellSchool_Arcane']    = { enabled = false, desc = "Arcane Damage",    default = { 1.00, 0.50, 1.00 } },
+            },
+          },
+          ['healingSpells'] = {
+            enabled = false, desc = "Healing Colors",
+            colors = {
+              ['shieldOut']             = { enabled = false, desc = "Shields",          default = { 0.60, 0.65, 1.00 } },
+              ['healingOut']            = { enabled = false, desc = "Healing",          default = { 0.10, 0.75, 0.10 } },
+              ['healingOutPeriodic']    = { enabled = false, desc = "Healing Periodic", default = { 0.10, 0.50, 0.10 } },
+            },
+          },
+        },
+
       -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
@@ -190,9 +247,17 @@ addon.defaults = {
         ["fontJustify"] = "RIGHT",
         
       -- font colors
-        ["customColor"] = false,
-        ["fontColor"] = nil,
-        
+        colors = {
+          ['genericDamageCritical']  = { enabled = false, desc = "Critical Generic Damage", default = { 1.00, 1.00, 0.00 } },
+
+          ['healingSpells'] = {
+            enabled = false, desc = "Healing Colors",
+            colors = {
+              ['healingOutCritical'] = { enabled = false, desc = "Critical Healing", default = { 0.10, 1.00, 0.10 } },
+            },
+          },
+        },
+
       -- critical appearance
         ["critPrefix"] = "|cffFF0000*|r",
         ["critPostfix"] = "|cffFF0000*|r",
@@ -234,10 +299,30 @@ addon.defaults = {
         ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "LEFT",
-        
+
       -- font colors
-        ["customColor"] = false,
-        ["fontColor"] = nil,
+        colors = {
+          ['damageTaken']               = { enabled = false, desc = "Physical Damage",          default = { 0.75, 0.10, 0.10 } },
+          ['damageTakenCritical']       = { enabled = false, desc = "Critical Physical Damage", default = { 1.00, 0.10, 0.10 } },
+          ['spellDamageTaken']          = { enabled = false, desc = "Spell Damage",             default = { 0.75, 0.30, 0.85 } },
+          ['spellDamageTakenCritical']  = { enabled = false, desc = "Critical Spell Damage",    default = { 0.75, 0.30, 0.85 } },
+
+          ['missTypesTaken'] = {
+            enabled = false, desc = "Miss Types",
+            colors = {
+              ['missTypeMiss']    = { enabled = false, desc = "Missed",   default = { 0.50, 0.50, 0.50 } },
+              ['missTypeDodge']   = { enabled = false, desc = "Dodged",   default = { 0.50, 0.50, 0.50 } },
+              ['missTypeParry']   = { enabled = false, desc = "Parry",    default = { 0.50, 0.50, 0.50 } },
+              ['missTypeEvade']   = { enabled = false, desc = "Evade",    default = { 0.50, 0.50, 0.50 } },
+              ['missTypeImmune']  = { enabled = false, desc = "Immune",   default = { 0.50, 0.50, 0.50 } },
+              ['missTypeDeflect'] = { enabled = false, desc = "Deflect",  default = { 0.50, 0.50, 0.50 } },
+              ['missTypeReflect'] = { enabled = false, desc = "Reflect",  default = { 0.50, 0.50, 0.50 } },
+              ['missTypeResist']  = { enabled = false, desc = "Resisted", default = { 0.50, 0.50, 0.50 } },
+              ['missTypeBlock']   = { enabled = false, desc = "Blocked",  default = { 0.50, 0.50, 0.50 } },
+              ['missTypeAbsorb']  = { enabled = false, desc = "Asorbed",  default = { 0.50, 0.50, 0.50 } },
+            },
+          },
+        },
         
       -- scrollable
         ["enableScrollable"] = false,
@@ -274,8 +359,12 @@ addon.defaults = {
         ["fontJustify"] = "LEFT",
         
       -- font colors
-        ["customColor"] = false,
-        ["fontColor"] = nil,
+        colors = {
+          ['shieldTaken']          = { enabled = false, desc = "Shields",          default = { 0.60, 0.65, 1.00 } },
+          ['healingTaken']         = { enabled = false, desc = "Healing",          default = { 0.10, 0.75, 0.10 } },
+          ['healingTakenCritical'] = { enabled = false, desc = "Critical Healing", default = { 0.10, 1.00, 0.10 } },
+          ['healingTakenPeriodic'] = { enabled = false, desc = "Periodic Healing", default = { 0.10, 0.50, 0.10 } },
+        },
         
       -- scrollable
         ["enableScrollable"] = false,
@@ -311,8 +400,10 @@ addon.defaults = {
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         
       -- font colors
-        ["customColor"] = false,
-        ["fontColor"] = nil,
+        colors = {
+          ['comboPoints']     = { enabled = false, desc = "Combo Points",     default = { 1.00, 0.82, 0.00 } },
+          ['comboPointsMax']  = { enabled = false, desc = "Max Combo Points", default = { 0.00, 0.82, 1.00 } },
+        },
       },
       
       power = {
@@ -372,9 +463,15 @@ addon.defaults = {
         ["fontJustify"] = "CENTER",
         
       -- font colors
-        ["customColor"] = false,
-        ["fontColor"] = nil,
-        
+        colors = {
+          ['spellProc']     = { enabled = false, desc = "Spell Procs",    default = { 1.00, 0.82, 0.00 } },
+          ['spellReactive'] = { enabled = false, desc = "Spell Reactive", default = { 1.00, 0.82, 0.00 } },
+        },
+
+      -- icons
+        ["iconsEnabled"] = true,
+        ["iconsSize"] = 16,
+
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
@@ -403,10 +500,6 @@ addon.defaults = {
         ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
-        
-      -- font colors
-        ["customColor"] = false,
-        ["fontColor"] = nil,
         
       -- icons
         ["iconsEnabled"] = true,

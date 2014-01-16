@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandruff @ Whisperwind-US  ]
  [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Â©2012. All Rights Reserved.        ]
  [====================================]]
 
 -- this file handles updating the frame settings and anything that changes the UI frames themselves
@@ -151,6 +151,8 @@ function x:UpdateFrames(specificFrame)
 				f.moving:SetPoint("TOPRIGHT", f, "TOPRIGHT", -1, -21)
 				f.moving:SetHeight(20)
 				f.moving:Hide()
+
+				x.frames[framename] = f
 			end
 			
 			f.frameName = framename
@@ -206,8 +208,6 @@ function x:UpdateFrames(specificFrame)
 				f:SetTimeVisible(3)
 			end
 			
-			x.frames[framename] = f
-
 			-- Send a Test message
 			if specificFrame then
 				f:SetScript("OnUpdate", Frame_SendTestMessage_OnUpdate)
@@ -215,7 +215,6 @@ function x:UpdateFrames(specificFrame)
 
 		end
 	end
-
 end
 
 -- =====================================================
@@ -277,7 +276,7 @@ function x:Abbreviate(amount, frameName)
 		end
 	end
 	return message
-end 
+end
 
 -- =====================================================
 -- AddOn:AddMessage(
@@ -307,7 +306,11 @@ function x:AddMessage(framename, message, colorname)
 			r, g, b = unpack(colorname)
 		else
 			if not x.colors[colorname] then
-				print("FRAME:", framename,"  xct+ says there is no color named:", colorname)
+				if x.LookupColorByName(colorname) then
+					r, g, b = unpack( x.LookupColorByName(colorname) )
+				else
+					print("FRAME:", framename,"  xct+ says there is no color named:", colorname)
+				end
 			else
 				r, g, b = unpack(x.colors[colorname])
 			end
@@ -315,7 +318,8 @@ function x:AddMessage(framename, message, colorname)
 		
 		-- make sure the frame is enabled
 		if frameOptions.enabledFrame then
-			if frameOptions.customColor then			-- check for forced color
+			-- check for forced color
+			if frameOptions.customColor then
 				r, g, b = unpack(frameOptions.fontColor or {1, 1, 1})
 			end
 			frame:AddMessage(message, r, g, b)
@@ -360,12 +364,19 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
 		table_insert(heap[mergeID].entries, message)
 	else
 		heap[mergeID] = {
-			last	= 0,			-- last update
-			update	= interval or (x.db.profile.spells.merge[mergeID] and x.db.profile.spells.merge[mergeID].interval or 3),	 -- how often to update
-			entries = {				-- entries to merge
+			-- last update
+			last = 0,
+
+			-- how often to update
+			update = interval or (x.db.profile.spells.merge[mergeID] and x.db.profile.spells.merge[mergeID].interval or 3),
+			
+			-- entries to merge
+			entries = {
 					message,
 				},
-			color	= colorname,	-- color
+
+			-- color
+			color = colorname,
 		}
 		table_insert(stack, mergeID)
 	end
@@ -481,7 +492,7 @@ do
 			
 			-- Add critical Prefix and Postfix
 			if frameIndex[index] == "critical" then
-				message = format("%s%s%s", x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
+				--message = format("%s%s%s", x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
 			
 			-- Show healer name (colored)
 			elseif frameIndex[index] == "healing" then
@@ -511,7 +522,6 @@ do
 			
 			-- Add Icons
 			if settings.iconsEnabled then
-				-- message = message .. x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize)
 				if settings.fontJustify == "LEFT" then
 					message = x:GetSpellTextureFormatted(stack[idIndex], settings.iconsSize) .. "  " .. message
 				else
@@ -885,7 +895,7 @@ function x.TestMoreUpdate(self, elapsed)
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
 				end
-				local message = x.db.profile.frames["critical"].critPrefix..x:Abbreviate(random(80000, 200000), "critical")..x.db.profile.frames["critical"].critPostfix
+				local message = x:Abbreviate(random(80000, 200000), "critical")
 				if (random(5) % 5 == 0) and (x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
 					message = sformat("%s |cffFFFFFFx%s|r", message, random(17)+1)
 				end
@@ -955,7 +965,16 @@ function x.TestMoreUpdate(self, elapsed)
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
 				end
-				x:AddMessage(output, MONEY .. ": " .. GetCoinTextureString(random(1000000)), {1, 1, 0}) -- yellow
+				if x.db.profile.frames[output].colorBlindMoney then
+					local g, s, c, message = random(100) % 10 ~= 0 and random(100) or nil, random(100) % 10 ~= 0 and random(100) or nil, random(100) % 10 ~= 0 and random(100) or nil, ""
+					if g then message = tostring(g).."|cffFFD700g|r" end
+					if s then if g then message = message .. " " .. tostring(s).."|cffC0C0C0s|r" else message = message .. tostring(s).."|cffC0C0C0s|r" end end
+					if c then if s or g then message = message .. " " .. tostring(c).."|cffB87333c|r" else message = message .. tostring(c).."|cffB87333c|r" end end
+					if not g and not s and not c then return end
+					x:AddMessage(output, MONEY .. ": " .. message, {1, 1, 0})
+				else
+					x:AddMessage(output, MONEY .. ": " .. GetCoinTextureString(random(1000000)), {1, 1, 0})
+				end
 			end
 		end
 	end

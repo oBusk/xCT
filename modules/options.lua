@@ -16,7 +16,7 @@ local ADDON_NAME, addon = ...
 local LSM = LibStub("LibSharedMedia-3.0")
 local x, noop = addon.engine, addon.noop
 local blankTable, unpack, select = {}, unpack, select
-local string_gsub, pairs = string.gsub, pairs
+local string_gsub, string_match, pairs = string.gsub, string.match, pairs
 
 -- New Icon "!"
 local NEW = x.new
@@ -26,10 +26,16 @@ local NEW = x.new
 local XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2 = COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2
 local XCT_CT_INC_1, XCT_CT_INC_3 = COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3
 
+local PLAYER_NAME = UnitName('player')
+local _, PLAYER_CLASS = UnitClass('player')
+if PLAYER_CLASS then
+  PLAYER_NAME = ('|c%s%s|r'):format(RAID_CLASS_COLORS[PLAYER_CLASS].colorStr, PLAYER_NAME)
+end
+
 -- Creating an Config
 addon.options = {
   -- Add a place for the user to grab
-  name = "                                                                                                                                  ",
+  name = "                                                      " .. "Version: "..(GetAddOnMetadata("xCT+", "Version") or "Unknown") .. "                                                      ",
   handler = x,
   type = 'group',
   args = {
@@ -37,14 +43,14 @@ addon.options = {
       order = 0,
       type = 'description',
       fontSize = 'large',
-      name = "|cffFF0000x|rCT|cffFFFF00+|r |cff798BDDConfiguration Tool|r",
+      name = "|cffFF0000x|rCT|cffFFFF00+|r |cff798BDDConfiguration Tool|r\n",
       width = 'double',
     },
 
     spacer0 = {
       order = 1,
       type = 'description',
-      name = "",
+      name = "|cffFFFF00Helpful Tips:|r\n\n",
       width = 'half',
     },
 
@@ -52,16 +58,24 @@ addon.options = {
       order = 2,
       type = 'description',
       fontSize = 'medium',
-      name = "If there is a certain spell or buff that you don't want to see, consider adding it to a filter.",
+      name = "On the left list, under the |cffFFFF00Startup Message|r checkbox, you can click on the |cff798BDD+ Buttons|r (plus) to show more options.",
       width = 'double',
     },
 
-    xCT_Header = {
+    --[[xCT_Header = {
       order = 10,
       type = "header",
       name = "Version: "..(GetAddOnMetadata("xCT+", "Version") or "Unknown"),
       width = "full",
+    },]]
+
+    space1 = {
+      order = 10,
+      type = 'description',
+      name = "\n",
+      width = 'full',
     },
+
     showStartupText = {
       order = 11,
       type = 'toggle',
@@ -340,7 +354,10 @@ local function isFrameNotScrollable(info) return isFrameItemDisabled(info) or no
 local function isFrameUseCustomFade(info) return not x.db.profile.frames[info[#info-2]].enableCustomFade or isFrameItemDisabled(info) end
 local function isFrameFadingDisabled(info) return isFrameUseCustomFade(info) or not x.db.profile.frames[info[#info-2]].enableFade end
 local function isFrameIconDisabled(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].iconsEnabled end
-local function isFrameCustomColorDisabled(info) return not x.db.profile.frames[info[#info-2]].customColor end
+
+-- This is TEMP
+local function isFrameItemEnabled(info) return x.db.profile.frames[info[#info-2]].enabledFrame end
+
 
 
 local function setSpecialCriticalOptions(info, value)
@@ -379,7 +396,7 @@ local function trim(s)
   return ( s:gsub("^%s*(.-)%s*$", "%1") )
 end
 
--- For each 'c' separated value in 's' (string) do 'f(value, ...)'
+-- For each 'comma' separated value in 'input' (string) do 'func(value, ...)'
 local function foreach(input, comma, func, ...)
   local pattern = ("[^%s]+"):format(comma)
   local s, e = 0, 0
@@ -584,23 +601,7 @@ addon.options.args["spells"] = {
           width = "double",
         },
         
-        --[[  TODO: Add Check all and uncheck all buttons
-        
-        checkAll = {
-          type = 'execute',
-          order = 0.1,
-          name = "Check",
-          desc = "Check all the class specific merge spells.",
-          width = "half",
-        },
-        
-        uncheckAll = {
-          type = 'execute',
-          order = 0.2,
-          name = "Uncheck",
-          desc = "Uncheck all the class specific merge spells.",
-          width = "half",
-        },]]
+        --[[  TODO: Add Check all and uncheck all buttons ]]
         
         mergeListDesc = {
           type = "description",
@@ -713,7 +714,6 @@ addon.options.args["spellFilter"] = {
           order = 22,
           type = 'input',
           name = "Incoming Healing",
-          desc = "The minimal amount of healing required inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
         },
@@ -766,36 +766,6 @@ addon.options.args["spellFilter"] = {
           get = get0_1,
           width = "full",
         },
-        
-        --[[spacer1 = {
-          order = 2,
-          type = 'description',
-          name = "",
-          width = "normal",
-        },
-        
-        spacer2 = {
-          order = 2,
-          type = 'description',
-          name = "",
-          width = "half",
-        },]]
-        
-        --[[enableAll = {
-          order = 3,
-          type = 'execute',
-          name = "Check All",
-          width = "half",
-        },
-        
-        test2 = {
-          order = 4,
-          type = 'execute',
-          name = "Uncheck All",
-          width = "half",
-        },]]
-        
-        
         spellName = {
           order = 6,
           type = 'input',
@@ -1088,32 +1058,7 @@ addon.options.args["FloatingCombatText"] = {
           set = set0_update,
           disabled = function(info) return not x.db.profile.blizzardFCT.fctSpellMechanics end, 
         },
-        
-        --[==[Frames_Description = {
-          type = "description",
-          order = 0,
-          name = "Unfortunately, I cannot display all the options for |cff10FF50Floating Combat Text|r in this configuration tool. Blizzard has a few tweaks you might want to look at. For performance reasons, I am leaving them there for the time being.\n\n",
-        },]==]
-        
-        --[==[blizzardHeadNumbers = {
-          order = 1,
-          type = 'toggle',
-          name = "Show Head Numbers",
-          desc = "Enable this option if you still want to see Blizzard's 'head numbers'.",
-          get = get0,
-          set = set0_update,
-        },]==]
-        
-        --[==[blizzardOptions = {
-          order = 2,
-          type = 'execute',
-          name = "More Blizzard Options...",
-          desc = "Opens: |cffFFA000Game Menu|r --> |cffFF7000Interface|r --> |cffFF3000Floating Combat Text|r",
-          width = "double",
-          func = function() InterfaceOptionsFrame:Show(); InterfaceOptionsFrameTab1:Click(); InterfaceOptionsFrameCategoriesButton8:Click(); LibStub('AceConfigDialog-3.0'):Close(ADDON_NAME); GameTooltip:Hide() end,
-        },]==]
-        
-        
+
         listSpacer1 = {
           type = "description",
           order = 10,
@@ -1145,42 +1090,6 @@ addon.options.args["FloatingCombatText"] = {
           end,
           disabled = function(info) return not x.db.profile.blizzardFCT.enabled end,
         },
-        
-        -- Not Working
-        --[==[fontSize = {
-          order = 22,
-          name = "Font Size",
-          desc = "Set the font size Blizzard's head numbers. |cffFF0000Requires:|r Full client restart, |cffFF0000NOT|r just logging off!",
-          type = 'range',
-          min = 6, max = 32, step = 1,
-          get = get0,
-          set = set0_update,
-        },
-        fontOutline = {
-          type = 'select',
-          order = 23,
-          name = "Font Outline",
-          desc = "Set the font outline Blizzard's head numbers. |cffFF0000Requires:|r Full client restart, |cffFF0000NOT|r just logging off!",
-          values = {
-            ['1NONE'] = "None",
-            ['2OUTLINE'] = 'OUTLINE',
-            -- BUG: Setting font to monochrome AND above size 16 will crash WoW
-            -- http://us.battle.net/wow/en/forum/topic/6470967362
-            --['3MONOCHROME'] = 'MONOCHROME',
-            ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
-            ['5THICKOUTLINE'] = 'THICKOUTLINE',
-          },
-          get = get0,
-          set = set0_update,
-        },]==]
-        
-        --[==[title1 = {
-          order = 30,
-          type = "description",
-          name = "\n|cffFF0000NOTICE:|r |cffFFFF00Settings below require a full client restart.|r",
-          fontSize = "large",
-        },]==]
-        
       },
     },
   },
@@ -1475,71 +1384,165 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFGeneral|r",
       type = 'group',
       order = 11,
+      childGroups = 'select',
       args = {
-        enabledFrame = {
-          order = 1,
-          type = 'toggle',
-          name = "Enable Frame",
-          get = get1,
-          set = set1,
-        },
-        secondaryFrame = {
-          type = 'select',
-          order = 2,
-          name = "Secondary Frame",
-          desc = "A frame to forward messages to when this frame is disabled.",
-          values = {
-            [0] = "None",
-            --[1] = "General",
-            [2] = "Outgoing",
-            [3] = "Outgoing (Criticals)",
-            [4] = "Incoming (Damage)",
-            [5] = "Incoming (Healing)",
-            [6] = "Class Power",
-            [7] = "Special Effects (Procs)",
-            [8] = "Loot & Money",
-          },
-          get = get1,
-          set = set1,
-          disabled = isFrameEnabled,
-        },
-        insertText = {
-          type = 'select',
-          order = 3,
-          name = "Text Direction",
-          desc = "Changes the direction that the text travels in the frame.",
-          values = {
-            ["top"] = "Down",
-            ["bottom"] = "Up",
-          },
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        alpha = {
-          order = 4,
-          name = "Frame Alpha",
-          desc = "Sets the alpha of the frame.",
-          type = 'range',
-          min = 0, max = 100, step = 1,
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        megaDamage = {
-          order = 5,
-          type = 'toggle',
-          name = "Use Number Formatting",
-          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
-          get = get1,
-          set = set1,
-        },
-        fonts = {
+
+        frameSettings = {
           order = 10,
           type = 'group',
-          guiInline = true,
-          name = "Fonts",
+          name = "Frame Settings",
           args = {
+            frameSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFrame Settings|r:",
+              fontSize = 'large',
+            },
+            enabledFrame = {
+              order = 1,
+              type = 'toggle',
+              name = "Enable",
+              width = 'half',
+              get = get2,
+              set = set2,
+            },
+            secondaryFrame = {
+              type = 'select',
+              order = 2,
+              name = "Secondary Frame",
+              desc = "A frame to forward messages to when this frame is disabled.",
+              values = {
+                [0] = "None",
+                --[1] = "General",
+                [2] = "Outgoing",
+                [3] = "Outgoing (Criticals)",
+                [4] = "Incoming (Damage)",
+                [5] = "Incoming (Healing)",
+                [6] = "Class Power",
+                [7] = "Special Effects (Procs)",
+                [8] = "Loot & Money",
+              },
+              get = get2,
+              set = set2,
+              disabled = isFrameItemEnabled,
+            },
+            insertText = {
+              type = 'select',
+              order = 3,
+              name = "Text Direction",
+              desc = "Changes the direction that the text travels in the frame.",
+              values = {
+                ["top"] = "Down",
+                ["bottom"] = "Up",
+              },
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            alpha = {
+              order = 4,
+              name = "Frame Alpha",
+              desc = "Sets the alpha of the frame.",
+              type = 'range',
+              min = 0, max = 100, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            megaDamage = {
+              order = 5,
+              type = 'toggle',
+              name = "Use Number Formatting",
+              desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
+              get = get2,
+              set = set2,
+            },
+
+            frameScrolling = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDScrollable Frame Settings|r:",
+              fontSize = 'large',
+            },
+            enableScrollable = {
+              order = 11,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            scrollableLines = {
+              order = 12,
+              name = "Number of Lines",
+              type = 'range',
+              min = 10, max = 60, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameNotScrollable,
+            },
+
+            frameFading = {
+              type = 'description',
+              order = 20,
+              name = "\n|cff798BDDFading Text Settings|r:",
+              fontSize = 'large',
+            },
+            enableCustomFade = {
+              order = 21,
+              type = 'toggle',
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            enableFade = {
+              order = 22,
+              type = 'toggle',
+              name = "Enable",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              width = 'half',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameUseCustomFade,
+            },
+            fadeTime = {
+              order = 23,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+            visibilityTime = {
+              order = 24,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+
+          },
+        },
+
+        fonts = {
+          order = 20,
+          type = 'group',
+          name = "Font Settings",
+          args = {
+            fontSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFont Settings|r:",
+              fontSize = 'large',
+            },
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -1593,107 +1596,32 @@ addon.options.args["Frames"] = {
             },
           },
         },
+
         fontColors = {
-          order = 20,
-          type = 'group',
-          guiInline = true,
-          name = "Font Colors",
-          args = {
-            customColor = {
-              order = 1,
-              type = 'toggle',
-              name = "Use Custom Colors",
-              get = get2,
-              set = set2,
-            },
-            fontColor = {
-              type = 'color',
-              name = "Custom Color",
-              order = 2,
-              get = getColor2,
-              set = setColor2,
-              disabled = isFrameCustomColorDisabled,
-            },
-          },
-        },
-        scrollable = {
           order = 30,
           type = 'group',
-          guiInline = true,
-          name = "Scrollable Frame",
+          name = "Custom Colors",
           args = {
-            enableScrollable = {
-              order = 1,
-              type = 'toggle',
-              name = "Enabled",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            scrollableLines = {
-              order = 2,
-              name = "Number of Lines",
-              type = 'range',
-              min = 10, max = 60, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameNotScrollable,
+            customColors = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDCustom Colors|r:\n",
+              fontSize = 'large',
             },
           },
         },
-        fading = {
-          order = 40,
-          type = 'group',
-          guiInline = true,
-          name = "Fading Text",
-          args = {
-            enableCustomFade = {
-              order = 2,
-              type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              width = 'full',
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            enableFade = {
-              order = 10,
-              type = 'toggle',
-              name = "Enable Fading",
-              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameUseCustomFade,
-            },
-            fadeTime = {
-              order = 11,
-              name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 0, max = 2, step = .1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-            visibilityTime = {
-              order = 12,
-              name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 2, max = 15, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-          },
-        },
+
         specialTweaks = {
-          order = 50,
-          type = 'group',
-          guiInline = true,
+          order = 40,
           name = "Special Tweaks",
+          type = 'group',
           args = {
+            specialTweaks = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDSpecial Tweaks|r:",
+              fontSize = 'large',
+            },
             showInterrupts = {
               order = 1,
               type = 'toggle',
@@ -1768,6 +1696,7 @@ addon.options.args["Frames"] = {
             },
           },
         },
+
       },
     },
     
@@ -1775,72 +1704,165 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFOutgoing|r",
       type = 'group',
       order = 12,
+      childGroups = 'select',
       args = {
-        enabledFrame = {
-          order = 1,
-          type = 'toggle',
-          name = "Enable Frame",
-          get = get1,
-          set = set1,
-        },
-        secondaryFrame = {
-          type = 'select',
-          order = 2,
-          name = "Secondary Frame",
-          desc = "A frame to forward messages to when this frame is disabled.",
-          values = {
-            [0] = "None",
-            [1] = "General",
-            --[2] = "Outgoing",
-            [3] = "Outgoing (Criticals)",
-            [4] = "Incoming (Damage)",
-            [5] = "Incoming (Healing)",
-            [6] = "Class Power",
-            [7] = "Special Effects (Procs)",
-            [8] = "Loot & Money",
-          },
-          get = get1,
-          set = set1,
-          disabled = isFrameEnabled,
-        },
-        insertText = {
-          type = 'select',
-          order = 3,
-          name = "Text Direction",
-          desc = "Changes the direction that the text travels in the frame.",
-          values = {
-            ["top"] = "Down",
-            ["bottom"] = "Up",
-          },
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        alpha = {
-          order = 4,
-          name = "Frame Alpha",
-          desc = "Sets the alpha of the frame.",
-          type = 'range',
-          min = 0, max = 100, step = 1,
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        megaDamage = {
-          order = 5,
-          type = 'toggle',
-          name = "Use Number Formatting",
-          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
-          get = get1,
-          set = set1,
-        },
-        fonts = {
+
+        frameSettings = {
           order = 10,
           type = 'group',
-          guiInline = true,
-          name = "Fonts",
+          name = "Frame Settings",
           args = {
-          
+            frameSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFrame Settings|r:",
+              fontSize = 'large',
+            },
+            enabledFrame = {
+              order = 1,
+              type = 'toggle',
+              name = "Enable",
+              width = 'half',
+              get = get2,
+              set = set2,
+            },
+            secondaryFrame = {
+              type = 'select',
+              order = 2,
+              name = "Secondary Frame",
+              desc = "A frame to forward messages to when this frame is disabled.",
+              values = {
+                [0] = "None",
+                [1] = "General",
+                --[2] = "Outgoing",
+                [3] = "Outgoing (Criticals)",
+                [4] = "Incoming (Damage)",
+                [5] = "Incoming (Healing)",
+                [6] = "Class Power",
+                [7] = "Special Effects (Procs)",
+                [8] = "Loot & Money",
+              },
+              get = get2,
+              set = set2,
+              disabled = isFrameItemEnabled,
+            },
+            insertText = {
+              type = 'select',
+              order = 3,
+              name = "Text Direction",
+              desc = "Changes the direction that the text travels in the frame.",
+              values = {
+                ["top"] = "Down",
+                ["bottom"] = "Up",
+              },
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            alpha = {
+              order = 4,
+              name = "Frame Alpha",
+              desc = "Sets the alpha of the frame.",
+              type = 'range',
+              min = 0, max = 100, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            megaDamage = {
+              order = 5,
+              type = 'toggle',
+              name = "Use Number Formatting",
+              desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
+              get = get2,
+              set = set2,
+            },
+
+            frameScrolling = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDScrollable Frame Settings|r:",
+              fontSize = 'large',
+            },
+            enableScrollable = {
+              order = 11,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            scrollableLines = {
+              order = 12,
+              name = "Number of Lines",
+              type = 'range',
+              min = 10, max = 60, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameNotScrollable,
+            },
+
+            frameFading = {
+              type = 'description',
+              order = 30,
+              name = "\n|cff798BDDFading Text Settings|r:",
+              fontSize = 'large',
+            },
+            enableCustomFade = {
+              order = 31,
+              type = 'toggle',
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            enableFade = {
+              order = 32,
+              type = 'toggle',
+              name = "Enable",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              width = 'half',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameUseCustomFade,
+            },
+            fadeTime = {
+              order = 33,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+            visibilityTime = {
+              order = 34,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+
+          },
+        },
+
+        fonts = {
+          order = 20,
+          type = 'group',
+          name = "Font Settings",
+          args = {
+            fontSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFont Settings|r:",
+              fontSize = 'large',
+            },
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -1851,7 +1873,6 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameItemDisabled,
             },
-            
             fontSize = {
               order = 2,
               name = "Font Size",
@@ -1862,7 +1883,6 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameItemDisabled,
             },
-            
             fontOutline = {
               type = 'select',
               order = 3,
@@ -1881,7 +1901,6 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameItemDisabled,
             },
-            
             fontJustify = {
               type = 'select',
               order = 4,
@@ -1895,108 +1914,15 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-          },
-        },
-        fontColors = {
-          order = 20,
-          type = 'group',
-          guiInline = true,
-          name = "Font Colors",
-          args = {
-            customColor = {
-              order = 1,
-              type = 'toggle',
-              name = "Use Custom Colors",
-              get = get2,
-              set = set2,
-            },
-            fontColor = {
-              type = 'color',
-              name = "Custom Color",
-              order = 2,
-              get = getColor2,
-              set = setColor2,
-              disabled = isFrameCustomColorDisabled,
-            },
-            listSpacer1 = {
-              type = "description",
+
+            iconSizeSettings = {
+              type = 'description',
               order = 10,
-              name = "\n\n|cff798BDDCustom Spell Colors|r:",
+              name = "\n|cff798BDDIcon Size Settings|r:",
+              fontSize = 'large',
             },
-            standardSpellColor = {
-              order = 11,
-              type = 'toggle',
-              name = "Use Custom Spell School Colors",
-              width = 'full',
-              get = get2,
-              set = set2,
-            },
-            colorPhysical = {
-              type = 'color',
-              name = "Physical Damage",
-              order = 12,
-              get = getColor2,
-              set = setColor2,
-              disabled = outgoingSpellColorsHidden,
-            },
-            colorHoly = {
-              type = 'color',
-              name = "Holy Damage",
-              order = 13,
-              get = getColor2,
-              set = setColor2,
-              disabled = outgoingSpellColorsHidden,
-            },
-            colorFire = {
-              type = 'color',
-              name = "Fire Damage",
-              order = 14,
-              get = getColor2,
-              set = setColor2,
-              disabled = outgoingSpellColorsHidden,
-            },
-            colorNature = {
-              type = 'color',
-              name = "Nature Damage",
-              order = 15,
-              get = getColor2,
-              set = setColor2,
-              disabled = outgoingSpellColorsHidden,
-            },
-            colorFrost = {
-              type = 'color',
-              name = "Frost Damage",
-              order = 16,
-              get = getColor2,
-              set = setColor2,
-              disabled = outgoingSpellColorsHidden,
-            },
-            colorShadow = {
-              type = 'color',
-              name = "Shadow Damage",
-              order = 17,
-              get = getColor2,
-              set = setColor2,
-              disabled = outgoingSpellColorsHidden,
-            },
-            colorArcane = {
-              type = 'color',
-              name = "Arcane Damage",
-              order = 18,
-              get = getColor2,
-              set = setColor2,
-              disabled = outgoingSpellColorsHidden,
-            },
-          },
-        },
-        icons = {
-          order = 30,
-          type = 'group',
-          guiInline = true,
-          name = "Icons",
-          args = {
             iconsEnabled = {
-              order = 1,
+              order = 11,
               type = 'toggle',
               name = "Icons",
               desc = "Show icons next to your damage.",
@@ -2004,9 +1930,8 @@ addon.options.args["Frames"] = {
               set = set2,
               disabled = isFrameItemDisabled,
             },
-          
             iconsSize = {
-              order = 2,
+              order = 12,
               name = "Icon Size",
               desc = "Set the icon size.",
               type = 'range',
@@ -2015,87 +1940,34 @@ addon.options.args["Frames"] = {
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          
           },
         },
-        scrollable = {
+
+        fontColors = {
+          order = 30,
+          type = 'group',
+          name = "Font Colors",
+          args = {
+            customColors = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDCustom Colors|r:\n",
+              fontSize = 'large',
+            },
+          },
+        },
+
+        specialTweaks = {
           order = 40,
           type = 'group',
-          guiInline = true,
-          name = "Scrollable Frame",
-          args = {
-            enableScrollable = {
-              order = 1,
-              type = 'toggle',
-              name = "Enabled",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            scrollableLines = {
-              order = 2,
-              name = "Number of Lines",
-              type = 'range',
-              min = 10, max = 60, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameNotScrollable,
-            },
-          },
-        },
-        fading = {
-          order = 50,
-          type = 'group',
-          guiInline = true,
-          name = "Fading Text",
-          args = {
-            enableCustomFade = {
-              order = 2,
-              type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              width = 'full',
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            enableFade = {
-              order = 10,
-              type = 'toggle',
-              name = "Enable Fading",
-              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameUseCustomFade,
-            },
-            fadeTime = {
-              order = 11,
-              name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 0, max = 2, step = .1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-            visibilityTime = {
-              order = 12,
-              name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 2, max = 15, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-          },
-        },
-        specialTweaks = {
-          order = 60,
-          type = 'group',
-          guiInline = true,
           name = "Special Tweaks",
           args = {
+            specialTweaks = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDSpecial Tweaks|r:",
+              fontSize = 'large',
+            },
             enableOutDmg = {
               order = 1,
               type = 'toggle',
@@ -2160,9 +2032,9 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
           },
         },
+
       },
     },
     
@@ -2170,71 +2042,165 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFOutgoing|r |cff798BDD(Criticals)|r",
       type = 'group',
       order = 13,
+      childGroups = 'select',
       args = {
-        enabledFrame = {
-          order = 1,
-          type = 'toggle',
-          name = "Enable Frame",
-          get = get1,
-          set = set1,
-        },
-        secondaryFrame = {
-          type = 'select',
-          order = 2,
-          name = "Secondary Frame",
-          desc = "A frame to forward messages to when this frame is disabled.",
-          values = {
-            [0] = "None",
-            [1] = "General",
-            [2] = "Outgoing",
-            --[3] = "Outgoing (Criticals)",
-            [4] = "Incoming (Damage)",
-            [5] = "Incoming (Healing)",
-            [6] = "Class Power",
-            [7] = "Special Effects (Procs)",
-            [8] = "Loot & Money",
-          },
-          get = get1,
-          set = set1,
-          disabled = isFrameEnabled,
-        },
-        insertText = {
-          type = 'select',
-          order = 3,
-          name = "Text Direction",
-          desc = "Changes the direction that the text travels in the frame.",
-          values = {
-            ["top"] = "Down",
-            ["bottom"] = "Up",
-          },
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        alpha = {
-          order = 4,
-          name = "Frame Alpha",
-          desc = "Sets the alpha of the frame.",
-          type = 'range',
-          min = 0, max = 100, step = 1,
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        megaDamage = {
-          order = 5,
-          type = 'toggle',
-          name = "Use Number Formatting",
-          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
-          get = get1,
-          set = set1,
-        },
-        fonts = {
+
+
+        frameSettings = {
           order = 10,
           type = 'group',
-          guiInline = true,
-          name = "Fonts",
+          name = "Frame Settings",
           args = {
+            frameSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFrame Settings|r:",
+              fontSize = 'large',
+            },
+            enabledFrame = {
+              order = 1,
+              type = 'toggle',
+              name = "Enable",
+              width = 'half',
+              get = get2,
+              set = set2,
+            },
+            secondaryFrame = {
+              type = 'select',
+              order = 2,
+              name = "Secondary Frame",
+              desc = "A frame to forward messages to when this frame is disabled.",
+              values = {
+                [0] = "None",
+                [1] = "General",
+                [2] = "Outgoing",
+                --[3] = "Outgoing (Criticals)",
+                [4] = "Incoming (Damage)",
+                [5] = "Incoming (Healing)",
+                [6] = "Class Power",
+                [7] = "Special Effects (Procs)",
+                [8] = "Loot & Money",
+              },
+              get = get2,
+              set = set2,
+              disabled = isFrameItemEnabled,
+            },
+            insertText = {
+              type = 'select',
+              order = 3,
+              name = "Text Direction",
+              desc = "Changes the direction that the text travels in the frame.",
+              values = {
+                ["top"] = "Down",
+                ["bottom"] = "Up",
+              },
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            alpha = {
+              order = 4,
+              name = "Frame Alpha",
+              desc = "Sets the alpha of the frame.",
+              type = 'range',
+              min = 0, max = 100, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            megaDamage = {
+              order = 5,
+              type = 'toggle',
+              name = "Use Number Formatting",
+              desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
+              get = get2,
+              set = set2,
+            },
+
+            frameScrolling = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDScrollable Frame Settings|r:",
+              fontSize = 'large',
+            },
+            enableScrollable = {
+              order = 11,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            scrollableLines = {
+              order = 12,
+              name = "Number of Lines",
+              type = 'range',
+              min = 10, max = 60, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameNotScrollable,
+            },
+
+            frameFading = {
+              type = 'description',
+              order = 30,
+              name = "\n|cff798BDDFading Text Settings|r:",
+              fontSize = 'large',
+            },
+            enableCustomFade = {
+              order = 31,
+              type = 'toggle',
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            enableFade = {
+              order = 32,
+              type = 'toggle',
+              name = "Enable",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              width = 'half',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameUseCustomFade,
+            },
+            fadeTime = {
+              order = 33,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+            visibilityTime = {
+              order = 34,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+          },
+        },
+
+        fonts = {
+          order = 20,
+          type = 'group',
+          name = "Font Settings",
+          args = {
+            fontSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFont Settings|r:",
+              fontSize = 'large',
+            },
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -2286,66 +2252,15 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
-          },
-        },
-        fontColors = {
-          order = 20,
-          type = 'group',
-          guiInline = true,
-          name = "Font Colors",
-          args = {
-            customColor = {
-              order = 1,
-              type = 'toggle',
-              name = "Use Custom Colors",
-              get = get2,
-              set = set2,
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDIcon Size Settings|r:",
+              fontSize = 'large',
             },
-            fontColor = {
-              type = 'color',
-              name = "Custom Color",
-              order = 2,
-              get = getColor2,
-              set = setColor2,
-              disabled = isFrameCustomColorDisabled,
-            },
-          },
-        },
-        -- TODO: Move Crits Appearance somewhere else, because other frames use it too
-        criticalAppearance = {
-          order = 30,
-          type = 'group',
-          guiInline = true,
-          name = "Critical Appearance",
-          args = {
-            critPrefix = {
-              order = 1,
-              type = 'input',
-              name = "Prefix",
-              desc = "Prefix this value to the beginning when displaying a critical amount.",
-              get = getTextIn2,
-              set = setTextIn2,
-              disabled = isFrameItemDisabled,
-            },
-            critPostfix = {
-              order = 2,
-              type = 'input',
-              name = "Postfix",
-              desc = "Postfix this value to the end when displaying a critical amount.",
-              get = getTextIn2,
-              set = setTextIn2,
-              disabled = isFrameItemDisabled,
-            },
-          },
-        },
-        icons = {
-          order = 40,
-          type = 'group',
-          guiInline = true,
-          name = "Icons",
-          args = {
             iconsEnabled = {
-              order = 1,
+              order = 11,
               type = 'toggle',
               name = "Icons",
               desc = "Show icons next to your damage.",
@@ -2354,7 +2269,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 2,
+              order = 12,
               name = "Icon Size",
               desc = "Set the icon size.",
               type = 'range',
@@ -2365,84 +2280,32 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        scrollable = {
+
+        fontColors = {
           order = 30,
           type = 'group',
-          guiInline = true,
-          name = "Scrollable Frame",
+          name = "Font Colors",
           args = {
-            enableScrollable = {
-              order = 1,
-              type = 'toggle',
-              name = "Enabled",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            scrollableLines = {
-              order = 2,
-              name = "Number of Lines",
-              type = 'range',
-              min = 10, max = 60, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameNotScrollable,
+            customColors = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDCustom Colors|r:\n",
+              fontSize = 'large',
             },
           },
         },
-        fading = {
+
+        specialTweaks = {
           order = 40,
           type = 'group',
-          guiInline = true,
-          name = "Fading Text",
-          args = {
-            enableCustomFade = {
-              order = 2,
-              type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              width = 'full',
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            enableFade = {
-              order = 10,
-              type = 'toggle',
-              name = "Enable Fading",
-              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameUseCustomFade,
-            },
-            fadeTime = {
-              order = 11,
-              name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 0, max = 2, step = .1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-            visibilityTime = {
-              order = 12,
-              name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 2, max = 15, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-          },
-        },
-        specialTweaks = {
-          order = 70,
-          type = 'group',
-          guiInline = true,
           name = "Special Tweaks",
           args = {
+            specialTweaks = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDSpecial Tweaks|r:",
+              fontSize = 'large',
+            },
             showSwing = {
               order = 1,
               type = 'toggle',
@@ -2459,7 +2322,33 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
+
+            criticalAppearance = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDCritical Appearance|r:",
+              fontSize = 'large',
+            },
+            critPrefix = {
+              order = 11,
+              type = 'input',
+              name = "Prefix",
+              desc = "Prefix this value to the beginning when displaying a critical amount.",
+              get = getTextIn2,
+              set = setTextIn2,
+              disabled = isFrameItemDisabled,
+            },
+            critPostfix = {
+              order = 12,
+              type = 'input',
+              name = "Postfix",
+              desc = "Postfix this value to the end when displaying a critical amount.",
+              get = getTextIn2,
+              set = setTextIn2,
+              disabled = isFrameItemDisabled,
+            },
           },
+
         },
       },
     },
@@ -2468,71 +2357,165 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Damage)|r",
       type = 'group',
       order = 14,
+      childGroups = 'select',
       args = {
-        enabledFrame = {
-          order = 1,
-          type = 'toggle',
-          name = "Enable Frame",
-          get = get1,
-          set = set1,
-        },
-        secondaryFrame = {
-          type = 'select',
-          order = 2,
-          name = "Secondary Frame",
-          desc = "A frame to forward messages to when this frame is disabled.",
-          values = {
-            [0] = "None",
-            [1] = "General",
-            [2] = "Outgoing",
-            [3] = "Outgoing (Criticals)",
-            --[4] = "Incoming (Damage)",
-            [5] = "Incoming (Healing)",
-            [6] = "Class Power",
-            [7] = "Special Effects (Procs)",
-            [8] = "Loot & Money",
-          },
-          get = get1,
-          set = set1,
-          disabled = isFrameEnabled,
-        },
-        insertText = {
-          type = 'select',
-          order = 3,
-          name = "Text Direction",
-          desc = "Changes the direction that the text travels in the frame.",
-          values = {
-            ["top"] = "Down",
-            ["bottom"] = "Up",
-          },
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        alpha = {
-          order = 4,
-          name = "Frame Alpha",
-          desc = "Sets the alpha of the frame.",
-          type = 'range',
-          min = 0, max = 100, step = 1,
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        megaDamage = {
-          order = 5,
-          type = 'toggle',
-          name = "Use Number Formatting",
-          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
-          get = get1,
-          set = set1,
-        },
-        fonts = {
+
+        frameSettings = {
           order = 10,
           type = 'group',
-          guiInline = true,
-          name = "Fonts",
+          name = "Frame Settings",
           args = {
+            frameSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFrame Settings|r:",
+              fontSize = 'large',
+            },
+            enabledFrame = {
+              order = 1,
+              type = 'toggle',
+              name = "Enable",
+              width = 'half',
+              get = get2,
+              set = set2,
+            },
+            secondaryFrame = {
+              type = 'select',
+              order = 2,
+              name = "Secondary Frame",
+              desc = "A frame to forward messages to when this frame is disabled.",
+              values = {
+                [0] = "None",
+                [1] = "General",
+                [2] = "Outgoing",
+                [3] = "Outgoing (Criticals)",
+                --[4] = "Incoming (Damage)",
+                [5] = "Incoming (Healing)",
+                [6] = "Class Power",
+                [7] = "Special Effects (Procs)",
+                [8] = "Loot & Money",
+              },
+              get = get2,
+              set = set2,
+              disabled = isFrameItemEnabled,
+            },
+            insertText = {
+              type = 'select',
+              order = 3,
+              name = "Text Direction",
+              desc = "Changes the direction that the text travels in the frame.",
+              values = {
+                ["top"] = "Down",
+                ["bottom"] = "Up",
+              },
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            alpha = {
+              order = 4,
+              name = "Frame Alpha",
+              desc = "Sets the alpha of the frame.",
+              type = 'range',
+              min = 0, max = 100, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            megaDamage = {
+              order = 5,
+              type = 'toggle',
+              name = "Use Number Formatting",
+              desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
+              get = get2,
+              set = set2,
+            },
+
+            frameScrolling = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDScrollable Frame Settings|r:",
+              fontSize = 'large',
+            },
+            enableScrollable = {
+              order = 11,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            scrollableLines = {
+              order = 12,
+              name = "Number of Lines",
+              type = 'range',
+              min = 10, max = 60, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameNotScrollable,
+            },
+
+            frameFading = {
+              type = 'description',
+              order = 20,
+              name = "\n|cff798BDDFading Text Settings|r:",
+              fontSize = 'large',
+            },
+            enableCustomFade = {
+              order = 21,
+              type = 'toggle',
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            enableFade = {
+              order = 22,
+              type = 'toggle',
+              name = "Enable",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              width = 'half',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameUseCustomFade,
+            },
+            fadeTime = {
+              order = 23,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+            visibilityTime = {
+              order = 24,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+
+          },
+        },
+
+        fonts = {
+          order = 20,
+          type = 'group',
+          name = "Font Settings",
+          args = {
+            fontSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFont Settings|r:",
+              fontSize = 'large',
+            },
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -2586,107 +2569,32 @@ addon.options.args["Frames"] = {
             },
           },
         },
+
         fontColors = {
-          order = 20,
-          type = 'group',
-          guiInline = true,
-          name = "Font Colors",
-          args = {
-            customColor = {
-              order = 1,
-              type = 'toggle',
-              name = "Use Custom Colors",
-              get = get2,
-              set = set2,
-            },
-            fontColor = {
-              type = 'color',
-              name = "Custom Color",
-              order = 2,
-              get = getColor2,
-              set = setColor2,
-              disabled = isFrameCustomColorDisabled,
-            },
-          },
-        },
-        scrollable = {
           order = 30,
           type = 'group',
-          guiInline = true,
-          name = "Scrollable Frame",
+          name = "Custom Colors",
           args = {
-            enableScrollable = {
-              order = 1,
-              type = 'toggle',
-              name = "Enabled",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            scrollableLines = {
-              order = 2,
-              name = "Number of Lines",
-              type = 'range',
-              min = 10, max = 60, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameNotScrollable,
+            customColors = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDCustom Colors|r:\n",
+              fontSize = 'large',
             },
           },
         },
-        fading = {
-          order = 40,
-          type = 'group',
-          guiInline = true,
-          name = "Fading Text",
-          args = {
-            enableCustomFade = {
-              order = 2,
-              type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              width = 'full',
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            enableFade = {
-              order = 10,
-              type = 'toggle',
-              name = "Enable Fading",
-              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameUseCustomFade,
-            },
-            fadeTime = {
-              order = 11,
-              name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 0, max = 2, step = .1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-            visibilityTime = {
-              order = 12,
-              name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 2, max = 15, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-          },
-        },
+
         specialTweaks = {
-          order = 50,
-          type = 'group',
-          guiInline = true,
+          order = 40,
           name = "Special Tweaks",
+          type = 'group',
           args = {
+            specialTweaks = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDSpecial Tweaks|r:",
+              fontSize = 'large',
+            },
             showDodgeParryMiss = {
               order = 1,
               type = 'toggle',
@@ -2712,71 +2620,165 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Healing)|r",
       type = 'group',
       order = 15,
+      childGroups = 'select',
       args = {
-        enabledFrame = {
-          order = 1,
-          type = 'toggle',
-          name = "Enable Frame",
-          get = get1,
-          set = set1,
-        },
-        secondaryFrame = {
-          type = 'select',
-          order = 2,
-          name = "Secondary Frame",
-          desc = "A frame to forward messages to when this frame is disabled.",
-          values = {
-            [0] = "None",
-            [1] = "General",
-            [2] = "Outgoing",
-            [3] = "Outgoing (Criticals)",
-            [4] = "Incoming (Damage)",
-            --[5] = "Incoming (Healing)",
-            [6] = "Class Power",
-            [7] = "Special Effects (Procs)",
-            [8] = "Loot & Money",
-          },
-          get = get1,
-          set = set1,
-          disabled = isFrameEnabled,
-        },
-        insertText = {
-          type = 'select',
-          order = 3,
-          name = "Text Direction",
-          desc = "Changes the direction that the text travels in the frame.",
-          values = {
-            ["top"] = "Down",
-            ["bottom"] = "Up",
-          },
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        alpha = {
-          order = 4,
-          name = "Frame Alpha",
-          desc = "Sets the alpha of the frame.",
-          type = 'range',
-          min = 0, max = 100, step = 1,
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        megaDamage = {
-          order = 5,
-          type = 'toggle',
-          name = "Use Number Formatting",
-          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
-          get = get1,
-          set = set1,
-        },
-        fonts = {
+
+        frameSettings = {
           order = 10,
           type = 'group',
-          guiInline = true,
-          name = "Fonts",
+          name = "Frame Settings",
           args = {
+            frameSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFrame Settings|r:",
+              fontSize = 'large',
+            },
+            enabledFrame = {
+              order = 1,
+              type = 'toggle',
+              name = "Enable",
+              width = 'half',
+              get = get2,
+              set = set2,
+            },
+            secondaryFrame = {
+              type = 'select',
+              order = 2,
+              name = "Secondary Frame",
+              desc = "A frame to forward messages to when this frame is disabled.",
+              values = {
+                [0] = "None",
+                [1] = "General",
+                [2] = "Outgoing",
+                [3] = "Outgoing (Criticals)",
+                [4] = "Incoming (Damage)",
+                --[5] = "Incoming (Healing)",
+                [6] = "Class Power",
+                [7] = "Special Effects (Procs)",
+                [8] = "Loot & Money",
+              },
+              get = get2,
+              set = set2,
+              disabled = isFrameItemEnabled,
+            },
+            insertText = {
+              type = 'select',
+              order = 3,
+              name = "Text Direction",
+              desc = "Changes the direction that the text travels in the frame.",
+              values = {
+                ["top"] = "Down",
+                ["bottom"] = "Up",
+              },
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            alpha = {
+              order = 4,
+              name = "Frame Alpha",
+              desc = "Sets the alpha of the frame.",
+              type = 'range',
+              min = 0, max = 100, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            megaDamage = {
+              order = 5,
+              type = 'toggle',
+              name = "Use Number Formatting",
+              desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
+              get = get2,
+              set = set2,
+            },
+
+            frameScrolling = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDScrollable Frame Settings|r:",
+              fontSize = 'large',
+            },
+            enableScrollable = {
+              order = 11,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            scrollableLines = {
+              order = 12,
+              name = "Number of Lines",
+              type = 'range',
+              min = 10, max = 60, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameNotScrollable,
+            },
+
+            frameFading = {
+              type = 'description',
+              order = 20,
+              name = "\n|cff798BDDFading Text Settings|r:",
+              fontSize = 'large',
+            },
+            enableCustomFade = {
+              order = 21,
+              type = 'toggle',
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            enableFade = {
+              order = 22,
+              type = 'toggle',
+              name = "Enable",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              width = 'half',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameUseCustomFade,
+            },
+            fadeTime = {
+              order = 23,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+            visibilityTime = {
+              order = 24,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+
+          },
+        },
+
+        fonts = {
+          order = 20,
+          type = 'group',
+          name = "Font Settings",
+          args = {
+            fontSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFont Settings|r:",
+              fontSize = 'large',
+            },
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -2830,107 +2832,32 @@ addon.options.args["Frames"] = {
             },
           },
         },
+
         fontColors = {
-          order = 20,
-          type = 'group',
-          guiInline = true,
-          name = "Font Colors",
-          args = {
-            customColor = {
-              order = 1,
-              type = 'toggle',
-              name = "Use Custom Colors",
-              get = get2,
-              set = set2,
-            },
-            fontColor = {
-              type = 'color',
-              name = "Custom Color",
-              order = 2,
-              get = getColor2,
-              set = setColor2,
-              disabled = isFrameCustomColorDisabled,
-            },
-          },
-        },
-        scrollable = {
           order = 30,
           type = 'group',
-          guiInline = true,
-          name = "Scrollable Frame",
+          name = "Custom Colors",
           args = {
-            enableScrollable = {
-              order = 1,
-              type = 'toggle',
-              name = "Enabled",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            scrollableLines = {
-              order = 2,
-              name = "Number of Lines",
-              type = 'range',
-              min = 10, max = 60, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameNotScrollable,
+            customColors = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDCustom Colors|r:\n",
+              fontSize = 'large',
             },
           },
         },
-        fading = {
-          order = 40,
-          type = 'group',
-          guiInline = true,
-          name = "Fading Text",
-          args = {
-            enableCustomFade = {
-              order = 2,
-              type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              width = 'full',
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            enableFade = {
-              order = 10,
-              type = 'toggle',
-              name = "Enable Fading",
-              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameUseCustomFade,
-            },
-            fadeTime = {
-              order = 11,
-              name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 0, max = 2, step = .1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-            visibilityTime = {
-              order = 12,
-              name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 2, max = 15, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-          },
-        },
+
         specialTweaks = {
-          order = 50,
-          type = 'group',
-          guiInline = true,
+          order = 40,
           name = "Special Tweaks",
+          type = 'group',
           args = {
+            specialTweaks = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDSpecial Tweaks|r:",
+              fontSize = 'large',
+            },
             showFriendlyHealers = {
               order = 1,
               type = 'toggle',
@@ -2980,36 +2907,81 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFClass Combo Points|r",
       type = 'group',
       order = 16,
+      childGroups = 'select',
       args = {
-        enabledFrame = {
-          order = 1,
-          type = 'toggle',
-          name = "Enable Frame",
-          get = get1,
-          set = set1,
-        },
-        secondaryFrame = {
-          type = 'description',
-          order = 2,
-          name = "|cffFF0000Secondary Frame Not Available|r - |cffFFFFFFThis frame cannot output to another frame when it is disabled.",
-          width = "double",
-        },
-        alpha = {
-          order = 3,
-          name = "Frame Alpha",
-          desc = "Sets the alpha of the frame.",
-          type = 'range',
-          min = 0, max = 100, step = 1,
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        fonts = {
+        frameSettings = {
           order = 10,
           type = 'group',
-          guiInline = true,
-          name = "Fonts",
+          name = "Frame Settings",
           args = {
+            frameSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFrame Settings|r:",
+              fontSize = 'large',
+            },
+            enabledFrame = {
+              order = 1,
+              type = 'toggle',
+              name = "Enable",
+              width = 'half',
+              get = get2,
+              set = set2,
+            },
+            secondaryFrame = {
+              type = 'description',
+              order = 2,
+              name = "|cffFF0000Secondary Frame Not Available|r - |cffFFFFFFThis frame cannot output to another frame when it is disabled.",
+              width = "double",
+            },
+            alpha = {
+              order = 4,
+              name = "Frame Alpha",
+              desc = "Sets the alpha of the frame.",
+              type = 'range',
+              min = 0, max = 100, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            frameScrolling = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDScrollable Frame Settings|r:",
+              fontSize = 'large',
+            },
+            enableScrollable = {
+              order = 11,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            scrollableLines = {
+              order = 12,
+              name = "Number of Lines",
+              type = 'range',
+              min = 10, max = 60, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameNotScrollable,
+            },
+          },
+        },
+
+        fonts = {
+          order = 20,
+          type = 'group',
+          name = "Font Settings",
+          args = {
+            fontSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFont Settings|r:",
+              fontSize = 'large',
+            },
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -3050,29 +3022,21 @@ addon.options.args["Frames"] = {
             },
           },
         },
+
         fontColors = {
-          order = 20,
+          order = 30,
           type = 'group',
-          guiInline = true,
-          name = "Font Colors",
+          name = "Custom Colors",
           args = {
-            customColor = {
-              order = 1,
-              type = 'toggle',
-              name = "Use Custom Colors",
-              get = get2,
-              set = set2,
-            },
-            fontColor = {
-              type = 'color',
-              name = "Custom Color",
-              order = 2,
-              get = getColor2,
-              set = setColor2,
-              disabled = isFrameCustomColorDisabled,
+            customColors = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDCustom Colors|r:\n",
+              fontSize = 'large',
             },
           },
         },
+
       },
     },
     
@@ -3080,71 +3044,165 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFClass Power|r",
       type = 'group',
       order = 17,
+      childGroups = 'select',
       args = {
-        enabledFrame = {
-          order = 1,
-          type = 'toggle',
-          name = "Enable Frame",
-          get = get1,
-          set = set1,
-        },
-        secondaryFrame = {
-          type = 'select',
-          order = 2,
-          name = "Secondary Frame",
-          desc = "A frame to forward messages to when this frame is disabled.",
-          values = {
-            [0] = "None",
-            [1] = "General",
-            [2] = "Outgoing",
-            [3] = "Outgoing (Criticals)",
-            [4] = "Incoming (Damage)",
-            [5] = "Incoming (Healing)",
-            --[6] = "Class Power",
-            [7] = "Special Effects (Procs)",
-            [8] = "Loot & Money",
-          },
-          get = get1,
-          set = set1,
-          disabled = isFrameEnabled,
-        },
-        insertText = {
-          type = 'select',
-          order = 3,
-          name = "Text Direction",
-          desc = "Changes the direction that the text travels in the frame.",
-          values = {
-            ["top"] = "Down",
-            ["bottom"] = "Up",
-          },
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        alpha = {
-          order = 4,
-          name = "Frame Alpha",
-          desc = "Sets the alpha of the frame.",
-          type = 'range',
-          min = 0, max = 100, step = 1,
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        megaDamage = {
-          order = 5,
-          type = 'toggle',
-          name = "Use Number Formatting",
-          desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
-          get = get1,
-          set = set1,
-        },
-        fonts = {
+
+        frameSettings = {
           order = 10,
           type = 'group',
-          guiInline = true,
-          name = "Fonts",
+          name = "Frame Settings",
           args = {
+            frameSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFrame Settings|r:",
+              fontSize = 'large',
+            },
+            enabledFrame = {
+              order = 1,
+              type = 'toggle',
+              name = "Enable",
+              width = 'half',
+              get = get2,
+              set = set2,
+            },
+            secondaryFrame = {
+              type = 'select',
+              order = 2,
+              name = "Secondary Frame",
+              desc = "A frame to forward messages to when this frame is disabled.",
+              values = {
+                [0] = "None",
+                [1] = "General",
+                [2] = "Outgoing",
+                [3] = "Outgoing (Criticals)",
+                [4] = "Incoming (Damage)",
+                [5] = "Incoming (Healing)",
+                --[6] = "Class Power",
+                [7] = "Special Effects (Procs)",
+                [8] = "Loot & Money",
+              },
+              get = get2,
+              set = set2,
+              disabled = isFrameItemEnabled,
+            },
+            insertText = {
+              type = 'select',
+              order = 3,
+              name = "Text Direction",
+              desc = "Changes the direction that the text travels in the frame.",
+              values = {
+                ["top"] = "Down",
+                ["bottom"] = "Up",
+              },
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            alpha = {
+              order = 4,
+              name = "Frame Alpha",
+              desc = "Sets the alpha of the frame.",
+              type = 'range',
+              min = 0, max = 100, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            megaDamage = {
+              order = 5,
+              type = 'toggle',
+              name = "Use Number Formatting",
+              desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
+              get = get2,
+              set = set2,
+            },
+
+            frameScrolling = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDScrollable Frame Settings|r:",
+              fontSize = 'large',
+            },
+            enableScrollable = {
+              order = 11,
+              type = 'toggle',
+              name = "Enabled",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            scrollableLines = {
+              order = 12,
+              name = "Number of Lines",
+              type = 'range',
+              min = 10, max = 60, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameNotScrollable,
+            },
+
+            frameFading = {
+              type = 'description',
+              order = 20,
+              name = "\n|cff798BDDFading Text Settings|r:",
+              fontSize = 'large',
+            },
+            enableCustomFade = {
+              order = 21,
+              type = 'toggle',
+              name = "Use Custom Fade (See |cffFF0000Warning|r)",
+              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
+              width = 'full',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            enableFade = {
+              order = 22,
+              type = 'toggle',
+              name = "Enable",
+              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              width = 'half',
+              get = get2,
+              set = set2_update,
+              disabled = isFrameUseCustomFade,
+            },
+            fadeTime = {
+              order = 23,
+              name = "Fade Out Duration",
+              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 0, max = 2, step = .1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+            visibilityTime = {
+              order = 24,
+              name = "Visibility Duration",
+              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              type = 'range',
+              min = 2, max = 15, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFadingDisabled,
+            },
+
+          },
+        },
+
+        fonts = {
+          order = 20,
+          type = 'group',
+          name = "Font Settings",
+          args = {
+            fontSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFont Settings|r:",
+              fontSize = 'large',
+            },
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -3198,107 +3256,33 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        fontColors = {
-          order = 20,
-          type = 'group',
-          guiInline = true,
-          name = "Font Colors",
-          args = {
-            customColor = {
-              order = 1,
-              type = 'toggle',
-              name = "Use Custom Colors",
-              get = get2,
-              set = set2,
-            },
-            fontColor = {
-              type = 'color',
-              name = "Custom Color",
-              order = 2,
-              get = getColor2,
-              set = setColor2,
-              disabled = isFrameCustomColorDisabled,
-            },
-          },
-        },
-        scrollable = {
+
+        -- TODO: Add Color Options to Class Power frame
+        --[[fontColors = {
           order = 30,
           type = 'group',
-          guiInline = true,
-          name = "Scrollable Frame",
+          name = "Custom Colors",
           args = {
-            enableScrollable = {
-              order = 1,
-              type = 'toggle',
-              name = "Enabled",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            scrollableLines = {
-              order = 2,
-              name = "Number of Lines",
-              type = 'range',
-              min = 10, max = 60, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameNotScrollable,
+            customColors = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDCustom Colors|r:\n",
+              fontSize = 'large',
             },
           },
-        },
-        fading = {
-          order = 40,
-          type = 'group',
-          guiInline = true,
-          name = "Fading Text",
-          args = {
-            enableCustomFade = {
-              order = 2,
-              type = 'toggle',
-              name = "Use Custom Fade (See |cffFF0000Warning|r)",
-              desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
-              width = 'full',
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            enableFade = {
-              order = 10,
-              type = 'toggle',
-              name = "Enable Fading",
-              desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              get = get2,
-              set = set2_update,
-              disabled = isFrameUseCustomFade,
-            },
-            fadeTime = {
-              order = 11,
-              name = "Fade Out Duration",
-              desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 0, max = 2, step = .1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-            visibilityTime = {
-              order = 12,
-              name = "Visibility Duration",
-              desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
-              type = 'range',
-              min = 2, max = 15, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameFadingDisabled,
-            },
-          },
-        },
+        },]]
+
         specialTweaks = {
-          order = 50,
-          type = 'group',
-          guiInline = true,
+          order = 40,
           name = "Special Tweaks",
+          type = 'group',
           args = {
+            specialTweaks = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDSpecial Tweaks|r:",
+              fontSize = 'large',
+            },
             showEnergyGains = {
               order = 1,
               type = 'toggle',
@@ -3325,147 +3309,88 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFSpecial Effects|r |cff798BDD(Procs)|r",
       type = 'group',
       order = 18,
+      childGroups = 'select',
       args = {
-        enabledFrame = {
-          order = 1,
-          type = 'toggle',
-          name = "Enable Frame",
-          get = get1,
-          set = set1,
-        },
-        secondaryFrame = {
-          type = 'select',
-          order = 2,
-          name = "Secondary Frame",
-          desc = "A frame to forward messages to when this frame is disabled.",
-          values = {
-            [0] = "None",
-            [1] = "General",
-            [2] = "Outgoing",
-            [3] = "Outgoing (Criticals)",
-            [4] = "Incoming (Damage)",
-            [5] = "Incoming (Healing)",
-            [6] = "Class Power",
-            --[7] = "Special Effects (Procs)",
-            [8] = "Loot & Money",
-          },
-          get = get1,
-          set = set1,
-          disabled = isFrameEnabled,
-        },
-        insertText = {
-          type = 'select',
-          order = 3,
-          name = "Text Direction",
-          desc = "Changes the direction that the text travels in the frame.",
-          values = {
-            ["top"] = "Down",
-            ["bottom"] = "Up",
-          },
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        alpha = {
-          order = 4,
-          name = "Frame Alpha",
-          desc = "Sets the alpha of the frame.",
-          type = 'range',
-          min = 0, max = 100, step = 1,
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        fonts = {
+
+        frameSettings = {
           order = 10,
           type = 'group',
-          guiInline = true,
-          name = "Fonts",
+          name = "Frame Settings",
           args = {
-            font = {
-              type = 'select', dialogControl = 'LSM30_Font',
-              order = 1,
-              name = "Font",
-              desc = "Set the font of the frame.",
-              values = AceGUIWidgetLSMlists.font,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
+            frameSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFrame Settings|r:",
+              fontSize = 'large',
             },
-            fontSize = {
-              order = 2,
-              name = "Font Size",
-              desc = "Set the font size of the frame.",
-              type = 'range',
-              min = 6, max = 32, step = 1,
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            fontOutline = {
-              type = 'select',
-              order = 3,
-              name = "Font Outline",
-              desc = "Set the font outline.",
-              values = {
-                ['1NONE'] = "None",
-                ['2OUTLINE'] = 'OUTLINE',
-                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
-                -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
-                ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
-                ['5THICKOUTLINE'] = 'THICKOUTLINE',
-              },
-              get = get2,
-              set = set2_update,
-              disabled = isFrameItemDisabled,
-            },
-            fontJustify = {
-              type = 'select',
-              order = 4,
-              name = "Justification",
-              desc = "Justifies the output to a side.",
-              values = {
-                ['RIGHT']  = "Right",
-                ['LEFT']   = "Left",
-                ['CENTER'] = "Center",
-              },
-              get = get2,
-              set = set2_update,
-            },
-          },
-        },
-        fontColors = {
-          order = 20,
-          type = 'group',
-          guiInline = true,
-          name = "Font Colors",
-          args = {
-            customColor = {
+            enabledFrame = {
               order = 1,
               type = 'toggle',
-              name = "Use Custom Colors",
+              name = "Enable",
+              width = 'half',
               get = get2,
               set = set2,
             },
-            fontColor = {
-              type = 'color',
-              name = "Custom Color",
+            secondaryFrame = {
+              type = 'select',
               order = 2,
-              get = getColor2,
-              set = setColor2,
-              disabled = isFrameCustomColorDisabled,
+              name = "Secondary Frame",
+              desc = "A frame to forward messages to when this frame is disabled.",
+              values = {
+                [0] = "None",
+                [1] = "General",
+                [2] = "Outgoing",
+                [3] = "Outgoing (Criticals)",
+                [4] = "Incoming (Damage)",
+                [5] = "Incoming (Healing)",
+                [6] = "Class Power",
+                --[7] = "Special Effects (Procs)",
+                [8] = "Loot & Money",
+              },
+              get = get2,
+              set = set2,
+              disabled = isFrameItemEnabled,
             },
-          },
-        },
-        scrollable = {
-          order = 30,
-          type = 'group',
-          guiInline = true,
-          name = "Scrollable Frame",
-          args = {
+            insertText = {
+              type = 'select',
+              order = 3,
+              name = "Text Direction",
+              desc = "Changes the direction that the text travels in the frame.",
+              values = {
+                ["top"] = "Down",
+                ["bottom"] = "Up",
+              },
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            alpha = {
+              order = 4,
+              name = "Frame Alpha",
+              desc = "Sets the alpha of the frame.",
+              type = 'range',
+              min = 0, max = 100, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            megaDamage = {
+              order = 5,
+              type = 'toggle',
+              name = "Use Number Formatting",
+              desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
+              get = get2,
+              set = set2,
+            },
+
+            frameScrolling = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDScrollable Frame Settings|r:",
+              fontSize = 'large',
+            },
             enableScrollable = {
-              order = 1,
+              order = 11,
               type = 'toggle',
               name = "Enabled",
               get = get2,
@@ -3473,7 +3398,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             scrollableLines = {
-              order = 2,
+              order = 12,
               name = "Number of Lines",
               type = 'range',
               min = 10, max = 60, step = 1,
@@ -3481,35 +3406,35 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameNotScrollable,
             },
-          },
-        },
-        fading = {
-          order = 40,
-          type = 'group',
-          guiInline = true,
-          name = "Fading Text",
-          args = {
+
+            frameFading = {
+              type = 'description',
+              order = 20,
+              name = "\n|cff798BDDFading Text Settings|r:",
+              fontSize = 'large',
+            },
             enableCustomFade = {
-              order = 2,
+              order = 21,
               type = 'toggle',
               name = "Use Custom Fade (See |cffFF0000Warning|r)",
               desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
               width = 'full',
               get = get2,
               set = set2_update,
-              disabled = isFrameNotScrollable,
+              disabled = isFrameItemDisabled,
             },
             enableFade = {
-              order = 10,
+              order = 22,
               type = 'toggle',
-              name = "Enable Fading",
+              name = "Enable",
               desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              width = 'half',
               get = get2,
               set = set2_update,
               disabled = isFrameUseCustomFade,
             },
             fadeTime = {
-              order = 11,
+              order = 23,
               name = "Fade Out Duration",
               desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
@@ -3519,7 +3444,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameFadingDisabled,
             },
             visibilityTime = {
-              order = 12,
+              order = 24,
               name = "Visibility Duration",
               desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
@@ -3530,70 +3455,18 @@ addon.options.args["Frames"] = {
             },
           },
         },
-      },
-    },
-    
-    loot = {
-      name = "|cffFFFFFFLoot & Money|r",
-      type = 'group',
-      order = 19,
-      args = {
-        enabledFrame = {
-          order = 1,
-          type = 'toggle',
-          name = "Enable Frame",
-          get = get1,
-          set = set1,
-        },
-        secondaryFrame = {
-          type = 'select',
-          order = 2,
-          name = "Secondary Frame",
-          desc = "A frame to forward messages to when this frame is disabled.",
-          values = {
-            [0] = "None",
-            [1] = "General",
-            [2] = "Outgoing",
-            [3] = "Outgoing (Criticals)",
-            [4] = "Incoming (Damage)",
-            [5] = "Incoming (Healing)",
-            [6] = "Class Power",
-            [7] = "Special Effects (Procs)",
-            --[8] = "Loot & Money",
-          },
-          get = get1,
-          set = set1,
-          disabled = isFrameEnabled,
-        },
-        insertText = {
-          type = 'select',
-          order = 3,
-          name = "Text Direction",
-          desc = "Changes the direction that the text travels in the frame.",
-          values = {
-            ["top"] = "Down",
-            ["bottom"] = "Up",
-          },
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
-        alpha = {
-          order = 4,
-          name = "Frame Alpha",
-          desc = "Sets the alpha of the frame.",
-          type = 'range',
-          min = 0, max = 100, step = 1,
-          get = get1,
-          set = set1_update,
-          disabled = isFrameDisabled,
-        },
+
         fonts = {
-          order = 10,
+          order = 20,
           type = 'group',
-          guiInline = true,
-          name = "Fonts",
+          name = "Font Settings",
           args = {
+            fontSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFont Settings|r:",
+              fontSize = 'large',
+            },
             font = {
               type = 'select', dialogControl = 'LSM30_Font',
               order = 1,
@@ -3644,41 +3517,16 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
-              disabled = isFrameItemDisabled,
             },
-          },
-        },
-        fontColors = {
-          order = 20,
-          type = 'group',
-          guiInline = true,
-          name = "Font Colors",
-          args = {
-            customColor = {
-              order = 1,
-              type = 'toggle',
-              name = "Use Custom Colors",
-              get = get2,
-              set = set2,
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDIcon Size Settings|r:",
+              fontSize = 'large',
             },
-            fontColor = {
-              type = 'color',
-              name = "Custom Color",
-              order = 2,
-              get = getColor2,
-              set = setColor2,
-              disabled = isFrameCustomColorDisabled,
-            },
-          },
-        },
-        icons = {
-          order = 30,
-          type = 'group',
-          guiInline = true,
-          name = "Icons",
-          args = {
             iconsEnabled = {
-              order = 1,
+              order = 11,
               type = 'toggle',
               name = "Icons",
               desc = "Show icons next to your damage.",
@@ -3687,7 +3535,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 2,
+              order = 12,
               name = "Icon Size",
               desc = "Set the icon size.",
               type = 'range',
@@ -3698,14 +3546,110 @@ addon.options.args["Frames"] = {
             },
           },
         },
-        scrollable = {
-          order = 40,
+
+        fontColors = {
+          order = 30,
           type = 'group',
-          guiInline = true,
-          name = "Scrollable Frame",
+          name = "Custom Colors",
           args = {
-            enableScrollable = {
+            customColors = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDCustom Colors|r:\n",
+              fontSize = 'large',
+            },
+          },
+        },
+
+      },
+    },
+    
+    loot = {
+      name = "|cffFFFFFFLoot & Money|r",
+      type = 'group',
+      order = 19,
+      childGroups = 'select',
+      args = {
+
+        frameSettings = {
+          order = 10,
+          type = 'group',
+          name = "Frame Settings",
+          args = {
+            frameSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFrame Settings|r:",
+              fontSize = 'large',
+            },
+            enabledFrame = {
               order = 1,
+              type = 'toggle',
+              name = "Enable",
+              width = 'half',
+              get = get2,
+              set = set2,
+            },
+            secondaryFrame = {
+              type = 'select',
+              order = 2,
+              name = "Secondary Frame",
+              desc = "A frame to forward messages to when this frame is disabled.",
+              values = {
+                [0] = "None",
+                [1] = "General",
+                [2] = "Outgoing",
+                [3] = "Outgoing (Criticals)",
+                [4] = "Incoming (Damage)",
+                [5] = "Incoming (Healing)",
+                [6] = "Class Power",
+                [7] = "Special Effects (Procs)",
+                --[8] = "Loot & Money",
+              },
+              get = get2,
+              set = set2,
+              disabled = isFrameItemEnabled,
+            },
+            insertText = {
+              type = 'select',
+              order = 3,
+              name = "Text Direction",
+              desc = "Changes the direction that the text travels in the frame.",
+              values = {
+                ["top"] = "Down",
+                ["bottom"] = "Up",
+              },
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            alpha = {
+              order = 4,
+              name = "Frame Alpha",
+              desc = "Sets the alpha of the frame.",
+              type = 'range',
+              min = 0, max = 100, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            megaDamage = {
+              order = 5,
+              type = 'toggle',
+              name = "Use Number Formatting",
+              desc = "Enables number formatting. This option can be customized in the main |cff00FF00Frames|r options page to be either |cff798BDDAbbreviation|r or |cff798BDDDecimal Marks|r. ",
+              get = get2,
+              set = set2,
+            },
+
+            frameScrolling = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDScrollable Frame Settings|r:",
+              fontSize = 'large',
+            },
+            enableScrollable = {
+              order = 11,
               type = 'toggle',
               name = "Enabled",
               get = get2,
@@ -3713,7 +3657,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             scrollableLines = {
-              order = 2,
+              order = 12,
               name = "Number of Lines",
               type = 'range',
               min = 10, max = 60, step = 1,
@@ -3721,16 +3665,15 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameNotScrollable,
             },
-          },
-        },
-        fading = {
-          order = 50,
-          type = 'group',
-          guiInline = true,
-          name = "Fading Text",
-          args = {
+
+            frameFading = {
+              type = 'description',
+              order = 30,
+              name = "\n|cff798BDDFading Text Settings|r:",
+              fontSize = 'large',
+            },
             enableCustomFade = {
-              order = 2,
+              order = 31,
               type = 'toggle',
               name = "Use Custom Fade (See |cffFF0000Warning|r)",
               desc = "|cffFF0000WARNING:|r Blizzard has a bug where you may see \"floating\" icons when you change the |cffFFFF00Fading Text|r. It is highly recommended that you also enable |cffFFFF00Clear Frames When Leaving Combat|r on the main options page.",
@@ -3740,16 +3683,17 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             enableFade = {
-              order = 10,
+              order = 32,
               type = 'toggle',
-              name = "Enable Fading",
+              name = "Enable",
               desc = "Turn off to disable fading all together.\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
+              width = 'half',
               get = get2,
               set = set2_update,
               disabled = isFrameUseCustomFade,
             },
             fadeTime = {
-              order = 11,
+              order = 33,
               name = "Fade Out Duration",
               desc = "The duration of the fade out animation. |cffFFFF00(Default: |cff798BDD0.3|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
@@ -3759,7 +3703,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameFadingDisabled,
             },
             visibilityTime = {
-              order = 12,
+              order = 34,
               name = "Visibility Duration",
               desc = "The duration that the text is shown in the frame. |cffFFFF00(Default: |cff798BDD5|r)|r\n\n|cffFF0000Requires:|r |cffFFFF00Use Custom Fade|r",
               type = 'range',
@@ -3768,14 +3712,112 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameFadingDisabled,
             },
+
           },
         },
-        specialTweaks = {
-          order = 60,
+
+        fonts = {
+          order = 20,
           type = 'group',
-          guiInline = true,
+          name = "Font Settings",
+          args = {
+            fontSettings = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDFont Settings|r:",
+              fontSize = 'large',
+            },
+            font = {
+              type = 'select', dialogControl = 'LSM30_Font',
+              order = 1,
+              name = "Font",
+              desc = "Set the font of the frame.",
+              values = AceGUIWidgetLSMlists.font,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            fontSize = {
+              order = 2,
+              name = "Font Size",
+              desc = "Set the font size of the frame.",
+              type = 'range',
+              min = 6, max = 32, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            fontOutline = {
+              type = 'select',
+              order = 3,
+              name = "Font Outline",
+              desc = "Set the font outline.",
+              values = {
+                ['1NONE'] = "None",
+                ['2OUTLINE'] = 'OUTLINE',
+                -- BUG: Setting font to monochrome AND above size 16 will crash WoW
+                -- http://us.battle.net/wow/en/forum/topic/6470967362
+                --['3MONOCHROME'] = 'MONOCHROME',
+                ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
+                ['5THICKOUTLINE'] = 'THICKOUTLINE',
+              },
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+            fontJustify = {
+              type = 'select',
+              order = 4,
+              name = "Justification",
+              desc = "Justifies the output to a side.",
+              values = {
+                ['RIGHT']  = "Right",
+                ['LEFT']   = "Left",
+                ['CENTER'] = "Center",
+              },
+              get = get2,
+              set = set2_update,
+            },
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDIcon Size Settings|r:",
+              fontSize = 'large',
+            },
+            iconsEnabled = {
+              order = 11,
+              type = 'toggle',
+              name = "Icons",
+              desc = "Show icons next to your damage.",
+              get = get2,
+              set = set2,
+              disabled = isFrameItemDisabled,
+            },
+            iconsSize = {
+              order = 12,
+              name = "Icon Size",
+              desc = "Set the icon size.",
+              type = 'range',
+              min = 6, max = 22, step = 1,
+              get = get2,
+              set = set2,
+              disabled = isFrameIconDisabled,
+            },
+          },
+        },
+
+        specialTweaks = {
+          order = 40,
+          type = 'group',
           name = "Special Tweaks",
           args = {
+            specialTweaks = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDSpecial Tweaks|r:",
+              fontSize = 'large',
+            },
             showMoney = {
               order = 1,
               type = 'toggle',
@@ -3852,6 +3894,7 @@ addon.options.args["Frames"] = {
             },
           },
         },
+
       },
     },
   },
