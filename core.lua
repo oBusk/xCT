@@ -43,6 +43,18 @@ end
 -- Local Handle to the Engine
 local x = addon.engine
 
+-- Profile Updated, need to refresh important stuff 
+local function RefreshConfig()
+  -- Clean up the Profile
+  x:CompatibilityLogic()
+
+  x:UpdateFrames()
+  x:UpdateSpamSpells()
+  x:UpdateItemTypes()
+    
+  collectgarbage()
+end
+
 -- Handle Addon Initialized
 function x:OnInitialize()
   if xCT or ct and ct.myname and ct.myclass then
@@ -51,19 +63,19 @@ function x:OnInitialize()
   end
 
   -- Load the Data Base
-  self.db = LibStub('AceDB-3.0'):New('xCTSavedDB')
-  self.db:RegisterDefaults(addon.defaults)
-  self.db.RegisterCallback(self, 'OnProfileChanged', 'RefreshConfig')
-  self.db.RegisterCallback(self, 'OnProfileCopied', 'RefreshConfig')
-  self.db.RegisterCallback(self, 'OnProfileReset', 'RefreshConfig')
-  self.db:GetCurrentProfile()
+  self.db = LibStub('AceDB-3.0'):New('xCTSavedDB', addon.defaults)
+
+  -- Add the profile options to my dialog config
+  addon.options.args['Profiles'] = LibStub('AceDBOptions-3.0'):GetOptionsTable(self.db)
+
+  -- Had to pass the explicit method into here, not sure why
+  self.db.RegisterCallback(self, 'OnProfileChanged', RefreshConfig)
+  self.db.RegisterCallback(self, 'OnProfileCopied', RefreshConfig)
+  self.db.RegisterCallback(self, 'OnProfileReset', RefreshConfig)
   
   -- Clean up the Profile
   x:CompatibilityLogic()
 
-  -- Add the profile options to my dialog config
-  addon.options.args['Profiles'] = LibStub('AceDBOptions-3.0'):GetOptionsTable(self.db)
-  
   -- Perform xCT+ Update
   x:UpdatePlayer()
   
@@ -108,18 +120,6 @@ function x:CompatibilityLogic()
         self.db.profile.frames.healing.megaDamage = true
         self.db.profile.frames.power.megaDamage = true
     end
-end
-
--- Profile Updated, need to refresh important stuff 
-function x:RefreshConfig()
-    -- Clean up the Profile
-    x:CompatibilityLogic()
-
-  x:UpdateFrames()
-  x:UpdateSpamSpells()
-  x:UpdateItemTypes()
-    
-  collectgarbage()
 end
 
 local getSpellDescription
@@ -937,8 +937,12 @@ end
 
 -- Process the slash command ('input' contains whatever follows the slash command)
 function x:OpenxCTCommand(input)
-  if string_match(string_lower(input), 'lock') then
-    if x.configuring then
+  local lock = string_match(string_lower(input), 'lock')
+  local save = string_match(string_lower(input), 'save')
+  if lock or save then
+    if not x.configuring and save then
+      return
+    elseif x.configuring then
       x:SaveAllFrames()
       x.EndConfigMode()
       print("|cffFF0000x|r|cffFFFF00CT+|r  Frames have been saved. Please fasten your seat belts.")
@@ -947,8 +951,8 @@ function x:OpenxCTCommand(input)
       x.ToggleConfigMode()
       
       print("|cffFF0000x|r|cffFFFF00CT+|r  You are now free to move about the cabin.")
-      print("      |cffFF0000/xct lock|r      - Saves your frames")
-      print("      |cffFF0000/xct cancel|r  - Cancels all your recent frame movements")
+      print("      |cffFF0000/xct lock|r      - Saves your frames.")
+      print("      |cffFF0000/xct cancel|r  - Cancels all your recent frame movements.")
     end
     
     -- return before you can do anything else
@@ -969,9 +973,15 @@ function x:OpenxCTCommand(input)
   if string_lower(input) == 'help' then
     print("|cffFF0000x|r|cffFFFF00CT+|r  Commands:")
     print("      |cffFF0000/xct lock|r - Locks and unlocks the frame movers.")
+    print("      |cffFF0000/xct test|r - Attempts to emulate combat.")
     return
   end
   
+  if string_lower(input) == 'test' then
+    x.ToggleTestMode(true)
+    return
+  end
+
   if string_match(string_lower(input), 'track %w+') then
     local unit = string_match(string_lower(input), '%s(%w+)')
     
@@ -990,20 +1000,6 @@ function x:OpenxCTCommand(input)
     return
   end
   
-
-  -- Setup a Custom Container for our Config Dialog
-  if not x.myContainer then
-    x.myContainer = AceGUI:Create("Frame")
-    x.myContainer:Hide()
-    x.myContainer.content:GetParent():SetMinResize(800, 300)
-  end
-
-  -- Open/Close the config menu
-  local mode = 'Close'
-  if not ACD.OpenFrames[AddonName] then
-    mode = 'Open'
-  end
-  
   if x.inCombat and x.db.profile.hideConfig then
     if not shownWarning then
       print("|cffFF0000x|r|cffFFFF00CT+|r will open the |cff798BDDConfiguration Tool|r after combat.")
@@ -1012,8 +1008,66 @@ function x:OpenxCTCommand(input)
     end
   else
     if not x.configuring then
-      ACD[mode](ACD, AddonName, x.myContainer)
+      x:ToggleConfigTool()
     end
+  end
+end
+
+local function myContainer_OnRelease( self )
+  AceGUI:Release(x.myContainer)
+  x.myContainer = nil
+
+  x.isConfigToolOpen = false
+end
+
+function x:ToggleConfigTool()
+  if x.isConfigToolOpen then
+    x:HideConfigTool()
+  else
+    x:ShowConfigTool()
+  end
+end
+
+function x:ShowConfigTool()
+  x.isConfigToolOpen = true
+
+  if x.myContainer then
+    x.myContainer:Hide()
+  end
+
+  x.myContainer = AceGUI:Create("Frame")
+  x.myContainer:SetCallback("OnClose", myContainer_OnRelease)
+  x.myContainer.content:GetParent():SetMinResize(800, 300)
+
+  ACD:Open(AddonName, x.myContainer)
+end
+
+local function HideConfigTool_OnUpdate( self, e )
+  x.waiterHideConfig:SetScript("OnUpdate", nil)
+  x.isConfigToolOpen = false
+
+  if x.myContainer then
+    x.myContainer:Hide()
+  end
+end
+
+function x:HideConfigTool( wait )
+  
+  -- If the item that is call needs the frame for another unit of time
+  if wait then
+    if not x.waiterHideConfig then
+      x.waiterHideConfig = CreateFrame("FRAME")
+    end
+
+    x.waiterHideConfig:SetScript("OnUpdate", HideConfigTool_OnUpdate)
+    return
+  end
+
+  -- This is if we don't wait
+  x.isConfigToolOpen = false
+
+  if x.myContainer then
+    x.myContainer:Hide()
   end
 end
 

@@ -1147,8 +1147,8 @@ addon.options.args["Frames"] = {
           name = "Frame Strata",
           desc = "The Z-Layer to place the |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames onto. If you find that another addon is in front of |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames, try increasing the Frame Strata.",
           values = {
-            ["1PARENT"]             = "Parent |cffFF0000(Lowest)|r",
-            ["2BACKGROUND"]         = "Background",
+            --["1PARENT"]             = "Parent |cffFF0000(Lowest)|r",
+            ["2BACKGROUND"]         = "Background |cffFF0000(Lowest)|r",
             ["3LOW"]                = "Low",
             ["4MEDIUM"]             = "Medium",
             ["5HIGH"]               = "High |cffFFFF00(Default)|r",
@@ -1209,10 +1209,11 @@ addon.options.args["Frames"] = {
         formatGroups = {
           type = 'toggle',
           order = 2,
-          name = "Decimal Marks",
+          name = "Decimal Marks (Coming Soon)",
           desc = "Groups decimals and separates them by commas; this allows for better responsiveness when reading numbers.\n\n|cffFF0000EXAMPLE|r |cff798BDD12,890|r",
           set = setFormating,
           get = getDBSpells,
+          disabled = true,
         },
 
         abbDesc = {
@@ -2931,7 +2932,7 @@ addon.options.args["Frames"] = {
             secondaryFrame = {
               type = 'description',
               order = 2,
-              name = "|cffFF0000Secondary Frame Not Available|r - |cffFFFFFFThis frame cannot output to another frame when it is disabled.",
+              name = "\n|cffFF0000Secondary Frame Not Available|r - |cffFFFFFFThis frame cannot output to another frame when it is disabled.\n\n",
               width = "double",
             },
             alpha = {

@@ -347,9 +347,9 @@ addon.defaults = {
         ["megaDamage"] = false,
       
       -- positioon
-        ["X"] = -320,
+        ["X"] = -288,
         ["Y"] = 88,
-        ["Width"] = 384,
+        ["Width"] = 448,
         ["Height"] = 144,
         
       -- fonts

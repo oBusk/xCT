@@ -109,6 +109,7 @@ end
 --	be updated.
 -- =====================================================
 function x:UpdateFrames(specificFrame)
+
 	-- Update Head Numbers and FCT Font Settings
 	if not specificFrame then x:UpdateBlizzardFCT() end
 	
@@ -492,8 +493,8 @@ do
 			
 			-- Add critical Prefix and Postfix
 			if frameIndex[index] == "critical" then
-				--message = format("%s%s%s", x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
-			
+				message = format("%s%s%s", x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
+				
 			-- Show healer name (colored)
 			elseif frameIndex[index] == "healing" then
 				format_mergeCount = "%s |cffFFFF00x%s|r"
@@ -797,8 +798,9 @@ function x.ToggleConfigMode()
 		return
 	else
 		-- Close the Options Dialog if it is Open
-		LibStub("AceConfigDialog-3.0"):Close(ADDON_NAME)
-		
+		-- Because this could be called fromt he UI, we need to wait
+		x:HideConfigTool(true)
+
 		-- Thanks Elv :)
 		GameTooltip:Hide() -- Just in case you're mouseovered something and it closes.
 		
@@ -895,7 +897,8 @@ function x.TestMoreUpdate(self, elapsed)
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
 				end
-				local message = x:Abbreviate(random(80000, 200000), "critical")
+				--local message = x:Abbreviate(random(80000, 200000), "critical")
+				local message = x.db.profile.frames.critical.critPrefix .. x:Abbreviate(random(60000), "critical") .. x.db.profile.frames.critical.critPostfix
 				if (random(5) % 5 == 0) and (x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
 					message = sformat("%s |cffFFFFFFx%s|r", message, random(17)+1)
 				end
@@ -980,7 +983,7 @@ function x.TestMoreUpdate(self, elapsed)
 	end
 end
 
-function x.ToggleTestMode()
+function x.ToggleTestMode(hidePopup)
 	if x.configuring then
 		return
 	else
@@ -998,9 +1001,14 @@ function x.ToggleTestMode()
 			end
 			
 			-- Test more Popup
-			LibStub("AceConfigDialog-3.0"):Close(ADDON_NAME)
-			GameTooltip:Hide()
-			StaticPopup_Show("XCT_PLUS_TESTMODE")
+			-- Because this could be called fromt he UI, we need to wait
+			x:HideConfigTool(true)
+
+			if type(hidePopup) == "boolean" and hidePopup then
+				return
+			else
+				StaticPopup_Show("XCT_PLUS_TESTMODE")
+			end
 		end
 	end
 end
@@ -1030,8 +1038,8 @@ StaticPopupDialogs["XCT_PLUS_CONFIGURING"] = {
 	
 	button1			= SAVE_CHANGES,
 	button2			= CANCEL,
-	OnAccept		= function() x:SaveAllFrames(); x.EndConfigMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
-	OnCancel		= function() x:UpdateFrames(); x.EndConfigMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
+	OnAccept		= function() x:SaveAllFrames(); x.EndConfigMode(); x:ShowConfigTool() end,
+	OnCancel		= function() x:UpdateFrames(); x.EndConfigMode(); x:ShowConfigTool() end,
 	hideOnEscape	= false,
 	
 	-- Taint work around
@@ -1044,7 +1052,7 @@ StaticPopupDialogs["XCT_PLUS_TESTMODE"] = {
 	whileDead		= 1,
 	
 	button1			= "Stop",
-	OnAccept		= function() x.EndTestMode(); LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
+	OnAccept		= function() x.EndTestMode(); x:ShowConfigTool() end,
 	hideOnEscape	= true,
 	
 	-- Taint work around
@@ -1059,7 +1067,7 @@ StaticPopupDialogs["XCT_PLUS_RESET_SETTINGS"] = {
 	button1			= "|cffFF0000ERASE ALL!!|r",
 	button2			= CANCEL,
 	OnAccept		= function() xCTSavedDB = nil; ReloadUI() end,
-	OnCancel		= function() LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME) end,
+	OnCancel		= function() x:ShowConfigTool() end,
 	hideOnEscape	= true,
 	
 	-- Taint work around
