@@ -15,8 +15,8 @@
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
-local sgsub, ipairs, pairs, type, string_format, table_insert, table_remove, print, tostring, tonumber, select, string_lower, collectgarbage, string_match =
-  string.gsub, ipairs, pairs, type, string.format, table.insert, table.remove, print, tostring, tonumber, select, string.lower, collectgarbage, string.match
+local sgsub, ipairs, pairs, type, string_format, table_insert, table_remove, table_sort, print, tostring, tonumber, select, string_lower, collectgarbage, string_match =
+  string.gsub, ipairs, pairs, type, string.format, table.insert, table.remove, table.sort, print, tostring, tonumber, select, string.lower, collectgarbage, string.match
 
 -- compares a tables values
 local function tableCompare(t1, t2)
@@ -803,7 +803,18 @@ local function GenerateColorOptionsTable(colorName, settings, options, index)
       args = { },
     }
     index = index + 1
-    for currentColorName, currentColorSettings in pairs(settings.colors) do
+
+    -- Sort the Colors Alphabetical
+    local sortedList = { }
+    for colorName in pairs(settings.colors) do
+      table_insert(sortedList, colorName)
+    end
+
+    table_sort(sortedList)
+
+    local currentColorSettings
+    for _, currentColorName in ipairs(sortedList) do
+      currentColorSettings = settings.colors[currentColorName]
       GenerateColorOptionsTable_Entry(currentColorName, currentColorSettings, options[colorName].args, index)
       index = index + 4
     end
@@ -822,25 +833,26 @@ function x.GenerateColorOptions()
     if settings.colors then
       local index = 1
 
+      -- Sort the Colors Alphabetical
+      local sortedList = { }
+      for colorName in pairs(settings.colors) do
+        table_insert(sortedList, colorName)
+      end
+
+      table_sort(sortedList)
+
+      local colorSettings
       -- Do Single Colors First
-      for colorName, colorSettings in pairs(settings.colors) do
-        --[[print("Table:", colorName, "= {")
-        for key, value in pairs(colorSettings) do
-          print("", key, '=', value)
-        end
-        print("}")]]
+      for _, colorName in ipairs(sortedList) do
+        colorSettings = settings.colors[colorName]
         if not colorSettings.colors then
           index = GenerateColorOptionsTable(colorName, colorSettings, options.args.fontColors.args, index) + 1
         end
       end
 
       -- Then Do Color Groups with multiple settings
-      for colorName, colorSettings in pairs(settings.colors) do
-        --[[print("Table:", colorName, "= {")
-        for key, value in pairs(colorSettings) do
-          print("", key, '=', value)
-        end
-        print("}")]]
+      for _, colorName in ipairs(sortedList) do
+        colorSettings = settings.colors[colorName]
         if colorSettings.colors then
           index = GenerateColorOptionsTable(colorName, colorSettings, options.args.fontColors.args, index) + 1
         end
