@@ -1,4 +1,4 @@
---[[   ____    ______      
+	--[[   ____    ______      
       /\  _`\ /\__  _\   __
  __  _\ \ \/\_\/_/\ \/ /_\ \___ 
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
@@ -16,7 +16,7 @@ local ADDON_NAME, addon = ...
 local LSM = LibStub("LibSharedMedia-3.0")
 local x, noop = addon.engine, addon.noop
 local blankTable, unpack, select = {}, unpack, select
-local string_gsub, string_match, pairs = string.gsub, string.match, pairs
+local string_gsub, string_match, sformat, pairs = string.gsub, string.match, string.format, pairs
 
 -- New Icon "!"
 local NEW = x.new
@@ -387,6 +387,7 @@ local checkAdd = {
   listBuffs = false,
   listDebuffs = false,
   listSpells = false,
+  listProcs = false,
 }
 
 local function getCheckAdd(info) return checkAdd[info[#info-1]] end
@@ -421,7 +422,7 @@ end
 local function IsTrackSpellsDisabled() return not x.db.profile.spellFilter.trackSpells end
 
 -- Lists that will be used to show tracked spells
-local buffHistory, debuffHistory, spellHistory = { }, { }, { }
+local buffHistory, debuffHistory, spellHistory, procHistory, itemHistory = { }, { }, { }, { }, { }
 
 local function GetBuffHistory()
   for i in pairs(buffHistory) do
@@ -459,6 +460,32 @@ local function GetSpellHistory()
   
   return spellHistory
 end
+
+local function GetProcHistory()
+  for i in pairs(procHistory) do
+    procHistory[i] = nil
+  end
+  
+  for i in pairs(x.spellCache.procs) do
+    procHistory[i] = x:GetSpellTextureFormatted(i, 16).." "..i
+  end
+  
+  return procHistory
+end
+
+local function GetItemHistory()
+  for i in pairs(itemHistory) do
+    itemHistory[i] = nil
+  end
+  
+  for i in pairs(x.spellCache.items) do
+	local name, _, _, _, _, _, _, _, _, texture = GetItemInfo( i )
+    itemHistory[i] = sformat("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", texture, 16, 16, name)
+  end
+  
+  return itemHistory
+end
+
 
 addon.options.args["spells"] = {
   name = "Spam Merger",
@@ -736,7 +763,7 @@ addon.options.args["spellFilter"] = {
           set = set0_1,
           get = get0_1,
         },
-    
+
         description = {
           type = 'description',
           order = 2,
@@ -847,11 +874,62 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
+
+    listProcs = {
+      name = "|cffFFFFFFFilter:|r |cff798BDDProcs|r",
+      type = 'group',
+      order = 40,
+      guiInline = false,
+      args = {
+        title = {
+          order = 0,
+          type = "description",
+          name = "case sensative spell procs",
+        },
+        whitelistProcs = {
+          order = 1,
+          type = 'toggle',
+          name = "Whitelist",
+          desc = "Check for whitelist, uncheck for blacklist.",
+          set = set0_1,
+          get = get0_1,
+          width = "full",
+        },
+        spellName = {
+          order = 6,
+          type = 'input',
+          name = "Proc Name",
+          desc = "The full, case-sensitive name of the |cff1AFF1AProc|r you want to filter.\n\nYou can add/remove |cff798BDDmultiple|r entries by separating them with a |cffFF8000semicolon|r (e.g. 'Shadowform;Power Word: Fortitude').",
+          set = setProc,
+          get = noop,
+        },
+        checkAdd = {
+          order = 7,
+          type = 'toggle',
+          name = "Remove",
+          desc = "Check to remove the item from the filtered list.",
+          get = getCheckAdd,
+          set = setCheckAdd,
+        },
+        
+        -- This is a feature option that I will enable when I get more time D:
+        selectTracked = {
+          order = 8,
+          type = 'select',
+          name = "Proc History:",
+          desc = "A list of |cff1AFF1AProc|r items that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
+          disabled = IsTrackSpellsDisabled,
+          values = GetProcHistory,
+          get = noop,
+          set = setSpell,
+        },
+      },
+    },
     
     listSpells = {
       name = "|cffFFFFFFFilter:|r |cff798BDDOutgoing Spells|r",
       type = 'group',
-      order = 40,
+      order = 50,
       guiInline = false,
       args = {
         title = {
@@ -899,6 +977,58 @@ addon.options.args["spellFilter"] = {
       },
     },
     
+	listItems = {
+      name = "|cffFFFFFFFilter:|r |cff798BDDItems (Plus)|r",
+      type = 'group',
+      order = 50,
+      guiInline = false,
+      args = {
+        title = {
+          order = 0,
+          type = "description",
+          name = "Description goes here.",
+        },
+        whitelistItems = {
+          order = 1,
+          type = 'toggle',
+          name = "Whitelist",
+          desc = "Filtered |cff798BDDItems (Plus)|r will be on a whitelist (opposed to a blacklist).",
+          set = set0_1,
+          get = get0_1,
+          width = "full",
+        },
+        spellName = {
+          order = 2,
+          type = 'input',
+          name = "Item ID",
+          desc = "The Item ID of the |cff798BDDItem|r you want to filter.",
+          set = setSpell,
+          get = noop,
+        },
+        checkAdd = {
+          order = 3,
+          type = 'toggle',
+          name = "Remove",
+          desc = "Check to remove the spell from the filtered list.",
+          get = getCheckAdd,
+          set = setCheckAdd,
+        },
+        
+        -- This is a feature option that I will enable when I get more time D:
+        selectTracked = {
+          order = 4,
+          type = 'select',
+          name = "Item History:",
+          desc = "A list of |cff798BDDItem|r IDs that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
+          disabled = IsTrackSpellsDisabled,
+          values = GetItemHistory,
+          get = noop,
+          set = setSpell,
+        },
+      },
+    },
+	
+	
   },
 }
 
@@ -1384,7 +1514,7 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFGeneral|r",
       type = 'group',
       order = 11,
-      childGroups = 'select',
+      childGroups = 'tab',
       args = {
 
         frameSettings = {
@@ -1704,7 +1834,7 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFOutgoing|r",
       type = 'group',
       order = 12,
-      childGroups = 'select',
+      childGroups = 'tab',
       args = {
 
         frameSettings = {
@@ -2042,7 +2172,7 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFOutgoing|r |cff798BDD(Criticals)|r",
       type = 'group',
       order = 13,
-      childGroups = 'select',
+      childGroups = 'tab',
       args = {
 
 
@@ -2357,7 +2487,7 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Damage)|r",
       type = 'group',
       order = 14,
-      childGroups = 'select',
+      childGroups = 'tab',
       args = {
 
         frameSettings = {
@@ -2620,7 +2750,7 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Healing)|r",
       type = 'group',
       order = 15,
-      childGroups = 'select',
+      childGroups = 'tab',
       args = {
 
         frameSettings = {
@@ -2907,7 +3037,7 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFClass Combo Points|r",
       type = 'group',
       order = 16,
-      childGroups = 'select',
+      childGroups = 'tab',
       args = {
         frameSettings = {
           order = 10,
@@ -3044,7 +3174,7 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFClass Power|r",
       type = 'group',
       order = 17,
-      childGroups = 'select',
+      childGroups = 'tab',
       args = {
 
         frameSettings = {
@@ -3309,7 +3439,7 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFSpecial Effects|r |cff798BDD(Procs)|r",
       type = 'group',
       order = 18,
-      childGroups = 'select',
+      childGroups = 'tab',
       args = {
 
         frameSettings = {
@@ -3560,7 +3690,7 @@ addon.options.args["Frames"] = {
       name = "|cffFFFFFFLoot & Money|r",
       type = 'group',
       order = 19,
-      childGroups = 'select',
+      childGroups = 'tab',
       args = {
 
         frameSettings = {

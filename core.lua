@@ -563,6 +563,41 @@ function x:UpdateAuraSpellFilter(specific)
       }
     end
   end
+
+  i = 10
+  
+  -- Update procs
+  if not specific or specific == "procs" then
+    addon.options.args.spellFilter.args.listProcs.args.list = {
+      name = "Filtered Procs |cff798BDD(Uncheck to Disable)|r",
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = { },
+    }
+  
+    local procs = addon.options.args.spellFilter.args.listProcs.args.list.args
+    local updated = false
+    
+    for name in pairs(x.db.profile.spellFilter.listProcs) do
+      updated = true
+      procs[name] = {
+        order = i,
+        name = name,
+        type = 'toggle',
+        get = getSF,
+        set = setSF,
+      }
+    end
+
+    if not updated then
+      procs["noSpells"] = {
+        order = 1,
+        name = "No items have been added to this list yet.",
+        type = 'description',
+      }
+    end
+  end
   
   i = 10
   
@@ -602,6 +637,48 @@ function x:UpdateAuraSpellFilter(specific)
     end
   end
   
+  i = 10
+  
+  -- Update spells
+  if not specific or specific == "items" then
+    addon.options.args.spellFilter.args.listItems.args.list = {
+      name = "Filtered Items |cff798BDD(Uncheck to Disable)|r",
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = { },
+    }
+  
+    local spells = addon.options.args.spellFilter.args.listItems.args.list.args
+    local updated = false
+    
+    for id in pairs(x.db.profile.spellFilter.listItems) do
+      local spellID = tonumber(string_match(id, "%d+"))
+	  
+	  local name, _, _, _, _, _, _, _, _, texture = GetItemInfo( spellID )
+	  
+	  name = name or "Unknown Item"
+	  
+      updated = true
+      spells[id] = {
+        order = i,
+        name = string_format("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", texture or x.BLANK_ICON, 16, 16, name),
+        desc = "|cffFF0000ID|r |cff798BDD" .. id .. "|r\n",
+        type = 'toggle',
+        get = getSF,
+        set = setSF,
+      }
+    end
+    
+    if not updated then
+      spells["noSpells"] = {
+        order = 1,
+        name = "No items have been added to this list yet.",
+        type = 'description',
+      }
+    end
+  end
+  
 end
 
 -- Add and remove Buffs, debuffs, and spells from the filter
@@ -620,6 +697,12 @@ function x.AddFilteredSpell(name, category)
     else
       print("|cffFF0000x|r|cffFFFF00CT+|r  Could not add invalid Spell ID: |cff798BDD" .. name .. "|r")
     end
+  elseif category == "listProcs" then
+    x.db.profile.spellFilter.listProcs[name] = true
+    x:UpdateAuraSpellFilter("procs")
+  elseif category == "listItems" then
+    x.db.profile.spellFilter.listItems[name] = true
+    x:UpdateAuraSpellFilter("items")
   else
     print("|cffFF0000x|r|cffFFFF00CT+|r  |cffFF0000Error:|r Unknown filter type '" .. category .. "'!")
   end
@@ -641,6 +724,12 @@ function x.RemoveFilteredSpell(name, category)
       print("|cffFF0000x|r|cffFFFF00CT+|r  Could not remove invalid Spell ID: |cff798BDD" .. name .. "|r")
     end
     x:UpdateAuraSpellFilter("spells")
+  elseif category == "listProcs" then
+    x.db.profile.spellFilter.listProcs[name] = nil
+    x:UpdateAuraSpellFilter("procs")
+  elseif category == "listItems" then
+    x.db.profile.spellFilter.listItems[name] = nil
+    x:UpdateAuraSpellFilter("items")
   else
     print("|cffFF0000x|r|cffFFFF00CT+|r  |cffFF0000Error:|r Unknown filter type '" .. category .. "'!")
   end
@@ -917,9 +1006,11 @@ local lastConfigState, shownWarning = false, false
 function x:CombatStateChanged()
   if x.db.profile.hideConfig then
     if self.inCombat then
-      if ACD.OpenFrames[AddonName] then
-        lastConfigState = true
-        ACD:Close(AddonName)
+	  if x.myContainer then
+        if x.myContainer:IsShown( ) then
+          lastConfigState = true
+		  x.myContainer:Hide()
+		end
       end
     else
       if lastConfigState then
@@ -1098,3 +1189,4 @@ function x:TrackxCTCommand(input)
   x:UpdatePlayer()
   print("|cffFF0000x|r|cffFFFF00CT+|r Tracking Unit:", name or "default")
 end
+

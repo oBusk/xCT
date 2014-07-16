@@ -28,6 +28,8 @@ x.spellCache = {
   buffs = { },
   debuffs = { },
   spells = { },
+  procs = { },
+  items = { },
 }
 
 --[=====================================================[
@@ -204,6 +206,20 @@ end
 local function IsDebuffFiltered(name)
   local spell = x.db.profile.spellFilter.listDebuffs[name]
   if x.db.profile.spellFilter.whitelistDebuffs then
+    return not spell
+  end
+  return spell
+end
+local function IsProcFiltered(name)
+  local spell = x.db.profile.spellFilter.listProcs[name]
+  if x.db.profile.spellFilter.whitelistProcs then
+    return not spell
+  end
+  return spell
+end
+local function IsItemFiltered(name)
+  local spell = x.db.profile.spellFilter.listItems[name]
+  if x.db.profile.spellFilter.whitelistItems then
     return not spell
   end
   return spell
@@ -630,6 +646,9 @@ x.combat_events = {
       end
     end,
   ["SPELL_ACTIVE"] = function(spellName)
+      if TrackSpells() then x.spellCache.procs[spellName] = true end
+      if IsProcFiltered(spellName) then return end
+
       local message = spellName
       
       -- Add Stacks
@@ -758,10 +777,38 @@ x.combat_events = {
       end
     end,
 
-  ["SPELL_AURA_END"] = function(spellname) if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage('general', sformat(format_fade, spellname), 'buffsFaded') end end,
-  ["SPELL_AURA_START"] = function(spellname) if TrackSpells() then x.spellCache.buffs[spellname] = true end if ShowBuffs() and not IsBuffFiltered(spellname) then x:AddMessage('general', sformat(format_gain, spellname), 'buffsGained') end end,
-  ["SPELL_AURA_END_HARMFUL"] = function(spellname) if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage('general', sformat(format_fade, spellname), 'debuffsFaded') end end,
-  ["SPELL_AURA_START_HARMFUL"] = function(spellname) if TrackSpells() then x.spellCache.debuffs[spellname] = true end if ShowDebuffs() and not IsDebuffFiltered(spellname) then x:AddMessage('general', sformat(format_gain, spellname), 'debuffsGained') end end,
+  ["SPELL_AURA_END"] = function(spellname)
+      if TrackSpells() then
+        x.spellCache.buffs[spellname] = true
+      end
+      if ShowBuffs() and not IsBuffFiltered(spellname) then
+        x:AddMessage('general', sformat(format_fade, spellname), 'buffsFaded')
+      end
+    end,
+  ["SPELL_AURA_START"] = function(spellname)
+      if TrackSpells() then
+        x.spellCache.buffs[spellname] = true
+      end
+      if ShowBuffs() and not IsBuffFiltered(spellname) then
+        x:AddMessage('general', sformat(format_gain, spellname), 'buffsGained')
+      end
+    end,
+  ["SPELL_AURA_END_HARMFUL"] = function(spellname)
+      if TrackSpells() then
+        x.spellCache.debuffs[spellname] = true
+      end
+      if ShowDebuffs() and not IsDebuffFiltered(spellname) then
+        x:AddMessage('general', sformat(format_fade, spellname), 'debuffsFaded')
+      end
+    end,
+  ["SPELL_AURA_START_HARMFUL"] = function(spellname)
+      if TrackSpells() then
+        x.spellCache.debuffs[spellname] = true
+      end
+      if ShowDebuffs() and not IsDebuffFiltered(spellname) then
+        x:AddMessage('general', sformat(format_gain, spellname), 'debuffsGained')
+      end
+    end,
   
   -- TODO: Create a merger for faction and honor xp
   ["HONOR_GAINED"] = function(amount)
@@ -859,6 +906,12 @@ x.events = {
       -- Format Loot
       local preMessage, linkColor, linkType, linkID, linkQuality, itemName, amount = select(3, string.find(msg, format_loot))
       
+	  if TrackSpells() then
+        x.spellCache.items[linkID] = true
+      end
+	  
+	  if IsItemFiltered( linkID ) then return end
+	  
       -- Check to see if this is a battle pet
       if linkType == "battlepet" then
         local speciesName, speciesIcon, petType = C_PetJournal.GetPetInfoBySpeciesID(linkID)

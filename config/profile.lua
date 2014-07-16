@@ -672,13 +672,17 @@ addon.defaults = {
       ["whitelistBuffs"]    = false,
       ["whitelistDebuffs"]  = false,
       ["whitelistSpells"]   = false,
-
+      ["whitelistProcs"]    = false,
+	  ["whitelistItems"]    = false,
+	  
       ["trackSpells"]       = false,
       
       listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
       listDebuffs  = { },  -- Used to filter gains/fades of debuffs  (Spell Name)
       listSpells   = { },  -- Used to filter outgoing spells         (Spell ID)
-
+      listProcs    = { },  -- Used to filter spell procs             (Proc Name)
+	  listItems    = { },  -- Used to filter Items                   (Item ID)
+      
       -- Minimal Spell Amount
       filterPowerValue = 0,
       filterOutgoingDamageValue = 0,
