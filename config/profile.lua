@@ -7,12 +7,12 @@
  \//\/_/  \/___/    \/_/
  
  [=====================================]
- [  Author: Dandruff @ Whisperwind-US  ]
- [  xCT+ Version 3.x.x                 ]
- [  ©2012. All Rights Reserved.        ]
+ [  Author: Dandraffbal-Stormreaver US ]
+ [  xCT+ Version 4.x.x                 ]
+ [  Â©2014. All Rights Reserved.        ]
  [====================================]]
-
- -- This file is a static default profile.  After your first profile is created, editing this file will do nothing.
+ 
+-- This file is a static default profile.  After your first profile is created, editing this file will do nothing.
 local ADDON_NAME, addon = ...
 
 -- =====================================================
@@ -53,6 +53,7 @@ addon.defaults = {
       ["CombatHealingAbsorbTarget"] = false,
       ["fctSpellMechanics"] = false,
       ["fctSpellMechanicsOther"] = false,
+      ["CombatDamageStyle"] = 1,
     },
     
     frameSettings = {
@@ -137,6 +138,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -209,6 +211,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -269,6 +272,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -327,6 +331,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -364,11 +369,13 @@ addon.defaults = {
           ['healingTaken']         = { enabled = false, desc = "Healing",          default = { 0.10, 0.75, 0.10 } },
           ['healingTakenCritical'] = { enabled = false, desc = "Critical Healing", default = { 0.10, 1.00, 0.10 } },
           ['healingTakenPeriodic'] = { enabled = false, desc = "Periodic Healing", default = { 0.10, 0.50, 0.10 } },
+          ['healingTakenPeriodicCritical'] = { enabled = false, desc = "Critical Periodic Healing", default = { 0.10, 0.50, 0.10 } },
         },
         
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -432,6 +439,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -475,6 +483,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -508,6 +517,7 @@ addon.defaults = {
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
+        ["scrollableInCombat"] = false,
         
       -- fading text
         ["enableCustomFade"] = false,
@@ -541,7 +551,7 @@ addon.defaults = {
       mergeCriticalsByThemselves = false,
       
       -- Abbreviate or Groups Settings
-      formatAbbreviate = true,
+      formatAbbreviate = true, 
       formatGroups = false,
       
       combo = {
@@ -559,7 +569,7 @@ addon.defaults = {
         
         ["DRUID"] = {
           [1] = {                                         -- Balance
-            CreateComboSpellEntry(true, 81192),           --   Lunar Shower
+            --CreateComboSpellEntry(true, 81192),           --   Lunar Shower
           },
           [2] = {                                         -- Feral
             [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
@@ -573,17 +583,17 @@ addon.defaults = {
             CreateComboSpellEntry(true, 19615, "pet"),    --   Frenzy Effect
           },
           [2] = {                                         -- Marksman
-            CreateComboSpellEntry(true, 82925),           --   Ready, Set, Aim...
+            --CreateComboSpellEntry(true, 82925),           --   Ready, Set, Aim...
           },
           [3] = {                                         -- Survival
-            CreateComboSpellEntry(true, 56453),           --   Lock 'n Load
+            CreateComboSpellEntry(true, 168980), --56453),           --   Lock 'n Load
           },
         },
         
         ["MAGE"] = {
-          [1] = { },    -- Arcane
-          [2] = { },    -- Fire
-          [3] = { },    -- Frost
+          [1] = { },    -- Arcane (Arcane Charge 114664)
+          [2] = { },    -- Fire (Heating Up)
+          [3] = { },    -- Frost (Fingers of Frost 112965)
         },
         
         ["MONK"] = {
@@ -630,7 +640,7 @@ addon.defaults = {
 
         ["SHAMAN"] = {
           [1] = {                                         -- Elemental
-            CreateComboSpellEntry(true, 324),             --   Fulmination
+            CreateComboSpellEntry(true, 324),             --   Fulmination (Stacks up to 20??)
           },    
           [2] = {                                         -- Enhancement
             CreateComboSpellEntry(true, 53817),           --   Maelstrom Weapon
@@ -666,6 +676,14 @@ addon.defaults = {
       -- yes this is supposed to be blank :P
       -- it is dynamically generated in core.lua
       items = { },
+
+      -- multistike items here
+      multistrikeEnabled = true,
+      multistrikeLatency = 600,
+      multistikeDebug = false,
+      multistikeAutoAdjust = true,
+      showMultistrikeIcons = true,
+      multistrikeIconMultiplier = 50,
     },
     
     spellFilter = {
@@ -673,15 +691,14 @@ addon.defaults = {
       ["whitelistDebuffs"]  = false,
       ["whitelistSpells"]   = false,
       ["whitelistProcs"]    = false,
-	  ["whitelistItems"]    = false,
-	  
+      ["whitelistItems"]    = false,
       ["trackSpells"]       = false,
-      
+
       listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
       listDebuffs  = { },  -- Used to filter gains/fades of debuffs  (Spell Name)
       listSpells   = { },  -- Used to filter outgoing spells         (Spell ID)
       listProcs    = { },  -- Used to filter spell procs             (Proc Name)
-	  listItems    = { },  -- Used to filter Items                   (Item ID)
+      listItems    = { },  -- Used to filter Items                   (Item ID)
       
       -- Minimal Spell Amount
       filterPowerValue = 0,
