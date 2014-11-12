@@ -91,6 +91,7 @@ addon.merges = {
   [1079]   = CreateMergeSpellEntry("DRUID", 2),         -- Rip
   [50288]  = CreateMergeSpellEntry("DRUID"),            -- Starfall
   [93402]  = CreateMergeSpellEntry("DRUID"),            -- Sunfire
+  [106785]  = CreateMergeSpellEntry("DRUID"),           -- Swipe (Cat)
   [106830] = CreateMergeSpellEntry("DRUID", 4),         -- Thrash (Cat)
   [77758]  = CreateMergeSpellEntry("DRUID", 4),         -- Thrash (Bear)
   [61391]  = CreateMergeSpellEntry("DRUID", .5),        -- Typhoon                                    (INSTANT)
