@@ -326,6 +326,15 @@ addon.defaults = {
               ['missTypeAbsorb']  = { enabled = false, desc = "Asorbed",  default = { 0.50, 0.50, 0.50 } },
             },
           },
+          
+          ['missTypesTakenPartial'] = {
+            enabled = false, desc = "Miss Types |cff798BDD(Partials)|r",
+            colors = {
+              ['missTypeResistPartial']  = { enabled = false, desc = "Resisted |cff798BDD(Partial)|r", default = { 0.75, 0.50, 0.50 } },
+              ['missTypeBlockPartial']   = { enabled = false, desc = "Blocked |cff798BDD(Partial)|r",  default = { 0.75, 0.50, 0.50 } },
+              ['missTypeAbsorbPartial']  = { enabled = false, desc = "Asorbed |cff798BDD(Partial)|r",  default = { 0.75, 0.50, 0.50 } },
+            },
+          },
         },
         
       -- scrollable
@@ -389,6 +398,8 @@ addon.defaults = {
         ["enableRealmNames"] = true,
         ["enableOverHeal"] = true,
         ["enableSelfAbsorbs"] = true,
+        ["showOnlyMyHeals"] = true,
+        ["showOnlyPetHeals"] = true,
       },
       
       class = {
