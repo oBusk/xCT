@@ -774,7 +774,7 @@ function x:UpdateAuraSpellFilter(specific)
     for id in pairs(x.db.profile.spellFilter.listItems) do
       local spellID = tonumber(string_match(id, "%d+"))
 	  
-	  local name, _, _, _, _, _, _, _, _, texture = GetItemInfo( spellID )
+	  local name, _, _, _, _, _, _, _, _, texture = GetItemInfo( spellID or id )
 	  
 	  name = name or "Unknown Item"
 	  

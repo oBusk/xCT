@@ -993,7 +993,7 @@ addon.options.args["spellFilter"] = {
           type = 'input',
           name = "Proc Name",
           desc = "The full, case-sensitive name of the |cff1AFF1AProc|r you want to filter.\n\nYou can add/remove |cff798BDDmultiple|r entries by separating them with a |cffFF8000semicolon|r (e.g. 'Shadowform;Power Word: Fortitude').",
-          set = setProc,
+          set = setSpell,
           get = noop,
         },
         checkAdd = {
@@ -1070,7 +1070,7 @@ addon.options.args["spellFilter"] = {
       },
     },
     
-	listItems = {
+    listItems = {
       name = "|cffFFFFFFFilter:|r |cff798BDDItems (Plus)|r",
       type = 'group',
       order = 50,
@@ -1079,7 +1079,7 @@ addon.options.args["spellFilter"] = {
         title = {
           order = 0,
           type = "description",
-          name = "These options allow you to filter out |cff8020FFItems|r that your player collects.  In order to filter them, you need to type the |cffFFFF00exact name of the item|r (case sensitive).",
+          name = "These options allow you to filter out |cff8020FFItems|r that your player collects.  In order to filter them, you need to type the |cffFFFF00exact name of the item|r (case sensitive). If you know the |cffFFFF00ItemID|r, you could also use that.",
         },
         whitelistItems = {
           order = 1,
