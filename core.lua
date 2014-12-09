@@ -51,6 +51,9 @@ local function RefreshConfig()
   x:UpdateFrames()
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
+
+  -- Update combat text engine CVars
+  x.cvar_udpate( true )
     
   collectgarbage()
 end
