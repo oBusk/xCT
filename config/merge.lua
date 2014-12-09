@@ -69,6 +69,8 @@ addon.merges = {
   [148234] = CreateMergeSpellEntry("ITEM", .5, "Holy Healing (Priests, Paladins)"),  -- Cleave (Holy, Healing)
   [148235] = CreateMergeSpellEntry("ITEM", .5, "Nature Healing (Monks, Druids)"),    -- Cleave (Nature, Healing)
 
+-- All classes
+  [124988] = CreateMergeSpellEntry("ITEM", 3, "All Classes"), -- Nature's Vigil (Nearby Druid Healing)
 
 
 -- death knight (damage)
@@ -86,12 +88,11 @@ addon.merges = {
   [106998] = CreateMergeSpellEntry("DRUID"),            -- Astral Storm                               (Every 1s for 10s)
   [42231]  = CreateMergeSpellEntry("DRUID"),            -- Hurricane
   [33745]  = CreateMergeSpellEntry("DRUID"),            -- Lacerate
-  [8921]   = CreateMergeSpellEntry("DRUID"),            -- Moonfire
+  [164812] = CreateMergeSpellEntry("DRUID"),            -- Moonfire
   [1822]   = CreateMergeSpellEntry("DRUID"),            -- Rake
   [1079]   = CreateMergeSpellEntry("DRUID", 2),         -- Rip
   [50288]  = CreateMergeSpellEntry("DRUID"),            -- Starfall
-  [93402]  = CreateMergeSpellEntry("DRUID"),            -- Sunfire
-  [106785]  = CreateMergeSpellEntry("DRUID"),           -- Swipe (Cat)
+  [164815] = CreateMergeSpellEntry("DRUID"),            -- Sunfire
   [106830] = CreateMergeSpellEntry("DRUID", 4),         -- Thrash (Cat)
   [77758]  = CreateMergeSpellEntry("DRUID", 4),         -- Thrash (Bear)
   [61391]  = CreateMergeSpellEntry("DRUID", .5),        -- Typhoon                                    (INSTANT)

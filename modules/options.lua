@@ -141,11 +141,30 @@ addon.options = {
 }
 
 -- A fast C-Var Update routine
-x.cvar_udpate = function()
+local function isCVarsDisabled( ) return x.db.profile.bypassCVars end
+
+x.cvar_udpate = function( force )
   -- Always have Combat Text Enabled
   SetCVar("enableCombatText", 1)
   _G["SHOW_COMBAT_TEXT"] = "1"
   
+-- Floating Combat Text: Threat Changes
+  if x.db.profile.blizzardFCT.CombatThreatChanges then
+    COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2
+    COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = XCT_CT_INC_1, XCT_CT_INC_3
+  else
+    COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = "", "", ""
+    COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = "", ""
+  end
+
+  if  isCVarsDisabled( ) then
+    if force then
+      StaticPopup_Show("XCT_PLUS_FORCE_CVAR_UPDATE")
+    else
+      return
+    end
+  end
+
   -- We dont care about "combatTextFloatMode"
   -- _G["COMBAT_TEXT_FLOAT_MODE"] = "1"
 
@@ -207,8 +226,8 @@ x.cvar_udpate = function()
   
   -- Check: fctHonorGains (General Option)
   if x.db.profile.frames.damage.showHonorGains then
-    SetCVar("fctHonorGains", 0)
-    _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "0"
+    SetCVar("fctHonorGains", 1)
+    _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "1"
   else
     SetCVar("fctHonorGains", 0)
     _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "0"
@@ -320,15 +339,6 @@ x.cvar_udpate = function()
   -- Floating Combat Text: Display Target Mode
   SetCVar("CombatDamageStyle", x.db.profile.blizzardFCT.CombatDamageStyle)
   
-  -- Floating Combat Text: Threat Changes
-  if x.db.profile.blizzardFCT.CombatThreatChanges then
-    COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2
-    COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = XCT_CT_INC_1, XCT_CT_INC_3
-  else
-    COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = "", "", ""
-    COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = "", ""
-  end
-  
 end
 
 -- Generic Get/Set methods
@@ -364,7 +374,6 @@ local function isFrameIconDisabled(info) return isFrameItemDisabled(info) or not
 
 -- This is TEMP
 local function isFrameItemEnabled(info) return x.db.profile.frames[info[#info-2]].enabledFrame end
-
 
 
 local function setSpecialCriticalOptions(info, value)
@@ -993,7 +1002,7 @@ addon.options.args["spellFilter"] = {
           type = 'input',
           name = "Proc Name",
           desc = "The full, case-sensitive name of the |cff1AFF1AProc|r you want to filter.\n\nYou can add/remove |cff798BDDmultiple|r entries by separating them with a |cffFF8000semicolon|r (e.g. 'Shadowform;Power Word: Fortitude').",
-          set = setSpell,
+          set = setProc,
           get = noop,
         },
         checkAdd = {
@@ -1070,7 +1079,7 @@ addon.options.args["spellFilter"] = {
       },
     },
     
-    listItems = {
+	listItems = {
       name = "|cffFFFFFFFilter:|r |cff798BDDItems (Plus)|r",
       type = 'group',
       order = 50,
@@ -1079,7 +1088,7 @@ addon.options.args["spellFilter"] = {
         title = {
           order = 0,
           type = "description",
-          name = "These options allow you to filter out |cff8020FFItems|r that your player collects.  In order to filter them, you need to type the |cffFFFF00exact name of the item|r (case sensitive). If you know the |cffFFFF00ItemID|r, you could also use that.",
+          name = "These options allow you to filter out |cff8020FFItems|r that your player collects.  In order to filter them, you need to type the |cffFFFF00exact name of the item|r (case sensitive).",
         },
         whitelistItems = {
           order = 1,
@@ -1246,11 +1255,37 @@ addon.options.args["FloatingCombatText"] = {
       name = "|cffA0A0A0Some changes might require a full|r |cffD0D000Client Restart|r |cffA0A0A0(completely exit out of WoW). Do not|r |cffD00000Alt+F4|r |cffA0A0A0or|r |cffD00000Command+Q|r |cffA0A0A0or your settings might not save. Use '|r|cff798BDD/exit|r|cffA0A0A0' to close the client.|r\n\n",
       fontSize = "small",
     },
+
+    listSpacer1 = {
+      type = "description",
+      order = 3,
+      name = "\n\n|cff798BDDFloating Combat Text|r |cffFF0000Advanced Settings|r:",
+      fontSize = 'large',
+    },
+
+    bypassCVARUpdates = {
+      order = 4,
+      type = 'toggle',
+      name = "Bypass CVar Updates (requires |cffFF0000/reload|r)",
+      desc = "Allows you to bypass xCT+'s CVar engine. This option might help if you have FCT enabled, but it disappears after awhile. Once you set your FCT options, enable this. Requires a UI reload after changing.",
+      width = 'full',
+      get = function( info ) return x.db.profile.bypassCVars end,
+      set = function( info, value ) x.db.profile.bypassCVars = value end,
+    },
+
+    listSpacer2 = {
+      type = "description",
+      order = 5,
+      name = "\n\n",
+      fontSize = 'large',
+    },
+
     blizzardFCT = {
-      name = "Blizzard's Floating Combat Text |cffFFFFFF(Head Numbers)|r",
+      name = "", --Blizzard's Floating Combat Text |cffFFFFFF(Head Numbers)|r",
       type = 'group',
       order = 1,
       guiInline = true,
+      disabled = isCVarsDisabled,
       args = {
         listSpacer0 = {
           type = "description",
@@ -1274,7 +1309,7 @@ addon.options.args["FloatingCombatText"] = {
           desc = "Enable this option if you want your DoT's as Floating Combat Text.",
           get = get0,
           set = set0_update,
-          disabled = function(info) return not x.db.profile.blizzardFCT.CombatDamage end,
+          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end,
         },
         
         PetMeleeDamage = {
@@ -1284,7 +1319,7 @@ addon.options.args["FloatingCombatText"] = {
           desc = "Enable this option if you want your pet's melee damage as Floating Combat Text.",
           get = get0,
           set = set0_update,
-          disabled = function(info) return not x.db.profile.blizzardFCT.CombatDamage end, 
+          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end, 
         },
         
         CombatHealing = {
@@ -1331,7 +1366,7 @@ addon.options.args["FloatingCombatText"] = {
           desc = "Enable this option if you want to see other player's snares and roots too.",
           get = get0,
           set = set0_update,
-          disabled = function(info) return not x.db.profile.blizzardFCT.fctSpellMechanics end, 
+          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.fctSpellMechanics end, 
         },
 
         listSpacer2 = {
@@ -1383,8 +1418,9 @@ addon.options.args["FloatingCombatText"] = {
             --x:UpdateFrames()
             --x.cvar_udpate()
           end,
-          disabled = function(info) return not x.db.profile.blizzardFCT.enabled end,
+          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.enabled end,
         },
+
       },
     },
     --[[
@@ -1910,6 +1946,32 @@ addon.options.args["Frames"] = {
               },
               get = get2,
               set = set2_update,
+            },
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDIcon Size Settings|r:",
+              fontSize = 'large',
+            },
+            iconsEnabled = {
+              order = 11,
+              type = 'toggle',
+              name = "Icons",
+              desc = "Show icons next to your damage.",
+              get = get2,
+              set = set2,
+              disabled = isFrameItemDisabled,
+            },
+            iconsSize = {
+              order = 12,
+              name = "Icon Size",
+              desc = "Set the icon size.",
+              type = 'range',
+              min = 6, max = 22, step = 1,
+              get = get2,
+              set = set2,
+              disabled = isFrameIconDisabled,
             },
           },
         },

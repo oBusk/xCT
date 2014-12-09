@@ -323,7 +323,7 @@ local format_lewtz_blind        = "(%s)"
 local format_crafted            = (LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
 local format_looted             = (LOOT_ITEM_SELF:gsub("%%.*", ""))
 local format_pushed             = (LOOT_ITEM_PUSHED_SELF:gsub("%%.*", ""))
-local format_strcolol_white     = "ffffff"
+local format_strcolor_white     = "ffffff"
 
 --[=====================================================[
  Message Formatters
@@ -531,10 +531,10 @@ end
     Formats an icon quickly for use when outputing to
   a combat text frame.
 --]=====================================================]
-function x:GetSpellTextureFormatted( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride )
+function x:GetSpellTextureFormatted( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride, forceOff )
   if not multistrike then multistrike = 0 end
   local icon = x.BLANK_ICON
-  strColor = strColor or format_strcolol_white
+  strColor = strColor or format_strcolor_white
   if spellID == 0 then
     icon = PET_ATTACK_TEXTURE
   else
@@ -545,7 +545,7 @@ function x:GetSpellTextureFormatted( spellID, message, multistrike, iconSize, ju
     icon = x.BLANK_ICON
   end
   
-  if mergeOverride or IsMultistrikeEnabled() then
+  if ( not forceOff ) and ( mergeOverride or IsMultistrikeEnabled() ) then
     if IsMultistrikeEnabled() and ShowMultistrikeIcons() and iconSize > 0 then
       local msIconSize = iconSize * GetMultistrikeIconMultiplier()
       if justify == "LEFT" then
@@ -595,6 +595,7 @@ function x:GetSpellTextureFormatted( spellID, message, multistrike, iconSize, ju
       end
     end
   else
+    
     if justify == "LEFT" then
       message = sformat( "%s %s", sformat( format_spell_icon, icon, iconSize, iconSize ), message )
     else
@@ -1961,7 +1962,10 @@ x.outgoing_events = {
                                             message,
                                             0, -- No multistrike
            x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-           x.db.profile.frames[outputFrame].fontJustify )
+           x.db.profile.frames[outputFrame].fontJustify,
+                                            nil,
+                                            nil,
+                                            true )
       
       if MergeDispells() then
         x:AddSpamMessage("general", spellName, message, outputColor, 0.5)
@@ -1981,7 +1985,10 @@ x.outgoing_events = {
                                             message,
                                             0, -- No multistrike
            x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-           x.db.profile.frames[outputFrame].fontJustify )
+           x.db.profile.frames[outputFrame].fontJustify,
+                                            nil,
+                                            nil,
+                                            true )
       
       x:AddMessage(outputFrame, message, outputColor)
     end,
@@ -1992,12 +1999,18 @@ x.outgoing_events = {
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _,  spellID, effect = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, INTERRUPTED, effect), "interrupts"
       
+      -- ( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride )
+      -- ( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride, forceOff )
+
       -- Add Icons
       message = x:GetSpellTextureFormatted( spellID,
                                             message,
                                             0, -- No multistrike
            x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-           x.db.profile.frames[outputFrame].fontJustify )
+           x.db.profile.frames[outputFrame].fontJustify,
+                                            nil,
+                                            nil,
+                                            true )
       
       x:AddMessage(outputFrame, message, outputColor)
     end,

@@ -35,6 +35,7 @@ addon.defaults = {
   profile = {
     showStartupText = true,
     hideConfig = true,
+    bypassCVars = false,
     
     blizzardFCT = {
       blizzardHeadNumbers = false,
@@ -134,6 +135,10 @@ addon.defaults = {
             },
           },
         },
+
+      -- icons
+        ["iconsEnabled"] = true,
+        ["iconsSize"] = 16,
         
       -- scrollable
         ["enableScrollable"] = false,

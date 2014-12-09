@@ -546,17 +546,17 @@ do
       --stack[idIndex], settings.iconsSize, settings.fontJustify
       
 			-- Add Icons
-			if frameIndex[index] ~= "healing" then
-        message = x:GetSpellTextureFormatted( stack[idIndex],
-                                              message,
-                                              #item.entries,
-                                              settings.iconsEnabled and settings.iconsSize or -1,
-                                              settings.fontJustify,
-                                              strColor, true ) -- Merge Override = true
-      else
-        if #item.entries > 1 then
-          message = sformat("%s |cff%sx%s|r", message, strColor, #item.entries)
-        end
+			if frameIndex[index] ~= "healing" and frameIndex[index] ~= "general" then
+				message = x:GetSpellTextureFormatted( stack[idIndex],
+				                                  message,
+				                                  #item.entries,
+				                                  settings.iconsEnabled and settings.iconsSize or -1,
+				                                  settings.fontJustify,
+				                                  strColor, true ) -- Merge Override = true
+			else
+				if #item.entries > 1 then
+					message = sformat("%s |cff%sx%s|r", message, strColor, #item.entries)
+				end
 			end
 		
 			x:AddMessage(frameIndex[index], message, item.color)
@@ -1121,6 +1121,20 @@ StaticPopupDialogs["XCT_PLUS_DB_CLEANUP_1"] = {
 	
   OnCancel		= function() x.db.global.dontShowDBCleaning = true end,
   
+	-- Taint work around
+	preferredIndex	= 3,
+}
+
+StaticPopupDialogs["XCT_PLUS_FORCE_CVAR_UPDATE"] = {
+	text			= "xCT+ Performed an action that requires it to update some Combat Text related CVars. It is highly recommened you reload your UI before changing any more settings.",
+	timeout			= 0,
+	whileDead		= 1,
+	
+	button1			= "Later",
+	button2			= "Reload UI Now",
+	OnAccept		= x.noop,
+	OnCancel		= ReloadUI,
+	
 	-- Taint work around
 	preferredIndex	= 3,
 }
