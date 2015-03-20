@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2014. All Rights Reserved.        ]
+ [  ©2015. All Rights Reserved.        ]
  [====================================]]
  
 -- this file handles updating the frame settings and anything that changes the UI frames themselves
