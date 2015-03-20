@@ -18,8 +18,8 @@ local ADDON_NAME, addon = ...
 local x = addon.engine
 
 -- up values
-local _, _G, sformat, mfloor, ssub, smatch, sgsub, s_upper, s_lower, string, tinsert, tremove, ipairs, pairs, print, tostring, tonumber, select, unpack =
-  nil, _G, string.format, math.floor, string.sub, string.match, string.gsub, string.upper, string.lower, string, table.insert, table.remove, ipairs, pairs, print, tostring, tonumber, select, unpack
+local _, _G, sformat, mfloor, mabs, ssub, smatch, sgsub, s_upper, s_lower, string, tinsert, tremove, ipairs, pairs, print, tostring, tonumber, select, unpack =
+  nil, _G, string.format, math.floor, math.abs, string.sub, string.match, string.gsub, string.upper, string.lower, string, table.insert, table.remove, ipairs, pairs, print, tostring, tonumber, select, unpack
 
 --[=====================================================[
  Holds cached spells, buffs, and debuffs
@@ -183,6 +183,7 @@ local function ShowDebuffs() return x.db.profile.frames["general"].showDebuffs e
 local function ShowOverHealing() return x.db.profile.frames["healing"].enableOverHeal end
 local function ShowEnergyGains() return x.db.profile.frames["power"].showEnergyGains end
 local function ShowPeriodicEnergyGains() return x.db.profile.frames["power"].showPeriodicEnergyGains end
+local function ShowEnergyTypes() return x.db.profile.frames["power"].showEnergyType end
 
 local function ShowRogueComboPoints() return x.db.profile.spells.combo["ROGUE"][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "ROGUE" end
 local function ShowFeralComboPoints() return x.db.profile.spells.combo["DRUID"][2][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "DRUID" and x.player.spec == 2 end
@@ -216,6 +217,20 @@ local function FilterOutgoingHealing(value) return x.db.profile.spellFilter.filt
 local function FilterIncomingDamage(value) return x.db.profile.spellFilter.filterIncomingDamageValue > value end
 local function FilterIncomingHealing(value) return x.db.profile.spellFilter.filterIncomingHealingValue > value end
 local function TrackSpells() return x.db.profile.spellFilter.trackSpells end
+
+local function IsResourceDisabled( resource, amount )
+  if resource == "ECLIPSE" then
+    if amount > 0 then
+      return x.db.profile.frames["power"].disableResource_ECLIPSE_positive
+    elseif amount < 0 then
+      return x.db.profile.frames["power"].disableResource_ECLIPSE_negative
+    end
+  end
+  if x.db.profile.frames["power"]["disableResource_"..resource] ~= nil then
+    return x.db.profile.frames["power"]["disableResource_"..resource]
+  end
+  return true
+end
 
 local function IsBearForm() return GetShapeshiftForm() == 1 and x.player.class == "DRUID" end
 local function IsSpellFiltered(spellID)
@@ -918,7 +933,8 @@ local function LootFrame_OnUpdate(self, elapsed)
   end
   
   for k in pairs(removeItems) do
-    self.items[k] = nil
+    --self.items[k] = nil
+    tremove( self.items, k )
   end
   
   if #removeItems > 1 then
@@ -1251,7 +1267,7 @@ x.combat_events = {
       end
     end,
   ["ENERGIZE"] = function(amount, energy_type)
-      if not ShowEnergyGains() then return end
+      --[[if not ShowEnergyGains() then return end
       if not FilterPlayerPower(tonumber(amount)) then
         if energy_type and (energy_type == "MANA" and not IsBearForm()) -- do not show mana in bear form (Leader of the Pack)                                     
             or energy_type == "RAGE" or energy_type == "FOCUS"
@@ -1261,10 +1277,32 @@ x.combat_events = {
 
           x:AddMessage("power", sformat(format_energy, message, _G[energy_type]), color)
         end
+      end]]
+      
+      if not ShowEnergyGains() then return end
+      if FilterPlayerPower(mabs(tonumber(amount))) then return end
+      if IsResourceDisabled( energy_type, amount ) then return end
+      
+      local color, message = nil, x:Abbreviate( amount, "power" )
+      if energy_type == "ECLIPSE" then
+        if amount > 0 then
+          color = x.LookupColorByName("color_ECLIPSE_positive")
+        elseif amount < 0 then 
+          color = x.LookupColorByName("color_ECLIPSE_negative")
+        end
+      else
+        color = x.LookupColorByName("color_" .. energy_type )
       end
+      
+      -- Default Color will be white
+      if not color then
+        color = {1,1,1}
+      end
+      
+      x:AddMessage("power", sformat(format_energy, message, ShowEnergyTypes() and _G[energy_type] or ""), color)
     end,
   ["PERIODIC_ENERGIZE"] = function(amount, energy_type)
-      if not ShowPeriodicEnergyGains() then return end
+      --[[if not ShowPeriodicEnergyGains() then return end
       if not FilterPlayerPower(tonumber(amount)) then
         if energy_type and (energy_type == "MANA" and not IsBearForm()) -- do not show mana in bear form (Leader of the Pack)
             or energy_type == "RAGE" or energy_type == "FOCUS"
@@ -1274,7 +1312,30 @@ x.combat_events = {
 
           x:AddMessage("power", sformat(format_energy, message, _G[energy_type]), color)
         end
+      end]]
+      
+      if not ShowPeriodicEnergyGains() then return end
+      if FilterPlayerPower(mabs(tonumber(amount))) then return end
+      if IsResourceDisabled( energy_type, amount ) then return end
+      
+      local color, message = nil, x:Abbreviate( amount, "power" )
+      if energy_type == "ECLIPSE" then
+        if amount > 0 then
+          color = x.LookupColorByName("color_ECLIPSE_positive")
+        elseif amount < 0 then 
+          color = x.LookupColorByName("color_ECLIPSE_negative")
+        end
+      else
+        color = x.LookupColorByName("color_" .. energy_type )
       end
+      
+      -- Default Color will be white
+      if not color then
+        color = {1,1,1}
+      end
+      
+      x:AddMessage("power", sformat(format_energy, message, ShowEnergyTypes() and _G[energy_type] or ""), color)
+      
     end,
 
   ["SPELL_AURA_END"] = function(spellname)
@@ -1474,13 +1535,13 @@ x.events = {
               x.lootUpdater.items = { }
             end
             
+            -- Enqueue the item to wait 1 second before showing
+            tinsert(x.lootUpdater.items, { id=linkID, message=message, t=0, r=r, g=g, b=b, })
+            
             if not x.lootUpdater.isRunning then
               x.lootUpdater:SetScript("OnUpdate", LootFrame_OnUpdate)
               x.lootUpdater.isRunning = true
             end
-            
-            -- Enqueue the item to wait 1 second before showing
-            tinsert(x.lootUpdater.items, { id=linkID, message=message, t=0, r=r, g=g, b=b, })
           else
           
             -- Add the message

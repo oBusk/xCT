@@ -403,8 +403,8 @@ addon.defaults = {
         ["enableRealmNames"] = true,
         ["enableOverHeal"] = true,
         ["enableSelfAbsorbs"] = true,
-        ["showOnlyMyHeals"] = true,
-        ["showOnlyPetHeals"] = true,
+        ["showOnlyMyHeals"] = false,
+        ["showOnlyPetHeals"] = false,
       },
       
       class = {
@@ -449,8 +449,19 @@ addon.defaults = {
         ["fontJustify"] = "CENTER",
         
       -- font colors
-        ["customColor"] = false,
-        ["fontColor"] = nil,
+        colors = {
+          ['color_MANA']             = { enabled = false, desc = MANA,        default = { 0.00, 0.00, 1.00 } },
+          ['color_RAGE']             = { enabled = false, desc = RAGE,        default = { 1.00, 0.00, 0.00 } },
+          ['color_FOCUS']            = { enabled = false, desc = FOCUS,       default = { 1.00, 0.50, 0.25 } },
+          ['color_ENERGY']           = { enabled = false, desc = ENERGY,      default = { 1.00, 1.00, 0.00 } },
+          ['color_CHI']              = { enabled = false, desc = CHI,         default = { 0.71, 1.00, 0.92 } },
+          ['color_RUNES']            = { enabled = false, desc = RUNES,       default = { 0.50, 0.50, 0.50 } },
+          ['color_RUNIC_POWER']      = { enabled = false, desc = RUNIC_POWER, default = { 0.00, 0.82, 1.00 } },
+          ['color_SOUL_SHARDS']      = { enabled = false, desc = SOUL_SHARDS, default = { 0.50, 0.32, 0.55 } },
+          ['color_HOLY_POWER']       = { enabled = false, desc = HOLY_POWER,  default = { 0.95, 0.90, 0.60 } },
+          ['color_ECLIPSE_positive'] = { enabled = false, desc = ECLIPSE .. " |cff798BDD(Positive)|r", default = { 0.80, 0.82, 0.60 } },
+          ['color_ECLIPSE_negative'] = { enabled = false, desc = ECLIPSE .. " |cff798BDD(Negative)|r", default = { 0.30, 0.52, 0.90 } },
+        },
         
       -- scrollable
         ["enableScrollable"] = false,
@@ -466,6 +477,20 @@ addon.defaults = {
       -- special tweaks
         ["showEnergyGains"] = true,
         ["showPeriodicEnergyGains"] = true,
+        ["showEnergyType"] = true,
+        
+        ["disableResource_MANA"]             = false,
+        ["disableResource_RAGE"]             = false,
+        ["disableResource_FOCUS"]            = false,
+        ["disableResource_ENERGY"]           = false,
+        ["disableResource_CHI"]              = true,
+        ["disableResource_RUNES"]            = true,
+        ["disableResource_RUNIC_POWER"]      = false,
+        ["disableResource_SOUL_SHARDS"]      = false,
+        ["disableResource_ECLIPSE_negative"] = true,
+        ["disableResource_ECLIPSE_positive"] = true,
+        ["disableResource_HOLY_POWER"]       = false,
+        
       },
       
       procs = {
@@ -597,12 +622,15 @@ addon.defaults = {
         ["HUNTER"] = {
           [1] = {                                         -- Beast Mastery
             CreateComboSpellEntry(true, 19615, "pet"),    --   Frenzy Effect
+            CreateComboSpellEntry(false, 34720),           --   Thrill of the Hunt (Talent)
           },
           [2] = {                                         -- Marksman
             --CreateComboSpellEntry(true, 82925),           --   Ready, Set, Aim...
+            CreateComboSpellEntry(false, 34720),           --   Thrill of the Hunt (Talent)
           },
           [3] = {                                         -- Survival
             CreateComboSpellEntry(true, 168980), --56453),           --   Lock 'n Load
+            CreateComboSpellEntry(false, 34720),           --   Thrill of the Hunt (Talent)
           },
         },
         

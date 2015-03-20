@@ -440,13 +440,16 @@ local function IsTrackSpellsDisabled() return not x.db.profile.spellFilter.track
 -- Lists that will be used to show tracked spells
 local buffHistory, debuffHistory, spellHistory, procHistory, itemHistory = { }, { }, { }, { }, { }
 
+
+-- GetSpellTextureFormatted( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride, forceOff )
+
 local function GetBuffHistory()
   for i in pairs(buffHistory) do
     buffHistory[i] = nil
   end
   
   for i in pairs(x.spellCache.buffs) do
-    buffHistory[i] = x:GetSpellTextureFormatted(i, 16).." "..i
+    buffHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
   end
   
   return buffHistory
@@ -458,7 +461,7 @@ local function GetDebuffHistory()
   end
   
   for i in pairs(x.spellCache.debuffs) do
-    debuffHistory[i] = x:GetSpellTextureFormatted(i, 16).." "..i
+    debuffHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
   end
   
   return debuffHistory
@@ -471,7 +474,7 @@ local function GetSpellHistory()
   
   for i in pairs(x.spellCache.spells) do
     local name = GetSpellInfo(i) or "Unknown Spell ID"
-    spellHistory[tostring(i)] = x:GetSpellTextureFormatted(i, 16).." "..name.." (|cff798BDD"..i.."|r)"
+    spellHistory[tostring(i)] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..name.." (|cff798BDD"..i.."|r)"
   end
   
   return spellHistory
@@ -483,7 +486,7 @@ local function GetProcHistory()
   end
   
   for i in pairs(x.spellCache.procs) do
-    procHistory[i] = x:GetSpellTextureFormatted(i, 16).." "..i
+    procHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
   end
   
   return procHistory
@@ -3701,8 +3704,7 @@ addon.options.args["Frames"] = {
           },
         },
 
-        -- TODO: Add Color Options to Class Power frame
-        --[[fontColors = {
+        fontColors = {
           order = 30,
           type = 'group',
           name = "Custom Colors",
@@ -3714,7 +3716,7 @@ addon.options.args["Frames"] = {
               fontSize = 'large',
             },
           },
-        },]]
+        },
 
         specialTweaks = {
           order = 40,
@@ -3742,8 +3744,118 @@ addon.options.args["Frames"] = {
               desc = "Show energy gained over time.",
               get = get2,
               set = set2,
-              width = "double",
             },
+            showEnergyType = {
+              order = 3,
+              type = 'toggle',
+              name = "Show Energy Type",
+              desc = "Show the type of energy that you are gaining.",
+              get = get2,
+              set = set2,
+            },
+            
+            title1 = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDFilter Resources|r:",
+              fontSize = 'large',
+            },
+            title2 = {
+              type = 'description',
+              order = 11,
+              name = "Check the energies that you do not wish to be displayed for your character:",
+              fontSize = 'small',
+            },
+            
+            disableResource_MANA = {
+              order = 20,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..MANA,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_RAGE = {
+              order = 21,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..RAGE,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_FOCUS = {
+              order = 22,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..FOCUS,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_ENERGY = {
+              order = 23,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..ENERGY,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_CHI = {
+              order = 24,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..CHI,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_RUNES = {
+              order = 25,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..RUNES,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_RUNIC_POWER = {
+              order = 26,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..RUNIC_POWER,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_SOUL_SHARDS = {
+              order = 27,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..SOUL_SHARDS,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_ECLIPSE_negative = {
+              order = 28,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..ECLIPSE.."|r (Negative)",
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_ECLIPSE_positive = {
+              order = 28,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..ECLIPSE.."|r (Positive)",
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            disableResource_HOLY_POWER = {
+              order = 29,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..HOLY_POWER,
+              get = get2,
+              set = set2,
+              width = "full",
+            },
+            
           },
         },
       },
