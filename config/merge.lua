@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2014. All Rights Reserved.        ]
+ [  ©2015. All Rights Reserved.        ]
  [====================================]]
  
 local ADDON_NAME, addon = ...
@@ -71,7 +71,7 @@ addon.merges = {
 
 -- All classes
   [124988] = CreateMergeSpellEntry("ITEM", 3, "All Classes"), -- Nature's Vigil (Nearby Druid Healing)
-
+  [143924] = CreateMergeSpellEntry("ITEM", 3, "All Classes"), -- Leech, the spammy healing stat
 
 -- death knight (damage)
   [55078]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Blood Plague
@@ -220,7 +220,7 @@ addon.merges = {
   [127626] = CreateMergeSpellEntry("PRIEST", 6.5),      -- Devouring Plague (Heal)
   [81751]  = CreateMergeSpellEntry("PRIEST", 6),        -- Atonement (Healing you do through damage)
   [126154] = CreateMergeSpellEntry("PRIEST", 3),        -- Lightspring Renew
-  [15290]  = CreateMergeSpellEntry("PRIEST", 5),        -- Vampiric Embrace...........................(Over 15s)
+  [15290]  = CreateMergeSpellEntry("PRIEST", 5),        -- Vampiric Embrace                           (Over 15s)
 
 -- rogue
   [22482]  = CreateMergeSpellEntry("ROGUE", .5),        -- Blade Flurry                               (INSTANT)
@@ -242,6 +242,7 @@ addon.merges = {
   [58879]  = CreateMergeSpellEntry("SHAMAN"),           -- Spirit Hunt (Spirit Wolves)
   [51490]  = CreateMergeSpellEntry("SHAMAN"),           -- Thunderstorm
   [25504]  = CreateMergeSpellEntry("SHAMAN", .5),       -- Windfury Attack                            (INSTANT)
+  [177601] = CreateMergeSpellEntry("SHAMAN"),           -- Liquid Magma                               (Every 0.5s for 10s)
 
 -- shaman (healing)
   [114911] = CreateMergeSpellEntry("SHAMAN", 5),        -- Ancestral Guidance                         (INSTANT)
