@@ -69,10 +69,19 @@ addon.merges = {
   [148234] = CreateMergeSpellEntry("ITEM", .5, "Holy Healing (Priests, Paladins)"),  -- Cleave (Holy, Healing)
   [148235] = CreateMergeSpellEntry("ITEM", .5, "Nature Healing (Monks, Druids)"),    -- Cleave (Nature, Healing)
 
--- All classes
-  [124988] = CreateMergeSpellEntry("ITEM", 3, "All Classes"), -- Nature's Vigil (Nearby Druid Healing)
-  [143924] = CreateMergeSpellEntry("ITEM", 3, "All Classes"), -- Leech, the spammy healing stat
+-- Follower / Bodyguard
+  [171764] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Vivianne 1"),
+  [175806] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Vivianne 2"),
+  [173010] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Vivianne 3"),
+  [175814] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Vivianne 4"),
+  [176020] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Aeda 1"),
+  [176017] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Aeda 2"),
 
+-- WoD
+  [143924] = CreateMergeSpellEntry("ITEM", 3.5, "Item Leech"), -- Item life Leech
+  [165421] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder1"), -- Gorgrond Shredder
+  [164603] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder2"), -- Gorgrond Shredder  
+  
 -- death knight (damage)
   [55078]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Blood Plague
   [91776]  = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Claw (Army of the Dead)
@@ -88,22 +97,26 @@ addon.merges = {
   [106998] = CreateMergeSpellEntry("DRUID"),            -- Astral Storm                               (Every 1s for 10s)
   [42231]  = CreateMergeSpellEntry("DRUID"),            -- Hurricane
   [33745]  = CreateMergeSpellEntry("DRUID"),            -- Lacerate
-  [164812] = CreateMergeSpellEntry("DRUID"),            -- Moonfire
+  [164812] = CreateMergeSpellEntry("DRUID"),            -- Moonfire (WoD)
+  [124991] = CreateMergeSpellEntry("DRUID", 3, "Damage"), -- Nature's Vigil (Damage)
   [1822]   = CreateMergeSpellEntry("DRUID"),            -- Rake
   [1079]   = CreateMergeSpellEntry("DRUID", 2),         -- Rip
   [50288]  = CreateMergeSpellEntry("DRUID"),            -- Starfall
-  [164815] = CreateMergeSpellEntry("DRUID"),            -- Sunfire
+  [164815] = CreateMergeSpellEntry("DRUID"),            -- Sunfire (WoD)
   [106830] = CreateMergeSpellEntry("DRUID", 4),         -- Thrash (Cat)
   [77758]  = CreateMergeSpellEntry("DRUID", 4),         -- Thrash (Bear)
   [61391]  = CreateMergeSpellEntry("DRUID", .5),        -- Typhoon                                    (INSTANT)
 
 -- druid (healing)
+  [162359] = CreateMergeSpellEntry("DRUID"),            -- Genesis
   [33763]  = CreateMergeSpellEntry("DRUID"),            -- Lifebloom
+  [124988] = CreateMergeSpellEntry("DRUID", 3, "Heal"), -- Nature's Vigil (Heal)
   [8936]   = CreateMergeSpellEntry("DRUID"),            -- Regrowth
   [774]    = CreateMergeSpellEntry("DRUID"),            -- Rejuvenation
+  [155777] = CreateMergeSpellEntry("DRUID"),            -- Rejuvenation (Germination)
   [81269]  = CreateMergeSpellEntry("DRUID"),            -- Swiftmend (Efflorescence)
   [48438]  = CreateMergeSpellEntry("DRUID"),            -- Wild Growth
-
+  
 -- hunter
   [131900] = CreateMergeSpellEntry("HUNTER", 6),        -- A Murder of Crows                          (Over 30s)
   [120361] = CreateMergeSpellEntry("HUNTER", 4),        -- Barrage                                    (Channeled over 3s) 4 to be safe :P
@@ -190,6 +203,7 @@ addon.merges = {
 -- priest (damage)
   [127628] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Damage)
   [2944]   = CreateMergeSpellEntry("PRIEST"),           -- Devouring Plague
+  [158831] = CreateMergeSpellEntry("PRIEST", 3),        -- Devouring Plague 2
   [122128] = CreateMergeSpellEntry("PRIEST", 3),        -- Divine Star (Shadow)                       (INSTANT... over 3ish)
   [120696] = CreateMergeSpellEntry("PRIEST", 5),        -- Halo (Damage)                              (INSTANT... over 5ish)
   [14914]  = CreateMergeSpellEntry("PRIEST"),           -- Holy Fire
@@ -199,6 +213,7 @@ addon.merges = {
   [47666]  = CreateMergeSpellEntry("PRIEST"),           -- Penance (Damage Effect)
   [129250] = CreateMergeSpellEntry("PRIEST", 4),        -- Power Word: Solace
   [33619]  = CreateMergeSpellEntry("PRIEST", 3),        -- Reflective Shield
+  [179337] = CreateMergeSpellEntry("PRIEST"),           -- Searing Insanity
   [589]    = CreateMergeSpellEntry("PRIEST", 6),        -- Shadow Word: Pain
   [34914]  = CreateMergeSpellEntry("PRIEST", 6),        -- Vampiric Touch 
 

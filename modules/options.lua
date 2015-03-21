@@ -507,7 +507,7 @@ end
 
 
 addon.options.args["spells"] = {
-  name = x.new .. "Spam Merger",
+  name = "Spam Merger",
   type = 'group',
   childGroups = 'tab',
   order = 2,
@@ -635,7 +635,7 @@ addon.options.args["spells"] = {
     },
     
     multistrike = {
-      name = x.new .. "Multistrike Options", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
+      name = "Multistrike Options", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
       order = 20,
       args = {
@@ -1219,25 +1219,47 @@ addon.options.args["Credits"] = {
       order = 40,
       name = " ",
     },
-    contactTitle = {
+    
+    tukuiTitle = {
       type = 'description',
       order = 41,
+      name = "|cffFFFF00Thank You Github Contributors!|r",
+      fontSize = "large",
+    },
+    userName3 = {
+      type = 'description',
+      order = 42,
+      fontSize = "medium",
+      name = " |cff22FF80 Tonyleila|r,|cff1AAD59 ckaotik|r,|cff22FF80 Stanzilla|r,|cff1AAD59 behub|r",
+    },
+    
+    
+    
+    testerTitleSpace5 = {
+      type = 'description',
+      order = 50,
+      name = " ",
+    },
+    
+    contactTitle = {
+      type = 'description',
+      order = 51,
       name = "|cffFFFF00Contact Me|r",
       fontSize = "large",
     },
     
     contactStep1 = {
       type = 'description',
-      order = 50,
+      order = 52,
       name = "1. GitHub: |cff22FF80https://github.com/dandruff/xCT|r\n\n2. Send a PM to |cffFF8000Dandruff|r on http://tukui.org",
     },
-    testerTitleSpace5 = {
+    testerTitleSpace6 = {
       type = 'description',
-      order = 51,
+      order = 53,
       name = "\n\n\n\n\n\n\n\n\n",
     },
     multistikeDebug = {
-      order = 52,
+      order = 54,
       type = 'toggle',
       name = "Verbose Debug",
       width = 'full',
