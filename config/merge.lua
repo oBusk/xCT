@@ -329,8 +329,6 @@ addon.merge2h = {
   [57842]  = 57841,    -- Killing Spree (Offhand)
 
   -- Shaman (damage)
-  [45297]  = 421,      -- Chain Lightning (Mastery)
-  [114738] = 114074,   -- Lava Beam (Mastery)
   [32176]  = 32175,    -- Stormstrike
   [115360] = 115357,   -- Windstrike
   [114093] = 114089,   -- Wind Lash (Ascendance)
