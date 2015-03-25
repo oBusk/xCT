@@ -242,8 +242,9 @@ addon.merges = {
   [113780] = CreateMergeSpellEntry("ROGUE"),            -- Deadly Poison                              (Merged with DoT)
   [121411] = CreateMergeSpellEntry("ROGUE"),            -- Crimson Tempest                            (Merged with DoT)
   [51723]  = CreateMergeSpellEntry("ROGUE", .5),        -- Fan of Knives                              (INSTANT)
-  [112974] = CreateMergeSpellEntry("ROGUE"),            -- Leeching Poison
   [8680]   = CreateMergeSpellEntry("ROGUE"),            -- Wound Poison
+  [157607] = CreateMergeSpellEntry("ROGUE"),       	    -- Swift Poison (Combat Rogue Perk)           (INSTANT)
+  [57841]  = CreateMergeSpellEntry("ROGUE", 3.5),       -- Killing Spree
 
 -- shaman (damage)
   [421]    = CreateMergeSpellEntry("SHAMAN", .5),       -- Chain Lightning                            (Merged with Mastery, INSTANT)
@@ -340,10 +341,9 @@ addon.merge2h = {
   -- Rogue (Damage)
   [122233] = 121411,   -- Crimson Tempest (DoT)
   [2818]   = 113780,   -- Deadly Poison (DoT)
+  [57842]  = 57841,    -- Killing Spree (Offhand)
 
   -- Shaman (damage)
-  [45297]  = 421,      -- Chain Lightning (Mastery)
-  [114738] = 114074,   -- Lava Beam (Mastery)
   [32176]  = 32175,    -- Stormstrike
   [115360] = 115357,   -- Windstrike
   [114093] = 114089,   -- Wind Lash (Ascendance)
