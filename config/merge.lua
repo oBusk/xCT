@@ -78,9 +78,10 @@ addon.merges = {
   [176017] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Aeda 2"),
 
 -- WoD
-  [143924] = CreateMergeSpellEntry("ITEM", 3.5, "Item Leech"), -- Item life Leech
-  [165421] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder1"), -- Gorgrond Shredder
-  [164603] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder2"), -- Gorgrond Shredder  
+  [159238] = CreateMergeSpellEntry("ITEM", 3.5, "Weapon Enchant"),    -- WoD Shattered Hand Enchant
+  [143924] = CreateMergeSpellEntry("ITEM", 3.5, "Item Leech"),        -- Item life Leech
+  [165421] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder1"),         -- Gorgrond Shredder
+  [164603] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder2"),         -- Gorgrond Shredder  
   
 -- death knight (damage)
   [55078]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Blood Plague
@@ -130,18 +131,28 @@ addon.merges = {
   [118253] = CreateMergeSpellEntry("HUNTER", 8),        -- Serpent Sting (Survival)                   (over 15s)
 
 -- mage
-  [1449]   = CreateMergeSpellEntry("MAGE", .5),         -- Arcane Explosion                           (INSTANT)
-  [42208]  = CreateMergeSpellEntry("MAGE"),             -- Blizzard
-  [83853]  = CreateMergeSpellEntry("MAGE"),             -- Combustion
+  [155152] = CreateMergeSpellEntry("MAGE"),             -- Primatic Crystal
+  [157977] = CreateMergeSpellEntry("MAGE"),             -- Unstable Magic
   [120]    = CreateMergeSpellEntry("MAGE"),             -- Cone of Cold
-  [31661]  = CreateMergeSpellEntry("MAGE", .5),         -- Dragon's Breath                            (INSTANT)
-  [2120]   = CreateMergeSpellEntry("MAGE", 4),          -- Flamestrike                                (Over 4 seconds)
-  [122]    = CreateMergeSpellEntry("MAGE", .5),         -- Frost Nova                                 (INSTANT)
-  [44461]  = CreateMergeSpellEntry("MAGE"),             -- Living Bomb                                (Merged w/ DoT)
-  [148022] = CreateMergeSpellEntry("MAGE", 4),          -- Icicle (Frost Mastery)                     (Could not find an actual time)
-  [12654]  = CreateMergeSpellEntry("MAGE"),             -- Ignite
-  [114954] = CreateMergeSpellEntry("MAGE"),             -- Nether Tempest                             (Merged w/ Secondary Spell)
-  [11366]  = CreateMergeSpellEntry("MAGE"),             -- Pyroblast
+  [114954] = CreateMergeSpellEntry("MAGE"),             -- Arcane: Nether Tempest                     (Merged w/ Secondary Spell)
+  [1449]   = CreateMergeSpellEntry("MAGE", .5),         -- Arcane: Arcane Explosion
+  [153640] = CreateMergeSpellEntry("MAGE", 3.5),        -- Arcane: Arcane Orb													(3.5 for rough travel time)
+  [157980] = CreateMergeSpellEntry("MAGE"),             -- Arcane: Supernova
+  [12654]  = CreateMergeSpellEntry("MAGE"),             -- Fire: Ignite
+  [2120]   = CreateMergeSpellEntry("MAGE", 4),          -- Fire: Flamestrike                          (Over 4 seconds)
+  [44461]  = CreateMergeSpellEntry("MAGE"),             -- Fire: Living Bomb                          (Merged w/ DoT)
+  [11366]  = CreateMergeSpellEntry("MAGE"),             -- Fire: Pyroblast
+  [31661]  = CreateMergeSpellEntry("MAGE", .5),         -- Fire: Dragon's Breath
+  [157981] = CreateMergeSpellEntry("MAGE"),             -- Fire: Blast Wave
+  [83853]  = CreateMergeSpellEntry("MAGE"),             -- Fire: Combustion
+  [153564] = CreateMergeSpellEntry("MAGE"),             -- Fire: Meteor
+  [155158] = CreateMergeSpellEntry("MAGE", 4.5),        -- Fire: Meteor (DOT)													(Over 8 seconds)
+  [148022] = CreateMergeSpellEntry("MAGE", 4),          -- Frost: Icicle (Mastery)                    (Could not find an actual time)
+  [42208]  = CreateMergeSpellEntry("MAGE"),             -- Frost: Blizzard
+  [122]    = CreateMergeSpellEntry("MAGE", .5),         -- Frost: Nova                                (INSTANT)
+  [157997] = CreateMergeSpellEntry("MAGE"),             -- Frost: Ice Nova
+  [153596] = CreateMergeSpellEntry("MAGE"),             -- Frost: Comet Storm
+  [113092] = CreateMergeSpellEntry("MAGE"),             -- Frost: Frost Bomb
   
 -- monk (damage)
   [128531] = CreateMergeSpellEntry("MONK", 4),          -- Blackout Kick (DoT)                        (Every 1s for 4s)
