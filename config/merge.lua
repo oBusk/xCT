@@ -185,18 +185,19 @@ addon.merges = {
   [116847] = CreateMergeSpellEntry("MONK", 2.5),        -- Rushing Jade Wind (Heal)                   (Duplicated SCK healing interval)
 
 -- paladin (damage)
+  [101423] = CreateMergeSpellEntry("PALADIN"),          -- Seal of Righteousness                      (INSTANT)
+  [88263]  = CreateMergeSpellEntry("PALADIN"),          -- Hammer of the Righteous
+  [159561] = CreateMergeSpellEntry("PALADIN", 4.5),     -- Consecration                               (Every 1s for 8s)
+  [157122] = CreateMergeSpellEntry("PALADIN", 1),       -- Holy Shield                                (Travel Time - Needs more testing)
+  [119072] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Wrath
   [86704]  = CreateMergeSpellEntry("PALADIN", .5),      -- Ancient Fury                               (INSTANT)
   [114919] = CreateMergeSpellEntry("PALADIN", 6.5),     -- Arcing Light (Damage)
   [31935]  = CreateMergeSpellEntry("PALADIN"),          -- Avenger's Shield
   [31803]  = CreateMergeSpellEntry("PALADIN", 6),       -- Censure
-  [81297]  = CreateMergeSpellEntry("PALADIN"),          -- Consecration
   [53385]  = CreateMergeSpellEntry("PALADIN"),          -- Divine Storm
   [122032] = CreateMergeSpellEntry("PALADIN"),          -- Exorcism (Glyph of Mass Exorcism)
-  [88263]  = CreateMergeSpellEntry("PALADIN"),          -- Hammer of the Righteous
   [96172]  = CreateMergeSpellEntry("PALADIN"),          -- Hand of Light (Mastery)
-  [114852] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Prism (Healing on Target, Damage AoE) (ISNTANT)
-  [119072] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Wrath
-  [101423] = CreateMergeSpellEntry("PALADIN"),          -- Seal of Righteousness                      (INSTANT)
+  [114852] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Prism (Healing on Target, Damage AoE) (INSTANT)
   [42463]  = CreateMergeSpellEntry("PALADIN"),          -- Seal of Truth
 
 -- paladin (healing)
