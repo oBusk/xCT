@@ -355,6 +355,7 @@ local function set1_update(info, value) set1(info, value); x:UpdateFrames(info[#
 local function get2(info) return x.db.profile.frames[info[#info-2]][info[#info]] end
 local function set2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = value; x.cvar_udpate() end
 local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_udpate() end
+local function set2_update_force(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_udpate(true) end
 local function getColor2(info) return unpack(x.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end
 local function setColor2(info, r, g, b) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end
 local function getTextIn2(info) return string_gsub(x.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end
@@ -3298,9 +3299,10 @@ addon.options.args["Frames"] = {
               order = 1,
               type = 'toggle',
               name = "Show Names",
-              desc = "Shows the healer names next to incoming heals.",
+              desc = "Shows the healer names next to incoming heals.\n|cffFF0000Requires:|r CVar Engine in order to change.",
+			  disabled = isCVarsDisabled,
               get = get2,
-              set = set2,
+              set = set2_update_force,
             },
             enableClassNames = {
               order = 2,
