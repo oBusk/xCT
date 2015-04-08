@@ -320,6 +320,7 @@ addon.merges = {
   [115767] = CreateMergeSpellEntry("WARRIOR", 3),       -- Deep Wounds
   [52174]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Heroic Leap                                (INSTANT)
   [96103]  = CreateMergeSpellEntry("WARRIOR"),          -- Raging Blow                                (Merged w/ Off-Hand)
+  [156287] = CreateMergeSpellEntry("WARRIOR", 3),       -- Ravager                                    (Every 1s for 10s)
   [6572]   = CreateMergeSpellEntry("WARRIOR", .5),      -- Revenge                                    (INSTANT)
   [46968]  = CreateMergeSpellEntry("WARRIOR", .5),      -- Shockwave                                  (INSTANT)
   [6343]   = CreateMergeSpellEntry("WARRIOR", .5),      -- Thunder Clap                               (INSTANT)
