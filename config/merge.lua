@@ -89,6 +89,7 @@ addon.merges = {
   [52212]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Death and Decay
   [55095]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Frost Fever
   [49184]  = CreateMergeSpellEntry("DEATHKNIGHT", .5),  -- Howling Blast                              (INSTANT)
+  [168828] = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Necrosis (Unholy)
 
 -- death knight (healing)
   [119980] = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Conversion
@@ -158,7 +159,7 @@ addon.merges = {
   [128531] = CreateMergeSpellEntry("MONK", 4),          -- Blackout Kick (DoT)                        (Every 1s for 4s)
   [115181] = CreateMergeSpellEntry("MONK", .5),         -- Breath of Fire                             (INSTANT)
   [148135] = CreateMergeSpellEntry("MONK", 3),          -- Chi Burst (Damage)
-  [132467] = CreateMergeSpellEntry("MONK", 6),          -- Chi Wave (Damage)
+  [132467] = CreateMergeSpellEntry("MONK", 3),          -- Chi Wave (Damage)
   [113656] = CreateMergeSpellEntry("MONK", 4),          -- Fists of Fury                              (Merged w/ Secondary Spell)
   [121253] = CreateMergeSpellEntry("MONK", .5),         -- Keg Smash                                  (INSTANT)
   [162530] = CreateMergeSpellEntry("MONK", 2.5),        -- Rushing Jade Wind (Damage)                 (Duplicated SCK healing interval)
@@ -167,12 +168,15 @@ addon.merges = {
   [124098] = CreateMergeSpellEntry("MONK", 6),          -- Zen Sphere (Damage)                        (Merged w/ Detonate)
   [117952] = CreateMergeSpellEntry("MONK", 4.5),        -- Crackling Jade Lightning                   (Over 4s)
   [123996] = CreateMergeSpellEntry("MONK", 3),          -- Crackling Tiger Lightning                  (3 targets, every 1s for ??s)
+  [157680] = CreateMergeSpellEntry("MONK", 2.5),        -- Chi Explosion (DMG)
+  [158221] = CreateMergeSpellEntry("MONK", 2.5),        -- Hurricane Strike
+  [117993] = CreateMergeSpellEntry("MONK", 1.5),        -- Chi Torpedo (DMG)                          (Travel Time)
 
 -- monk (healing)
   [128591] = CreateMergeSpellEntry("MONK", 3),          -- Blackout Kick (Heal??)
   [130654] = CreateMergeSpellEntry("MONK", 3),          -- Chi Burst
-  [124040] = CreateMergeSpellEntry("MONK", 5),          -- Chi Torpedo                                (INSTANT)
-  [132463] = CreateMergeSpellEntry("MONK", 6),          -- Chi Wave (Heal)
+  [124040] = CreateMergeSpellEntry("MONK", 1),          -- Chi Torpedo                                (Travel Time)
+  [132463] = CreateMergeSpellEntry("MONK", 3),          -- Chi Wave (Heal)
   [117895] = CreateMergeSpellEntry("MONK", 3),          -- Eminence                                   (Merged w/ Statue)
   [132120] = CreateMergeSpellEntry("MONK", 6),          -- Enveloping Mist                            (Every 1s for 6s)
   [119611] = CreateMergeSpellEntry("MONK", 6),          -- Renewing Mist                              (Every 3s for 18s)
