@@ -79,24 +79,6 @@ CombatText:SetScript("OnLoad", nil)
 CombatText:SetScript("OnEvent", nil)
 CombatText:SetScript("OnUpdate", nil)
 
-
--- Create a button to delete profiles
-if not xCTCombatTextConfigButton then
-  CreateFrame("Button", "xCTCombatTextConfigButton", InterfaceOptionsCombatTextPanel, "UIPanelButtonTemplate")
-end
-
-xCTCombatTextConfigButton:ClearAllPoints()
-xCTCombatTextConfigButton:SetPoint("TOPRIGHT", -36, -80)
-xCTCombatTextConfigButton:SetSize(200, 30)
-xCTCombatTextConfigButton:SetText("|cffFFFFFFOpen |r|cffFF0000x|r|cff80F000CT|r|cff60A0FF+|r |cffFFFFFFOptions...|r")
-xCTCombatTextConfigButton:Show()
-xCTCombatTextConfigButton:SetScript("OnClick", function(self)
-  InterfaceOptionsFrameOkay:Click()
-  GameMenuButtonContinue:Click()
-  --LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
-  x:ShowConfigTool()
-end)
-
 -- Interface - Addons (Ace3 Blizzard Options)
 x.blizzardOptions = {
   name = "|cffFFFF00Combat Text - |r|cff60A0FFPowered By |cffFF0000x|r|cff80F000CT|r+|r",
@@ -107,7 +89,7 @@ x.blizzardOptions = {
       order = 1,
       type = 'execute',
       name = "Show Config",
-      func = function() InterfaceOptionsFrameOkay:Click(); GameMenuButtonContinue:Click(); x:ShowConfigTool() end,
+      func = function() InterfaceOptionsFrame_OnHide(); HideUIPanel(GameMenuFrame); x:ShowConfigTool() end,
     },
   },
 }
