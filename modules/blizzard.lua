@@ -29,7 +29,7 @@ InterfaceOptionsCombatTextPanel:HookScript('OnShow', function(self)
   for _, control in pairs(self.controls) do
     -- UIFrameFadeOut(control, 0, 0, 0)
     if control.type == CONTROLTYPE_DROPDOWN then
-      _G[control:GetName()..'Button']:Disable()
+    	UIDropDownMenu_DisableDropDown(control)
     else
       control:Disable()
     end
