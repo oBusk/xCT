@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2015. All Rights Reserved.        ]
+ [  Â©2015. All Rights Reserved.        ]
  [====================================]]
  
 local ADDON_NAME, addon = ...
@@ -143,18 +143,18 @@ addon.options = {
 -- A fast C-Var Update routine
 local function isCVarsDisabled( ) return x.db.profile.bypassCVars end
 
-x.cvar_udpate = function( force )
+x.cvar_update = function( force )
   -- Always have Combat Text Enabled
   SetCVar("enableCombatText", 1)
-  _G["SHOW_COMBAT_TEXT"] = "1"
-  
--- Floating Combat Text: Threat Changes
-  if x.db.profile.blizzardFCT.CombatThreatChanges then
-    COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2
-    COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = XCT_CT_INC_1, XCT_CT_INC_3
-  else
+
+  -- Floating Combat Text: Threat Changes
+  if not x.db.profile.blizzardFCT.CombatThreatChanges then
     COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = "", "", ""
     COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = "", ""
+  elseif COMBAT_THREAT_DECREASE_0 == "" then
+    -- only overwrite Blizzard constants if they were previously changed
+    COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2
+    COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = XCT_CT_INC_1, XCT_CT_INC_3
   end
 
   if  isCVarsDisabled( ) then
@@ -166,196 +166,166 @@ x.cvar_udpate = function( force )
   end
 
   -- We dont care about "combatTextFloatMode"
-  -- _G["COMBAT_TEXT_FLOAT_MODE"] = "1"
 
   -- Check: fctLowManaHealth (General Option)
   if x.db.profile.frames.general.showLowManaHealth then
     SetCVar("fctLowManaHealth", 1)
-    _G["COMBAT_TEXT_SHOW_LOW_HEALTH_MANA"] = "1"
   else
     SetCVar("fctLowManaHealth", 0)
-    _G["COMBAT_TEXT_SHOW_LOW_HEALTH_MANA"] = "0"
   end
-  
+
   -- Check: fctAuras (General Option)
   if x.db.profile.frames.general.showBuffs or x.db.profile.frames.general.showDebuffs then
     SetCVar("fctAuras", 1)
-    _G["COMBAT_TEXT_SHOW_AURAS"] = "1"
-    _G["COMBAT_TEXT_SHOW_AURA_FADE"] = "1"
   else
     SetCVar("fctAuras", 0)
-    _G["COMBAT_TEXT_SHOW_AURAS"] = "0"
-    _G["COMBAT_TEXT_SHOW_AURA_FADE"] = "0"
   end
-  
+
   -- Check: fctCombatState (General Option)
   if x.db.profile.frames.general.showCombatState then
     SetCVar("fctCombatState", 1)
-    _G["COMBAT_TEXT_SHOW_COMBAT_STATE"] = "1"
   else
     SetCVar("fctCombatState", 0)
-    _G["COMBAT_TEXT_SHOW_COMBAT_STATE"] = "0"
   end
-  
+
   -- Check: fctDodgeParryMiss (Damage Option)
   if x.db.profile.frames.damage.showDodgeParryMiss then
     SetCVar("fctDodgeParryMiss", 1)
-    _G["COMBAT_TEXT_SHOW_DODGE_PARRY_MISS"] = "1"
   else
     SetCVar("fctDodgeParryMiss", 0)
-    _G["COMBAT_TEXT_SHOW_DODGE_PARRY_MISS"] = "0"
   end
-  
+
   -- Check: fctDamageReduction (Damage Option)
   if x.db.profile.frames.damage.showDamageReduction then
     SetCVar("fctDamageReduction", 1)
-    _G["COMBAT_TEXT_SHOW_RESISTANCES"] = "1"
   else
     SetCVar("fctDamageReduction", 0)
-    _G["COMBAT_TEXT_SHOW_RESISTANCES"] = "0"
   end
-  
+
   -- Check: fctRepChanges (General Option)
   if x.db.profile.frames.general.showRepChanges then
     SetCVar("fctRepChanges", 1)
-    _G["COMBAT_TEXT_SHOW_REPUTATION"] = "1"
   else
     SetCVar("fctRepChanges", 0)
-    _G["COMBAT_TEXT_SHOW_REPUTATION"] = "0"
   end
-  
+
   -- Check: fctHonorGains (General Option)
   if x.db.profile.frames.damage.showHonorGains then
     SetCVar("fctHonorGains", 1)
-    _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "1"
   else
     SetCVar("fctHonorGains", 0)
-    _G["COMBAT_TEXT_SHOW_HONOR_GAINED"] = "0"
   end
-  
+
   -- Check: fctReactives (Attach to Procs Frame)
   if x.db.profile.frames.procs.enabledFrame then
     SetCVar("fctReactives", 1)
-    _G["COMBAT_TEXT_SHOW_REACTIVES"] = "1"
   else
     SetCVar("fctReactives", 0)
-    _G["COMBAT_TEXT_SHOW_REACTIVES"] = "0"
   end
-  
+
   -- Check: fctFriendlyHealers (Healing Option)
   if x.db.profile.frames.healing.showFriendlyHealers then
     SetCVar("fctFriendlyHealers", 1)
-    _G["COMBAT_TEXT_SHOW_FRIENDLY_NAMES"] = "1"
   else
     SetCVar("fctFriendlyHealers", 0)
-    _G["COMBAT_TEXT_SHOW_FRIENDLY_NAMES"] = "0"
   end
-  
+
   -- Check: CombatHealingAbsorbSelf (Healing Option)
   if x.db.profile.frames.healing.enableSelfAbsorbs then
     SetCVar("CombatHealingAbsorbSelf", 1)
-    _G["SHOW_COMBAT_HEALING_ABSORB_SELF"] = "1"
   else
     SetCVar("CombatHealingAbsorbSelf", 0)
-    _G["SHOW_COMBAT_HEALING_ABSORB_SELF"] = "0"
   end
-  
+
   -- Check: fctComboPoints (COMBO Option)
   if x.player.class == "ROGUE" and x.db.profile.frames.class.enabledFrame then
     SetCVar("fctComboPoints", 1)
-    _G["COMBAT_TEXT_SHOW_COMBO_POINTS"] = "1"
   else
     SetCVar("fctComboPoints", 0)
-    _G["COMBAT_TEXT_SHOW_COMBO_POINTS"] = "0"
   end
-  
+
   -- Check: fctEnergyGains (Power Option)
   if x.db.profile.frames.power.showEnergyGains then
     SetCVar("fctEnergyGains", 1)
-    _G["COMBAT_TEXT_SHOW_ENERGIZE"] = "1"
   else
     SetCVar("fctEnergyGains", 0)
-    _G["COMBAT_TEXT_SHOW_ENERGIZE"] = "0"
   end
-  
+
   -- Check: fctPeriodicEnergyGains (Power Option)
   if x.db.profile.frames.power.showPeriodicEnergyGains then
     SetCVar("fctPeriodicEnergyGains", 1)
-    _G["COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE"] = "1"
   else
     SetCVar("fctPeriodicEnergyGains", 0)
-    _G["COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE"] = "0"
   end
-  
+
   -- Floating Combat Text: Effects
   if x.db.profile.blizzardFCT.fctSpellMechanics then
     SetCVar("fctSpellMechanics", 1)
   else
     SetCVar("fctSpellMechanics", 0)
   end
-  
+
   -- Floating Combat Text: Effects (Others)
   if x.db.profile.blizzardFCT.fctSpellMechanicsOther then
     SetCVar("fctSpellMechanicsOther", 1)
   else
     SetCVar("fctSpellMechanicsOther", 0)
   end
-  
+
   -- Floating Combat Text: Outgoing Damage
   if x.db.profile.blizzardFCT.CombatDamage then
     SetCVar("CombatDamage", 1)
   else
     SetCVar("CombatDamage", 0)
   end
-  
+
   -- Floating Combat Text: Outgoing Dots and Hots
   if x.db.profile.blizzardFCT.CombatLogPeriodicSpells then
     SetCVar("CombatLogPeriodicSpells", 1)
   else
     SetCVar("CombatLogPeriodicSpells", 0)
   end
-  
+
   -- Floating Combat Text: Outgoing Pet Damage
   if x.db.profile.blizzardFCT.PetMeleeDamage then
     SetCVar("PetMeleeDamage", 1)
   else
     SetCVar("PetMeleeDamage", 0)
   end
-  
+
   -- Floating Combat Text: Outgoing Healing
   if x.db.profile.blizzardFCT.CombatHealing then
     SetCVar("CombatHealing", 1)
   else
     SetCVar("CombatHealing", 0)
   end
-  
+
   -- Floating Combat Text: Outgoing Absorbs
   if x.db.profile.blizzardFCT.CombatHealingAbsorbTarget then
     SetCVar("CombatHealingAbsorbTarget", 1)
   else
     SetCVar("CombatHealingAbsorbTarget", 0)
   end
-  
+
   -- Floating Combat Text: Display Target Mode
   SetCVar("CombatDamageStyle", x.db.profile.blizzardFCT.CombatDamageStyle)
-  
 end
 
 -- Generic Get/Set methods
 local function get0(info) return x.db.profile[info[#info-1]][info[#info]] end
-local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x.cvar_udpate() end
-local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames(); x.cvar_udpate() end
+local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x.cvar_update() end
+local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames(); x.cvar_update() end
 local function get0_1(info) return x.db.profile[info[#info-2]][info[#info]] end
-local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value; x.cvar_udpate() end
+local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value; x.cvar_update() end
 local function getTextIn0(info) return string_gsub(x.db.profile[info[#info-1]][info[#info]], "|", "||") end
-local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|"); x.cvar_udpate() end
+local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|"); x.cvar_update() end
 local function get1(info) return x.db.profile.frames[info[#info-1]][info[#info]] end
-local function set1(info, value) x.db.profile.frames[info[#info-1]][info[#info]] = value; x.cvar_udpate() end
-local function set1_update(info, value) set1(info, value); x:UpdateFrames(info[#info-1]); x.cvar_udpate() end
+local function set1(info, value) x.db.profile.frames[info[#info-1]][info[#info]] = value; x.cvar_update() end
+local function set1_update(info, value) set1(info, value); x:UpdateFrames(info[#info-1]); x.cvar_update() end
 local function get2(info) return x.db.profile.frames[info[#info-2]][info[#info]] end
-local function set2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = value; x.cvar_udpate() end
-local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_udpate() end
-local function set2_update_force(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_udpate(true) end
+local function set2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = value; x.cvar_update() end
+local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_update() end
+local function set2_update_force(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_update(true) end
 local function getColor2(info) return unpack(x.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end
 local function setColor2(info, r, g, b) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end
 local function getTextIn2(info) return string_gsub(x.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end
@@ -1442,7 +1412,7 @@ addon.options.args["FloatingCombatText"] = {
             x.db.profile.blizzardFCT.fontName = LSM:Fetch("font", value)
             
             --x:UpdateFrames()
-            --x.cvar_udpate()
+            --x.cvar_update()
           end,
           disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.enabled end,
         },
