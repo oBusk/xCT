@@ -24,17 +24,20 @@ hooksecurefunc('CombatText_AddMessage', function(message, scrollFunction, r, g, 
   x:AddMessage("general", message, {r, g, b})
 end)
 
-local fsTitle, configButton
-InterfaceOptionsCombatTextPanel:HookScript('OnShow', function(self)
+hooksecurefunc(InterfaceOptionsCombatTextPanel, 'refresh', function(...)
+  -- @see InterfaceOptionsPanel_Refresh
+  local self = InterfaceOptionsCombatTextPanel
   for _, control in pairs(self.controls) do
-    -- UIFrameFadeOut(control, 0, 0, 0)
     if control.type == CONTROLTYPE_DROPDOWN then
-    	UIDropDownMenu_DisableDropDown(control)
+      UIDropDownMenu_DisableDropDown(control)
     else
       control:Disable()
     end
   end
+end)
 
+local fsTitle, configButton
+InterfaceOptionsCombatTextPanel:HookScript('OnShow', function(self)
   if not fsTitle then
     -- Show Combat Options Title
     fsTitle = self:CreateFontString(nil, "OVERLAY")
