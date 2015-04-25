@@ -53,7 +53,7 @@ local function RefreshConfig()
   x:UpdateItemTypes()
 
   -- Update combat text engine CVars
-  x.cvar_udpate( true )
+  x.cvar_update( true )
     
   collectgarbage()
 end
@@ -107,7 +107,7 @@ function x:OnInitialize()
   x.GenerateColorOptions()
   
   -- Update combat text engine CVars
-  x.cvar_udpate()
+  x.cvar_update()
   
   -- Everything got Initialized, show Startup Text
   if self.db.profile.showStartupText then
