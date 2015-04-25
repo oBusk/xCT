@@ -143,14 +143,16 @@ end
 --[=====================================================[
  Fast Boolean Lookups
 --]=====================================================]
-local function ShowMissTypes() return COMBAT_TEXT_SHOW_DODGE_PARRY_MISS == "1" end
-local function ShowResistances() return COMBAT_TEXT_SHOW_RESISTANCES == "1" end
-local function ShowHonor() return COMBAT_TEXT_SHOW_HONOR_GAINED == "1" end
-local function ShowFaction() return COMBAT_TEXT_SHOW_REPUTATION == "1" end
-local function ShowReactives() return COMBAT_TEXT_SHOW_REACTIVES == "1" end
-local function ShowLowResources() return COMBAT_TEXT_SHOW_LOW_HEALTH_MANA == "1" end
-local function ShowCombatState() return COMBAT_TEXT_SHOW_COMBAT_STATE == "1" end
-local function ShowFriendlyNames() return COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" end
+x.CVars = {}
+
+local function ShowMissTypes() return x.CVars["SHOW_DODGE_PARRY_MISS"] end
+local function ShowResistances() return x.CVars["SHOW_RESISTANCES"] end
+local function ShowHonor() return x.CVars["SHOW_HONOR_GAINED"] end
+local function ShowFaction() return x.CVars["SHOW_REPUTATION"] end
+local function ShowReactives() return x.CVars["SHOW_REACTIVES"] end
+local function ShowLowResources() return x.CVars["SHOW_LOW_HEALTH_MANA"] end
+local function ShowCombatState() return x.CVars["SHOW_COMBAT_STATE"] end
+local function ShowFriendlyNames() return x.CVars["SHOW_FRIENDLY_NAMES"] end
 local function ShowColoredFriendlyNames() return x.db.profile.frames["healing"].enableClassNames end
 local function ShowHealingRealmNames() return x.db.profile.frames["healing"].enableRealmNames end
 local function ShowOnlyMyHeals() return x.db.profile.frames.healing.showOnlyMyHeals end

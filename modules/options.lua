@@ -170,8 +170,10 @@ x.cvar_update = function( force )
   -- Check: fctLowManaHealth (General Option)
   if x.db.profile.frames.general.showLowManaHealth then
     SetCVar("fctLowManaHealth", 1)
+    x.CVars["SHOW_LOW_HEALTH_MANA"] = true
   else
     SetCVar("fctLowManaHealth", 0)
+    x.CVars["SHOW_LOW_HEALTH_MANA"] = false
   end
 
   -- Check: fctAuras (General Option)
@@ -184,50 +186,64 @@ x.cvar_update = function( force )
   -- Check: fctCombatState (General Option)
   if x.db.profile.frames.general.showCombatState then
     SetCVar("fctCombatState", 1)
+    x.CVars["SHOW_COMBAT_STATE"] = true
   else
     SetCVar("fctCombatState", 0)
+    x.CVars["SHOW_COMBAT_STATE"] = false
   end
 
   -- Check: fctDodgeParryMiss (Damage Option)
   if x.db.profile.frames.damage.showDodgeParryMiss then
     SetCVar("fctDodgeParryMiss", 1)
+    x.CVars["SHOW_DODGE_PARRY_MISS"] = true
   else
     SetCVar("fctDodgeParryMiss", 0)
+    x.CVars["SHOW_DODGE_PARRY_MISS"] = false
   end
 
   -- Check: fctDamageReduction (Damage Option)
   if x.db.profile.frames.damage.showDamageReduction then
     SetCVar("fctDamageReduction", 1)
+    x.CVars["SHOW_RESISTANCES"] = true
   else
     SetCVar("fctDamageReduction", 0)
+    x.CVars["SHOW_RESISTANCES"] = false
   end
 
   -- Check: fctRepChanges (General Option)
   if x.db.profile.frames.general.showRepChanges then
     SetCVar("fctRepChanges", 1)
+    x.CVars["SHOW_REPUTATION"] = true
   else
     SetCVar("fctRepChanges", 0)
+    x.CVars["SHOW_REPUTATION"] = false
   end
 
   -- Check: fctHonorGains (General Option)
   if x.db.profile.frames.damage.showHonorGains then
     SetCVar("fctHonorGains", 1)
+    x.CVars["SHOW_HONOR_GAINED"] = true
   else
     SetCVar("fctHonorGains", 0)
+    x.CVars["SHOW_HONOR_GAINED"] = false
   end
 
   -- Check: fctReactives (Attach to Procs Frame)
   if x.db.profile.frames.procs.enabledFrame then
     SetCVar("fctReactives", 1)
+    x.CVars["SHOW_REACTIVES"] = true
   else
     SetCVar("fctReactives", 0)
+    x.CVars["SHOW_REACTIVES"] = false
   end
 
   -- Check: fctFriendlyHealers (Healing Option)
   if x.db.profile.frames.healing.showFriendlyHealers then
     SetCVar("fctFriendlyHealers", 1)
+    x.CVars["SHOW_FRIENDLY_NAMES"] = true
   else
     SetCVar("fctFriendlyHealers", 0)
+    x.CVars["SHOW_FRIENDLY_NAMES"] = false
   end
 
   -- Check: CombatHealingAbsorbSelf (Healing Option)
@@ -575,7 +591,7 @@ addon.options.args["spells"] = {
         mergeDontMergeCriticals = {
           order = 41,
           type = 'toggle',
-          name = "Don't Merge Critical Together",
+          name = "Don't Merge Critical Hits Together",
           desc = "Crits will not get merged in the critical frame, but they will be included in the outgoing total. |cffFFFF00(Default)|r",
           get = get0_1,
           set = setSpecialCriticalOptions,
@@ -1204,8 +1220,6 @@ addon.options.args["Credits"] = {
       name = " |cff22FF80 Tonyleila|r,|cff1AAD59 ckaotik|r,|cff22FF80 Stanzilla|r,|cff1AAD59 behub|r",
     },
     
-    
-    
     testerTitleSpace5 = {
       type = 'description',
       order = 50,
@@ -1222,7 +1236,7 @@ addon.options.args["Credits"] = {
     contactStep1 = {
       type = 'description',
       order = 52,
-      name = "1. GitHub: |cff22FF80https://github.com/dandruff/xCT|r\n\n2. Send a PM to |cffFF8000Dandruff|r on http://tukui.org",
+      name = "1. GitHub: |cff22FF80https://github.com/dandruff/xCT|r\n\n2. Send a PM to |cffFF8000Dandruff|r at |cff6495EDhttp://tukui.org/|r",
     },
     testerTitleSpace6 = {
       type = 'description',
@@ -2027,7 +2041,7 @@ addon.options.args["Frames"] = {
               name = "Buff Gains/Fades",
               desc = "Display the names of helpful auras |cff00FF00(Buffs)|r that you gain and lose.",
               get = get2,
-              set = set2,
+              set = set2_update_force,
             },
             showDebuffs = {
               order = 5,
@@ -2035,7 +2049,7 @@ addon.options.args["Frames"] = {
               name = "Debuff Gains/Fades",
               desc = "Display the names of harmful auras |cffFF0000(Debuffs)|r that you gain and lose.",
               get = get2,
-              set = set2,
+              set = set2_update_force,
             },
             showLowManaHealth = {
               order = 6,
@@ -2043,7 +2057,7 @@ addon.options.args["Frames"] = {
               name = "Low Mana/Health",
               desc = "Displays 'Low Health/Mana' when your health/mana reaches the low threshold.",
               get = get2,
-              set = set2,
+              set = set2_update_force,
             },
             showCombatState = {
               order = 7,
@@ -2051,7 +2065,7 @@ addon.options.args["Frames"] = {
               name = "Leave/Enter Combat",
               desc = "Displays when the player is leaving or entering combat.",
               get = get2,
-              set = set2,
+              set = set2_update_force,
             },
             showRepChanges = {
               order = 8,
@@ -2059,7 +2073,7 @@ addon.options.args["Frames"] = {
               name = "Show Reputation",
               desc = "Displays your player's reputation gains and losses.",
               get = get2,
-              set = set2,
+              set = set2_update_force,
             },
             showHonorGains = {
               order = 9,
@@ -2067,7 +2081,7 @@ addon.options.args["Frames"] = {
               name = "Show Honor",
               desc = "Displays your player's honor gains.",
               get = get2,
-              set = set2,
+              set = set2_update_force,
             },
           },
         },

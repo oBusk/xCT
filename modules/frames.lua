@@ -1126,7 +1126,7 @@ StaticPopupDialogs["XCT_PLUS_DB_CLEANUP_1"] = {
 }
 
 StaticPopupDialogs["XCT_PLUS_FORCE_CVAR_UPDATE"] = {
-	text			= "xCT+ Performed an action that requires it to update some Combat Text related CVars. It is highly recommened you reload your UI before changing any more settings.",
+	text			= "|cff798BDDxCT+|r performed an action that requires it to update some |cffFFFF00Combat Text|r related |cffFF8000CVars|r. It is |cff20DD40highly recommened|r you reload your UI before changing any more settings.",
 	timeout			= 0,
 	whileDead		= 1,
 	
