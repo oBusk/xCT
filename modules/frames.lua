@@ -520,7 +520,7 @@ do
 			elseif frameIndex[index] == "healing" then
 				--format_mergeCount = "%s |cffFFFF00x%s|r"
         local strColor = "ffff00"
-				if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
+				if x.CVars["SHOW_FRIENDLY_NAMES"] then
 					local healerName = stack[idIndex]
 					if x.db.profile.frames["healing"].enableClassNames then
 						local _, class = UnitClass(healerName)
