@@ -121,6 +121,7 @@ function x:UpdateCombatTextEvents(enable)
     
     -- if loot
     f:RegisterEvent("CHAT_MSG_LOOT")
+    f:RegisterEvent("CHAT_MSG_CURRENCY")
     f:RegisterEvent("CHAT_MSG_MONEY")
     
     -- damage and healing
@@ -341,6 +342,9 @@ local format_crafted            = (LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))
 local format_looted             = (LOOT_ITEM_SELF:gsub("%%.*", ""))
 local format_pushed             = (LOOT_ITEM_PUSHED_SELF:gsub("%%.*", ""))
 local format_strcolor_white     = "ffffff"
+local format_currency_single    = (CURRENCY_GAINED:gsub("%%s", "(.+)"))
+local format_currency_multiple  = (CURRENCY_GAINED_MULTIPLE:gsub("%%s", "(.+)"):gsub("%%d", "(%%d+)"))
+local format_currency           = "%s: %s [%s] |cff798BDDx%s|r |cffFFFF00(%s)|r"
 
 --[=====================================================[
  Message Formatters
@@ -1551,6 +1555,36 @@ x.events = {
           end
         end
       end
+    end,
+  ["CHAT_MSG_CURRENCY"] = function(msg)
+		local currencyLink, amountGained = msg:match(format_currency_multiple)
+		if not currencyLink then
+			amountGained, currencyLink = 1, msg:match(format_currency_single)
+
+			if not currencyLink then
+				return
+			end
+		end
+
+		local name, amountOwned, texturePath = _G.GetCurrencyInfo(tonumber(currencyLink:match("currency:(%d+)")))
+		
+		-- "%s: %s [%s] |cff798BDDx%s|r |cffFFFF00(%s)|r"
+		local message = sformat(format_currency,
+		  "Currency",		-- Item Type
+		  ShowLootIcons()                           -- Icon
+			and sformat(format_loot_icon,
+						texturePath,
+						GetLootIconSize(),
+						GetLootIconSize())
+			or "",
+		  name,                                     -- Name
+		  amountGained, -- Amount Gained
+		  amountOwned -- Amount Total
+		)
+		
+		-- Add the message
+		x:AddMessage("loot", message, {1, 1, 1})
+		-- LibToast:Spawn(FOLDER_NAME, _G.CURRENCY, name, texturePath, 1, tonumber(amountGained), tonumber(amountOwned))
     end,
   ["CHAT_MSG_MONEY"] = function(msg)
       if not ShowLootMoney() then return end
