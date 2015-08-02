@@ -171,6 +171,7 @@ local function ShowSwingCritPrefix() return x.db.profile.frames["critical"].pref
 local function ShowLootItems() return x.db.profile.frames["loot"].showItems end
 local function ShowLootItemTypes() return x.db.profile.frames["loot"].showItemTypes end
 local function ShowLootMoney() return x.db.profile.frames["loot"].showMoney end
+local function ShowLootCurrency() return x.db.profile.frames["loot"].showCurrency end
 local function ShowTotalItems() return x.db.profile.frames["loot"].showItemTotal end
 local function ShowLootCrafted() return x.db.profile.frames["loot"].showCrafted end
 local function ShowLootQuest() return x.db.profile.frames["loot"].showQuest end
@@ -1557,34 +1558,37 @@ x.events = {
       end
     end,
   ["CHAT_MSG_CURRENCY"] = function(msg)
-		local currencyLink, amountGained = msg:match(format_currency_multiple)
-		if not currencyLink then
-			amountGained, currencyLink = 1, msg:match(format_currency_single)
+      if not ShowLootCurrency() then return end
+      -- get currency from chat
+      local currencyLink, amountGained = msg:match(format_currency_multiple)
+      if not currencyLink then
+        amountGained, currencyLink = 1, msg:match(format_currency_single)
 
-			if not currencyLink then
-				return
-			end
-		end
+        if not currencyLink then
+          return
+        end
+      end
 
-		local name, amountOwned, texturePath = _G.GetCurrencyInfo(tonumber(currencyLink:match("currency:(%d+)")))
-		
-		-- "%s: %s [%s] |cff798BDDx%s|r |cffFFFF00(%s)|r"
-		local message = sformat(format_currency,
-		  "Currency",		-- Item Type
-		  ShowLootIcons()                           -- Icon
-			and sformat(format_loot_icon,
-						texturePath,
-						GetLootIconSize(),
-						GetLootIconSize())
-			or "",
-		  name,                                     -- Name
-		  amountGained, -- Amount Gained
-		  amountOwned -- Amount Total
-		)
-		
-		-- Add the message
-		x:AddMessage("loot", message, {1, 1, 1})
-		-- LibToast:Spawn(FOLDER_NAME, _G.CURRENCY, name, texturePath, 1, tonumber(amountGained), tonumber(amountOwned))
+      -- get currency info
+      local name, amountOwned, texturePath = _G.GetCurrencyInfo(tonumber(currencyLink:match("currency:(%d+)")))
+
+      -- format curency
+      -- "%s: %s [%s] |cff798BDDx%s|r |cffFFFF00(%s)|r"
+      local message = sformat(format_currency,
+        "Currency",
+        ShowLootIcons()
+          and sformat(format_loot_icon,
+          texturePath,
+          GetLootIconSize(),
+          GetLootIconSize())
+          or "",
+        name,
+        amountGained,
+        amountOwned
+      )
+
+      -- Add the message
+      x:AddMessage("loot", message, {1, 1, 1})
     end,
   ["CHAT_MSG_MONEY"] = function(msg)
       if not ShowLootMoney() then return end
