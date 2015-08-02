@@ -1578,9 +1578,9 @@ x.events = {
         "Currency",
         ShowLootIcons()
           and sformat(format_loot_icon,
-          texturePath,
-          GetLootIconSize(),
-          GetLootIconSize())
+            texturePath,
+            GetLootIconSize(),
+            GetLootIconSize())
           or "",
         name,
         amountGained,
