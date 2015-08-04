@@ -38,11 +38,16 @@ end
 -- List of Spells that need to be merged
 addon.merges = {
 
+-- items (legendary rings)
+  [187626] = CreateMergeSpellEntry("ITEM", .5, "Legedary Ring for Agility Users"),        -- Legedary Ring (Agility DPS - INSTANT)
+  [187625] = CreateMergeSpellEntry("ITEM", .5, "Legedary Ring for Intellect DPS Users"),  -- Legedary Ring (Intellect DPS - INSTANT)
+  [187624] = CreateMergeSpellEntry("ITEM", .5, "Legedary Ring for Strength DPS Users"),   -- Legedary Ring (Strength DPS - INSTANT)
+
 -- items (legendary cloaks)
-  [147891] = CreateMergeSpellEntry("ITEM", 3.5, "Legedary Cloak for Melee"),    -- Legedary Cloak (Melee - dmg over 3s)
-  [148008] = CreateMergeSpellEntry("ITEM", 3.5, "Legedary Cloak for Casters"),  -- Legedary Cloak (Caster - dmg over 3s)
-  [148009] = CreateMergeSpellEntry("ITEM", 5,   "Legedary Cloak for Healers"),  -- Legedary Cloak (Healer - heal over 10s)
-  [149276] = CreateMergeSpellEntry("ITEM", 3.5, "Legedary Cloak for Hunters"),  -- Legedary Cloak (Hunter - dmg over 3s)
+  [147891] = CreateMergeSpellEntry("ITEM", 3.5, "Legedary Cloak for Melee"),         -- Legedary Cloak (Melee - dmg over 3s)
+  [148008] = CreateMergeSpellEntry("ITEM", 3.5, "Legedary Cloak for Casters"),       -- Legedary Cloak (Caster - dmg over 3s)
+  [148009] = CreateMergeSpellEntry("ITEM", 5,   "Legedary Cloak for Healers"),       -- Legedary Cloak (Healer - heal over 10s)
+  [149276] = CreateMergeSpellEntry("ITEM", 3.5, "Legedary Cloak for Hunters"),       -- Legedary Cloak (Hunter - dmg over 3s)
   
   -- Trinket: Kardris' Toxic Totem (Based on class and spec)
   [146061] = CreateMergeSpellEntry("ITEM", 5, "Physical Damage (Melee)"),            -- Multi-Strike (Physical, Melee)
@@ -69,19 +74,22 @@ addon.merges = {
   [148234] = CreateMergeSpellEntry("ITEM", .5, "Holy Healing (Priests, Paladins)"),  -- Cleave (Holy, Healing)
   [148235] = CreateMergeSpellEntry("ITEM", .5, "Nature Healing (Monks, Druids)"),    -- Cleave (Nature, Healing)
 
+  -- Trinket: Hellfire High Council's Mirror of the Blademaster
+  [184280] = CreateMergeSpellEntry("ITEM", 7,  "Mirror of the Blademaster"),         -- Felstorm (every 2s for 20s) 
+
 -- Follower / Bodyguard
-  [171764] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Vivianne 1"),
-  [175806] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Vivianne 2"),
-  [173010] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Vivianne 3"),
-  [175814] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Vivianne 4"),
-  [176020] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Aeda 1"),
-  [176017] = CreateMergeSpellEntry("ITEM", 3.5, "Follower Aeda 2"),
+  [171764] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),              -- Fireball (for 8s)
+  [175806] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),              -- Meteor (Initial Dmg - AoE - every 5s for 8s)
+  [173010] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),              -- Blizzard
+  [175814] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),              -- Meteor Burn (DoT - AoE - every 5s for 8s)
+  [176020] = CreateMergeSpellEntry("ITEM",  .5, "Aeda (Follower)"),                  -- Demonic Leap (INSTANT)
+  [176017] = CreateMergeSpellEntry("ITEM", 3.5, "Aeda (Follower)"),                  -- Shadow Bolt Volley
 
 -- WoD
-  [159238] = CreateMergeSpellEntry("ITEM", 3.5, "Weapon Enchant"),    -- WoD Shattered Hand Enchant
-  [143924] = CreateMergeSpellEntry("ITEM", 3.5, "Item Leech"),        -- Item life Leech
-  [165421] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder1"),         -- Gorgrond Shredder
-  [164603] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder2"),         -- Gorgrond Shredder  
+  [159238] = CreateMergeSpellEntry("ITEM", 3.5, "Mark of the Shattered Hand (Rogue Weapon Enchant)"), -- WoD Shattered Hand Enchant
+  [143924] = CreateMergeSpellEntry("ITEM", 3.5, "Item Leech"),       -- Item life Leech
+  [165421] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder"),         -- Gorgrond Shredder
+  [164603] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder"),         -- Gorgrond Shredder  
   
 -- death knight (damage)
   [55078]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Blood Plague

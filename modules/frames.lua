@@ -132,13 +132,6 @@ function x:UpdateFrames(specificFrame)
 				f:SetClampedToScreen(true)
 				f:SetShadowColor(0, 0, 0, 0)
 				
-				-- Special Cases
-				if framename == "class" then
-					f:SetMaxLines(1)
-					f:SetFading(false)
-				end
-				
-				
 				f.sizing = CreateFrame("Frame", "xCT_Plus"..framename.."SizingFrame", f)
 				f.sizing.parent = f
 				f.sizing:SetHeight(16)
@@ -190,21 +183,21 @@ function x:UpdateFrames(specificFrame)
 			
 			-- scrolling
 			if settings.enableScrollable then
-        f:SetMaxLines(settings.scrollableLines)
-        if not settings.scrollableInCombat then
-          if InCombatLockdown() then
-            x:DisableFrameScrolling( framename )
-          else
-            x:EnableFrameScrolling( framename )
-          end
-        else
-          x:EnableFrameScrolling( framename )
-        end
+				f:SetMaxLines(settings.scrollableLines)
+				if not settings.scrollableInCombat then
+					if InCombatLockdown() then
+						x:DisableFrameScrolling( framename )
+					else
+						x:EnableFrameScrolling( framename )
+					end
+				else
+					x:EnableFrameScrolling( framename )
+				end
 			else
-        f:SetMaxLines(settings.Height / settings.fontSize)
+				f:SetMaxLines(settings.Height / settings.fontSize)
 				x:DisableFrameScrolling( framename )
 			end
-			
+
 			-- fading
 			if settings.enableCustomFade then
 				f:SetFading(settings.enableFade)
@@ -215,6 +208,12 @@ function x:UpdateFrames(specificFrame)
 				f:SetTimeVisible(3)
 			end
 			
+			-- Special Cases
+			if framename == "class" then
+				f:SetMaxLines(1)
+				f:SetFading(false)
+			end
+
 			-- Send a Test message
 			if specificFrame then
 				f:SetScript("OnUpdate", Frame_SendTestMessage_OnUpdate)
