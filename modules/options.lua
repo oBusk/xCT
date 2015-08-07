@@ -1217,7 +1217,7 @@ addon.options.args["Credits"] = {
       type = 'description',
       order = 42,
       fontSize = "medium",
-      name = " |cff22FF80 Tonyleila|r,|cff1AAD59 ckaotik|r,|cff22FF80 Stanzilla|r,|cff1AAD59 behub|r,|cff22FF80 vforge|r",
+      name = " |cff22FF80 Tonyleila|r,|cff1AAD59 ckaotik|r,|cff22FF80 Stanzilla|r,|cff1AAD59 Torch (behub)|r,|cff22FF80 vforge|r",
     },
     
     testerTitleSpace5 = {
