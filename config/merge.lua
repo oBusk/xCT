@@ -74,8 +74,10 @@ addon.merges = {
   [148234] = CreateMergeSpellEntry("ITEM", .5, "Holy Healing (Priests, Paladins)"),  -- Cleave (Holy, Healing)
   [148235] = CreateMergeSpellEntry("ITEM", .5, "Nature Healing (Monks, Druids)"),    -- Cleave (Nature, Healing)
 
-  -- Trinket: Hellfire High Council's Mirror of the Blademaster
-  [184280] = CreateMergeSpellEntry("ITEM", 7,  "Mirror of the Blademaster"),         -- Felstorm (every 2s for 20s) 
+  -- Trinket: Warlord's of Draenor
+  [184280] = CreateMergeSpellEntry("ITEM",   7, "Mirror of the Blademaster"),         -- Felstorm (every 2s for 20s) 
+  [184248] = CreateMergeSpellEntry("ITEM",  .5, "Discordant Chorus"),                 -- Discordant Chorus
+  [185098] = CreateMergeSpellEntry("ITEM", 4.5, "Soothing Breeze"),                   -- Monk Class Trinket (Sacred Draenic Incense)
 
 -- Follower / Bodyguard
   [171764] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),              -- Fireball (for 8s)
@@ -84,13 +86,17 @@ addon.merges = {
   [175814] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),              -- Meteor Burn (DoT - AoE - every 5s for 8s)
   [176020] = CreateMergeSpellEntry("ITEM",  .5, "Aeda (Follower)"),                  -- Demonic Leap (INSTANT)
   [176017] = CreateMergeSpellEntry("ITEM", 3.5, "Aeda (Follower)"),                  -- Shadow Bolt Volley
+  [172965] = CreateMergeSpellEntry("ITEM", 3.5, "Delvar (Follower)"),                -- Death and Decay
+  [175796] = CreateMergeSpellEntry("ITEM", 3.5, "Delvar (Follower)"),                -- Breath of Sindragosa
 
 -- WoD
-  [159238] = CreateMergeSpellEntry("ITEM", 3.5, "Mark of the Shattered Hand (Rogue Weapon Enchant)"), -- WoD Shattered Hand Enchant
+  [159238] = CreateMergeSpellEntry("ITEM", 3.5, "Mark of the Shattered Hand (Weapon Enchant)"), -- WoD Shattered Hand Enchant
   [143924] = CreateMergeSpellEntry("ITEM", 3.5, "Item Leech"),       -- Item life Leech
   [165421] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder"),         -- Gorgrond Shredder
   [164603] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder"),         -- Gorgrond Shredder  
-  
+  [188505] = CreateMergeSpellEntry("ITEM",  .5, "Felmouth Frenzy"),  -- Felmouth Frenzy Food (Tanaan)
+  [182218] = CreateMergeSpellEntry("ITEM", 1.5, "HFC Construct"),    -- HFC Construct (Felblaze Residue)
+
 -- death knight (damage)
   [55078]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Blood Plague
   [91776]  = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Claw (Army of the Dead)
@@ -98,6 +104,8 @@ addon.merges = {
   [55095]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Frost Fever
   [49184]  = CreateMergeSpellEntry("DEATHKNIGHT", .5),  -- Howling Blast                              (INSTANT)
   [168828] = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Necrosis (Unholy)
+  [155159] = CreateMergeSpellEntry("DEATHKNIGHT", 2.5), -- Necrotic Plague
+  [50401]  = CreateMergeSpellEntry("DEATHKNIGHT", 1.5), -- Razorice (Frost DW)
 
 -- death knight (healing)
   [119980] = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Conversion
@@ -145,6 +153,7 @@ addon.merges = {
   [120]    = CreateMergeSpellEntry("MAGE"),             -- Cone of Cold
   [114954] = CreateMergeSpellEntry("MAGE"),             -- Arcane: Nether Tempest                     (Merged w/ Secondary Spell)
   [1449]   = CreateMergeSpellEntry("MAGE", .5),         -- Arcane: Arcane Explosion
+  [7268]   = CreateMergeSpellEntry("MAGE", 2),          -- Arcane: Arcane Missiles
   [153640] = CreateMergeSpellEntry("MAGE", 3.5),        -- Arcane: Arcane Orb													(3.5 for rough travel time)
   [157980] = CreateMergeSpellEntry("MAGE"),             -- Arcane: Supernova
   [12654]  = CreateMergeSpellEntry("MAGE"),             -- Fire: Ignite
@@ -166,7 +175,8 @@ addon.merges = {
 -- monk (damage)
   [128531] = CreateMergeSpellEntry("MONK", 4),          -- Blackout Kick (DoT)                        (Every 1s for 4s)
   [115181] = CreateMergeSpellEntry("MONK", .5),         -- Breath of Fire                             (INSTANT)
-  [148135] = CreateMergeSpellEntry("MONK", 3),          -- Chi Burst (Damage)
+  [148135] = CreateMergeSpellEntry("MONK", 3),          -- Chi Burst (DoT)
+  [157676] = CreateMergeSpellEntry("MONK"),             -- Chi Burst (Instant)
   [132467] = CreateMergeSpellEntry("MONK", 3),          -- Chi Wave (Damage)
   [113656] = CreateMergeSpellEntry("MONK", 4),          -- Fists of Fury                              (Merged w/ Secondary Spell)
   [121253] = CreateMergeSpellEntry("MONK", .5),         -- Keg Smash                                  (INSTANT)
@@ -223,6 +233,7 @@ addon.merges = {
   [86678]  = CreateMergeSpellEntry("PALADIN"),          -- Light of the Ancient Kings
   [94289]  = CreateMergeSpellEntry("PALADIN"),          -- Protector of the Innocent
   [20167]  = CreateMergeSpellEntry("PALADIN"),          -- Seal of Insight (Heal)
+  [159375] = CreateMergeSpellEntry("PALADIN", 1.5),     -- Shining Protector (Prot Paladin)
 
 -- priest (damage)
   [127628] = CreateMergeSpellEntry("PRIEST", 3),        -- Cascade (Damage)
@@ -297,29 +308,27 @@ addon.merges = {
   [114089] = CreateMergeSpellEntry("SHAMAN"),           -- Wind Lash (Ascendance)                     (Merged w/ Off-Hand)
 
 -- warlock (damage)
-  [980]    = CreateMergeSpellEntry("WARLOCK"),          -- Agony                                      (Merged with Malefic Grasp)
+  [980]    = CreateMergeSpellEntry("WARLOCK"),          -- Agony                                      (Cataclysm Spam)
   [124915] = CreateMergeSpellEntry("WARLOCK", .5),      -- Chaos Wave                                 (INSTANT)
   [108685] = CreateMergeSpellEntry("WARLOCK", .5),      -- Conflagrate                                (INSTANT)
-  [172]    = CreateMergeSpellEntry("WARLOCK"),          -- Corruption                                 (Merged with Malefic Grasp)
+  [146739] = CreateMergeSpellEntry("WARLOCK"),          -- Corruption                                 (Cataclysm Spam)
   [689]    = CreateMergeSpellEntry("WARLOCK"),          -- Drain Life
   [103103] = CreateMergeSpellEntry("WARLOCK", 4),       -- Drain Soul                                 (Every 1s for 4s)
   [89753]  = CreateMergeSpellEntry("WARLOCK"),          -- Felstorm (Felguard)
   [104318] = CreateMergeSpellEntry("WARLOCK"),          -- Fel Firebolt (Wild Imps)
   [86040]  = CreateMergeSpellEntry("WARLOCK"),          -- Hand of Gul'dan (Shadowflame)
   [47960]  = CreateMergeSpellEntry("WARLOCK"),          -- Hand of Gul'dan (DOT a.k.a Shadowflame )
-  [108371] = CreateMergeSpellEntry("WARLOCK"),          -- Harvest Life
   [5857]   = CreateMergeSpellEntry("WARLOCK"),          -- Hellfire
-  [348]    = CreateMergeSpellEntry("WARLOCK"),          -- Immolate
-  [108686] = CreateMergeSpellEntry("WARLOCK"),          -- Immolate (Malefic Grasp)
-  [20153]  = CreateMergeSpellEntry("WARLOCK"),          -- Immolation (Infrenal)
+  [157736] = CreateMergeSpellEntry("WARLOCK"),          -- Immolate
+  [20153]  = CreateMergeSpellEntry("WARLOCK"),          -- Immolation (Infernal)
   [129476] = CreateMergeSpellEntry("WARLOCK"),          -- Immolation Aura
   [114654] = CreateMergeSpellEntry("WARLOCK", .5),      -- Incinerate                                 (INSTANT)
   [30213]  = CreateMergeSpellEntry("WARLOCK", .5),      -- Legion Strike (Felguard)                   (INSTANT)
-  [42223]  = CreateMergeSpellEntry("WARLOCK", 4),       -- Rain of Fire (Affliction)                  (Every 1s for 8s)
   [104233] = CreateMergeSpellEntry("WARLOCK", 4),       -- Rain of Fire (Destruction)                 (Every 1s for 8s)
   [27243]  = CreateMergeSpellEntry("WARLOCK"),          -- Seed of Corruption                         (Merged w/ Explosion & Soulburned)
-  [30108]  = CreateMergeSpellEntry("WARLOCK"),          -- Unstable Affliction                        (Merged with Malefic Grasp)
-
+  [30108]  = CreateMergeSpellEntry("WARLOCK"),          -- Unstable Affliction                        (Cataclysm Spam)
+  [116858] = CreateMergeSpellEntry("WARLOCK", .5),      -- Choas Bolt                                 (Charred Remains Talent)
+  
 -- warlock (healing)
   [89653]  = CreateMergeSpellEntry("WARLOCK"),          -- Drain Life
   [63106]  = CreateMergeSpellEntry("WARLOCK"),          -- Siphon Life
@@ -338,10 +347,15 @@ addon.merges = {
   [6343]   = CreateMergeSpellEntry("WARRIOR", .5),      -- Thunder Clap                               (INSTANT)
   [1680]   = CreateMergeSpellEntry("WARRIOR"),          -- Whirlwind       
   [5308]   = CreateMergeSpellEntry("WARRIOR"),          -- Execute                                    (Merged w/ Off-Hand)
+  [118000] = CreateMergeSpellEntry("WARRIOR", .5),      -- Dragon Roar
 }
 
 
 addon.merge2h = {
+  -- Death Knight (Damage)
+  [66198] = 49020,     -- Obliterate (DW)
+  [66196] = 49143,     -- Frost Strike (DW)
+  
   -- Hunter (Damage)
   [120761] = 121414,   -- Glaive Toss
   
@@ -361,6 +375,9 @@ addon.merge2h = {
   -- Paladin (Healing)
   [156322] = 114163,   -- Eternal Flame (HoT)
   
+  -- Paladin (Damage)
+  [53595] = 88263,		 -- Hammer of the Righteous (Holy DMG)
+
   -- Priest (Damage)
   [124469] = 49821,    -- Mind Sear
   
