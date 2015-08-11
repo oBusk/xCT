@@ -211,6 +211,7 @@ addon.merges = {
   [101423] = CreateMergeSpellEntry("PALADIN"),          -- Seal of Righteousness                      (INSTANT)
   [88263]  = CreateMergeSpellEntry("PALADIN"),          -- Hammer of the Righteous
   [159561] = CreateMergeSpellEntry("PALADIN", 4.5),     -- Consecration                               (Every 1s for 8s)
+  [81297]  = CreateMergeSpellEntry("PALADIN", 4.5),     -- Consecration (Tanks???)                    (Every 1s for 8s)
   [157122] = CreateMergeSpellEntry("PALADIN", 1),       -- Holy Shield                                (Travel Time - Needs more testing)
   [119072] = CreateMergeSpellEntry("PALADIN", .5),      -- Holy Wrath
   [86704]  = CreateMergeSpellEntry("PALADIN", .5),      -- Ancient Fury                               (INSTANT)
