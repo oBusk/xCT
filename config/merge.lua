@@ -171,6 +171,7 @@ addon.merges = {
   [157997] = CreateMergeSpellEntry("MAGE"),             -- Frost: Ice Nova
   [153596] = CreateMergeSpellEntry("MAGE"),             -- Frost: Comet Storm
   [113092] = CreateMergeSpellEntry("MAGE"),             -- Frost: Frost Bomb
+  [84721]  = CreateMergeSpellEntry("MAGE", 2.5),        -- Frost: Frozen Orb
   
 -- monk (damage)
   [128531] = CreateMergeSpellEntry("MONK", 4),          -- Blackout Kick (DoT)                        (Every 1s for 4s)
