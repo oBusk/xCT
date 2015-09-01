@@ -80,50 +80,55 @@ addon.merges = {
   [185098] = CreateMergeSpellEntry("ITEM", 4.5, "Soothing Breeze"),                   -- Monk Class Trinket (Sacred Draenic Incense)
 
 -- Follower / Bodyguard
-  [171764] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),              -- Fireball (for 8s)
-  [175806] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),              -- Meteor (Initial Dmg - AoE - every 5s for 8s)
-  [173010] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),              -- Blizzard
-  [175814] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),              -- Meteor Burn (DoT - AoE - every 5s for 8s)
-  [176020] = CreateMergeSpellEntry("ITEM",  .5, "Aeda (Follower)"),                  -- Demonic Leap (INSTANT)
-  [176017] = CreateMergeSpellEntry("ITEM", 3.5, "Aeda (Follower)"),                  -- Shadow Bolt Volley
-  [172965] = CreateMergeSpellEntry("ITEM", 3.5, "Delvar (Follower)"),                -- Death and Decay
-  [175796] = CreateMergeSpellEntry("ITEM", 3.5, "Delvar (Follower)"),                -- Breath of Sindragosa
+  [171764] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),               -- Fireball (for 8s)
+  [175806] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),               -- Meteor (Initial Dmg - AoE - every 5s for 8s)
+  [173010] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),               -- Blizzard
+  [175814] = CreateMergeSpellEntry("ITEM", 3.5, "Vivianne (Follower)"),               -- Meteor Burn (DoT - AoE - every 5s for 8s)
+  [176020] = CreateMergeSpellEntry("ITEM",  .5, "Aeda (Follower)"),                   -- Demonic Leap (INSTANT)
+  [176017] = CreateMergeSpellEntry("ITEM", 3.5, "Aeda (Follower)"),                   -- Shadow Bolt Volley
+  [172965] = CreateMergeSpellEntry("ITEM", 3.5, "Delvar (Follower)"),                 -- Death and Decay
+  [175796] = CreateMergeSpellEntry("ITEM", 3.5, "Delvar (Follower)"),                 -- Breath of Sindragosa
 
--- WoD
-  [159238] = CreateMergeSpellEntry("ITEM", 3.5, "Mark of the Shattered Hand (Weapon Enchant)"), -- WoD Shattered Hand Enchant
-  [143924] = CreateMergeSpellEntry("ITEM", 3.5, "Item Leech"),       -- Item life Leech
-  [165421] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder"),         -- Gorgrond Shredder
-  [164603] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder"),         -- Gorgrond Shredder  
-  [188505] = CreateMergeSpellEntry("ITEM",  .5, "Felmouth Frenzy"),  -- Felmouth Frenzy Food (Tanaan)
-  [182218] = CreateMergeSpellEntry("ITEM", 1.5, "HFC Construct"),    -- HFC Construct (Felblaze Residue)
+-- Warlords of Draenor
+  [159238] = CreateMergeSpellEntry("ITEM", 3.5, "Shattered Hand (Weapon Enchant)"),   -- WoD Shattered Hand Enchant
+  [143924] = CreateMergeSpellEntry("ITEM", 3.5, "Item Leech"),                        -- Item life Leech
+  [165421] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder"),                          -- Gorgrond Shredder
+  [164603] = CreateMergeSpellEntry("ITEM", 3.5, "Shredder"),                          -- Gorgrond Shredder  
+  [188505] = CreateMergeSpellEntry("ITEM",  .5, "Felmouth Frenzy"),                   -- Felmouth Frenzy Food (Tanaan)
+  [182635] = CreateMergeSpellEntry("ITEM",  .5, "HFC Construct #1"),                  -- HFC Construct (Reverberating Blow)
+  [182218] = CreateMergeSpellEntry("ITEM",  .5, "HFC Construct #2"),                  -- HFC Construct (Volatile Felblast)
+  [180223] = CreateMergeSpellEntry("ITEM", 1.5, "HFC Construct #4"),                  -- HFC Construct (Felblaze Residue)
+  [185656] = CreateMergeSpellEntry("ITEM",  .5, "Shadowfel Annihilation"),            -- HFC Xhul'horac (Friendly Fire)
+  [181102] = CreateMergeSpellEntry("ITEM",  .5, "Mark Eruption"),                     -- HFC Mannoroth (Mark of Doom)
 
 -- death knight (damage)
   [55078]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Blood Plague
   [91776]  = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Claw (Army of the Dead)
   [52212]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Death and Decay
   [55095]  = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Frost Fever
-  [49184]  = CreateMergeSpellEntry("DEATHKNIGHT", .5),  -- Howling Blast                              (INSTANT)
-  [168828] = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Necrosis (Unholy)
+  [49184]  = CreateMergeSpellEntry("DEATHKNIGHT", .5),  -- Frost: Howling Blast                              (INSTANT)
+  [168828] = CreateMergeSpellEntry("DEATHKNIGHT"),      -- Unholy: Necrosis
   [155159] = CreateMergeSpellEntry("DEATHKNIGHT", 2.5), -- Necrotic Plague
-  [50401]  = CreateMergeSpellEntry("DEATHKNIGHT", 1.5), -- Razorice (Frost DW)
+  [50401]  = CreateMergeSpellEntry("DEATHKNIGHT", 1.5), -- Frost: Razorice
 
 -- death knight (healing)
   [119980] = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Conversion
   [53365]  = CreateMergeSpellEntry("DEATHKNIGHT", 4),   -- Unholy Strength
 
 -- druid (damage)
-  [106998] = CreateMergeSpellEntry("DRUID"),            -- Astral Storm                               (Every 1s for 10s)
-  [42231]  = CreateMergeSpellEntry("DRUID"),            -- Hurricane
-  [33745]  = CreateMergeSpellEntry("DRUID"),            -- Lacerate
-  [164812] = CreateMergeSpellEntry("DRUID"),            -- Moonfire (WoD)
+  [106998] = CreateMergeSpellEntry("DRUID"),              -- Astral Storm                               (Every 1s for 10s)
+  [42231]  = CreateMergeSpellEntry("DRUID"),              -- Hurricane
+  [33745]  = CreateMergeSpellEntry("DRUID"),              -- Lacerate
+  [164812] = CreateMergeSpellEntry("DRUID"),              -- Moonfire (WoD)
   [124991] = CreateMergeSpellEntry("DRUID", 3, "Damage"), -- Nature's Vigil (Damage)
-  [1822]   = CreateMergeSpellEntry("DRUID"),            -- Rake
-  [1079]   = CreateMergeSpellEntry("DRUID", 2),         -- Rip
-  [50288]  = CreateMergeSpellEntry("DRUID"),            -- Starfall
-  [164815] = CreateMergeSpellEntry("DRUID"),            -- Sunfire (WoD)
-  [106830] = CreateMergeSpellEntry("DRUID", 4),         -- Thrash (Cat)
-  [77758]  = CreateMergeSpellEntry("DRUID", 4),         -- Thrash (Bear)
-  [61391]  = CreateMergeSpellEntry("DRUID", .5),        -- Typhoon                                    (INSTANT)
+  [1822]   = CreateMergeSpellEntry("DRUID"),              -- Rake
+  [1079]   = CreateMergeSpellEntry("DRUID", 2),           -- Rip
+  [50288]  = CreateMergeSpellEntry("DRUID"),              -- Starfall
+  [164815] = CreateMergeSpellEntry("DRUID"),              -- Sunfire (WoD)
+  [106785] = CreateMergeSpellEntry("DRUID", 1),           -- Swipe (Cat)
+  [106830] = CreateMergeSpellEntry("DRUID", 4),           -- Thrash (Cat)
+  [77758]  = CreateMergeSpellEntry("DRUID", 4),           -- Thrash (Bear)
+  [61391]  = CreateMergeSpellEntry("DRUID", .5),          -- Typhoon                                    (INSTANT)
 
 -- druid (healing)
   [162359] = CreateMergeSpellEntry("DRUID"),            -- Genesis
@@ -138,13 +143,13 @@ addon.merges = {
 -- hunter
   [131900] = CreateMergeSpellEntry("HUNTER", 6),        -- A Murder of Crows                          (Over 30s)
   [120361] = CreateMergeSpellEntry("HUNTER", 4),        -- Barrage                                    (Channeled over 3s) 4 to be safe :P
-  [118459] = CreateMergeSpellEntry("HUNTER", .5),       -- Beast Cleave                               (INSTANT)
+  [118459] = CreateMergeSpellEntry("HUNTER", 2.5),      -- Beast Cleave                               (INSTANT)
   [3674]   = CreateMergeSpellEntry("HUNTER", 4),        -- Black Arrow                                (Every 2s for 20s)
   [13812]  = CreateMergeSpellEntry("HUNTER"),           -- Explosive Trap
   [53301]  = CreateMergeSpellEntry("HUNTER"),           -- Explosive Shot (3 ticks merged as one)
   [121414] = CreateMergeSpellEntry("HUNTER", 6),        -- Glaive Toss (Initial Damage)               (Merged with DoT)
   [120699] = CreateMergeSpellEntry("HUNTER", 4),        -- Lynx Rush                                  (9x over 4s)
-  [2643]   = CreateMergeSpellEntry("HUNTER", .5),       -- Multi-Shot                                 (INSTANT)
+  [2643]   = CreateMergeSpellEntry("HUNTER", 2.5),      -- Multi-Shot                                 (INSTANT)
   [118253] = CreateMergeSpellEntry("HUNTER", 8),        -- Serpent Sting (Survival)                   (over 15s)
 
 -- mage
@@ -276,6 +281,7 @@ addon.merges = {
 
 -- rogue
   [22482]  = CreateMergeSpellEntry("ROGUE", .5),        -- Blade Flurry                               (INSTANT)
+  [86392]  = CreateMergeSpellEntry("ROGUE", .5),        -- Main Gauche                                (INSTANT)
   [113780] = CreateMergeSpellEntry("ROGUE"),            -- Deadly Poison                              (Merged with DoT)
   [121411] = CreateMergeSpellEntry("ROGUE"),            -- Crimson Tempest                            (Merged with DoT)
   [51723]  = CreateMergeSpellEntry("ROGUE", .5),        -- Fan of Knives                              (INSTANT)
