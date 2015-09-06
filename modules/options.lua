@@ -367,6 +367,7 @@ local function setSpecialCriticalOptions(info, value)
   x.db.profile[info[#info-2]].mergeCriticalsWithOutgoing = false
   x.db.profile[info[#info-2]].mergeCriticalsByThemselves = false
   x.db.profile[info[#info-2]].mergeDontMergeCriticals = false
+  x.db.profile[info[#info-2]].mergeHideMergedCriticals = false
 
   x.db.profile[info[#info-2]][info[#info]] = true
 end
@@ -613,6 +614,16 @@ addon.options.args["spells"] = {
           type = 'toggle',
           name = "Merge Critical Hits by Themselves",
           desc = "Crits will be merged and the total merged amount in the outgoing frame |cffFF0000DOES NOT|r include crits.",
+          get = get0_1,
+          set = setSpecialCriticalOptions,
+          width = 'full',
+        },
+
+        mergeHideMergedCriticals = {
+          order = 44,
+          type = 'toggle',
+          name = "Hide Merged Criticals",
+          desc = "Criticals that have been merged with the Outgoing frame will not be shown in the Critical frame",
           get = get0_1,
           set = setSpecialCriticalOptions,
           width = 'full',
@@ -2714,16 +2725,16 @@ addon.options.args["Frames"] = {
             showSwing = {
               order = 1,
               type = 'toggle',
-              name = "Swing Crits",
-              desc = "Show Swing and Auto Attack crits in this frame.",
+              name = "Show Auto Attacks",
+              desc = "Show Auto Attack and Swings criticals in this frame. If disabled here, they are automatically shown in the Outgoing frame and can be completely disabled there.",
               get = get2,
               set = set2,
             },
             prefixSwing = {
               order = 2,
               type = 'toggle',
-              name = "Swing (Pre)Postfix",
-              desc = "Make Swing and Auto Attack crits more visible by adding the prefix and postfix.",
+              name = "Show Auto Attacks (Pre)Postfix",
+              desc = "Make Auto Attack and Swing criticals more visible by adding the prefix and postfix.",
               get = get2,
               set = set2,
             },

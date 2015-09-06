@@ -161,7 +161,7 @@ local function ShowOnlyMyPetsHeals() return x.db.profile.frames.healing.showOnly
 local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg end
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
-local function ShowAutoAttack() return x.db.profile.frames["outgoing"].enableAutoAttack end
+local function ShowAutoAttack() return x.db.profile.frames["outgoing"].enableAutoAttack end -- Also see ShowSwingCrit
 local function ShowDots() return x.db.profile.frames["outgoing"].enableDotDmg end
 local function ShowHots() return x.db.profile.frames["outgoing"].enableHots end
 local function ShowImmunes() return x.db.profile.frames["outgoing"].enableImmunes end -- outgoing immunes
@@ -206,6 +206,7 @@ local function MergeRangedAttacks() return x.db.profile.spells.mergeRanged end
 local function MergeCriticalsWithOutgoing() return x.db.profile.spells.mergeCriticalsWithOutgoing end
 local function MergeCriticalsByThemselves() return x.db.profile.spells.mergeCriticalsByThemselves end
 local function MergeDontMergeCriticals() return x.db.profile.spells.mergeDontMergeCriticals end
+local function MergeHideMergedCriticals() return x.db.profile.spells.mergeHideMergedCriticals end
 local function MergeDispells() return x.db.profile.spells.mergeDispells end
 
 local function IsMultistrikeEnabled() return x.db.profile.spells.multistrikeEnabled end
@@ -518,12 +519,7 @@ local COMBATLOG_FILTER_MY_VEHICLE = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE,
 function x.OnCombatTextEvent(self, event, ...)
   if event == "COMBAT_LOG_EVENT_UNFILTERED" then
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, srcFlags2, destGUID, destName, destFlags, destFlags2 = select(1, ...)
-    
-    --[[local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand, multistrike = select(1, ...)
-    if eventType=="SPELL_DAMAGE" and spellName=="Kill Command" then 
-      print("Flags:", sourceFlags, sourceRaidFlags, sourceGUID, sourceName, hideCaster)
-    end]]
-    
+
     if sourceGUID == x.player.guid or ( sourceGUID == UnitGUID("pet") and ShowPetDamage() ) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
       if x.outgoing_events[eventType] then
         x.outgoing_events[eventType](...)
@@ -553,6 +549,8 @@ end
     Formats an icon quickly for use when outputing to
   a combat text frame.
 --]=====================================================]
+
+--Spell: spellID=2643, message=*6,021*, multistrike=1, iconsize=16, justify=RIGHT, strColor=ffffff, mergeOverride=true, forceOff=nil
 function x:GetSpellTextureFormatted( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride, forceOff )
   if not multistrike then multistrike = 0 end
   local icon = x.BLANK_ICON
@@ -602,11 +600,11 @@ function x:GetSpellTextureFormatted( spellID, message, multistrike, iconSize, ju
         end
       end
       
-    elseif multistrike > 0 then
+    elseif not mergeOverride and multistrike > 0 or multistrike > 1 then
       if justify == "LEFT" then
-        message = sformat( format_msspell_icon_left, icon, iconSize, iconSize, message, strColor, multistrike+1 )
+        message = sformat( format_msspell_icon_left, icon, iconSize, iconSize, message, strColor, multistrike+(mergeOverride and 0 or 1) )
       else
-        message = sformat( format_msspell_icon_right, message, strColor, multistrike+1, icon, iconSize, iconSize )
+        message = sformat( format_msspell_icon_right, message, strColor, multistrike+(mergeOverride and 0 or 1), icon, iconSize, iconSize )
       end
       
     else
@@ -771,7 +769,7 @@ function x:CleanupMultistrikeQueue( )
   for i, entry in pairs(msQueue) do
     if entry.timestamp + GetMSLatency() <= current then
       tremove(msQueue, i)
-      
+
       if msMissed > 0 then msMissed = msMissed - 1 end
       
       -- OUTPUT the ENTRY
@@ -1623,11 +1621,17 @@ x.events = {
 x.outgoing_events = {
   ["SPELL_PERIODIC_HEAL"] = function(...)
       if not ShowHealing() or not ShowHots() then return end
-      
-      -- WoD - ADDING SUPPORT FOR MULTISTRIKE
+
       local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical, multistrike = select(12, ...)
+      local merged, outputFrame, color = false, critical and "critical" or "outgoing", "healingOutPeriodic"
       
-      -- Check for Overhealing
+      -- Keep track of spells that go by
+      if TrackSpells() then x.spellCache.spells[spellID] = true end
+
+      -- Filter Ougoing Healing Spell or Amount
+      if IsSpellFiltered(spellID) or FilterOutgoingHealing(amount) then return end
+
+      -- Filter Overhealing
       if not ShowOverHealing() then
         local realamount = amount - overhealing
         if realamount < 1 then
@@ -1636,73 +1640,51 @@ x.outgoing_events = {
         amount = realamount
       end
 
-      local outputFrame = "outgoing"
-      local merged = false
-
-      -- Keep track of spells that go by
-      if TrackSpells() then x.spellCache.spells[spellID] = true end
-
-      -- Filter Ougoing Healing
-      if FilterOutgoingHealing(amount) then return end
-      
-      -- Spell Specific Filter
-      if IsSpellFiltered(spellID) then return end
-      
-      -- Check for merge
+      -- Condensed Critical Merge
       if IsMerged(spellID) then
-        if not critical or critical and not MergeCriticalsByThemselves() then
-          merged = true
-          x:AddSpamMessage("outgoing", spellID, amount, "healingOutPeriodic")
+        merged = true
+        if critical then
+          if MergeCriticalsByThemselves() then
+            x:AddSpamMessage(outputFrame, spellID, amount, color)
+            return
+          elseif MergeCriticalsWithOutgoing() then
+            x:AddSpamMessage("outgoing", spellID, amount, color)
+          elseif MergeHideMergedCriticals() then
+            x:AddSpamMessage("outgoing", spellID, amount, color)
+            return
+          end
+        else
+          x:AddSpamMessage(outputFrame, spellID, amount, color)
+          return
         end
       end
 
-      -- Check for Critical
-      if critical then
-        if not MergeDontMergeCriticals() and IsMerged(spellID) then
-          -- Merge this critical entry
-          x:AddSpamMessage("critical", spellID, amount, "healingOutPeriodic")
-          
-          -- We are done, after we check for criticals. We don't need to do anything else.
-          return 
-        else
-          -- Don't merge criticals
-          outputFrame = "critical"
-        end
-      elseif merged then  -- return merged, non-crits
-        return
-      end
-      
       if IsMultistrikeEnabled() then
         if multistrike then
-          x:MultistrikeSpellEvent( spellID, amount ) -- sorry, but I just dont think we care about crit'd multistrikes
+          x:MultistrikeSpellEvent( spellID, amount )
         else
           x:EnqueueMultistrikeSpell( "SPELL_PERIODIC_HEAL", outputFrame, spellID, amount, critical, merged )
         end
-        
         return
       end
       
       -- Output to Message Frame (Do not format multistrikes here)
-      xCTFormat:SPELL_PERIODIC_HEAL( multistrike and 1 or 0, outputFrame, spellID, amount, critical, merged )
+      xCTFormat:SPELL_PERIODIC_HEAL( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged )
     end,
     
   ["SPELL_HEAL"] = function(...)
       if not ShowHealing() then return end
 
       local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical, multistrike = select(12, ...)
-      local outputFrame = "outgoing"
-      local merged = false
+      local merged, outputFrame, color = false, critical and "critical" or "outgoing", critical and "healingOutCritical" or "healingOut"
       
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
-      -- Filter Ougoing Healing
-      if FilterOutgoingHealing(amount) then return end
-      
-      -- Spell Specific Filter
-      if IsSpellFiltered(spellID) then return end
-      
-      -- Check for Overhealing
+      -- Filter Ougoing Healing Spell or Amount
+      if IsSpellFiltered(spellID) or FilterOutgoingHealing(amount) then return end
+
+      -- Filter Overhealing
       if not ShowOverHealing() then
         local realamount = amount - overhealing
         if realamount < 1 then
@@ -1710,28 +1692,24 @@ x.outgoing_events = {
         end
         amount = realamount
       end
-      
-      -- Check for merge
-      if IsMerged(spellID) then
-        if not critical or critical and not MergeCriticalsByThemselves() then
-          merged = true
-          x:AddSpamMessage("outgoing", spellID, amount, "healingOut")
-        end
-      end
 
-      -- Check for Critical
-      if critical then
-        if not MergeDontMergeCriticals() and IsMerged(spellID) then
-          -- Merge this critical entry
-          x:AddSpamMessage("critical", spellID, amount, "healingOutCritical")
-          
-          -- We are done, after we check for criticals. We don't need to do anything else.
-          return 
+      -- Condensed Critical Merge
+      if IsMerged(spellID) then
+        merged = true
+        if critical then
+          if MergeCriticalsByThemselves() then
+            x:AddSpamMessage(outputFrame, spellID, amount, color)
+            return
+          elseif MergeCriticalsWithOutgoing() then
+            x:AddSpamMessage("outgoing", spellID, amount, color)
+          elseif MergeHideMergedCriticals() then
+            x:AddSpamMessage("outgoing", spellID, amount, color)
+            return
+          end
         else
-          outputFrame = "critical"
+          x:AddSpamMessage(outputFrame, spellID, amount, color)
+          return
         end
-      elseif merged then  -- return merged, non-crits
-        return
       end
 
       if IsMultistrikeEnabled() then
@@ -1757,7 +1735,7 @@ x.outgoing_events = {
       
       -- Filter Outgoing Damage
       if FilterOutgoingDamage(amount) then return end
-      
+
       -- Check for Pet Swings
       local spellID = 6603
       if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
@@ -1765,28 +1743,37 @@ x.outgoing_events = {
         spellID = 0
         critical = nil -- stupid spam fix for hunter pets
       end
-      
-      -- Check for Critical
+
+      -- Check for Critical Swings
       if critical then
         if ShowSwingCrit() then
           outputFrame = "critical"
-        else
+        elseif not ShowAutoAttack() then
           return
         end
+        -- Dont need to change the ouputFrame if ShowAutoAttack() is true
+      else
+        if not ShowAutoAttack() then return end
       end
-      
-      -- Are we filtering Auto Attacks in the Outgoing frame?
-      if outputFrame == "outgoing" and not ShowAutoAttack() then return end;
-      
-      -- Check for merge
+
+      -- Check to see if we merge swings
       if MergeMeleeSwings() then
         merged = true
-        x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6)
-      end
-      
-      -- Only show non-merged swings
-      if merged and not critical then
-        return
+        if outputFrame == "critical" then
+          if MergeCriticalsByThemselves() then
+            x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
+            return
+          elseif MergeCriticalsWithOutgoing() then
+            x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6)
+          elseif MergeHideMergedCriticals() then
+            x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6)
+            return
+          end
+          -- MergeDontMergeCriticals() don't need to do anything for this one
+        else
+          x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
+          return
+        end
       end
 
       if IsMultistrikeEnabled() then
@@ -1795,10 +1782,9 @@ x.outgoing_events = {
         else
           x:EnqueueMultistrikeSpell( "SWING_DAMAGE", outputFrame, spellID, amount, critical, merged )
         end
-        
         return
       end
-      
+
       xCTFormat:SWING_DAMAGE( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged )
     end,
     
@@ -1813,67 +1799,49 @@ x.outgoing_events = {
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
       -- Filter Outgoing Damage
-      if FilterOutgoingDamage(amount) then return end
-      
-      -- Spell Specific Filter
-      if IsSpellFiltered(spellID) then return end
+      if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
       
       -- Auto Shot's Spell ID
       local autoShot = (spellID == 75)
-      
-      -- Check for critical
+
+      -- Check for Critical Auto Attacks
       if critical then
-      
-        -- Check if we should display Auto Shot criticals
-        if not autoShot or autoShot and ShowSwingCrit() then
+        if ShowSwingCrit() then
           outputFrame = "critical"
-        else
-          -- Check if we need to merge this attack in the "outgoing" frame
-          if autoShot and MergeRangedAttacks() and not MergeCriticalsByThemselves() then
-          
-            -- Are we filtering Auto Attacks in the Outgoing frame?
-            if ShowAutoAttack() then
-              -- Send message (amount) to "outgoing"
-              x:AddSpamMessage(outputFrame, spellID, amount, "genericDamage", 6)
-            end
-            
-            -- After the spam merge, there is nothing we need to do
+        elseif not ShowAutoAttack() then
+          return
+        end
+        -- Dont need to change the ouputFrame if ShowAutoAttack() is true
+      else
+        if not ShowAutoAttack() then return end
+      end
+
+      -- Check to see if we merge swings
+      if MergeMeleeSwings() then
+        merged = true
+        if outputFrame == "critical" then
+          if MergeCriticalsByThemselves() then
+            x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
+            return
+          elseif MergeCriticalsWithOutgoing() then
+            x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6)
+          elseif MergeHideMergedCriticals() then
+            x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6)
             return
           end
-        end
-        
-        
-      end
-      
-      -- Check for Auto Shot critical merge with normal damage
-      if outputFrame == "critical" and not MergeCriticalsByThemselves() then
-        if not autoShot or autoShot and MergeRangedAttacks() then
-          -- If Criticals With Outgoing, then we need to merge again with the critical frame
-          merged = MergeDontMergeCriticals()
-          
-          -- Are we filtering Auto Attacks in the Outgoing frame?
-          if ShowAutoAttack() then
-            -- Merge with the outgoing damage
-            x:AddSpamMessage("outgoing", spellID, amount, "genericDamage", 6)
-          end
+          -- MergeDontMergeCriticals() don't need to do anything for this one
+        else
+          x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
+          return
         end
       end
-      
-      -- Are we filtering Auto Attacks in the Outgoing frame?
-      if not ShowAutoAttack() and outputFrame == "outgoing" then return end
-      
-      if not merged and autoShot and MergeRangedAttacks() then
-        x:AddSpamMessage(outputFrame, spellID, amount, "genericDamage", 6)
-        return
-      end
-      
+
       if IsMultistrikeEnabled() then
         if multistrike then
           x:MultistrikeSpellEvent( spellID, amount )
         else
           x:EnqueueMultistrikeSpell( "RANGE_DAMAGE", outputFrame, spellID, amount, critical, merged, autoShot )
         end
-        
         return
       end
       
@@ -1885,47 +1853,39 @@ x.outgoing_events = {
       if not ShowDamage() then return end
       
       local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand, multistrike = select(1, ...)
-      local merged, outputFrame = false, "outgoing"
+      local merged, outputFrame, color = false, critical and "critical" or "outgoing", GetCustomSpellColorFromIndex(spellSchool)
       
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
-      -- Filter Outgoing Damage
-      if FilterOutgoingDamage(amount) then return end
+      -- Filters: Specific Spell, or Amount
+      if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
       
-      -- Spell Specific Filter
-      if IsSpellFiltered(spellID) then return end
-      
-      -- Check for merge
+      -- Condensed Critical Merge
       if IsMerged(spellID) then
-        if critical and not MergeCriticalsByThemselves() or not critical then
-          merged = true
-          x:AddSpamMessage("outgoing", spellID, amount, GetCustomSpellColorFromIndex(spellSchool))
+        merged = true
+        if critical then
+          if MergeCriticalsByThemselves() then
+            x:AddSpamMessage(outputFrame, spellID, amount, color)
+            return
+          elseif MergeCriticalsWithOutgoing() then
+            x:AddSpamMessage("outgoing", spellID, amount, color)
+          elseif MergeHideMergedCriticals() then
+            x:AddSpamMessage("outgoing", spellID, amount, color)
+            return
+          end
+        else
+          x:AddSpamMessage(outputFrame, spellID, amount, color)
+          return
         end
       end
       
-      -- Check for Critical
-      if critical then
-        if not MergeDontMergeCriticals() and IsMerged(spellID) then
-          -- Merge this critical entry
-          x:AddSpamMessage("critical", spellID, amount, GetCustomSpellColorFromIndex(spellSchool))
-          
-          -- We are done, after we check for criticals. We don't need to do anything else.
-          return 
-        else
-          outputFrame = "critical"
-        end
-      elseif merged then  -- return merged, non-crits
-        return
-      end
-
       if IsMultistrikeEnabled() then
         if multistrike then
           x:MultistrikeSpellEvent( spellID, amount )
         else
           x:EnqueueMultistrikeSpell( "SPELL_DAMAGE", outputFrame, spellID, amount, critical, merged, spellSchool )
         end
-        
         return
       end
 
@@ -1937,48 +1897,39 @@ x.outgoing_events = {
       if not ShowDamage() or not ShowDots() then return end
       
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical, glancing, crushing, isOffHand, multistrike = ...
-      local merged, outputFrame = false, "outgoing"
+      local merged, outputFrame = false, critical and "critical" or "outgoing"
       
-	  
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
-      -- Filter Outgoing Damage
-      if FilterOutgoingDamage(amount) then return end
-      
-      -- Spell Specific Filter
-      if IsSpellFiltered(spellID) then return end
-      
-      -- Check for merge
+      -- Filters: Specific Spell, or Amount
+      if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
+
+      -- Condensed Critical Merge
       if IsMerged(spellID) then
-        if critical and not MergeCriticalsByThemselves() or not critical then
-          merged = true
-          x:AddSpamMessage("outgoing", spellID, amount, GetCustomSpellColorFromIndex(spellSchool))
+        merged = true
+        if critical then
+          if MergeCriticalsByThemselves() then
+            x:AddSpamMessage(outputFrame, spellID, amount, color)
+            return
+          elseif MergeCriticalsWithOutgoing() then
+            x:AddSpamMessage("outgoing", spellID, amount, color)
+          elseif MergeHideMergedCriticals() then
+            x:AddSpamMessage("outgoing", spellID, amount, color)
+            return
+          end
+        else
+          x:AddSpamMessage(outputFrame, spellID, amount, color)
+          return
         end
       end
 
-      -- Check for Critical
-      if critical then
-        if not MergeDontMergeCriticals() and IsMerged(spellID) then
-          -- Merge this critical entry
-          x:AddSpamMessage("critical", spellID, amount, GetCustomSpellColorFromIndex(spellSchool))
-          
-          -- We are done, after we check for criticals. We don't need to do anything else.
-          return 
-        else
-          outputFrame = "critical"
-        end
-      elseif merged then  -- return merged, non-crits
-        return
-      end
-      
       if IsMultistrikeEnabled() then
         if multistrike then
           x:MultistrikeSpellEvent( spellID, amount )
         else
           x:EnqueueMultistrikeSpell( "SPELL_PERIODIC_DAMAGE", outputFrame, spellID, amount, critical, merged, spellSchool )
         end
-        
         return
       end
 

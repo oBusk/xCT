@@ -590,6 +590,7 @@ addon.defaults = {
       mergeDontMergeCriticals = true,
       mergeCriticalsWithOutgoing = false,
       mergeCriticalsByThemselves = false,
+      mergeHideMergedCriticals = false,
       
       -- Abbreviate or Groups Settings
       formatAbbreviate = true, 

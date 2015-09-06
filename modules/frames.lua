@@ -400,7 +400,6 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
 		}
 		table_insert(stack, mergeID)
 	end
-
 end
 
 --[================================================================[
@@ -542,8 +541,8 @@ do
 			--	message = sformat(format_mergeCount, message, #item.entries)
 			--end
 			
-      --stack[idIndex], settings.iconsSize, settings.fontJustify
-      
+            --stack[idIndex], settings.iconsSize, settings.fontJustify
+
 			-- Add Icons
 			if frameIndex[index] ~= "healing" and frameIndex[index] ~= "general" then
 				message = x:GetSpellTextureFormatted( stack[idIndex],
