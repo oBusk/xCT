@@ -1897,7 +1897,7 @@ x.outgoing_events = {
       if not ShowDamage() or not ShowDots() then return end
       
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical, glancing, crushing, isOffHand, multistrike = ...
-      local merged, outputFrame = false, critical and "critical" or "outgoing"
+      local merged, outputFrame, color = false, critical and "critical" or "outgoing", GetCustomSpellColorFromIndex(spellSchool)
       
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
