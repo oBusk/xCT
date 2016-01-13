@@ -1,17 +1,17 @@
---[[   ____    ______      
+--[[   ____    ______
       /\  _`\ /\__  _\   __
- __  _\ \ \/\_\/_/\ \/ /_\ \___ 
+ __  _\ \ \/\_\/_/\ \/ /_\ \___
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
 \/>  </ \ \ \L\ \ \ \ \/__/\_\_/
  /\_/\_\ \ \____/  \ \_\  \/_/
  \//\/_/  \/___/    \/_/
- 
+
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
  [  ©2015. All Rights Reserved.        ]
  [====================================]]
- 
+
 local ADDON_NAME, addon = ...
 
 -- Shorten my handle
@@ -20,6 +20,15 @@ local x = addon.engine
 -- up values
 local _, _G, sformat, mfloor, mabs, ssub, smatch, sgsub, s_upper, s_lower, string, tinsert, tremove, ipairs, pairs, print, tostring, tonumber, select, unpack =
   nil, _G, string.format, math.floor, math.abs, string.sub, string.match, string.gsub, string.upper, string.lower, string, table.insert, table.remove, ipairs, pairs, print, tostring, tonumber, select, unpack
+
+-- UTF8 Functions
+local utf8 = {
+	len = string.utf8len,
+	sub = string.utf8sub,
+	reverse = string.utf8reverse,
+	upper = string.utf8upper,
+	lower = string.utf8lower
+}
 
 --[=====================================================[
  Holds cached spells, buffs, and debuffs
@@ -82,7 +91,7 @@ function x:UpdatePlayer()
   x.player.name   = UnitName("player")
   x.player.class  = select(2, UnitClass("player"))
   x.player.guid   = UnitGUID("player")
-  
+
   local activeTalentGroup = GetActiveSpecGroup(false, false)
   x.player.spec = GetSpecialization(false, false, activeTalentGroup)
 end
@@ -101,7 +110,7 @@ function x:UpdateCombatTextEvents(enable)
   else
     f = CreateFrame("FRAME")
   end
-  
+
   if enable then
     -- Enabled Combat Text
     f:RegisterEvent("COMBAT_TEXT_UPDATE")
@@ -115,18 +124,18 @@ function x:UpdateCombatTextEvents(enable)
     f:RegisterEvent("UNIT_PET")
     f:RegisterEvent("PLAYER_TARGET_CHANGED")
     f:RegisterEvent("SPELL_ACTIVATION_OVERLAY_GLOW_SHOW")
-    
+
     -- if runes
     f:RegisterEvent("RUNE_POWER_UPDATE")
-    
+
     -- if loot
     f:RegisterEvent("CHAT_MSG_LOOT")
     f:RegisterEvent("CHAT_MSG_CURRENCY")
     f:RegisterEvent("CHAT_MSG_MONEY")
-    
+
     -- damage and healing
     f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-    
+
     -- Class combo points
     f:RegisterEvent("UNIT_AURA")
     f:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED")
@@ -355,7 +364,7 @@ local xCTFormat = { }
 
 function xCTFormat:SPELL_HEAL( multistriked, outputFrame, spellID, amount, critical, merged )
   local outputColor, message = "healingOut"
-  
+
   -- Format Criticals and also abbreviate values
   if critical then
     outputColor = "healingOutCritical"
@@ -372,7 +381,7 @@ function xCTFormat:SPELL_HEAL( multistriked, outputFrame, spellID, amount, criti
                                         multistriked,
        x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
        x.db.profile.frames[outputFrame].fontJustify )
-  
+
   x:AddMessage(outputFrame, message, outputColor)
 end
 
@@ -394,7 +403,7 @@ function xCTFormat:SPELL_PERIODIC_HEAL( multistriked, outputFrame, spellID, amou
                                         multistriked,
        x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
        x.db.profile.frames[outputFrame].fontJustify )
-  
+
   x:AddMessage(outputFrame, message, outputColor)
 end
 
@@ -460,14 +469,14 @@ function xCTFormat:SPELL_DAMAGE( multistriked, outputFrame, spellID, amount, cri
   else
     message = x:Abbreviate( amount, outputFrame )
   end
-  
+
   -- Add Icons
   message = x:GetSpellTextureFormatted( spellID,
                                         message,
                                         multistriked,
        x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
        x.db.profile.frames[outputFrame].fontJustify )
-  
+
   x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(spellSchool) )
 end
 
@@ -497,9 +506,9 @@ end
 --[=====================================================[
  Capitalize Locals
 --]=====================================================]
-local XCT_STOLE = string.upper(string.sub(ACTION_SPELL_STOLEN, 1, 1))..string.sub(ACTION_SPELL_STOLEN, 2)
-local XCT_KILLED = string.upper(string.sub(ACTION_PARTY_KILL, 1, 1))..string.sub(ACTION_PARTY_KILL, 2)
-local XCT_DISPELLED = string.upper(string.sub(ACTION_SPELL_DISPEL, 1, 1))..string.sub(ACTION_SPELL_DISPEL, 2)
+local XCT_STOLE = utf8.upper(utf8.sub(ACTION_SPELL_STOLEN, 1, 1))..utf8.sub(ACTION_SPELL_STOLEN, 2)
+local XCT_KILLED = utf8.upper(utf8.sub(ACTION_PARTY_KILL, 1, 1))..utf8.sub(ACTION_PARTY_KILL, 2)
+local XCT_DISPELLED = utf8.upper(utf8.sub(ACTION_SPELL_DISPEL, 1, 1))..utf8.sub(ACTION_SPELL_DISPEL, 2)
 
 --[=====================================================[
  Flag value for special pets and vehicles
@@ -564,7 +573,7 @@ function x:GetSpellTextureFormatted( spellID, message, multistrike, iconSize, ju
   if iconSize < 1 then
     icon = x.BLANK_ICON
   end
-  
+
   if ( not forceOff ) and ( mergeOverride or IsMultistrikeEnabled() ) then
     if IsMultistrikeEnabled() and ShowMultistrikeIcons() and iconSize > 0 then
       local msIconSize = iconSize * GetMultistrikeIconMultiplier()
@@ -599,14 +608,14 @@ function x:GetSpellTextureFormatted( spellID, message, multistrike, iconSize, ju
           )
         end
       end
-      
+
     elseif not mergeOverride and multistrike > 0 or multistrike > 1 then
       if justify == "LEFT" then
         message = sformat( format_msspell_icon_left, icon, iconSize, iconSize, message, strColor, multistrike+(mergeOverride and 0 or 1) )
       else
         message = sformat( format_msspell_icon_right, message, strColor, multistrike+(mergeOverride and 0 or 1), icon, iconSize, iconSize )
       end
-      
+
     else
       if justify == "LEFT" then
         message = sformat( "%s %s", sformat( format_spell_icon, icon, iconSize, iconSize ), message )
@@ -615,14 +624,14 @@ function x:GetSpellTextureFormatted( spellID, message, multistrike, iconSize, ju
       end
     end
   else
-    
+
     if justify == "LEFT" then
       message = sformat( "%s %s", sformat( format_spell_icon, icon, iconSize, iconSize ), message )
     else
       message = sformat( "%s%s", message, sformat( format_spell_icon, icon, iconSize, iconSize ) )
     end
   end
-  
+
   if x.db.profile.spells.enableMergerDebug then
     message = message .. " |cffFFFFFF[|cffFF0000ID:|r|cffFFFF00" .. spellID .. "|r]|r"
   end
@@ -653,18 +662,18 @@ function x:EnqueueMultistrikeSpell( spellType, outputFrame, spellID, amount, ...
   if IsMSAutoAdjusted() or IS_MULTISTRIKE_DEBUG() then
     tinsert(msDebug, { t=GetTime(), id=spellID })
   end
-  
+
   -- Soooo they take out "args" and they dont put in "pack"... what to do :P
   if argn > 0 then
     entry.params = tnew( )
-  
+
     for i=1, argn do
       entry.params[i] = select(i, ...)
     end
   else
     entry.params = nil
   end
-  
+
   tinsert(msQueue, entry)
 end
 
@@ -673,7 +682,7 @@ local msMaxWait, msPreviousMax, msMissed = 0, 0, 0
 function x:MultistrikeSpellEvent( spellID, amount )
   if #msQueue == 0 then return end
   local entry
-  
+
   -- Always assume its the latest entry
   for i=#msQueue, 1, -1 do -- iter backwards through the queue
     if msQueue[i].spellID == spellID then
@@ -681,7 +690,7 @@ function x:MultistrikeSpellEvent( spellID, amount )
       break
     end
   end
-  
+
   if entry then
     local timestamp = mfloor( (GetTime() - entry.timestamp) * 1000)
     if timestamp > msMaxWait then msMaxWait = timestamp end
@@ -695,7 +704,7 @@ function x:MultistrikeSpellEvent( spellID, amount )
 
         if x.db.profile.spells.multistrikeLatency > msMaxWait - 100 then
           x.db.profile.spells.multistrikeLatency = msMaxWait + 50
-          
+
           if x.db.profile.spells.multistrikeLatency > 3000 then
             print("|cffFFFF00xCT+|r: Latency threshold reached (over |cffFF00003000ms|r)! Disabling |cff798BDDMultistrike Spam Merger|r.")
             x.db.profile.spells.multistrikeLatency = 300
@@ -704,8 +713,8 @@ function x:MultistrikeSpellEvent( spellID, amount )
             if IS_MULTISTRIKE_DEBUG() then print("Updating Latency to |cffFF0000"..(msMaxWait + 50)) end
             msMaxWait = 0
           end
-          
-          
+
+
         end
 
         -- 100ms decay every 4 successful hits
@@ -725,7 +734,7 @@ function x:MultistrikeSpellEvent( spellID, amount )
             msDebug[i].t = GetTime()
             lastAutoUpdate = 0
             msMissed = msMissed + 1
-            
+
             if msMissed > 3 then
               if (time + 50) > 3000 then
                 print("|cffFFFF00xCT+|r: Latency threshold reached (over |cffFF00003000ms|r)! Disabling |cff798BDDMultistrike Spam Merger|r.")
@@ -736,7 +745,7 @@ function x:MultistrikeSpellEvent( spellID, amount )
                 x.db.profile.spells.multistrikeLatency = (time + 50)
               end
             end
-            
+
             return
           end
         end
@@ -771,28 +780,28 @@ function x:CleanupMultistrikeQueue( )
       tremove(msQueue, i)
 
       if msMissed > 0 then msMissed = msMissed - 1 end
-      
+
       -- OUTPUT the ENTRY
       if entry.spellType == "SPELL_HEAL" then
         xCTFormat:SPELL_HEAL( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2] )
 
       elseif entry.spellType == "SPELL_PERIODIC_HEAL" then
         xCTFormat:SPELL_PERIODIC_HEAL( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2] )
-        
+
       elseif entry.spellType == "SPELL_DAMAGE" then
         xCTFormat:SPELL_DAMAGE( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2], entry.params[3] )
-      
+
       elseif entry.spellType == "SPELL_PERIODIC_DAMAGE" then
         xCTFormat:SPELL_PERIODIC_DAMAGE( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2], entry.params[3] )
-      
+
       elseif entry.spellType == "SWING_DAMAGE" then
         xCTFormat:SWING_DAMAGE( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2] )
-        
+
       elseif entry.spellType == "RANGE_DAMAGE" then
         xCTFormat:RANGE_DAMAGE( entry.ms, entry.outputFrame, entry.spellID, entry.amount, entry.params[1], entry.params[2], entry.params[3] )
-      
+
       end
-      
+
       tdel( entry.params )
       tdel( entry )
     end
@@ -804,10 +813,10 @@ local testFrame = CreateFrame("FRAME")
 testFrame:SetScript("OnUpdate", function(self, e)
   if not IsMultistrikeEnabled() then return end
   lastUpdate = lastUpdate + e
-  
+
   if lastUpdate >= 0.1 then
     lastUpdate = 0
-    
+
     x:CleanupMultistrikeQueue( )
   end
 end)
@@ -870,11 +879,11 @@ end
 --]=====================================================]
 local function UpdateAuraTracking(unit)
   local entry = x.TrackingEntry
-  
+
   if entry then
     if unit == entry.unit then
       local i, name, _, icon, count, _, _, _, _, _, _, spellId = 1, UnitBuff(entry.unit, 1)
-      
+
       while name do
         if entry.id == spellId then
           break
@@ -882,13 +891,13 @@ local function UpdateAuraTracking(unit)
         i = i + 1;
         name, _, icon, count, _, _, _, _, _, _, spellId = UnitBuff(entry.unit, i)
       end
-      
+
       if name and count > 0 then
         x:AddMessage("class", count, "comboPoints")
       else
         x:AddMessage("class", " ", "comboPoints")
       end
-        
+
     -- Fix issue of not reseting when unit disapears (e.g. dismiss pet)
     elseif not UnitExists(entry.unit) then
       x:AddMessage("class", " ", "comboPoints")
@@ -901,7 +910,7 @@ function x:QuickClassFrameUpdate()
   if entry and UnitExists(entry.unit) then
     -- Update Buffs
     UpdateAuraTracking(entry.unit)
-    
+
     -- Update Unit's Power
     if ShowMonkChi() then
       UpdateUnitPower(entry.unit, "LIGHT_FORCE")
@@ -929,31 +938,31 @@ local function LootFrame_OnUpdate(self, elapsed)
   local removeItems = { }
   for i, item in ipairs(self.items) do
     item.t = item.t + elapsed
-    
+
     -- Time to wait before showing a looted item
     if item.t > 0.5 then
       x:AddMessage("loot", sformat(item.message, sformat(format_lewtz_total, GetItemCount(item.id))), {item.r, item.g, item.b})
       removeItems[i] = true
     end
   end
-  
+
   for k in pairs(removeItems) do
     --self.items[k] = nil
     tremove( self.items, k )
   end
-  
+
   if #removeItems > 1 then
     local index, newList = 1, { }
-    
+
     -- Rebalance the Lua list
     for _, v in pairs(self.items) do
       newList[index] = v
       index = index + 1
     end
-    
+
     self.items = newList
   end
-  
+
   if #self.items < 1 then
     self:SetScript("OnUpdate", nil)
     self.isRunning = false
@@ -982,21 +991,21 @@ x.combat_events = {
     end,
   ["ABSORB_ADDED"] = function(healer_name, amount)
       local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
-      
-      if ShowOnlyMyHeals() and healer_name ~= x.player.name then 
-        if ShowOnlyMyPetsHeals() and healer_name == UnitName("pet") then 
+
+      if ShowOnlyMyHeals() and healer_name ~= x.player.name then
+        if ShowOnlyMyPetsHeals() and healer_name == UnitName("pet") then
           -- If its the pet, then continue
         else
           return
         end
       end
-      
+
       if not ShowHealingRealmNames() then
         healer_name = smatch(healer_name, format_remove_realm) or healer_name
       end
-      
+
       -- TODO: Add merge shields
-      
+
       if ShowFriendlyNames() and healer_name then
         if ShowColoredFriendlyNames() then
           local _, class = UnitClass(healer_name)
@@ -1004,33 +1013,33 @@ x.combat_events = {
             healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
           end
         end
-      
+
         if x.db.profile.frames["healing"].fontJustify == "LEFT" then
           message = message .. " " .. healer_name
         else
           message = healer_name .. " " .. message
         end
       end
-      
+
       x:AddMessage("healing", message, "shieldTaken")
     end,
   ["HEAL"] = function(healer_name, amount)
       if FilterIncomingHealing(amount) then return end
-  
-      if ShowOnlyMyHeals() and healer_name ~= x.player.name then 
-        if ShowOnlyMyPetsHeals() and healer_name == UnitName("pet") then 
+
+      if ShowOnlyMyHeals() and healer_name ~= x.player.name then
+        if ShowOnlyMyPetsHeals() and healer_name == UnitName("pet") then
           -- If its the pet, then continue
         else
           return
         end
       end
-  
+
       local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
-      
+
       if not ShowHealingRealmNames() then
         healer_name = smatch(healer_name, format_remove_realm) or healer_name
       end
-      
+
       if MergeIncomingHealing() then
         x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
       else
@@ -1041,7 +1050,7 @@ x.combat_events = {
               healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
             end
           end
-        
+
           if x.db.profile.frames["healing"].fontJustify == "LEFT" then
             message = message .. " " .. healer_name
           else
@@ -1053,21 +1062,21 @@ x.combat_events = {
     end,
   ["HEAL_CRIT"] = function(healer_name, amount)
       if FilterIncomingHealing(amount) then return end
-      
-      if ShowOnlyMyHeals() and healer_name ~= x.player.name then 
-        if ShowOnlyMyPetsHeals() and healer_name == UnitName("pet") then 
+
+      if ShowOnlyMyHeals() and healer_name ~= x.player.name then
+        if ShowOnlyMyPetsHeals() and healer_name == UnitName("pet") then
           -- If its the pet, then continue
         else
           return
         end
       end
-      
+
       local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
-      
+
       if not ShowHealingRealmNames() then
         healer_name = smatch(healer_name, format_remove_realm) or healer_name
       end
-      
+
       if MergeIncomingHealing() then
         x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
       else
@@ -1078,7 +1087,7 @@ x.combat_events = {
               healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
             end
           end
-        
+
           if x.db.profile.frames["healing"].fontJustify == "LEFT" then
             message = message .. " " .. healer_name
           else
@@ -1090,21 +1099,21 @@ x.combat_events = {
     end,
   ["PERIODIC_HEAL"] = function(healer_name, amount)
       if FilterIncomingHealing(amount) then return end
-      
-      if ShowOnlyMyHeals() and healer_name ~= x.player.name then 
-        if ShowOnlyMyPetsHeals() and healer_name == UnitName("pet") then 
+
+      if ShowOnlyMyHeals() and healer_name ~= x.player.name then
+        if ShowOnlyMyPetsHeals() and healer_name == UnitName("pet") then
           -- If its the pet, then continue
         else
           return
         end
       end
-      
+
       local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
-      
+
       if not ShowHealingRealmNames() then
         healer_name = smatch(healer_name, format_remove_realm) or healer_name
       end
-      
+
       if MergeIncomingHealing() then
         x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
       else
@@ -1115,34 +1124,34 @@ x.combat_events = {
               healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
             end
           end
-        
+
           if x.db.profile.frames["healing"].fontJustify == "LEFT" then
             message = message .. " " .. healer_name
           else
             message = healer_name .. " " .. message
           end
         end
-        
+
         x:AddMessage("healing", message, "healingTakenPeriodic")
       end
     end,
   ["PERIODIC_HEAL_CRIT"] = function(healer_name, amount)
       if FilterIncomingHealing(amount) then return end
-      
-      if ShowOnlyMyHeals() and healer_name ~= x.player.name then 
-        if ShowOnlyMyPetsHeals() and healer_name == UnitName("pet") then 
+
+      if ShowOnlyMyHeals() and healer_name ~= x.player.name then
+        if ShowOnlyMyPetsHeals() and healer_name == UnitName("pet") then
           -- If its the pet, then continue
         else
           return
         end
       end
-      
+
       local message = sformat(format_gain, x:Abbreviate(amount,"healing"))
-      
+
       if not ShowHealingRealmNames() then
         healer_name = smatch(healer_name, format_remove_realm) or healer_name
       end
-      
+
       if MergeIncomingHealing() then
         x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
       else
@@ -1153,14 +1162,14 @@ x.combat_events = {
               healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
             end
           end
-        
+
           if x.db.profile.frames["healing"].fontJustify == "LEFT" then
             message = message .. " " .. healer_name
           else
             message = healer_name .. " " .. message
           end
         end
-        
+
         x:AddMessage("healing", message, "healingTakenPeriodicCritical")
       end
     end,
@@ -1169,7 +1178,7 @@ x.combat_events = {
       if IsProcFiltered(spellName) then return end
 
       local message = spellName
-      
+
       -- Add Stacks
       local icon, spellStacks = select(3, UnitAura("player", spellName))
       if spellStacks and tonumber(spellStacks) > 1 then
@@ -1188,7 +1197,7 @@ x.combat_events = {
       x:AddMessage("procs", message, "spellProc")
     end,
   ["SPELL_CAST"] = function(spellName) if ShowReactives() then x:AddMessage("procs", spellName, "spellReactive") end end,
-  
+
   ["MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "missTypeMiss") end end,
   ["DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "missTypeDodge") end end,
   ["PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "missTypeParry") end end,
@@ -1196,7 +1205,7 @@ x.combat_events = {
   ["IMMUNE"] = function() if ShowMissTypes() then x:AddMessage("damage", IMMUNE, "missTypeImmune") end end,
   ["DEFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", DEFLECT, "missTypeDeflect") end end,
   ["REFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", REFLECT, "missTypeReflect") end end,
-  
+
   ["SPELL_MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "missTypeMiss") end end,
   ["SPELL_DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "missTypeDodge") end end,
   ["SPELL_PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "missTypeParry") end end,
@@ -1274,7 +1283,7 @@ x.combat_events = {
   ["ENERGIZE"] = function(amount, energy_type)
       --[[if not ShowEnergyGains() then return end
       if not FilterPlayerPower(tonumber(amount)) then
-        if energy_type and (energy_type == "MANA" and not IsBearForm()) -- do not show mana in bear form (Leader of the Pack)                                     
+        if energy_type and (energy_type == "MANA" and not IsBearForm()) -- do not show mana in bear form (Leader of the Pack)
             or energy_type == "RAGE" or energy_type == "FOCUS"
             or energy_type == "ENERGY" or energy_type == "RUINIC_POWER"
             or energy_type == "SOUL_SHARDS" or energy_type == "HOLY_POWER" then
@@ -1283,27 +1292,27 @@ x.combat_events = {
           x:AddMessage("power", sformat(format_energy, message, _G[energy_type]), color)
         end
       end]]
-      
+
       if not ShowEnergyGains() then return end
       if FilterPlayerPower(mabs(tonumber(amount))) then return end
       if IsResourceDisabled( energy_type, amount ) then return end
-      
+
       local color, message = nil, x:Abbreviate( amount, "power" )
       if energy_type == "ECLIPSE" then
         if amount > 0 then
           color = x.LookupColorByName("color_ECLIPSE_positive")
-        elseif amount < 0 then 
+        elseif amount < 0 then
           color = x.LookupColorByName("color_ECLIPSE_negative")
         end
       else
         color = x.LookupColorByName("color_" .. energy_type )
       end
-      
+
       -- Default Color will be white
       if not color then
         color = {1,1,1}
       end
-      
+
       x:AddMessage("power", sformat(format_energy, message, ShowEnergyTypes() and _G[energy_type] or ""), color)
     end,
   ["PERIODIC_ENERGIZE"] = function(amount, energy_type)
@@ -1318,29 +1327,29 @@ x.combat_events = {
           x:AddMessage("power", sformat(format_energy, message, _G[energy_type]), color)
         end
       end]]
-      
+
       if not ShowPeriodicEnergyGains() then return end
       if FilterPlayerPower(mabs(tonumber(amount))) then return end
       if IsResourceDisabled( energy_type, amount ) then return end
-      
+
       local color, message = nil, x:Abbreviate( amount, "power" )
       if energy_type == "ECLIPSE" then
         if amount > 0 then
           color = x.LookupColorByName("color_ECLIPSE_positive")
-        elseif amount < 0 then 
+        elseif amount < 0 then
           color = x.LookupColorByName("color_ECLIPSE_negative")
         end
       else
         color = x.LookupColorByName("color_" .. energy_type )
       end
-      
+
       -- Default Color will be white
       if not color then
         color = {1,1,1}
       end
-      
+
       x:AddMessage("power", sformat(format_energy, message, ShowEnergyTypes() and _G[energy_type] or ""), color)
-      
+
     end,
 
   ["SPELL_AURA_END"] = function(spellname)
@@ -1375,7 +1384,7 @@ x.combat_events = {
         x:AddMessage('general', sformat(format_gain, spellname), 'debuffsGained')
       end
     end,
-  
+
   -- TODO: Create a merger for faction and honor xp
   ["HONOR_GAINED"] = function(amount)
       local num = mfloor(tonumber(amount) or 0)
@@ -1410,7 +1419,7 @@ x.events = {
   ["UNIT_POWER"] = function(unit, powerType)
       -- Update for Class Combo Points
       UpdateUnitPower(unit, powerType)
-  
+
       if select(2, UnitPowerType(x.player.unit)) == "MANA" and ShowLowResources() and UnitPower(x.player.unit) / UnitPowerMax(x.player.unit) <= COMBAT_TEXT_LOW_MANA_THRESHOLD then
         if not x.lowMana then
           x:AddMessage('general', MANA_LOW, 'lowResourcesMana')
@@ -1451,7 +1460,7 @@ x.events = {
       end
     end,
   ["UNIT_COMBO_POINTS"] = function() UpdateComboPoints() end,
-  
+
   ["PLAYER_TARGET_CHANGED"] = function() UpdateComboPoints() end,
   ["UNIT_AURA"] = function(unit) UpdateAuraTracking(unit) end,
 
@@ -1461,21 +1470,21 @@ x.events = {
       x:UpdatePlayer()
       x:UpdateComboPointOptions()
       x:Clear()
-      
+
       -- Lazy Coding (Clear up messy libraries... yuck!)
       collectgarbage()
     end,
-    
+
   ["UNIT_PET"] = function()
       x:UpdatePlayer()
     end,
-    
+
   ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); x:UpdateComboTracker() end,    -- x:UpdateComboPointOptions(true) end,
-  
+
   ["CHAT_MSG_LOOT"] = function(msg)
       -- Format Loot
       local preMessage, linkColor, linkType, linkID, linkQuality, itemName, amount = select(3, string.find(msg, format_loot))
-      
+
       if TrackSpells() then
         x.spellCache.items[linkID] = true
       end
@@ -1487,27 +1496,27 @@ x.events = {
         local speciesName, speciesIcon, petType = C_PetJournal.GetPetInfoBySpeciesID(linkID)
         local petTypeName = PET_TYPE_SUFFIX[petType]
         local message = sformat(format_pet, speciesName, petTypeName)
-        
+
         local r, g, b = GetItemQualityColor(linkQuality)
-        
+
         -- Add the message
         x:AddMessage("loot", message, { r, g, b } )
         return
       end
-    
+
       -- Check to see if this is a item
       if linkType == "item" then
         local crafted, looted, pushed = (preMessage == format_crafted), (preMessage == format_looted), (preMessage == format_pushed)
-        
+
         -- Item Quality, See "GetAuctionItemClasses()" For Type and Subtype, Item Icon Texture Location
         local itemQuality, _, _, itemType, itemSubtype, _, _, itemTexture = select(3, GetItemInfo(linkID))
-        
+
         -- Item White-List Filter
         local listed = x.db.profile.spells.items[itemType] and (x.db.profile.spells.items[itemType][itemSubtype] == true)
-        
+
         -- Fix the Amount of a item looted
         amount = tonumber(amount) or 1
-        
+
         -- Only let self looted items go through the "Always Show" filter
         if (listed and looted) or (ShowLootItems() and looted and itemQuality >= GetLootQuality()) or (itemType == "Quest" and ShowLootQuest() and looted) or (crafted and ShowLootCrafted()) then
           local r, g, b = GetItemQualityColor(itemQuality)
@@ -1529,26 +1538,26 @@ x.events = {
               itemName,                                 -- Item Name
               sformat(format_lewtz_amount, amount)      -- Amount Looted
             )
-            
+
           -- Purchased/quest items seem to get to your bags faster than looted items
           if ShowTotalItems() then
-          
+
             -- This frame was created to make sure I always display the correct number of an item in your bag
             if not x.lootUpdater then
               x.lootUpdater = CreateFrame("FRAME")
               x.lootUpdater.isRunning = false
               x.lootUpdater.items = { }
             end
-            
+
             -- Enqueue the item to wait 1 second before showing
             tinsert(x.lootUpdater.items, { id=linkID, message=message, t=0, r=r, g=g, b=b, })
-            
+
             if not x.lootUpdater.isRunning then
               x.lootUpdater:SetScript("OnUpdate", LootFrame_OnUpdate)
               x.lootUpdater.isRunning = true
             end
           else
-          
+
             -- Add the message
             x:AddMessage("loot", sformat(message, ""), {r, g, b})
           end
@@ -1592,21 +1601,21 @@ x.events = {
       if not ShowLootMoney() then return end
       local g, s, c = tonumber(msg:match(GOLD_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(SILVER_AMOUNT:gsub("%%d", "(%%d+)"))), tonumber(msg:match(COPPER_AMOUNT:gsub("%%d", "(%%d+)")))
       local money, o = (g and g * 10000 or 0) + (s and s * 100 or 0) + (c or 0), MONEY .. ": "
-      
+
       -- TODO: Add a minimum amount of money
-      
+
       if ShowColorBlindMoney() then
         o = o..(g and g.." G " or "")..(s and s.." S " or "")..(c and c.." C " or "")
       else
         o = o..GetCoinTextureString(money).." "
       end
-      
+
       -- This only works on english clients :\
       if msg:find("share") then o = o.."(split)" end
-      
+
       x:AddMessage("loot", o, {1, 1, 0}) -- yellow
     end,
-    
+
   ["SPELL_ACTIVATION_OVERLAY_GLOW_SHOW"] = function(spellID)
       if spellID == 32379 then  -- Shadow Word: Death
         local name = GetSpellInfo(spellID)
@@ -1624,7 +1633,7 @@ x.outgoing_events = {
 
       local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical, multistrike = select(12, ...)
       local merged, outputFrame, color = false, critical and "critical" or "outgoing", "healingOutPeriodic"
-      
+
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
@@ -1667,17 +1676,17 @@ x.outgoing_events = {
         end
         return
       end
-      
+
       -- Output to Message Frame (Do not format multistrikes here)
       xCTFormat:SPELL_PERIODIC_HEAL( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged )
     end,
-    
+
   ["SPELL_HEAL"] = function(...)
       if not ShowHealing() then return end
 
       local spellID, spellName, spellSchool, amount, overhealing, absorbed, critical, multistrike = select(12, ...)
       local merged, outputFrame, color = false, critical and "critical" or "outgoing", critical and "healingOutCritical" or "healingOut"
-      
+
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
@@ -1718,21 +1727,21 @@ x.outgoing_events = {
         else
           x:EnqueueMultistrikeSpell( "SPELL_HEAL", outputFrame, spellID, amount, critical, merged )
         end
-        
+
         return
       end
-      
+
       -- Output to Message Frame (Do not format multistrikes here)
       xCTFormat:SPELL_HEAL( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged )
     end,
-    
+
   ["SWING_DAMAGE"] = function(...)
       if not ShowDamage() then return end
-      
+
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  amount, _, _, _, _, _, critical, glancing, crushing, isOffHand, multistrike = ...
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "genericDamage"
       local merged, critMessage = false, nil
-      
+
       -- Filter Outgoing Damage
       if FilterOutgoingDamage(amount) then return end
 
@@ -1787,20 +1796,20 @@ x.outgoing_events = {
 
       xCTFormat:SWING_DAMAGE( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged )
     end,
-    
+
   ["RANGE_DAMAGE"] = function(...)
       if not ShowDamage() then return end
-      
+
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, amount, _, _, _, _, _, critical, glancing, crushing, isOffHand, multistrike = ...
       local outputFrame, outputColor = "outgoing", "genericDamage"
       local merged = false
-      
+
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
       -- Filter Outgoing Damage
       if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
-      
+
       -- Auto Shot's Spell ID
       local autoShot = (spellID == 75)
 
@@ -1844,23 +1853,23 @@ x.outgoing_events = {
         end
         return
       end
-      
+
       -- Output to Message Frame (Do not format multistrikes here)
       xCTFormat:RANGE_DAMAGE( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged, autoShot )
     end,
-    
+
   ["SPELL_DAMAGE"] = function(...)
       if not ShowDamage() then return end
-      
+
       local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand, multistrike = select(1, ...)
       local merged, outputFrame, color = false, critical and "critical" or "outgoing", GetCustomSpellColorFromIndex(spellSchool)
-      
+
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
       -- Filters: Specific Spell, or Amount
       if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
-      
+
       -- Condensed Critical Merge
       if IsMerged(spellID) then
         merged = true
@@ -1879,7 +1888,7 @@ x.outgoing_events = {
           return
         end
       end
-      
+
       if IsMultistrikeEnabled() then
         if multistrike then
           x:MultistrikeSpellEvent( spellID, amount )
@@ -1892,13 +1901,13 @@ x.outgoing_events = {
       -- Output to Message Frame (Do not format multistrikes here)
       xCTFormat:SPELL_DAMAGE( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged, spellSchool )
     end,
-    
+
   ["SPELL_PERIODIC_DAMAGE"] = function(...)
       if not ShowDamage() or not ShowDots() then return end
-      
+
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, spellSchool, amount, _, _, _, _, _, critical, glancing, crushing, isOffHand, multistrike = ...
       local merged, outputFrame, color = false, critical and "critical" or "outgoing", GetCustomSpellColorFromIndex(spellSchool)
-      
+
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
@@ -1936,79 +1945,79 @@ x.outgoing_events = {
       -- Output to Message Frame (Do not format multistrikes here)
       xCTFormat:SPELL_PERIODIC_DAMAGE( (multistrike and 1) or 0, outputFrame, spellID, amount, critical, merged, spellSchool )
     end,
-    
+
   ["SWING_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  missType = ...
       local outputFrame, message, outputColor = "outgoing", _G["COMBAT_TEXT_"..missType], "misstypesOut"
-      
+
       -- Are we filtering Auto Attacks in the Outgoing frame?
       if not ShowAutoAttack() then return end;
-      
+
       if missType == "IMMUNE" and not ShowImmunes() then return end
       if missType ~= "IMMUNE" and not ShowMisses() then return end
-      
+
       -- Check for Pet Swings
       local spellID = 6603
       if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
         if not ShowPetDamage() then return end
         spellID = PET_ATTACK_TEXTURE
       end
-      
+
       -- Add Icons
       message = x:GetSpellTextureFormatted( spellID,
                                             message,
                                             0, -- No multistrike
            x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
            x.db.profile.frames[outputFrame].fontJustify )
-           
+
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
+
   ["SPELL_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
       local outputFrame, message, outputColor = "outgoing", _G[missType], "misstypesOut"
-      
+
       if missType == "IMMUNE" and not ShowImmunes() then return end
       if missType ~= "IMMUNE" and not ShowMisses() then return end
-      
+
       -- Add Icons
       message = x:GetSpellTextureFormatted( spellID,
                                             message,
                                             0, -- No multistrike
            x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
            x.db.profile.frames[outputFrame].fontJustify )
-      
+
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
+
   ["RANGE_MISSED"] = function(...)
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
       local outputFrame, message, outputColor = "outgoing", _G[missType], "misstypesOut"
-      
+
       if missType == "IMMUNE" and not ShowImmunes() then return end
       if missType ~= "IMMUNE" and not ShowMisses() then return end
-      
+
       -- Add Icons
       message = x:GetSpellTextureFormatted( spellID,
                                             message,
                                             0, -- No multistrike
            x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
            x.db.profile.frames[outputFrame].fontJustify )
-      
+
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
+
   ["SPELL_DISPEL"] = function(...)
       if not ShowDispells() then return end
-  
+
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_DISPELLED, spellName), "dispellDebuffs"
-      
+
       -- Check for buff or debuff (for color)
       if auraType == "BUFF" then
         outputColor = "dispellBuffs"
       end
-      
+
       -- Add Icons
       message = x:GetSpellTextureFormatted( spellID,
                                             message,
@@ -2018,20 +2027,20 @@ x.outgoing_events = {
                                             nil,
                                             nil,
                                             true )
-      
+
       if MergeDispells() then
         x:AddSpamMessage("general", spellName, message, outputColor, 0.5)
       else
         x:AddMessage(outputFrame, message, outputColor)
       end
     end,
-    
+
   ["SPELL_STOLEN"] = function(...)
       if not ShowDispells() then return end
-      
+
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_STOLE, spellName), "dispellStolen"
-      
+
       -- Add Icons
       message = x:GetSpellTextureFormatted( spellID,
                                             message,
@@ -2041,16 +2050,16 @@ x.outgoing_events = {
                                             nil,
                                             nil,
                                             true )
-      
+
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
+
   ["SPELL_INTERRUPT"] = function(...)
       if not ShowInterrupts() then return end
-  
+
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  target, _, _,  spellID, effect = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, INTERRUPTED, effect), "interrupts"
-      
+
       -- ( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride )
       -- ( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride, forceOff )
 
@@ -2063,16 +2072,16 @@ x.outgoing_events = {
                                             nil,
                                             nil,
                                             true )
-      
+
       x:AddMessage(outputFrame, message, outputColor)
     end,
-    
+
   ["PARTY_KILL"] = function(...)
       if not ShowPartyKill() then return end
-  
+
       local _, _, _, sourceGUID, _, sourceFlags, _, destGUID, name = ...
       local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_KILLED, name), "killingBlow"
-      
+
       -- Color the text according to class that got killed
       if destGUID then
         local index = select(2, GetPlayerInfoByGUID(destGUID))
@@ -2080,7 +2089,7 @@ x.outgoing_events = {
           outputColor = {RAID_CLASS_COLORS[index].r, RAID_CLASS_COLORS[index].g, RAID_CLASS_COLORS[index].b}
         end
       end
-      
+
       x:AddMessage(outputFrame, message, outputColor)
     end,
 }
