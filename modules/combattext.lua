@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2015. All Rights Reserved.        ]
+ [  ©2016. All Rights Reserved.        ]
  [====================================]]
 
 local ADDON_NAME, addon = ...
