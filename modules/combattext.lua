@@ -853,7 +853,7 @@ local function UpdateUnitPower(unit, powertype)
     elseif powertype == "SHADOW_ORBS" and ShowPriestShadowOrbs() then
       value = UnitPower(x.player.unit, SPELL_POWER_SHADOW_ORBS)
     elseif powertype == "SOUL_SHARDS" and ShowWarlockSoulShards() then
-      value = UnitPower(x.player.unit, SPELL_POWER_SOUL_SHARDS) / 100
+      value = UnitPower(x.player.unit, SPELL_POWER_SOUL_SHARDS)
     elseif powertype == "DEMONIC_FURY" and ShowWarlockDemonicFury() then
       value = UnitPower(x.player.unit, SPELL_POWER_DEMONIC_FURY) / 100
     elseif powertype == "BURNING_EMBERS" and ShowWarlockBurningEmbers() then
