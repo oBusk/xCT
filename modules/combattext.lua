@@ -1582,7 +1582,7 @@ x.events = {
       -- format curency
       -- "%s: %s [%s] |cff798BDDx%s|r |cffFFFF00(%s)|r"
       local message = sformat(format_currency,
-        _G.Currency,
+        _G.CURRENCY,
         ShowLootIcons()
           and sformat(format_loot_icon,
             texturePath,
