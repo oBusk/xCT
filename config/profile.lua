@@ -595,125 +595,80 @@ addon.defaults = {
       -- Abbreviate or Groups Settings
       formatAbbreviate = true, 
       formatGroups = false,
-      
+
       combo = {
         ["DEATHKNIGHT"] = {
-          [1] = {                                         -- Blood
-            CreateComboSpellEntry(false, 49222),          --   Bone Shield
-            CreateComboSpellEntry(true, 114851),          --   Blood Charge
-            CreateComboSpellEntry(false, 50421),          --   Scent of Blood
-          },
-          [2] = { },    -- Frost
-          [3] = {                                         -- Unholy
-            CreateComboSpellEntry(true, 91342, "pet"),    --   Shadow Infusion
-          },
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
         
         ["DRUID"] = {
-          [1] = {                                         -- Balance
-            --CreateComboSpellEntry(true, 81192),           --   Lunar Shower
-          },
-          [2] = {                                         -- Feral
-            [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
-          }, 
-          [3] = { },    -- Guardian
-          [4] = { },    -- Restoration
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
       
         ["HUNTER"] = {
-          [1] = {                                         -- Beast Mastery
-            CreateComboSpellEntry(true, 19615, "pet"),    --   Frenzy Effect
-            CreateComboSpellEntry(false, 34720),           --   Thrill of the Hunt (Talent)
-          },
-          [2] = {                                         -- Marksman
-            --CreateComboSpellEntry(true, 82925),           --   Ready, Set, Aim...
-            CreateComboSpellEntry(false, 34720),           --   Thrill of the Hunt (Talent)
-          },
-          [3] = {                                         -- Survival
-            CreateComboSpellEntry(true, 168980), --56453),           --   Lock 'n Load
-            CreateComboSpellEntry(false, 34720),           --   Thrill of the Hunt (Talent)
-          },
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
         
         ["MAGE"] = {
-          [1] = { },    -- Arcane (Arcane Charge 114664)
-          [2] = { },    -- Fire (Heating Up)
-          [3] = { },    -- Frost (Fingers of Frost 112965)
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
         
         ["MONK"] = {
-          [CHI] = true,
-          
-          -- DO NOT USE - MONKS GET CHI
-          [1] = { },    -- Brewmaster
-          [2] = { },    -- Mistweaver
-          [3] = { },    -- Windwalker
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
         
         ["PALADIN"] = {
-          [HOLY_POWER] = true,
-        
-          -- DO NOT USE - PALADINS GET HOLY POWER
-          [1] = { },    -- Holy
-          [2] = { },    -- Protection
-          [3] = { },    -- Retribution
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
         
         ["PRIEST"] = {
-          [1] = {                                         -- Discipline
-            CreateComboSpellEntry(true, 81661),           --   Evangelism
-          },    
-          [2] = {                                         -- Holy
-            CreateComboSpellEntry(true, 63735),           --   Serendipity
-            CreateComboSpellEntry(false, 114255),         --   Surge of Light
-          },    
-          -- DO NOT USE - SHADOW PRIEST GET SHADOW ORBS
-          [3] = {                                         -- Shadow
-            [SHADOW_ORBS] = true,
-            -- 87160 Surge of Darkness
-          },    
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
         
         ["ROGUE"] = {
-          [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
-        
-          -- DO NOT USE - ROGUES GET COMBO POINTS
-          [1] = { },    -- Assassination
-          [2] = { },    -- Combat
-          [3] = { },    -- Subtlety
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
         ["SHAMAN"] = {
-          [1] = {                                         -- Elemental
-            CreateComboSpellEntry(true, 324),             --   Fulmination (Stacks up to 20??)
-          },    
-          [2] = {                                         -- Enhancement
-            CreateComboSpellEntry(true, 53817),           --   Maelstrom Weapon
-          },
-          [3] = {                                         -- Restoration
-            CreateComboSpellEntry(true, 53390),           --   Tidal Waves
-          },
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
         ["WARLOCK"] = {
-          -- DO NOT USE - AFFLICTION WARLOCKS GET SOUL SHARDS
-          [1] = { [SOUL_SHARDS] = true },                 -- Affliction
-          
-          -- DO NOT USE - DEMONOLOGY WARLOCKS GET DEMONIC FURY
-          [2] = { [DEMONIC_FURY] = true },                -- Demonology
-          
-          -- DO NOT USE - DESTRUCTION WARLOCKS GET BURNING EMBERS
-          [3] = { [BURNING_EMBERS] = true },              -- Destruction
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
         
         ["WARRIOR"] = {
-          [1] = { },    -- Arms
-          [2] = { },    -- Fury
-          [3] = { },    -- Protection
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
         
       },
-      
+
+
+
+
+
       -- yes this is supposed to be blank :P
       -- it is generated in merge.lua
       merge = { },
@@ -751,6 +706,9 @@ addon.defaults = {
       filterOutgoingHealingValue = 0,
       filterIncomingDamageValue = 0,
       filterIncomingHealingValue = 0,
+
+      -- Filter Multistrike
+      filterMultistrikes = false,
     },
   },
 }

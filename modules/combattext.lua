@@ -223,6 +223,8 @@ local function FilterIncomingDamage(value) return x.db.profile.spellFilter.filte
 local function FilterIncomingHealing(value) return x.db.profile.spellFilter.filterIncomingHealingValue > value end
 local function TrackSpells() return x.db.profile.spellFilter.trackSpells end
 
+local function IsFilteringMultistrikes() return x.db.profile.spellFilter.filterMultistrikes end
+
 local function IsResourceDisabled( resource, amount )
   if resource == "ECLIPSE" then
     if amount > 0 then
@@ -1628,6 +1630,9 @@ x.outgoing_events = {
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
+      -- Filter Multistrikes
+      if IsFilteringMultistrikes() and multistrike then return end
+
       -- Filter Ougoing Healing Spell or Amount
       if IsSpellFiltered(spellID) or FilterOutgoingHealing(amount) then return end
 
@@ -1681,6 +1686,9 @@ x.outgoing_events = {
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
+      -- Filter Multistrikes
+      if IsFilteringMultistrikes() and multistrike then return end
+
       -- Filter Ougoing Healing Spell or Amount
       if IsSpellFiltered(spellID) or FilterOutgoingHealing(amount) then return end
 
@@ -1732,6 +1740,9 @@ x.outgoing_events = {
       local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  amount, _, _, _, _, _, critical, glancing, crushing, isOffHand, multistrike = ...
       local outputFrame, message, outputColor = "outgoing", x:Abbreviate(amount, "outgoing"), "genericDamage"
       local merged, critMessage = false, nil
+
+      -- Filter Multistrikes
+      if IsFilteringMultistrikes() and multistrike then return end
       
       -- Filter Outgoing Damage
       if FilterOutgoingDamage(amount) then return end
@@ -1798,6 +1809,9 @@ x.outgoing_events = {
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
+      -- Filter Multistrikes
+      if IsFilteringMultistrikes() and multistrike then return end
+
       -- Filter Outgoing Damage
       if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
       
@@ -1858,6 +1872,9 @@ x.outgoing_events = {
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
 
+      -- Filter Multistrikes
+      if IsFilteringMultistrikes() and multistrike then return end
+
       -- Filters: Specific Spell, or Amount
       if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
       
@@ -1901,6 +1918,9 @@ x.outgoing_events = {
       
       -- Keep track of spells that go by
       if TrackSpells() then x.spellCache.spells[spellID] = true end
+
+      -- Filter Multistrikes
+      if IsFilteringMultistrikes() and multistrike then return end
 
       -- Filters: Specific Spell, or Amount
       if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end

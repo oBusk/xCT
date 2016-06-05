@@ -12,6 +12,11 @@
  [  ©2015. All Rights Reserved.        ]
  [====================================]]
  
+-- Dont do anything for Legion
+local build = select(4, GetBuildInfo())
+if build >= 70000 then return end
+
+
 local ADDON_NAME, addon = ...
 local x = addon.engine
 

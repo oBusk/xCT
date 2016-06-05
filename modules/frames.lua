@@ -11,7 +11,9 @@
  [  xCT+ Version 4.x.x                 ]
  [  ©2015. All Rights Reserved.        ]
  [====================================]]
- 
+
+local build = select(4, GetBuildInfo())
+
 -- this file handles updating the frame settings and anything that changes the UI frames themselves
 local ADDON_NAME, addon = ...
 
@@ -111,7 +113,9 @@ end
 function x:UpdateFrames(specificFrame)
 
 	-- Update Head Numbers and FCT Font Settings
-	if not specificFrame then x:UpdateBlizzardFCT() end
+	if build < 70000 then
+		if not specificFrame then x:UpdateBlizzardFCT() end
+	end
 	
 	-- Update the frames
 	for framename, settings in pairs(x.db.profile.frames) do
@@ -1135,4 +1139,9 @@ StaticPopupDialogs["XCT_PLUS_FORCE_CVAR_UPDATE"] = {
 	
 	-- Taint work around
 	preferredIndex	= 3,
+}
+
+StaticPopupDialogs["XCT_PLUS_SUGGEST_MULTISTRIKE_OFF"] = {
+	text            = ""
+
 }

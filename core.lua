@@ -12,6 +12,10 @@
  [  ©2015. All Rights Reserved.        ]
  [====================================]]
  
+-- Dont do anything for Legion
+local build = select(4, GetBuildInfo())
+
+
 -- Get Addon's name and Blizzard's Addon Stub
 local AddonName, addon = ...
 
@@ -98,8 +102,10 @@ function x:OnInitialize()
   
   -- Delay updating frames until all other addons are loaded!
   --x:UpdateFrames()
+  if build < 70000 then
+    x:UpdateBlizzardFCT()
+  end
   
-  x:UpdateBlizzardFCT()
   x:UpdateCombatTextEvents(true)
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
@@ -359,6 +365,45 @@ local function setIF_1(info, value) x.db.profile.spells.items[info[#info - 1]][i
 local function getIF_2(info) return x.db.profile.spells.items[info[#info - 1]][info[#info - 1]] end
 local function setIF_2(info, value) x.db.profile.spells.items[info[#info - 1]][info[#info - 1]] = value end
 
+
+
+-- For Legion - Reimplement legacy GetAuctionItemClasses and GetAuctionItemSubClasses
+if build >= 70000 then
+  
+
+  function GetAuctionItemClasses()
+    local list = {}
+    for i, v in pairs(OPEN_FILTER_LIST) do
+      if v.type == "category" then
+        list[v.categoryIndex] = v.name
+      end
+    end
+    return list
+  end
+
+  function GetAuctionItemSubClasses(index)
+    local list, found = {}
+    for i, v in pairs(OPEN_FILTER_LIST) do
+      if v.type == "category" then
+        if found then break end
+        if v.categoryIndex == index then
+          found = 1
+        end
+      elseif v.type == "subCategory" then
+        if found then
+          list[v.subCategoryIndex] = v.name
+        end
+      end
+    end
+    return list
+  end
+end
+
+x.UpdateItemTypes = function(self)end
+
+
+--[===[
+
 -- Updates item filter list
 function x:UpdateItemTypes()
   -- check to see if this is the first time we are loading this version
@@ -461,6 +506,9 @@ function x:UpdateItemTypes()
 
   addon.options.args["spellFilter"].args["typeFilter"] = allTypes
 end
+
+]===]
+
 
 local function getCP_1(info) return x.db.profile.spells.combo[x.player.class][info[#info]] end
 local function setCP_1(info, value) x.db.profile.spells.combo[x.player.class][info[#info]] = value end
@@ -1118,8 +1166,14 @@ local ACR = LibStub('AceConfigRegistry-3.0')
 -- Register the Options
 ACD:SetDefaultSize(AddonName, 800, 560)
 AC:RegisterOptionsTable(AddonName, addon.options)
-AC:RegisterOptionsTable(AddonName.."Blizzard", x.blizzardOptions)
-ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
+
+
+if build < 70000 then
+  AC:RegisterOptionsTable(AddonName.."Blizzard", x.blizzardOptions)
+  ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
+end
+
+
 
 -- Register Slash Commands
 x:RegisterChatCommand('xct', 'OpenxCTCommand')

@@ -44,6 +44,10 @@ LSM:Register("font", "Champagne (xCT+)", [[Interface\AddOns\]] .. ADDON_NAME .. 
 --LSM:Register("font", "Champagne (I)", [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\Champagne & Limousines Italic.ttf]], LSM.LOCALE_BIT_western)
 --LSM:Register("font", "Champagne", [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\Champagne & Limousines.ttf]], LSM.LOCALE_BIT_western)
 
+LSM:Register("font", "Condensed Bold (xCT+)", [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\OpenSans-CondBold.ttf]], LSM.LOCALE_BIT_western)
+LSM:Register("font", "Condensed Light (xCT+)", [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\OpenSans-CondLight.ttf]], LSM.LOCALE_BIT_western)
+LSM:Register("font", "Condensed Light Italics (xCT+)", [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\OpenSans-CondLightItalic.ttf]], LSM.LOCALE_BIT_western)
+
 -- Do you want awesome text? Put your name below :D
 if UnitName("PLAYER") == "Puppycat" or UnitName("PLAYER") == "Dandraffbal" then
   local settings = CreateFrame("FRAME")

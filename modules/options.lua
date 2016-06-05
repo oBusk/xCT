@@ -11,7 +11,9 @@
  [  xCT+ Version 4.x.x                 ]
  [  ©2015. All Rights Reserved.        ]
  [====================================]]
- 
+
+local build = select(4, GetBuildInfo())
+
 local ADDON_NAME, addon = ...
 local LSM = LibStub("LibSharedMedia-3.0")
 local x, noop = addon.engine, addon.noop
@@ -144,6 +146,11 @@ addon.options = {
 local function isCVarsDisabled( ) return x.db.profile.bypassCVars end
 
 x.cvar_update = function( force )
+
+
+  if build >= 70000 then return end
+
+
   -- Always have Combat Text Enabled
   SetCVar("enableCombatText", 1)
 
@@ -770,12 +777,12 @@ addon.options.args["spellFilter"] = {
   type = "group",
   order = 3,
   args = {
-    filterSpacer1 = {
+    --[[filterSpacer1 = {
       type = 'description',
       order = 1,
       fontSize = "medium",
       name = "",
-    },
+    },]]
     
     filterValues = {
       name = "Minimal Value Thresholds",
@@ -849,11 +856,29 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-  
+    
+    multistrikeOptions = {
+      name = "Multistrike Filters",
+      type = 'group',
+      order = 11,
+      guiInline = true,
+      args = {
+        filterMultistrikes = {
+          order = 1,
+          type = 'toggle',
+          name = "Hide Multistrikes",
+          desc = "Filters all multistrikes so that they do not show.",
+          set = set0_1,
+          get = get0_1,
+        },
+
+      },
+    },
+
     spellFilter = {
       name = "Track Spell History",
       type = 'group',
-      order = 11,
+      order = 21,
       guiInline = true,
       args = {
     
