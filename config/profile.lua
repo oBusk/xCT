@@ -1,17 +1,17 @@
---[[   ____    ______      
+--[[   ____    ______
       /\  _`\ /\__  _\   __
- __  _\ \ \/\_\/_/\ \/ /_\ \___ 
+ __  _\ \ \/\_\/_/\ \/ /_\ \___
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
 \/>  </ \ \ \L\ \ \ \ \/__/\_\_/
  /\_/\_\ \ \____/  \ \_\  \/_/
  \//\/_/  \/___/    \/_/
- 
+
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
  [  ©2015. All Rights Reserved.        ]
  [====================================]]
- 
+
 -- This file is a static default profile.  After your first profile is created, editing this file will do nothing.
 local ADDON_NAME, addon = ...
 
@@ -36,7 +36,7 @@ addon.defaults = {
     showStartupText = true,
     hideConfig = true,
     bypassCVars = false,
-    
+
     blizzardFCT = {
       blizzardHeadNumbers = false,
       enabled = false,
@@ -44,7 +44,7 @@ addon.defaults = {
       fontName = [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\HOOGE.TTF]],
       fontSize = 32,
       fontOutline = "4MONOCHROMEOUTLINE",
-      
+
       -- CVars
       ["CombatThreatChanges"] = false,
       ["CombatDamage"] = false,
@@ -56,20 +56,20 @@ addon.defaults = {
       ["fctSpellMechanicsOther"] = false,
       ["CombatDamageStyle"] = 1,
     },
-    
+
     frameSettings = {
       clearLeavingCombat = false,
       showGrid = true,
       showPositions = true,
       frameStrata = "5HIGH",
     },
-    
+
     megaDamage = {
       thousandSymbol = "|cffFF8000K|r",
       millionSymbol = "|cffFF0000M|r",
       decimalPoint = true,
     },
-    
+
     frames = {
       general = {
         ["enabledFrame"] = true,
@@ -77,13 +77,13 @@ addon.defaults = {
         ["insertText"] = "bottom",
         ["alpha"] = 100,
         ["megaDamage"] = false,
-        
+
       -- position
         ["X"] = 0,
         ["Y"] = 224,
         ["Width"] = 512,
         ["Height"] = 128,
-        
+
       -- fonts
         ["font"] = "Homespun (xCT+)",
         ["fontSize"] = 20,
@@ -139,18 +139,18 @@ addon.defaults = {
       -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
-        
+
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
-        
+
       -- fading text
         ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
-        
+
       -- special tweaks
         ["showInterrupts"] = true,
         ["showDispells"] = true,
@@ -162,31 +162,31 @@ addon.defaults = {
         ["showRepChanges"] = true,
         ["showHonorGains"] = true,
       },
-      
+
       outgoing = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
         ["megaDamage"] = false,
-        
+
       -- position
         ["X"] = 480,
         ["Y"] = 0,
         ["Width"] = 192,
         ["Height"] = 320,
-        
+
       -- fonts
         ["font"] = "Homespun (xCT+)",
         ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
-        
+
       -- font colors
         colors = {
           ['genericDamage']         = { enabled = false, desc = "Generic Damage",   default = { 1.00, 0.82, 0.00 } },
           ['misstypesOut']          = { enabled = false, desc = "Missed",           default = { 0.50, 0.50, 0.50 } },
-          
+
           ["spellSchools"] = {
             enabled = false, desc = "Spell School Colors",
             colors = {
@@ -212,18 +212,18 @@ addon.defaults = {
       -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
-        
+
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
-        
+
       -- fading text
         ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
-        
+
       -- special tweaks
         ["enableOutDmg"] = true,
         ["enableOutHeal"] = true,
@@ -234,26 +234,26 @@ addon.defaults = {
         ["enableImmunes"] = true,
         ["enableMisses"] = true,
       },
-      
+
       critical = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
         ["megaDamage"] = false,
-      
+
       -- position
         ["X"] = 256,
         ["Y"] = 0,
         ["Width"] = 256,
         ["Height"] = 128,
-        
+
       -- fonts
         ["font"] = "Homespun (xCT+)",
         ["fontSize"] = 30,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
-        
+
       -- font colors
         colors = {
           ['genericDamageCritical']  = { enabled = false, desc = "Critical Generic Damage", default = { 1.00, 1.00, 0.00 } },
@@ -269,40 +269,40 @@ addon.defaults = {
       -- critical appearance
         ["critPrefix"] = "|cffFF0000*|r",
         ["critPostfix"] = "|cffFF0000*|r",
-        
+
       -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
-        
+
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
-        
+
       -- fading text
         ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
-        
+
       -- special tweaks
         ["showSwing"] = true,
         ["prefixSwing"] = true,
       },
-      
+
       damage = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "top",
         ["alpha"] = 100,
         ["megaDamage"] = false,
-        
+
       -- position
         ["X"] = -448,
         ["Y"] = -88,
         ["Width"] = 128,
         ["Height"] = 144,
-        
+
       -- fonts
         ["font"] = "Homespun (xCT+)",
         ["fontSize"] = 20,
@@ -331,7 +331,7 @@ addon.defaults = {
               ['missTypeAbsorb']  = { enabled = false, desc = "Asorbed",  default = { 0.50, 0.50, 0.50 } },
             },
           },
-          
+
           ['missTypesTakenPartial'] = {
             enabled = false, desc = "Miss Types |cff798BDD(Partials)|r",
             colors = {
@@ -341,18 +341,18 @@ addon.defaults = {
             },
           },
         },
-        
+
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
-        
+
       -- fading text
         ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
-      
+
       -- Special Tweaks
         ["showDodgeParryMiss"] = true,
         ["showDamageReduction"] = true,
@@ -364,19 +364,19 @@ addon.defaults = {
         ["insertText"] = "bottom",
         ["alpha"] = 100,
         ["megaDamage"] = false,
-      
+
       -- positioon
         ["X"] = -288,
         ["Y"] = 88,
         ["Width"] = 448,
         ["Height"] = 144,
-        
+
       -- fonts
         ["font"] = "Homespun (xCT+)",
         ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "LEFT",
-        
+
       -- font colors
         colors = {
           ['shieldTaken']          = { enabled = false, desc = "Shields",          default = { 0.60, 0.65, 1.00 } },
@@ -385,18 +385,18 @@ addon.defaults = {
           ['healingTakenPeriodic'] = { enabled = false, desc = "Periodic Healing", default = { 0.10, 0.50, 0.10 } },
           ['healingTakenPeriodicCritical'] = { enabled = false, desc = "Critical Periodic Healing", default = { 0.10, 0.50, 0.10 } },
         },
-        
+
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
-        
+
       -- fading text
         ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
-        
+
       -- special tweaks
         ["showFriendlyHealers"] = true,
         ["enableClassNames"] = true,
@@ -406,49 +406,50 @@ addon.defaults = {
         ["showOnlyMyHeals"] = false,
         ["showOnlyPetHeals"] = false,
       },
-      
+
       class = {
         ["enabledFrame"] = true,
         ["alpha"] = 100,
-        
+
       -- position
         ["X"] = 0,
         ["Y"] = 64,
         ["Width"] = 64,
         ["Height"] = 64,
-        
+
       -- fonts
         ["font"] = "HOOGE (xCT)",
         ["fontSize"] = 32,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
-        
+
       -- font colors
         colors = {
           ['comboPoints']     = { enabled = false, desc = "Combo Points",     default = { 1.00, 0.82, 0.00 } },
           ['comboPointsMax']  = { enabled = false, desc = "Max Combo Points", default = { 0.00, 0.82, 1.00 } },
         },
       },
-      
+
       power = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
         ["megaDamage"] = false,
-        
+
       -- position
         ["X"] = 0,
         ["Y"] = -64,
         ["Width"] = 256,
         ["Height"] = 128,
-        
+
       -- fonts
         ["font"] = "Homespun (xCT+)",
         ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
-        
+
       -- font colors
+        -- TODO: Update these ( See http://www.wowinterface.com/forums/showthread.php?t=53140 )
         colors = {
           ['color_MANA']             = { enabled = false, desc = MANA,        default = { 0.00, 0.00, 1.00 } },
           ['color_RAGE']             = { enabled = false, desc = RAGE,        default = { 1.00, 0.00, 0.00 } },
@@ -462,23 +463,23 @@ addon.defaults = {
           ['color_ECLIPSE_positive'] = { enabled = false, desc = ECLIPSE .. " |cff798BDD(Positive)|r", default = { 0.80, 0.82, 0.60 } },
           ['color_ECLIPSE_negative'] = { enabled = false, desc = ECLIPSE .. " |cff798BDD(Negative)|r", default = { 0.30, 0.52, 0.90 } },
         },
-        
+
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
-        
+
       -- fading text
         ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
-        
+
       -- special tweaks
         ["showEnergyGains"] = true,
         ["showPeriodicEnergyGains"] = true,
         ["showEnergyType"] = true,
-        
+
         ["disableResource_MANA"]             = false,
         ["disableResource_RAGE"]             = false,
         ["disableResource_FOCUS"]            = false,
@@ -490,27 +491,27 @@ addon.defaults = {
         ["disableResource_ECLIPSE_negative"] = true,
         ["disableResource_ECLIPSE_positive"] = true,
         ["disableResource_HOLY_POWER"]       = false,
-        
+
       },
-      
+
       procs = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "top",
         ["alpha"] = 100,
-        
+
       -- position
         ["X"] = -256,
         ["Y"] = -64,
         ["Width"] = 256,
         ["Height"] = 128,
-        
+
       -- fonts
         ["font"] = "Homespun (xCT+)",
         ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
-        
+
       -- font colors
         colors = {
           ['spellProc']     = { enabled = false, desc = "Spell Procs",    default = { 1.00, 0.82, 0.00 } },
@@ -525,47 +526,47 @@ addon.defaults = {
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
-        
+
       -- fading text
         ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
       },
-      
+
       loot = {
         ["enabledFrame"] = true,
         ["secondaryFrame"] = 0,
         ["insertText"] = "top",
         ["alpha"] = 100,
-        
-      -- position 
+
+      -- position
         ["X"] = 0,
         ["Y"] = -224,
         ["Width"] = 512,
         ["Height"] = 128,
-        
+
       -- fonts
         ["font"] = "Homespun (xCT+)",
         ["fontSize"] = 20,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
-        
+
       -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
-        
+
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
-        
+
       -- fading text
         ["enableCustomFade"] = false,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
-        
+
       -- special tweaks
         ["showItems"] = true,
         ["showItemTypes"] = true,
@@ -577,7 +578,7 @@ addon.defaults = {
         ["filterItemQuality"] = 3,
       },
     },
-    
+
     spells = {
       enableMerger = true,        -- enable/disable spam merger
       enableMergerDebug = false,  -- Shows spell IDs for debugging merged spells
@@ -585,15 +586,15 @@ addon.defaults = {
       mergeSwings = true,
       mergeRanged = true,
       mergeDispells = true,
-      
+
       -- Only one of these can be true
       mergeDontMergeCriticals = true,
       mergeCriticalsWithOutgoing = false,
       mergeCriticalsByThemselves = false,
       mergeHideMergedCriticals = false,
-      
+
       -- Abbreviate or Groups Settings
-      formatAbbreviate = true, 
+      formatAbbreviate = true,
       formatGroups = false,
 
       combo = {
@@ -602,43 +603,49 @@ addon.defaults = {
           [2] = { },
           [3] = { },
         },
-        
+
+        ["DEMONHUNTER"] = {
+          [1] = { },
+          [2] = { },
+        },
+
         ["DRUID"] = {
           [1] = { },
           [2] = { },
           [3] = { },
+          [4] = { },
         },
-      
+
         ["HUNTER"] = {
           [1] = { },
           [2] = { },
           [3] = { },
         },
-        
+
         ["MAGE"] = {
           [1] = { },
           [2] = { },
           [3] = { },
         },
-        
+
         ["MONK"] = {
           [1] = { },
           [2] = { },
           [3] = { },
         },
-        
+
         ["PALADIN"] = {
           [1] = { },
           [2] = { },
           [3] = { },
         },
-        
+
         ["PRIEST"] = {
           [1] = { },
           [2] = { },
           [3] = { },
         },
-        
+
         ["ROGUE"] = {
           [1] = { },
           [2] = { },
@@ -656,13 +663,13 @@ addon.defaults = {
           [2] = { },
           [3] = { },
         },
-        
+
         ["WARRIOR"] = {
           [1] = { },
           [2] = { },
           [3] = { },
         },
-        
+
       },
 
 
@@ -672,7 +679,7 @@ addon.defaults = {
       -- yes this is supposed to be blank :P
       -- it is generated in merge.lua
       merge = { },
-    
+
       -- yes this is supposed to be blank :P
       -- it is dynamically generated in core.lua
       items = { },
@@ -685,7 +692,7 @@ addon.defaults = {
       showMultistrikeIcons = true,
       multistrikeIconMultiplier = 50,
     },
-    
+
     spellFilter = {
       ["whitelistBuffs"]    = false,
       ["whitelistDebuffs"]  = false,
@@ -699,7 +706,7 @@ addon.defaults = {
       listSpells   = { },  -- Used to filter outgoing spells         (Spell ID)
       listProcs    = { },  -- Used to filter spell procs             (Proc Name)
       listItems    = { },  -- Used to filter Items                   (Item ID)
-      
+
       -- Minimal Spell Amount
       filterPowerValue = 0,
       filterOutgoingDamageValue = 0,
