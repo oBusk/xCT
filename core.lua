@@ -310,17 +310,15 @@ local CLASS_NAMES = {
 function x:UpdateSpamSpells()
   -- Update our saved DB
   for id, item in pairs(addon.merges) do
-    if not CLASS_NAMES[item.class] or item.class == x.player.class then
-      if not self.db.profile.spells.merge[id] then
-        self.db.profile.spells.merge[id] = item
-        self.db.profile.spells.merge[id]['enabled'] = true    -- default all to on
-      else
-      -- update merge setting incase they are outdated
-        self.db.profile.spells.merge[id].interval = item.interval
-        self.db.profile.spells.merge[id].prep = item.prep
-        self.db.profile.spells.merge[id].desc = item.desc
-        self.db.profile.spells.merge[id].class = item.class
-      end
+    if not self.db.profile.spells.merge[id] then
+      self.db.profile.spells.merge[id] = item
+      self.db.profile.spells.merge[id]['enabled'] = true    -- default all to on
+    else
+    -- update merge setting incase they are outdated
+      self.db.profile.spells.merge[id].interval = item.interval
+      self.db.profile.spells.merge[id].prep = item.prep
+      self.db.profile.spells.merge[id].desc = item.desc
+      self.db.profile.spells.merge[id].class = item.class
     end
   end
 
@@ -328,8 +326,8 @@ function x:UpdateSpamSpells()
   local global = addon.options.args.spells.args.globalList.args
 
   -- Clear out the old spells
-  for index in pairs(spells) do
-    spells[index] = nil
+  for class in pairs(CLASS_NAMES) do
+    spells[class].args = {}
   end
 
   -- Clear out the old spells (global)
@@ -365,47 +363,47 @@ function x:UpdateSpamSpells()
 
   -- Update the UI
   for spellID, entry in pairs(self.db.profile.spells.merge) do
-    if not CLASS_NAMES[entry.class] or entry.class == x.player.class then
-      local name = GetSpellInfo(spellID)
-      if name then
+    local name = GetSpellInfo(spellID)
+    if name then
 
-        -- Create a useful description for the spell
-        local spellDesc = getSpellDescription(spellID) or "No Description"
-        local desc = ""
-        if entry.desc then
-          desc = "|cff9F3ED5" .. entry.desc .. "|r\n\n"
-        end
-        desc = desc .. spellDesc .. "\n\n|cffFF0000ID|r |cff798BDD" .. spellID .. "|r"
-        if entry.interval <= 0.5 then
-          desc = desc .. "\n|cffFF0000Interval|r Instant"
-        else
-          desc = desc .. "\n|cffFF0000Interval|r Merge every |cffFFFF00" .. tostring(entry.interval) .. "|r seconds"
-        end
+      -- Create a useful description for the spell
+      local spellDesc = getSpellDescription(spellID) or "No Description"
+      local desc = ""
+      if entry.desc then
+        desc = "|cff9F3ED5" .. entry.desc .. "|r\n\n"
+      end
+      desc = desc .. spellDesc .. "\n\n|cffFF0000ID|r |cff798BDD" .. spellID .. "|r"
+      if entry.interval <= 0.5 then
+        desc = desc .. "\n|cffFF0000Interval|r Instant"
+      else
+        desc = desc .. "\n|cffFF0000Interval|r Merge every |cffFFFF00" .. tostring(entry.interval) .. "|r seconds"
+      end
 
-        -- Add the spell to the UI
-        if entry.class == x.player.class then
-          spells[tostring(spellID)] = {
-            order = 3,
-            type = 'toggle',
-            name = name,
-            desc = desc,
-            get = SpamSpellGet,
-            set = SpamSpellSet,
-          }
-        elseif not CLASS_NAMES[entry.class] then
-          global[tostring(spellID)] = {
-            order = categoryOffsets[entry.class],
-            type = 'toggle',
-            name = name,
-            desc = desc,
-            get = SpamSpellGet,
-            set = SpamSpellSet,
-          }
-          categoryOffsets[entry.class] = categoryOffsets[entry.class] + 1
-        end
+      -- Add the spell to the UI
+      if CLASS_NAMES[entry.class] then
+
+        spells[entry.class].args[tostring(spellID)] = {
+          order = 3,
+          type = 'toggle',
+          name = name,
+          desc = desc,
+          get = SpamSpellGet,
+          set = SpamSpellSet,
+        }
+      else
+        global[tostring(spellID)] = {
+          order = categoryOffsets[entry.class],
+          type = 'toggle',
+          name = name,
+          desc = desc,
+          get = SpamSpellGet,
+          set = SpamSpellSet,
+        }
+        categoryOffsets[entry.class] = categoryOffsets[entry.class] + 1
       end
     end
   end
+
 end
 
 local function ItemToggleAll(info)
@@ -1219,7 +1217,7 @@ local ACD = LibStub('AceConfigDialog-3.0')
 local ACR = LibStub('AceConfigRegistry-3.0')
 
 -- Register the Options
-ACD:SetDefaultSize(AddonName, 800, 560)
+ACD:SetDefaultSize(AddonName, 803, 560)
 AC:RegisterOptionsTable(AddonName, addon.options)
 
 
@@ -1395,7 +1393,7 @@ function x:ShowConfigTool()
   x.myContainer:SetCallback("OnClose", myContainer_OnRelease)
 
   -- Last minute settings and SHOW
-  x.myContainer.content:GetParent():SetMinResize(800, 300)
+  x.myContainer.content:GetParent():SetMinResize(803, 300)
   ACD:Open(AddonName, x.myContainer)
 end
 

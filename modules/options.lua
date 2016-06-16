@@ -728,6 +728,7 @@ addon.options.args["spells"] = {
       name = "Class Spells", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
       order = 21,
+      childGroups = 'select',
       args = {
         title = {
           type = 'description',
@@ -745,6 +746,31 @@ addon.options.args["spells"] = {
           fontSize = "small",
           name = "Uncheck a spell if you do not want it merged. Contact me to add new spells. See |cffFFFF00Credits|r for contact info.\n\n",
         },
+
+        --[[classes = {
+          name = "Class Spells",
+          type = 'group',
+          order = 2,
+          childGroups = 'select',
+          args = {
+
+          },
+        }]]
+
+
+        ["DEATHKNIGHT"] = { type = 'group', order = 1,  name = "|cffC41F3BDeath Knight|r" },
+        ["DEMONHUNTER"] = { type = 'group', order = 2,  name = "|cffA330C9Demon Hunter|r" },
+        ["DRUID"]       = { type = 'group', order = 3,  name = "|cffFF7D0ADruid|r" },
+        ["HUNTER"]      = { type = 'group', order = 4,  name = "|cffABD473Hunter|r" },
+        ["MAGE"]        = { type = 'group', order = 5,  name = "|cff69CCF0Mage|r" },
+        ["MONK"]        = { type = 'group', order = 6,  name = "|cff00FF96Monk|r" },
+        ["PALADIN"]     = { type = 'group', order = 7,  name = "|cffF58CBAPaladin|r" },
+        ["PRIEST"]      = { type = 'group', order = 8,  name = "|cffFFFFFFPriest|r" },
+        ["ROGUE"]       = { type = 'group', order = 9,  name = "|cffFFF569Rogue|r" },
+        ["SHAMAN"]      = { type = 'group', order = 10, name = "|cff0070DEShaman|r" },
+        ["WARLOCK"]     = { type = 'group', order = 11, name = "|cff9482C9Warlock|r" },
+        ["WARRIOR"]     = { type = 'group', order = 12, name = "|cffC79C6EWarrior|r" },
+
       },
     },
 
@@ -1243,13 +1269,13 @@ addon.options.args["Credits"] = {
       name = " ",
     },
 
-    tukuiTitle = {
+    githubTitle = {
       type = 'description',
       order = 41,
       name = "|cffFFFF00Thank You Github Contributors!|r",
       fontSize = "large",
     },
-    userName3 = {
+    userName4 = {
       type = 'description',
       order = 42,
       fontSize = "medium",
