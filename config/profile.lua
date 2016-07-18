@@ -93,7 +93,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- position
         ["X"] = 0,
@@ -103,7 +103,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 24,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
 
@@ -163,7 +163,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -185,7 +185,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- position
         ["X"] = 480,
@@ -195,7 +195,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 18,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
 
@@ -236,7 +236,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -257,17 +257,17 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- position
         ["X"] = 256,
         ["Y"] = 0,
         ["Width"] = 256,
-        ["Height"] = 128,
+        ["Height"] = 140,
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 30,
+        ["fontSize"] = 24,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
 
@@ -297,7 +297,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -312,17 +312,17 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "top",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- position
         ["X"] = -448,
         ["Y"] = -88,
         ["Width"] = 128,
-        ["Height"] = 144,
+        ["Height"] = 160,
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 24,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "LEFT",
 
@@ -365,7 +365,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -380,7 +380,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- positioon
         ["X"] = -288,
@@ -390,7 +390,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 18,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "LEFT",
 
@@ -409,7 +409,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -436,7 +436,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 32,
+        ["fontSize"] = 64,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
 
       -- font colors
@@ -451,17 +451,17 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- position
         ["X"] = 0,
         ["Y"] = -64,
-        ["Width"] = 256,
+        ["Width"] = 180,
         ["Height"] = 128,
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 17,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
 
@@ -487,7 +487,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -518,14 +518,14 @@ addon.defaults = {
         ["alpha"] = 100,
 
       -- position
-        ["X"] = -256,
+        ["X"] = -237,
         ["Y"] = -64,
-        ["Width"] = 256,
+        ["Width"] = 294,
         ["Height"] = 128,
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 24,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
 
@@ -545,7 +545,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -565,7 +565,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 25,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
 
@@ -579,7 +579,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -611,8 +611,8 @@ addon.defaults = {
       mergeHideMergedCriticals = false,
 
       -- Abbreviate or Groups Settings
-      formatAbbreviate = true,
-      formatGroups = false,
+      formatAbbreviate = false,
+      formatGroups = true,
 
       combo = {
         ["DEATHKNIGHT"] = {
@@ -704,7 +704,7 @@ addon.defaults = {
       ["whitelistSpells"]   = false,
       ["whitelistProcs"]    = false,
       ["whitelistItems"]    = false,
-      ["trackSpells"]       = false,
+      ["trackSpells"]       = true,
 
       listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
       listDebuffs  = { },  -- Used to filter gains/fades of debuffs  (Spell Name)
