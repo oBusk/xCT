@@ -201,32 +201,33 @@ addon.merges[194392]    = CreateMergeSpellEntry("HUNTER", 0.5, 0)           -- T
 addon.merges[120361]    = CreateMergeSpellEntry("HUNTER", 1.5, 0)           -- Talent: Barrage
 
 -- Beast Mastery (ID: 253)
-addon.merges[118459]    = CreateMergeSpellEntry("HUNTER", 2.5, 253)           -- Pet: Beast Cleave
-addon.merges[201754]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)           -- Talent: Stomp
-addon.merges[217207]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)           -- Talent: Dire Frenzy
-addon.merges[171454]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)           -- Talent: Chimaera Shot
-addon.merges[197465]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)           -- Artifact: Surge of the Stormgod
-addon.merges[207097]    = CreateMergeSpellEntry("HUNTER", 1.5, 253)           -- Artifact: Titan's Thunder
+addon.merges[118459]    = CreateMergeSpellEntry("HUNTER", 2.5, 253)         -- Pet: Beast Cleave
+addon.merges[201754]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- Talent: Stomp
+addon.merges[217207]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- Talent: Dire Frenzy
+addon.merges[171454]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- Talent: Chimaera Shot
+addon.merges[197465]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- Artifact: Surge of the Stormgod
+addon.merges[207097]    = CreateMergeSpellEntry("HUNTER", 1.5, 253)         -- Artifact: Titan's Thunder
 addon.merge2h[171457]   = 171454                                            -- [Cleave Merger] Chimaera Shot
 
 -- Marksmanship (ID: 254)
-addon.merges[212621]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)           -- Marked Shot
-addon.merges[186387]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)           -- Bursting Shot
-addon.merges[212680]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)           -- Talent: Explosive Shot
-addon.merges[214581]    = CreateMergeSpellEntry("HUNTER", 1.5, 254)           -- Talent: Sidewinders
-addon.merges[198670]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)           -- Talent: Piercing Shot
-addon.merges[19434]     = CreateMergeSpellEntry("HUNTER", 0.5, 254)           -- Talent: Aimed Shot (check it!)
-addon.merges[191070]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)           -- Artifact: Call of the Hunter
-addon.merges[191043]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)           -- Talent: Trick Shot (Aimed Shot)
+addon.merges[212621]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Marked Shot
+addon.merges[186387]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Bursting Shot
+addon.merges[212680]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Talent: Explosive Shot
+addon.merges[214581]    = CreateMergeSpellEntry("HUNTER", 1.5, 254)         -- Talent: Sidewinders
+addon.merges[198670]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Talent: Piercing Shot
+addon.merges[19434]     = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Talent: Aimed Shot (check it!)
+addon.merges[191070]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Artifact: Call of the Hunter
+addon.merges[191043]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Talent: Trick Shot (Aimed Shot)
 
 -- Survival (ID: 255)
-addon.merges[187708]    = CreateMergeSpellEntry("HUNTER", 0.5, 255)           -- Carve
-addon.merges[13812]     = CreateMergeSpellEntry("HUNTER", 2.5, 255)           -- Explosive Trap
-addon.merges[194279]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)           -- Talent: Caltrops
-addon.merges[212436]    = CreateMergeSpellEntry("HUNTER", 0.5, 255)           -- Talent: Butchery
-addon.merges[203413]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)           -- Artifact: Fury of the Eagle
-addon.merges[194859]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)           -- Artifact: Dragonsfire Conflagration
-addon.merges[194858]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)           -- Artifact: Dragonsfire Grenade
+addon.merges[187708]    = CreateMergeSpellEntry("HUNTER", 0.5, 255)         -- Carve
+addon.merges[13812]     = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Explosive Trap
+addon.merges[194279]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Talent: Caltrops
+addon.merges[212436]    = CreateMergeSpellEntry("HUNTER", 0.5, 255)         -- Talent: Butchery
+addon.merges[203413]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Artifact: Fury of the Eagle
+addon.merges[194859]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Artifact: Dragonsfire Conflagration
+addon.merges[194858]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Artifact: Dragonsfire Grenade
+addon.merges[164857]    = CreateMergeSpellEntry("HUNTER", 5.0, 255)         -- Passive: Survivalist
 
 
 
