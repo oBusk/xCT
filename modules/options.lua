@@ -3245,7 +3245,7 @@ addon.options.args["Frames"] = {
               name = "Show Miss Types",
               desc = "Displays Dodge, Parry, or Miss when you miss incoming damage.",
               get = get2,
-              set = set2_update_force,
+              set = set2,
             },
             showDamageReduction = {
               order = 2,
@@ -3253,7 +3253,7 @@ addon.options.args["Frames"] = {
               name = "Show Reductions",
               desc = "Formats incoming damage to show how much was absorbed.",
               get = get2,
-              set = set2_update_force,
+              set = set2,
             },
           },
         },
@@ -4121,7 +4121,7 @@ addon.options.args["Frames"] = {
               name = "Enable",
               width = 'half',
               get = get2,
-              set = set2_update_force,
+              set = set2_update,
             },
             secondaryFrame = {
               type = 'select',
