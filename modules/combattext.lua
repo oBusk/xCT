@@ -783,8 +783,6 @@ x.combat_events = {
       x:AddMessage("healing", message, "shieldTaken")
     end,
   ["HEAL"] = function(healer_name, amount)
-
-      print("Heal Event:", healer_name, amount)
       if FilterIncomingHealing(amount) then return end
   
       if ShowOnlyMyHeals() and healer_name ~= x.player.name then 
@@ -823,8 +821,6 @@ x.combat_events = {
     end,
   ["HEAL_CRIT"] = function(healer_name, amount)
 
-      print("Heal (Crit) Event:", healer_name, amount)
-
       if FilterIncomingHealing(amount) then return end
       
       if ShowOnlyMyHeals() and healer_name ~= x.player.name then 
@@ -862,8 +858,6 @@ x.combat_events = {
       end
     end,
   ["PERIODIC_HEAL"] = function(healer_name, amount)
-
-      print("Heal (HoT) Event:", healer_name, amount)
 
       if FilterIncomingHealing(amount) then return end
       
