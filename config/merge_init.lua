@@ -12,5 +12,7 @@
  [  ©2015. All Rights Reserved.        ]
  [====================================]]
 
+local ADDON_NAME, addon = ...
+
 addon.merges = {}
 addon.merge2h = {}

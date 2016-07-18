@@ -292,19 +292,81 @@ local function SpamSpellGet(info) return x.db.profile.spells.merge[tonumber(info
 local function SpamSpellSet(info, value) x.db.profile.spells.merge[tonumber(info[#info])].enabled = value end
 
 local CLASS_NAMES = {
-  ["DEATHKNIGHT"] = true,
-  ["DEMONHUNTER"] = true,
-  ["DRUID"] = true,
-  ["HUNTER"] = true,
-  ["MAGE"] = true,
-  ["MONK"] = true,
-  ["PALADIN"] = true,
-  ["PRIEST"] = true,
-  ["ROGUE"] = true,
-  ["SHAMAN"] = true,
-  ["WARLOCK"] = true,
-  ["WARRIOR"] = true,
+  ["DEATHKNIGHT"] = {
+    [0]   = 0,   -- All Specs
+    [250] = 1,   -- Blood
+    [251] = 2,   -- Frost
+    [252] = 3,   -- Unholy
+  },
+  ["DEMONHUNTER"] = {
+    [0]   = 0,   -- All Specs
+    [577] = 1,   -- Havoc
+    [581] = 2,   -- Vengeance
+  },
+  ["DRUID"] = {
+    [0]   = 0,   -- All Specs
+    [102] = 1,   -- Balance
+    [103] = 2,   -- Feral
+    [104] = 3,   -- Guardian
+    [105] = 4,   -- Restoration
+  },
+  ["HUNTER"] = {
+    [0]   = 0,   -- All Specs
+    [253] = 1,   -- Beast Mastery
+    [254] = 2,   -- Marksmanship
+    [255] = 3,   -- Survival
+  },
+  ["MAGE"] = {
+    [0]  = 0,    -- All Specs
+    [62] = 1,    -- Arcane
+    [63] = 2,    -- Fire
+    [64] = 3,    -- Frost
+  },
+  ["MONK"] = {
+    [0]   = 0,   -- All Specs
+    [268] = 1,   -- Brewmaster
+    [269] = 2,   -- Windwalker
+    [270] = 3,   -- Mistweaver
+  },
+  ["PALADIN"] = {
+    [0]  = 0,    -- All Specs
+    [65] = 1,    -- Holy
+    [66] = 2,    -- Protection
+    [70] = 3,    -- Retribution
+  },
+  ["PRIEST"] = {
+    [0]   = 0,   -- All Specs
+    [256] = 1,   -- Discipline
+    [257] = 2,   -- Holy
+    [258] = 3,   -- Shadow
+  },
+  ["ROGUE"] = {
+    [0]   = 0,   -- All Specs
+    [259] = 1,   -- Assassination
+    [260] = 2,   -- Combat
+    [261] = 3,   -- Subtlety
+  },
+  ["SHAMAN"] = {
+    [0]   = 0,   -- All Specs
+    [262] = 1,   -- Elemental
+    [263] = 2,   -- Enhancement
+    [264] = 3,   -- Restoration
+  },
+  ["WARLOCK"] = {
+    [0]   = 0,   -- All Specs
+    [265] = 1,   -- Affliction
+    [266] = 2,   -- Demonology
+    [267] = 3,   -- Destruction
+  },
+  ["WARRIOR"] = {
+    [0]  = 0,    -- All Specs
+    [71] = 1,    -- Arms
+    [72] = 2,    -- Fury
+    [73] = 3,    -- Protection
+  },
 }
+
+
 
 -- Gets spammy spells from the database and creates options
 function x:UpdateSpamSpells()
@@ -326,8 +388,19 @@ function x:UpdateSpamSpells()
   local global = addon.options.args.spells.args.globalList.args
 
   -- Clear out the old spells
-  for class in pairs(CLASS_NAMES) do
+  for class, specs in pairs(CLASS_NAMES) do
     spells[class].args = {}
+    for spec, index in pairs(specs) do
+      local name, _ = "All Specializations"
+      if index ~= 0 then
+        _, name = GetSpecializationInfoByID(spec)
+      end
+      spells[class].args["specHeader"..index] = {
+        type = 'header',
+        order = index * 2,
+        name = name,
+      }
+    end
   end
 
   -- Clear out the old spells (global)
@@ -369,7 +442,7 @@ function x:UpdateSpamSpells()
       -- Create a useful description for the spell
       local spellDesc = getSpellDescription(spellID) or "No Description"
       local desc = ""
-      if entry.desc then
+      if entry.desc and not CLASS_NAMES[entry.class] then
         desc = "|cff9F3ED5" .. entry.desc .. "|r\n\n"
       end
       desc = desc .. spellDesc .. "\n\n|cffFF0000ID|r |cff798BDD" .. spellID .. "|r"
@@ -381,9 +454,10 @@ function x:UpdateSpamSpells()
 
       -- Add the spell to the UI
       if CLASS_NAMES[entry.class] then
-
+        print("Test", entry.class, entry.desc, tostring(spellID))
+        local index = CLASS_NAMES[entry.class][entry.desc]
         spells[entry.class].args[tostring(spellID)] = {
-          order = 3,
+          order = index * 2 + 1,
           type = 'toggle',
           name = name,
           desc = desc,
