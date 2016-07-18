@@ -147,7 +147,6 @@ local function isCVarsDisabled( ) return x.db.profile.bypassCVars end
 
 
 x.cvar_update = function( force )
-
   -- Floating Combat Text: Threat Changes
   if not x.db.profile.blizzardFCT.CombatThreatChanges then
     COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = "", "", ""
@@ -156,6 +155,14 @@ x.cvar_update = function( force )
     -- only overwrite Blizzard constants if they were previously changed
     COMBAT_THREAT_DECREASE_0, COMBAT_THREAT_DECREASE_1, COMBAT_THREAT_DECREASE_2 = XCT_CT_DEC_0, XCT_CT_DEC_1, XCT_CT_DEC_2
     COMBAT_THREAT_INCREASE_1, COMBAT_THREAT_INCREASE_3 = XCT_CT_INC_1, XCT_CT_INC_3
+  end
+
+  if  isCVarsDisabled( ) then
+    if force then
+      StaticPopup_Show("XCT_PLUS_FORCE_CVAR_UPDATE")
+    else
+      return
+    end
   end
 
   if x.db.profile.blizzardFCT.floatingCombatTextAllSpellMechanics then
@@ -2268,7 +2275,7 @@ addon.options.args["Frames"] = {
               name = "Buff Gains/Fades",
               desc = "Display the names of helpful auras |cff00FF00(Buffs)|r that you gain and lose.",
               get = get2,
-              set = set2_update_force,
+              set = set2,
             },
             showDebuffs = {
               order = 5,
@@ -2276,7 +2283,7 @@ addon.options.args["Frames"] = {
               name = "Debuff Gains/Fades",
               desc = "Display the names of harmful auras |cffFF0000(Debuffs)|r that you gain and lose.",
               get = get2,
-              set = set2_update_force,
+              set = set2,
             },
             showLowManaHealth = {
               order = 6,
@@ -2284,7 +2291,7 @@ addon.options.args["Frames"] = {
               name = "Low Mana/Health",
               desc = "Displays 'Low Health/Mana' when your health/mana reaches the low threshold.",
               get = get2,
-              set = set2_update_force,
+              set = set2,
             },
             showCombatState = {
               order = 7,
@@ -2292,7 +2299,7 @@ addon.options.args["Frames"] = {
               name = "Leave/Enter Combat",
               desc = "Displays when the player is leaving or entering combat.",
               get = get2,
-              set = set2_update_force,
+              set = set2,
             },
             showRepChanges = {
               order = 8,
@@ -2300,7 +2307,7 @@ addon.options.args["Frames"] = {
               name = "Show Reputation",
               desc = "Displays your player's reputation gains and losses.",
               get = get2,
-              set = set2_update_force,
+              set = set2,
             },
             showHonorGains = {
               order = 9,
@@ -2308,7 +2315,7 @@ addon.options.args["Frames"] = {
               name = "Show Honor",
               desc = "Displays your player's honor gains.",
               get = get2,
-              set = set2_update_force,
+              set = set2,
             },
           },
         },
@@ -3508,7 +3515,7 @@ addon.options.args["Frames"] = {
               name = "Show Names",
               desc = "Shows the healer names next to incoming heals.\n|cffFF0000Requires:|r CVar Engine in order to change.",
               get = get2,
-              set = set2_update_force,
+              set = set2,
             },
             enableClassNames = {
               order = 2,

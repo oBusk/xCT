@@ -144,16 +144,14 @@ end
 --[=====================================================[
  Fast Boolean Lookups
 --]=====================================================]
-x.CVars = {}
-
-local function ShowMissTypes() return x.CVars["SHOW_DODGE_PARRY_MISS"] end
-local function ShowResistances() return x.CVars["SHOW_RESISTANCES"] end
-local function ShowHonor() return x.CVars["SHOW_HONOR_GAINED"] end
-local function ShowFaction() return x.CVars["SHOW_REPUTATION"] end
-local function ShowReactives() return x.CVars["SHOW_REACTIVES"] end
-local function ShowLowResources() return x.CVars["SHOW_LOW_HEALTH_MANA"] end
-local function ShowCombatState() return x.CVars["SHOW_COMBAT_STATE"] end
-local function ShowFriendlyNames() return x.CVars["SHOW_FRIENDLY_NAMES"] end
+local function ShowMissTypes() return x.db.profile.frames.damage.showDodgeParryMiss end
+local function ShowResistances() return x.db.profile.frames.damage.showDamageReduction end
+local function ShowHonor() return x.db.profile.frames.damage.showHonorGains end
+local function ShowFaction() return x.db.profile.frames.general.showRepChanges end
+local function ShowReactives() return x.db.profile.frames.procs.enabledFrame end
+local function ShowLowResources() return x.db.profile.frames.general.showLowManaHealth end
+local function ShowCombatState() return x.db.profile.frames.general.showCombatState end
+local function ShowFriendlyNames() return x.db.profile.frames["healing"].showFriendlyHealers end
 local function ShowColoredFriendlyNames() return x.db.profile.frames["healing"].enableClassNames end
 local function ShowHealingRealmNames() return x.db.profile.frames["healing"].enableRealmNames end
 local function ShowOnlyMyHeals() return x.db.profile.frames.healing.showOnlyMyHeals end
@@ -785,6 +783,8 @@ x.combat_events = {
       x:AddMessage("healing", message, "shieldTaken")
     end,
   ["HEAL"] = function(healer_name, amount)
+
+      print("Heal Event:", healer_name, amount)
       if FilterIncomingHealing(amount) then return end
   
       if ShowOnlyMyHeals() and healer_name ~= x.player.name then 
@@ -822,6 +822,9 @@ x.combat_events = {
       end
     end,
   ["HEAL_CRIT"] = function(healer_name, amount)
+
+      print("Heal (Crit) Event:", healer_name, amount)
+
       if FilterIncomingHealing(amount) then return end
       
       if ShowOnlyMyHeals() and healer_name ~= x.player.name then 
@@ -859,6 +862,9 @@ x.combat_events = {
       end
     end,
   ["PERIODIC_HEAL"] = function(healer_name, amount)
+
+      print("Heal (HoT) Event:", healer_name, amount)
+
       if FilterIncomingHealing(amount) then return end
       
       if ShowOnlyMyHeals() and healer_name ~= x.player.name then 

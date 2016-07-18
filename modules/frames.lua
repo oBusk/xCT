@@ -513,7 +513,7 @@ do
 			
 			--local format_mergeCount = "%s |cffFFFFFFx%s|r"
 			local strColor = "ffffff"
-      
+
 			-- Add critical Prefix and Postfix
 			if frameIndex[index] == "critical" then
 				message = format("%s%s%s", x.db.profile.frames["critical"].critPrefix, message, x.db.profile.frames["critical"].critPostfix)
@@ -521,8 +521,8 @@ do
 			-- Show healer name (colored)
 			elseif frameIndex[index] == "healing" then
 				--format_mergeCount = "%s |cffFFFF00x%s|r"
-                local strColor = "ffff00"
-				if x.CVars["SHOW_FRIENDLY_NAMES"] then
+				local strColor = "ffff00"
+				if x.db.profile.frames["healing"].showFriendlyHealers then
 					local healerName = stack[idIndex]
 					if x.db.profile.frames["healing"].enableClassNames then
 						local _, class = UnitClass(healerName)
@@ -544,8 +544,7 @@ do
 			--if #item.entries > 1 then
 			--	message = sformat(format_mergeCount, message, #item.entries)
 			--end
-			
-            --stack[idIndex], settings.iconsSize, settings.fontJustify
+			--stack[idIndex], settings.iconsSize, settings.fontJustify
 
 			-- Add Icons
 			if frameIndex[index] ~= "healing" and frameIndex[index] ~= "general" then
