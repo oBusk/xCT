@@ -236,7 +236,9 @@ function x:CompatibilityLogic( existing )
     end
 
     -- Updating Spam Merger for 4.0.0 Beta 4 (Requires a reset)
-    if CompareVersions( VersionToTable("4.0.0"), previousVersion) > 0 then
+    if CompareVersions( VersionToTable("4.0.0"), previousVersion) > 0
+      or CompareVersions( VersionToTable("4.2.0"), previousVersion) > 0 then
+
       -- Reset merge table
       self.db.profile.spells.merge = {}
 
@@ -454,7 +456,6 @@ function x:UpdateSpamSpells()
 
       -- Add the spell to the UI
       if CLASS_NAMES[entry.class] then
-        print("Test", entry.class, entry.desc, tostring(spellID))
         local index = CLASS_NAMES[entry.class][entry.desc]
         spells[entry.class].args[tostring(spellID)] = {
           order = index * 2 + 1,
