@@ -639,91 +639,6 @@ addon.options.args["spells"] = {
       },
     },
 
-    multistrike = {
-      name = "Multistrike Options", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
-      type = 'group',
-      order = 20,
-      args = {
-        title = {
-          type = 'description',
-          order = 0,
-          name = "Spam Merger |cff798BDD(Multistrike)|r",
-          fontSize = "large",
-          width = "double",
-        },
-        multistrikeDesc = {
-          type = "description",
-          order = 1,
-          fontSize = "small",
-          name = "This feature was added to help mitigate multistrike spam. It adds one or two smaller icons next to a big to signify your multistrikes.",
-        },
-        spacer0 = {
-          type = "description",
-          order = 2,
-          fontSize = "small",
-          name="\n\n",
-        },
-        multistrikeEnabled = {
-          order = 11,
-          type = 'toggle',
-          name = "Enable",
-          desc = "Enables the multistrike spam merger.",
-          get = get0_1,
-          set = set0_1,
-        },
-
-        listSpacer1 = {
-          type = "description",
-          order = 20,
-          name = "\n|cff798BDDIcon Settings|r:",
-          fontSize = 'large',
-        },
-        showMultistrikeIcons = {
-          order = 21,
-          type = 'toggle',
-          name = "Icons",
-          desc = "Show multistrike icons.",
-          get = get0_1,
-          set = set0_1,
-        },
-        multistrikeIconMultiplier = {
-          order = 22,
-          name = "Icon Size (|cffFFFFFF%|r)",
-          desc = "Size of the multistrike icons.",
-          type = 'range',
-          min = 0, max = 200, step = 1,
-          get = get0_1,
-          set = set0_1,
-          disabled = function() return not x.db.profile.spells.showMultistrikeIcons end,
-        },
-
-        listSpacer4 = {
-          type = "description",
-          order = 40,
-          name = "\n|cff798BDDAdvanced Settings|r:",
-          fontSize = 'large',
-        },
-        multistikeAutoAdjust = {
-          order = 41,
-          type = 'toggle',
-          name = "Auto Adjust Latency",
-          get = get0_1,
-          set = set0_1,
-        },
-        multistrikeLatency = {
-          order = 42,
-          name = "Multistrike Latency Compensation |cffFFFFFF(In |cffFF0000Milliseconds|r|cffFFFFFF)|r",
-          desc = "Helps the |cffFFFF00Multistrike Merger|r compensate for latency when merging multistrikes.\n\nThis option is |cffFF0000NOT|r your ping. It is how long it takes |cff2233FFBlizzard's|r servers to calculate the multistrike and can vary from day to day depending on their load.\n\nIncreasing this value will improve success rate of merging, but |cffFF0000all|r spells will be delayed by the amount before they are displayed.",
-          type = 'range',
-          width = 'double',
-          min = 200, max = 3000, step = 10,
-          get = get0_1,
-          set = set0_1,
-          disabled = function() return x.db.profile.spells.multistikeAutoAdjust end,
-        },
-      },
-    },
-
     classList = {
       name = "Class Spells", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
@@ -880,24 +795,6 @@ addon.options.args["spellFilter"] = {
           set = setNumber2,
           get = getNumber2,
         },
-      },
-    },
-
-    multistrikeOptions = {
-      name = "Multistrike Filters",
-      type = 'group',
-      order = 11,
-      guiInline = true,
-      args = {
-        filterMultistrikes = {
-          order = 1,
-          type = 'toggle',
-          name = "Hide Multistrikes",
-          desc = "Filters all multistrikes so that they do not show.",
-          set = set0_1,
-          get = get0_1,
-        },
-
       },
     },
 
@@ -1131,7 +1028,7 @@ addon.options.args["spellFilter"] = {
       },
     },
 
-	listItems = {
+    listItems = {
       name = "|cffFFFFFFFilter:|r |cff798BDDItems (Plus)|r",
       type = 'group',
       order = 50,
@@ -1299,21 +1196,8 @@ addon.options.args["Credits"] = {
       type = 'description',
       order = 52,
       name = "1. GitHub: |cff22FF80https://github.com/dandruff/xCT|r\n\n2. Send a PM to |cffFF8000Dandruff|r at |cff6495EDhttp://tukui.org/|r",
-    },
-    testerTitleSpace6 = {
-      type = 'description',
-      order = 53,
-      name = "\n\n\n\n\n\n\n\n\n",
-    },
-    multistikeDebug = {
-      order = 54,
-      type = 'toggle',
-      name = "Verbose Debug",
-      width = 'full',
-      get = function(info) return x.db.profile.spells.multistikeDebug end,
-      set = function(info, value) x.db.profile.spells.multistikeDebug = value end,
-    },
-  },
+    }
+  }
 }
 
 addon.options.args["FloatingCombatText"] = {

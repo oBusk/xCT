@@ -1257,7 +1257,6 @@ local tips = {
   "|cffFFFF00xCT+|r has several different ways it will merge critical hits. You can check them out in |cffFFFF00Spam Merer|r.",
   "Each frame has a |cffFFFF00Special Tweaks|r section; select a frame and select the drop-down box to find it.",
   "If there is a certain |cff798BDDSpell|r, |cff798BDDBuff|r, or |cff798BDDDebuff|r that you don't want to see, consider adding it to a |cff798BDDFilter|r.",
-  "There is a new |cff798BDDMultistrike|r merging feature. It will delay spells until they multistrike. You can turn it off if you find your spells take too long to display.",
 }
 
 local helpfulList = {}

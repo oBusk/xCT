@@ -672,10 +672,6 @@ addon.defaults = {
 
       },
 
-
-
-
-
       -- yes this is supposed to be blank :P
       -- it is generated in merge.lua
       merge = { },
@@ -683,14 +679,6 @@ addon.defaults = {
       -- yes this is supposed to be blank :P
       -- it is dynamically generated in core.lua
       items = { },
-
-      -- multistike items here
-      multistrikeEnabled = true,
-      multistrikeLatency = 600,
-      multistikeDebug = false,
-      multistikeAutoAdjust = true,
-      showMultistrikeIcons = true,
-      multistrikeIconMultiplier = 50,
     },
 
     spellFilter = {
@@ -714,8 +702,6 @@ addon.defaults = {
       filterIncomingDamageValue = 0,
       filterIncomingHealingValue = 0,
 
-      -- Filter Multistrike
-      filterMultistrikes = false,
     },
   },
 }

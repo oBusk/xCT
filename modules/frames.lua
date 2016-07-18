@@ -551,10 +551,11 @@ do
 			if frameIndex[index] ~= "healing" and frameIndex[index] ~= "general" then
 				message = x:GetSpellTextureFormatted( stack[idIndex],
 				                                  message,
-				                                  #item.entries,
 				                                  settings.iconsEnabled and settings.iconsSize or -1,
 				                                  settings.fontJustify,
-				                                  strColor, true ) -- Merge Override = true
+				                                  strColor,
+				                                  true, -- Merge Override = true
+				                                  #item.entries )
 			else
 				if #item.entries > 1 then
 					message = sformat("%s |cff%sx%s|r", message, strColor, #item.entries)
@@ -910,13 +911,13 @@ function x.TestMoreUpdate(self, elapsed)
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
 				end
-				local message, merged = x:Abbreviate(random(60000), "outgoing")
-				local multistriked = ((random(4) % 4 == 0) and 1 or 0) + ((random(4) % 4 == 0) and 1 or 0)
-        if random(5) % 5 == 0 and (x.db.profile.spells.mergeDontMergeCriticals or x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
+				local message = x:Abbreviate(random(60000), "outgoing")
+				local merged, multistriked = false, 0
+				if random(5) % 5 == 0 and (x.db.profile.spells.mergeDontMergeCriticals or x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
 					multistriked = random(17)+1
-          merged = true
+					merged = true
 				end
-				message = x:GetSpellTextureFormatted( x.db.profile.frames["outgoing"].iconsEnabled and GetRandomSpellID() or -1, message, multistriked, x.db.profile.frames["outgoing"].iconsSize, x.db.profile.frames["outgoing"].fontJustify, nil, merged )
+				message = x:GetSpellTextureFormatted( x.db.profile.frames["outgoing"].iconsEnabled and GetRandomSpellID() or -1, message, x.db.profile.frames["outgoing"].iconsSize, x.db.profile.frames["outgoing"].fontJustify, nil, merged, multistriked )
 				x:AddMessage(output, message, x.damagecolor[damageColorLookup[math.random(7)]])
 			elseif self == x.frames["critical"] and random(2) % 2 == 0 then
 				local output = "critical"
@@ -924,13 +925,13 @@ function x.TestMoreUpdate(self, elapsed)
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
 				end
-				local message, merged = x.db.profile.frames.critical.critPrefix .. x:Abbreviate(random(60000), "critical") .. x.db.profile.frames.critical.critPostfix
-        local multistriked = ((random(4) % 4 == 0) and 1 or 0) + ((random(4) % 4 == 0) and 1 or 0)
-        if (random(5) % 5 == 0) and (x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
+				local message = x.db.profile.frames.critical.critPrefix .. x:Abbreviate(random(60000), "critical") .. x.db.profile.frames.critical.critPostfix
+				local merged, multistriked = false, 0
+				if (random(5) % 5 == 0) and (x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
 					multistriked = random(17)+1
-          merged = true
+					merged = true
 				end
-				message = x:GetSpellTextureFormatted( x.db.profile.frames["critical"].iconsEnabled and GetRandomSpellID() or -1, message, multistriked, x.db.profile.frames["critical"].iconsSize, x.db.profile.frames["critical"].fontJustify, nil, merged )
+				message = x:GetSpellTextureFormatted( x.db.profile.frames["critical"].iconsEnabled and GetRandomSpellID() or -1, message, x.db.profile.frames["critical"].iconsSize, x.db.profile.frames["critical"].fontJustify, nil, merged, multistriked )
 				x:AddMessage(output, message, x.damagecolor[damageColorLookup[math.random(7)]])
 			elseif self == x.frames["damage"] and random(2) % 2 == 0 then
 				local output = "damage"
