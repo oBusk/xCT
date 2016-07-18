@@ -1706,7 +1706,7 @@ addon.options.args["Frames"] = {
             ['2OUTLINE'] = 'OUTLINE',
             -- BUG: Setting font to monochrome AND above size 16 will crash WoW
             -- http://us.battle.net/wow/en/forum/topic/6470967362
-            --['3MONOCHROME'] = 'MONOCHROME',
+            ['3MONOCHROME'] = 'MONOCHROME',
             ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
             ['5THICKOUTLINE'] = 'THICKOUTLINE',
           },
@@ -1957,7 +1957,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -1972,7 +1972,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -2311,7 +2311,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -2326,7 +2326,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -2657,7 +2657,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -2672,7 +2672,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -2980,7 +2980,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -2995,7 +2995,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -3251,7 +3251,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -3266,7 +3266,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -3479,7 +3479,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -3494,7 +3494,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -3708,7 +3708,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -3723,7 +3723,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -4081,7 +4081,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -4096,7 +4096,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
@@ -4341,7 +4341,7 @@ addon.options.args["Frames"] = {
               name = "Font Size",
               desc = "Set the font size of the frame.",
               type = 'range',
-              min = 6, max = 32, step = 1,
+              min = 6, max = 64, step = 1,
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
@@ -4356,7 +4356,7 @@ addon.options.args["Frames"] = {
                 ['2OUTLINE'] = 'OUTLINE',
                 -- BUG: Setting font to monochrome AND above size 16 will crash WoW
                 -- http://us.battle.net/wow/en/forum/topic/6470967362
-                --['3MONOCHROME'] = 'MONOCHROME',
+                ['3MONOCHROME'] = 'MONOCHROME',
                 ['4MONOCHROMEOUTLINE'] = 'MONOCHROMEOUTLINE',
                 ['5THICKOUTLINE'] = 'THICKOUTLINE',
               },
