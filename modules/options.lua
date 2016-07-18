@@ -1,11 +1,11 @@
---[[   ____    ______      
+--[[   ____    ______
       /\  _`\ /\__  _\   __
- __  _\ \ \/\_\/_/\ \/ /_\ \___ 
+ __  _\ \ \/\_\/_/\ \/ /_\ \___
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
 \/>  </ \ \ \L\ \ \ \ \/__/\_\_/
  /\_/\_\ \ \____/  \ \_\  \/_/
  \//\/_/  \/___/    \/_/
- 
+
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
@@ -84,7 +84,7 @@ addon.options = {
       name = "Startup Message",
       get = function(info) return x.db.profile.showStartupText end,
       set = function(info, value) x.db.profile.showStartupText = value end,
-    },  
+    },
     hideConfig = {
       order = 12,
       type = 'toggle',
@@ -442,11 +442,11 @@ local function GetBuffHistory()
   for i in pairs(buffHistory) do
     buffHistory[i] = nil
   end
-  
+
   for i in pairs(x.spellCache.buffs) do
     buffHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
   end
-  
+
   return buffHistory
 end
 
@@ -454,11 +454,11 @@ local function GetDebuffHistory()
   for i in pairs(debuffHistory) do
     debuffHistory[i] = nil
   end
-  
+
   for i in pairs(x.spellCache.debuffs) do
     debuffHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
   end
-  
+
   return debuffHistory
 end
 
@@ -466,12 +466,12 @@ local function GetSpellHistory()
   for i in pairs(spellHistory) do
     spellHistory[i] = nil
   end
-  
+
   for i in pairs(x.spellCache.spells) do
     local name = GetSpellInfo(i) or "Unknown Spell ID"
     spellHistory[tostring(i)] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..name.." (|cff798BDD"..i.."|r)"
   end
-  
+
   return spellHistory
 end
 
@@ -479,11 +479,11 @@ local function GetProcHistory()
   for i in pairs(procHistory) do
     procHistory[i] = nil
   end
-  
+
   for i in pairs(x.spellCache.procs) do
     procHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
   end
-  
+
   return procHistory
 end
 
@@ -491,12 +491,12 @@ local function GetItemHistory()
   for i in pairs(itemHistory) do
     itemHistory[i] = nil
   end
-  
+
   for i in pairs(x.spellCache.items) do
 	local name, _, _, _, _, _, _, _, _, texture = GetItemInfo( i )
     itemHistory[i] = sformat("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s", texture, 16, 16, name)
   end
-  
+
   return itemHistory
 end
 
@@ -507,7 +507,7 @@ addon.options.args["spells"] = {
   childGroups = 'tab',
   order = 2,
   args = {
-    
+
     mergeOptions = {
       name = "Merge Options",
       type = 'group',
@@ -536,7 +536,7 @@ addon.options.args["spells"] = {
           name = "\n|cff798BDDMerge Incoming Healing|r:",
           fontSize = 'large',
         },
-      
+
         mergeHealing = {
           order = 11,
           type = 'toggle',
@@ -546,14 +546,14 @@ addon.options.args["spells"] = {
           set = set0_1,
           width = 'double',
         },
-        
+
         listSpacer2 = {
           type = "description",
           order = 20,
           name = "\n|cff798BDDMerge Multiple Dispells|r:",
           fontSize = 'large',
         },
-      
+
         mergeDispells = {
           order = 21,
           type = 'toggle',
@@ -563,14 +563,14 @@ addon.options.args["spells"] = {
           set = set0_1,
           width = 'double',
         },
-        
+
         listSpacer3 = {
           type = "description",
           order = 30,
           name = "\n|cff798BDDMerge Auto-Attacks|r:",
           fontSize = 'large',
         },
-      
+
         mergeSwings = {
           order = 31,
           type = 'toggle',
@@ -579,7 +579,7 @@ addon.options.args["spells"] = {
           get = get0_1,
           set = set0_1,
         },
-        
+
         mergeRanged = {
           order = 32,
           type = 'toggle',
@@ -588,14 +588,14 @@ addon.options.args["spells"] = {
           get = get0_1,
           set = set0_1,
         },
-        
+
         listSpacer4 = {
           type = "description",
           order = 40,
           name = "\n|cff798BDDMerge Critical Hits|r (Choose one):",
           fontSize = 'large',
         },
-        
+
         mergeDontMergeCriticals = {
           order = 41,
           type = 'toggle',
@@ -605,7 +605,7 @@ addon.options.args["spells"] = {
           set = setSpecialCriticalOptions,
           width = 'full',
         },
-        
+
         mergeCriticalsWithOutgoing = {
           order = 42,
           type = 'toggle',
@@ -615,7 +615,7 @@ addon.options.args["spells"] = {
           set = setSpecialCriticalOptions,
           width = 'full',
         },
-        
+
         mergeCriticalsByThemselves = {
           order = 43,
           type = 'toggle',
@@ -638,7 +638,7 @@ addon.options.args["spells"] = {
 
       },
     },
-    
+
     multistrike = {
       name = "Multistrike Options", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
@@ -724,10 +724,11 @@ addon.options.args["spells"] = {
       },
     },
 
-    spellList = {
-      name = "Class Specific", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
+    classList = {
+      name = "Class Spells", --"List of Mergeable Spells |cff798BDD(Class Specific)|r",
       type = 'group',
       order = 21,
+      childGroups = 'select',
       args = {
         title = {
           type = 'description',
@@ -736,27 +737,52 @@ addon.options.args["spells"] = {
           fontSize = "large",
           width = "double",
         },
-        
+
         --[[  TODO: Add Check all and uncheck all buttons ]]
-        
+
         mergeListDesc = {
           type = "description",
           order = 1,
           fontSize = "small",
           name = "Uncheck a spell if you do not want it merged. Contact me to add new spells. See |cffFFFF00Credits|r for contact info.\n\n",
         },
+
+        --[[classes = {
+          name = "Class Spells",
+          type = 'group',
+          order = 2,
+          childGroups = 'select',
+          args = {
+
+          },
+        }]]
+
+
+        ["DEATHKNIGHT"] = { type = 'group', order = 1,  name = "|cffC41F3BDeath Knight|r" },
+        ["DEMONHUNTER"] = { type = 'group', order = 2,  name = "|cffA330C9Demon Hunter|r" },
+        ["DRUID"]       = { type = 'group', order = 3,  name = "|cffFF7D0ADruid|r" },
+        ["HUNTER"]      = { type = 'group', order = 4,  name = "|cffABD473Hunter|r" },
+        ["MAGE"]        = { type = 'group', order = 5,  name = "|cff69CCF0Mage|r" },
+        ["MONK"]        = { type = 'group', order = 6,  name = "|cff00FF96Monk|r" },
+        ["PALADIN"]     = { type = 'group', order = 7,  name = "|cffF58CBAPaladin|r" },
+        ["PRIEST"]      = { type = 'group', order = 8,  name = "|cffFFFFFFPriest|r" },
+        ["ROGUE"]       = { type = 'group', order = 9,  name = "|cffFFF569Rogue|r" },
+        ["SHAMAN"]      = { type = 'group', order = 10, name = "|cff0070DEShaman|r" },
+        ["WARLOCK"]     = { type = 'group', order = 11, name = "|cff9482C9Warlock|r" },
+        ["WARRIOR"]     = { type = 'group', order = 12, name = "|cffC79C6EWarrior|r" },
+
       },
     },
-    
-    itemList = {
-      name = "All Classes",
+
+    globalList = {
+      name = "Global Spells",
       type = 'group',
       order = 22,
       args = {
         title = {
           type = 'description',
           order = 0,
-          name = "List of Mergeable Spells |cff798BDD(Items)|r",
+          name = "List of Mergeable Spells |cff798BDD(See Category)|r",
           fontSize = "large",
           width = "double",
         },
@@ -768,7 +794,7 @@ addon.options.args["spells"] = {
         },
       },
     },
-  
+
   },
 }
 
@@ -783,7 +809,7 @@ addon.options.args["spellFilter"] = {
       fontSize = "medium",
       name = "",
     },]]
-    
+
     filterValues = {
       name = "Minimal Value Thresholds",
       type = 'group',
@@ -796,7 +822,7 @@ addon.options.args["spellFilter"] = {
           name = "|cff798BDDIncoming Player Power Threshold|r: (Mana, Rage, Energy, etc.)",
           fontSize = "large",
         },
-        
+
         filterPowerValue = {
           order = 1,
           type = 'input',
@@ -805,14 +831,14 @@ addon.options.args["spellFilter"] = {
           set = setNumber2,
           get = getNumber2,
         },
-      
+
         listSpacer1 = {
           type = "description",
           order = 10,
           name = "\n|cff798BDDOutgoing Damage and Healing Threshold|r:",
           fontSize = "large",
         },
-        
+
         filterOutgoingDamageValue = {
           order = 11,
           type = 'input',
@@ -821,7 +847,7 @@ addon.options.args["spellFilter"] = {
           set = setNumber2,
           get = getNumber2,
         },
-        
+
         filterOutgoingHealingValue = {
           order = 12,
           type = 'input',
@@ -830,14 +856,14 @@ addon.options.args["spellFilter"] = {
           set = setNumber2,
           get = getNumber2,
         },
-        
+
         listSpacer2 = {
           type = "description",
           order = 20,
           name = "\n|cff798BDDIncoming Damage and Healing Threshold|r:",
           fontSize = "large",
         },
-        
+
         filterIncomingDamageValue = {
           order = 21,
           type = 'input',
@@ -846,7 +872,7 @@ addon.options.args["spellFilter"] = {
           set = setNumber2,
           get = getNumber2,
         },
-        
+
         filterIncomingHealingValue = {
           order = 22,
           type = 'input',
@@ -856,7 +882,7 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-    
+
     multistrikeOptions = {
       name = "Multistrike Filters",
       type = 'group',
@@ -881,7 +907,7 @@ addon.options.args["spellFilter"] = {
       order = 21,
       guiInline = true,
       args = {
-    
+
         -- This is a feature option that I will enable when I get more time D:
         trackSpells = {
           order = 1,
@@ -899,8 +925,8 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-    
-    
+
+
     listBuffs = {
       name = "|cffFFFFFFFilter:|r |cff798BDDBuffs|r",
       type = 'group',
@@ -937,7 +963,7 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        
+
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
           order = 8,
@@ -951,7 +977,7 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-    
+
     listDebuffs = {
       name = "|cffFFFFFFFilter:|r |cff798BDDDebuffs|r",
       type = 'group',
@@ -988,7 +1014,7 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        
+
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
           order = 4,
@@ -1039,7 +1065,7 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        
+
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
           order = 8,
@@ -1053,7 +1079,7 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-    
+
     listSpells = {
       name = "|cffFFFFFFFilter:|r |cff798BDDOutgoing Spells|r",
       type = 'group',
@@ -1090,7 +1116,7 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        
+
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
           order = 4,
@@ -1104,7 +1130,7 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-    
+
 	listItems = {
       name = "|cffFFFFFFFilter:|r |cff798BDDItems (Plus)|r",
       type = 'group',
@@ -1141,7 +1167,7 @@ addon.options.args["spellFilter"] = {
           get = getCheckAdd,
           set = setCheckAdd,
         },
-        
+
         -- This is a feature option that I will enable when I get more time D:
         selectTracked = {
           order = 4,
@@ -1155,8 +1181,8 @@ addon.options.args["spellFilter"] = {
         },
       },
     },
-	
-	
+
+
   },
 }
 
@@ -1187,7 +1213,7 @@ addon.options.args["Credits"] = {
       order = 3,
       name = " ",
     },
-    
+
     testerTitle = {
       type = 'description',
       order = 10,
@@ -1200,7 +1226,7 @@ addon.options.args["Credits"] = {
       fontSize = "medium",
       name = " |cffAAAAFF Alex|r,|cff8080EE BuG|r,|cffAAAAFF Kkthnxbye|r,|cff8080EE Azilroka|r,|cffAAAAFF Prizma|r,|cff8080EE schmeebs|r,|cffAAAAFF Pat|r,|cff8080EE hgwells|r,|cffAAAAFF Jaron|r,|cff8080EE Fitzbattleaxe|r,|cffAAAAFF Nihan|r,|cff8080EE Jaxo|r,|cffAAAAFF Schaduw|r,|cff8080EE sylenced|r,|cffAAAAFF kaleidoscope|r,|cff8080EE Killatones|r,|cffAAAAFF Trokko|r,|cff8080EE Yperia|r,|cffAAAAFF Edoc|r,|cff8080EE Cazart|r,|cffAAAAFF Nevah|r,|cff8080EE Refrakt|r,|cffAAAAFF Thakah|r,|cff8080EE johnis007|r,|cffAAAAFF Sgt|r,|cff8080EE NitZo|r,|cffAAAAFF cptblackgb|r,|cff8080EE pollyzoid|r.",
     },
-    
+
     testerTitleSpace2 = {
       type = 'description',
       order = 20,
@@ -1218,7 +1244,7 @@ addon.options.args["Credits"] = {
       fontSize = "medium",
       name = " |cffAAAAFF CadjieBOOM|r,|cff8080EE Mokal|r,|cffAAAAFF ShadoFall|r,|cff8080EE alloman|r,|cffAAAAFF chhld|r,|cff8080EE chizzlestick|r,|cffAAAAFF egreym|r,|cff8080EE nukme|r,|cffAAAAFF razrwolf|r,|cff8080EE star182|r,|cffAAAAFF zacheklund|r"
     },
-    
+
     testerTitleSpace3 = {
       type = 'description',
       order = 30,
@@ -1236,39 +1262,39 @@ addon.options.args["Credits"] = {
       fontSize = "medium",
       name = " |cffAAAAFF Affiniti|r,|cff8080EE Badinfluence|r,|cffAAAAFF Badinfluence|r,|cff8080EE BuG|r,|cffAAAAFF Curdi|r,|cff8080EE Dorkie|r,|cffAAAAFF Galadeon|r,|cff8080EE HarryDotter|r,|cffAAAAFF Joebacsi21|r,|cff8080EE Kuron|r,|cffAAAAFF Mabb22|r,|cff8080EE Narlya|r,|cffAAAAFF Nihan|r,|cff8080EE Verdell|r,|cffAAAAFF arzelia|r,|cff8080EE blessed|r,|cffAAAAFF djouga|r,|cff8080EE fakemessiah|r,|cffAAAAFF faze|r,|cff8080EE firewall|r,|cffAAAAFF jatha86|r,|cff8080EE jaydogg10|r,|cffAAAAFF jlor|r,|cff8080EE lunariongames|r,|cffAAAAFF stoankold|r",
     },
-      
+
     testerTitleSpace4 = {
       type = 'description',
       order = 40,
       name = " ",
     },
-    
-    tukuiTitle = {
+
+    githubTitle = {
       type = 'description',
       order = 41,
       name = "|cffFFFF00Thank You Github Contributors!|r",
       fontSize = "large",
     },
-    userName3 = {
+    userName4 = {
       type = 'description',
       order = 42,
       fontSize = "medium",
       name = " |cff22FF80 Tonyleila|r,|cff1AAD59 ckaotik|r,|cff22FF80 Stanzilla|r,|cff1AAD59 Torch (behub)|r,|cff22FF80 vforge|r",
     },
-    
+
     testerTitleSpace5 = {
       type = 'description',
       order = 50,
       name = " ",
     },
-    
+
     contactTitle = {
       type = 'description',
       order = 51,
       name = "|cffFFFF00Contact Me|r",
       fontSize = "large",
     },
-    
+
     contactStep1 = {
       type = 'description',
       order = 52,
@@ -1347,7 +1373,7 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         CombatLogPeriodicSpells = {
           order = 3,
           type = 'toggle',
@@ -1357,7 +1383,7 @@ addon.options.args["FloatingCombatText"] = {
           set = set0_update,
           disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end,
         },
-        
+
         PetMeleeDamage = {
           order = 4,
           type = 'toggle',
@@ -1365,9 +1391,9 @@ addon.options.args["FloatingCombatText"] = {
           desc = "Enable this option if you want your pet's melee damage as Floating Combat Text.",
           get = get0,
           set = set0_update,
-          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end, 
+          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end,
         },
-        
+
         CombatHealing = {
           order = 5,
           type = 'toggle',
@@ -1376,7 +1402,7 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         CombatHealingAbsorbTarget = {
           order = 6,
           type = 'toggle',
@@ -1385,7 +1411,7 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         CombatThreatChanges = {
           order = 7,
           type = 'toggle',
@@ -1394,7 +1420,7 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         -- Floating Combat Text Effects
         fctSpellMechanics = {
           order = 8,
@@ -1404,7 +1430,7 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         fctSpellMechanicsOther = {
           order = 9,
           type = 'toggle',
@@ -1412,7 +1438,7 @@ addon.options.args["FloatingCombatText"] = {
           desc = "Enable this option if you want to see other player's snares and roots too.",
           get = get0,
           set = set0_update,
-          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.fctSpellMechanics end, 
+          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.fctSpellMechanics end,
         },
 
         listSpacer2 = {
@@ -1441,7 +1467,7 @@ addon.options.args["FloatingCombatText"] = {
           name = "\n\n|cff798BDDFloating Combat Text Font|r:",
           fontSize = 'large',
         },
-        
+
         enabled = {
           order = 31,
           type = 'toggle',
@@ -1449,7 +1475,7 @@ addon.options.args["FloatingCombatText"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         font = {
           type = 'select', dialogControl = 'LSM30_Font',
           order = 32,
@@ -1460,7 +1486,7 @@ addon.options.args["FloatingCombatText"] = {
           set = function(info, value)
             x.db.profile.blizzardFCT.font = value
             x.db.profile.blizzardFCT.fontName = LSM:Fetch("font", value)
-            
+
             --x:UpdateFrames()
             --x.cvar_update()
           end,
@@ -1491,7 +1517,7 @@ addon.options.args["Frames"] = {
   type = 'group',
   order = 0,
   args = {
-    
+
 
     frameSettings = {
       name = "Frame Settings ",
@@ -1499,7 +1525,7 @@ addon.options.args["Frames"] = {
       order = 1,
       guiInline = true,
       args = {
-        
+
         listSpacer0 = {
           type = "description",
           order = 1,
@@ -1515,7 +1541,7 @@ addon.options.args["Frames"] = {
           get = get0,
           set = set0,
         },
-        
+
         showPositions = {
           order = 3,
           type = 'toggle',
@@ -1551,7 +1577,7 @@ addon.options.args["Frames"] = {
           get = get0,
           set = set0_update,
         },
-        
+
         listSpacer2 = {
           type = "description",
           order = 20,
@@ -1663,8 +1689,8 @@ addon.options.args["Frames"] = {
           order = 0,
           name = "The following settings are marked as experimental. They should all work, but they might not be very useful. Expect chanrges or updates to these in the near future.\n\nClick |cffFFFF00Set All|r to apply setting to all |cffFF0000x|r|cffFFFF00CT|r|cffFF0000+|r frames.\n",
         },
-        
-        
+
+
         font = {
           type = 'select', dialogControl = 'LSM30_Font',
           order = 1,
@@ -1674,7 +1700,7 @@ addon.options.args["Frames"] = {
           get = function(info) return miscFont end,
           set = function(info, value) miscFont = value end,
         },
-        
+
         applyFont = {
           type = 'execute',
           order = 2,
@@ -1689,13 +1715,13 @@ addon.options.args["Frames"] = {
             end
           end,
         },
-        
+
         spacer1 = {
           type = 'description',
           order = 3,
           name = "",
         },
-        
+
         fontOutline = {
           type = 'select',
           order = 4,
@@ -1713,7 +1739,7 @@ addon.options.args["Frames"] = {
           get = function(info) return miscFontOutline end,
           set = function(info, value) miscFontOutline = value end,
         },
-        
+
         applyFontOutline = {
           type = 'execute',
           order = 5,
@@ -1728,13 +1754,13 @@ addon.options.args["Frames"] = {
             end
           end,
         },
-        
+
         spacer2 = {
           type = 'description',
           order = 6,
           name = "",
         },
-        
+
         customFade = {
           type = 'toggle',
           order = 7,
@@ -1743,7 +1769,7 @@ addon.options.args["Frames"] = {
           get = function(info) return miscEnableCustomFade end,
           set = function(info, value) miscEnableCustomFade = value end,
         },
-        
+
         applyCustomFade = {
           type = 'execute',
           order = 8,
@@ -1760,7 +1786,7 @@ addon.options.args["Frames"] = {
             end
           end,
         },
-        
+
       },
     },
 
@@ -1880,7 +1906,7 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameItemDisabled,
             },
-            
+
             frameFading = {
               type = 'description',
               order = 20,
@@ -2124,7 +2150,7 @@ addon.options.args["Frames"] = {
 
       },
     },
-    
+
     outgoing = {
       name = "|cffFFFFFFOutgoing|r",
       type = 'group',
@@ -2470,7 +2496,7 @@ addon.options.args["Frames"] = {
 
       },
     },
-    
+
     critical = {
       name = "|cffFFFFFFOutgoing|r |cff798BDD(Criticals)|r",
       type = 'group',
@@ -2793,7 +2819,7 @@ addon.options.args["Frames"] = {
         },
       },
     },
-    
+
     damage = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Damage)|r",
       type = 'group',
@@ -3064,7 +3090,7 @@ addon.options.args["Frames"] = {
         },
       },
     },
-    
+
     healing = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Healing)|r",
       type = 'group',
@@ -3376,7 +3402,7 @@ addon.options.args["Frames"] = {
         },
       },
     },
-    
+
     class = {
       name = "|cffFFFFFFClass Combo Points|r",
       type = 'group',
@@ -3521,7 +3547,7 @@ addon.options.args["Frames"] = {
 
       },
     },
-    
+
     power = {
       name = "|cffFFFFFFClass Power|r",
       type = 'group',
@@ -3796,7 +3822,7 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            
+
             title1 = {
               type = 'description',
               order = 10,
@@ -3809,7 +3835,7 @@ addon.options.args["Frames"] = {
               name = "Check the energies that you do not wish to be displayed for your character:",
               fontSize = 'small',
             },
-            
+
             disableResource_MANA = {
               order = 20,
               type = 'toggle',
@@ -3898,12 +3924,12 @@ addon.options.args["Frames"] = {
               set = set2,
               width = "full",
             },
-            
+
           },
         },
       },
     },
-    
+
     procs = {
       name = "|cffFFFFFFSpecial Effects|r |cff798BDD(Procs)|r",
       type = 'group',
@@ -4162,7 +4188,7 @@ addon.options.args["Frames"] = {
 
       },
     },
-    
+
     loot = {
       name = "|cffFFFFFFLoot, Currency & Money|r",
       type = 'group',
