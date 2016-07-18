@@ -496,7 +496,10 @@ local function setIF_2(info, value) x.db.profile.spells.items[info[#info - 1]][i
 
 
 -- For Legion - Reimplement legacy GetAuctionItemClasses and GetAuctionItemSubClasses
-if build >= 70000 then
+
+
+-- TODO: Figure out how to list all items in Legion
+--[[if build >= 70000 then
 
 
   function GetAuctionItemClasses()
@@ -525,7 +528,7 @@ if build >= 70000 then
     end
     return list
   end
-end
+end]]
 
 x.UpdateItemTypes = function(self)end
 
