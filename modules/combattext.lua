@@ -303,7 +303,7 @@ end
 --[=====================================================[
  String Formatters
 --]=====================================================]
-local format_getItemString = "([^|]+)|cff(%x+)|H([^|]+)|h%[[^%]]+%]|h|r[^%d]*(%d*)"
+local format_getItemString = "([^|]+)|cff(%x+)|H([^|]+)|h%[([^%]]+)%]|h|r[^%d]*(%d*)"
 local format_pet  = sformat("|cff798BDD[%s]:|r %%s (%%s)", sgsub(BATTLE_PET_CAGE_ITEM_NAME,"%s?%%s","")) -- [Caged]: Pet Name (Pet Family)
 
 -- TODO: Remove old loot pattern
