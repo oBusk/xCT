@@ -237,10 +237,13 @@ function x:CompatibilityLogic( existing )
 
     -- Updating Spam Merger for 4.0.0 Beta 4 (Requires a reset)
     if CompareVersions( VersionToTable("4.0.0"), previousVersion) > 0
-      or CompareVersions( VersionToTable("4.2.0"), previousVersion) > 0 then
+      or CompareVersions( VersionToTable("4.2.0"), previousVersion) < 0 then
 
       -- Reset merge table
       self.db.profile.spells.merge = {}
+
+      -- Fix Combo Points
+      self.db.profile.spells.combo = addon.defaults.profile.spells.combo
 
       -- Tell the user... i am sooo sorry
       if existing and not x.db.global.dontShowDBCleaning then
