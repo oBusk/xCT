@@ -570,7 +570,7 @@ addon.merge2h[66196]    = 222026                                            -- [
 
 -- Unholy (ID: 252)
 addon.merges[215969]    = CreateMergeSpellEntry("DEATHKNIGHT", 0.5, 252)    -- Virulent Plague (DoT)
-addon.merges[70890]     = CreateMergeSpellEntry("DEATHKNIGHT", 3.0, 252)         -- Scourge Strike
+addon.merges[70890]     = CreateMergeSpellEntry("DEATHKNIGHT", 3.0, 252)    -- Scourge Strike
 addon.merges[194311]    = CreateMergeSpellEntry("DEATHKNIGHT", 0.5, 252)    -- Festering Wound
 addon.merges[91778]     = CreateMergeSpellEntry("DEATHKNIGHT", 0.5, 252)    -- Pet: Sweeping Claws
 addon.merges[199373]    = CreateMergeSpellEntry("DEATHKNIGHT", 2.5, 252)    -- Army: Claw
