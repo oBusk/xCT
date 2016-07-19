@@ -1,16 +1,23 @@
---[[   ____    ______
+--[[   ____    ______      
       /\  _`\ /\__  _\   __
- __  _\ \ \/\_\/_/\ \/ /_\ \___
+ __  _\ \ \/\_\/_/\ \/ /_\ \___ 
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
 \/>  </ \ \ \L\ \ \ \ \/__/\_\_/
  /\_/\_\ \ \____/  \ \_\  \/_/
  \//\/_/  \/___/    \/_/
-
+ 
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2016. All Rights Reserved.        ]
+ [  ©2015. All Rights Reserved.        ]
  [====================================]]
+ 
+-- Dont do anything for Legion
+local build = select(4, GetBuildInfo())
+if build >= 70000 then return end
+
+
+-- TODO: Fix this up
 
 local ADDON_NAME, addon = ...
 local x = addon.engine
@@ -68,7 +75,7 @@ end)
 function x:UpdateBlizzardFCT()
   if self.db.profile.blizzardFCT.enabled then
     DAMAGE_TEXT_FONT = self.db.profile.blizzardFCT.fontName
-
+		
     -- Not working
 		--  LSM:Fetch("font", self.db.profile.blizzardFCT.font)
     --COMBAT_TEXT_HEIGHT = self.db.profile.blizzardFCT.fontSize

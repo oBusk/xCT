@@ -46,15 +46,32 @@ addon.defaults = {
       fontOutline = "4MONOCHROMEOUTLINE",
 
       -- CVars
-      ["CombatThreatChanges"] = false,
-      ["CombatDamage"] = false,
-      ["CombatHealing"] = false,
-      ["PetMeleeDamage"] = false,
-      ["CombatLogPeriodicSpells"] = false,
-      ["CombatHealingAbsorbTarget"] = false,
-      ["fctSpellMechanics"] = false,
-      ["fctSpellMechanicsOther"] = false,
-      ["CombatDamageStyle"] = 1,
+      floatingCombatTextAllSpellMechanics = false,
+      floatingCombatTextAuras = false,
+      floatingCombatTextCombatDamage = false,
+      floatingCombatTextCombatDamageAllAutos = false,
+      floatingCombatTextCombatDamageDirectionalOffset = false,
+      floatingCombatTextCombatDamageDirectionalScale = false,
+      floatingCombatTextCombatHealing = false,
+      floatingCombatTextCombatHealingAbsorbSelf = false,
+      floatingCombatTextCombatHealingAbsorbTarget = false,
+      floatingCombatTextCombatLogPeriodicSpells = false,
+      floatingCombatTextCombatState = false,
+      floatingCombatTextComboPoints = false,
+      floatingCombatTextDamageReduction = false,
+      floatingCombatTextDodgeParryMiss = false,
+      floatingCombatTextEnergyGains = false,
+      floatingCombatTextFloatMode = false,
+      floatingCombatTextFriendlyHealers = false,
+      floatingCombatTextHonorGains = false,
+      floatingCombatTextLowManaHealth = false,
+      floatingCombatTextPeriodicEnergyGains = false,
+      floatingCombatTextPetMeleeDamage = false,
+      floatingCombatTextPetSpellDamage = false,
+      floatingCombatTextReactives = false,
+      floatingCombatTextRepChanges = false,
+      floatingCombatTextSpellMechanics = false,
+      floatingCombatTextSpellMechanicsOther = false,
     },
 
     frameSettings = {
@@ -76,7 +93,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- position
         ["X"] = 0,
@@ -86,7 +103,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 24,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
 
@@ -146,7 +163,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -168,7 +185,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- position
         ["X"] = 480,
@@ -178,7 +195,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 18,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
 
@@ -219,7 +236,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -240,17 +257,17 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- position
         ["X"] = 256,
         ["Y"] = 0,
         ["Width"] = 256,
-        ["Height"] = 128,
+        ["Height"] = 140,
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 30,
+        ["fontSize"] = 24,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
 
@@ -280,7 +297,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -295,17 +312,17 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "top",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- position
         ["X"] = -448,
         ["Y"] = -88,
         ["Width"] = 128,
-        ["Height"] = 144,
+        ["Height"] = 160,
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 24,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "LEFT",
 
@@ -348,7 +365,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -363,7 +380,7 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- positioon
         ["X"] = -288,
@@ -373,7 +390,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 18,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "LEFT",
 
@@ -392,7 +409,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -419,7 +436,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "HOOGE (xCT)",
-        ["fontSize"] = 32,
+        ["fontSize"] = 64,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
 
       -- font colors
@@ -434,21 +451,22 @@ addon.defaults = {
         ["secondaryFrame"] = 0,
         ["insertText"] = "bottom",
         ["alpha"] = 100,
-        ["megaDamage"] = false,
+        ["megaDamage"] = true,
 
       -- position
         ["X"] = 0,
         ["Y"] = -64,
-        ["Width"] = 256,
+        ["Width"] = 180,
         ["Height"] = 128,
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 17,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
 
       -- font colors
+        -- TODO: Update these ( See http://www.wowinterface.com/forums/showthread.php?t=53140 )
         colors = {
           ['color_MANA']             = { enabled = false, desc = MANA,        default = { 0.00, 0.00, 1.00 } },
           ['color_RAGE']             = { enabled = false, desc = RAGE,        default = { 1.00, 0.00, 0.00 } },
@@ -469,7 +487,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -500,14 +518,14 @@ addon.defaults = {
         ["alpha"] = 100,
 
       -- position
-        ["X"] = -256,
+        ["X"] = -237,
         ["Y"] = -64,
-        ["Width"] = 256,
+        ["Width"] = 294,
         ["Height"] = 128,
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 24,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
 
@@ -527,7 +545,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -547,7 +565,7 @@ addon.defaults = {
 
       -- fonts
         ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 20,
+        ["fontSize"] = 25,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
 
@@ -561,7 +579,7 @@ addon.defaults = {
         ["scrollableInCombat"] = false,
 
       -- fading text
-        ["enableCustomFade"] = false,
+        ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
@@ -593,123 +611,80 @@ addon.defaults = {
       mergeHideMergedCriticals = false,
 
       -- Abbreviate or Groups Settings
-      formatAbbreviate = true,
-      formatGroups = false,
+      formatAbbreviate = false,
+      formatGroups = true,
 
       combo = {
         ["DEATHKNIGHT"] = {
-          [1] = {                                         -- Blood
-            CreateComboSpellEntry(false, 49222),          --   Bone Shield
-            CreateComboSpellEntry(true, 114851),          --   Blood Charge
-            CreateComboSpellEntry(false, 50421),          --   Scent of Blood
-          },
-          [2] = { },    -- Frost
-          [3] = {                                         -- Unholy
-            CreateComboSpellEntry(true, 91342, "pet"),    --   Shadow Infusion
-          },
+          [1] = { },
+          [2] = { },
+          [3] = { },
+        },
+
+        ["DEMONHUNTER"] = {
+          [1] = { },
+          [2] = { },
         },
 
         ["DRUID"] = {
-          [1] = {                                         -- Balance
-            --CreateComboSpellEntry(true, 81192),           --   Lunar Shower
-          },
-          [2] = {                                         -- Feral
-            [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
-          },
-          [3] = { },    -- Guardian
-          [4] = { },    -- Restoration
+          [1] = { },
+          [2] = { },
+          [3] = { },
+          [4] = { },
         },
 
         ["HUNTER"] = {
-          [1] = {                                         -- Beast Mastery
-            CreateComboSpellEntry(true, 19615, "pet"),    --   Frenzy Effect
-            CreateComboSpellEntry(false, 34720),           --   Thrill of the Hunt (Talent)
-          },
-          [2] = {                                         -- Marksman
-            --CreateComboSpellEntry(true, 82925),           --   Ready, Set, Aim...
-            CreateComboSpellEntry(false, 34720),           --   Thrill of the Hunt (Talent)
-          },
-          [3] = {                                         -- Survival
-            CreateComboSpellEntry(true, 168980), --56453),           --   Lock 'n Load
-            CreateComboSpellEntry(false, 34720),           --   Thrill of the Hunt (Talent)
-          },
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
         ["MAGE"] = {
-          [1] = { },    -- Arcane (Arcane Charge 114664)
-          [2] = { },    -- Fire (Heating Up)
-          [3] = { },    -- Frost (Fingers of Frost 112965)
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
         ["MONK"] = {
-          [CHI] = true,
-
-          -- DO NOT USE - MONKS GET CHI
-          [1] = { },    -- Brewmaster
-          [2] = { },    -- Mistweaver
-          [3] = { },    -- Windwalker
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
         ["PALADIN"] = {
-          [HOLY_POWER] = true,
-
-          -- DO NOT USE - PALADINS GET HOLY POWER
-          [1] = { },    -- Holy
-          [2] = { },    -- Protection
-          [3] = { },    -- Retribution
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
         ["PRIEST"] = {
-          [1] = {                                         -- Discipline
-            CreateComboSpellEntry(true, 81661),           --   Evangelism
-          },
-          [2] = {                                         -- Holy
-            CreateComboSpellEntry(true, 63735),           --   Serendipity
-            CreateComboSpellEntry(false, 114255),         --   Surge of Light
-          },
-          -- DO NOT USE - SHADOW PRIEST GET SHADOW ORBS
-          [3] = {                                         -- Shadow
-            [SHADOW_ORBS] = true,
-            -- 87160 Surge of Darkness
-          },
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
         ["ROGUE"] = {
-          [COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] = true,
-
-          -- DO NOT USE - ROGUES GET COMBO POINTS
-          [1] = { },    -- Assassination
-          [2] = { },    -- Combat
-          [3] = { },    -- Subtlety
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
         ["SHAMAN"] = {
-          [1] = {                                         -- Elemental
-            CreateComboSpellEntry(true, 324),             --   Fulmination (Stacks up to 20??)
-          },
-          [2] = {                                         -- Enhancement
-            CreateComboSpellEntry(true, 53817),           --   Maelstrom Weapon
-          },
-          [3] = {                                         -- Restoration
-            CreateComboSpellEntry(true, 53390),           --   Tidal Waves
-          },
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
         ["WARLOCK"] = {
-          -- DO NOT USE - AFFLICTION WARLOCKS GET SOUL SHARDS
-          [1] = { [SOUL_SHARDS] = true },                 -- Affliction
-
-          -- DO NOT USE - DEMONOLOGY WARLOCKS GET DEMONIC FURY
-          [2] = { [DEMONIC_FURY] = true },                -- Demonology
-
-          -- DO NOT USE - DESTRUCTION WARLOCKS GET BURNING EMBERS
-          [3] = { [BURNING_EMBERS] = true },              -- Destruction
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
         ["WARRIOR"] = {
-          [1] = { },    -- Arms
-          [2] = { },    -- Fury
-          [3] = { },    -- Protection
+          [1] = { },
+          [2] = { },
+          [3] = { },
         },
 
       },
@@ -721,14 +696,6 @@ addon.defaults = {
       -- yes this is supposed to be blank :P
       -- it is dynamically generated in core.lua
       items = { },
-
-      -- multistike items here
-      multistrikeEnabled = true,
-      multistrikeLatency = 600,
-      multistikeDebug = false,
-      multistikeAutoAdjust = true,
-      showMultistrikeIcons = true,
-      multistrikeIconMultiplier = 50,
     },
 
     spellFilter = {
@@ -737,7 +704,7 @@ addon.defaults = {
       ["whitelistSpells"]   = false,
       ["whitelistProcs"]    = false,
       ["whitelistItems"]    = false,
-      ["trackSpells"]       = false,
+      ["trackSpells"]       = true,
 
       listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
       listDebuffs  = { },  -- Used to filter gains/fades of debuffs  (Spell Name)
@@ -751,6 +718,7 @@ addon.defaults = {
       filterOutgoingHealingValue = 0,
       filterIncomingDamageValue = 0,
       filterIncomingHealingValue = 0,
+
     },
   },
 }
