@@ -1194,12 +1194,8 @@ x.events = {
     end,
   ["RUNE_POWER_UPDATE"] = function(slot)
       if GetRuneCooldown(slot) ~= 0 then return end
-      local runeType = GetRuneType(slot);
-      if runeType then
-        local message = sformat(format_gain_rune, x.runeIcons[runeType], COMBAT_TEXT_RUNE[runeType], x.runeIcons[runeType])
-        --x:AddMessage("power", message, x.runecolors[runeType])
-        x:AddSpamMessage("power", runeType, message, x.runecolors[runeType], 1)
-      end
+      local message = sformat(format_gain_rune, x.runeIcons[4], COMBAT_TEXT_RUNE_DEATH, x.runeIcons[4])
+      x:AddSpamMessage("power", RUNES, message, x.runecolors[4], 1)
     end,
   ["PLAYER_REGEN_ENABLED"] = function()
       x.inCombat = false
