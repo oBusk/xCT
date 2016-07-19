@@ -1140,6 +1140,24 @@ addon.options.args["Credits"] = {
       name = " |cffAAAAFF Affiniti|r,|cff8080EE Badinfluence|r,|cffAAAAFF Badinfluence|r,|cff8080EE BuG|r,|cffAAAAFF Curdi|r,|cff8080EE Dorkie|r,|cffAAAAFF Galadeon|r,|cff8080EE HarryDotter|r,|cffAAAAFF Joebacsi21|r,|cff8080EE Kuron|r,|cffAAAAFF Mabb22|r,|cff8080EE Narlya|r,|cffAAAAFF Nihan|r,|cff8080EE Verdell|r,|cffAAAAFF arzelia|r,|cff8080EE blessed|r,|cffAAAAFF djouga|r,|cff8080EE fakemessiah|r,|cffAAAAFF faze|r,|cff8080EE firewall|r,|cffAAAAFF jatha86|r,|cff8080EE jaydogg10|r,|cffAAAAFF jlor|r,|cff8080EE lunariongames|r,|cffAAAAFF stoankold|r",
     },
 
+    testerTitleSpace3Legion = {
+      type = 'description',
+      order = 33,
+      name = " ",
+    },
+    tukuiTitleLegion = {
+      type = 'description',
+      order = 34,
+      name = "|cffFFFF00Beta Testers - Version 4.2.0 for Legion|r",
+      fontSize = "large",
+    },
+    userName3Legion = {
+      type = 'description',
+      order = 35,
+      fontSize = "medium",
+      name = " |cffAAAAFF Azazu|r,|cff8080EE Merathilis|r,|cffAAAAFF Torch|r",
+    },
+
     testerTitleSpace4 = {
       type = 'description',
       order = 40,
