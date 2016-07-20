@@ -106,6 +106,7 @@ addon.merges[6572]      = CreateMergeSpellEntry("WARRIOR", 0.5, 73)         -- R
 addon.merges[115767]    = CreateMergeSpellEntry("WARRIOR", 3.5, 73)         -- Deep Wounds
 addon.merges[6343]      = CreateMergeSpellEntry("WARRIOR", 0.5, 73)         -- Thunder Clap
 addon.merges[7922]      = CreateMergeSpellEntry("WARRIOR", 0.5, 73)         -- Talent: Warbringer
+addon.merges[222944]    = CreateMergeSpellEntry("WARRIOR", 3.0, 73)         -- Talent: Inspiring Presence
 addon.merges[203526]    = CreateMergeSpellEntry("WARRIOR", 3.5, 73)         -- Artifact: Neltharion's Fury
 
 
