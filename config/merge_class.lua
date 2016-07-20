@@ -160,6 +160,7 @@ addon.merges[194238]    = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- A
 -- All Specs
 addon.merges[81297]     = CreateMergeSpellEntry("PALADIN", 2.5, 0)          -- Consecration
 addon.merges[105421]    = CreateMergeSpellEntry("PALADIN", 0.5, 0)          -- Talent: Blinding Light
+addon.merges[183811]    = CreateMergeSpellEntry("PALADIN", 2.5, 0)          -- Talent: Judgment of Light
 
 -- Holy (ID: 65)
 addon.merges[225311]    = CreateMergeSpellEntry("PALADIN", 0.5, 65)         -- Light of Dawn
