@@ -185,21 +185,27 @@ function x:UpdateFrames(specificFrame)
 				f:SetJustifyH(settings.fontJustify)
 			end
 			
-			-- scrolling
-			if settings.enableScrollable then
-				f:SetMaxLines(settings.scrollableLines)
-				if not settings.scrollableInCombat then
-					if InCombatLockdown() then
-						x:DisableFrameScrolling( framename )
+			-- Special Cases
+			if framename == "class" then
+				f:SetMaxLines(1)
+				f:SetFading(false)
+			else
+				-- scrolling
+				if settings.enableScrollable then
+					f:SetMaxLines(settings.scrollableLines)
+					if not settings.scrollableInCombat then
+						if InCombatLockdown() then
+							x:DisableFrameScrolling( framename )
+						else
+							x:EnableFrameScrolling( framename )
+						end
 					else
 						x:EnableFrameScrolling( framename )
 					end
 				else
-					x:EnableFrameScrolling( framename )
+					f:SetMaxLines(settings.Height / settings.fontSize)
+					x:DisableFrameScrolling( framename )
 				end
-			else
-				f:SetMaxLines(settings.Height / settings.fontSize)
-				x:DisableFrameScrolling( framename )
 			end
 
 			-- fading
@@ -210,12 +216,6 @@ function x:UpdateFrames(specificFrame)
 			else
 				f:SetFading(true)
 				f:SetTimeVisible(3)
-			end
-			
-			-- Special Cases
-			if framename == "class" then
-				f:SetMaxLines(1)
-				f:SetFading(false)
 			end
 
 			-- Send a Test message

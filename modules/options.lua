@@ -1155,7 +1155,7 @@ addon.options.args["Credits"] = {
       type = 'description',
       order = 35,
       fontSize = "medium",
-      name = " |cffAAAAFF Azazu|r,|cff8080EE Merathilis|r,|cffAAAAFF Torch|r",
+      name = " |cffAAAAFF Azazu|r,|cff8080EE Merathilis|r,|cffAAAAFF Torch|r,|cff8080EE Broni|r,|cffAAAAFF Zylos|r",
     },
 
     testerTitleSpace4 = {
@@ -3631,7 +3631,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
 
-            frameScrolling = {
+            --[[frameScrolling = {
               type = 'description',
               order = 10,
               name = "\n|cff798BDDScrollable Frame Settings|r:",
@@ -3661,7 +3661,7 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
-            },
+            },]]
           },
         },
 
