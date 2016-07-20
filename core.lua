@@ -237,7 +237,7 @@ function x:CompatibilityLogic( existing )
 
     -- Updating Spam Merger for 4.0.0 Beta 4 (Requires a reset)
     if CompareVersions( VersionToTable("4.0.0"), previousVersion) > 0
-      or CompareVersions( VersionToTable("4.2.0"), previousVersion) > 0 then
+      or CompareVersions( VersionToTable("4.2.3"), previousVersion) > 0 then
 
       -- Reset merge table
       self.db.profile.spells.merge = {}
@@ -371,8 +371,6 @@ local CLASS_NAMES = {
   },
 }
 
-
-
 -- Gets spammy spells from the database and creates options
 function x:UpdateSpamSpells()
   -- Update our saved DB
@@ -459,7 +457,7 @@ function x:UpdateSpamSpells()
 
       -- Add the spell to the UI
       if CLASS_NAMES[entry.class] then
-        local index = CLASS_NAMES[entry.class][entry.desc]
+        local index = CLASS_NAMES[entry.class][tonumber(entry.desc) or 0]
         spells[entry.class].args[tostring(spellID)] = {
           order = index * 2 + 1,
           type = 'toggle',
@@ -495,8 +493,6 @@ local function getIF_1(info) return x.db.profile.spells.items[info[#info - 1]][i
 local function setIF_1(info, value) x.db.profile.spells.items[info[#info - 1]][info[#info]] = value end
 local function getIF_2(info) return x.db.profile.spells.items[info[#info - 1]][info[#info - 1]] end
 local function setIF_2(info, value) x.db.profile.spells.items[info[#info - 1]][info[#info - 1]] = value end
-
-
 
 -- For Legion - Reimplement legacy GetAuctionItemClasses and GetAuctionItemSubClasses
 
