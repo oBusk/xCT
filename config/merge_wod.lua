@@ -71,7 +71,8 @@ addon.merges[187624]    = CreateMergeSpellEntry(Item_WOD, 0.5, "Legedary Ring: S
 
 -- WoD Trinkets
 addon.merges[184280]    = CreateMergeSpellEntry(Item_WOD, 3.5, "Mirror of the Blademaster")   -- Felstorm (every 2s for 20s)
-addon.merges[184256]    = CreateMergeSpellEntry(Item_WOD, 2.5, "Discordant Chorus")           -- Discordant Chorus
+addon.merges[184256]    = CreateMergeSpellEntry(Item_WOD, 2.5, "Empty Drinking Horn")         -- Empty Drinking Horn
+addon.merges[184248]    = CreateMergeSpellEntry(Item_WOD, 0.5, "Discordant Chorus")           -- Discordant Chorus
 addon.merges[185098]    = CreateMergeSpellEntry(Item_WOD, 4.5, "Soothing Breeze")             -- Monk Class Trinket (Sacred Draenic Incense)
 addon.merges[184075]    = CreateMergeSpellEntry(Item_WOD, 0.5, "Prophecy of Fear")            -- Propecy of Fear
 
