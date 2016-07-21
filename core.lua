@@ -249,6 +249,14 @@ function x:CompatibilityLogic( existing )
       if existing and not x.db.global.dontShowDBCleaning then
         StaticPopup_Show("XCT_PLUS_DB_CLEANUP_1")
       end
+
+    -- Less Intrusive Migration
+    elseif CompareVersions( VersionToTable("4.2.4 beta"), previousVersion) > 0 then
+      for index in pairs(self.db.profile.spells.merge) do
+        if not addon.merges[index] then
+          self.db.profile.spells.merge[index] = nil
+        end
+      end
     end
 
     self.db.profile.dbVersion = addonVersionString
