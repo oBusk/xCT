@@ -84,9 +84,7 @@ addon.merges[199658]    = CreateMergeSpellEntry("WARRIOR", 1.5, 71)         -- W
 addon.merge2h[199850]   = 199658                                            -- [Spell Merger] Whirlwind
 
 -- Fury (ID: 72)
-addon.merges[218617]    = CreateMergeSpellEntry("WARRIOR", 1.5, 72)         -- Rampage (1st Hit)
-addon.merges[184707]    = CreateMergeSpellEntry("WARRIOR", 1.5, 72)         -- Rampage (2nd MH Hit)
-addon.merges[201364]    = CreateMergeSpellEntry("WARRIOR", 1.5, 72)         -- Rampage (3rd MH Hit)
+addon.merges[184367]    = CreateMergeSpellEntry("WARRIOR", 2.0, 72)         -- Rampage (Red Face Icon)
 addon.merges[96103]     = CreateMergeSpellEntry("WARRIOR", 0.5, 72)         -- Raging Blow
 addon.merges[199667]    = CreateMergeSpellEntry("WARRIOR", 2.5, 72)         -- Whirlwind
 addon.merges[23881]     = CreateMergeSpellEntry("WARRIOR", 0.5, 72)         -- Bloodthirst (Whirlwind: Meat Cleaver)
@@ -98,8 +96,11 @@ addon.merge2h[205547]   = 205546                                            -- A
 addon.merge2h[85384]    = 96103                                             -- [MH/OH] Raging Blow
 addon.merge2h[44949]    = 199667                                            -- [MH/OH] Whirlwind
 addon.merge2h[95738]    = 50622                                             -- [MH/OH] Bladestorm
-addon.merge2h[184709]   = 184707                                            -- Rampage (2nd OH Hit)
-addon.merge2h[201363]   = 201364                                            -- Rampage (3rd OH Hit)
+addon.merge2h[218617]   = 184367                                            -- Rampage (1st Hit)
+addon.merge2h[184707]   = 184367                                            -- Rampage (2nd Hit)
+addon.merge2h[184709]   = 184367                                            -- Rampage (3rd Hit)
+addon.merge2h[201364]   = 184367                                            -- Rampage (4th Hit)
+addon.merge2h[201363]   = 184367                                            -- Rampage (5th Hit)
 
 -- Protection (ID: 73)
 addon.merges[6572]      = CreateMergeSpellEntry("WARRIOR", 0.5, 73)         -- Revenge
