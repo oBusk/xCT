@@ -75,7 +75,8 @@ addon.merges[184256]    = CreateMergeSpellEntry(Item_WOD, 2.5, "Discordant Choru
 addon.merges[185098]    = CreateMergeSpellEntry(Item_WOD, 4.5, "Soothing Breeze")             -- Monk Class Trinket (Sacred Draenic Incense)
 addon.merges[184075]    = CreateMergeSpellEntry(Item_WOD, 0.5, "Prophecy of Fear")            -- Propecy of Fear
 
-
+-- Tier Gear
+addon.merges[188046]    = CreateMergeSpellEntry(Item_WOD, 1.5, "T18 Druid Balance 2P")        -- Fey Moonwing (Fey Missile)
 
 -- ---------------------------
 -- Pets / NPC's             --

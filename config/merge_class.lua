@@ -467,6 +467,8 @@ addon.merges[210687]    = CreateMergeSpellEntry("DRUID", 0.5, 103)          -- A
 addon.merge2h[1822]     = 155722                                            -- [DD/DoT Merger] Rake
 
 -- Guardian (ID: 104)
+addon.merges[227034]    = CreateMergeSpellEntry("DRUID", 1.5, 104)          -- Mastery: Nature's Guardian
+addon.merges[22842]     = CreateMergeSpellEntry("DRUID", 1.5, 104)          -- Frenzied Regeneration
 addon.merges[33917]     = CreateMergeSpellEntry("DRUID", 0.5, 104)          -- Mangle (Incarnation Cleave)
 addon.merges[213771]    = CreateMergeSpellEntry("DRUID", 0.5, 104)          -- Swipe (Bear)
 addon.merges[77758]     = CreateMergeSpellEntry("DRUID", 2.5, 104)          -- Thrash (Bear)
