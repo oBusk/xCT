@@ -239,7 +239,6 @@ addon.merges[164857]    = CreateMergeSpellEntry("HUNTER", 5.0, 255)         -- P
 -- ---------------------------
 
 -- Elemental (ID: 262)
-addon.merges[188196]    = CreateMergeSpellEntry("SHAMAN", 2.5, 262)         -- Lightning Bolt
 addon.merges[188443]    = CreateMergeSpellEntry("SHAMAN", 2.0, 262)         -- Chain Lightning (Elemental)
 addon.merges[77478]     = CreateMergeSpellEntry("SHAMAN", 1.5, 262)         -- Earthquake
 addon.merges[191732]    = CreateMergeSpellEntry("SHAMAN", 1.5, 262)         -- Artifact Greater Lightning Elemental
@@ -250,7 +249,6 @@ addon.merges[192231]    = CreateMergeSpellEntry("SHAMAN", 2.5, 262)         -- T
 addon.merges[170379]    = CreateMergeSpellEntry("SHAMAN", 2.0, 262)         -- Talent: Earthn Rage
 addon.merges[197568]    = CreateMergeSpellEntry("SHAMAN", 0.5, 262)         -- Talent: Lightning Rod
 addon.merges[117588]    = CreateMergeSpellEntry("SHAMAN", 0.5, 262)         -- Talent: Primal Elementalist [Fire]
-addon.merge2h[45284]    = 188196                                            -- [Mastery Merger] Lightning Bolt Overload
 addon.merge2h[45297]    = 188443                                            -- [Mastery Merger] Chain Lightning Overload
 
 -- Enhancement (ID: 263)
