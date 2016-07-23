@@ -924,16 +924,20 @@ function x:UpdateAuraSpellFilter(specific)
 
     for id in pairs(x.db.profile.spellFilter.listSpells) do
       local spellID = tonumber(string_match(id, "%d+"))
-
-      updated = true
-      spells[id] = {
-        order = i,
-        name = GetSpellInfo(spellID),
-        desc = "|cffFF0000ID|r |cff798BDD" .. id .. "|r\n",
-        type = 'toggle',
-        get = getSF,
-        set = setSF,
-      }
+      local spellName = GetSpellInfo(spellID)
+      if spellName then
+        updated = true
+        spells[id] = {
+          order = i,
+          name = spellName,
+          desc = "|cffFF0000ID|r |cff798BDD" .. id .. "|r\n",
+          type = 'toggle',
+          get = getSF,
+          set = setSF,
+        }
+	  else
+	    x.db.profile.spellFilter[id] = nil
+      end
     end
 
     if not updated then
@@ -962,11 +966,8 @@ function x:UpdateAuraSpellFilter(specific)
 
     for id in pairs(x.db.profile.spellFilter.listItems) do
       local spellID = tonumber(string_match(id, "%d+"))
-
-	  local name, _, _, _, _, _, _, _, _, texture = GetItemInfo( spellID or id )
-
-	  name = name or "Unknown Item"
-
+      local name, _, _, _, _, _, _, _, _, texture = GetItemInfo(spellID or id)
+      name = name or "Unknown Item"
       updated = true
       spells[id] = {
         order = i,
