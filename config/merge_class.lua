@@ -396,6 +396,7 @@ addon.merges[132467]    = CreateMergeSpellEntry("MONK", 1.5, 0)             -- T
 addon.merges[132463]    = CreateMergeSpellEntry("MONK", 2.5, 0)             -- Talent: Chi Wave (Healing)
 addon.merges[148187]    = CreateMergeSpellEntry("MONK", 1.5, 0)             -- Talent: Rushing Jade Wind
 addon.merges[107270]    = CreateMergeSpellEntry("MONK", 1.5, 0)             -- Spinning Crane Kick
+addon.merges[100784]    = CreateMergeSpellEntry("MONK", 1.0, 0)             -- Blackout Kick
 
 -- Brewmaster (ID: 268)
 addon.merges[124507]    = CreateMergeSpellEntry("MONK", 0.5, 268)           -- Gift of the Ox
@@ -411,7 +412,6 @@ addon.merge2h[178173]   = 124507                                            -- [
 
 -- Windwalker (ID: 269)
 addon.merges[117418]    = CreateMergeSpellEntry("MONK", 1.5, 269)           -- Fists of Fury
-addon.merges[100784]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Blackout Kick (SEF)
 addon.merges[100780]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Tiger Palm (SEF)
 addon.merges[185099]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Rising Sun Kick (SEF)
 addon.merges[196748]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Talent: Chi Orbit
@@ -433,6 +433,7 @@ addon.merges[198756]    = CreateMergeSpellEntry("MONK", 2.5, 270)           -- T
 addon.merges[199668]    = CreateMergeSpellEntry("MONK", 2.0, 270)           -- Artifact: Blessing of Yu'lon
 addon.merges[199656]    = CreateMergeSpellEntry("MONK", 2.0, 270)           -- Artifact: Celestial Breath
 addon.merge2h[198533]   = 115175                                            -- [Statue Merger] Talent: Jade Serpent Statue
+addon.merge2h[228649]   = 100784                                            -- [Passive Merger] Teachings of the Monastery
 
 
 
