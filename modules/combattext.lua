@@ -107,7 +107,7 @@ function x:UpdateCombatTextEvents(enable)
 
   if enable then
     -- Enabled Combat Text
-    f:RegisterEvent("COMBAT_TEXT_UPDATE")
+    --f:RegisterEvent("COMBAT_TEXT_UPDATE")
     f:RegisterEvent("UNIT_HEALTH")
     f:RegisterEvent("UNIT_POWER")
     f:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -1986,6 +1986,35 @@ local CombatEventHandlers = {
 			print("xCT Needs Some Help: unhandled _DAMAGE event", args.event)
 		end
 	end,
+
+	["DamageIncoming"] = function (args)
+		local outputFrame, message = "damage"
+
+		-- Format Criticals and also abbreviate values
+		if args.critical then
+			message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix,
+			                               x:Abbreviate(-args.amount, "critical"),
+			                               x.db.profile.frames["critical"].critPostfix)
+		else
+			message = x:Abbreviate(-args.amount, outputFrame)
+		end
+
+		-- Add Source Name
+		if args.prefix == "ENVIRONMENTAL" then
+			message = message .. " |cffFFFFFF<"..args.spellName..">|r"
+		else
+			message = message .. " |cffFFFFFF<"..args.sourceName..">|r"
+		end
+
+		-- Add Icons
+		message = x:GetSpellTextureFormatted(args.spellId,
+		                                     message,
+		    x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+		    x.db.profile.frames[outputFrame].fontJustify)
+
+		print(message)
+		x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(args.spellSchool))
+	end,
 }
 
 function x.CombatLogEvent (args)
@@ -2003,11 +2032,11 @@ function x.CombatLogEvent (args)
 	end
 
 	-- Is the destination someone we care about?
-	if args.atPlayer or args:IsDestinationMyPet() or args:IsDestinationMyVehicle() then
+	if args.atPlayer or args:IsDestinationMyVehicle() then
 		if args.suffix == "_HEAL" then
 
 		elseif args.suffix == "_DAMAGE" then
-
+			CombatEventHandlers.DamageIncoming(args)
 		end
 	end
 end

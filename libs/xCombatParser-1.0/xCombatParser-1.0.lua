@@ -158,7 +158,7 @@ do
 	private.frame:RegisterEvent"PLAYER_ENTERING_WORLD"
 
 	-- Localize Auto Attack
-	local AUTO_ATTACK=GetSpellInfo(6603)
+	local ENVIRONMENT_SUBHEADER,AUTO_ATTACK=ENVIRONMENT_SUBHEADER,GetSpellInfo(6603)
 
 	-- Localize Environmental Damage
 	local ENVIRONMENTAL_TYPES = {
@@ -263,7 +263,7 @@ do
 			elseif prefix == "ENVIRONMENTAL" then
 				local environmentalType = select(1, ...)
 				args.environmentalType = environmentalType
-
+				args.sourceName = ENVIRONMENT_SUBHEADER
 				-- Fake out some spell things for icons and names
 				args.spellId, args.spellName, args.spellSchool = ENVIRONMENTAL_FAKE_IDS[environmentalType],
 				ENVIRONMENTAL_TYPES[environmentalType], ENVIRONMENTAL_FAKE_SPELLSCHOOL[environmentalType]
