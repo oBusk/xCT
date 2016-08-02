@@ -21,6 +21,9 @@ local x = addon.engine
 local _, _G, sformat, mfloor, mabs, ssub, smatch, sgsub, s_upper, s_lower, string, tinsert, tremove, ipairs, pairs, print, tostring, tonumber, select, unpack =
   nil, _G, string.format, math.floor, math.abs, string.sub, string.match, string.gsub, string.upper, string.lower, string, table.insert, table.remove, ipairs, pairs, print, tostring, tonumber, select, unpack
 
+local xCP = LibStub and LibStub("xCombatParser-1.0", true)
+if not xCP then print("Something went wrong when xCT+ tried to load. Please resintall and inform the author.") end
+
 --[=====================================================[
  Holds cached spells, buffs, and debuffs
 --]=====================================================]
@@ -104,7 +107,7 @@ function x:UpdateCombatTextEvents(enable)
 
   if enable then
     -- Enabled Combat Text
-    f:RegisterEvent("COMBAT_TEXT_UPDATE")
+    --f:RegisterEvent("COMBAT_TEXT_UPDATE")
     f:RegisterEvent("UNIT_HEALTH")
     f:RegisterEvent("UNIT_POWER")
     f:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -125,7 +128,7 @@ function x:UpdateCombatTextEvents(enable)
     f:RegisterEvent("CHAT_MSG_MONEY")
 
     -- damage and healing
-    f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    --f:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
     -- Class combo points
     f:RegisterEvent("UNIT_AURA")
@@ -1397,6 +1400,9 @@ x.events = {
 --[=====================================================[
  Event handlers - Combat Log Unfiltered Events
 --]=====================================================]
+
+-- TODO: remove this lol
+
 x.outgoing_events = {
   ["SPELL_PERIODIC_HEAL"] = function(...)
       if not ShowHealing() or not ShowHots() then return end
@@ -1794,3 +1800,244 @@ x.outgoing_events = {
       x:AddMessage(outputFrame, message, outputColor)
     end,
 }
+
+
+
+
+--[[
+
+		if not ShowDamage() then return end
+
+      local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(1, ...)
+      local merged, outputFrame, color = false, critical and "critical" or "outgoing", GetCustomSpellColorFromIndex(spellSchool)
+
+      -- Keep track of spells that go by
+      if TrackSpells() then x.spellCache.spells[spellID] = true end
+
+      -- Filters: Specific Spell, or Amount
+      if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
+
+      -- Condensed Critical Merge
+      if IsMerged(spellID) then
+        merged = true
+        if critical then
+          if MergeCriticalsByThemselves() then
+            x:AddSpamMessage(outputFrame, spellID, amount, color)
+            return
+          elseif MergeCriticalsWithOutgoing() then
+            x:AddSpamMessage("outgoing", spellID, amount, color)
+          elseif MergeHideMergedCriticals() then
+            x:AddSpamMessage("outgoing", spellID, amount, color)
+            return
+          end
+        else
+          x:AddSpamMessage(outputFrame, spellID, amount, color)
+          return
+        end
+      end
+
+      xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool )
+]]
+
+local CombatEventHandlers = {
+	["HealingOutgoing"] = function (args)
+		local spellID, isHoT, merged = args.spellId, args.prefix == "SPELL_PERIODIC"
+
+		-- Keep track of spells that go by
+		if TrackSpells() then x.spellCache.spells[spellID] = true end
+
+		if not ShowHealing() then return end
+
+		-- Check to see if this is a HoT
+		if isHoT and not ShowHots() then return end
+
+		-- Filter Ougoing Healing Spell or Amount
+		if IsSpellFiltered(args.spellID) or FilterOutgoingHealing(args.amount) then return end
+
+		-- Filter Overhealing
+		local amount = args.amount
+		if not ShowOverHealing() then
+			amount = amount - args.overhealing
+			if amount < 1 then
+				return
+			end
+		end
+
+		-- Figure out which frame and color to output
+		local outputFrame, outputColor, critical = "outgoing", "healingOut", args.critical
+		if critical then
+			outputFrame = "critical"
+			outputColor = "healingOutCritical"
+		end
+
+		-- HoTs only have one color
+		if isHoT then outputColor = "healingOutPeriodic"end
+
+		-- Condensed Critical Merge
+		if IsMerged(spellID) then
+			merged = true
+			if critical then
+				if MergeCriticalsByThemselves() then
+					x:AddSpamMessage(outputFrame, spellID, amount, outputColor)
+					return
+				elseif MergeCriticalsWithOutgoing() then
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+				elseif MergeHideMergedCriticals() then
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+					return
+				end
+			else
+				x:AddSpamMessage(outputFrame, spellID, amount, outputColor)
+				return
+			end
+		end
+
+		if args.event == "SPELL_PERIODIC_HEAL" then
+			xCTFormat:SPELL_PERIODIC_HEAL(outputFrame, spellID, amount, critical, merged)
+		elseif args.event == "SPELL_HEAL" then
+			xCTFormat:SPELL_HEAL(outputFrame, spellID, amount, critical, merged)
+		else
+			print("xCT Needs Some Help: unhandled _HEAL event", args.event)
+		end
+	end,
+
+	["DamageOutgoing"] = function (args)
+		local critical, spellID, amount, merged = args.critical, args.spellId, args.amount
+		local isEnvironmental, isSwing, isAutoShot, isDoT = args.prefix == "ENVIRONMENTAL", args.prefix == "SWING", spellID == 75, args.prefix == "SPELL_PERIODIC"
+		local outputFrame, outputColor = "outgoing", GetCustomSpellColorFromIndex(args.spellSchool or 1)
+
+		-- Keep track of spells that go by (Don't track Swings or Environmental damage)
+		if not isEnvironmental and not isSwing and TrackSpells() then x.spellCache.spells[spellID] = true end
+
+		if not ShowDamage() then return end
+		if isSwing and not args:IsSourceMyPet() and not args:IsSourceMyVehicle() and not ShowAutoAttack() then return end
+
+		-- Filter Outgoing Damage
+		if FilterOutgoingDamage(amount) then return end
+
+		-- Check to see if my pet is doing things
+		if args:IsSourceMyPet() then
+			if not ShowPetDamage() then return end
+			spellID = 0 -- this will get fixed later
+			critical = nil -- stupid spam fix for hunter pets
+		end
+
+		if args:IsSourceMyVehicle() then
+			-- TODO: Add Vehicle things here
+		end
+
+		-- Check for Critical Swings
+		if critical then
+			if (isSwing or isAutoShot) and ShowSwingCrit() then
+				outputFrame = "critical"
+			elseif not isSwing and not isAutoShot then
+				outputFrame = "critical"
+			end
+		end
+
+		if (isSwing or isAutoShot) and MergeMeleeSwings() then
+			merged = true
+			if outputFrame == "critical" then
+				if MergeCriticalsByThemselves() then
+					x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
+					return
+				elseif MergeCriticalsWithOutgoing() then
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6)
+				elseif MergeHideMergedCriticals() then
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6)
+					return
+				end
+			else
+				x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
+				return
+			end
+		elseif not isSwing and not isAutoShot and IsMerged(spellID) then
+			merged = true
+			if critical then
+				if MergeCriticalsByThemselves() then
+					x:AddSpamMessage(outputFrame, spellID, amount, outputColor)
+					return
+				elseif MergeCriticalsWithOutgoing() then
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+				elseif MergeHideMergedCriticals() then
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+					return
+				end
+			else
+				x:AddSpamMessage(outputFrame, spellID, amount, outputColor)
+				return
+			end
+		end
+
+
+		if args.event == "SWING_DAMAGE" then
+			xCTFormat:SWING_DAMAGE(outputFrame, spellID, amount, critical, merged)
+
+		elseif args.event == "RANGE_DAMAGE" then
+			xCTFormat:RANGE_DAMAGE(outputFrame, spellID, amount, critical, merged, isAutoShot)
+
+		elseif args.event == "SPELL_DAMAGE" then
+			xCTFormat:SPELL_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool)
+
+		elseif args.event == "SPELL_PERIODIC_DAMAGE" then
+			xCTFormat:SPELL_PERIODIC_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool)
+
+		else
+			print("xCT Needs Some Help: unhandled _DAMAGE event", args.event)
+		end
+	end,
+
+	["DamageIncoming"] = function (args)
+		local outputFrame, message = "damage"
+
+		-- Format Criticals and also abbreviate values
+		if args.critical then
+			message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix,
+			                               x:Abbreviate(-args.amount, "critical"),
+			                               x.db.profile.frames["critical"].critPostfix)
+		else
+			message = x:Abbreviate(-args.amount, outputFrame)
+		end
+
+		-- Add Source Name
+		if args.prefix == "ENVIRONMENTAL" then
+			message = message .. " |cffFFFFFF<"..args.spellName..">|r"
+		else
+			message = message .. " |cffFFFFFF<"..args.sourceName..">|r"
+		end
+
+		-- Add Icons
+		message = x:GetSpellTextureFormatted(args.spellId,
+		                                     message,
+		    x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+		    x.db.profile.frames[outputFrame].fontJustify)
+
+		print(message)
+		x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(args.spellSchool))
+	end,
+}
+
+function x.CombatLogEvent (args)
+	--print("Combat Event!", args.event)
+
+	-- Is the source someone we care about?
+	if args.isPlayer or ShowPetDamage() and args:IsSourceMyPet() or args:IsSourceMyVehicle() then
+		if args.suffix == "_HEAL" then
+			CombatEventHandlers.HealingOutgoing(args)
+
+		elseif args.suffix == "_DAMAGE" then
+			CombatEventHandlers.DamageOutgoing(args)
+
+		end
+	end
+
+	-- Is the destination someone we care about?
+	if args.atPlayer or args:IsDestinationMyVehicle() then
+		if args.suffix == "_HEAL" then
+
+		elseif args.suffix == "_DAMAGE" then
+			CombatEventHandlers.DamageIncoming(args)
+		end
+	end
+end
+xCP:RegisterCombat(x.CombatLogEvent)

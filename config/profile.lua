@@ -359,6 +359,10 @@ addon.defaults = {
           },
         },
 
+      -- icons
+        ["iconsEnabled"] = true,
+        ["iconsSize"] = 16,
+
       -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
@@ -402,6 +406,10 @@ addon.defaults = {
           ['healingTakenPeriodic'] = { enabled = false, desc = "Periodic Healing", default = { 0.10, 0.50, 0.10 } },
           ['healingTakenPeriodicCritical'] = { enabled = false, desc = "Critical Periodic Healing", default = { 0.10, 0.50, 0.10 } },
         },
+
+      -- icons
+        ["iconsEnabled"] = true,
+        ["iconsSize"] = 16,
 
       -- scrollable
         ["enableScrollable"] = false,

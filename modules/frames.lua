@@ -878,7 +878,7 @@ local function GetRandomSpellID()
 	repeat
 		spellID = random(100, 80000)
 		icon = select(3, GetSpellInfo(spellID))
-	until icon and icon ~= "Interface\\Icons\\Trade_Engineering"
+	until icon and icon ~= 136243
 	return spellID
 end
 
