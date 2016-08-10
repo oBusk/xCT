@@ -399,6 +399,8 @@ addon.merges[107270]    = CreateMergeSpellEntry("MONK", 1.5, 0)             -- S
 addon.merges[100784]    = CreateMergeSpellEntry("MONK", 1.0, 0)             -- Blackout Kick
 
 -- Brewmaster (ID: 268)
+addon.merges[124255]    = CreateMergeSpellEntry("MONK", 1.5, 268)           -- DmgTkn: Stagger
+addon.merges[216521]    = CreateMergeSpellEntry("MONK", 1.0, 268)           -- Celestial Fortune
 addon.merges[124507]    = CreateMergeSpellEntry("MONK", 0.5, 268)           -- Gift of the Ox
 addon.merges[115181]    = CreateMergeSpellEntry("MONK", 0.5, 268)           -- Breath of Fire
 addon.merges[121253]    = CreateMergeSpellEntry("MONK", 0.5, 268)           -- Keg Smash
