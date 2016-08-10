@@ -2000,7 +2000,7 @@ local CombatEventHandlers = {
 		end
 
 		-- Add Source Name
-		if args.prefix == "ENVIRONMENTAL" then
+		if args.prefix == "ENVIRONMENTAL" or args.sourceName == UNKNOWN then
 			message = message .. " |cffFFFFFF<"..args.spellName..">|r"
 		else
 			message = message .. " |cffFFFFFF<"..args.sourceName..">|r"
@@ -2012,8 +2012,52 @@ local CombatEventHandlers = {
 		    x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
 		    x.db.profile.frames[outputFrame].fontJustify)
 
-		print(message)
+
+		--print(message)
 		x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(args.spellSchool))
+	end,
+
+	["HealingIncoming"] = function (args)
+		local amount, isHoT = args.amount, args.prefix == "SPELL_PERIODIC"
+		local color = isHoT and "healingTakenPeriodic" or args.critical and "healingTakenCritical" or "healingTaken"
+		if FilterIncomingHealing(amount) then return end
+
+		if ShowOnlyMyHeals() and not args.isPlayer then
+			if ShowOnlyMyPetsHeals() and args:IsSourceMyPet() then
+				-- If its the pet, then continue
+			else
+				return
+			end
+		end
+
+		-- format_gain = "+%s"
+
+		local healer_name, message = args.sourceName, sformat(format_gain, x:Abbreviate(amount,"healing"))
+
+		if not ShowHealingRealmNames() then
+			healer_name = smatch(healer_name, format_remove_realm) or healer_name
+		end
+
+
+		if MergeIncomingHealing() then
+			x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
+		else
+			if ShowFriendlyNames() then
+				if ShowColoredFriendlyNames() and args:IsSourceRaidMember() then
+					local _, class = UnitClass(healer_name)
+					if (class) then
+						healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
+					end
+				end
+
+				if x.db.profile.frames["healing"].fontJustify == "LEFT" then
+					message = message .. " " .. healer_name
+				else
+					message = healer_name .. " " .. message
+				end
+			end
+			x:AddMessage("healing", message, color)
+		end
 	end,
 }
 
@@ -2034,7 +2078,7 @@ function x.CombatLogEvent (args)
 	-- Is the destination someone we care about?
 	if args.atPlayer or args:IsDestinationMyVehicle() then
 		if args.suffix == "_HEAL" then
-
+			CombatEventHandlers.HealingIncoming(args)
 		elseif args.suffix == "_DAMAGE" then
 			CombatEventHandlers.DamageIncoming(args)
 		end
