@@ -205,6 +205,9 @@ do
 	                                            destRaidFlags,
 	                                            ...)
 
+	-- COMBAT_LOG_EVENT_UNFILTERED 1470787329.392 SPELL_DAMAGE true  nil 1297 0 Player-58-071885E0 Dandraffbal 1297 0
+
+
 		if frameEvent == "COMBAT_LOG_EVENT_UNFILTERED" then
 			local i, args = 1, private.create()
 
@@ -213,11 +216,11 @@ do
 			args.event = event                              -- 2
 			args.hideCaster = hideCaster                    -- 3
 			args.sourceGUID = sourceGUID                    -- 4
-			args.sourceName = sourceName                    -- 5
+			args.sourceName = sourceName or UNKNOWN         -- 5
 			args.sourceFlags = sourceFlags                  -- 6
 			args.sourceRaidFlags = sourceRaidFlags          -- 7
 			args.destGUID = destGUID                        -- 8
-			args.destName = destName                        -- 9
+			args.destName = destName or UNKNOWN             -- 9
 			args.destFlags = destFlags                      -- 10
 			args.destRaidFlags = destRaidFlags              -- 11
 
@@ -263,6 +266,7 @@ do
 			elseif prefix == "ENVIRONMENTAL" then
 				local environmentalType = select(1, ...)
 				args.environmentalType = environmentalType
+
 				args.sourceName = ENVIRONMENT_SUBHEADER
 				-- Fake out some spell things for icons and names
 				args.spellId, args.spellName, args.spellSchool = ENVIRONMENTAL_FAKE_IDS[environmentalType],
@@ -367,6 +371,12 @@ do
 			args.IsDestinationMyPet     = private.IsDestinationMyPet
 			args.IsSourceMyVehicle      = private.IsSourceMyVehicle
 			args.IsDestinationMyVehicle = private.IsDestinationMyVehicle
+
+			-- Raid/Party Member Checks
+			args.IsSourceRaidMember       = private.IsSourceRaidMember
+			args.IsDestinationRaidMember  = private.IsDestinationRaidMember
+			args.IsSourcePartyMember      = private.IsSourcePartyMember
+			args.IsDestinationPartyMember = private.IsDestinationPartyMember
 
 			-- Call all the registered handlers
 			args:pin()
@@ -545,42 +555,6 @@ do
 				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET1) and RAID_TARGET_1 or "NONE"
 		end
 	end
-
-	-- IsSourceMyPet and IsDestinationMyPet
-	do
-		local MY_PET_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE,
-		                             COMBATLOG_OBJECT_REACTION_FRIENDLY,
-		                             COMBATLOG_OBJECT_CONTROL_PLAYER,
-		                             COMBATLOG_OBJECT_TYPE_PET)
-
-		function private.IsSourceMyPet (args)
-			flags = args.sourceFlags
-			return hasFlag(flags, MY_PET_FLAGS)
-		end
-
-		function private.IsDestinationMyPet (args)
-			flags = args.destFlags
-			return hasFlag(flags, MY_PET_FLAGS)
-		end
-	end
-
-	-- IsSourceMyVehicle and IsDestinationMyVehicle
-	do
-		local MY_VEHICLE_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE,
-		                                 COMBATLOG_OBJECT_REACTION_FRIENDLY,
-		                                 COMBATLOG_OBJECT_CONTROL_PLAYER,
-		                                 COMBATLOG_OBJECT_TYPE_GUARDIAN)
-
-		function private.IsSourceMyVehicle (args)
-			flags = args.sourceFlags
-			return hasFlag(flags, MY_VEHICLE_FLAGS)
-		end
-
-		function private.IsDestinationMyVehicle (args)
-			flags = args.destFlags
-			return hasFlag(flags, MY_VEHICLE_FLAGS)
-		end
-	end
 end
 
 -- Functions that do not require Flags
@@ -646,5 +620,69 @@ do
 
 	function private.DestinationIsTarget (args)
 		return hasFlag(args.destFlags, COMBATLOG_OBJECT_TARGET)
+	end
+end
+
+-- IsSourceMyPet and IsDestinationMyPet
+do
+	local MY_PET_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE,
+	                             COMBATLOG_OBJECT_REACTION_FRIENDLY,
+	                             COMBATLOG_OBJECT_CONTROL_PLAYER,
+	                             COMBATLOG_OBJECT_TYPE_PET)
+
+	function private.IsSourceMyPet (args)
+		return hasFlag(args.sourceFlags, MY_PET_FLAGS)
+	end
+
+	function private.IsDestinationMyPet (args)
+		return hasFlag(args.destFlags, MY_PET_FLAGS)
+	end
+end
+
+-- IsSourceMyVehicle and IsDestinationMyVehicle
+do
+	local MY_VEHICLE_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE,
+	                                 COMBATLOG_OBJECT_REACTION_FRIENDLY,
+	                                 COMBATLOG_OBJECT_CONTROL_PLAYER,
+	                                 COMBATLOG_OBJECT_TYPE_GUARDIAN)
+
+	function private.IsSourceMyVehicle (args)
+		return hasFlag(args.sourceFlags, MY_VEHICLE_FLAGS)
+	end
+
+	function private.IsDestinationMyVehicle (args)
+		return hasFlag(args.destFlags, MY_VEHICLE_FLAGS)
+	end
+end
+
+-- IsSourceRaidMember IsDestinationRaidMember
+do
+	local MY_RAID_MEMBER = bit.bor(COMBATLOG_OBJECT_AFFILIATION_RAID,
+	                               COMBATLOG_OBJECT_REACTION_FRIENDLY,
+	                               COMBATLOG_OBJECT_CONTROL_PLAYER,
+	                               COMBATLOG_OBJECT_TYPE_PLAYER)
+
+	function private.IsSourceRaidMember (args)
+		return hasFlag(args.sourceFlags, MY_RAID_MEMBER)
+	end
+
+	function private.IsDestinationRaidMember (args)
+		return hasFlag(args.destFlags, MY_RAID_MEMBER)
+	end
+end
+
+-- IsSourcePartyMember IsDestinationPartyMember
+do
+	local MY_PARTY_MEMBER = bit.bor(COMBATLOG_OBJECT_AFFILIATION_PARTY,
+	                                COMBATLOG_OBJECT_REACTION_FRIENDLY,
+	                                COMBATLOG_OBJECT_CONTROL_PLAYER,
+	                                COMBATLOG_OBJECT_TYPE_PLAYER)
+
+	function private.IsSourcePartyMember (args)
+		return hasFlag(args.sourceFlags, MY_RAID_MEMBER)
+	end
+
+	function private.IsDestinationPartyMember (args)
+		return hasFlag(args.destFlags, MY_RAID_MEMBER)
 	end
 end
