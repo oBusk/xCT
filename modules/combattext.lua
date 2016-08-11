@@ -2018,7 +2018,7 @@ local CombatEventHandlers = {
 	end,
 
 	["HealingIncoming"] = function (args)
-		local amount, isHoT = args.amount, args.prefix == "SPELL_PERIODIC"
+		local amount, isHoT, spellID = args.amount, args.prefix == "SPELL_PERIODIC", args.spellId
 		local color = isHoT and "healingTakenPeriodic" or args.critical and "healingTakenCritical" or "healingTaken"
 		if FilterIncomingHealing(amount) then return end
 
@@ -2031,19 +2031,17 @@ local CombatEventHandlers = {
 		end
 
 		-- format_gain = "+%s"
-
 		local healer_name, message = args.sourceName, sformat(format_gain, x:Abbreviate(amount,"healing"))
 
 		if not ShowHealingRealmNames() then
 			healer_name = smatch(healer_name, format_remove_realm) or healer_name
 		end
 
-
 		if MergeIncomingHealing() then
 			x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
 		else
 			if ShowFriendlyNames() then
-				if ShowColoredFriendlyNames() and args:IsSourceRaidMember() then
+				if ShowColoredFriendlyNames() and args:IsSourceRaidMember() or args:IsSourcePartyMember() then
 					local _, class = UnitClass(healer_name)
 					if (class) then
 						healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
