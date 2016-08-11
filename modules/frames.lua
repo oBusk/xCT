@@ -218,6 +218,13 @@ function x:UpdateFrames(specificFrame)
 				f:SetTimeVisible(3)
 			end
 
+			if settings.enableFontShadow then
+				f:SetShadowColor(unpack(settings.fontShadowColor))
+				f:SetShadowOffset(settings.fontShadowOffsetX, settings.fontShadowOffsetY)
+			else
+				f:SetShadowColor(0, 0, 0, 0)
+			end
+
 			-- Send a Test message
 			if specificFrame then
 				f:SetScript("OnUpdate", Frame_SendTestMessage_OnUpdate)

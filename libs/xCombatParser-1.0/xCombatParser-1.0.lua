@@ -265,15 +265,13 @@ do
 				i = 4
 			elseif prefix == "ENVIRONMENTAL" then
 				local environmentalType = select(1, ...)
-				args.environmentalType = environmentalType
 
+				args.environmentalType = environmentalType
 				args.sourceName = ENVIRONMENT_SUBHEADER
+
 				-- Fake out some spell things for icons and names
 				args.spellId, args.spellName, args.spellSchool = ENVIRONMENTAL_FAKE_IDS[environmentalType],
 				ENVIRONMENTAL_TYPES[environmentalType], ENVIRONMENTAL_FAKE_SPELLSCHOOL[environmentalType]
-
-				-- TODO: Maybe add
-				-- args.sourceName = ENVIRONMENT_SUBHEADER -- Localized "Environment"
 
 				i = 2
 			elseif prefix == "SWING" then
@@ -392,9 +390,12 @@ do
 	end)
 end
 
-local band = bit.band
-local function hasFlag (flags, flag)
-	return band(flags, flag) == flag
+local hasFlag
+do
+	local band = bit.band
+	function hasFlag (flags, flag)
+		return band(flags, flag) == flag
+	end
 end
 
 -- Functions that require Flags
@@ -679,10 +680,10 @@ do
 	                                COMBATLOG_OBJECT_TYPE_PLAYER)
 
 	function private.IsSourcePartyMember (args)
-		return hasFlag(args.sourceFlags, MY_RAID_MEMBER)
+		return hasFlag(args.sourceFlags, MY_PARTY_MEMBER)
 	end
 
 	function private.IsDestinationPartyMember (args)
-		return hasFlag(args.destFlags, MY_RAID_MEMBER)
+		return hasFlag(args.destFlags, MY_PARTY_MEMBER)
 	end
 end

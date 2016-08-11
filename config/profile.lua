@@ -46,6 +46,7 @@ addon.defaults = {
       fontOutline = "4MONOCHROMEOUTLINE",
 
       -- CVars
+      enableFloatingCombatText = false,
       floatingCombatTextAllSpellMechanics = false,
       floatingCombatTextAuras = false,
       floatingCombatTextCombatDamage = false,
@@ -106,6 +107,12 @@ addon.defaults = {
         ["fontSize"] = 24,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
+
+      -- font shadow
+        ["enableFontShadow"] = false,
+        ["fontShadowColor"] = { 0, 0, 0, 1 },
+        ["fontShadowOffsetX"] = 1,
+        ["fontShadowOffsetY"] = -1,
 
       -- font colors
         colors = {
@@ -199,6 +206,12 @@ addon.defaults = {
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
 
+      -- font shadow
+        ["enableFontShadow"] = false,
+        ["fontShadowColor"] = { 0, 0, 0, 1 },
+        ["fontShadowOffsetX"] = 1,
+        ["fontShadowOffsetY"] = -1,
+
       -- font colors
         colors = {
           ['genericDamage']         = { enabled = false, desc = "Generic Damage",   default = { 1.00, 0.82, 0.00 } },
@@ -271,6 +284,12 @@ addon.defaults = {
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "RIGHT",
 
+      -- font shadow
+        ["enableFontShadow"] = false,
+        ["fontShadowColor"] = { 0, 0, 0, 1 },
+        ["fontShadowOffsetX"] = 1,
+        ["fontShadowOffsetY"] = -1,
+
       -- font colors
         colors = {
           ['genericDamageCritical']  = { enabled = false, desc = "Critical Generic Damage", default = { 1.00, 1.00, 0.00 } },
@@ -326,6 +345,12 @@ addon.defaults = {
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "LEFT",
 
+      -- font shadow
+        ["enableFontShadow"] = false,
+        ["fontShadowColor"] = { 0, 0, 0, 1 },
+        ["fontShadowOffsetX"] = 1,
+        ["fontShadowOffsetY"] = -1,
+
       -- font colors
         colors = {
           ['damageTaken']               = { enabled = false, desc = "Physical Damage",          default = { 0.75, 0.10, 0.10 } },
@@ -358,6 +383,10 @@ addon.defaults = {
             },
           },
         },
+
+      -- critical appearance
+        ["critPrefix"] = "",
+        ["critPostfix"] = "",
 
       -- icons
         ["iconsEnabled"] = true,
@@ -397,6 +426,12 @@ addon.defaults = {
         ["fontSize"] = 18,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "LEFT",
+
+      -- font shadow
+        ["enableFontShadow"] = false,
+        ["fontShadowColor"] = { 0, 0, 0, 1 },
+        ["fontShadowOffsetX"] = 1,
+        ["fontShadowOffsetY"] = -1,
 
       -- font colors
         colors = {
@@ -447,6 +482,12 @@ addon.defaults = {
         ["fontSize"] = 64,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
 
+      -- font shadow
+        ["enableFontShadow"] = false,
+        ["fontShadowColor"] = { 0, 0, 0, 1 },
+        ["fontShadowOffsetX"] = 1,
+        ["fontShadowOffsetY"] = -1,
+
       -- font colors
         colors = {
           ['comboPoints']     = { enabled = false, desc = "Combo Points",     default = { 1.00, 0.82, 0.00 } },
@@ -472,6 +513,12 @@ addon.defaults = {
         ["fontSize"] = 17,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
+
+      -- font shadow
+        ["enableFontShadow"] = false,
+        ["fontShadowColor"] = { 0, 0, 0, 1 },
+        ["fontShadowOffsetX"] = 1,
+        ["fontShadowOffsetY"] = -1,
 
       -- font colors
         -- TODO: Update these ( See http://www.wowinterface.com/forums/showthread.php?t=53140 )
@@ -537,6 +584,12 @@ addon.defaults = {
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
 
+      -- font shadow
+        ["enableFontShadow"] = false,
+        ["fontShadowColor"] = { 0, 0, 0, 1 },
+        ["fontShadowOffsetX"] = 1,
+        ["fontShadowOffsetY"] = -1,
+
       -- font colors
         colors = {
           ['spellProc']     = { enabled = false, desc = "Spell Procs",    default = { 1.00, 0.82, 0.00 } },
@@ -576,6 +629,12 @@ addon.defaults = {
         ["fontSize"] = 25,
         ["fontOutline"] = "4MONOCHROMEOUTLINE",
         ["fontJustify"] = "CENTER",
+
+      -- font shadow
+        ["enableFontShadow"] = false,
+        ["fontShadowColor"] = { 0, 0, 0, 1 },
+        ["fontShadowOffsetX"] = 1,
+        ["fontShadowOffsetY"] = -1,
 
       -- icons
         ["iconsEnabled"] = true,

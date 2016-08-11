@@ -165,6 +165,12 @@ x.cvar_update = function( force )
     end
   end
 
+  if x.db.profile.blizzardFCT.enableFloatingCombatText then
+    SetCVar("enableFloatingCombatText", 1)
+  else
+    SetCVar("enableFloatingCombatText", 0)
+  end
+
   if x.db.profile.blizzardFCT.floatingCombatTextAllSpellMechanics then
     SetCVar("floatingCombatTextAllSpellMechanics", 1)
   else
@@ -339,6 +345,7 @@ local function set2_update(info, value) set2(info, value); x:UpdateFrames(info[#
 local function set2_update_force(info, value) set2(info, value); x:UpdateFrames(info[#info-2]); x.cvar_update(true) end
 local function getColor2(info) return unpack(x.db.profile.frames[info[#info-2]][info[#info]] or blankTable) end
 local function setColor2(info, r, g, b) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b} end
+local function setColor2_alpha(info, r, g, b, a) x.db.profile.frames[info[#info-2]][info[#info]] = {r,g,b,a} end
 local function getTextIn2(info) return string_gsub(x.db.profile.frames[info[#info-2]][info[#info]], "|", "||") end
 local function setTextIn2(info, value) x.db.profile.frames[info[#info-2]][info[#info]] = string_gsub(value, "||", "|") end
 local function getNumber2(info) return tostring(x.db.profile[info[#info-2]][info[#info]]) end
@@ -353,6 +360,7 @@ local function isFrameNotScrollable(info) return isFrameItemDisabled(info) or no
 local function isFrameUseCustomFade(info) return not x.db.profile.frames[info[#info-2]].enableCustomFade or isFrameItemDisabled(info) end
 local function isFrameFadingDisabled(info) return isFrameUseCustomFade(info) or not x.db.profile.frames[info[#info-2]].enableFade end
 local function isFrameIconDisabled(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].iconsEnabled end
+local function isFrameFontShadowDisabled(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].enableFontShadow end
 
 -- This is TEMP
 local function isFrameItemEnabled(info) return x.db.profile.frames[info[#info-2]].enabledFrame end
@@ -1248,16 +1256,42 @@ addon.options.args["FloatingCombatText"] = {
           fontSize = 'large',
         },
 
+        enableFloatingCombatText = {
+          order = 1,
+          name = "Enable Scrolling Combat Text (Self)",
+          type = 'toggle',
+          desc = "Required for a lot of the other events to work.\n\n|cffFF0000Requires a UI Reload!|r",
+          width = 'double',
+          get = get0,
+          set = set0_update,
+        },
+
+        enableFCT_Header = {
+          type = "description",
+          order = 2,
+          name = "|CffFF0000Requires:|r |cff00FF33/reload|r after change",
+          fontSize = 'small',
+          width = 'normal'
+        },
+
+        enableFCT_Spacer = {
+          type = "description",
+          order = 3,
+          name = "\n",
+          fontSize = 'small',
+          width = 'normal'
+        },
+
         -- Damage
         headerDamage = {
           type = "description",
-          order = 1,
+          order = 10,
           name = "|cffFFFF00Damage:|r",
           fontSize = 'medium',
         },
 
         floatingCombatTextCombatDamage = {
-          order = 2,
+          order = 11,
           name = "Show Damage",
           type = 'toggle',
           desc = "Enable this option if you want to see your damage.",
@@ -1266,7 +1300,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextCombatLogPeriodicSpells = {
-          order = 3,
+          order = 12,
           name = "Show DoTs",
           type = 'toggle',
           desc = "Enable this option if you want to see your damage over time.",
@@ -1275,7 +1309,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextCombatDamageAllAutos = {
-          order = 4,
+          order = 13,
           name = "Show Auto Attacks",
           type = 'toggle',
           desc = "Enable this option if you want to see all auto-attack numbers, rather than hiding non-event numbers.",
@@ -1284,7 +1318,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextPetMeleeDamage = {
-          order = 5,
+          order = 14,
           name = "Show Pet Melee",
           type = 'toggle',
           desc = "Enable this option if you want to see pet's melee damage.",
@@ -1293,7 +1327,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextPetSpellDamage = {
-          order = 6,
+          order = 15,
           name = "Show Pet Spells",
           type = 'toggle',
           desc = "Enable this option if you want to see pet's spell damage.",
@@ -1302,7 +1336,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextDamageReduction = {
-          order = 7,
+          order = 16,
           name = "Show Damage Reduction",
           type = 'toggle',
           desc = "New option in Legion. Updating description soon.",
@@ -1313,13 +1347,13 @@ addon.options.args["FloatingCombatText"] = {
         -- Healing and Absorbs
         headerHealingAbsorbs = {
           type = "description",
-          order = 10,
+          order = 20,
           name = "\n|cffFFFF00Healing and Absorbs:|r",
           fontSize = 'medium',
         },
 
         floatingCombatTextCombatHealing = {
-          order = 11,
+          order = 21,
           name = "Show Healing",
           type = 'toggle',
           desc = "Enable this option if you want to see your healing.",
@@ -1328,7 +1362,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextFriendlyHealers = {
-          order = 12,
+          order = 22,
           name = "Show Friendly Healers",
           type = 'toggle',
           desc = "New option in Legion. Updating description soon.",
@@ -1337,7 +1371,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextCombatHealingAbsorbSelf = {
-          order = 13,
+          order = 23,
           name = "Show Absorbs (Self)",
           type = 'toggle',
           desc = "Enable this option if you want to see shields that are put on you.",
@@ -1346,7 +1380,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextCombatHealingAbsorbTarget = {
-          order = 14,
+          order = 24,
           name = "Show Absorbs (Target)",
           type = 'toggle',
           desc = "Enable this option if you want to see shields that are put on your target.",
@@ -1354,17 +1388,16 @@ addon.options.args["FloatingCombatText"] = {
           set = set0_update,
         },
 
-
         -- Gains
         headerGains = {
           type = "description",
-          order = 20,
+          order = 30,
           name = "\n|cffFFFF00Player Gains:|r",
           fontSize = 'medium',
         },
 
         floatingCombatTextEnergyGains = {
-          order = 21,
+          order = 31,
           name = "Show Energy",
           type = 'toggle',
           desc = "Enable this option if you want to see class engery gains.",
@@ -1373,7 +1406,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextPeriodicEnergyGains = {
-          order = 21,
+          order = 31,
           name = "Show Energy (Periodic)",
           type = 'toggle',
           desc = "Enable this option if you want to see class engery gains that happen over time.",
@@ -1382,7 +1415,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextComboPoints = {
-          order = 22,
+          order = 32,
           name = "Show Combo Points",
           type = 'toggle',
           desc = "Enable this option if you want to see combo point gains.",
@@ -1391,7 +1424,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextHonorGains = {
-          order = 23,
+          order = 33,
           name = "Show Honor",
           type = 'toggle',
           desc = "Enable this option if you want to see your honor point gains.",
@@ -1400,7 +1433,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextRepChanges = {
-          order = 24,
+          order = 34,
           name = "Show Rep Changes",
           type = 'toggle',
           desc = "Enable this option if you want to see your reputation gains or losses.",
@@ -1408,17 +1441,16 @@ addon.options.args["FloatingCombatText"] = {
           set = set0_update,
         },
 
-
         -- Status Effects
         headerStatusEffects = {
           type = "description",
-          order = 30,
+          order = 40,
           name = "\n|cffFFFF00Status Effects:|r",
           fontSize = 'medium',
         },
 
         floatingCombatTextDodgeParryMiss = {
-          order = 31,
+          order = 41,
           name = "Show Miss Types",
           type = 'toggle',
           desc = "Enable this option if you want to see misses (dodges, parries, etc).",
@@ -1427,7 +1459,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextAuras = {
-          order = 32,
+          order = 42,
           name = "Show Auras",
           type = 'toggle',
           desc = "New option in Legion. Updating description soon.",
@@ -1436,7 +1468,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextSpellMechanics = {
-          order = 33,
+          order = 43,
           name = "Show Effects (Mine)",
           type = 'toggle',
           desc = "Enable if you want to see your effects (snare, root, etc).",
@@ -1445,7 +1477,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextSpellMechanicsOther = {
-          order = 34,
+          order = 44,
           name = "Show Effects (Group)",
           type = 'toggle',
           desc = "Enable if you want to see other effects (snare, root, etc) from your group.",
@@ -1454,7 +1486,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextAllSpellMechanics = {
-          order = 35,
+          order = 45,
           name = "Show Effects (All)",
           type = 'toggle',
           desc = "Enable if you want to see all effects (snare, root, etc) from anyone.",
@@ -1463,7 +1495,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         CombatThreatChanges = {
-          order = 36,
+          order = 46,
           type = 'toggle',
           name = "Show Threat Changes",
           desc = "Enable this option if you want to see threat changes.",
@@ -1471,17 +1503,16 @@ addon.options.args["FloatingCombatText"] = {
           set = set0_update,
         },
 
-
         -- Player's Status
         headerPlayerStatus = {
           type = "description",
-          order = 40,
+          order = 50,
           name = "\n|cffFFFF00Player Status:|r",
           fontSize = 'medium',
         },
 
         floatingCombatTextCombatState = {
-          order = 41,
+          order = 52,
           name = "Show Combat State",
           type = 'toggle',
           desc = "Enable this option if you want to see when you are leaving and entering combat.",
@@ -1490,7 +1521,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextLowManaHealth = {
-          order = 42,
+          order = 53,
           name = "Show Low HP/Mana",
           type = 'toggle',
           desc = "Enable this option if you want to see when you are low mana and health.",
@@ -1499,7 +1530,7 @@ addon.options.args["FloatingCombatText"] = {
         },
 
         floatingCombatTextReactives = {
-          order = 43,
+          order = 54,
           name = "Show Reactives",
           type = 'toggle',
           desc = "Enable this option if you want to see your spell reactives (Kill Shot, Shadow Word: Death, etc).",
@@ -1540,7 +1571,7 @@ addon.options.args["FloatingCombatText"] = {
           name = "Show Damage",
           type = 'range',
           desc = "The combat text float mode.",
-          
+
           min = 1, max = 100,
           get = get0,
           set = set0_update,
@@ -1606,7 +1637,7 @@ addon.options.args["FloatingCombatText"] = {
           set = set0_update,
         },
 
-        
+
 
         -- Floating Combat Text Effects
         fctSpellMechanics = {
@@ -2210,14 +2241,61 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = get2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 20,
               name = "\n|cff798BDDIcon Size Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 21,
               type = 'toggle',
               name = "Icons",
               desc = "Show icons next to your damage.",
@@ -2226,7 +2304,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
+              order = 22,
               name = "Icon Size",
               desc = "Set the icon size.",
               type = 'range',
@@ -2563,14 +2641,61 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = get2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 20,
               name = "\n|cff798BDDIcon Size Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 21,
               type = 'toggle',
               name = "Icons",
               desc = "Show icons next to your damage.",
@@ -2579,7 +2704,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
+              order = 22,
               name = "Icon Size",
               desc = "Set the icon size.",
               type = 'range',
@@ -2908,14 +3033,61 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = get2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 20,
               name = "\n|cff798BDDIcon Size Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 21,
               type = 'toggle',
               name = "Icons",
               desc = "Show icons next to your damage.",
@@ -2924,7 +3096,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
+              order = 22,
               name = "Icon Size",
               desc = "Set the icon size.",
               type = 'range',
@@ -3230,14 +3402,61 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = get2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 20,
               name = "\n|cff798BDDIcon Size Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 21,
               type = 'toggle',
               name = "Icons",
               desc = "Show icons next to your damage.",
@@ -3246,7 +3465,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
+              order = 22,
               name = "Icon Size",
               desc = "Set the icon size.",
               type = 'range',
@@ -3298,6 +3517,31 @@ addon.options.args["Frames"] = {
               desc = "Formats incoming damage to show how much was absorbed.",
               get = get2,
               set = set2,
+            },
+
+            criticalAppearance = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDCritical Appearance|r:",
+              fontSize = 'large',
+            },
+            critPrefix = {
+              order = 11,
+              type = 'input',
+              name = "Prefix",
+              desc = "Prefix this value to the beginning when displaying a critical amount.",
+              get = getTextIn2,
+              set = setTextIn2,
+              disabled = isFrameItemDisabled,
+            },
+            critPostfix = {
+              order = 12,
+              type = 'input',
+              name = "Postfix",
+              desc = "Postfix this value to the end when displaying a critical amount.",
+              get = getTextIn2,
+              set = setTextIn2,
+              disabled = isFrameItemDisabled,
             },
           },
         },
@@ -3526,14 +3770,61 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = get2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 20,
               name = "\n|cff798BDDIcon Size Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 21,
               type = 'toggle',
               name = "Icons",
               desc = "Show icons next to your damage.",
@@ -3542,7 +3833,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
+              order = 22,
               name = "Icon Size",
               desc = "Set the icon size.",
               type = 'range',
@@ -3765,6 +4056,53 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
               disabled = isFrameItemDisabled,
+            },
+
+            fontShadowSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = get2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
             },
           },
         },
@@ -4007,6 +4345,54 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2_update,
             },
+
+            fontShadowSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = get2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
           },
         },
 
@@ -4380,14 +4766,61 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = get2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 20,
               name = "\n|cff798BDDIcon Size Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 21,
               type = 'toggle',
               name = "Icons",
               desc = "Show icons next to your damage.",
@@ -4396,7 +4829,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
+              order = 22,
               name = "Icon Size",
               desc = "Set the icon size.",
               type = 'range',
@@ -4639,14 +5072,61 @@ addon.options.args["Frames"] = {
               set = set2_update,
             },
 
-            iconSizeSettings = {
+            fontShadowSettings = {
               type = 'description',
               order = 10,
+              name = "\n|cff798BDDFont Shadow Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableFontShadow = {
+              order = 11,
+              type = 'toggle',
+              name = "Enable Font Shadow",
+              desc = "Shows a shadow behind the combat text fonts.",
+              get = get2,
+              set = set2_update,
+              disabled = isFrameItemDisabled,
+            },
+
+            fontShadowColor = {
+              order = 12,
+              type = 'color',
+              hasAlpha = true,
+              name = "Font Shadow Color",
+              get = get2,
+              set = setColor2_alpha,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetX = {
+              order = 13,
+              name = "Horizonal Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            fontShadowOffsetY = {
+              order = 14,
+              name = "Vertical Offset",
+              type = 'range',
+              min = -10, max = 10, step = 1,
+              get = get2,
+              set = set2_update,
+              disabled = isFrameFontShadowDisabled,
+            },
+
+            iconSizeSettings = {
+              type = 'description',
+              order = 20,
               name = "\n|cff798BDDIcon Size Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 11,
+              order = 21,
               type = 'toggle',
               name = "Icons",
               desc = "Show icons next to your damage.",
@@ -4655,7 +5135,7 @@ addon.options.args["Frames"] = {
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 12,
+              order = 22,
               name = "Icon Size",
               desc = "Set the icon size.",
               type = 'range',
