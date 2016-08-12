@@ -3491,6 +3491,240 @@ addon.options.args["Frames"] = {
           },
         },
 
+        names = {
+          order = 20,
+          type = 'group',
+          name = "Name Settings",
+          args = {
+            namesDescription = {
+              type = 'description',
+              order = 1,
+              name = "The |cffFFFF00Names Settings|r allows you to further format and customize your combat text frames. By selecting values from below, you will be able to see the source, destination or spell names of certain events.\n\n|cffFF8040NOTE:|r The |cffFFFF00Spam Merger|r will preempt formatting.\n",
+              fontSize = 'small'
+            },
+
+            nameAppearance = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDName Appearance|r:",
+              fontSize = 'large',
+            },
+
+            namePrefix = {
+              order = 11,
+              type = 'input',
+              name = "Prefix",
+              desc = "Prefix this value to the beginning when displaying the name.",
+              get = getTextIn2,
+              set = setTextIn2,
+            },
+
+            namePostfix = {
+              order = 12,
+              type = 'input',
+              name = "Postfix",
+              desc = "Postfix this value to the end when displaying the name.",
+              get = getTextIn2,
+              set = setTextIn2,
+            },
+
+            playerNames = {
+              type = 'description',
+              order = 20,
+              name = "\n|cff798BDDEvents from a Player|r:",
+              fontSize = 'large',
+            },
+
+            namePlayerColorPlayerName = {
+              order = 21,
+              type = 'toggle',
+              name = "Color Player Name",
+              desc = "If the player's class is known (e.g. is a raid member), it will be colored.",
+              get = get2,
+              set = set2,
+            },
+
+            namePlayerColorPlayerNameCustom = {
+              order = 22,
+              type = 'toggle',
+              name = "Custom Color",
+              get = get2,
+              set = set2,
+            },
+
+            namePlayerColorPlayerNameColor = {
+              order = 23,
+              type = 'color',
+              name = "Color",
+              width = 'half',
+              get = getColor2,
+              set = setColor2
+            },
+
+            playerNames_Spacer1 = {
+              type = 'description',
+              order = 24,
+              name = "",
+            },
+
+            namePlayerColorSpellName = {
+              order = 25,
+              type = 'toggle',
+              name = "Color Spell Name",
+              desc = "The spell name will be colored according to it's spell school.",
+              get = get2,
+              set = set2,
+            },
+
+            namePlayerColorSpellNameCustom = {
+              order = 26,
+              type = 'toggle',
+              name = "Custom Color",
+              get = get2,
+              set = set2,
+            },
+
+            namePlayerColorSpellNameColor = {
+              order = 27,
+              type = 'color',
+              name = "Color",
+              width = 'half',
+              get = getColor2,
+              set = setColor2
+            },
+
+            playerNames_Spacer2 = {
+              type = 'description',
+              order = 28,
+              name = "",
+            },
+
+            namePlayerType = {
+              type = 'select',
+              order = 29,
+              name = "Display Player Name",
+              desc = "",
+              width = 'double',
+              style = 'radio',
+              values = {
+                [0] = "None",
+                [1] = "Player Name",
+                [2] = "Spell Name",
+                [3] = "Both (Player Name - Spell Name)",
+                [4] = "Both (Spell Name - Player Name)"
+              },
+              get = get2,
+              set = set2,
+            },
+
+            npcNames = {
+              type = 'description',
+              order = 30,
+              name = "\n|cff798BDDEvents from a NPC|r:",
+              fontSize = 'large',
+            },
+
+            nameNpcColorNpcNameColor = {
+              order = 33,
+              type = 'color',
+              name = "NPC Name's Color",
+              width = 'double',
+              get = getColor2,
+              set = setColor2
+            },
+
+            playerNames_Spacer1 = {
+              type = 'description',
+              order = 34,
+              name = "",
+            },
+
+            nameNpcColorSpellName = {
+              order = 35,
+              type = 'toggle',
+              name = "Color Spell Name",
+              desc = "The spell name will be colored according to it's spell school.",
+              get = get2,
+              set = set2,
+            },
+
+            nameNpcColorSpellNameCustom = {
+              order = 36,
+              type = 'toggle',
+              name = "Custom Color",
+              get = get2,
+              set = set2,
+            },
+
+            nameNpcColorSpellNameColor = {
+              order = 37,
+              type = 'color',
+              name = "Color",
+              width = 'half',
+              get = getColor2,
+              set = setColor2
+            },
+
+            playerNames_Spacer2 = {
+              type = 'description',
+              order = 38,
+              name = "",
+            },
+
+
+
+            nameNpcType = {
+              type = 'select',
+              order = 39,
+              name = "Display NPC Name",
+              desc = "",
+              width = 'double',
+              style = 'radio',
+              values = {
+                [0] = "None",
+                [1] = "NPC's Name",
+                [2] = "Spell Name",
+                [3] = "Both (NPC Name - Spell Name)",
+                [4] = "Both (Spell Name - NPC Name)"
+              },
+              get = get2,
+              set = set2,
+            },
+
+            environmentNames = {
+              type = 'description',
+              order = 40,
+              name = "\n|cff798BDDEvents from the Environment|r:",
+              fontSize = 'large',
+            },
+
+            nameEnvironmentType = {
+              type = 'select',
+              order = 41,
+              name = "Display Environment Name",
+              desc = "Environment Damage Types:"..
+                "\n|cffFFFF00"..ACTION_ENVIRONMENTAL_DAMAGE_DROWNING.."|r,"..
+                " |cffFFFF00"..ACTION_ENVIRONMENTAL_DAMAGE_FALLING.."|r,"..
+                " |cffFFFF00"..ACTION_ENVIRONMENTAL_DAMAGE_FATIGUE.."|r,"..
+                "\n|cffFF8000"..ACTION_ENVIRONMENTAL_DAMAGE_FIRE.."|r,"..
+                " |cffFF8000"..ACTION_ENVIRONMENTAL_DAMAGE_LAVA.."|r,"..
+                " |cff4DFF4D"..ACTION_ENVIRONMENTAL_DAMAGE_SLIME.."|r",
+              width = 'double',
+              style = 'radio',
+              values = {
+                [0] = "None",
+                [1] = "\"Environment\"",
+                [2] = "Environmental Damage Type",
+                [3] = "Both (\"Environment\" - Type)",
+                [4] = "Both (Type - \"Environment\")"
+              },
+              get = get2,
+              set = set2,
+            },
+
+          }
+        },
+
         specialTweaks = {
           order = 40,
           name = "Special Tweaks",
