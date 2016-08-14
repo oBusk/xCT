@@ -363,7 +363,7 @@ function x:AddMessage(framename, message, colorname)
 	end
 end
 
-local spamHeap, spamStack = {}, {}
+local spamHeap, spamStack, now = {}, {}, 0
 local spam_format = "%s%s x%s"
 
 -- =====================================================
@@ -381,7 +381,7 @@ local spam_format = "%s%s x%s"
 --	)
 --		Sends a message to the framename specified.
 -- =====================================================
-function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
+function x:AddSpamMessage(framename, mergeID, message, colorname, interval, prep)
 
 	-- Check for a Secondary Spell ID
 	mergeID = addon.merge2h[mergeID] or mergeID
@@ -390,13 +390,19 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval)
 	if heap[mergeID] then
 		heap[mergeID].color = colorname
 		table_insert(heap[mergeID].entries, message)
+
+		if heap[mergeID].last + heap[mergeID].update <= now then
+			heap[mergeID].last = now
+		end
 	else
 		heap[mergeID] = {
 			-- last update
-			last = 0,
+			last = now,
 
 			-- how often to update
 			update = interval or (x.db.profile.spells.merge[mergeID] and x.db.profile.spells.merge[mergeID].interval or 3),
+
+			prep = prep or interval or x.db.profile.spells.merge[mergeID].prep or 3,
 
 			-- entries to merge
 			entries = {
@@ -462,7 +468,6 @@ do
 
 	local index = 1
 	local frames = {}
-	local now = 0
 
 	function x.OnSpamUpdate(self, elapsed)
 		if not x.db then return end

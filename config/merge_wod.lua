@@ -27,7 +27,7 @@ local function CreateMergeSpellEntry(class, interval, desc, prep)
   return {
          class = class      or "ITEM",
       interval = interval   or 3,
-          prep = prep       or 0,
+          prep = prep       or interval or 3,
           desc = desc,
     }
 end
