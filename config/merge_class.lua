@@ -403,6 +403,7 @@ addon.merges[124255]    = CreateMergeSpellEntry("MONK", 1.5, 268)           -- D
 addon.merges[216521]    = CreateMergeSpellEntry("MONK", 1.0, 268)           -- Celestial Fortune
 addon.merges[124507]    = CreateMergeSpellEntry("MONK", 0.5, 268)           -- Gift of the Ox
 addon.merges[115181]    = CreateMergeSpellEntry("MONK", 0.5, 268)           -- Breath of Fire
+addon.merges[123725]    = CreateMergeSpellEntry("MONK", 2.5, 268)           -- Breath of Fire (DoT)
 addon.merges[121253]    = CreateMergeSpellEntry("MONK", 0.5, 268)           -- Keg Smash
 addon.merges[130654]    = CreateMergeSpellEntry("MONK", 1.5, 268)           -- Chi Burst (Healing)
 addon.merges[130654]    = CreateMergeSpellEntry("MONK", 1.5, 268)           -- Chi Burst (Damage)
