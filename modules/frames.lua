@@ -46,7 +46,7 @@ local frameIndex = {
 }
 
 -- Static Title Lookup
-local frameTitles = {
+x.FrameTitles = {
 	["general"]		= "General",					-- COMBAT_TEXT_LABEL,
 	["outgoing"]	= "Outgoing",					-- SCORE_DAMAGE_DONE.." / "..SCORE_HEALING_DONE,
 	["critical"]	= "Outgoing (Criticals)",		-- TEXT_MODE_A_STRING_RESULT_CRITICAL:gsub("%(", ""):gsub("%)", ""), -- "(Critical)" --> "Critical"
@@ -57,6 +57,8 @@ local frameTitles = {
 	["procs"]		= "Special Effects (Procs)",	-- COMBAT_TEXT_SHOW_REACTIVES_TEXT,
 	["loot"]		= "Loot & Money",				-- LOOT,
 }
+
+local frameTitles = x.FrameTitles
 
 local function autoClearFrame_OnUpdate(self, elasped)
 	if not self.last then self.last = 0 end
