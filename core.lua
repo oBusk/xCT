@@ -1262,19 +1262,23 @@ end
 
 -- Add LibSink Support
 do
-  local color, LibSink = {}, LibStub"LibSink-2.0"
+  local frames, color, LibSink = {}, {}, LibStub"LibSink-2.0"
+
+  for name, title in pairs(x.FrameTitles) do
+    frames[title] = name
+  end
 
   -- shortName, name, desc, func, scrollAreaFunc, hasSticky
   LibSink:RegisterSink("xCT_Plus", "xCT+", "Created for optimal performance in the toughest fights, this rugged combat text add-on is ready to be put to the test!",
 
-    -- Sink: addon, text, r, g, b, font, size, outline, sticky, location, icon
-    function(addon, text, r, g, b, _, _, _, location, icon)
+    -- The Sink Function
+    function(addon, text, r, g, b, font, size, outline, sticky, location, icon)
       local settings = x.db.profile.frames[location or "general"]
       if settings.iconsEnabled and icon then
         if settings.fontJustify == "LEFT" then
-          text = sformat("%s %s", sformat(" |T%s:%d:%d:0:0:64:64:5:59:5:59|t", icon, iconSize, iconSize), text)
+          text = sformat("%s %s", sformat(" |T%s:%d:%d:0:0:64:64:5:59:5:59|t", icon, settings.iconSize, settings.iconSize), text)
         else
-          text = sformat("%s%s", text, sformat(" |T%s:%d:%d:0:0:64:64:5:59:5:59|t", icon, iconSize, iconSize))
+          text = sformat("%s%s", text, sformat(" |T%s:%d:%d:0:0:64:64:5:59:5:59|t", icon, settings.iconSize, settings.iconSize))
         end
       end
       color[1] = r; color[2] = g; color[3] = b
@@ -1283,11 +1287,11 @@ do
 
     -- List Active Scrolling Areas
     function ()
-      local frames = {}
-      for name, frame in pairs(x.db.profile.frames) do
-        table_insert(frames, name)
+      local tmp = {}
+      for name in pairs(frames) do
+        table_insert(tmp, name)
       end
-      return frames
+      return tmp
     end, false)
 end
 
