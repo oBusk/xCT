@@ -418,7 +418,7 @@ addon.merges[227681]    = CreateMergeSpellEntry("MONK", 1.5, 268)           -- A
 addon.merge2h[178173]   = 124507                                            -- [Greater Merger] Artifact: Overflow (double check)
 
 -- Windwalker (ID: 269)
-addon.merges[117418]    = CreateMergeSpellEntry("MONK", 1.5, 269)           -- Fists of Fury
+addon.merges[117418]    = CreateMergeSpellEntry("MONK", 3.5, 269)           -- Fists of Fury
 addon.merges[100780]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Tiger Palm (SEF)
 addon.merges[185099]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Rising Sun Kick (SEF)
 addon.merges[196748]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Talent: Chi Orbit
@@ -482,6 +482,7 @@ addon.merges[213709]    = CreateMergeSpellEntry("DRUID", 2.5, 104)          -- T
 addon.merges[204069]    = CreateMergeSpellEntry("DRUID", 2.5, 104)          -- Talent: Lunbar Beam
 addon.merges[219432]    = CreateMergeSpellEntry("DRUID", 2.5, 104)          -- Artifact: Rage of the Sleeper
 addon.merge2h[192090]   = 77758                                             -- [DD/DoT Merger] Thrash
+addon.merge2h[203958]   = 213709                                            -- [Barkskin Merger] Brambles
 
 -- Restoration (Druid) (ID: 105)
 addon.merges[81269]     = CreateMergeSpellEntry("DRUID", 1.5, 105)          -- Efflorescence
