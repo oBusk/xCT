@@ -261,6 +261,7 @@ addon.merges[187874]    = CreateMergeSpellEntry("SHAMAN", 0.5, 263)         -- C
 addon.merges[192592]    = CreateMergeSpellEntry("SHAMAN", 1.5, 263)         -- Stormstrike: Crash Lightning (TODO: Not working?)
 addon.merges[25504]     = CreateMergeSpellEntry("SHAMAN", 0.5, 263)         -- Windfury Attacks
 addon.merges[32175]     = CreateMergeSpellEntry("SHAMAN", 0.5, 263)         -- Stormstrike MH/OH Merger
+addon.merges[10444]     = CreateMergeSpellEntry("SHAMAN", 1.5, 263)         -- Flametongue
 addon.merges[199054]    = CreateMergeSpellEntry("SHAMAN", 0.5, 263)         -- Artifact: Unleash Doom
 addon.merges[198485]    = CreateMergeSpellEntry("SHAMAN", 0.5, 263)         -- Artifact: Alpha Wolf
 addon.merges[198483]    = CreateMergeSpellEntry("SHAMAN", 1.5, 263)         -- Artifact: Doom Wolves
