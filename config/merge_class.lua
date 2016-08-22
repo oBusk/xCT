@@ -84,9 +84,9 @@ addon.merges[199658]    = CreateMergeSpellEntry("WARRIOR", 1.5, 71)         -- W
 addon.merge2h[199850]   = 199658                                            -- [Spell Merger] Whirlwind
 
 -- Fury (ID: 72)
-addon.merges[184367]    = CreateMergeSpellEntry("WARRIOR", 2.0, 72)         -- Rampage (Red Face Icon)
+addon.merges[184367]    = CreateMergeSpellEntry("WARRIOR", 2.5, 72)         -- Rampage (Red Face Icon)
 addon.merges[96103]     = CreateMergeSpellEntry("WARRIOR", 0.5, 72)         -- Raging Blow
-addon.merges[199667]    = CreateMergeSpellEntry("WARRIOR", 2.5, 72)         -- Whirlwind
+addon.merges[199667]    = CreateMergeSpellEntry("WARRIOR", 1.5, 72)         -- Whirlwind
 addon.merges[23881]     = CreateMergeSpellEntry("WARRIOR", 0.5, 72)         -- Bloodthirst (Whirlwind: Meat Cleaver)
 addon.merges[113344]    = CreateMergeSpellEntry("WARRIOR", 2.5, 72)         -- Talent: Bloodbath
 addon.merges[118000]    = CreateMergeSpellEntry("WARRIOR", 0.5, 72)         -- Talent: Dragon Roar
@@ -239,7 +239,9 @@ addon.merges[164857]    = CreateMergeSpellEntry("HUNTER", 5.0, 255)         -- P
 -- ---------------------------
 
 -- Elemental (ID: 262)
-addon.merges[188443]    = CreateMergeSpellEntry("SHAMAN", 2.0, 262)         -- Chain Lightning (Elemental)
+addon.merges[51505]     = CreateMergeSpellEntry("SHAMAN", 1.0, 262)         -- Lavaburst (Elemental)
+addon.merges[188196]    = CreateMergeSpellEntry("SHAMAN", 1.0, 262)         -- Lightning Bolt (Elemental)
+addon.merges[188443]    = CreateMergeSpellEntry("SHAMAN", 1.5, 262)         -- Chain Lightning (Elemental)
 addon.merges[77478]     = CreateMergeSpellEntry("SHAMAN", 1.5, 262)         -- Earthquake
 addon.merges[191732]    = CreateMergeSpellEntry("SHAMAN", 1.5, 262)         -- Artifact Greater Lightning Elemental
 addon.merges[205533]    = CreateMergeSpellEntry("SHAMAN", 1.5, 262)         -- Artifact Greater Lightning Elemental
@@ -249,7 +251,9 @@ addon.merges[192231]    = CreateMergeSpellEntry("SHAMAN", 2.5, 262)         -- T
 addon.merges[170379]    = CreateMergeSpellEntry("SHAMAN", 2.0, 262)         -- Talent: Earthn Rage
 addon.merges[197568]    = CreateMergeSpellEntry("SHAMAN", 0.5, 262)         -- Talent: Lightning Rod
 addon.merges[117588]    = CreateMergeSpellEntry("SHAMAN", 0.5, 262)         -- Talent: Primal Elementalist [Fire]
+addon.merge2h[77451]    = 51505                                             -- [Mastery Merger] Lavaburst Overload
 addon.merge2h[45297]    = 188443                                            -- [Mastery Merger] Chain Lightning Overload
+addon.merge2h[45284]    = 188196                                            -- [Mastery Merger] Lightning Bolt Overload
 
 -- Enhancement (ID: 263)
 addon.merges[195256]    = CreateMergeSpellEntry("SHAMAN", 1.5, 263)         -- Stormlash (Gets Spammy!)
@@ -257,6 +261,7 @@ addon.merges[187874]    = CreateMergeSpellEntry("SHAMAN", 0.5, 263)         -- C
 addon.merges[192592]    = CreateMergeSpellEntry("SHAMAN", 1.5, 263)         -- Stormstrike: Crash Lightning (TODO: Not working?)
 addon.merges[25504]     = CreateMergeSpellEntry("SHAMAN", 0.5, 263)         -- Windfury Attacks
 addon.merges[32175]     = CreateMergeSpellEntry("SHAMAN", 0.5, 263)         -- Stormstrike MH/OH Merger
+addon.merges[10444]     = CreateMergeSpellEntry("SHAMAN", 1.5, 263)         -- Flametongue
 addon.merges[199054]    = CreateMergeSpellEntry("SHAMAN", 0.5, 263)         -- Artifact: Unleash Doom
 addon.merges[198485]    = CreateMergeSpellEntry("SHAMAN", 0.5, 263)         -- Artifact: Alpha Wolf
 addon.merges[198483]    = CreateMergeSpellEntry("SHAMAN", 1.5, 263)         -- Artifact: Doom Wolves
@@ -414,7 +419,7 @@ addon.merges[227681]    = CreateMergeSpellEntry("MONK", 1.5, 268)           -- A
 addon.merge2h[178173]   = 124507                                            -- [Greater Merger] Artifact: Overflow (double check)
 
 -- Windwalker (ID: 269)
-addon.merges[117418]    = CreateMergeSpellEntry("MONK", 1.5, 269)           -- Fists of Fury
+addon.merges[117418]    = CreateMergeSpellEntry("MONK", 3.5, 269)           -- Fists of Fury
 addon.merges[100780]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Tiger Palm (SEF)
 addon.merges[185099]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Rising Sun Kick (SEF)
 addon.merges[196748]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Talent: Chi Orbit
@@ -478,6 +483,7 @@ addon.merges[213709]    = CreateMergeSpellEntry("DRUID", 2.5, 104)          -- T
 addon.merges[204069]    = CreateMergeSpellEntry("DRUID", 2.5, 104)          -- Talent: Lunbar Beam
 addon.merges[219432]    = CreateMergeSpellEntry("DRUID", 2.5, 104)          -- Artifact: Rage of the Sleeper
 addon.merge2h[192090]   = 77758                                             -- [DD/DoT Merger] Thrash
+addon.merge2h[203958]   = 213709                                            -- [Barkskin Merger] Brambles
 
 -- Restoration (Druid) (ID: 105)
 addon.merges[81269]     = CreateMergeSpellEntry("DRUID", 1.5, 105)          -- Efflorescence
