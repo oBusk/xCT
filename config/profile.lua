@@ -388,7 +388,11 @@ addon.defaults = {
         ["critPrefix"] = "",
         ["critPostfix"] = "",
 
-      -- name appearance (players)
+      -- name appearance
+        ["namePrefix"] = " |cffFFFFFF<|r",
+        ["namePostfix"] = "|cffFFFFFF>|r",
+
+        -- (players)
         ["namePlayerColorPlayerName"] = true,
         ["namePlayerColorPlayerNameCustom"] = false,
         ["namePlayerColorPlayerNameColor"] = { 1, 1, 1 },
@@ -399,16 +403,15 @@ addon.defaults = {
 
         ["namePlayerType"] = 2, -- 0 = None; 1 = PN; 2 = SN; 3 = Both PN - SP; 4 = Both SP - PN
 
-      -- name appearance (npcs)
+        -- (npcs)
         ["nameNpcColorNpcNameColor"] = { .3, 0, .3 },
         ["nameNpcColorSpellName"] = true,
         ["nameNpcColorSpellNameCustom"] = false,
         ["nameNpcColorSpellNameColor"] = { 1, 1, 1 },
         ["nameNpcType"] = 0,
 
+      -- (environment)
         ["nameEnvironmentType"] = 0,
-        ["namePrefix"] = "<",
-        ["namePostfix"] = ">",
 
       -- icons
         ["iconsEnabled"] = true,

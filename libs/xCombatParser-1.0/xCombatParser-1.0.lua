@@ -394,7 +394,7 @@ local hasFlag
 do
 	local band = bit.band
 	function hasFlag (flags, flag)
-		return band(flags, flag) == flag
+		return band(flags or 0, flag) == flag
 	end
 end
 
@@ -435,13 +435,13 @@ do
 			COMBATLOG_OBJECT_CONTROL_NPC, COMBATLOG_OBJECT_CONTROL_PLAYER
 
 		function private.GetSourceController (args)
-			flags = args.sourceFlags
+			flags = args.sourceFlags or 0
 			return hasFlag(flags, COMBATLOG_OBJECT_CONTROL_NPC) and "NPC" or
 				hasFlag(flags, COMBATLOG_OBJECT_CONTROL_PLAYER) and "PLAYER" or "UNKNOWN"
 		end
 
 		function private.GetDestinationController (args)
-			flags = args.destFlags
+			flags = args.destFlags or 0
 			return hasFlag(flags, COMBATLOG_OBJECT_CONTROL_NPC) and "NPC" or
 				hasFlag(flags, COMBATLOG_OBJECT_CONTROL_PLAYER) and "PLAYER" or "UNKNOWN"
 		end

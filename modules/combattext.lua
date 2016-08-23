@@ -1999,11 +1999,60 @@ local CombatEventHandlers = {
 			message = x:Abbreviate(-args.amount, outputFrame)
 		end
 
-		-- Add Source Name
-		if args.prefix == "ENVIRONMENTAL" or args.sourceName == UNKNOWN then
-			message = message .. " |cffFFFFFF<"..args.spellName..">|r"
-		else
-			message = message .. " |cffFFFFFF<"..args.sourceName..">|r"
+
+		local settings = x.db.profile.frames["damage"]
+
+		--[[
+		["namePrefix"] = "<",
+		["namePostfix"] = ">",
+
+		-- (players)
+		["namePlayerColorPlayerName"] = true,
+		["namePlayerColorPlayerNameCustom"] = false,
+		["namePlayerColorPlayerNameColor"] = { 1, 1, 1 },
+
+		["namePlayerColorSpellName"] = true,
+		["namePlayerColorSpellNameCustom"] = false,
+		["namePlayerColorSpellNameColor"] = { 1, 1, 1 },
+
+		["namePlayerType"] = 2, -- 0 = None; 1 = PN; 2 = SN; 3 = Both PN - SP; 4 = Both SP - PN
+
+		-- (npcs)
+		["nameNpcColorNpcNameColor"] = { .3, 0, .3 },
+		["nameNpcColorSpellName"] = true,
+		["nameNpcColorSpellNameCustom"] = false,
+		["nameNpcColorSpellNameColor"] = { 1, 1, 1 },
+		["nameNpcType"] = 0,
+
+		-- (environment)
+		["nameEnvironmentType"] = 0,
+		]]
+
+		local nameType = 0
+		if args.prefix == "ENVIRONMENTAL" and settings.nameEnvironmentType ~= 0 then
+			nameType = settings.nameEnvironmentType
+		elseif args:GetSourceType() == "PLAYER" and settings.namePlayerType ~= 0 then
+			nameType = settings.namePlayerType
+		elseif args:GetSourceType() == "NPC" and settings.nameNpcType ~= 0 then
+			nameType = settings.nameNpcType
+		end
+
+
+		-- TODO: Move this to its own function
+		
+		if nameType ~= 0 then
+			message = message .. settings.namePrefix
+
+			if nameType == 1 then -- Player Name
+				message = message..args.sourceName
+			elseif nameType == 2 then -- Spell Name
+				message = message..args.spellName
+			elseif nameType == 3 then -- Both: Player Name - Spell Name
+				message = message..args.sourceName.." - "..args.spellName
+			elseif nameType == 4 then -- Both: Spell Name - Player Name
+				message = message..args.spellName.." - "..args.sourceName
+			end
+			message = message .. settings.namePostfix
 		end
 
 		-- Add Icons
@@ -2026,6 +2075,7 @@ local CombatEventHandlers = {
 			if ShowOnlyMyPetsHeals() and args:IsSourceMyPet() then
 				-- If its the pet, then continue
 			else
+				print("Filtered Heal from:", args.sourceName)
 				return
 			end
 		end
