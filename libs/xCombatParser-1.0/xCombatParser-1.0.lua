@@ -435,13 +435,13 @@ do
 			COMBATLOG_OBJECT_CONTROL_NPC, COMBATLOG_OBJECT_CONTROL_PLAYER
 
 		function private.GetSourceController (args)
-			flags = args.sourceFlags or 0
+			flags = args.sourceFlags
 			return hasFlag(flags, COMBATLOG_OBJECT_CONTROL_NPC) and "NPC" or
 				hasFlag(flags, COMBATLOG_OBJECT_CONTROL_PLAYER) and "PLAYER" or "UNKNOWN"
 		end
 
 		function private.GetDestinationController (args)
-			flags = args.destFlags or 0
+			flags = args.destFlags
 			return hasFlag(flags, COMBATLOG_OBJECT_CONTROL_NPC) and "NPC" or
 				hasFlag(flags, COMBATLOG_OBJECT_CONTROL_PLAYER) and "PLAYER" or "UNKNOWN"
 		end
