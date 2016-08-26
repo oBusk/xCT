@@ -1839,6 +1839,90 @@ x.outgoing_events = {
       xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool )
 ]]
 
+local function hexNameColor(t)
+	if type(t) == "string" then
+		return "ff"..t
+	elseif not t then
+		return "ffFFFFFF"
+	elseif t.colorStr then -- Support Blizzard's raid colors
+		return t.colorStr
+	end
+	return sformat("ff%2X%2X%2X", mfloor(t[1]*255+.5), mfloor(t[2]*255+.5), mfloor(t[3]*255+.5))
+end
+
+local function formatNameHelper(name, enableColor, color, enableCustomColor, customColor)
+	if enableColor then
+		if enableCustomColor then
+			return "|c"..hexNameColor(customColor)..name.."|r"
+		end
+		return "|c"..hexNameColor(color)..name.."|r"
+	end
+	return "|cffFFFFFF"..name.."|r"
+end
+
+local formatNameTypes
+formatNameTypes = {
+	function (args, settings) -- [1] = Source Name
+		local color
+		if settings.enableNameColor and not settings.enableCustomNameColor then
+			if args.prefix == "ENVIRONMENTAL" then
+				color = x.spellColors[args.school or args.spellSchool or 1]
+			else
+				color = RAID_CLASS_COLORS[select(2, GetPlayerInfoByGUID(args.sourceGUID)) or 0]
+			end
+		end
+
+		return formatNameHelper(args.sourceName,
+		                    settings.enableNameColor,
+		                             color,
+		                    settings.enableCustomNameColor,
+		                    settings.customNameColor)
+	end,
+
+	function (args, settings) -- [2] = Spell Name
+		local color
+			if settings.enableNameColor and not settings.enableCustomNameColor then
+
+			-- NOTE: I don't think we want the spell school of the spell
+			--       being cast. We want the spell school of the damage
+			--       being done. That said, if you want to change it so
+			--       that the spell name matches the type of spell it
+			--       is, and not the type of damage it does, change
+			--       "args.school" to "args.spellSchool".
+
+			color = x.spellColors[args.school or args.spellSchool or 1]
+		end
+
+		return formatNameHelper(args.spellName,
+		                    settings.enableSpellColor,
+		                             color,
+		                    settings.enableCustomSpellColor,
+		                    settings.customSpellColor)
+	end,
+
+	function (args, settings) -- [3] = Source Name - Spell Name
+		return formatNameTypes[1](args, settings) .. " - " .. formatNameTypes[2](args, settings)
+	end,
+
+	function (args, settings) -- [4] = Spell Name - Source Name
+		return formatNameTypes[2](args, settings) .. " - " .. formatNameTypes[1](args, settings)
+	end
+}
+
+local function formatName(args, settings)
+	-- Event Type helper
+	local eventType = args:GetSourceType()
+
+	print("Format Name:", eventType)
+
+	-- If we have a valid event type that we can handle
+	if eventType == "NPC" or eventType == "PLAYER" or eventType == "ENVIRONMENT" then
+		print("Using Settings:", settings[eventType], settings[eventType].nameType)
+		return settings.namePrefix .. formatNameTypes[settings[eventType].nameType](args, settings[eventType]) .. settings.namePostfix
+	end
+	return "" -- Names not supported
+end
+
 local CombatEventHandlers = {
 	["HealingOutgoing"] = function (args)
 		local spellID, isHoT, merged = args.spellId, args.prefix == "SPELL_PERIODIC"
@@ -1989,6 +2073,7 @@ local CombatEventHandlers = {
 
 	["DamageIncoming"] = function (args)
 		local outputFrame, message = "damage"
+		local settings = x.db.profile.frames["damage"]
 
 		-- Format Criticals and also abbreviate values
 		if args.critical then
@@ -1999,61 +2084,10 @@ local CombatEventHandlers = {
 			message = x:Abbreviate(-args.amount, outputFrame)
 		end
 
+		-- TODO: Add merge settings
 
-		local settings = x.db.profile.frames["damage"]
-
-		--[[
-		["namePrefix"] = "<",
-		["namePostfix"] = ">",
-
-		-- (players)
-		["namePlayerColorPlayerName"] = true,
-		["namePlayerColorPlayerNameCustom"] = false,
-		["namePlayerColorPlayerNameColor"] = { 1, 1, 1 },
-
-		["namePlayerColorSpellName"] = true,
-		["namePlayerColorSpellNameCustom"] = false,
-		["namePlayerColorSpellNameColor"] = { 1, 1, 1 },
-
-		["namePlayerType"] = 2, -- 0 = None; 1 = PN; 2 = SN; 3 = Both PN - SP; 4 = Both SP - PN
-
-		-- (npcs)
-		["nameNpcColorNpcNameColor"] = { .3, 0, .3 },
-		["nameNpcColorSpellName"] = true,
-		["nameNpcColorSpellNameCustom"] = false,
-		["nameNpcColorSpellNameColor"] = { 1, 1, 1 },
-		["nameNpcType"] = 0,
-
-		-- (environment)
-		["nameEnvironmentType"] = 0,
-		]]
-
-		local nameType = 0
-		if args.prefix == "ENVIRONMENTAL" and settings.nameEnvironmentType ~= 0 then
-			nameType = settings.nameEnvironmentType
-		elseif args:GetSourceType() == "PLAYER" and settings.namePlayerType ~= 0 then
-			nameType = settings.namePlayerType
-		elseif args:GetSourceType() == "NPC" and settings.nameNpcType ~= 0 then
-			nameType = settings.nameNpcType
-		end
-
-
-		-- TODO: Move this to its own function
-		
-		if nameType ~= 0 then
-			message = message .. settings.namePrefix
-
-			if nameType == 1 then -- Player Name
-				message = message..args.sourceName
-			elseif nameType == 2 then -- Spell Name
-				message = message..args.spellName
-			elseif nameType == 3 then -- Both: Player Name - Spell Name
-				message = message..args.sourceName.." - "..args.spellName
-			elseif nameType == 4 then -- Both: Spell Name - Player Name
-				message = message..args.spellName.." - "..args.sourceName
-			end
-			message = message .. settings.namePostfix
-		end
+		-- Add names
+		message = message .. formatName(args, settings.names)
 
 		-- Add Icons
 		message = x:GetSpellTextureFormatted(args.spellId,
@@ -2061,8 +2095,7 @@ local CombatEventHandlers = {
 		    x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
 		    x.db.profile.frames[outputFrame].fontJustify)
 
-
-		--print(message)
+		-- Output message
 		x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(args.spellSchool))
 	end,
 

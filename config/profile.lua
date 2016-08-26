@@ -388,30 +388,70 @@ addon.defaults = {
         ["critPrefix"] = "",
         ["critPostfix"] = "",
 
-      -- name appearance
-        ["namePrefix"] = " |cffFFFFFF<|r",
-        ["namePostfix"] = "|cffFFFFFF>|r",
+      -- name formatting
+        names = {
 
-        -- (players)
-        ["namePlayerColorPlayerName"] = true,
-        ["namePlayerColorPlayerNameCustom"] = false,
-        ["namePlayerColorPlayerNameColor"] = { 1, 1, 1 },
+          -- appearance
+          ["namePrefix"] = " |cffFFFFFF<|r",
+          ["namePostfix"] = "|cffFFFFFF>|r",
 
-        ["namePlayerColorSpellName"] = true,
-        ["namePlayerColorSpellNameCustom"] = false,
-        ["namePlayerColorSpellNameColor"] = { 1, 1, 1 },
+          -- events from a player's character
+          PLAYER = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 2,
 
-        ["namePlayerType"] = 2, -- 0 = None; 1 = PN; 2 = SN; 3 = Both PN - SP; 4 = Both SP - PN
+            ["enableNameColor"] = true,
+            ["enableCustomNameColor"] = false,
+            ["customNameColor"] = { 1, 1, 1 },
 
-        -- (npcs)
-        ["nameNpcColorNpcNameColor"] = { .3, 0, .3 },
-        ["nameNpcColorSpellName"] = true,
-        ["nameNpcColorSpellNameCustom"] = false,
-        ["nameNpcColorSpellNameColor"] = { 1, 1, 1 },
-        ["nameNpcType"] = 0,
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
 
-      -- (environment)
-        ["nameEnvironmentType"] = 0,
+          -- events from a npc
+          NPC = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 2,
+
+            ["enableNameColor"] = true,             -- Always On (Not in Options)
+            ["enableCustomNameColor"] = true,       -- Always On (Not in Options)
+            ["customNameColor"] = { .3, 0, .3 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from the envirornment
+          ENVIRONMENT = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Environment
+            --   2 = Environment Type
+            --   3 = Both ("Environment - Environment Type")
+            --   4 = Both ("Environment Type - Environment")
+            ["nameType"] = 2,
+
+            ["enableNameColor"] = true,
+            ["enableCustomNameColor"] = true,
+            ["customNameColor"] = { 0.32, 0.317, 0.1 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          }
+        },
 
       -- icons
         ["iconsEnabled"] = true,

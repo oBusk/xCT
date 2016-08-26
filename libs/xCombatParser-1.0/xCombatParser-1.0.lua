@@ -416,7 +416,8 @@ do
 				hasFlag(flags, COMBATLOG_OBJECT_TYPE_GUARDIAN) and "GUARDIAN" or
 				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PET) and "PET" or
 				hasFlag(flags, COMBATLOG_OBJECT_TYPE_NPC) and "NPC" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PLAYER) and "PLAYER" or "UNKNOWN"
+				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PLAYER) and "PLAYER" or
+				args.prefix == "ENVIRONMENTAL" and "ENVIRONMENT" or "UNKNOWN"
 		end
 
 		function private.GetDestinationType (args)
