@@ -359,8 +359,8 @@ local function setNameFormat(info, value) x.db.profile.frames[info[#info-3]].nam
 local function getNameFormatColor(info) return unpack(x.db.profile.frames[info[#info-3]].names[info[#info-1]][info[#info]] or blankTable) end
 local function setNameFormatColor(info, r, g, b) x.db.profile.frames[info[#info-3]].names[info[#info-1]][info[#info]] = {r,g,b} end
 
-local function getNameFormatText(info) return string_gsub(x.db.profile.frames[info[#info-3]].names[info[#info]], "|", "||") end
-local function setNameFormatText(info, value) x.db.profile.frames[info[#info-3]].names[info[#info]] = string_gsub(value, "||", "|") end
+local function getNameFormatText(info) return string_gsub(x.db.profile.frames[info[#info-2]].names[info[#info]], "|", "||") end
+local function setNameFormatText(info, value) x.db.profile.frames[info[#info-2]].names[info[#info]] = string_gsub(value, "||", "|") end
 
 local function outgoingSpellColorsHidden(info) return not x.db.profile.frames["outgoing"].standardSpellColor end
 
@@ -3529,7 +3529,7 @@ NNNNNNNN         NNNNNNN  aaaaaaaaaa  aaaammmmmm   mmmmmm   mmmmmm    eeeeeeeeee
           name = "Name Settings",
           childGroups = 'select',
           get = getNameFormat,
-          set = getNameFormat,
+          set = setNameFormat,
           args = {
             namesDescription = {
               type = 'description',

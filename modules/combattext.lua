@@ -22,7 +22,12 @@ local _, _G, sformat, mfloor, mabs, ssub, smatch, sgsub, s_upper, s_lower, strin
   nil, _G, string.format, math.floor, math.abs, string.sub, string.match, string.gsub, string.upper, string.lower, string, table.insert, table.remove, ipairs, pairs, print, tostring, tonumber, select, unpack
 
 local xCP = LibStub and LibStub("xCombatParser-1.0", true)
-if not xCP then print("Something went wrong when xCT+ tried to load. Please resintall and inform the author.") end
+local LPS = LibStub and LibStub("LibPlayerSpells-1.0", true)
+
+if not xCP or not LPS then print("Something went wrong when xCT+ tried to load. Please resintall and inform the author.") end
+
+
+
 
 --[=====================================================[
  Holds cached spells, buffs, and debuffs
@@ -1839,6 +1844,7 @@ x.outgoing_events = {
       xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool )
 ]]
 
+
 local function hexNameColor(t)
 	if type(t) == "string" then
 		return "ff"..t
@@ -1860,6 +1866,22 @@ local function formatNameHelper(name, enableColor, color, enableCustomColor, cus
 	return "|cffFFFFFF"..name.."|r"
 end
 
+local CLASS_MASK = LPS.masks.CLASS
+local CLASS_LOOKUP = {
+	[0x00000001] = "DEATHKNIGHT",
+	[0x00000002] = "DEMONHUNTER",
+	[0x00000004] = "DRUID",
+	[0x00000008] = "HUNTER",
+	[0x00000010] = "MAGE",
+	[0x00000020] = "MONK",
+	[0x00000040] = "PALADIN",
+	[0x00000080] = "PRIEST",
+	[0x00000100] = "ROGUE",
+	[0x00000200] = "SHAMAN",
+	[0x00000400] = "WARLOCK",
+	[0x00000800] = "WARRIOR"
+}
+
 local formatNameTypes
 formatNameTypes = {
 	function (args, settings) -- [1] = Source Name
@@ -1868,7 +1890,15 @@ formatNameTypes = {
 			if args.prefix == "ENVIRONMENTAL" then
 				color = x.spellColors[args.school or args.spellSchool or 1]
 			else
-				color = RAID_CLASS_COLORS[select(2, GetPlayerInfoByGUID(args.sourceGUID)) or 0]
+				local _, class = GetPlayerInfoByGUID(args.sourceGUID)
+				if not class and args.spellId then
+					local isClass = bit.band(CLASS_MASK, LPS:GetSpellInfo(args.spellId))
+					if isClass ~= 0 then
+						class = CLASS_LOOKUP[isClass0]
+					end
+				end
+
+				color = RAID_CLASS_COLORS[class or 0]
 			end
 		end
 
@@ -1913,11 +1943,8 @@ local function formatName(args, settings)
 	-- Event Type helper
 	local eventType = args:GetSourceType()
 
-	print("Format Name:", eventType)
-
 	-- If we have a valid event type that we can handle
 	if eventType == "NPC" or eventType == "PLAYER" or eventType == "ENVIRONMENT" then
-		print("Using Settings:", settings[eventType], settings[eventType].nameType)
 		return settings.namePrefix .. formatNameTypes[settings[eventType].nameType](args, settings[eventType]) .. settings.namePostfix
 	end
 	return "" -- Names not supported
@@ -2108,7 +2135,6 @@ local CombatEventHandlers = {
 			if ShowOnlyMyPetsHeals() and args:IsSourceMyPet() then
 				-- If its the pet, then continue
 			else
-				print("Filtered Heal from:", args.sourceName)
 				return
 			end
 		end
@@ -2151,8 +2177,8 @@ function x.CombatLogEvent (args)
 			CombatEventHandlers.HealingOutgoing(args)
 
 		elseif args.suffix == "_DAMAGE" then
-			CombatEventHandlers.DamageOutgoing(args)
-
+			--CombatEventHandlers.DamageOutgoing(args)
+			CombatEventHandlers.DamageIncoming(args)
 		end
 	end
 
