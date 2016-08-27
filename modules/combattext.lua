@@ -25,7 +25,7 @@ local _, _G, sformat, mfloor, mabs, ssub, smatch, sgsub, s_upper, s_lower, strin
 local utf8 = {
   len = string.utf8len,
   sub = string.utf8sub,
-  reverse = string.utf8reverse
+  reverse = string.utf8reverse,
   upper = string.utf8upper,
   lower = string.utf8lower
 }
