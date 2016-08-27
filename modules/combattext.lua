@@ -21,8 +21,22 @@ local x = addon.engine
 local _, _G, sformat, mfloor, mabs, ssub, smatch, sgsub, s_upper, s_lower, string, tinsert, tremove, ipairs, pairs, print, tostring, tonumber, select, unpack =
   nil, _G, string.format, math.floor, math.abs, string.sub, string.match, string.gsub, string.upper, string.lower, string, table.insert, table.remove, ipairs, pairs, print, tostring, tonumber, select, unpack
 
+--UTF8 Functions
+local utf8 = {
+  len = string.utf8len,
+  sub = string.utf8sub,
+  reverse = string.utf8reverse,
+  upper = string.utf8upper,
+  lower = string.utf8lower
+}
+
 local xCP = LibStub and LibStub("xCombatParser-1.0", true)
-if not xCP then print("Something went wrong when xCT+ tried to load. Please resintall and inform the author.") end
+local LPS = LibStub and LibStub("LibPlayerSpells-1.0", true)
+
+if not xCP or not LPS then print("Something went wrong when xCT+ tried to load. Please resintall and inform the author.") end
+
+
+
 
 --[=====================================================[
  Holds cached spells, buffs, and debuffs
@@ -488,9 +502,9 @@ end
 --[=====================================================[
  Capitalize Locals
 --]=====================================================]
-local XCT_STOLE = string.upper(string.sub(ACTION_SPELL_STOLEN, 1, 1))..string.sub(ACTION_SPELL_STOLEN, 2)
-local XCT_KILLED = string.upper(string.sub(ACTION_PARTY_KILL, 1, 1))..string.sub(ACTION_PARTY_KILL, 2)
-local XCT_DISPELLED = string.upper(string.sub(ACTION_SPELL_DISPEL, 1, 1))..string.sub(ACTION_SPELL_DISPEL, 2)
+local XCT_STOLE = utf8.upper(utf8.sub(ACTION_SPELL_STOLEN, 1, 1))..utf8.sub(ACTION_SPELL_STOLEN, 2)
+local XCT_KILLED = utf8.upper(utf8.sub(ACTION_PARTY_KILL, 1, 1))..utf8.sub(ACTION_PARTY_KILL, 2)
+local XCT_DISPELLED = utf8.upper(utf8.sub(ACTION_SPELL_DISPEL, 1, 1))..utf8.sub(ACTION_SPELL_DISPEL, 2)
 
 --[=====================================================[
  Flag value for special pets and vehicles
@@ -1355,7 +1369,7 @@ x.events = {
       -- format curency
       -- "%s: %s [%s] |cff798BDDx%s|r |cffFFFF00(%s)|r"
       local message = sformat(format_currency,
-        "Currency",
+        _G.CURRENCY,
         ShowLootIcons()
           and sformat(format_loot_icon,
             texturePath,
@@ -1807,6 +1821,7 @@ x.outgoing_events = {
 -- =====================================================
 
 -- Changes a color table into a hex string
+
 local function hexNameColor(t)
 	if type(t) == "string" then
 		return "ff"..t
@@ -1830,6 +1845,21 @@ local function formatNameHelper(name, enableColor, color, enableCustomColor, cus
 end
 
 -- Format Handlers for name
+local CLASS_LOOKUP = {
+	[1] = "DEATHKNIGHT",
+	[2] = "DEMONHUNTER",
+	[4] = "DRUID",
+	[8] = "HUNTER",
+	[16] = "MAGE",
+	[32] = "MONK",
+	[64] = "PALADIN",
+	[128] = "PRIEST",
+	[256] = "ROGUE",
+	[512] = "SHAMAN",
+	[1024] = "WARLOCK",
+	[2048] = "WARRIOR"
+}
+
 local formatNameTypes
 formatNameTypes = {
 	function (args, settings) -- [1] = Source Name
@@ -1838,7 +1868,15 @@ formatNameTypes = {
 			if args.prefix == "ENVIRONMENTAL" then
 				color = x.spellColors[args.school or args.spellSchool or 1]
 			else
-				color = RAID_CLASS_COLORS[select(2, GetPlayerInfoByGUID(args.sourceGUID)) or 0]
+				local _, class = GetPlayerInfoByGUID(args.sourceGUID)
+				if not class and args.spellId then
+					local isClass = bit.band(CLASS_MASK, LPS:GetSpellInfo(args.spellId))
+					if isClass ~= 0 then
+						class = CLASS_LOOKUP[isClass0]
+					end
+				end
+
+				color = RAID_CLASS_COLORS[class or 0]
 			end
 		end
 
@@ -1884,11 +1922,8 @@ local function formatName(args, settings)
 	-- Event Type helper
 	local eventType = args:GetSourceType()
 
-	print("Format Name:", eventType)
-
 	-- If we have a valid event type that we can handle
 	if eventType == "NPC" or eventType == "PLAYER" or eventType == "ENVIRONMENT" then
-		print("Using Settings:", settings[eventType], settings[eventType].nameType)
 		return settings.namePrefix .. formatNameTypes[settings[eventType].nameType](args, settings[eventType]) .. settings.namePostfix
 	end
 	return "" -- Names not supported
@@ -2083,7 +2118,6 @@ local CombatEventHandlers = {
 			if ShowOnlyMyPetsHeals() and args:IsSourceMyPet() then
 				-- If its the pet, then continue
 			else
-				print("Filtered Heal from:", args.sourceName)
 				return
 			end
 		end
@@ -2202,8 +2236,8 @@ function x.CombatLogEvent (args)
 			CombatEventHandlers.HealingOutgoing(args)
 
 		elseif args.suffix == "_DAMAGE" then
-			CombatEventHandlers.DamageOutgoing(args)
-
+			--CombatEventHandlers.DamageOutgoing(args)
+			CombatEventHandlers.DamageIncoming(args)
 		end
 	end
 
