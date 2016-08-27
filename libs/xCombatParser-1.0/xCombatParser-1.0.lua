@@ -314,7 +314,7 @@ do
 			elseif suffix == "_AURA_APPLIED" or suffix == "_AURA_REMOVED"
 				or suffix == "_AURA_APPLIED_DOSE" or suffix == "_AURA_REMOVED_DOSE"
 				or suffix == "_AURA_REFRESH" then
-				args.auraType, args.amount = select(i, ...)
+				args.auraType, args.amount = select(i, ...) -- auraType: BUFF, DEBUFF
 
 			elseif suffix == "_AURA_BROKEN" then
 				args.auraType = select(i, ...)

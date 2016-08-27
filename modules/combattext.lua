@@ -1802,43 +1802,11 @@ x.outgoing_events = {
 }
 
 
+-- =====================================================
+--                  Format Name Things
+-- =====================================================
 
-
---[[
-
-		if not ShowDamage() then return end
-
-      local timestamp, event, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, spellSchool, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand = select(1, ...)
-      local merged, outputFrame, color = false, critical and "critical" or "outgoing", GetCustomSpellColorFromIndex(spellSchool)
-
-      -- Keep track of spells that go by
-      if TrackSpells() then x.spellCache.spells[spellID] = true end
-
-      -- Filters: Specific Spell, or Amount
-      if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
-
-      -- Condensed Critical Merge
-      if IsMerged(spellID) then
-        merged = true
-        if critical then
-          if MergeCriticalsByThemselves() then
-            x:AddSpamMessage(outputFrame, spellID, amount, color)
-            return
-          elseif MergeCriticalsWithOutgoing() then
-            x:AddSpamMessage("outgoing", spellID, amount, color)
-          elseif MergeHideMergedCriticals() then
-            x:AddSpamMessage("outgoing", spellID, amount, color)
-            return
-          end
-        else
-          x:AddSpamMessage(outputFrame, spellID, amount, color)
-          return
-        end
-      end
-
-      xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool )
-]]
-
+-- Changes a color table into a hex string
 local function hexNameColor(t)
 	if type(t) == "string" then
 		return "ff"..t
@@ -1850,6 +1818,7 @@ local function hexNameColor(t)
 	return sformat("ff%2X%2X%2X", mfloor(t[1]*255+.5), mfloor(t[2]*255+.5), mfloor(t[3]*255+.5))
 end
 
+-- Checks the options you provide and outputs the correctly formated name
 local function formatNameHelper(name, enableColor, color, enableCustomColor, customColor)
 	if enableColor then
 		if enableCustomColor then
@@ -1860,6 +1829,7 @@ local function formatNameHelper(name, enableColor, color, enableCustomColor, cus
 	return "|cffFFFFFF"..name.."|r"
 end
 
+-- Format Handlers for name
 local formatNameTypes
 formatNameTypes = {
 	function (args, settings) -- [1] = Source Name
@@ -1909,6 +1879,7 @@ formatNameTypes = {
 	end
 }
 
+-- Check to see if the name needs for be formated, if so, handle all the logistics
 local function formatName(args, settings)
 	-- Event Type helper
 	local eventType = args:GetSourceType()
@@ -1923,6 +1894,10 @@ local function formatName(args, settings)
 	return "" -- Names not supported
 end
 
+
+-- =====================================================
+--               The New Combat Handlers
+-- =====================================================
 local CombatEventHandlers = {
 	["HealingOutgoing"] = function (args)
 		local spellID, isHoT, merged = args.spellId, args.prefix == "SPELL_PERIODIC"
@@ -2140,11 +2115,87 @@ local CombatEventHandlers = {
 			x:AddMessage("healing", message, color)
 		end
 	end,
+
+	["AuraIncoming"] = function (args)
+		-- Some useful information about the event
+		local isBuff, isGaining = args.auraType == "BUFF", args.suffix == "_AURA_APPLIED" or args.suffix == "_AURA_APPLIED_DOSE"
+
+		-- Track the aura
+		if TrackSpells() then x.spellCache[isBuff and 'buffs' or 'debuffs'][args.spellName]=true end
+
+		-- Check to see if we are filtering this spell's name
+		if IsBuffFiltered(args.spellName) then return end
+
+		-- See if we are showing that type of aura
+		if isBuff and not ShowBuffs() or not ShowDebuffs() then return end
+
+		-- Begin constructing the event message and color
+		local color, message
+		if isGaining then
+			message = sformat(format_gain, args.spellName)
+			color = isBuff and 'buffsGained' or 'debuffsGained'
+		else
+			message = sformat(format_fade, args.spellName)
+			color = isBuff and 'buffsFaded' or 'debuffsFaded'
+		end
+
+		-- Add the icon
+		message = x:GetSpellTextureFormatted(args.spellId,
+		                                          message,
+		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+		           x.db.profile.frames['general'].fontJustify)
+
+	end,
 }
 
-function x.CombatLogEvent (args)
-	--print("Combat Event!", args.event)
 
+--[[
+
+  ["SPELL_AURA_END"] = function(spellname)
+      if TrackSpells() then
+        x.spellCache.buffs[spellname] = true
+      end
+      if ShowBuffs() and not IsBuffFiltered(spellname) then
+        x:AddMessage('general', sformat(format_fade, spellname), 'buffsFaded')
+      end
+    end,
+  ["SPELL_AURA_START"] = function(spellname)
+      if TrackSpells() then
+        x.spellCache.buffs[spellname] = true
+      end
+      if ShowBuffs() and not IsBuffFiltered(spellname) then
+        x:AddMessage('general', sformat(format_gain, spellname), 'buffsGained')
+      end
+    end,
+  ["SPELL_AURA_END_HARMFUL"] = function(spellname)
+      if TrackSpells() then
+        x.spellCache.debuffs[spellname] = true
+      end
+      if ShowDebuffs() and not IsDebuffFiltered(spellname) then
+        x:AddMessage('general', sformat(format_fade, spellname), 'debuffsFaded')
+      end
+    end,
+  ["SPELL_AURA_START_HARMFUL"] = function(spellname)
+      if TrackSpells() then
+        x.spellCache.debuffs[spellname] = true
+      end
+      if ShowDebuffs() and not IsDebuffFiltered(spellname) then
+        x:AddMessage('general', sformat(format_gain, spellname), 'debuffsGained')
+      end
+    end,
+
+]]
+
+local BuffsOrDebuffs = {
+	["_AURA_APPLIED"] = true,
+	["_AURA_REMOVED"] = true,
+	["_AURA_APPLIED_DOSE"] = true,
+	["_AURA_REMOVED_DOSE"] = true,
+	--["_AURA_REFRESH"] = true, -- I dont know how we should support this
+}
+
+
+function x.CombatLogEvent (args)
 	-- Is the source someone we care about?
 	if args.isPlayer or ShowPetDamage() and args:IsSourceMyPet() or args:IsSourceMyVehicle() then
 		if args.suffix == "_HEAL" then
@@ -2160,9 +2211,17 @@ function x.CombatLogEvent (args)
 	if args.atPlayer or args:IsDestinationMyVehicle() then
 		if args.suffix == "_HEAL" then
 			CombatEventHandlers.HealingIncoming(args)
+
 		elseif args.suffix == "_DAMAGE" then
 			CombatEventHandlers.DamageIncoming(args)
+
 		end
+	end
+
+	-- Player Auras
+	if args.atPlayer and BuffsOrDebuffs[args.suffix] then
+		CombatEventHandlers.AuraIncoming(args)
+
 	end
 end
 xCP:RegisterCombat(x.CombatLogEvent)
