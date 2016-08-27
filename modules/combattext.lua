@@ -1877,18 +1877,18 @@ end
 
 local CLASS_MASK = LPS.masks.CLASS
 local CLASS_LOOKUP = {
-	[0x00000001] = "DEATHKNIGHT",
-	[0x00000002] = "DEMONHUNTER",
-	[0x00000004] = "DRUID",
-	[0x00000008] = "HUNTER",
-	[0x00000010] = "MAGE",
-	[0x00000020] = "MONK",
-	[0x00000040] = "PALADIN",
-	[0x00000080] = "PRIEST",
-	[0x00000100] = "ROGUE",
-	[0x00000200] = "SHAMAN",
-	[0x00000400] = "WARLOCK",
-	[0x00000800] = "WARRIOR"
+	[1] = "DEATHKNIGHT",
+	[2] = "DEMONHUNTER",
+	[4] = "DRUID",
+	[8] = "HUNTER",
+	[16] = "MAGE",
+	[32] = "MONK",
+	[64] = "PALADIN",
+	[128] = "PRIEST",
+	[256] = "ROGUE",
+	[512] = "SHAMAN",
+	[1024] = "WARLOCK",
+	[2048] = "WARRIOR"
 }
 
 local formatNameTypes
