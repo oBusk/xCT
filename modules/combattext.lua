@@ -407,10 +407,11 @@ function xCTFormat:SPELL_PERIODIC_HEAL( outputFrame, spellID, amount, critical, 
   x:AddMessage(outputFrame, message, outputColor)
 end
 
-function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged )
-  local outputColor, message = "genericDamage"
+function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged, args )
+  local outputColor, message, settings = "genericDamage"
 
   if critical and ShowSwingCrit() then
+    settings = x.db.profile.frames["critical"]
     if ShowSwingCritPrefix() then
       message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
                                       x:Abbreviate(amount, "critical"),
@@ -419,8 +420,12 @@ function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged 
       message = x:Abbreviate(amount, "critical")
     end
   else
+    settings = x.db.profile.frames["outgoing"]
     message = x:Abbreviate(amount, "outgoing")
   end
+
+  -- Add names
+  message = message .. x.formatName(args, settings.names)
 
   -- Add Icons
   message = x:GetSpellTextureFormatted( spellID,
@@ -431,10 +436,12 @@ function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged 
   x:AddMessage(outputFrame, message, outputColor)
 end
 
-function xCTFormat:RANGE_DAMAGE( outputFrame, spellID, amount, critical, merged, autoShot )
-  local outputColor, message = "genericDamage"
+function xCTFormat:RANGE_DAMAGE( outputFrame, spellID, amount, critical, merged, autoShot, args )
+  local outputColor, message, settings = "genericDamage"
 
   if critical then
+    settings = x.db.profile.frames["critical"]
+
     -- Check to see if we should format the Auto Shot critical hit
     if not autoShot or autoShot and ShowSwingCritPrefix() then
       message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
@@ -444,8 +451,12 @@ function xCTFormat:RANGE_DAMAGE( outputFrame, spellID, amount, critical, merged,
       message = x:Abbreviate(amount, "critical")
     end
   else
+    settings = x.db.profile.frames["outgoing"]
     message = x:Abbreviate(amount, "outgoing")
   end
+
+  -- Add names
+  message = message .. x.formatName(args, settings.names)
 
   -- Add Icons
   message = x:GetSpellTextureFormatted( spellID,
@@ -456,17 +467,22 @@ function xCTFormat:RANGE_DAMAGE( outputFrame, spellID, amount, critical, merged,
   x:AddMessage(outputFrame, message, outputColor)
 end
 
-function xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool )
-  local message
+function xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool, args )
+  local message, settings
 
   -- Format Criticals and also abbreviate values
   if critical then
+    settings = x.db.profile.frames["critical"]
     message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
                                     x:Abbreviate( amount, "critical" ),
                                     x.db.profile.frames["critical"].critPostfix )
   else
+    settings = x.db.profile.frames["outgoing"]
     message = x:Abbreviate( amount, outputFrame )
   end
+
+  -- Add names
+  message = message .. x.formatName(args, settings.names)
 
   -- Add Icons
   message = x:GetSpellTextureFormatted( spellID,
@@ -477,17 +493,22 @@ function xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged,
   x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(spellSchool) )
 end
 
-function xCTFormat:SPELL_PERIODIC_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool )
-  local message
+function xCTFormat:SPELL_PERIODIC_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool, args )
+  local message, settigns
 
   -- Format Criticals and also abbreviate values
   if critical then
+    settings = x.db.profile.frames["critical"]
     message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
                                     x:Abbreviate( amount, "critical" ),
                                     x.db.profile.frames["critical"].critPostfix )
   else
+    settings = x.db.profile.frames["outgoing"]
     message = x:Abbreviate( amount, outputFrame )
   end
+
+  -- Add names
+  message = message .. x.formatName(args, settings.names)
 
   -- Add Icons
   message = x:GetSpellTextureFormatted( spellID,
@@ -1918,13 +1939,13 @@ formatNameTypes = {
 }
 
 -- Check to see if the name needs for be formated, if so, handle all the logistics
-local function formatName(args, settings)
+function x.formatName(args, settings)
 	-- Event Type helper
-	local eventType = args:GetSourceType()
+	local eventType = settings[args:GetSourceType()]
 
 	-- If we have a valid event type that we can handle
-	if eventType == "NPC" or eventType == "PLAYER" or eventType == "ENVIRONMENT" then
-		return settings.namePrefix .. formatNameTypes[settings[eventType].nameType](args, settings[eventType]) .. settings.namePostfix
+	if eventType and eventType.nameType > 0 then
+		return settings.namePrefix .. formatNameTypes[eventType.nameType](args, eventType) .. settings.namePostfix
 	end
 	return "" -- Names not supported
 end
@@ -2065,16 +2086,16 @@ local CombatEventHandlers = {
 
 
 		if args.event == "SWING_DAMAGE" then
-			xCTFormat:SWING_DAMAGE(outputFrame, spellID, amount, critical, merged)
+			xCTFormat:SWING_DAMAGE(outputFrame, spellID, amount, critical, merged, args)
 
 		elseif args.event == "RANGE_DAMAGE" then
-			xCTFormat:RANGE_DAMAGE(outputFrame, spellID, amount, critical, merged, isAutoShot)
+			xCTFormat:RANGE_DAMAGE(outputFrame, spellID, amount, critical, merged, isAutoShot, args)
 
 		elseif args.event == "SPELL_DAMAGE" then
-			xCTFormat:SPELL_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool)
+			xCTFormat:SPELL_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool, args)
 
 		elseif args.event == "SPELL_PERIODIC_DAMAGE" then
-			xCTFormat:SPELL_PERIODIC_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool)
+			xCTFormat:SPELL_PERIODIC_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool, args)
 
 		else
 			print("xCT Needs Some Help: unhandled _DAMAGE event", args.event)
@@ -2097,7 +2118,7 @@ local CombatEventHandlers = {
 		-- TODO: Add merge settings
 
 		-- Add names
-		message = message .. formatName(args, settings.names)
+		message = message .. x.formatName(args, settings.names)
 
 		-- Add Icons
 		message = x:GetSpellTextureFormatted(args.spellId,
@@ -2125,7 +2146,7 @@ local CombatEventHandlers = {
 		-- format_gain = "+%s"
 		local healer_name, message = args.sourceName, sformat(format_gain, x:Abbreviate(amount,"healing"))
 
-		if not ShowHealingRealmNames() then
+		if not ShowHealingRealmNames() and args:GetSourceType() == "PLAYER" then
 			healer_name = smatch(healer_name, format_remove_realm) or healer_name
 		end
 
@@ -2179,46 +2200,35 @@ local CombatEventHandlers = {
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
 		           x.db.profile.frames['general'].fontJustify)
 
+		x:AddMessage('general', message, color)
+	end,
+
+	["KilledUnit"] = function (args)
+		if not ShowPartyKill() then return end
+
+		local color
+		if args.destGUID then
+			color = RAID_CLASS_COLORS[select(2, GetPlayerInfoByGUID(args.destGUID)) or 0]
+		end
+
+		x:AddMessage('general', sformat(format_dispell, XCT_KILLED, args.destName), color or 'killingBlow')
+	end,
+
+	["InterruptedUnit"] = function (args)
+		if not ShowInterrupts() then return end
+
+		-- Create and format the message
+		local message = sformat(format_dispell, INTERRUPTED, args.spellName)
+
+		-- Add the icon
+		message = x:GetSpellTextureFormatted(args.spellId,
+		                                          message,
+		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+		           x.db.profile.frames['general'].fontJustify)
+
+		x:AddMessage('general', message, 'interrupts')
 	end,
 }
-
-
---[[
-
-  ["SPELL_AURA_END"] = function(spellname)
-      if TrackSpells() then
-        x.spellCache.buffs[spellname] = true
-      end
-      if ShowBuffs() and not IsBuffFiltered(spellname) then
-        x:AddMessage('general', sformat(format_fade, spellname), 'buffsFaded')
-      end
-    end,
-  ["SPELL_AURA_START"] = function(spellname)
-      if TrackSpells() then
-        x.spellCache.buffs[spellname] = true
-      end
-      if ShowBuffs() and not IsBuffFiltered(spellname) then
-        x:AddMessage('general', sformat(format_gain, spellname), 'buffsGained')
-      end
-    end,
-  ["SPELL_AURA_END_HARMFUL"] = function(spellname)
-      if TrackSpells() then
-        x.spellCache.debuffs[spellname] = true
-      end
-      if ShowDebuffs() and not IsDebuffFiltered(spellname) then
-        x:AddMessage('general', sformat(format_fade, spellname), 'debuffsFaded')
-      end
-    end,
-  ["SPELL_AURA_START_HARMFUL"] = function(spellname)
-      if TrackSpells() then
-        x.spellCache.debuffs[spellname] = true
-      end
-      if ShowDebuffs() and not IsDebuffFiltered(spellname) then
-        x:AddMessage('general', sformat(format_gain, spellname), 'debuffsGained')
-      end
-    end,
-
-]]
 
 local BuffsOrDebuffs = {
 	["_AURA_APPLIED"] = true,
@@ -2229,6 +2239,116 @@ local BuffsOrDebuffs = {
 }
 
 
+--[[
+
+["SWING_MISSED"] = function(...)
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  missType = ...
+      local outputFrame, message, outputColor = "outgoing", _G["COMBAT_TEXT_"..missType], "misstypesOut"
+
+      -- Are we filtering Auto Attacks in the Outgoing frame?
+      if not ShowAutoAttack() then return end;
+
+      if missType == "IMMUNE" and not ShowImmunes() then return end
+      if missType ~= "IMMUNE" and not ShowMisses() then return end
+
+      -- Check for Pet Swings
+      local spellID = 6603
+      if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
+        if not ShowPetDamage() then return end
+        spellID = PET_ATTACK_TEXTURE
+      end
+
+      -- Add Icons
+      message = x:GetSpellTextureFormatted( spellID,
+                                            message,
+           x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+           x.db.profile.frames[outputFrame].fontJustify )
+
+      x:AddMessage(outputFrame, message, outputColor)
+    end,
+
+  ["SPELL_MISSED"] = function(...)
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
+      local outputFrame, message, outputColor = "outgoing", _G[missType], "misstypesOut"
+
+      if missType == "IMMUNE" and not ShowImmunes() then return end
+      if missType ~= "IMMUNE" and not ShowMisses() then return end
+
+      -- Add Icons
+      message = x:GetSpellTextureFormatted( spellID,
+                                            message,
+           x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+           x.db.profile.frames[outputFrame].fontJustify )
+
+      x:AddMessage(outputFrame, message, outputColor)
+    end,
+
+  ["RANGE_MISSED"] = function(...)
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
+      local outputFrame, message, outputColor = "outgoing", _G[missType], "misstypesOut"
+
+      if missType == "IMMUNE" and not ShowImmunes() then return end
+      if missType ~= "IMMUNE" and not ShowMisses() then return end
+
+      -- Add Icons
+      message = x:GetSpellTextureFormatted( spellID,
+                                            message,
+           x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+           x.db.profile.frames[outputFrame].fontJustify )
+
+      x:AddMessage(outputFrame, message, outputColor)
+    end,
+
+  ["SPELL_DISPEL"] = function(...)
+      if not ShowDispells() then return end
+
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_DISPELLED, spellName), "dispellDebuffs"
+
+      -- Check for buff or debuff (for color)
+      if auraType == "BUFF" then
+        outputColor = "dispellBuffs"
+      end
+
+      -- Add Icons
+      message = x:GetSpellTextureFormatted( spellID,
+                                            message,
+           x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+           x.db.profile.frames[outputFrame].fontJustify,
+                                            nil,
+                                            nil,
+                                            true )
+
+      if MergeDispells() then
+        x:AddSpamMessage("general", spellName, message, outputColor, 0.5)
+      else
+        x:AddMessage(outputFrame, message, outputColor)
+      end
+    end,
+
+  ["SPELL_STOLEN"] = function(...)
+      if not ShowDispells() then return end
+
+      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
+      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_STOLE, spellName), "dispellStolen"
+
+      -- Add Icons
+      message = x:GetSpellTextureFormatted( spellID,
+                                            message,
+           x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+           x.db.profile.frames[outputFrame].fontJustify,
+                                            nil,
+                                            nil,
+                                            true )
+
+      x:AddMessage(outputFrame, message, outputColor)
+    end,
+
+]]
+
+
+
+
 function x.CombatLogEvent (args)
 	-- Is the source someone we care about?
 	if args.isPlayer or ShowPetDamage() and args:IsSourceMyPet() or args:IsSourceMyVehicle() then
@@ -2236,8 +2356,8 @@ function x.CombatLogEvent (args)
 			CombatEventHandlers.HealingOutgoing(args)
 
 		elseif args.suffix == "_DAMAGE" then
-			--CombatEventHandlers.DamageOutgoing(args)
-			CombatEventHandlers.DamageIncoming(args)
+			CombatEventHandlers.DamageOutgoing(args)
+			--CombatEventHandlers.DamageIncoming(args)
 		end
 	end
 
@@ -2256,6 +2376,18 @@ function x.CombatLogEvent (args)
 	if args.atPlayer and BuffsOrDebuffs[args.suffix] then
 		CombatEventHandlers.AuraIncoming(args)
 
+	end
+
+
+	if args.isPlayer then
+
+		if args.event == 'PARTY_KILL' then
+			CombatEventHandlers.KilledUnit(args)
+
+		elseif args.event == 'SPELL_INTERRUPT' then
+			CombatEventHandlers.InterruptedUnit(args)
+
+		end
 	end
 end
 xCP:RegisterCombat(x.CombatLogEvent)

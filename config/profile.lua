@@ -239,6 +239,71 @@ addon.defaults = {
           },
         },
 
+      -- name formatting
+        names = {
+
+          -- appearance
+          ["namePrefix"] = " |cffFFFFFF<|r",
+          ["namePostfix"] = "|cffFFFFFF>|r",
+
+          -- events from a player's character
+          PLAYER = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 2,
+
+            ["enableNameColor"] = true,
+            ["enableCustomNameColor"] = false,
+            ["customNameColor"] = { 1, 1, 1 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from a npc
+          NPC = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 2,
+
+            ["enableNameColor"] = true,             -- Always On (Not in Options)
+            ["enableCustomNameColor"] = true,       -- Always On (Not in Options)
+            ["customNameColor"] = { .3, 0, .3 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from the envirornment
+          ENVIRONMENT = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Environment
+            --   2 = Environment Type
+            --   3 = Both ("Environment - Environment Type")
+            --   4 = Both ("Environment Type - Environment")
+            ["nameType"] = 0,
+
+            --["enableNameColor"] = true,
+            --["enableCustomNameColor"] = true,
+            --["customNameColor"] = { 0.32, 0.317, 0.1 },
+
+            --["enableSpellColor"] = true,
+            --["enableCustomSpellColor"] = false,
+            --["customSpellColor"] = { 1, 1, 1 },
+          }
+        },
+
       -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
@@ -300,6 +365,71 @@ addon.defaults = {
               ['healingOutCritical'] = { enabled = false, desc = "Critical Healing", default = { 0.10, 1.00, 0.10 } },
             },
           },
+        },
+
+      -- name formatting
+        names = {
+
+          -- appearance
+          ["namePrefix"] = " |cffFFFFFF<|r",
+          ["namePostfix"] = "|cffFFFFFF>|r",
+
+          -- events from a player's character
+          PLAYER = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 2,
+
+            ["enableNameColor"] = true,
+            ["enableCustomNameColor"] = false,
+            ["customNameColor"] = { 1, 1, 1 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from a npc
+          NPC = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Source Name
+            --   2 = Spell Name
+            --   3 = Both ("Source Name - Spell Name")
+            --   4 = Both ("Spell Name - Source Name")
+            ["nameType"] = 2,
+
+            ["enableNameColor"] = true,             -- Always On (Not in Options)
+            ["enableCustomNameColor"] = true,       -- Always On (Not in Options)
+            ["customNameColor"] = { .3, 0, .3 },
+
+            ["enableSpellColor"] = true,
+            ["enableCustomSpellColor"] = false,
+            ["customSpellColor"] = { 1, 1, 1 },
+          },
+
+          -- events from the envirornment
+          ENVIRONMENT = {
+            -- Name Types:
+            --   0 = None
+            --   1 = Environment
+            --   2 = Environment Type
+            --   3 = Both ("Environment - Environment Type")
+            --   4 = Both ("Environment Type - Environment")
+            ["nameType"] = 0,
+
+            --["enableNameColor"] = true,
+            --["enableCustomNameColor"] = true,
+            --["customNameColor"] = { 0.32, 0.317, 0.1 },
+
+            --["enableSpellColor"] = true,
+            --["enableCustomSpellColor"] = false,
+            --["customSpellColor"] = { 1, 1, 1 },
+          }
         },
 
       -- critical appearance
