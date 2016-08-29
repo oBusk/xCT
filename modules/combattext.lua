@@ -121,7 +121,7 @@ function x:UpdateCombatTextEvents(enable)
 
   if enable then
     -- Enabled Combat Text
-    --f:RegisterEvent("COMBAT_TEXT_UPDATE")
+    f:RegisterEvent("COMBAT_TEXT_UPDATE")
     f:RegisterEvent("UNIT_HEALTH")
     f:RegisterEvent("UNIT_POWER")
     f:RegisterEvent("PLAYER_REGEN_DISABLED")
@@ -773,6 +773,8 @@ end
  Event handlers - Combat Text Events
 --]=====================================================]
 x.combat_events = {
+
+--[[
   ["DAMAGE"] = function(amount)
       if FilterIncomingDamage(amount) then return end
       x:AddMessage("damage", sformat(format_fade, x:Abbreviate(amount,"damage")), "damageTaken")
@@ -975,6 +977,9 @@ x.combat_events = {
         x:AddMessage("healing", message, "healingTakenPeriodicCritical")
       end
     end,
+]]
+
+
   ["SPELL_ACTIVE"] = function(spellName)
       if TrackSpells() then x.spellCache.procs[spellName] = true end
       if IsProcFiltered(spellName) then return end
@@ -1000,6 +1005,7 @@ x.combat_events = {
     end,
   ["SPELL_CAST"] = function(spellName) if ShowReactives() then x:AddMessage("procs", spellName, "spellReactive") end end,
 
+--[[
   ["MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "missTypeMiss") end end,
   ["DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "missTypeDodge") end end,
   ["PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "missTypeParry") end end,
@@ -1083,6 +1089,10 @@ x.combat_events = {
         x:AddMessage("damage", ABSORB, "missTypeAbsorb")
       end
     end,
+]]
+
+
+    -- TODO: Do this somewhere else
   ["ENERGIZE"] = function(amount, energy_type)
       --[[if not ShowEnergyGains() then return end
       if not FilterPlayerPower(tonumber(amount)) then
@@ -1154,6 +1164,8 @@ x.combat_events = {
       x:AddMessage("power", sformat(format_energy, message, ShowEnergyTypes() and _G[energy_type] or ""), color)
 
     end,
+
+
 
   ["SPELL_AURA_END"] = function(spellname)
       if TrackSpells() then
@@ -1438,7 +1450,7 @@ x.events = {
 --]=====================================================]
 
 -- TODO: remove this lol
-
+--[==[
 x.outgoing_events = {
   ["SPELL_PERIODIC_HEAL"] = function(...)
       if not ShowHealing() or not ShowHots() then return end
@@ -1836,7 +1848,7 @@ x.outgoing_events = {
       x:AddMessage(outputFrame, message, outputColor)
     end,
 }
-
+]==]
 
 -- =====================================================
 --                  Format Name Things
@@ -1955,6 +1967,16 @@ function x.formatName(args, settings, isSource)
 	end
 	return "" -- Names not supported
 end
+
+local missTypeColorLookup = {
+	['MISS'] = 'missTypeMiss',
+	['DODGE'] = 'missTypeDodge',
+	['PARRY'] = 'missTypeParry',
+	['EVADE'] = 'missTypeEvade',
+	['IMMUNE'] = 'missTypeImmune',
+	['DEFLECT'] = 'missTypeDeflect',
+	['REFLECT'] = 'missTypeReflect'
+}
 
 
 -- =====================================================
@@ -2130,33 +2152,38 @@ local CombatEventHandlers = {
 			local resistedAmount, resistType
 
 			-- Check for resists (full and partials)
-			if args.resisted > 0 then
+			if (args.resisted or 0) > 0 then
 				resistType, resistedAmount = RESIST, args.amount > 0 and args.resisted
 				color = resistedAmount and 'missTypeResist' or 'missTypeResistPartial'
-			elseif args.blocked > 0 then
+			elseif (args.blocked or 0) > 0 then
 				resistType, resistedAmount = BLOCK, args.amount > 0 and args.blocked
 				color = resistedAmount and 'missTypeBlock', 'missTypeBlockPartial'
-			elseif args.absorbed > 0 then
+			elseif (args.absorbed or 0) > 0 then
 				resistType, resistedAmount = BLOCK, args.amount > 0 and args.absorbed
 				color = resistedAmount and 'missTypeAbsorb', 'missTypeAbsorbPartial'
 			end
 
-			-- Craft the new message (if is partial)
-			if resistedAmount then
-				-- format_resist: "-%s (%s %s)"
-				message = sformat(format_resist, x:Abbreviate(args.amount, 'damage'), resistType, x:Abbreviate(resistedAmount, 'damage'))
-			else
-				-- It was a full resist
-				message = resistType	-- TODO: Add an option to still see how much was reisted on a full resist
+			if resistType then
+				-- Craft the new message (if is partial)
+				if resistedAmount then
+					-- format_resist: "-%s (%s %s)"
+					message = sformat(format_resist, x:Abbreviate(args.amount, 'damage'), resistType, x:Abbreviate(resistedAmount, 'damage'))
+				else
+					-- It was a full resist
+					message = resistType	-- TODO: Add an option to still see how much was reisted on a full resist
+				end
 			end
-		else
+		end
+
+		-- If this is not a resist, then lets format it as normal
+		if not message then
 			-- Format Criticals and also abbreviate values
 			if args.critical then
 				message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix,
-				                               x:Abbreviate(-amount, "critical"),
+				                               x:Abbreviate(-args.amount, "critical"),
 				                               x.db.profile.frames["critical"].critPostfix)
 			else
-				message = x:Abbreviate(-amount, outputFrame)
+				message = x:Abbreviate(-args.amount, outputFrame)
 			end
 		end
 
@@ -2312,6 +2339,20 @@ local CombatEventHandlers = {
 		x:AddMessage('outgoing', message, 'misstypesOut')
 	end,
 
+	["IncomingMiss"] = function (args)
+		if not ShowMissTypes() then return end
+
+		local message = _G["COMBAT_TEXT_"..args.missType]
+
+		-- Add Icons
+		message = x:GetSpellTextureFormatted(args.spellId,
+		                                          message,
+		          x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
+		          x.db.profile.frames['damage'].fontJustify)
+
+		x:AddMessage('damage', message, missTypeColorLookup[args.missType] or 'misstypesOut')
+	end,
+
 	["SpellDispel"] = function (args)
 		if not ShowDispells() then return end
 
@@ -2434,6 +2475,9 @@ function x.CombatLogEvent (args)
 
 		elseif args.suffix == "_DAMAGE" then
 			CombatEventHandlers.DamageIncoming(args)
+
+		elseif args.suffix == "_MISSED" then
+			CombatEventHandlers.IncomingMiss(args)
 
 		elseif (args.suffix == "_AURA_APPLIED" or args.suffix == "_AURA_REFRESH") and AbsorbList[args.spellId] then
 			CombatEventHandlers.ShieldIncoming(args)
