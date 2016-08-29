@@ -3469,81 +3469,6 @@ addon.options.args["Frames"] = {
       },
     },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     damage = {
       name = "|cffFFFFFFIncoming|r |cff798BDD(Damage)|r",
       type = 'group',
@@ -4813,30 +4738,6 @@ addon.options.args["Frames"] = {
               order = 0,
               name = "|cff798BDDSpecial Tweaks|r:",
               fontSize = 'large',
-            },
-            showFriendlyHealers = {
-              order = 1,
-              type = 'toggle',
-              name = "Show Names",
-              desc = "Shows the healer names next to incoming heals.\n|cffFF0000Requires:|r CVar Engine in order to change.",
-              get = get2,
-              set = set2,
-            },
-            enableClassNames = {
-              order = 2,
-              type = 'toggle',
-              name = "Class Color Names",
-              desc = "Color healer names by class. \n\n|cffFF0000Requires:|r Healer in |cffAAAAFFParty|r or |cffFF8000Raid|r",
-              get = get2,
-              set = set2,
-            },
-            enableRealmNames = {
-              order = 3,
-              type = 'toggle',
-              name = "Show Realm Names",
-              desc = "Show incoming healer names with their realm name.",
-              get = get2,
-              set = set2,
             },
             enableOverHeal = {
               order = 4,

@@ -685,9 +685,6 @@ addon.defaults = {
         ["visibilityTime"] = 5,
 
       -- special tweaks
-        ["showFriendlyHealers"] = true,
-        ["enableClassNames"] = true,
-        ["enableRealmNames"] = true,
         ["enableOverHeal"] = true,
         ["enableSelfAbsorbs"] = true,
         ["showOnlyMyHeals"] = false,

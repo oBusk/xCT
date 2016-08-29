@@ -1960,6 +1960,19 @@ end
 --               The New Combat Handlers
 -- =====================================================
 local CombatEventHandlers = {
+	["ShieldOutgoing"] = function (args)
+		local settings, value = x.db.profile.frames['outgoing'], select(17, UnitBuff(args.destName, args.spellName))
+		if not value or value <= 0 then return end
+
+		-- Create the message
+		local message = x:Abbreviate(value, 'outgoing')
+
+		-- Add names
+		message = message .. x.formatName(args, settings.names, true)
+
+		x:AddMessage('outgoing', message, 'shieldTaken')
+	end,
+
 	["HealingOutgoing"] = function (args)
 		local spellID, isHoT, merged = args.spellId, args.prefix == "SPELL_PERIODIC"
 
@@ -1972,7 +1985,7 @@ local CombatEventHandlers = {
 		if isHoT and not ShowHots() then return end
 
 		-- Filter Ougoing Healing Spell or Amount
-		if IsSpellFiltered(args.spellID) or FilterOutgoingHealing(args.amount) then return end
+		if IsSpellFiltered(spellID) or FilterOutgoingHealing(args.amount) then return end
 
 		-- Filter Overhealing
 		local amount = args.amount
@@ -2135,12 +2148,31 @@ local CombatEventHandlers = {
 		x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(args.spellSchool))
 	end,
 
+	["ShieldIncoming"] = function (args)
+		local settings, value = x.db.profile.frames['healing'], select(17, UnitBuff("player", args.spellName))
+		if not value or value <= 0 then return end
+
+		-- Create the message
+		local message = sformat(format_gain, x:Abbreviate(value, "healing"))
+
+		-- Add names
+		message = message .. x.formatName(args, settings.names, true)
+
+		x:AddMessage('healing', message, 'shieldTaken')
+	end,
+
 	["HealingIncoming"] = function (args)
 		local amount, isHoT, spellID = args.amount, args.prefix == "SPELL_PERIODIC", args.spellId
 		local color = isHoT and "healingTakenPeriodic" or args.critical and "healingTakenCritical" or "healingTaken"
 		local settings = x.db.profile.frames["healing"]
 
-		if FilterIncomingHealing(amount) then return end
+		-- Adjust the amount if the user doesnt want over healing
+		if not ShowOverHealing() then
+			amount = amount - args.overhealing
+		end
+
+		-- Filter out small amounts
+		if amount <= 0 or FilterIncomingHealing(amount) then return end
 
 		if ShowOnlyMyHeals() and not args.isPlayer then
 			if ShowOnlyMyPetsHeals() and args:IsSourceMyPet() then
@@ -2153,28 +2185,9 @@ local CombatEventHandlers = {
 		-- format_gain = "+%s"
 		local healer_name, message = args.sourceName, sformat(format_gain, x:Abbreviate(amount,"healing"))
 
-		if not ShowHealingRealmNames() and args:GetSourceType() == "PLAYER" then
-			healer_name = smatch(healer_name, format_remove_realm) or healer_name
-		end
-
 		if MergeIncomingHealing() then
-			x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
+			x:AddSpamMessage("healing", x.formatName(args, settings.names, true), amount, "healingTaken", 5)
 		else
-			--[[if ShowFriendlyNames() then
-				if ShowColoredFriendlyNames() and args:IsSourceRaidMember() or args:IsSourcePartyMember() then
-					local _, class = UnitClass(healer_name)
-					if (class) then
-						healer_name = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healer_name)
-					end
-				end
-
-				if x.db.profile.frames["healing"].fontJustify == "LEFT" then
-					message = message .. " " .. healer_name
-				else
-					message = healer_name .. " " .. message
-				end
-			end]]
-
 			-- Add names
 			message = message .. x.formatName(args, settings.names, true)
 
@@ -2223,12 +2236,12 @@ local CombatEventHandlers = {
 	["KilledUnit"] = function (args)
 		if not ShowPartyKill() then return end
 
-		local color
+		local color = 'killingBlow'
 		if args.destGUID then
 			color = RAID_CLASS_COLORS[select(2, GetPlayerInfoByGUID(args.destGUID)) or 0]
 		end
 
-		x:AddMessage('general', sformat(format_dispell, XCT_KILLED, args.destName), color or 'killingBlow')
+		x:AddMessage('general', sformat(format_dispell, XCT_KILLED, args.destName), color)
 	end,
 
 	["InterruptedUnit"] = function (args)
@@ -2248,7 +2261,7 @@ local CombatEventHandlers = {
 
 	["OutgoingMiss"] = function (args)
 		local message, spellId = _G["COMBAT_TEXT_"..args.missType], args.spellId
-		
+
 		-- If this is a melee swing, it could also be our pets
 		if args.prefix == 'SWING' then
 			if not ShowAutoAttack() then return end
@@ -2313,6 +2326,50 @@ local BuffsOrDebuffs = {
 	--["_AURA_REFRESH"] = true, -- I dont know how we should support this
 }
 
+-- List from: http://www.tukui.org/addons/index.php?act=view&id=236
+local AbsorbList = {
+	-- All
+	[187805] = true, -- Etheralus (WoD Legendary Ring)
+	[173260] = true, -- Shield Tronic (Like a health potion from WoD)
+	[64413] = true,  -- Val'anyr, Hammer of Ancient Kings (WotLK Legendary Mace)
+
+	-- Death Knight
+	[48707] = true,  -- Anti-Magic Shield
+	[77535] = true,  -- Blood Shield
+	[116888] = true, -- Purgatory
+	[219809] = true, -- Tombstone
+
+	-- Demon Hunter
+	[227225] = true, -- Soul Barrier
+
+	-- Mage
+	[11426] = true,  -- Ice Barrier
+
+	-- Monk
+	[116849] = true, -- Life Cocoon
+
+	-- Paladin
+	[203538] = true, -- Greater Blessing of Kings
+	[185676] = true, -- Protection Paladin T18 - 2 piece
+	[184662] = true, -- Shield of Vengeance
+
+	--Priest
+	[152118] = true, -- Clarity of Will
+	[17] = true,     -- Power Word: Shield
+
+	-- Shaman
+	[145378] = true, -- Shaman T16 - 2 piece
+	[114893] = true, -- Stone Bulwark
+
+	-- Warlock
+	[108416] = true, -- Dark Pact
+	[108366] = true, -- Soul Leech
+
+	-- Warrior
+	[190456] = true, -- Ignore Pain
+	[112048] = true, -- Shield Barrier
+}
+
 function x.CombatLogEvent (args)
 	-- Is the source someone we care about?
 	if args.isPlayer or args:IsSourceMyVehicle() or ShowPetDamage() and args:IsSourceMyPet() then
@@ -2334,8 +2391,11 @@ function x.CombatLogEvent (args)
 		elseif args.event == 'SPELL_DISPEL' then
 			CombatEventHandlers.SpellDispel(args)
 
-		elseif args.event == 'SPELL_DISPEL' then
+		elseif args.event == 'SPELL_STOLEN' then
 			CombatEventHandlers.SpellStolen(args)
+
+		elseif (args.suffix == "_AURA_APPLIED" or args.suffix == "_AURA_REFRESH") and AbsorbList[args.spellId] then
+			CombatEventHandlers.ShieldOutgoing(args)
 
 		end
 	end
@@ -2348,6 +2408,8 @@ function x.CombatLogEvent (args)
 		elseif args.suffix == "_DAMAGE" then
 			CombatEventHandlers.DamageIncoming(args)
 
+		elseif (args.suffix == "_AURA_APPLIED" or args.suffix == "_AURA_REFRESH") and AbsorbList[args.spellId] then
+			CombatEventHandlers.ShieldIncoming(args)
 		end
 	end
 
