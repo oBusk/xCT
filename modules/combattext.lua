@@ -1049,6 +1049,7 @@ x.combat_events = {
         x:AddMessage("damage", ABSORB, "missTypeAbsorb")
       end
     end,
+
   ["SPELL_RESIST"] = function(amount, resisted)
       if resisted then
         if ShowResistances() then
@@ -2121,16 +2122,42 @@ local CombatEventHandlers = {
 	end,
 
 	["DamageIncoming"] = function (args)
-		local outputFrame, message = "damage"
+		local outputFrame, color, message = "damage"
 		local settings = x.db.profile.frames["damage"]
 
-		-- Format Criticals and also abbreviate values
-		if args.critical then
-			message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix,
-			                               x:Abbreviate(-args.amount, "critical"),
-			                               x.db.profile.frames["critical"].critPostfix)
+		-- Check for resists
+		if ShowResistances() then
+			local resistedAmount, resistType
+
+			-- Check for resists (full and partials)
+			if args.resisted > 0 then
+				resistType, resistedAmount = RESIST, args.amount > 0 and args.resisted
+				color = resistedAmount and 'missTypeResist' or 'missTypeResistPartial'
+			elseif args.blocked > 0 then
+				resistType, resistedAmount = BLOCK, args.amount > 0 and args.blocked
+				color = resistedAmount and 'missTypeBlock', 'missTypeBlockPartial'
+			elseif args.absorbed > 0 then
+				resistType, resistedAmount = BLOCK, args.amount > 0 and args.absorbed
+				color = resistedAmount and 'missTypeAbsorb', 'missTypeAbsorbPartial'
+			end
+
+			-- Craft the new message (if is partial)
+			if resistedAmount then
+				-- format_resist: "-%s (%s %s)"
+				message = sformat(format_resist, x:Abbreviate(args.amount, 'damage'), resistType, x:Abbreviate(resistedAmount, 'damage'))
+			else
+				-- It was a full resist
+				message = resistType	-- TODO: Add an option to still see how much was reisted on a full resist
+			end
 		else
-			message = x:Abbreviate(-args.amount, outputFrame)
+			-- Format Criticals and also abbreviate values
+			if args.critical then
+				message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix,
+				                               x:Abbreviate(-amount, "critical"),
+				                               x.db.profile.frames["critical"].critPostfix)
+			else
+				message = x:Abbreviate(-amount, outputFrame)
+			end
 		end
 
 		-- TODO: Add merge settings
