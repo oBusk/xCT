@@ -438,7 +438,8 @@ do
 		function private.GetSourceController (args)
 			flags = args.sourceFlags
 			return hasFlag(flags, COMBATLOG_OBJECT_CONTROL_NPC) and "NPC" or
-				hasFlag(flags, COMBATLOG_OBJECT_CONTROL_PLAYER) and "PLAYER" or "UNKNOWN"
+				hasFlag(flags, COMBATLOG_OBJECT_CONTROL_PLAYER) and "PLAYER" or
+				args.prefix == "ENVIRONMENTAL" and "ENVIRONMENT" or "UNKNOWN"
 		end
 
 		function private.GetDestinationController (args)

@@ -1883,13 +1883,13 @@ local CLASS_LOOKUP = {
 
 local formatNameTypes
 formatNameTypes = {
-	function (args, settings) -- [1] = Source Name
-		local color
+	function (args, settings, isSource) -- [1] = Source/Destination Name
+		local guid, name, color = isSource and args.sourceGUID or args.destGUID, isSource and args.sourceName or args.destName
 		if settings.enableNameColor and not settings.enableCustomNameColor then
 			if args.prefix == "ENVIRONMENTAL" then
 				color = x.spellColors[args.school or args.spellSchool or 1]
 			else
-				local _, class = GetPlayerInfoByGUID(args.sourceGUID)
+				local _, class = GetPlayerInfoByGUID(guid)
 				if not class and args.spellId then
 					local isClass = bit.band(CLASS_MASK, LPS:GetSpellInfo(args.spellId))
 					if isClass ~= 0 then
@@ -1901,14 +1901,14 @@ formatNameTypes = {
 			end
 		end
 
-		return formatNameHelper(args.sourceName,
-		                    settings.enableNameColor,
-		                             color,
-		                    settings.enableCustomNameColor,
-		                    settings.customNameColor)
+		return formatNameHelper(name,
+		               settings.enableNameColor,
+		                        color,
+		               settings.enableCustomNameColor,
+		               settings.customNameColor)
 	end,
 
-	function (args, settings) -- [2] = Spell Name
+	function (args, settings, isSource) -- [2] = Spell Name
 		local color
 			if settings.enableNameColor and not settings.enableCustomNameColor then
 
@@ -1929,23 +1929,23 @@ formatNameTypes = {
 		                    settings.customSpellColor)
 	end,
 
-	function (args, settings) -- [3] = Source Name - Spell Name
-		return formatNameTypes[1](args, settings) .. " - " .. formatNameTypes[2](args, settings)
+	function (args, settings, isSource) -- [3] = Source Name - Spell Name
+		return formatNameTypes[1](args, settings, isSource) .. " - " .. formatNameTypes[2](args, settings, isSource)
 	end,
 
-	function (args, settings) -- [4] = Spell Name - Source Name
-		return formatNameTypes[2](args, settings) .. " - " .. formatNameTypes[1](args, settings)
+	function (args, settings, isSource) -- [4] = Spell Name - Source Name
+		return formatNameTypes[2](args, settings, isSource) .. " - " .. formatNameTypes[1](args, settings, isSource)
 	end
 }
 
 -- Check to see if the name needs for be formated, if so, handle all the logistics
-function x.formatName(args, settings)
+function x.formatName(args, settings, isSource)
 	-- Event Type helper
-	local eventType = settings[args:GetSourceType()]
+	local eventType = settings[isSource and args:GetSourceController() or args:GetDestinationController()]
 
 	-- If we have a valid event type that we can handle
 	if eventType and eventType.nameType > 0 then
-		return settings.namePrefix .. formatNameTypes[eventType.nameType](args, eventType) .. settings.namePostfix
+		return settings.namePrefix .. formatNameTypes[eventType.nameType](args, eventType, isSource) .. settings.namePostfix
 	end
 	return "" -- Names not supported
 end
@@ -2118,7 +2118,7 @@ local CombatEventHandlers = {
 		-- TODO: Add merge settings
 
 		-- Add names
-		message = message .. x.formatName(args, settings.names)
+		message = message .. x.formatName(args, settings.names, true)
 
 		-- Add Icons
 		message = x:GetSpellTextureFormatted(args.spellId,
@@ -2227,6 +2227,64 @@ local CombatEventHandlers = {
 		           x.db.profile.frames['general'].fontJustify)
 
 		x:AddMessage('general', message, 'interrupts')
+	end,
+
+	["OutgoingMiss"] = function (args)
+		local message, spellId = _G["COMBAT_TEXT_"..args.missType], args.spellId
+		
+		-- If this is a melee swing, it could also be our pets
+		if args.prefix == 'SWING' then
+			if not ShowAutoAttack() then return end
+			if args:IsSourceMyPet() then
+				spellId = PET_ATTACK_TEXTURE
+			else
+				spellId = 6603
+			end
+		end
+
+		-- Check for filtered immunes
+		if args.missType == "IMMUNE" and not ShowImmunes() then return end
+		if args.missType ~= "IMMUNE" and not ShowMisses() then return end
+
+		-- Add Icons
+		message = x:GetSpellTextureFormatted(spellID,
+		                                     message,
+		     x.db.profile.frames['outgoing'].iconsEnabled and x.db.profile.frames['outgoing'].iconsSize or -1,
+		     x.db.profile.frames['outgoing'].fontJustify)
+
+		x:AddMessage('outgoing', message, 'misstypesOut')
+	end,
+
+	["SpellDispel"] = function (args)
+		if not ShowDispells() then return end
+
+		local color = args.auraType == 'BUFF' and 'dispellBuffs' or 'dispellDebuffs'
+		local message = sformat(format_dispell, XCT_DISPELLED, args.spellName)
+
+		-- Add Icons
+		message = x:GetSpellTextureFormatted(args.spellId,
+		                                          message,
+		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+		           x.db.profile.frames['general'].fontJustify)
+
+		if MergeDispells() then
+			x:AddSpamMessage('general', args.spellName, message, color, 0.5)
+		else
+			x:AddMessage('general', message, color)
+		end
+	end,
+
+	["SpellStolen"] = function (args)
+		if not ShowDispells() then return end
+		local message = sformat(format_dispell, XCT_STOLE, args.spellName)
+
+		-- Add Icons
+		message = x:GetSpellTextureFormatted(args.spellId,
+		                                          message,
+		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+		           x.db.profile.frames['general'].fontJustify)
+
+		x:AddMessage('general', message, 'dispellStolen')
 	end,
 }
 
@@ -2344,6 +2402,27 @@ local BuffsOrDebuffs = {
       x:AddMessage(outputFrame, message, outputColor)
     end,
 
+
+
+
+	["MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "missTypeMiss") end end,
+  ["DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "missTypeDodge") end end,
+  ["PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "missTypeParry") end end,
+  ["EVADE"] = function() if ShowMissTypes() then x:AddMessage("damage", EVADE, "missTypeEvade") end end,
+  ["IMMUNE"] = function() if ShowMissTypes() then x:AddMessage("damage", IMMUNE, "missTypeImmune") end end,
+  ["DEFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", DEFLECT, "missTypeDeflect") end end,
+  ["REFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", REFLECT, "missTypeReflect") end end,
+
+  ["SPELL_MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "missTypeMiss") end end,
+  ["SPELL_DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "missTypeDodge") end end,
+  ["SPELL_PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "missTypeParry") end end,
+  ["SPELL_EVADE"] = function() if ShowMissTypes() then x:AddMessage("damage", EVADE, "missTypeEvade") end end,
+  ["SPELL_IMMUNE"] = function() if ShowMissTypes() then x:AddMessage("damage", IMMUNE, "missTypeImmune") end end,
+  ["SPELL_DEFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", DEFLECT, "missTypeDeflect") end end,
+  ["SPELL_REFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", REFLECT, "missTypeReflect") end end,
+
+
+
 ]]
 
 
@@ -2351,13 +2430,26 @@ local BuffsOrDebuffs = {
 
 function x.CombatLogEvent (args)
 	-- Is the source someone we care about?
-	if args.isPlayer or ShowPetDamage() and args:IsSourceMyPet() or args:IsSourceMyVehicle() then
+	if args.isPlayer or args:IsSourceMyVehicle() or ShowPetDamage() and args:IsSourceMyPet() then
 		if args.suffix == "_HEAL" then
 			CombatEventHandlers.HealingOutgoing(args)
 
 		elseif args.suffix == "_DAMAGE" then
 			CombatEventHandlers.DamageOutgoing(args)
-			--CombatEventHandlers.DamageIncoming(args)
+
+		elseif args.suffix == '_MISSED' then
+			CombatEventHandlers.OutgoingMiss(args)
+
+		elseif args.event == 'PARTY_KILL' then
+			CombatEventHandlers.KilledUnit(args)
+
+		elseif args.event == 'SPELL_INTERRUPT' then
+			CombatEventHandlers.InterruptedUnit(args)
+
+		elseif args.event == 'SPELL_DISPEL' then
+
+		elseif args.event == 'SPELL_DISPEL' then
+
 		end
 	end
 
@@ -2376,18 +2468,6 @@ function x.CombatLogEvent (args)
 	if args.atPlayer and BuffsOrDebuffs[args.suffix] then
 		CombatEventHandlers.AuraIncoming(args)
 
-	end
-
-
-	if args.isPlayer then
-
-		if args.event == 'PARTY_KILL' then
-			CombatEventHandlers.KilledUnit(args)
-
-		elseif args.event == 'SPELL_INTERRUPT' then
-			CombatEventHandlers.InterruptedUnit(args)
-
-		end
 	end
 end
 xCP:RegisterCombat(x.CombatLogEvent)
