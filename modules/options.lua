@@ -1549,199 +1549,8 @@ addon.options.args["FloatingCombatText"] = {
           set = set0_update,
         },
 
-
-        -- Misc
-        --[[
-        headerMisc = {
-          type = "description",
-          order = 20,
-          name = "|cffFFFF00Misc:|r",
-          fontSize = 'medium',
-        },
-
-        floatingCombatTextCombatDamageDirectionalOffset = {
-          order = 51,
-          name = "Show Damage",
-          type = 'toggle',
-          desc = "Amount to offset directional damage numbers when they start.",
-          get = get0,
-          set = set0_update,
-        },
-
-        floatingCombatTextCombatDamageDirectionalScale = {
-          order = 51,
-          name = "Show Damage",
-          type = 'toggle',
-          desc = "Directional damage numbers movement scale (0 = no directional numbers)",
-          get = get0,
-          set = set0_update,
-        },
-
-        floatingCombatTextFloatMode = {
-          order = 51,
-          name = "Show Damage",
-          type = 'range',
-          desc = "The combat text float mode.",
-
-          min = 1, max = 100,
-          get = get0,
-          set = set0_update,
-        },]]
-
-
-
-
-
-
-
-
-
-
-
-
-
-        --[==[
-        CombatDamage = {
-          order = 2,
-          type = 'toggle',
-          name = "Show Damage",
-          desc = "Enable this option if you want your damage as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-        },
-
-        CombatLogPeriodicSpells = {
-          order = 3,
-          type = 'toggle',
-          name = "Show Damage over Time",
-          desc = "Enable this option if you want your DoT's as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end,
-        },
-
-        PetMeleeDamage = {
-          order = 4,
-          type = 'toggle',
-          name = "Show Pet Melee Damage",
-          desc = "Enable this option if you want your pet's melee damage as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.CombatDamage end,
-        },
-
-        CombatHealing = {
-          order = 5,
-          type = 'toggle',
-          name = "Show Healing",
-          desc = "Enable this option if you want your healing as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-        },
-
-        CombatHealingAbsorbTarget = {
-          order = 6,
-          type = 'toggle',
-          name = "Show Absorbs",
-          desc = "Enable this option if you want your aborbs as Floating Combat Text.",
-          get = get0,
-          set = set0_update,
-        },
-
-
-
-        -- Floating Combat Text Effects
-        fctSpellMechanics = {
-          order = 8,
-          type = 'toggle',
-          name = "Show Effects",
-          desc = "Enable this option if you want to see your snares and roots.",
-          get = get0,
-          set = set0_update,
-        },
-
-        fctSpellMechanicsOther = {
-          order = 9,
-          type = 'toggle',
-          name = "Show Other's Effects",
-          desc = "Enable this option if you want to see other player's snares and roots too.",
-          get = get0,
-          set = set0_update,
-          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.fctSpellMechanics end,
-        },
-
-        listSpacer2 = {
-          type = "description",
-          order = 20,
-          name = "\n\n|cff798BDDFloating Combat Text Target Mode|r:",
-          fontSize = 'large',
-        },
-
-        CombatDamageStyle = {
-          type = "select",
-              order = 21,
-          name = "Target Mode:",
-          values = {
-            [1] = COMBAT_TARGET_MODE_NEW,
-            [2] = COMBAT_TARGET_MODE_OLD,
-          },
-          get = get0,
-          set = set0_update,
-          desc = "Allows you to change how your target's FCT is displayed.\n\n|cff798BDD"..COMBAT_TARGET_MODE_NEW.."|r - |cffFF8000(Fastest)|r displays damage on your target in an arc. New in WoD.\n\n|cff798BDD"..COMBAT_TARGET_MODE_OLD.."|r - |cffFF8000(Slower)|r displays damage floating up. This was the old default in MoP.",
-        },
-
-        listSpacer3 = {
-          type = "description",
-          order = 30,
-          name = "\n\n|cff798BDDFloating Combat Text Font|r:",
-          fontSize = 'large',
-        },
-
-        enabled = {
-          order = 31,
-          type = 'toggle',
-          name = "Customize",
-          get = get0,
-          set = set0_update,
-        },
-
-        font = {
-          type = 'select', dialogControl = 'LSM30_Font',
-          order = 32,
-          name = "Blizzard's FCT Font",
-          desc = "Set the font Blizzard's head numbers (|cffFFFF00Default:|r Friz Quadrata TT)",
-          values = AceGUIWidgetLSMlists.font,
-          get = get0,
-          set = function(info, value)
-            x.db.profile.blizzardFCT.font = value
-            x.db.profile.blizzardFCT.fontName = LSM:Fetch("font", value)
-
-            --x:UpdateFrames()
-            --x.cvar_update()
-          end,
-          disabled = function(info) return isCVarsDisabled( ) or not x.db.profile.blizzardFCT.enabled end,
-        },
-        ]==]
-
-
-
-
       },
     },
-    --[[
-    battlePetFCT = {
-      name = "Battle Pets",
-      type = 'group',
-      order = 2,
-      args = {
-        title1 = {
-          order = 0,
-          type = "description",
-          name = "Battle Pet Settings to go in here :)",
-        },
-      },
-    },
-    ]]
   },
 }
 
@@ -2789,70 +2598,90 @@ addon.options.args["Frames"] = {
               args = {
                 playerNames = {
                   type = 'description',
-                  order = 20,
-                  name = "|cff798BDDEvents to a Player|r:",
+                  order = 1,
+                  name = "|cff798BDDPlayer Name Format Settings|r:",
                   fontSize = 'large',
                 },
 
                 enableNameColor = {
-                  order = 21,
+                  order = 2,
                   type = 'toggle',
                   name = "Color Player Name",
                   desc = "If the player's class is known (e.g. is a raid member), it will be colored.",
                 },
 
-                enableCustomNameColor = {
-                  order = 22,
+                removeRealmName = {
+                  order = 3,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Remove Realm Name",
+                  desc = "If the player has a realm name attatched to her name, it will be removed.",
+                },
+
+                enableCustomNameColor = {
+                  order = 4,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half',
                 },
 
                 customNameColor = {
-                  order = 23,
+                  order = 5,
                   type = 'color',
                   name = "Color",
-                  width = 'half',
                   get = getNameFormatColor,
                   set = setNameFormatColor,
+                  width = 'half',
                 },
 
-                playerNames_Spacer1 = {
+                playerSpellNames = {
                   type = 'description',
-                  order = 24,
-                  name = "",
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
                 },
 
                 enableSpellColor = {
-                  order = 25,
+                  order = 11,
                   type = 'toggle',
                   name = "Color Spell Name",
                   desc = "The spell name will be colored according to it's spell school.",
                 },
 
+                playerNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
                 enableCustomSpellColor = {
-                  order = 26,
+                  order = 13,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
                 },
 
                 customSpellColor = {
-                  order = 27,
+                  order = 14,
                   type = 'color',
                   name = "Color",
                   width = 'half',
                   get = getNameFormatColor,
                   set = setNameFormatColor,
+                  width = 'half'
                 },
 
                 playerNames_Spacer2 = {
                   type = 'description',
-                  order = 28,
+                  order = 20,
                   name = "",
                 },
 
                 nameType = {
                   type = 'select',
-                  order = 29,
+                  order = 30,
                   name = "Display Player Name",
                   desc = "",
                   width = 'double',
@@ -2876,40 +2705,50 @@ addon.options.args["Frames"] = {
               args = {
                 npcNames = {
                   type = 'description',
-                  order = 30,
-                  name = "|cff798BDDEvents to a NPC|r:",
+                  order = 1,
+                  name = "|cff798BDDNPC Name Format Settings|r:",
                   fontSize = 'large',
                 },
 
                 customNameColor = {
-                  order = 31,
+                  order = 2,
                   type = 'color',
                   name = "NPC Name's Color",
                   get = getNameFormatColor,
                   set = setNameFormatColor,
                 },
 
-                npcNames_Spacer1 = {
+                npcSpellNames = {
                   type = 'description',
-                  order = 34,
-                  name = "",
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
                 },
 
                 enableSpellColor = {
-                  order = 35,
+                  order = 11,
                   type = 'toggle',
                   name = "Color Spell Name",
                   desc = "The spell name will be colored according to it's spell school.",
                 },
 
+                npcNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
                 enableCustomSpellColor = {
-                  order = 36,
+                  order = 13,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
                 },
 
                 customSpellColor = {
-                  order = 37,
+                  order = 14,
                   type = 'color',
                   name = "Color",
                   width = 'half',
@@ -2919,13 +2758,13 @@ addon.options.args["Frames"] = {
 
                 npcNames_Spacer2 = {
                   type = 'description',
-                  order = 38,
+                  order = 20,
                   name = "",
                 },
 
                 nameType = {
                   type = 'select',
-                  order = 39,
+                  order = 21,
                   name = "Display NPC Name",
                   desc = "",
                   width = 'double',
@@ -3385,70 +3224,90 @@ addon.options.args["Frames"] = {
               args = {
                 playerNames = {
                   type = 'description',
-                  order = 20,
-                  name = "|cff798BDDEvents to a Player|r:",
+                  order = 1,
+                  name = "|cff798BDDPlayer Name Format Settings|r:",
                   fontSize = 'large',
                 },
 
                 enableNameColor = {
-                  order = 21,
+                  order = 2,
                   type = 'toggle',
                   name = "Color Player Name",
                   desc = "If the player's class is known (e.g. is a raid member), it will be colored.",
                 },
 
-                enableCustomNameColor = {
-                  order = 22,
+                removeRealmName = {
+                  order = 3,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Remove Realm Name",
+                  desc = "If the player has a realm name attatched to her name, it will be removed.",
+                },
+
+                enableCustomNameColor = {
+                  order = 4,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half',
                 },
 
                 customNameColor = {
-                  order = 23,
+                  order = 5,
                   type = 'color',
                   name = "Color",
-                  width = 'half',
                   get = getNameFormatColor,
                   set = setNameFormatColor,
+                  width = 'half',
                 },
 
-                playerNames_Spacer1 = {
+                playerSpellNames = {
                   type = 'description',
-                  order = 24,
-                  name = "",
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
                 },
 
                 enableSpellColor = {
-                  order = 25,
+                  order = 11,
                   type = 'toggle',
                   name = "Color Spell Name",
                   desc = "The spell name will be colored according to it's spell school.",
                 },
 
+                playerNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
                 enableCustomSpellColor = {
-                  order = 26,
+                  order = 13,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
                 },
 
                 customSpellColor = {
-                  order = 27,
+                  order = 14,
                   type = 'color',
                   name = "Color",
                   width = 'half',
                   get = getNameFormatColor,
                   set = setNameFormatColor,
+                  width = 'half'
                 },
 
                 playerNames_Spacer2 = {
                   type = 'description',
-                  order = 28,
+                  order = 20,
                   name = "",
                 },
 
                 nameType = {
                   type = 'select',
-                  order = 29,
+                  order = 30,
                   name = "Display Player Name",
                   desc = "",
                   width = 'double',
@@ -3472,40 +3331,50 @@ addon.options.args["Frames"] = {
               args = {
                 npcNames = {
                   type = 'description',
-                  order = 30,
-                  name = "|cff798BDDEvents to a NPC|r:",
+                  order = 1,
+                  name = "|cff798BDDNPC Name Format Settings|r:",
                   fontSize = 'large',
                 },
 
                 customNameColor = {
-                  order = 31,
+                  order = 2,
                   type = 'color',
                   name = "NPC Name's Color",
                   get = getNameFormatColor,
                   set = setNameFormatColor,
                 },
 
-                npcNames_Spacer1 = {
+                npcSpellNames = {
                   type = 'description',
-                  order = 34,
-                  name = "",
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
                 },
 
                 enableSpellColor = {
-                  order = 35,
+                  order = 11,
                   type = 'toggle',
                   name = "Color Spell Name",
                   desc = "The spell name will be colored according to it's spell school.",
                 },
 
+                npcNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
                 enableCustomSpellColor = {
-                  order = 36,
+                  order = 13,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
                 },
 
                 customSpellColor = {
-                  order = 37,
+                  order = 14,
                   type = 'color',
                   name = "Color",
                   width = 'half',
@@ -3515,13 +3384,13 @@ addon.options.args["Frames"] = {
 
                 npcNames_Spacer2 = {
                   type = 'description',
-                  order = 38,
+                  order = 20,
                   name = "",
                 },
 
                 nameType = {
                   type = 'select',
-                  order = 39,
+                  order = 21,
                   name = "Display NPC Name",
                   desc = "",
                   width = 'double',
@@ -4034,70 +3903,90 @@ addon.options.args["Frames"] = {
               args = {
                 playerNames = {
                   type = 'description',
-                  order = 20,
-                  name = "|cff798BDDEvents from a Player|r:",
+                  order = 1,
+                  name = "|cff798BDDPlayer Name Format Settings|r:",
                   fontSize = 'large',
                 },
 
                 enableNameColor = {
-                  order = 21,
+                  order = 2,
                   type = 'toggle',
                   name = "Color Player Name",
                   desc = "If the player's class is known (e.g. is a raid member), it will be colored.",
                 },
 
-                enableCustomNameColor = {
-                  order = 22,
+                removeRealmName = {
+                  order = 3,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Remove Realm Name",
+                  desc = "If the player has a realm name attatched to her name, it will be removed.",
+                },
+
+                enableCustomNameColor = {
+                  order = 4,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half',
                 },
 
                 customNameColor = {
-                  order = 23,
+                  order = 5,
                   type = 'color',
                   name = "Color",
-                  width = 'half',
                   get = getNameFormatColor,
                   set = setNameFormatColor,
+                  width = 'half',
                 },
 
-                playerNames_Spacer1 = {
+                playerSpellNames = {
                   type = 'description',
-                  order = 24,
-                  name = "",
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
                 },
 
                 enableSpellColor = {
-                  order = 25,
+                  order = 11,
                   type = 'toggle',
                   name = "Color Spell Name",
                   desc = "The spell name will be colored according to it's spell school.",
                 },
 
+                playerNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
                 enableCustomSpellColor = {
-                  order = 26,
+                  order = 13,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
                 },
 
                 customSpellColor = {
-                  order = 27,
+                  order = 14,
                   type = 'color',
                   name = "Color",
                   width = 'half',
                   get = getNameFormatColor,
                   set = setNameFormatColor,
+                  width = 'half'
                 },
 
                 playerNames_Spacer2 = {
                   type = 'description',
-                  order = 28,
+                  order = 20,
                   name = "",
                 },
 
                 nameType = {
                   type = 'select',
-                  order = 29,
+                  order = 30,
                   name = "Display Player Name",
                   desc = "",
                   width = 'double',
@@ -4121,40 +4010,50 @@ addon.options.args["Frames"] = {
               args = {
                 npcNames = {
                   type = 'description',
-                  order = 30,
-                  name = "|cff798BDDEvents from a NPC|r:",
+                  order = 1,
+                  name = "|cff798BDDNPC Name Format Settings|r:",
                   fontSize = 'large',
                 },
 
                 customNameColor = {
-                  order = 31,
+                  order = 2,
                   type = 'color',
                   name = "NPC Name's Color",
                   get = getNameFormatColor,
                   set = setNameFormatColor,
                 },
 
-                npcNames_Spacer1 = {
+                npcSpellNames = {
                   type = 'description',
-                  order = 34,
-                  name = "",
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
                 },
 
                 enableSpellColor = {
-                  order = 35,
+                  order = 11,
                   type = 'toggle',
                   name = "Color Spell Name",
                   desc = "The spell name will be colored according to it's spell school.",
                 },
 
+                npcNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
                 enableCustomSpellColor = {
-                  order = 36,
+                  order = 13,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
                 },
 
                 customSpellColor = {
-                  order = 37,
+                  order = 14,
                   type = 'color',
                   name = "Color",
                   width = 'half',
@@ -4164,13 +4063,13 @@ addon.options.args["Frames"] = {
 
                 npcNames_Spacer2 = {
                   type = 'description',
-                  order = 38,
+                  order = 20,
                   name = "",
                 },
 
                 nameType = {
                   type = 'select',
-                  order = 39,
+                  order = 21,
                   name = "Display NPC Name",
                   desc = "",
                   width = 'double',
@@ -4194,26 +4093,34 @@ addon.options.args["Frames"] = {
               args = {
                 environmentNames = {
                   type = 'description',
-                  order = 60,
-                  name = "|cff798BDDEvents from the Environment|r:",
+                  order = 1,
+                  name = "|cff798BDD\"Environment\" Format Settings|r:",
                   fontSize = 'large',
                 },
 
                 enableNameColor = {
-                  order = 61,
+                  order = 2,
                   type = 'toggle',
-                  name = "Color Name",
+                  name = "Color \"Environment\"",
                   desc = "The name will be colored according to it's environmental type.",
                 },
 
+                environmentNames_Spacer1 = {
+                  type = 'description',
+                  order = 3,
+                  name = "",
+                  width = 'normal',
+                },
+
                 enableCustomNameColor = {
-                  order = 62,
+                  order = 4,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Custom",
+                  width = 'half',
                 },
 
                 customNameColor = {
-                  order = 63,
+                  order = 5,
                   type = 'color',
                   name = "Color",
                   width = 'half',
@@ -4221,27 +4128,36 @@ addon.options.args["Frames"] = {
                   set = setNameFormatColor,
                 },
 
-                environmentNames_Spacer1 = {
+                environmentSpellNames = {
                   type = 'description',
-                  order = 64,
-                  name = "",
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
                 },
 
                 enableSpellColor = {
-                  order = 65,
+                  order = 11,
                   type = 'toggle',
                   name = "Color Type",
                   desc = "The type will be colored according to it's environmental type.",
                 },
 
+                environmentNames_Spacer2 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal',
+                },
+
                 enableCustomSpellColor = {
-                  order = 66,
+                  order = 13,
                   type = 'toggle',
-                  name = "Custom Color",
+                  name = "Custom",
+                  width = 'half',
                 },
 
                 customSpellColor = {
-                  order = 67,
+                  order = 14,
                   type = 'color',
                   name = "Color",
                   width = 'half',
@@ -4249,15 +4165,15 @@ addon.options.args["Frames"] = {
                   set = setNameFormatColor,
                 },
 
-                environmentNames_Spacer2 = {
+                environmentNames_Spacer3 = {
                   type = 'description',
-                  order = 68,
+                  order = 20,
                   name = "",
                 },
 
                 nameType = {
                   type = 'select',
-                  order = 69,
+                  order = 21,
                   name = "Display Environment Name",
                   desc = "Environment Damage Types:"..
                     "\n|cffFFFF00"..ACTION_ENVIRONMENTAL_DAMAGE_DROWNING.."|r,"..
@@ -4653,8 +4569,242 @@ addon.options.args["Frames"] = {
           },
         },
 
-        specialTweaks = {
+        names = {
           order = 40,
+          type = 'group',
+          name = "Name Settings",
+          childGroups = 'select',
+          get = getNameFormat,
+          set = setNameFormat,
+          args = {
+            namesDescription = {
+              type = 'description',
+              order = 1,
+              name = "The |cffFFFF00Names Settings|r allows you to further format and customize your combat text frames. By selecting values from below, you will be able to see the source, destination or spell names of certain events.\n\n|cffFF8040NOTE:|r The |cffFFFF00Spam Merger|r will preempt formatting.",
+              fontSize = 'small'
+            },
+
+            nameAppearance = {
+              type = 'description',
+              order = 2,
+              name = "|cff798BDDName Appearance|r:\n\n",
+              fontSize = 'large',
+              width = 'normal'
+            },
+
+            namePrefix = {
+              order = 3,
+              type = 'input',
+              name = "Prefix",
+              desc = "Prefix this value to the beginning when displaying the name.",
+              get = getNameFormatText,
+              set = setNameFormatText,
+            },
+
+            namePostfix = {
+              order = 4,
+              type = 'input',
+              name = "Postfix",
+              desc = "Postfix this value to the end when displaying the name.",
+              get = getNameFormatText,
+              set = setNameFormatText,
+            },
+
+            PLAYER = {
+              order = 10,
+              type = 'group',
+              name = "Events from a Player",
+              args = {
+                playerNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDDPlayer Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableNameColor = {
+                  order = 2,
+                  type = 'toggle',
+                  name = "Color Player Name",
+                  desc = "If the player's class is known (e.g. is a raid member), it will be colored.",
+                },
+
+                removeRealmName = {
+                  order = 3,
+                  type = 'toggle',
+                  name = "Remove Realm Name",
+                  desc = "If the player has a realm name attatched to her name, it will be removed.",
+                },
+
+                enableCustomNameColor = {
+                  order = 4,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half',
+                },
+
+                customNameColor = {
+                  order = 5,
+                  type = 'color',
+                  name = "Color",
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                  width = 'half',
+                },
+
+                playerSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Spell Name",
+                  desc = "The spell name will be colored according to it's spell school.",
+                },
+
+                playerNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                  width = 'half'
+                },
+
+                playerNames_Spacer2 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 30,
+                  name = "Display Player Name",
+                  desc = "",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "Player Name",
+                    [2] = "Spell Name",
+                    [3] = "Both (Player Name - Spell Name)",
+                    [4] = "Both (Spell Name - Player Name)"
+                  },
+                },
+
+              }
+            },
+
+            NPC = {
+              order = 20,
+              type = 'group',
+              name = "Events from a NPC",
+              args = {
+                npcNames = {
+                  type = 'description',
+                  order = 1,
+                  name = "|cff798BDDNPC Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                customNameColor = {
+                  order = 2,
+                  type = 'color',
+                  name = "NPC Name's Color",
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                npcSpellNames = {
+                  type = 'description',
+                  order = 10,
+                  name = "\n|cff798BDDSpell Name Format Settings|r:",
+                  fontSize = 'large',
+                },
+
+                enableSpellColor = {
+                  order = 11,
+                  type = 'toggle',
+                  name = "Color Spell Name",
+                  desc = "The spell name will be colored according to it's spell school.",
+                },
+
+                npcNames_Spacer1 = {
+                  type = 'description',
+                  order = 12,
+                  name = "",
+                  width = 'normal'
+                },
+
+                enableCustomSpellColor = {
+                  order = 13,
+                  type = 'toggle',
+                  name = "Custom",
+                  desc = "Preempt an automatic color with a custom one.",
+                  width = 'half'
+                },
+
+                customSpellColor = {
+                  order = 14,
+                  type = 'color',
+                  name = "Color",
+                  width = 'half',
+                  get = getNameFormatColor,
+                  set = setNameFormatColor,
+                },
+
+                npcNames_Spacer2 = {
+                  type = 'description',
+                  order = 20,
+                  name = "",
+                },
+
+                nameType = {
+                  type = 'select',
+                  order = 21,
+                  name = "Display NPC Name",
+                  desc = "",
+                  width = 'double',
+                  style = 'radio',
+                  values = {
+                    [0] = "None",
+                    [1] = "NPC's Name",
+                    [2] = "Spell Name",
+                    [3] = "Both (NPC Name - Spell Name)",
+                    [4] = "Both (Spell Name - NPC Name)"
+                  },
+                },
+
+              },
+            },
+
+          }
+        },
+
+        specialTweaks = {
+          order = 50,
           name = "Special Tweaks",
           type = 'group',
           args = {

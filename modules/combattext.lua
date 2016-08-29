@@ -1885,6 +1885,11 @@ local formatNameTypes
 formatNameTypes = {
 	function (args, settings, isSource) -- [1] = Source/Destination Name
 		local guid, name, color = isSource and args.sourceGUID or args.destGUID, isSource and args.sourceName or args.destName
+
+		if settings.removeRealmName then
+			name = smatch(name, format_remove_realm) or name
+		end
+
 		if settings.enableNameColor and not settings.enableCustomNameColor then
 			if args.prefix == "ENVIRONMENTAL" then
 				color = x.spellColors[args.school or args.spellSchool or 1]
@@ -2133,6 +2138,8 @@ local CombatEventHandlers = {
 	["HealingIncoming"] = function (args)
 		local amount, isHoT, spellID = args.amount, args.prefix == "SPELL_PERIODIC", args.spellId
 		local color = isHoT and "healingTakenPeriodic" or args.critical and "healingTakenCritical" or "healingTaken"
+		local settings = x.db.profile.frames["healing"]
+
 		if FilterIncomingHealing(amount) then return end
 
 		if ShowOnlyMyHeals() and not args.isPlayer then
@@ -2153,7 +2160,7 @@ local CombatEventHandlers = {
 		if MergeIncomingHealing() then
 			x:AddSpamMessage("healing", healer_name, amount, "healingTaken", 5)
 		else
-			if ShowFriendlyNames() then
+			--[[if ShowFriendlyNames() then
 				if ShowColoredFriendlyNames() and args:IsSourceRaidMember() or args:IsSourcePartyMember() then
 					local _, class = UnitClass(healer_name)
 					if (class) then
@@ -2166,7 +2173,17 @@ local CombatEventHandlers = {
 				else
 					message = healer_name .. " " .. message
 				end
-			end
+			end]]
+
+			-- Add names
+			message = message .. x.formatName(args, settings.names, true)
+
+			-- Add the icon
+			message = x:GetSpellTextureFormatted(args.spellId,
+			                                          message,
+			           x.db.profile.frames['healing'].iconsEnabled and x.db.profile.frames['healing'].iconsSize or -1,
+			           x.db.profile.frames['healing'].fontJustify)
+
 			x:AddMessage("healing", message, color)
 		end
 	end,
@@ -2296,138 +2313,6 @@ local BuffsOrDebuffs = {
 	--["_AURA_REFRESH"] = true, -- I dont know how we should support this
 }
 
-
---[[
-
-["SWING_MISSED"] = function(...)
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  missType = ...
-      local outputFrame, message, outputColor = "outgoing", _G["COMBAT_TEXT_"..missType], "misstypesOut"
-
-      -- Are we filtering Auto Attacks in the Outgoing frame?
-      if not ShowAutoAttack() then return end;
-
-      if missType == "IMMUNE" and not ShowImmunes() then return end
-      if missType ~= "IMMUNE" and not ShowMisses() then return end
-
-      -- Check for Pet Swings
-      local spellID = 6603
-      if (sourceGUID == UnitGUID("pet")) or sourceFlags == COMBATLOG_FILTER_MY_VEHICLE then
-        if not ShowPetDamage() then return end
-        spellID = PET_ATTACK_TEXTURE
-      end
-
-      -- Add Icons
-      message = x:GetSpellTextureFormatted( spellID,
-                                            message,
-           x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-           x.db.profile.frames[outputFrame].fontJustify )
-
-      x:AddMessage(outputFrame, message, outputColor)
-    end,
-
-  ["SPELL_MISSED"] = function(...)
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
-      local outputFrame, message, outputColor = "outgoing", _G[missType], "misstypesOut"
-
-      if missType == "IMMUNE" and not ShowImmunes() then return end
-      if missType ~= "IMMUNE" and not ShowMisses() then return end
-
-      -- Add Icons
-      message = x:GetSpellTextureFormatted( spellID,
-                                            message,
-           x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-           x.db.profile.frames[outputFrame].fontJustify )
-
-      x:AddMessage(outputFrame, message, outputColor)
-    end,
-
-  ["RANGE_MISSED"] = function(...)
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,  spellID, _, _, missType = ...
-      local outputFrame, message, outputColor = "outgoing", _G[missType], "misstypesOut"
-
-      if missType == "IMMUNE" and not ShowImmunes() then return end
-      if missType ~= "IMMUNE" and not ShowMisses() then return end
-
-      -- Add Icons
-      message = x:GetSpellTextureFormatted( spellID,
-                                            message,
-           x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-           x.db.profile.frames[outputFrame].fontJustify )
-
-      x:AddMessage(outputFrame, message, outputColor)
-    end,
-
-  ["SPELL_DISPEL"] = function(...)
-      if not ShowDispells() then return end
-
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_DISPELLED, spellName), "dispellDebuffs"
-
-      -- Check for buff or debuff (for color)
-      if auraType == "BUFF" then
-        outputColor = "dispellBuffs"
-      end
-
-      -- Add Icons
-      message = x:GetSpellTextureFormatted( spellID,
-                                            message,
-           x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-           x.db.profile.frames[outputFrame].fontJustify,
-                                            nil,
-                                            nil,
-                                            true )
-
-      if MergeDispells() then
-        x:AddSpamMessage("general", spellName, message, outputColor, 0.5)
-      else
-        x:AddMessage(outputFrame, message, outputColor)
-      end
-    end,
-
-  ["SPELL_STOLEN"] = function(...)
-      if not ShowDispells() then return end
-
-      local _, _, _, sourceGUID, _, sourceFlags, _, _, _, _, _,   dispelSourceID, dispelSourceName, _,   spellID, spellName, _,  auraType = ...
-      local outputFrame, message, outputColor = "general", sformat(format_dispell, XCT_STOLE, spellName), "dispellStolen"
-
-      -- Add Icons
-      message = x:GetSpellTextureFormatted( spellID,
-                                            message,
-           x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-           x.db.profile.frames[outputFrame].fontJustify,
-                                            nil,
-                                            nil,
-                                            true )
-
-      x:AddMessage(outputFrame, message, outputColor)
-    end,
-
-
-
-
-	["MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "missTypeMiss") end end,
-  ["DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "missTypeDodge") end end,
-  ["PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "missTypeParry") end end,
-  ["EVADE"] = function() if ShowMissTypes() then x:AddMessage("damage", EVADE, "missTypeEvade") end end,
-  ["IMMUNE"] = function() if ShowMissTypes() then x:AddMessage("damage", IMMUNE, "missTypeImmune") end end,
-  ["DEFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", DEFLECT, "missTypeDeflect") end end,
-  ["REFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", REFLECT, "missTypeReflect") end end,
-
-  ["SPELL_MISS"] = function() if ShowMissTypes() then x:AddMessage("damage", MISS, "missTypeMiss") end end,
-  ["SPELL_DODGE"] = function() if ShowMissTypes() then x:AddMessage("damage", DODGE, "missTypeDodge") end end,
-  ["SPELL_PARRY"] = function() if ShowMissTypes() then x:AddMessage("damage", PARRY, "missTypeParry") end end,
-  ["SPELL_EVADE"] = function() if ShowMissTypes() then x:AddMessage("damage", EVADE, "missTypeEvade") end end,
-  ["SPELL_IMMUNE"] = function() if ShowMissTypes() then x:AddMessage("damage", IMMUNE, "missTypeImmune") end end,
-  ["SPELL_DEFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", DEFLECT, "missTypeDeflect") end end,
-  ["SPELL_REFLECT"] = function() if ShowMissTypes() then x:AddMessage("damage", REFLECT, "missTypeReflect") end end,
-
-
-
-]]
-
-
-
-
 function x.CombatLogEvent (args)
 	-- Is the source someone we care about?
 	if args.isPlayer or args:IsSourceMyVehicle() or ShowPetDamage() and args:IsSourceMyPet() then
@@ -2447,8 +2332,10 @@ function x.CombatLogEvent (args)
 			CombatEventHandlers.InterruptedUnit(args)
 
 		elseif args.event == 'SPELL_DISPEL' then
+			CombatEventHandlers.SpellDispel(args)
 
 		elseif args.event == 'SPELL_DISPEL' then
+			CombatEventHandlers.SpellStolen(args)
 
 		end
 	end
