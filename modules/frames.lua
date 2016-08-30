@@ -170,7 +170,7 @@ function x:UpdateFrames(specificFrame)
 			f:SetHeight(settings.Height)
 
 			f:SetPoint("CENTER", settings.X, settings.Y)
-			f:SetClampRectInsets(0, 0, settings.fontSize, 0)
+			--f:SetClampRectInsets(0, 0, settings.fontSize, 0)
 
 			-- Frame Alpha
 			f:SetAlpha(settings.alpha / 100)
@@ -343,6 +343,7 @@ function x:AddMessage(framename, message, colorname)
 					r, g, b = unpack( x.LookupColorByName(colorname) )
 				else
 					print("FRAME:", framename,"  xct+ says there is no color named:", colorname)
+					error("missing color")
 				end
 			else
 				r, g, b = unpack(x.colors[colorname])
@@ -533,14 +534,9 @@ do
 			elseif frameIndex[index] == "healing" then
 				--format_mergeCount = "%s |cffFFFF00x%s|r"
 				local strColor = "ffff00"
-				if x.db.profile.frames["healing"].showFriendlyHealers then
+				if x.db.profile.frames["healing"].names.PLAYER.nameType ~= 0 then
 					local healerName = stack[idIndex]
-					if x.db.profile.frames["healing"].enableClassNames then
-						local _, class = UnitClass(healerName)
-						if (class) then
-							healerName = sformat("|c%s%s|r", RAID_CLASS_COLORS[class].colorStr, healerName)
-						end
-					end
+					
 					if x.db.profile.frames["healing"].fontJustify == "LEFT" then
 						message = sformat("+%s %s", message, healerName)
 					else
@@ -685,22 +681,22 @@ function x.StartConfigMode()
 
 			-- Frame Title
 			f.title = f:CreateFontString(nil, "OVERLAY")
-			f.title:SetPoint("BOTTOM", f, "TOP", 0, -16)
-			f.title:SetFont(LSM:Fetch("font", "Homespun (xCT+)"), 16, "MONOCHROMEOUTLINE")
+			f.title:SetPoint("BOTTOM", f, "TOP", 0, -18)
+			f.title:SetFont(LSM:Fetch("font", "Condensed Bold (xCT+)"), 15, "OUTLINE")
 			f.title:SetText(frameTitles[framename])
 
 			-- Size Text
 			f.width = f:CreateFontString(nil, "OVERLAY")
 			f.width:SetTextColor(.47, .55, .87, 1)
-			f.width:SetPoint("TOP", f, "BOTTOM", 0, 0)
-			f.width:SetFont(LSM:Fetch("font", "Homespun (xCT+)"), 25, "MONOCHROMEOUTLINE")
+			f.width:SetPoint("TOP", f, "BOTTOM", 0, -2)
+			f.width:SetFont(LSM:Fetch("font", "Condensed Bold (xCT+)"), 18, "OUTLINE")
 			f.width:SetText(mfloor(f:GetWidth()+.5))
 			f.width:Hide()
 
 			f.height = f:CreateFontString(nil, "OVERLAY")
 			f.height:SetTextColor(.47, .55, .87, 1)
-			f.height:SetPoint("LEFT", f, "RIGHT", 3, 0)
-			f.height:SetFont(LSM:Fetch("font", "Homespun (xCT+)"), 25, "MONOCHROMEOUTLINE")
+			f.height:SetPoint("LEFT", f, "RIGHT", 4, 0)
+			f.height:SetFont(LSM:Fetch("font", "Condensed Bold (xCT+)"), 18, "OUTLINE")
 			f.height:SetText(mfloor(f:GetHeight()+.5))
 			f.height:Hide()
 
@@ -712,7 +708,7 @@ function x.StartConfigMode()
 			f.position = f:CreateFontString(nil, "OVERLAY")
 			f.position:SetTextColor(1, 1, 0, 1)
 			f.position:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, 4)
-			f.position:SetFont(LSM:Fetch("font", "Homespun (xCT+)"), 25, "MONOCHROMEOUTLINE")
+			f.position:SetFont(LSM:Fetch("font", "Condensed Bold (xCT+)"), 18, "OUTLINE")
 			f.position:SetText(sformat("%d, %d", posX, posY))
 			f.position:Hide()
 
@@ -1131,10 +1127,10 @@ StaticPopupDialogs["XCT_PLUS_DB_CLEANUP_1"] = {
 	whileDead		= 1,
 
 	button1			= OKAY.."!",
-  button2			= "Don't Show Again",
+	button2			= "Don't Show Again",
 	hideOnEscape	= true,
 
-  OnCancel		= function() x.db.global.dontShowDBCleaning = true end,
+	OnCancel		= function() x.db.global.dontShowDBCleaning = true end,
 
 	-- Taint work around
 	preferredIndex	= 3,
@@ -1157,4 +1153,17 @@ StaticPopupDialogs["XCT_PLUS_FORCE_CVAR_UPDATE"] = {
 StaticPopupDialogs["XCT_PLUS_SUGGEST_MULTISTRIKE_OFF"] = {
 	text            = ""
 
+}
+
+StaticPopupDialogs["XCT_PLUS_DB_CLEANUP_2"] = {
+	text			= "|cffD7DF23xCT+ Legion Clean Up|r\n\nHello Again, |cffFFFF00xCT|r|cffFF0000+|r needs to |cffFF0000COMPLETELY RESET|r your profile back to the original defaults. \n\nI am sincerely sorry for the inconvenience this is going to cause many of you, but after much deliberation, this is the only way to properly prepare your profile for Legion.\n\n|cffFFFF00Your UI will |r|cff798BDDReload|r|cffFFFF00 after pressing:|r   '"..OKAY.."'",
+	timeout			= 0,
+	whileDead		= 1,
+
+	button1			= OKAY,
+
+	OnAccept		= function () print("Resetting UI"); x.CleanUpForLegion() end,
+
+	-- Taint work around
+	preferredIndex	= 3,
 }

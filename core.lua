@@ -95,7 +95,11 @@ function x:OnInitialize()
   self.db.RegisterCallback(self, 'OnProfileReset', ProfileReset)
 
   -- Clean up the Profile
-  x:CompatibilityLogic(self.existingProfile)
+  local success = x:CompatibilityLogic(self.existingProfile)
+  if not success then
+    x:UpdateCombatTextEvents(false)
+    return
+  end
 
   -- Perform xCT+ Update
   x:UpdatePlayer()
@@ -114,6 +118,9 @@ function x:OnInitialize()
 
   -- Update combat text engine CVars
   x.cvar_update()
+
+  -- Register Slash Commands
+  x:RegisterChatCommand('xct', 'OpenxCTCommand')
 
   -- Everything got Initialized, show Startup Text
   if self.db.profile.showStartupText then
@@ -222,46 +229,26 @@ function x:CompatibilityLogic( existing )
     local currentVersion = VersionToTable(addonVersionString)
     local previousVersion = VersionToTable(self.db.profile.dbVersion or "0.0.0")
 
-    -- MegaDamage Change (version 3.3.0)
-    if self.db.profile.megaDamage.enableMegaDamage == false then
-      self.db.profile.megaDamage.enableMegaDamage = nil
-    elseif self.db.profile.megaDamage.enableMegaDamage == true then
-      self.db.profile.megaDamage.enableMegaDamage = nil
-      self.db.profile.frames.general.megaDamage = true
-      self.db.profile.frames.outgoing.megaDamage = true
-      self.db.profile.frames.critical.megaDamage = true
-      self.db.profile.frames.damage.megaDamage = true
-      self.db.profile.frames.healing.megaDamage = true
-      self.db.profile.frames.power.megaDamage = true
-    end
-
-    -- Updating Spam Merger for 4.0.0 Beta 4 (Requires a reset)
-    if CompareVersions( VersionToTable("4.0.0"), previousVersion) > 0
-      or CompareVersions( VersionToTable("4.2.3"), previousVersion) > 0 then
-
-      -- Reset merge table
-      self.db.profile.spells.merge = {}
-
-      -- Fix Combo Points
-      self.db.profile.spells.combo = addon.defaults.profile.spells.combo
-
-      -- Tell the user... i am sooo sorry
-      if existing and not x.db.global.dontShowDBCleaning then
-        StaticPopup_Show("XCT_PLUS_DB_CLEANUP_1")
+    if existing then
+      -- Pre-Legion Requires Complete Reset
+      if CompareVersions( VersionToTable("4.3.0"), previousVersion) > 0 then
+        StaticPopup_Show("XCT_PLUS_DB_CLEANUP_2")
+        return false -- Do not continue loading addon
       end
-
-    -- Less Intrusive Migration
-    elseif CompareVersions( VersionToTable("4.2.4 beta"), previousVersion) > 0 then
-      for index in pairs(self.db.profile.spells.merge) do
-        if not addon.merges[index] then
-          self.db.profile.spells.merge[index] = nil
-        end
-      end
+    else
+      -- Created New: Dont need to do anything right now
     end
-
     self.db.profile.dbVersion = addonVersionString
+
+    return true
 end
 
+function x.CleanUpForLegion()
+  print("Cleaning Up Legion")
+  local key = xCTSavedDB.profileKeys[UnitName("player").." - "..GetRealmName()]
+  xCTSavedDB.profiles[key] = {}
+  ReloadUI()
+end
 
 local getSpellDescription
 do
@@ -1346,11 +1333,6 @@ if build < 70000 then
   AC:RegisterOptionsTable(AddonName.."Blizzard", x.blizzardOptions)
   ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
 end
-
-
-
--- Register Slash Commands
-x:RegisterChatCommand('xct', 'OpenxCTCommand')
 
 -- Close Config when entering combat
 local lastConfigState, shownWarning = false, false

@@ -333,7 +333,7 @@ local format_pet  = sformat("|cff798BDD[%s]:|r %%s (%%s)", sgsub(BATTLE_PET_CAGE
 local format_fade               = "-%s"
 local format_gain               = "+%s"
 local format_gain_rune          = "%s +%s %s"
-local format_resist             = "-%s (%s %s)"
+local format_resist             = "-%s |c%s(%s %s)|r"
 local format_energy             = "+%s %s"
 local format_honor              = sgsub(COMBAT_TEXT_HONOR_GAINED, "%%s", "+%%s")
 local format_faction_add        = "%s +%s"
@@ -1166,7 +1166,7 @@ x.combat_events = {
     end,
 
 
-
+   --[==[
   ["SPELL_AURA_END"] = function(spellname)
       if TrackSpells() then
         x.spellCache.buffs[spellname] = true
@@ -1199,7 +1199,7 @@ x.combat_events = {
         x:AddMessage('general', sformat(format_gain, spellname), 'debuffsGained')
       end
     end,
-
+		]==]
   -- TODO: Create a merger for faction and honor xp
   ["HONOR_GAINED"] = function(amount)
       local num = mfloor(tonumber(amount) or 0)
@@ -1907,14 +1907,16 @@ formatNameTypes = {
 			if args.prefix == "ENVIRONMENTAL" then
 				color = x.spellColors[args.school or args.spellSchool or 1]
 			else
-				local _, class = GetPlayerInfoByGUID(guid)
+				--[[
 				if not class and args.spellId then
-					local isClass = bit.band(CLASS_MASK, LPS:GetSpellInfo(args.spellId))
+					local isClass = bit.band(CLASS_MASK, LPS:GetSpellInfo(args.spellId) or 0)
 					if isClass ~= 0 then
-						class = CLASS_LOOKUP[isClass0]
+						class = CLASS_LOOKUP[isClass]
 					end
-				end
+				end]]
 
+
+				local _, class = GetPlayerInfoByGUID(guid)
 				color = RAID_CLASS_COLORS[class or 0]
 			end
 		end
@@ -2144,12 +2146,12 @@ local CombatEventHandlers = {
 	end,
 
 	["DamageIncoming"] = function (args)
-		local outputFrame, color, message = "damage"
+		local outputFrame, message = "damage"
 		local settings = x.db.profile.frames["damage"]
 
 		-- Check for resists
 		if ShowResistances() then
-			local resistedAmount, resistType
+			local resistedAmount, resistType, color
 
 			-- Check for resists (full and partials)
 			if (args.resisted or 0) > 0 then
@@ -2166,8 +2168,9 @@ local CombatEventHandlers = {
 			if resistType then
 				-- Craft the new message (if is partial)
 				if resistedAmount then
-					-- format_resist: "-%s (%s %s)"
-					message = sformat(format_resist, x:Abbreviate(args.amount, 'damage'), resistType, x:Abbreviate(resistedAmount, 'damage'))
+					-- format_resist: "-%s |c%s(%s %s)|r"
+					color = hexNameColor(x.LookupColorByName(color))
+					message = sformat(format_resist, x:Abbreviate(args.amount, 'damage'), color, resistType, x:Abbreviate(resistedAmount, 'damage'))
 				else
 					-- It was a full resist
 					message = resistType	-- TODO: Add an option to still see how much was reisted on a full resist
@@ -2292,7 +2295,10 @@ local CombatEventHandlers = {
 
 		local color = 'killingBlow'
 		if args.destGUID then
-			color = RAID_CLASS_COLORS[select(2, GetPlayerInfoByGUID(args.destGUID)) or 0]
+			local class = select(2, GetPlayerInfoByGUID(args.destGUID))
+			if RAID_CLASS_COLORS[class] then
+				color = RAID_CLASS_COLORS[class]
+			end
 		end
 
 		x:AddMessage('general', sformat(format_dispell, XCT_KILLED, args.destName), color)

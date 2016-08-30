@@ -33,6 +33,7 @@ end
 
 addon.defaults = {
   profile = {
+    dbVersion = GetAddOnMetadata("xCT+", "Version"),
     showStartupText = true,
     hideConfig = true,
     bypassCVars = false,
@@ -40,10 +41,10 @@ addon.defaults = {
     blizzardFCT = {
       blizzardHeadNumbers = false,
       enabled = false,
-      font = "Homespun (xCT+)",
-      fontName = [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\HOOGE.TTF]],
+      font = "Condensed Bold (xCT+)",
+      fontName = [[Interface\AddOns\]] .. ADDON_NAME .. [[\media\OpenSans-CondBold.ttf]],
       fontSize = 32,
-      fontOutline = "4MONOCHROMEOUTLINE",
+      fontOutline = "2OUTLINE",
 
       -- CVars
       enableFloatingCombatText = false,
@@ -103,16 +104,16 @@ addon.defaults = {
         ["Height"] = 128,
 
       -- fonts
-        ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 24,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["font"] = "Condensed Bold (xCT+)",
+        ["fontSize"] = 18,
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
       -- font shadow
-        ["enableFontShadow"] = false,
-        ["fontShadowColor"] = { 0, 0, 0, 1 },
-        ["fontShadowOffsetX"] = 1,
-        ["fontShadowOffsetY"] = -1,
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
 
       -- font colors
         colors = {
@@ -195,22 +196,22 @@ addon.defaults = {
         ["megaDamage"] = true,
 
       -- position
-        ["X"] = 480,
+        ["X"] = 400,
         ["Y"] = 0,
-        ["Width"] = 192,
-        ["Height"] = 320,
+        ["Width"] = 164,
+        ["Height"] = 512,
 
       -- fonts
-        ["font"] = "Homespun (xCT+)",
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 18,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "RIGHT",
 
       -- font shadow
-        ["enableFontShadow"] = false,
-        ["fontShadowColor"] = { 0, 0, 0, 1 },
-        ["fontShadowOffsetX"] = 1,
-        ["fontShadowOffsetY"] = -1,
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
 
       -- font colors
         colors = {
@@ -254,7 +255,7 @@ addon.defaults = {
             --   2 = Spell Name
             --   3 = Both ("Source Name - Spell Name")
             --   4 = Both ("Spell Name - Source Name")
-            ["nameType"] = 2,
+            ["nameType"] = 0,
 
             ["enableNameColor"] = true,
             ["removeRealmName"] = true,
@@ -274,7 +275,7 @@ addon.defaults = {
             --   2 = Spell Name
             --   3 = Both ("Source Name - Spell Name")
             --   4 = Both ("Spell Name - Source Name")
-            ["nameType"] = 2,
+            ["nameType"] = 0,
 
             ["enableNameColor"] = true,             -- Always On (Not in Options)
             ["removeRealmName"] = false,            -- Always Off (Not in Options)
@@ -326,22 +327,22 @@ addon.defaults = {
         ["megaDamage"] = true,
 
       -- position
-        ["X"] = 256,
+        ["X"] = 192,
         ["Y"] = 0,
         ["Width"] = 256,
         ["Height"] = 140,
 
       -- fonts
-        ["font"] = "Homespun (xCT+)",
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 24,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "RIGHT",
 
       -- font shadow
-        ["enableFontShadow"] = false,
-        ["fontShadowColor"] = { 0, 0, 0, 1 },
-        ["fontShadowOffsetX"] = 1,
-        ["fontShadowOffsetY"] = -1,
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
 
       -- font colors
         colors = {
@@ -440,22 +441,22 @@ addon.defaults = {
         ["megaDamage"] = true,
 
       -- position
-        ["X"] = -448,
-        ["Y"] = -88,
-        ["Width"] = 128,
+        ["X"] = -288,
+        ["Y"] = -80,
+        ["Width"] = 448,
         ["Height"] = 160,
 
       -- fonts
-        ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 24,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["font"] = "Condensed Bold (xCT+)",
+        ["fontSize"] = 18,
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "LEFT",
 
       -- font shadow
-        ["enableFontShadow"] = false,
-        ["fontShadowColor"] = { 0, 0, 0, 1 },
-        ["fontShadowOffsetX"] = 1,
-        ["fontShadowOffsetY"] = -1,
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
 
       -- font colors
         colors = {
@@ -471,8 +472,8 @@ addon.defaults = {
               ['missTypeDodge']   = { enabled = false, desc = "Dodged",   default = { 0.50, 0.50, 0.50 } },
               ['missTypeParry']   = { enabled = false, desc = "Parry",    default = { 0.50, 0.50, 0.50 } },
               ['missTypeEvade']   = { enabled = false, desc = "Evade",    default = { 0.50, 0.50, 0.50 } },
-              ['missTypeImmune']  = { enabled = false, desc = "Immune",   default = { 0.50, 0.50, 0.50 } },
               ['missTypeDeflect'] = { enabled = false, desc = "Deflect",  default = { 0.50, 0.50, 0.50 } },
+              ['missTypeImmune']  = { enabled = false, desc = "Immune",   default = { 0.50, 0.50, 0.50 } },
               ['missTypeReflect'] = { enabled = false, desc = "Reflect",  default = { 0.50, 0.50, 0.50 } },
               ['missTypeResist']  = { enabled = false, desc = "Resisted", default = { 0.50, 0.50, 0.50 } },
               ['missTypeBlock']   = { enabled = false, desc = "Blocked",  default = { 0.50, 0.50, 0.50 } },
@@ -564,7 +565,7 @@ addon.defaults = {
 
       -- icons
         ["iconsEnabled"] = true,
-        ["iconsSize"] = 16,
+        ["iconsSize"] = 14,
 
       -- scrollable
         ["enableScrollable"] = false,
@@ -596,16 +597,16 @@ addon.defaults = {
         ["Height"] = 144,
 
       -- fonts
-        ["font"] = "Homespun (xCT+)",
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 18,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "LEFT",
 
       -- font shadow
-        ["enableFontShadow"] = false,
-        ["fontShadowColor"] = { 0, 0, 0, 1 },
-        ["fontShadowOffsetX"] = 1,
-        ["fontShadowOffsetY"] = -1,
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
 
       -- font colors
         colors = {
@@ -702,15 +703,15 @@ addon.defaults = {
         ["Height"] = 64,
 
       -- fonts
-        ["font"] = "HOOGE (xCT)",
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 64,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["fontOutline"] = "2OUTLINE",
 
       -- font shadow
-        ["enableFontShadow"] = false,
-        ["fontShadowColor"] = { 0, 0, 0, 1 },
-        ["fontShadowOffsetX"] = 1,
-        ["fontShadowOffsetY"] = -1,
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
 
       -- font colors
         colors = {
@@ -728,21 +729,21 @@ addon.defaults = {
 
       -- position
         ["X"] = 0,
-        ["Y"] = -64,
-        ["Width"] = 180,
-        ["Height"] = 128,
+        ["Y"] = -16,
+        ["Width"] = 128,
+        ["Height"] = 96,
 
       -- fonts
-        ["font"] = "Homespun (xCT+)",
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 17,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
       -- font shadow
-        ["enableFontShadow"] = false,
-        ["fontShadowColor"] = { 0, 0, 0, 1 },
-        ["fontShadowOffsetX"] = 1,
-        ["fontShadowOffsetY"] = -1,
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
 
       -- font colors
         -- TODO: Update these ( See http://www.wowinterface.com/forums/showthread.php?t=53140 )
@@ -797,22 +798,22 @@ addon.defaults = {
         ["alpha"] = 100,
 
       -- position
-        ["X"] = -237,
-        ["Y"] = -64,
+        ["X"] = 0,
+        ["Y"] = -256,
         ["Width"] = 294,
-        ["Height"] = 128,
+        ["Height"] = 64,
 
       -- fonts
-        ["font"] = "Homespun (xCT+)",
+        ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 24,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
       -- font shadow
-        ["enableFontShadow"] = false,
-        ["fontShadowColor"] = { 0, 0, 0, 1 },
-        ["fontShadowOffsetX"] = 1,
-        ["fontShadowOffsetY"] = -1,
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
 
       -- font colors
         colors = {
@@ -844,21 +845,21 @@ addon.defaults = {
 
       -- position
         ["X"] = 0,
-        ["Y"] = -224,
+        ["Y"] = -352,
         ["Width"] = 512,
         ["Height"] = 128,
 
       -- fonts
-        ["font"] = "Homespun (xCT+)",
-        ["fontSize"] = 25,
-        ["fontOutline"] = "4MONOCHROMEOUTLINE",
+        ["font"] = "Condensed Bold (xCT+)",
+        ["fontSize"] = 18,
+        ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
       -- font shadow
-        ["enableFontShadow"] = false,
-        ["fontShadowColor"] = { 0, 0, 0, 1 },
-        ["fontShadowOffsetX"] = 1,
-        ["fontShadowOffsetY"] = -1,
+        ["enableFontShadow"] = true,
+        ["fontShadowColor"] = { 0, 0, 0, 0.6 },
+        ["fontShadowOffsetX"] = 2,
+        ["fontShadowOffsetY"] = -2,
 
       -- icons
         ["iconsEnabled"] = true,
