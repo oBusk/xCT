@@ -231,7 +231,7 @@ function x:CompatibilityLogic( existing )
 
     if existing then
       -- Pre-Legion Requires Complete Reset
-      if CompareVersions( VersionToTable("4.3.0"), previousVersion) > 0 then
+      if CompareVersions( VersionToTable("4.2.9"), previousVersion) > 0 then
         StaticPopup_Show("XCT_PLUS_DB_CLEANUP_2")
         return false -- Do not continue loading addon
       end
