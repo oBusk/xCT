@@ -2150,7 +2150,7 @@ local CombatEventHandlers = {
 	end,
 
 	["DamageIncoming"] = function (args)
-		local outputFrame, message = "damage"
+		local message
 		local settings = x.db.profile.frames["damage"]
 
 		-- Check for resists
@@ -2163,10 +2163,10 @@ local CombatEventHandlers = {
 				color = resistedAmount and 'missTypeResist' or 'missTypeResistPartial'
 			elseif (args.blocked or 0) > 0 then
 				resistType, resistedAmount = BLOCK, args.amount > 0 and args.blocked
-				color = resistedAmount and 'missTypeBlock', 'missTypeBlockPartial'
+				color = resistedAmount and 'missTypeBlock' or 'missTypeBlockPartial'
 			elseif (args.absorbed or 0) > 0 then
 				resistType, resistedAmount = BLOCK, args.amount > 0 and args.absorbed
-				color = resistedAmount and 'missTypeAbsorb', 'missTypeAbsorbPartial'
+				color = resistedAmount and 'missTypeAbsorb' or 'missTypeAbsorbPartial'
 			end
 
 			if resistType then
@@ -2187,10 +2187,10 @@ local CombatEventHandlers = {
 			-- Format Criticals and also abbreviate values
 			if args.critical then
 				message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix,
-				                               x:Abbreviate(-args.amount, "critical"),
+				                               x:Abbreviate(-args.amount, 'damage'),
 				                               x.db.profile.frames["critical"].critPostfix)
 			else
-				message = x:Abbreviate(-args.amount, outputFrame)
+				message = x:Abbreviate(-args.amount, 'damage')
 			end
 		end
 
@@ -2202,11 +2202,11 @@ local CombatEventHandlers = {
 		-- Add Icons
 		message = x:GetSpellTextureFormatted(args.spellId,
 		                                     message,
-		    x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-		    x.db.profile.frames[outputFrame].fontJustify)
+		    x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
+		    x.db.profile.frames['damage'].fontJustify)
 
 		-- Output message
-		x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(args.spellSchool))
+		x:AddMessage('damage', message, GetCustomSpellColorFromIndex(args.spellSchool))
 	end,
 
 	["ShieldIncoming"] = function (args)
@@ -2367,7 +2367,7 @@ local CombatEventHandlers = {
 		if not ShowDispells() then return end
 
 		local color = args.auraType == 'BUFF' and 'dispellBuffs' or 'dispellDebuffs'
-		local message = sformat(format_dispell, XCT_DISPELLED, args.spellName)
+		local message = sformat(format_dispell, XCT_DISPELLED, args.extraSpellName)
 
 		-- Add Icons
 		message = x:GetSpellTextureFormatted(args.spellId,
@@ -2376,7 +2376,7 @@ local CombatEventHandlers = {
 		           x.db.profile.frames['general'].fontJustify)
 
 		if MergeDispells() then
-			x:AddSpamMessage('general', args.spellName, message, color, 0.5)
+			x:AddSpamMessage('general', args.extraSpellName, message, color, 0.5)
 		else
 			x:AddMessage('general', message, color)
 		end
@@ -2384,7 +2384,7 @@ local CombatEventHandlers = {
 
 	["SpellStolen"] = function (args)
 		if not ShowDispells() then return end
-		local message = sformat(format_dispell, XCT_STOLE, args.spellName)
+		local message = sformat(format_dispell, XCT_STOLE, args.extraSpellName)
 
 		-- Add Icons
 		message = x:GetSpellTextureFormatted(args.spellId,
