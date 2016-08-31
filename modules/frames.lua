@@ -1156,7 +1156,7 @@ StaticPopupDialogs["XCT_PLUS_SUGGEST_MULTISTRIKE_OFF"] = {
 }
 
 StaticPopupDialogs["XCT_PLUS_DB_CLEANUP_2"] = {
-	text			= "|cffD7DF23xCT+ Legion Clean Up|r\n\nHello Again,\n\n I am sorry to inform you that |cffFFFF00xCT|r|cffFF0000+|r needs to\n\n|cffFF0000COMPLETELY RESET YOUR PROFILE|r\n\n back to the original defaults. \n\nI know this may significantly inconvenience many of you, but after much deliberation, the profile reset is the only way to properly prepare your profile for Legion.\n\n|cffFFFF00We will need to |r|cff798BDDReload Your UI|r|cffFFFF00 after we |cff798BDDReset Your Profile|r|cffFFFF00. Press the button below to continue...\n\n|cffaaaaaa(You may also revert to an older version of xCT+ at this time, but is not recommened)|r",
+	text			= "|cffD7DF23xCT+ Legion Clean Up|r\n\nHello Again,\n\n I am sorry to inform you that |cffFFFF00xCT|r|cffFF0000+|r needs to\n\n|cffFF0000COMPLETELY RESET YOUR PROFILE|r\n\n back to the original defaults. \n\nI know this may significantly inconvenience many of you, but after much deliberation, the profile reset is the only way to properly prepare your profile for Legion.\n\n|cffFFFF00We will need to |r|cff798BDDReload Your UI|r|cffFFFF00 after we |cff798BDDReset Your Profile|r|cffFFFF00. Press the button below to continue...\n\n|cffaaaaaa(You may also revert to an older version of xCT+ at this time, but is not recommended)|r",
 	timeout			= 0,
 	whileDead		= 1,
 
