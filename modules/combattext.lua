@@ -2055,7 +2055,9 @@ local CombatEventHandlers = {
 		elseif args.event == "SPELL_HEAL" then
 			xCTFormat:SPELL_HEAL(outputFrame, spellID, amount, critical, merged)
 		else
-			print("xCT Needs Some Help: unhandled _HEAL event", args.event)
+			if UnitName('player') == "Dandraffbal" then
+				print("xCT Needs Some Help: unhandled _HEAL event", args.event)
+			end
 		end
 	end,
 
@@ -2134,14 +2136,16 @@ local CombatEventHandlers = {
 		elseif args.event == "RANGE_DAMAGE" then
 			xCTFormat:RANGE_DAMAGE(outputFrame, spellID, amount, critical, merged, isAutoShot, args)
 
-		elseif args.event == "SPELL_DAMAGE" then
+		elseif args.event == "SPELL_DAMAGE" or args.event == "SHIELD_DAMAGE" then
 			xCTFormat:SPELL_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool, args)
 
 		elseif args.event == "SPELL_PERIODIC_DAMAGE" then
 			xCTFormat:SPELL_PERIODIC_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool, args)
 
 		else
-			print("xCT Needs Some Help: unhandled _DAMAGE event", args.event)
+			if UnitName('player') == "Dandraffbal" then
+				print("xCT Needs Some Help: unhandled _DAMAGE event", args.event)
+			end
 		end
 	end,
 
@@ -2308,7 +2312,7 @@ local CombatEventHandlers = {
 		if not ShowInterrupts() then return end
 
 		-- Create and format the message
-		local message = sformat(format_dispell, INTERRUPTED, args.spellName)
+		local message = sformat(format_dispell, INTERRUPTED, args.extraSpellName)
 
 		-- Add the icon
 		message = x:GetSpellTextureFormatted(args.spellId,
