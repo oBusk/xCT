@@ -536,7 +536,7 @@ do
 				local strColor = "ffff00"
 				if x.db.profile.frames["healing"].names.PLAYER.nameType ~= 0 then
 					local healerName = stack[idIndex]
-					
+
 					if x.db.profile.frames["healing"].fontJustify == "LEFT" then
 						message = sformat("+%s %s", message, healerName)
 					else
@@ -1156,11 +1156,11 @@ StaticPopupDialogs["XCT_PLUS_SUGGEST_MULTISTRIKE_OFF"] = {
 }
 
 StaticPopupDialogs["XCT_PLUS_DB_CLEANUP_2"] = {
-	text			= "|cffD7DF23xCT+ Legion Clean Up|r\n\nHello Again, |cffFFFF00xCT|r|cffFF0000+|r needs to |cffFF0000COMPLETELY RESET|r your profile back to the original defaults. \n\nI am sincerely sorry for the inconvenience this is going to cause many of you, but after much deliberation, this is the only way to properly prepare your profile for Legion.\n\n|cffFFFF00Your UI will |r|cff798BDDReload|r|cffFFFF00 after pressing:|r   '"..OKAY.."'",
+	text			= "|cffD7DF23xCT+ Legion Clean Up|r\n\nHello Again,\n\n I am sorry to inform you that |cffFFFF00xCT|r|cffFF0000+|r needs to\n\n|cffFF0000COMPLETELY RESET YOUR PROFILE|r\n\n back to the original defaults. \n\nI know this may significantly inconvenience many of you, but after much deliberation, the profile reset is the only way to properly prepare your profile for Legion.\n\n|cffFFFF00We will need to |r|cff798BDDReload Your UI|r|cffFFFF00 after we |cff798BDDReset Your Profile|r|cffFFFF00. Press the button below to continue...\n\n|cffaaaaaa(You may also revert to an older version of xCT+ at this time, but is not recommened)|r",
 	timeout			= 0,
 	whileDead		= 1,
 
-	button1			= OKAY,
+	button1			= "Reset Profile and Reload UI",
 
 	OnAccept		= function () print("Resetting UI"); x.CleanUpForLegion() end,
 
