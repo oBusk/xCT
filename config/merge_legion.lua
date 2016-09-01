@@ -52,7 +52,7 @@ end
 local Leg_World = CreateMergeHeader("Legion|r™", "World Zones", "93BE3D")
 local Leg_QuestItems = CreateMergeHeader("Legion|r™", "Quest Items", "93BE3D")
 local Leg_BG = CreateMergeHeader("Legion|r™", "Bodyguards", "93BE3D")
-
+local Leg_Items = CreateMergeHeader("Legion|r™", "Items", "93BE3D")
 
 
 -- ---------------------------
@@ -65,6 +65,24 @@ addon.merges[218797]      = CreateMergeSpellEntry(Leg_BG, 3.5, "Broll Bearmantle
 -- Paladin
 addon.merges[221647]      = CreateMergeSpellEntry(Leg_BG, 0.5, "Vindicator Boros (Hammer of the Righteous)")
 addon.merges[222175]      = CreateMergeSpellEntry(Leg_BG, 1.5, "Blood Vanguard (Trample)")
+
+
+
+-- ---------------------------
+-- Items                    --
+-- ---------------------------
+
+-- Buffs
+addon.merges[225623]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Fishbrul Special (Food Buff)")
+addon.merge2h[201573]     = 225623 -- Pepper Breath
+addon.merge2h[225624]     = 225623 -- Pepper Breath
+
+-- Trinkets
+addon.merges[213786]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Corrupted Starlight (Trinket)")
+addon.merge2h[213782]     = 213786 -- Nightfall
+addon.merge2h[213833]     = 213786 -- Nightfall
+addon.merge2h[213784]     = 213786 -- Nightfall
+addon.merge2h[213785]     = 213786 -- Nightfall
 
 
 
