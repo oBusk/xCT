@@ -2355,7 +2355,7 @@ local CombatEventHandlers = {
 		local message = _G["COMBAT_TEXT_"..args.missType]
 
 		-- Add Icons
-		message = x:GetSpellTextureFormatted(args.spellId,
+		message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		          x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
 		          x.db.profile.frames['damage'].fontJustify)
@@ -2370,7 +2370,7 @@ local CombatEventHandlers = {
 		local message = sformat(format_dispell, XCT_DISPELLED, args.extraSpellName)
 
 		-- Add Icons
-		message = x:GetSpellTextureFormatted(args.spellId,
+		message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
 		           x.db.profile.frames['general'].fontJustify)
@@ -2387,7 +2387,7 @@ local CombatEventHandlers = {
 		local message = sformat(format_dispell, XCT_STOLE, args.extraSpellName)
 
 		-- Add Icons
-		message = x:GetSpellTextureFormatted(args.spellId,
+		message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
 		           x.db.profile.frames['general'].fontJustify)
