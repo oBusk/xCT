@@ -2136,7 +2136,7 @@ local CombatEventHandlers = {
 		elseif args.event == "RANGE_DAMAGE" then
 			xCTFormat:RANGE_DAMAGE(outputFrame, spellID, amount, critical, merged, isAutoShot, args)
 
-		elseif args.event == "SPELL_DAMAGE" or args.event == "SHIELD_DAMAGE" then
+		elseif args.event == "SPELL_DAMAGE" or args.event == "DAMAGE_SHIELD" then
 			xCTFormat:SPELL_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool, args)
 
 		elseif args.event == "SPELL_PERIODIC_DAMAGE" then

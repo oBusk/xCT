@@ -1498,6 +1498,15 @@ function x:ShowConfigTool()
   -- Last minute settings and SHOW
   x.myContainer.content:GetParent():SetMinResize(803, 300)
   ACD:Open(AddonName, x.myContainer)
+
+  -- Go through and select all the groups that are relevant to the player
+  if not x.selectDefaultGroups then
+    x.selectDefaultGroups = true
+
+    ACD:SelectGroup(AddonName, "spells", "classList", x.player.class)
+    ACD:SelectGroup(AddonName, "spells", "mergeOptions")
+    ACD:SelectGroup(AddonName, "Frames")
+  end
 end
 
 local function HideConfigTool_OnUpdate( self, e )
