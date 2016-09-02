@@ -86,6 +86,7 @@ addon.defaults = {
     megaDamage = {
       thousandSymbol = "|cffFF8000K|r",
       millionSymbol = "|cffFF0000M|r",
+      billionSymbol = "|cffFF0000G|r",
       decimalPoint = true,
     },
 

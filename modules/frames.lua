@@ -290,7 +290,13 @@ function x:Abbreviate(amount, frameName)
 	if isNegative then amount = -amount end
 	if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
 		if self.db.profile.spells.formatAbbreviate then
-			if (amount >= 1000000) then
+			elseif (amount >= 1000000000) then
+				if self.db.profile.megaDamage.decimalPoint then
+					message = tostring(mfloor((amount + 50000) / 100000) / 10) .. self.db.profile.megaDamage.millionSymbol
+				else
+					message = tostring(mfloor((amount + 500000) / 1000000)) .. self.db.profile.megaDamage.millionSymbol
+				end
+			elseif (amount >= 1000000) then
 				if self.db.profile.megaDamage.decimalPoint then
 					message = tostring(mfloor((amount + 50000) / 100000) / 10) .. self.db.profile.megaDamage.millionSymbol
 				else
@@ -303,6 +309,7 @@ function x:Abbreviate(amount, frameName)
 					message = tostring(mfloor((amount + 500) / 1000)) .. self.db.profile.megaDamage.thousandSymbol
 				end
 			end
+			if isNegative then message = "-"..message end
 		else
 			local k
 			while true do
@@ -311,8 +318,6 @@ function x:Abbreviate(amount, frameName)
 			end
 		end
 	end
-
-	if isNegative then message = "-"..message end
 	return message
 end
 

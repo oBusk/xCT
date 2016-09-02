@@ -1703,8 +1703,16 @@ addon.options.args["Frames"] = {
           get = getTextIn0,
           set = setTextIn0,
         },
+        billionSymbol = {
+          order = 14,
+          type = 'input',
+          name = "Billion",
+          desc = "Symbol for: |cffFF0000Billions|r |cff798BDD(10e+9)|r",
+          get = getTextIn0,
+          set = setTextIn0,
+        },
         decimalPoint = {
-          order = 13,
+          order = 15,
           type = 'toggle',
           name = "Single Decimal",
           desc = "Shows a single decimal when abbreviating the value (e.g. will show |cff798BDD5.9K|r instead of |cff798BDD6K|r).",
