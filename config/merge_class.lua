@@ -122,7 +122,6 @@ addon.merges[122128]    = CreateMergeSpellEntry("PRIEST", 2.5, 0)           -- T
 addon.merges[110745]    = CreateMergeSpellEntry("PRIEST", 2.5, 0)           -- Talent: Divine Star (Heal)
 addon.merges[120696]    = CreateMergeSpellEntry("PRIEST", 2.0, 0)           -- Talent: Halo (Damage)
 addon.merges[120692]    = CreateMergeSpellEntry("PRIEST", 2.0, 0)           -- Talent: Halo (Heal)
-
 -- Discipline (ID: 256)
 addon.merges[81751]     = CreateMergeSpellEntry("PRIEST", 2.5, 256)         -- Atonement
 addon.merges[47666]     = CreateMergeSpellEntry("PRIEST", 2.5, 256)         -- Penance (Heal)
@@ -153,6 +152,7 @@ addon.merges[217676]    = CreateMergeSpellEntry("PRIEST", 0.5, 258)         -- T
 addon.merges[193473]    = CreateMergeSpellEntry("PRIEST", 2.0, 258)         -- Artifact: Void Tendril (Mind Flay)
 addon.merges[205065]    = CreateMergeSpellEntry("PRIEST", 2.0, 258)         -- Artifact: Void Torrent
 addon.merges[194238]    = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- Artifact: Sphere of Insanity
+addon.merges[204778]    = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- Honor Talent: Void Shield
 
 
 -- ---------------------------
