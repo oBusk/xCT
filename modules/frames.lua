@@ -290,7 +290,7 @@ function x:Abbreviate(amount, frameName)
 	if isNegative then amount = -amount end
 	if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
 		if self.db.profile.spells.formatAbbreviate then
-			elseif (amount >= 1000000000) then
+			if (amount >= 1000000000) then
 				if self.db.profile.megaDamage.decimalPoint then
 					message = tostring(mfloor((amount + 50000000) / 100000000) / 10) .. self.db.profile.megaDamage.millionSymbol
 				else
