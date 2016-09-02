@@ -292,9 +292,9 @@ function x:Abbreviate(amount, frameName)
 		if self.db.profile.spells.formatAbbreviate then
 			elseif (amount >= 1000000000) then
 				if self.db.profile.megaDamage.decimalPoint then
-					message = tostring(mfloor((amount + 50000) / 100000) / 10) .. self.db.profile.megaDamage.millionSymbol
+					message = tostring(mfloor((amount + 50000000) / 100000000) / 10) .. self.db.profile.megaDamage.millionSymbol
 				else
-					message = tostring(mfloor((amount + 500000) / 1000000)) .. self.db.profile.megaDamage.millionSymbol
+					message = tostring(mfloor((amount + 500000000) / 1000000000)) .. self.db.profile.megaDamage.millionSymbol
 				end
 			elseif (amount >= 1000000) then
 				if self.db.profile.megaDamage.decimalPoint then
