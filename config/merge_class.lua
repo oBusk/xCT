@@ -419,14 +419,14 @@ addon.merges[227681]    = CreateMergeSpellEntry("MONK", 1.5, 268)           -- A
 addon.merge2h[178173]   = 124507                                            -- [Greater Merger] Artifact: Overflow (double check)
 
 -- Windwalker (ID: 269)
-addon.merges[117418]    = CreateMergeSpellEntry("MONK", 3.5, 269)           -- Fists of Fury
+addon.merges[117418]    = CreateMergeSpellEntry("MONK", 2.0, 269)           -- Fists of Fury
 addon.merges[100780]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Tiger Palm (SEF)
 addon.merges[185099]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Rising Sun Kick (SEF)
 addon.merges[196748]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Talent: Chi Orbit
 addon.merges[158221]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Talent: Whirling Dragon Punch
 addon.merges[222029]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Artifact: Strike of the Windlord
-addon.merges[196061]    = CreateMergeSpellEntry("MONK", 1.5, 269)           -- Artifact: Crosswinds
 addon.merge2h[205414]   = 222029                                            -- [MH/OH Merger] Artifact: Strike of the Windlord
+addon.merge2h[196061]   = 117418                                            -- [DMG Merger] Artifact: Crosswinds
 
 -- Mistweaver (ID: 270)
 addon.merges[115175]    = CreateMergeSpellEntry("MONK", 1.5, 270)           -- Soothing Mist

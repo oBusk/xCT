@@ -90,6 +90,10 @@ addon.merge2h[213785]     = 213786 -- Nightfall
 -- World Zone               --
 -- ---------------------------
 
+-- Suramar
+addon.merges[203148]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: Air Superiority (Unstable Mana)")
+addon.merges[221254]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: Life Finds a Way (Devour Demon)")
+
 -- Broken Shore
 addon.merges[200009]      = CreateMergeSpellEntry(Leg_World, 0.5, "Unattended Cannon (Fel Cannonball)")
 
