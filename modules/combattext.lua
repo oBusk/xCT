@@ -2315,7 +2315,7 @@ local CombatEventHandlers = {
 		local message = sformat(format_dispell, INTERRUPTED, args.extraSpellName)
 
 		-- Add the icon
-		message = x:GetSpellTextureFormatted(args.spellId,
+		message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
 		           x.db.profile.frames['general'].fontJustify)
