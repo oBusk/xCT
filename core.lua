@@ -677,13 +677,13 @@ function x:UpdateComboPointOptions(force)
 
   local comboSpells = {
     order = 100,
-    name = "Special Tweaks",
+    name = "Misc",
     type = 'group',
     args = {
       specialTweaks = {
         type = 'description',
         order = 0,
-        name = "|cff798BDDSpecial Tweaks|r:",
+        name = "|cff798BDDMiscellaneous Settings|r:",
         fontSize = 'large',
       },
       specialTweaksDesc = {
@@ -1244,6 +1244,13 @@ function x.GenerateColorOptions()
       end
     end
   end
+end
+
+function x.GenerateSpellSchoolColors()
+  local options = addon.options.args.SpellSchools
+
+
+  -- TODO: Add spell school color options
 end
 
 

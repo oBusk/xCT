@@ -203,6 +203,7 @@ local function ShowOverHealing() return x.db.profile.frames["healing"].enableOve
 local function ShowEnergyGains() return x.db.profile.frames["power"].showEnergyGains end
 local function ShowPeriodicEnergyGains() return x.db.profile.frames["power"].showPeriodicEnergyGains end
 local function ShowEnergyTypes() return x.db.profile.frames["power"].showEnergyType end
+local function ShowIncomingAutoAttackIcons() return x.db.profile.frames["damage"].iconsEnabledAutoAttack end
 
 -- TODO: Add Combo Point Support
 local function ShowRogueComboPoints() return false end -- x.db.profile.spells.combo["ROGUE"][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "ROGUE" end
@@ -2199,11 +2200,18 @@ local CombatEventHandlers = {
 		-- Add names
 		message = message .. x.formatName(args, settings.names, true)
 
-		-- Add Icons
-		message = x:GetSpellTextureFormatted(args.spellId,
-		                                     message,
-		    x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
-		    x.db.profile.frames['damage'].fontJustify)
+		-- Add Icons (Hide Auto Attack icons)
+		if args.prefix ~= "SWING" or ShowIncomingAutoAttackIcons() then
+			message = x:GetSpellTextureFormatted(args.spellId,
+			                                     message,
+			       x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
+			       x.db.profile.frames['damage'].fontJustify)
+		else
+			message = x:GetSpellTextureFormatted(nil,
+			                                     message,
+			       x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
+			       x.db.profile.frames['damage'].fontJustify)
+		end
 
 		-- Output message
 		x:AddMessage('damage', message, GetCustomSpellColorFromIndex(args.spellSchool))

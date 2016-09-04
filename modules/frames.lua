@@ -548,7 +548,7 @@ do
 					local healerName = stack[idIndex]
 
 					if x.db.profile.frames["healing"].fontJustify == "LEFT" then
-						message = sformat("+%s %s", message, healerName)
+						message = sformat("+%s%s", message, healerName)
 					else
 						message = sformat("%s +%s", healerName, message)
 					end

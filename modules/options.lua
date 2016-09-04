@@ -1085,7 +1085,7 @@ addon.options.args["spellFilter"] = {
 addon.options.args["Credits"] = {
   name = "Credits",
   type = 'group',
-  order = 4,
+  order = 6,
   args = {
     title = {
       type = "header",
@@ -1554,6 +1554,20 @@ addon.options.args["FloatingCombatText"] = {
   },
 }
 
+addon.options.args["SpellSchools"] = {
+  name = "Spell School Colors",
+  type = 'group',
+  order = 5,
+  args = {
+    title = {
+      type = "description",
+      order = 0,
+      name = "|cff798BDDCustomize Spell School Colors|r:\n",
+      fontSize = 'large',
+    },
+  },
+}
+
 addon.options.args["Frames"] = {
   name = "Frames",
   type = 'group',
@@ -1714,8 +1728,8 @@ addon.options.args["Frames"] = {
         decimalPoint = {
           order = 15,
           type = 'toggle',
-          name = "Single Decimal",
-          desc = "Shows a single decimal when abbreviating the value (e.g. will show |cff798BDD5.9K|r instead of |cff798BDD6K|r).",
+          name = "Single Decimal Precision",
+          desc = "Shows a single digit of precision when abbreviating the value (e.g. will show |cff798BDD5.9K|r instead of |cff798BDD6K|r).",
           get = get0,
           set = set0,
         },
@@ -1857,7 +1871,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -2009,7 +2023,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -2115,39 +2129,46 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameFontShadowDisabled,
             },
+          },
+        },
 
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
             iconSizeSettings = {
               type = 'description',
-              order = 20,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 21,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 22,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -2159,14 +2180,14 @@ addon.options.args["Frames"] = {
         },
 
         specialTweaks = {
-          order = 40,
-          name = "Special Tweaks",
+          order = 50,
+          name = "Misc",
           type = 'group',
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             showInterrupts = {
@@ -2257,7 +2278,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -2409,7 +2430,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -2515,39 +2536,46 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameFontShadowDisabled,
             },
+          },
+        },
 
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
             iconSizeSettings = {
               type = 'description',
-              order = 20,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 21,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 22,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -2559,9 +2587,9 @@ addon.options.args["Frames"] = {
         },
 
         names = {
-          order = 40,
+          order = 50,
           type = 'group',
-          name = "Name Settings",
+          name = "Names",
           childGroups = 'select',
           get = getNameFormat,
           set = setNameFormat,
@@ -2793,14 +2821,14 @@ addon.options.args["Frames"] = {
         },
 
         specialTweaks = {
-          order = 50,
+          order = 60,
           type = 'group',
-          name = "Special Tweaks",
+          name = "Misc",
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             enableOutDmg = {
@@ -2884,7 +2912,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -3035,7 +3063,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -3141,39 +3169,46 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameFontShadowDisabled,
             },
+          },
+        },
 
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
             iconSizeSettings = {
               type = 'description',
-              order = 20,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 21,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 22,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -3185,9 +3220,9 @@ addon.options.args["Frames"] = {
         },
 
         names = {
-          order = 40,
+          order = 50,
           type = 'group',
-          name = "Name Settings",
+          name = "Names",
           childGroups = 'select',
           get = getNameFormat,
           set = setNameFormat,
@@ -3418,16 +3453,15 @@ addon.options.args["Frames"] = {
           }
         },
 
-
         specialTweaks = {
-          order = 50,
+          order = 60,
           type = 'group',
-          name = "Special Tweaks",
+          name = "Misc",
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             showSwing = {
@@ -3487,7 +3521,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -3639,7 +3673,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -3745,39 +3779,62 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameFontShadowDisabled,
             },
+          },
+        },
 
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
             iconSizeSettings = {
               type = 'description',
-              order = 20,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 21,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 22,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+
+            iconAdditionalSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDAdditional Settings|r:",
+              fontSize = 'large',
+            },
+            iconsEnabledAutoAttack = {
+              order = 11,
+              type = 'toggle',
+              name = "Auto Attack",
+              desc = "Show icons from Auto Attacks.",
+              get = get2,
+              set = set2,
+              disabled = isFrameItemDisabled,
+            },
+          }
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -3789,9 +3846,9 @@ addon.options.args["Frames"] = {
         },
 
         names = {
-          order = 40,
+          order = 50,
           type = 'group',
-          name = "Name Settings",
+          name = "Names",
           childGroups = 'select',
           get = getNameFormat,
           set = setNameFormat,
@@ -4135,14 +4192,14 @@ addon.options.args["Frames"] = {
         },
 
         specialTweaks = {
-          order = 50,
-          name = "Special Tweaks",
+          order = 60,
+          name = "Misc",
           type = 'group',
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             showDodgeParryMiss = {
@@ -4201,7 +4258,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -4353,7 +4410,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -4459,39 +4516,46 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameFontShadowDisabled,
             },
+          },
+        },
 
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
             iconSizeSettings = {
               type = 'description',
-              order = 20,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 21,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 22,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -4503,9 +4567,9 @@ addon.options.args["Frames"] = {
         },
 
         names = {
-          order = 40,
+          order = 50,
           type = 'group',
-          name = "Name Settings",
+          name = "Names",
           childGroups = 'select',
           get = getNameFormat,
           set = setNameFormat,
@@ -4737,14 +4801,14 @@ addon.options.args["Frames"] = {
         },
 
         specialTweaks = {
-          order = 50,
-          name = "Special Tweaks",
+          order = 60,
+          name = "Misc",
           type = 'group',
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             enableOverHeal = {
@@ -4794,7 +4858,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -4864,7 +4928,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -4963,7 +5027,7 @@ addon.options.args["Frames"] = {
         fontColors = {
           order = 30,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -4987,7 +5051,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -5139,7 +5203,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -5252,7 +5316,7 @@ addon.options.args["Frames"] = {
         fontColors = {
           order = 30,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -5265,13 +5329,13 @@ addon.options.args["Frames"] = {
 
         specialTweaks = {
           order = 40,
-          name = "Special Tweaks",
+          name = "Misc",
           type = 'group',
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             showEnergyGains = {
@@ -5416,7 +5480,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -5559,7 +5623,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -5665,39 +5729,46 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameFontShadowDisabled,
             },
+          },
+        },
 
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
             iconSizeSettings = {
               type = 'description',
-              order = 20,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 21,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 22,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
-          name = "Custom Colors",
+          name = "Colors",
           args = {
             customColors = {
               type = 'description',
@@ -5721,7 +5792,7 @@ addon.options.args["Frames"] = {
         frameSettings = {
           order = 10,
           type = 'group',
-          name = "Frame Settings",
+          name = "Frame",
           args = {
             frameSettings = {
               type = 'description',
@@ -5865,7 +5936,7 @@ addon.options.args["Frames"] = {
         fonts = {
           order = 20,
           type = 'group',
-          name = "Font Settings",
+          name = "Font",
           args = {
             fontSettings = {
               type = 'description',
@@ -5971,44 +6042,51 @@ addon.options.args["Frames"] = {
               set = set2_update,
               disabled = isFrameFontShadowDisabled,
             },
+          },
+        },
 
+        icons = {
+          order = 30,
+          type = 'group',
+          name = "Icons",
+          args = {
             iconSizeSettings = {
               type = 'description',
-              order = 20,
-              name = "\n|cff798BDDIcon Size Settings|r:",
+              order = 1,
+              name = "|cff798BDDIcon Settings|r:",
               fontSize = 'large',
             },
             iconsEnabled = {
-              order = 21,
+              order = 2,
               type = 'toggle',
-              name = "Icons",
+              name = "Enable Icons",
               desc = "Show icons next to your damage.",
               get = get2,
               set = set2,
               disabled = isFrameItemDisabled,
             },
             iconsSize = {
-              order = 22,
-              name = "Icon Size",
-              desc = "Set the icon size.",
+              order = 3,
+              name = "Size",
+              desc = "Set the icon size. (Recommended value: 16)",
               type = 'range',
               min = 6, max = 22, step = 1,
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
             },
-          },
+          }
         },
 
         specialTweaks = {
           order = 40,
           type = 'group',
-          name = "Special Tweaks",
+          name = "Misc",
           args = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDSpecial Tweaks|r:",
+              name = "|cff798BDDMiscellaneous Settings|r:",
               fontSize = 'large',
             },
             showMoney = {

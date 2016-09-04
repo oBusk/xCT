@@ -109,42 +109,110 @@ x.runecolors = {
 
 -- From: https://www.wowace.com/addons/yurr-combat-log/files/440-v0-74-1/
 x.spellColors = {
-	[SCHOOL_MASK_PHYSICAL]						= "FFFFFF",
-	[SCHOOL_MASK_HOLY]							= "FFFF4D",
-	[SCHOOL_MASK_FIRE]							= "FF262E",
-	[SCHOOL_MASK_NATURE]						= "66FF66",
-	[SCHOOL_MASK_FROST]							= "4D4DE6",
-	[SCHOOL_MASK_SHADOW]						= "FFB3FF",
-	[SCHOOL_MASK_ARCANE]						= "BFBFBF",
+	[SCHOOL_MASK_PHYSICAL]						= "FFFFFF",             -- Physical
+	[SCHOOL_MASK_HOLY]							= "FFFF4D",             -- Holy
+	[SCHOOL_MASK_FIRE]							= "FF262E",             -- Fire
+	[SCHOOL_MASK_NATURE]						= "66FF66",             -- Nature
+	[SCHOOL_MASK_FROST]							= "4D4DE6",             -- Frost
+	[SCHOOL_MASK_SHADOW]						= "FFB3FF",             -- Shadow
+	[SCHOOL_MASK_ARCANE]						= "BFBFBF",             -- Arcane
 
 	-- Physical and a Magical
-	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FIRE]	= "FF9397",
-	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FROST]	= "A6A6F3",
-	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_ARCANE]	= "DFDFDF",
-	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_NATURE]	= "B3FFB3",
-	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_SHADOW]	= "FFD9FF",
-	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_HOLY]	= "FFFFD3",
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FIRE]	= "FF9397",             -- Flamestrike
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FROST]	= "A6A6F3",             -- Froststrike
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_ARCANE]	= "DFDFDF",             -- Spellstrike
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_NATURE]	= "B3FFB3",             -- Stormstrike
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_SHADOW]	= "FFD9FF",             -- Shadowstrike
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_HOLY]	= "FFFFD3",             -- Holystrike
 
 	-- Two Magical Schools
-	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST]		= "A63A8A",
-	[SCHOOL_MASK_FIRE + SCHOOL_MASK_ARCANE]		= "DF7377",
-	[SCHOOL_MASK_FIRE + SCHOOL_MASK_NATURE]		= "B3934A",
-	[SCHOOL_MASK_FIRE + SCHOOL_MASK_SHADOW]		= "FF6D97",
-	[SCHOOL_MASK_FIRE + SCHOOL_MASK_HOLY]		= "FF933E",
-	[SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE]	= "8686D3",
-	[SCHOOL_MASK_FROST + SCHOOL_MASK_NATURE]	= "5AA6A6",
-	[SCHOOL_MASK_FROST + SCHOOL_MASK_SHADOW]	= "A680F3",
-	[SCHOOL_MASK_FROST + SCHOOL_MASK_HOLY]		= "A6A69A",
-	[SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE]	= "93DF93",
-	[SCHOOL_MASK_ARCANE + SCHOOL_MASK_SHADOW]	= "DFB9DF",
-	[SCHOOL_MASK_ARCANE + SCHOOL_MASK_HOLY]		= "DFDF86",
-	[SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW]	= "B3D9B3",
-	[SCHOOL_MASK_NATURE + SCHOOL_MASK_HOLY]		= "B3FF5A",
-	[SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]		= "FFD9A6",
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST]		= "A63A8A",             -- Frostfire
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_ARCANE]		= "DF7377",             -- Spellfire
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_NATURE]		= "B3934A",             -- Firestorm
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_SHADOW]		= "FF6D97",             -- Shadowflame
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_HOLY]		= "FF933E",             -- Holyfire (Radiant)
+	[SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE]	= "8686D3",             -- Spellfrost
+	[SCHOOL_MASK_FROST + SCHOOL_MASK_NATURE]	= "5AA6A6",             -- Froststorm
+	[SCHOOL_MASK_FROST + SCHOOL_MASK_SHADOW]	= "A680F3",             -- Shadowfrost
+	[SCHOOL_MASK_FROST + SCHOOL_MASK_HOLY]		= "A6A69A",             -- Holyfrost
+	[SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE]	= "93DF93",             -- Spellstorm (Astral)
+	[SCHOOL_MASK_ARCANE + SCHOOL_MASK_SHADOW]	= "DFB9DF",             -- Spellshadow
+	[SCHOOL_MASK_ARCANE + SCHOOL_MASK_HOLY]		= "DFDF86",             -- Divine
+	[SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW]	= "B3D9B3",             -- Shadowstorm (Plague)
+	[SCHOOL_MASK_NATURE + SCHOOL_MASK_HOLY]		= "B3FF5A",             -- Holystorm
+	[SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]		= "FFD9A6",             -- Shadowlight (Twilight)
 
 	-- Three or more schools
-	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_NATURE]																						= "917B7E",
-	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW]											= "B094A5",
-	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]						= "BDA696",
-	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]	= "C7B3A5"
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_NATURE]																						= "917B7E",     -- Elemental
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW]											= "B094A5",     -- Chromatic
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]						= "BDA696",     -- Magic
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]	= "C7B3A5"      -- Chaos
 }
+
+--[==[
+Convert old way to new:
+
+[[[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_NATURE]																						= "917B7E",     -- Elemental]],
+[[[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW]											= "B094A5",     -- Chromatic]],
+[[[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]						= "BDA696",     -- Magic]],
+[[[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]	= "C7B3A5"      -- Chaos]],
+
+for i, v in pairs(lines) do
+  local mask, hex, name = string.match(v, "%[([^%]]-)%][^=]-= \"([^\"]-)\"[^%-]+%-%- (.*)")
+  local r, g, b = tonumber("0x"..hex:sub(1,2))/255, tonumber("0x"..hex:sub(3,4))/255, tonumber("0x"..hex:sub(5,6))/255
+  print(string.format("[%s] = { enabled = false, desc = \"%s\",   default = { %.2f, %.2f, %.2f } },", mask, name, r, g, b))
+end
+]==]
+
+
+x.defaultSpellColors = {
+
+	-- Vanilla Schools
+	[SCHOOL_MASK_PHYSICAL] = { enabled = false, desc = "Physical", default = { 1.00, 1.00, 1.00 } },
+	[SCHOOL_MASK_HOLY]     = { enabled = false, desc = "Holy",     default = { 1.00, 1.00, 0.30 } },
+	[SCHOOL_MASK_FIRE]     = { enabled = false, desc = "Fire",     default = { 1.00, 0.15, 0.18 } },
+	[SCHOOL_MASK_NATURE]   = { enabled = false, desc = "Nature",   default = { 0.40, 1.00, 0.40 } },
+	[SCHOOL_MASK_FROST]    = { enabled = false, desc = "Frost",    default = { 0.30, 0.30, 0.90 } },
+	[SCHOOL_MASK_SHADOW]   = { enabled = false, desc = "Shadow",   default = { 1.00, 0.70, 1.00 } },
+	[SCHOOL_MASK_ARCANE]   = { enabled = false, desc = "Arcane",   default = { 0.75, 0.75, 0.75 } },
+
+	-- Physical and a Magical
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FIRE]   = { enabled = false, desc = "Flamestrike",  default = { 1.00, 0.58, 0.59 } },
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FROST]  = { enabled = false, desc = "Froststrike",  default = { 0.65, 0.65, 0.95 } },
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_ARCANE] = { enabled = false, desc = "Spellstrike",  default = { 0.87, 0.87, 0.87 } },
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_NATURE] = { enabled = false, desc = "Stormstrike",  default = { 0.70, 1.00, 0.70 } },
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_SHADOW] = { enabled = false, desc = "Shadowstrike", default = { 1.00, 0.85, 1.00 } },
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_HOLY]   = { enabled = false, desc = "Holystrike",   default = { 1.00, 1.00, 0.83 } },
+
+	-- Two Magical Schools
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST]    = { enabled = false, desc = "Frostfire",              default = { 0.65, 0.23, 0.54 } },
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_ARCANE]   = { enabled = false, desc = "Spellfire",              default = { 0.87, 0.45, 0.47 } },
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_NATURE]   = { enabled = false, desc = "Firestorm",              default = { 0.70, 0.58, 0.29 } },
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_SHADOW]   = { enabled = false, desc = "Shadowflame",            default = { 1.00, 0.43, 0.59 } },
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_HOLY]     = { enabled = false, desc = "Holyfire (Radiant)",     default = { 1.00, 0.58, 0.24 } },
+	[SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE]  = { enabled = false, desc = "Spellfrost",             default = { 0.53, 0.53, 0.83 } },
+	[SCHOOL_MASK_FROST + SCHOOL_MASK_NATURE]  = { enabled = false, desc = "Froststorm",             default = { 0.35, 0.65, 0.65 } },
+	[SCHOOL_MASK_FROST + SCHOOL_MASK_SHADOW]  = { enabled = false, desc = "Shadowfrost",            default = { 0.65, 0.50, 0.95 } },
+	[SCHOOL_MASK_FROST + SCHOOL_MASK_HOLY]    = { enabled = false, desc = "Holyfrost",              default = { 0.65, 0.65, 0.60 } },
+	[SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE] = { enabled = false, desc = "Spellstorm (Astral)",    default = { 0.58, 0.87, 0.58 } },
+	[SCHOOL_MASK_ARCANE + SCHOOL_MASK_SHADOW] = { enabled = false, desc = "Spellshadow",            default = { 0.87, 0.73, 0.87 } },
+	[SCHOOL_MASK_ARCANE + SCHOOL_MASK_HOLY]   = { enabled = false, desc = "Divine",                 default = { 0.87, 0.87, 0.53 } },
+	[SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW] = { enabled = false, desc = "Shadowstorm (Plague)",   default = { 0.70, 0.85, 0.70 } },
+	[SCHOOL_MASK_NATURE + SCHOOL_MASK_HOLY]   = { enabled = false, desc = "Holystorm",              default = { 0.70, 1.00, 0.35 } },
+	[SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]   = { enabled = false, desc = "Shadowlight (Twilight)", default = { 1.00, 0.85, 0.65 } },
+
+	-- Three or More Schools
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_NATURE]
+		= { enabled = false, desc = "Elemental", default = { 0.57, 0.48, 0.49 } },
+
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW]
+		= { enabled = false, desc = "Chromatic", default = { 0.69, 0.58, 0.65 } },
+
+	[SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]
+		= { enabled = false, desc = "Magic", default = { 0.74, 0.65, 0.59 } },
+
+	[SCHOOL_MASK_PHYSICAL + SCHOOL_MASK_FIRE + SCHOOL_MASK_FROST + SCHOOL_MASK_ARCANE + SCHOOL_MASK_NATURE + SCHOOL_MASK_SHADOW + SCHOOL_MASK_HOLY]
+		= { enabled = false, desc = "Chaos", default = { 0.78, 0.70, 0.65 } },
+}
+
+
