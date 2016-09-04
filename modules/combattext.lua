@@ -2349,7 +2349,7 @@ local CombatEventHandlers = {
 		if args.missType ~= "IMMUNE" and not ShowMisses() then return end
 
 		-- Add Icons
-		message = x:GetSpellTextureFormatted(spellID,
+		message = x:GetSpellTextureFormatted(spellId,
 		                                     message,
 		     x.db.profile.frames['outgoing'].iconsEnabled and x.db.profile.frames['outgoing'].iconsSize or -1,
 		     x.db.profile.frames['outgoing'].fontJustify)
