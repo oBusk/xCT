@@ -115,6 +115,7 @@ function x:OnInitialize()
   x:UpdateItemTypes()
   x:UpdateAuraSpellFilter()
   x.GenerateColorOptions()
+  x.GenerateSpellSchoolColors()
 
   -- Update combat text engine CVars
   x.cvar_update()
@@ -1043,6 +1044,7 @@ end
 local getColorDB = function(info)
   local enabled = string_match(info[#info], "(.*)_enabled")
   local color = string_match(info[#info], "(.*)_color")
+
   if info[#info-1] == 'fontColors' then
     if enabled then
       return x.db.profile.frames[info[#info-2]].colors[enabled].enabled
@@ -1060,6 +1062,12 @@ local getColorDB = function(info)
       return x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[enabled].enabled
     elseif color then
       return unpack(x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].color or x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].default)
+    end
+  elseif info[#info-1] == 'SpellSchools' then
+    if enabled then
+      return x.db.profile.SpellColors[enabled].enabled
+    elseif color then
+      return unpack(x.db.profile.SpellColors[color].color or x.db.profile.SpellColors[color].default)
     end
   end
 end
@@ -1085,6 +1093,12 @@ local setColorDB = function(info, r, g, b)
     elseif color then
       x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].color = { r, g, b }
     end
+  elseif info[#info-1] == 'SpellSchools' then
+    if enabled then
+      x.db.profile.SpellColors[enabled].enabled = r
+    elseif color then
+      x.db.profile.SpellColors[color].color = { r, g, b }
+    end
   end
 end
 
@@ -1096,6 +1110,8 @@ local funcColorReset = function(info)
     x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].color = x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].default
   elseif info[#info-3] == 'fontColors' then
     x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].color = x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].default
+  elseif info[#info-1] == 'SpellSchools' then
+    x.db.profile.SpellColors[color].color = x.db.profile.SpellColors[color].default
   end
 end
 
@@ -1107,6 +1123,8 @@ local funcColorHidden = function(info)
     return not x.db.profile.frames[info[#info-3]].colors[info[#info-1]].colors[color].enabled
   elseif info[#info-3] == 'fontColors' then
     return not x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].enabled
+  elseif info[#info-1] == 'SpellSchools' then
+    return not x.db.profile.SpellColors[color].enabled
   end
 end
 
@@ -1121,6 +1139,9 @@ local funcColorResetHidden = function(info)
   elseif info[#info-3] == 'fontColors' then
     return not x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].color or
       tableCompare(x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].color, x.db.profile.frames[info[#info-4]].colors[info[#info-2]].colors[info[#info-1]].colors[color].default)
+  elseif info[#info-1] == 'SpellSchools' then
+    return not x.db.profile.SpellColors[color].enabled or
+      tableCompare(x.db.profile.SpellColors[color].color, x.db.profile.SpellColors[color].default)
   end
 end
 
@@ -1246,13 +1267,44 @@ function x.GenerateColorOptions()
   end
 end
 
+
 function x.GenerateSpellSchoolColors()
-  local options = addon.options.args.SpellSchools
+  local options = addon.options.args.SpellSchools.args
+  local settings = x.db.profile.SpellColors
+  local index = 10
 
+  local sortedList = { }
+  for n in pairs(settings) do
+    sortedList[#sortedList + 1] = tonumber(n)
+  end
 
-  -- TODO: Add spell school color options
+  table_sort(sortedList)
+
+  local color
+  for _, mask in ipairs(sortedList) do
+    mask = tostring(mask)
+    color = settings[mask]
+    index = GenerateColorOptionsTable(mask, color, options, index) + 1
+  end
 end
 
+do
+  local cache = { [1] = "1", [2] = "2", [3] = "3",
+    [4] = "4", [5] = "5", [6] = "6", [8] = "8",
+    [9] = "9", [10] = "10", [12] = "12", [16] = "16",
+    [17] = "17", [18] = "18", [20] = "20",
+    [24] = "24", [28] = "28", [32] = "32", [33] = "33",
+    [34] = "34", [36] = "36", [40] = "40", [48] = "48",
+    [64] = "64", [65] = "65", [66] = "66", [68] = "68",
+    [72] = "72", [80] = "80", [96] = "96", [124] = "124",
+    [126] = "126", [127] = "127"
+  }
+
+  function x.GetSpellSchoolColor(spellSchool)
+    local index = cache[spellSchool or 1] or "1"
+    return x.db.profile.SpellColors[index].color or x.db.profile.SpellColors[index].default
+  end
+end
 
 -- Add LibSink Support
 do

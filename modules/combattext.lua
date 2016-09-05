@@ -299,25 +299,6 @@ local function IsMerged(spellID)
 end
 
 local function UseStandardSpellColors() return not x.db.profile.frames["outgoing"].standardSpellColor end
-local function GetCustomSpellColorFromIndex(index)
-	if index == 1 then
-    return x.LookupColorByName('SpellSchool_Physical')
-	elseif index == 2 then
-    return x.LookupColorByName('SpellSchool_Holy')
-	elseif index == 4 then
-    return x.LookupColorByName('SpellSchool_Fire')
-	elseif index == 8 then
-    return x.LookupColorByName('SpellSchool_Nature')
-	elseif index == 16 then
-    return x.LookupColorByName('SpellSchool_Frost')
-	elseif index == 32 then
-    return x.LookupColorByName('SpellSchool_Shadow')
-	elseif index == 64 then
-    return x.LookupColorByName('SpellSchool_Arcane')
-	else
-    return x.LookupColorByName('SpellSchool_Physical')
-	end
-end
 
 --[=====================================================[
  String Formatters
@@ -409,7 +390,7 @@ function xCTFormat:SPELL_PERIODIC_HEAL( outputFrame, spellID, amount, critical, 
 end
 
 function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged, args )
-  local outputColor, message, settings = "genericDamage"
+  local outputColor, message, settings = x.GetSpellSchoolColor(1)
 
   if critical and ShowSwingCrit() then
     settings = x.db.profile.frames["critical"]
@@ -438,7 +419,7 @@ function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged,
 end
 
 function xCTFormat:RANGE_DAMAGE( outputFrame, spellID, amount, critical, merged, autoShot, args )
-  local outputColor, message, settings = "genericDamage"
+  local outputColor, message, settings = x.GetSpellSchoolColor(1)
 
   if critical then
     settings = x.db.profile.frames["critical"]
@@ -491,7 +472,7 @@ function xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged,
        x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
        x.db.profile.frames[outputFrame].fontJustify )
 
-  x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(spellSchool) )
+  x:AddMessage(outputFrame, message, x.GetSpellSchoolColor(spellSchool))
 end
 
 function xCTFormat:SPELL_PERIODIC_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool, args )
@@ -517,7 +498,7 @@ function xCTFormat:SPELL_PERIODIC_DAMAGE( outputFrame, spellID, amount, critical
        x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
        x.db.profile.frames[outputFrame].fontJustify )
 
-  x:AddMessage(outputFrame, message, GetCustomSpellColorFromIndex(spellSchool) )
+  x:AddMessage(outputFrame, message, x.GetSpellSchoolColor(spellSchool) )
 end
 
 
@@ -2065,7 +2046,7 @@ local CombatEventHandlers = {
 	["DamageOutgoing"] = function (args)
 		local critical, spellID, amount, merged = args.critical, args.spellId, args.amount
 		local isEnvironmental, isSwing, isAutoShot, isDoT = args.prefix == "ENVIRONMENTAL", args.prefix == "SWING", spellID == 75, args.prefix == "SPELL_PERIODIC"
-		local outputFrame, outputColor = "outgoing", GetCustomSpellColorFromIndex(args.spellSchool or 1)
+		local outputFrame, outputColor = "outgoing", x.GetSpellSchoolColor(args.spellSchool or 1)
 
 		-- Keep track of spells that go by (Don't track Swings or Environmental damage)
 		if not isEnvironmental and not isSwing and TrackSpells() then x.spellCache.spells[spellID] = true end
@@ -2214,7 +2195,7 @@ local CombatEventHandlers = {
 		end
 
 		-- Output message
-		x:AddMessage('damage', message, GetCustomSpellColorFromIndex(args.spellSchool))
+		x:AddMessage('damage', message, x.GetSpellSchoolColor(args.spellSchool))
 	end,
 
 	["ShieldIncoming"] = function (args)
