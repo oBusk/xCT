@@ -563,6 +563,7 @@ addon.merges[196528]    = CreateMergeSpellEntry("DEATHKNIGHT", 1.5, 250)    -- T
 addon.merges[196545]    = CreateMergeSpellEntry("DEATHKNIGHT", 1.5, 250)    -- Talent: Bonestorm (Heal)
 addon.merges[205223]    = CreateMergeSpellEntry("DEATHKNIGHT", 0.5, 250)    -- Artifact: Consumption (DMG)
 addon.merges[205224]    = CreateMergeSpellEntry("DEATHKNIGHT", 0.5, 250)    -- Artifact: Consumption (Heal)
+addon.merges[203166]    = CreateMergeSpellEntry("DEATHKNIGHT", 2.5, 250)    -- PVP Talent: Blight (ID: 203172)
 
 -- Frost (ID: 251)
 addon.merges[196771]    = CreateMergeSpellEntry("DEATHKNIGHT", 2.5, 251)    -- Remorseless Winter
