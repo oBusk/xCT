@@ -66,6 +66,8 @@ addon.merges[218797]      = CreateMergeSpellEntry(Leg_BG, 3.5, "Broll Bearmantle
 addon.merges[221647]      = CreateMergeSpellEntry(Leg_BG, 0.5, "Vindicator Boros (Hammer of the Righteous)")
 addon.merges[222175]      = CreateMergeSpellEntry(Leg_BG, 1.5, "Blood Vanguard (Trample)")
 
+-- Monk
+addon.merges[212141]      = CreateMergeSpellEntry(Leg_BG, 1.5, "The Monkey King (Spinning Crane Kick)")
 
 
 -- ---------------------------
@@ -78,12 +80,13 @@ addon.merge2h[201573]     = 225623 -- Pepper Breath
 addon.merge2h[225624]     = 225623 -- Pepper Breath
 
 -- Trinkets
+addon.merges[214169]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Spiked Counterweight (Trinket)")
+addon.merge2h[228780]     = 214169 -- Brutal Haymaker (Spiked Counterweight)
 addon.merges[213786]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Corrupted Starlight (Trinket)")
 addon.merge2h[213782]     = 213786 -- Nightfall
 addon.merge2h[213833]     = 213786 -- Nightfall
 addon.merge2h[213784]     = 213786 -- Nightfall
 addon.merge2h[213785]     = 213786 -- Nightfall
-
 
 
 -- ---------------------------
