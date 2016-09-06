@@ -36,7 +36,6 @@ local tostring = tostring
 
 addon.defaults = {
   profile = {
-    dbVersion = GetAddOnMetadata("xCT+", "Version"),
     showStartupText = true,
     hideConfig = true,
     bypassCVars = false,
@@ -150,25 +149,25 @@ addon.defaults = {
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- position
+        -- position
         ["X"] = 0,
         ["Y"] = 224,
         ["Width"] = 512,
         ["Height"] = 128,
 
-      -- fonts
+        -- fonts
         ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
-      -- font shadow
+        -- font shadow
         ["enableFontShadow"] = true,
         ["fontShadowColor"] = { 0, 0, 0, 0.6 },
         ["fontShadowOffsetX"] = 2,
         ["fontShadowOffsetY"] = -2,
 
-      -- font colors
+        -- font colors
         colors = {
           ["interrupts"]   = { enabled = false, desc = "Interrupts",     default = { 1.00, 0.50, 0.00 } },
           ["killingBlow"]  = { enabled = false, desc = "Killing Blows",  default = { 0.20, 1.00, 0.20 } },
@@ -214,22 +213,22 @@ addon.defaults = {
           },
         },
 
-      -- icons
+        -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
+        -- special tweaks
         ["showInterrupts"] = true,
         ["showDispells"] = true,
         ["showPartyKills"] = true,
@@ -248,41 +247,28 @@ addon.defaults = {
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- position
+        -- position
         ["X"] = 400,
         ["Y"] = 0,
         ["Width"] = 164,
         ["Height"] = 512,
 
-      -- fonts
+        -- fonts
         ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "RIGHT",
 
-      -- font shadow
+        -- font shadow
         ["enableFontShadow"] = true,
         ["fontShadowColor"] = { 0, 0, 0, 0.6 },
         ["fontShadowOffsetX"] = 2,
         ["fontShadowOffsetY"] = -2,
 
-      -- font colors
+        -- font colors
         colors = {
           ['genericDamage']         = { enabled = false, desc = "Generic Damage",   default = { 1.00, 0.82, 0.00 } },
           ['misstypesOut']          = { enabled = false, desc = "Missed",           default = { 0.50, 0.50, 0.50 } },
-
-          ["spellSchools"] = {
-            enabled = false, desc = "Spell School Colors",
-            colors = {
-              ['SpellSchool_Physical']  = { enabled = false, desc = "Physical Damage",  default = { 1.00, 1.00, 0.00 } },
-              ['SpellSchool_Holy']      = { enabled = false, desc = "Holy Damage",      default = { 1.00, 0.90, 0.50 } },
-              ['SpellSchool_Fire']      = { enabled = false, desc = "Fire Damage",      default = { 1.00, 0.50, 0.00 } },
-              ['SpellSchool_Nature']    = { enabled = false, desc = "Nature Damage",    default = { 0.30, 1.00, 0.30 } },
-              ['SpellSchool_Frost']     = { enabled = false, desc = "Frost Damage",     default = { 0.50, 1.00, 1.00 } },
-              ['SpellSchool_Shadow']    = { enabled = false, desc = "Shadow Damage",    default = { 0.50, 0.50, 1.00 } },
-              ['SpellSchool_Arcane']    = { enabled = false, desc = "Arcane Damage",    default = { 1.00, 0.50, 1.00 } },
-            },
-          },
           ['healingSpells'] = {
             enabled = false, desc = "Healing Colors",
             colors = {
@@ -293,9 +279,8 @@ addon.defaults = {
           },
         },
 
-      -- name formatting
+        -- name formatting
         names = {
-
           -- appearance
           ["namePrefix"] = " |cffFFFFFF<|r",
           ["namePostfix"] = "|cffFFFFFF>|r",
@@ -346,22 +331,22 @@ addon.defaults = {
           }
         },
 
-      -- icons
+        -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
+        -- special tweaks
         ["enableOutDmg"] = true,
         ["enableOutHeal"] = true,
         ["enablePetDmg"] = true,
@@ -379,25 +364,25 @@ addon.defaults = {
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- position
+        -- position
         ["X"] = 192,
         ["Y"] = 0,
         ["Width"] = 256,
         ["Height"] = 140,
 
-      -- fonts
+        -- fonts
         ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 24,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "RIGHT",
 
-      -- font shadow
+        -- font shadow
         ["enableFontShadow"] = true,
         ["fontShadowColor"] = { 0, 0, 0, 0.6 },
         ["fontShadowOffsetX"] = 2,
         ["fontShadowOffsetY"] = -2,
 
-      -- font colors
+        -- font colors
         colors = {
           ['genericDamageCritical']  = { enabled = false, desc = "Critical Generic Damage", default = { 1.00, 1.00, 0.00 } },
 
@@ -409,7 +394,7 @@ addon.defaults = {
           },
         },
 
-      -- name formatting
+        -- name formatting
         names = {
 
           -- appearance
@@ -462,26 +447,26 @@ addon.defaults = {
           }
         },
 
-      -- critical appearance
+        -- critical appearance
         ["critPrefix"] = "|cffFF0000*|r",
         ["critPostfix"] = "|cffFF0000*|r",
 
-      -- icons
+        -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
+        -- special tweaks
         ["showSwing"] = true,
         ["prefixSwing"] = true,
       },
@@ -493,25 +478,25 @@ addon.defaults = {
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- position
+        -- position
         ["X"] = -288,
         ["Y"] = -80,
         ["Width"] = 448,
         ["Height"] = 160,
 
-      -- fonts
+        -- fonts
         ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "LEFT",
 
-      -- font shadow
+        -- font shadow
         ["enableFontShadow"] = true,
         ["fontShadowColor"] = { 0, 0, 0, 0.6 },
         ["fontShadowOffsetX"] = 2,
         ["fontShadowOffsetY"] = -2,
 
-      -- font colors
+        -- font colors
         colors = {
           ['damageTaken']               = { enabled = false, desc = "Physical Damage",          default = { 0.75, 0.10, 0.10 } },
           ['damageTakenCritical']       = { enabled = false, desc = "Critical Physical Damage", default = { 1.00, 0.10, 0.10 } },
@@ -544,11 +529,11 @@ addon.defaults = {
           },
         },
 
-      -- critical appearance
+        -- critical appearance
         ["critPrefix"] = "",
         ["critPostfix"] = "",
 
-      -- name formatting
+        -- name formatting
         names = {
 
           -- appearance
@@ -616,23 +601,23 @@ addon.defaults = {
           }
         },
 
-      -- icons
+        -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 14,
         ["iconsEnabledAutoAttack"] = true,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- Special Tweaks
+        -- Special Tweaks
         ["showDodgeParryMiss"] = true,
         ["showDamageReduction"] = true,
       },
@@ -644,25 +629,25 @@ addon.defaults = {
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- positioon
+        -- positioon
         ["X"] = -288,
         ["Y"] = 88,
         ["Width"] = 448,
         ["Height"] = 144,
 
-      -- fonts
+        -- fonts
         ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "LEFT",
 
-      -- font shadow
+        -- font shadow
         ["enableFontShadow"] = true,
         ["fontShadowColor"] = { 0, 0, 0, 0.6 },
         ["fontShadowOffsetX"] = 2,
         ["fontShadowOffsetY"] = -2,
 
-      -- font colors
+        -- font colors
         colors = {
           ['shieldTaken']          = { enabled = false, desc = "Shields",          default = { 0.60, 0.65, 1.00 } },
           ['healingTaken']         = { enabled = false, desc = "Healing",          default = { 0.10, 0.75, 0.10 } },
@@ -671,7 +656,7 @@ addon.defaults = {
           ['healingTakenPeriodicCritical'] = { enabled = false, desc = "Critical Periodic Healing", default = { 0.10, 0.50, 0.10 } },
         },
 
-      -- name formatting
+        -- name formatting
         names = {
 
           -- appearance
@@ -724,22 +709,22 @@ addon.defaults = {
           }
         },
 
-      -- icons
+        -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
+        -- special tweaks
         ["enableOverHeal"] = true,
         ["enableSelfAbsorbs"] = true,
         ["showOnlyMyHeals"] = false,
@@ -750,24 +735,24 @@ addon.defaults = {
         ["enabledFrame"] = true,
         ["alpha"] = 100,
 
-      -- position
+        -- position
         ["X"] = 0,
         ["Y"] = 64,
         ["Width"] = 64,
         ["Height"] = 64,
 
-      -- fonts
+        -- fonts
         ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 64,
         ["fontOutline"] = "2OUTLINE",
 
-      -- font shadow
+        -- font shadow
         ["enableFontShadow"] = true,
         ["fontShadowColor"] = { 0, 0, 0, 0.6 },
         ["fontShadowOffsetX"] = 2,
         ["fontShadowOffsetY"] = -2,
 
-      -- font colors
+        -- font colors
         colors = {
           ['comboPoints']     = { enabled = false, desc = "Combo Points",     default = { 1.00, 0.82, 0.00 } },
           ['comboPointsMax']  = { enabled = false, desc = "Max Combo Points", default = { 0.00, 0.82, 1.00 } },
@@ -781,25 +766,25 @@ addon.defaults = {
         ["alpha"] = 100,
         ["megaDamage"] = true,
 
-      -- position
+        -- position
         ["X"] = 0,
         ["Y"] = -16,
         ["Width"] = 128,
         ["Height"] = 96,
 
-      -- fonts
+        -- fonts
         ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 17,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
-      -- font shadow
+        -- font shadow
         ["enableFontShadow"] = true,
         ["fontShadowColor"] = { 0, 0, 0, 0.6 },
         ["fontShadowOffsetX"] = 2,
         ["fontShadowOffsetY"] = -2,
 
-      -- font colors
+        -- font colors
         -- TODO: Update these ( See http://www.wowinterface.com/forums/showthread.php?t=53140 )
         colors = {
           ['color_MANA']             = { enabled = false, desc = MANA,        default = { 0.00, 0.00, 1.00 } },
@@ -815,18 +800,18 @@ addon.defaults = {
           ['color_ECLIPSE_negative'] = { enabled = false, desc = ECLIPSE .. " |cff798BDD(Negative)|r", default = { 0.30, 0.52, 0.90 } },
         },
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
+        -- special tweaks
         ["showEnergyGains"] = true,
         ["showPeriodicEnergyGains"] = true,
         ["showEnergyType"] = true,
@@ -842,7 +827,6 @@ addon.defaults = {
         ["disableResource_ECLIPSE_negative"] = true,
         ["disableResource_ECLIPSE_positive"] = true,
         ["disableResource_HOLY_POWER"]       = false,
-
       },
 
       procs = {
@@ -851,40 +835,40 @@ addon.defaults = {
         ["insertText"] = "top",
         ["alpha"] = 100,
 
-      -- position
+        -- position
         ["X"] = 0,
         ["Y"] = -256,
         ["Width"] = 294,
         ["Height"] = 64,
 
-      -- fonts
+        -- fonts
         ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 24,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
-      -- font shadow
+        -- font shadow
         ["enableFontShadow"] = true,
         ["fontShadowColor"] = { 0, 0, 0, 0.6 },
         ["fontShadowOffsetX"] = 2,
         ["fontShadowOffsetY"] = -2,
 
-      -- font colors
+        -- font colors
         colors = {
           ['spellProc']     = { enabled = false, desc = "Spell Procs",    default = { 1.00, 0.82, 0.00 } },
           ['spellReactive'] = { enabled = false, desc = "Spell Reactive", default = { 1.00, 0.82, 0.00 } },
         },
 
-      -- icons
+        -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
@@ -897,40 +881,40 @@ addon.defaults = {
         ["insertText"] = "top",
         ["alpha"] = 100,
 
-      -- position
+        -- position
         ["X"] = 0,
         ["Y"] = -352,
         ["Width"] = 512,
         ["Height"] = 128,
 
-      -- fonts
+        -- fonts
         ["font"] = "Condensed Bold (xCT+)",
         ["fontSize"] = 18,
         ["fontOutline"] = "2OUTLINE",
         ["fontJustify"] = "CENTER",
 
-      -- font shadow
+        -- font shadow
         ["enableFontShadow"] = true,
         ["fontShadowColor"] = { 0, 0, 0, 0.6 },
         ["fontShadowOffsetX"] = 2,
         ["fontShadowOffsetY"] = -2,
 
-      -- icons
+        -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
 
-      -- scrollable
+        -- scrollable
         ["enableScrollable"] = false,
         ["scrollableLines"] = 10,
         ["scrollableInCombat"] = false,
 
-      -- fading text
+        -- fading text
         ["enableCustomFade"] = true,
         ["enableFade"] = true,
         ["fadeTime"] = 0.3,
         ["visibilityTime"] = 5,
 
-      -- special tweaks
+        -- special tweaks
         ["showItems"] = true,
         ["showItemTypes"] = true,
         ["showMoney"] = true,

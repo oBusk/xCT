@@ -73,6 +73,14 @@ local function ProfileReset()
   collectgarbage()
 end
 
+local function CheckExistingProfile()
+	local key = UnitName("player").." - "..GetRealmName()
+	return xCTSavedDB
+	   and xCTSavedDB.profileKeys
+	   and xCTSavedDB.profileKeys[key]
+	   and xCTSavedDB.profiles[xCTSavedDB.profileKeys[key]]
+end
+
 -- Handle Addon Initialized
 function x:OnInitialize()
   if xCT or ct and ct.myname and ct.myclass then
@@ -81,7 +89,7 @@ function x:OnInitialize()
   end
 
   -- Check for new installs
-  self.existingProfile = xCTSavedDB and xCTSavedDB.profiles and xCTSavedDB.profiles[UnitName("player").." - "..GetRealmName()] and true
+  self.existingProfile = CheckExistingProfile()
 
   -- Load the Data Base
   self.db = LibStub('AceDB-3.0'):New('xCTSavedDB', addon.defaults)
@@ -228,13 +236,41 @@ end
 function x:CompatibilityLogic( existing )
     local addonVersionString = GetAddOnMetadata("xCT+", "Version")
     local currentVersion = VersionToTable(addonVersionString)
-    local previousVersion = VersionToTable(self.db.profile.dbVersion or "0.0.0")
+    local previousVersion = VersionToTable(self.db.profile.dbVersion or "4.3.0 Beta 2")
 
     if existing then
       -- Pre-Legion Requires Complete Reset
       if CompareVersions( VersionToTable("4.2.9"), previousVersion) > 0 then
         StaticPopup_Show("XCT_PLUS_DB_CLEANUP_2")
         return false -- Do not continue loading addon
+      end
+
+      -- 4.3.0 Beta 3 -> Removes Spell School Colors from Outgoing fraame settings
+      if CompareVersions( VersionToTable("4.3.0 Beta 3"), previousVersion) > 0 then
+        if currentVersion.devBuild then
+          print("|cffFF0000x|rCT|cffFFFF00+|r: |cffFF8000Beta 3 Clean Up - Migrated Settings|r")
+          print("    |cff798BDDSpell School Colors|r (|cffFFFF00From: Config Tool->Frames->Outgoing|r | |cff00FF00To: Config Tool->Spell School Colors|r)")
+        end
+        if x.db.profile.frames.outgoing.colors.spellSchools then
+          local oldDB = x.db.profile.frames.outgoing.colors.spellSchools.colors
+          local newDB = x.db.profile.SpellColors
+          local keys = {
+            ['SpellSchool_Physical'] = "1",
+            ['SpellSchool_Holy']     = "2",
+            ['SpellSchool_Fire']     = "4",
+            ['SpellSchool_Nature']   = "8",
+            ['SpellSchool_Frost']    = "16",
+            ['SpellSchool_Shadow']   = "32",
+            ['SpellSchool_Arcane']   = "64",
+          }
+          for oldKey, newKey in pairs(keys) do
+            if oldDB[oldKey] then
+              newDB[newKey].enabled = oldDB[oldKey].enabled
+              newDB[newKey].color = oldDB[oldKey].color
+            end
+          end
+          x.db.profile.frames.outgoing.colors.spellSchools = nil
+        end
       end
     else
       -- Created New: Dont need to do anything right now
