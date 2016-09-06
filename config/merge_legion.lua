@@ -99,8 +99,6 @@ addon.merges[221254]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: 
 addon.merges[218895]      = CreateMergeSpellEntry(Leg_World, 1.0, "World Quest: Withered Army Training (Throw Rock)")
 addon.merges[204204]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: The Battle Rages On (Unleashed Magic)")
 
--- 204204
-
 -- Broken Shore
 addon.merges[200009]      = CreateMergeSpellEntry(Leg_World, 0.5, "Unattended Cannon (Fel Cannonball)")
 
