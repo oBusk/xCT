@@ -1071,7 +1071,7 @@ end
 local colorNameDB = { }
 function x.LookupColorByName(name)
   if colorNameDB[name] then
-    return colorNameDB[name].color
+    return colorNameDB[name].color or colorNameDB[name].default
   else
     return
   end

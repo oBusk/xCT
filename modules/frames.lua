@@ -348,15 +348,11 @@ function x:AddMessage(framename, message, colorname)
 		if type(colorname) == "table" then
 			r, g, b = unpack(colorname)
 		else
-			if not x.colors[colorname] then
-				if x.LookupColorByName(colorname) then
-					r, g, b = unpack( x.LookupColorByName(colorname) )
-				else
-					print("FRAME:", framename,"  xct+ says there is no color named:", colorname)
-					error("missing color")
-				end
+			if x.LookupColorByName(colorname) then
+				r, g, b = unpack( x.LookupColorByName(colorname) )
 			else
-				r, g, b = unpack(x.colors[colorname])
+				print("FRAME:", framename,"  xct+ says there is no color named:", colorname)
+				error("missing color")
 			end
 		end
 
@@ -890,7 +886,11 @@ function x:SaveAllFrames()
 	end
 end
 
-local damageColorLookup = { [1] = 1, [2] = 2, [3] = 4, [4] = 8, [5] = 16, [6] = 32, [7] = 64, }
+local colors = { '1', '2', '4', '8', '16', '32', '64' }
+local function GetRandomSpellColor()
+	local color = colors[math.random(7)]
+	return x.db.profile.SpellColors[color].color or x.db.profile.SpellColors[color].default
+end
 
 -- Gets a random spell icon that is NOT an engineering cog wheel
 local function GetRandomSpellID()
@@ -936,7 +936,7 @@ function x.TestMoreUpdate(self, elapsed)
 					merged = true
 				end
 				message = x:GetSpellTextureFormatted( x.db.profile.frames["outgoing"].iconsEnabled and GetRandomSpellID() or -1, message, x.db.profile.frames["outgoing"].iconsSize, x.db.profile.frames["outgoing"].fontJustify, nil, merged, multistriked )
-				x:AddMessage(output, message, x.damagecolor[damageColorLookup[math.random(7)]])
+				x:AddMessage(output, message, GetRandomSpellColor())
 			elseif self == x.frames["critical"] and random(2) % 2 == 0 then
 				local output = "critical"
 				if not x.db.profile.frames[output].enabledFrame then
@@ -950,7 +950,7 @@ function x.TestMoreUpdate(self, elapsed)
 					merged = true
 				end
 				message = x:GetSpellTextureFormatted( x.db.profile.frames["critical"].iconsEnabled and GetRandomSpellID() or -1, message, x.db.profile.frames["critical"].iconsSize, x.db.profile.frames["critical"].fontJustify, nil, merged, multistriked )
-				x:AddMessage(output, message, x.damagecolor[damageColorLookup[math.random(7)]])
+				x:AddMessage(output, message, GetRandomSpellColor())
 			elseif self == x.frames["damage"] and random(2) % 2 == 0 then
 				local output = "damage"
 				if not x.db.profile.frames[output].enabledFrame then
