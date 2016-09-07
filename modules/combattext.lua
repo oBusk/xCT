@@ -285,17 +285,13 @@ local function IsItemFiltered(name)
 end
 
 local function IsMerged(spellID)
-	return ( x.db.profile.spells.enableMerger ) and
-		(	-- Check to see if it is a merged spell
-			x.db.profile.spells.merge[spellID] and
-			x.db.profile.spells.merge[spellID].enabled
-		)
-		or
-		(	-- Check to see if it is a two hand weapon
-			addon.merge2h[spellID] and
-			x.db.profile.spells.merge[addon.merge2h[spellID]] and
-			x.db.profile.spells.merge[addon.merge2h[spellID]].enabled
-		)
+	local merged = false
+	if x.db.profile.spells.enableMerger then
+		spellID = addon.merge2h[spellID] or spellID
+		local db = x.db.profile.spells.merge[spellID] or addon.defaults.profile.spells.merge[spellID]
+		if db and db.enabled then merged = true end
+	end
+	return merged
 end
 
 local function UseStandardSpellColors() return not x.db.profile.frames["outgoing"].standardSpellColor end
@@ -1920,8 +1916,7 @@ formatNameTypes = {
 			--       that the spell name matches the type of spell it
 			--       is, and not the type of damage it does, change
 			--       "args.school" to "args.spellSchool".
-
-			color = x.spellColors[args.school or args.spellSchool or 1]
+			color = x.GetSpellSchoolColor(args.school or args.spellSchool)
 		end
 
 		return formatNameHelper(args.spellName,

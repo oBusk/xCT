@@ -404,14 +404,15 @@ function x:AddSpamMessage(framename, mergeID, message, colorname, interval, prep
 			heap[mergeID].last = now
 		end
 	else
+		local db = addon.defaults.profile.spells.merge[mergeID]
 		heap[mergeID] = {
 			-- last update
 			last = now,
 
 			-- how often to update
-			update = interval or (x.db.profile.spells.merge[mergeID] and x.db.profile.spells.merge[mergeID].interval or 3),
+			update = interval or (db and db.interval) or 3,
 
-			prep = prep or interval or x.db.profile.spells.merge[mergeID].prep or 3,
+			prep = prep or (db and db.prep) or interval or 3,
 
 			-- entries to merge
 			entries = {

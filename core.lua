@@ -91,6 +91,9 @@ function x:OnInitialize()
   -- Check for new installs
   self.existingProfile = CheckExistingProfile()
 
+  -- Generate Dynamic Merge Entries
+  addon.GenerateDefaultSpamSpells()
+
   -- Load the Data Base
   self.db = LibStub('AceDB-3.0'):New('xCTSavedDB', addon.defaults)
 
@@ -232,6 +235,17 @@ local function CompareVersions( a, b )
   return 0
 end
 
+do
+  local cleanUpShown = false
+  function x.MigratePrint(msg)
+    if not cleanUpShown then
+      print("|cffFF0000x|rCT|cffFFFF00+|r: |cffFF8000Clean Up - Migrated Settings|r")
+      cleanUpShown = true
+    end
+    print("    "..msg)
+  end
+end
+
 -- This function was created as the central location for crappy code
 function x:CompatibilityLogic( existing )
     local addonVersionString = GetAddOnMetadata("xCT+", "Version")
@@ -248,8 +262,7 @@ function x:CompatibilityLogic( existing )
       -- 4.3.0 Beta 3 -> Removes Spell School Colors from Outgoing fraame settings
       if CompareVersions( VersionToTable("4.3.0 Beta 3"), previousVersion) > 0 then
         if currentVersion.devBuild then
-          print("|cffFF0000x|rCT|cffFFFF00+|r: |cffFF8000Beta 3 Clean Up - Migrated Settings|r")
-          print("    |cff798BDDSpell School Colors|r (|cffFFFF00From: Config Tool->Frames->Outgoing|r | |cff00FF00To: Config Tool->Spell School Colors|r)")
+          x.MigratePrint("|cff798BDDSpell School Colors|r (|cffFFFF00From: Config Tool->Frames->Outgoing|r | |cff00FF00To: Config Tool->Spell School Colors|r)")
         end
         if x.db.profile.frames.outgoing.colors.spellSchools then
           local oldDB = x.db.profile.frames.outgoing.colors.spellSchools.colors
@@ -270,6 +283,21 @@ function x:CompatibilityLogic( existing )
             end
           end
           x.db.profile.frames.outgoing.colors.spellSchools = nil
+        end
+      end
+
+
+      -- 4.3.0 Beta 4 -> Remove redundent Merge Entries from the Config
+      if CompareVersions( VersionToTable("4.3.0 Beta 5"), previousVersion) > 0 then
+        if currentVersion.devBuild then
+          x.MigratePrint("|cff798BDDMerge Entries:|r (|cffFFFF00Optimizing SavedVars|r)")
+        end
+        local merge = x.db.profile.spells.merge
+        for id, entry in pairs(merge) do
+          merge[id] = nil
+          if not entry.enabled and addon.merges[id] then
+            merge[id] = { enabled = false }
+          end
         end
       end
     else
@@ -325,8 +353,17 @@ do
 end
 
 -- Spammy Spell Get/Set Functions
-local function SpamSpellGet(info) return x.db.profile.spells.merge[tonumber(info[#info])].enabled end
-local function SpamSpellSet(info, value) x.db.profile.spells.merge[tonumber(info[#info])].enabled = value end
+local function SpamSpellGet(info)
+  local id = tonumber(info[#info])
+  local db = x.db.profile.spells.merge[id] or addon.defaults.profile.spells.merge[id]
+  return db.enabled
+end
+local function SpamSpellSet(info, value)
+  local id = tonumber(info[#info])
+  local db = x.db.profile.spells.merge[id] or {}
+  db.enabled = value
+  x.db.profile.spells.merge[id] = db
+end
 
 local CLASS_NAMES = {
   ["DEATHKNIGHT"] = {
@@ -403,9 +440,14 @@ local CLASS_NAMES = {
   },
 }
 
+function x.GenerateDefaultSpamSpells()
+  local defaults = addon.defaults.spells.merge
+
+end
+
 -- Gets spammy spells from the database and creates options
 function x:UpdateSpamSpells()
-  -- Update our saved DB
+  --[[ Update our saved DB
   for id, item in pairs(addon.merges) do
     if not self.db.profile.spells.merge[id] then
       self.db.profile.spells.merge[id] = item
@@ -417,7 +459,7 @@ function x:UpdateSpamSpells()
       self.db.profile.spells.merge[id].desc = item.desc
       self.db.profile.spells.merge[id].class = item.class
     end
-  end
+  end]]
 
   local spells = addon.options.args.spells.args.classList.args
   local global = addon.options.args.spells.args.globalList.args
@@ -445,7 +487,7 @@ function x:UpdateSpamSpells()
 
   -- Create a list of the categories (to be sorted)
   local categories = {}
-  for _, entry in pairs(self.db.profile.spells.merge) do
+  for _, entry in pairs(addon.merges) do
     if not CLASS_NAMES[entry.class] then
       table.insert(categories, entry.class)
     end
@@ -470,7 +512,7 @@ function x:UpdateSpamSpells()
   end
 
   -- Update the UI
-  for spellID, entry in pairs(self.db.profile.spells.merge) do
+  for spellID, entry in pairs(addon.merges) do
     local name = GetSpellInfo(spellID)
     if name then
 
@@ -1303,7 +1345,6 @@ function x.GenerateColorOptions()
   end
 end
 
-
 function x.GenerateSpellSchoolColors()
   local options = addon.options.args.SpellSchools.args
   local settings = x.db.profile.SpellColors
@@ -1347,7 +1388,9 @@ do
   local frames, color, LibSink = {}, {}, LibStub"LibSink-2.0"
 
   for name, title in pairs(x.FrameTitles) do
-    frames[title] = name
+    if name ~= 'class' then
+      frames[title] = name
+    end
   end
 
   -- shortName, name, desc, func, scrollAreaFunc, hasSticky

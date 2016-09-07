@@ -34,6 +34,16 @@ end
 -- Upvalue
 local tostring = tostring
 
+
+-- Add Merge Spell to the DB before it gets used by the profile
+function addon.GenerateDefaultSpamSpells()
+  local default = addon.defaults.profile.spells.merge
+  for id, item in pairs(addon.merges) do
+    default[id] = item
+    default[id].enabled = true
+  end
+end
+
 addon.defaults = {
   profile = {
     showStartupText = true,
@@ -1019,8 +1029,7 @@ addon.defaults = {
 
       },
 
-      -- yes this is supposed to be blank :P
-      -- it is generated in merge.lua
+      -- This gets dynamically generated
       merge = { },
 
       -- yes this is supposed to be blank :P
