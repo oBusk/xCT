@@ -543,7 +543,8 @@ addon.merges[207407]    = CreateMergeSpellEntry("DEMONHUNTER", 1.5, 581)    -- A
 addon.merge2h[178741]   = 187727                                            -- [DD/DoT Merger] Immolation Aura
 addon.merge2h[208038]   = 222030                                            -- [DD/DoT Merger] Soul Cleave
 addon.merge2h[214743]   = 207407                                            -- [DD/DoT Merger] Soul Cleave
-addon.merge2h[212106]   = 212105                                            -- [MH/OH Merger] Fel Devastation
+addon.merge2h[212106]   = 227255                                            -- [MH/OH Merger] Fel Devastation
+addon.merge2h[212084]   = 227255                                            -- Reported From Curse: Should be Fel Devastation
 
 
 
