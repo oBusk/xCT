@@ -65,6 +65,8 @@ addon.merges[218797]      = CreateMergeSpellEntry(Leg_BG, 3.5, "Broll Bearmantle
 -- Paladin
 addon.merges[221647]      = CreateMergeSpellEntry(Leg_BG, 0.5, "Vindicator Boros (Hammer of the Righteous)")
 addon.merges[222175]      = CreateMergeSpellEntry(Leg_BG, 1.5, "Blood Vanguard (Trample)")
+addon.merges[222175]      = CreateMergeSpellEntry(Leg_BG, 1.5, "Arator the Redeemer (Divine Storm)")
+addon.merges[221720]      = CreateMergeSpellEntry(Leg_BG, 1.5, "Arator the Redeemer (Divine Storm Heal)")
 
 -- Monk
 addon.merges[212141]      = CreateMergeSpellEntry(Leg_BG, 1.5, "The Monkey King (Spinning Crane Kick)")
@@ -92,6 +94,9 @@ addon.merge2h[213785]     = 213786 -- Nightfall
 -- ---------------------------
 -- World Zone               --
 -- ---------------------------
+
+-- All
+addon.merges[205238]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: PvP Warden Tower's (Powder Keg)")
 
 -- Suramar
 addon.merges[203148]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: Air Superiority (Unstable Mana)")
