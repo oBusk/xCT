@@ -593,7 +593,7 @@ function x:GetSpellTextureFormatted( spellID, message, iconSize, justify, strCol
   end
 
   if x.db.profile.spells.enableMergerDebug then
-    message = message .. " |cffFFFFFF[|cffFF0000ID:|r|cffFFFF00" .. spellID .. "|r]|r"
+    message = message .. " |cffFFFFFF[|cffFF0000ID:|r|cffFFFF00" .. (spellID or "No ID") .. "|r]|r"
   end
 
   return message
