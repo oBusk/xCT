@@ -8,9 +8,6 @@ local private = {}
 Lib.private = private
 
 do
-	-- Upvalues
-	local pairs=pairs
-
 	-- Registered Event Handles
 	-- Hook into the old handles incase someone registered with them before we could load.
 	private.handles = oldLib and oldLib.private.handles or{}
@@ -32,7 +29,7 @@ do
 	--                              "args:free()" when you are finished with it.
 	-- ------------------------------------------------------------------------------
 	function Lib:RegisterCombat(func)
-		private.handles[func]=true
+		private.handles[func] = true
 		private.frame:RegisterEvent"COMBAT_LOG_EVENT_UNFILTERED"
 	end
 
@@ -43,13 +40,10 @@ do
 	--           The callback that you want to unregister from getting combat
 	--           events. See "Lib:RegisterCombat" for more details.
 	-- ------------------------------------------------------------------------------
+	local next = next-- Upvalues
 	function Lib:UnregisterCombat(func)
-		private.handles[func]=nil
-		local reg
-		for i in pairs(private.handles)do
-			if i then reg=1;break;end
-		end
-		if not reg then
+		private.handles[func] = nil
+		if not next(private.handles) then
 			private.frame:UnregisterEvent"COMBAT_LOG_EVENT_UNFILTERED"
 		end
 	end
@@ -204,10 +198,6 @@ do
 	                                            destFlags,
 	                                            destRaidFlags,
 	                                            ...)
-
-	-- COMBAT_LOG_EVENT_UNFILTERED 1470787329.392 SPELL_DAMAGE true  nil 1297 0 Player-58-071885E0 Dandraffbal 1297 0
-
-
 		if frameEvent == "COMBAT_LOG_EVENT_UNFILTERED" then
 			local i, args = 1, private.create()
 
@@ -391,8 +381,8 @@ do
 end
 
 local hasFlag
+local band = bit.band
 do
-	local band = bit.band
 	function hasFlag (flags, flag)
 		return band(flags or 0, flag) == flag
 	end
@@ -404,29 +394,21 @@ do
 
 	-- GetSourceType and GetDestinationType
 	do
-		local COMBATLOG_OBJECT_TYPE_OBJECT, COMBATLOG_OBJECT_TYPE_GUARDIAN,
-			COMBATLOG_OBJECT_TYPE_PET, COMBATLOG_OBJECT_TYPE_NPC,
-			COMBATLOG_OBJECT_TYPE_PLAYER = COMBATLOG_OBJECT_TYPE_OBJECT,
-			COMBATLOG_OBJECT_TYPE_GUARDIAN, COMBATLOG_OBJECT_TYPE_PET,
-			COMBATLOG_OBJECT_TYPE_NPC, COMBATLOG_OBJECT_TYPE_PLAYER
+		local COMBATLOG_OBJECT_TYPES, COMBATLOG_OBJECT_TYPE_MASK = {
+			[COMBATLOG_OBJECT_TYPE_OBJECT] = 'OBJECT',
+			[COMBATLOG_OBJECT_TYPE_GUARDIAN] = 'GUARDIAN',
+			[COMBATLOG_OBJECT_TYPE_PET] = 'PET',
+			[COMBATLOG_OBJECT_TYPE_NPC] = 'NPC',
+			[COMBATLOG_OBJECT_TYPE_PLAYER] = 'PLAYER',
+		}, COMBATLOG_OBJECT_TYPE_MASK
 
 		function private.GetSourceType (args)
-			flags = args.sourceFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_TYPE_OBJECT) and "OBJECT" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_GUARDIAN) and "GUARDIAN" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PET) and "PET" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_NPC) and "NPC" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PLAYER) and "PLAYER" or
-				args.prefix == "ENVIRONMENTAL" and "ENVIRONMENT" or "UNKNOWN"
+			if args.prefix == 'ENVIRONMENTAL' then return 'ENVIRONMENT' end
+			return COMBATLOG_OBJECT_TYPES[band(COMBATLOG_OBJECT_TYPE_MASK, args.sourceFlags or 0)] or 'UNKNOWN'
 		end
 
 		function private.GetDestinationType (args)
-			flags = args.destFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_TYPE_OBJECT) and "OBJECT" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_GUARDIAN) and "GUARDIAN" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PET) and "PET" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_NPC) and "NPC" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PLAYER) and "PLAYER" or "UNKNOWN"
+			return COMBATLOG_OBJECT_TYPES[band(COMBATLOG_OBJECT_TYPE_MASK, args.destFlags or 0)] or 'UNKNOWN'
 		end
 	end
 
@@ -657,6 +639,7 @@ do
 		return hasFlag(args.destFlags, MY_VEHICLE_FLAGS)
 	end
 end
+
 
 -- IsSourceRaidMember IsDestinationRaidMember
 do

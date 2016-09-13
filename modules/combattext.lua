@@ -2055,12 +2055,17 @@ local CombatEventHandlers = {
 		-- Check to see if my pet is doing things
 		if args:IsSourceMyPet() then
 			if not ShowPetDamage() then return end
-			spellID = 0 -- this will get fixed later
 			critical = nil -- stupid spam fix for hunter pets
+			if isSwing then
+				spellID = 0 -- this will get fixed later
+			end
 		end
 
 		if args:IsSourceMyVehicle() then
-			-- TODO: Add Vehicle things here
+			if isSwing then
+				spellID = 0 -- this will get fixed later
+				critical = nil -- stupid spam fix for hunter pets
+			end
 		end
 
 		-- Check for Critical Swings
@@ -2105,7 +2110,6 @@ local CombatEventHandlers = {
 				return
 			end
 		end
-
 
 		if args.event == "SWING_DAMAGE" then
 			xCTFormat:SWING_DAMAGE(outputFrame, spellID, amount, critical, merged, args)
