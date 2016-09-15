@@ -9,7 +9,7 @@ Lib.private = private
 
 do
 	-- Upvalues
-	local pairs=pairs
+	local next=next
 
 	-- Registered Event Handles
 	-- Hook into the old handles incase someone registered with them before we could load.
@@ -45,11 +45,7 @@ do
 	-- ------------------------------------------------------------------------------
 	function Lib:UnregisterCombat(func)
 		private.handles[func]=nil
-		local reg
-		for i in pairs(private.handles)do
-			if i then reg=1;break;end
-		end
-		if not reg then
+		if not next(private.handles)then
 			private.frame:UnregisterEvent"COMBAT_LOG_EVENT_UNFILTERED"
 		end
 	end
@@ -127,11 +123,7 @@ do
 	--           more references, it will be destroyed automatically.
 	-- ------------------------------------------------------------------------------
 	private.pin=function(t)
-		if not t.__pinned then
-			t.__pinned=1
-		else
-			t.__pinned=t.__pinned+1
-		end
+		if not t.__pinned then t.__pinned=1;else t.__pinned=t.__pinned+1;end
 	end
 
 	-- ------------------------------------------------------------------------------
@@ -204,10 +196,6 @@ do
 	                                            destFlags,
 	                                            destRaidFlags,
 	                                            ...)
-
-	-- COMBAT_LOG_EVENT_UNFILTERED 1470787329.392 SPELL_DAMAGE true  nil 1297 0 Player-58-071885E0 Dandraffbal 1297 0
-
-
 		if frameEvent == "COMBAT_LOG_EVENT_UNFILTERED" then
 			local i, args = 1, private.create()
 
@@ -284,6 +272,14 @@ do
 				args.resisted, args.blocked, args.absorbed,
 				args.critical, args.glancing, args.crushing,
 				args.isOffHand = select(i, ...)
+
+			--[[ This is for the combat log only
+			elseif suffix == "_DAMAGE_LANDED" then
+				args.amount, args.overkill, args.school,
+				args.resisted, args.blocked, args.absorbed,
+				args.critical, args.glancing, args.crushing,
+				args.isOffHand = select(i, ...)
+			]]
 
 			elseif suffix == "_MISSED" then
 				args.missType, args.isOffHand, args.multistrike,
