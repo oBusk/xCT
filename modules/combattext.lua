@@ -1885,17 +1885,10 @@ formatNameTypes = {
 			if args.prefix == "ENVIRONMENTAL" then
 				color = x.spellColors[args.school or args.spellSchool or 1]
 			else
-				--[[
-				if not class and args.spellId then
-					local isClass = bit.band(CLASS_MASK, LPS:GetSpellInfo(args.spellId) or 0)
-					if isClass ~= 0 then
-						class = CLASS_LOOKUP[isClass]
-					end
-				end]]
-
-
-				local _, class = GetPlayerInfoByGUID(guid)
-				color = RAID_CLASS_COLORS[class or 0]
+				if smatch(guid, "^Player") then
+					local _, class = GetPlayerInfoByGUID(guid)
+					color = RAID_CLASS_COLORS[class or 0]
+				end
 			end
 		end
 
