@@ -400,93 +400,71 @@ do
 
 	-- GetSourceType and GetDestinationType
 	do
-		local COMBATLOG_OBJECT_TYPE_OBJECT, COMBATLOG_OBJECT_TYPE_GUARDIAN,
-			COMBATLOG_OBJECT_TYPE_PET, COMBATLOG_OBJECT_TYPE_NPC,
-			COMBATLOG_OBJECT_TYPE_PLAYER = COMBATLOG_OBJECT_TYPE_OBJECT,
-			COMBATLOG_OBJECT_TYPE_GUARDIAN, COMBATLOG_OBJECT_TYPE_PET,
-			COMBATLOG_OBJECT_TYPE_NPC, COMBATLOG_OBJECT_TYPE_PLAYER
+		local COMBATLOG_OBJECT_TYPE_MASK, COMBATLOG_OBJECT_CONTROL_MASK,
+			COMBATLOG_OBJECT_REACTION_MASK, COMBATLOG_OBJECT_AFFILIATION_MASK =
+			COMBATLOG_OBJECT_TYPE_MASK, COMBATLOG_OBJECT_CONTROL_MASK,
+			COMBATLOG_OBJECT_REACTION_MASK, COMBATLOG_OBJECT_AFFILIATION_MASK
+
+		local COMBATLOG_OBJECTS = {
+			[0] = 'UNKNOWN',
+
+			-- Types
+			[COMBATLOG_OBJECT_TYPE_GUARDIAN] = 'GUARDIAN',
+			[COMBATLOG_OBJECT_TYPE_OBJECT] = 'OBJECT',
+			[COMBATLOG_OBJECT_TYPE_PLAYER] = 'PLAYER',
+			[COMBATLOG_OBJECT_TYPE_PET] = 'PET',
+			[COMBATLOG_OBJECT_TYPE_NPC] = 'NPC',
+
+			-- Controllers
+			[COMBATLOG_OBJECT_CONTROL_PLAYER] = 'PLAYER',
+			[COMBATLOG_OBJECT_CONTROL_NPC] = 'NPC',
+
+			-- Reactions
+			[COMBATLOG_OBJECT_REACTION_FRIENDLY] = 'FRIENDLY',
+			[COMBATLOG_OBJECT_REACTION_HOSTILE] = 'HOSTILE',
+			[COMBATLOG_OBJECT_REACTION_NEUTRAL] = 'NEUTRAL',
+
+			-- Affiliations
+			[COMBATLOG_OBJECT_AFFILIATION_OUTSIDER] = 'OUTSIDER',
+			[COMBATLOG_OBJECT_AFFILIATION_PARTY] = 'PARTY',
+			[COMBATLOG_OBJECT_AFFILIATION_RAID] = 'RAID',
+			[COMBATLOG_OBJECT_AFFILIATION_MINE] = 'MINE'
+		}
 
 		function private.GetSourceType (args)
-			flags = args.sourceFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_TYPE_OBJECT) and "OBJECT" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_GUARDIAN) and "GUARDIAN" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PET) and "PET" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_NPC) and "NPC" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PLAYER) and "PLAYER" or
-				args.prefix == "ENVIRONMENTAL" and "ENVIRONMENT" or "UNKNOWN"
+			if args.prefix == 'ENVIRONMENTAL' then return 'ENVIRONMENT' end
+			return COMBATLOG_OBJECTS[band(args.sourceFlags or 0, COMBATLOG_OBJECT_TYPE_MASK)]
 		end
 
 		function private.GetDestinationType (args)
-			flags = args.destFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_TYPE_OBJECT) and "OBJECT" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_GUARDIAN) and "GUARDIAN" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PET) and "PET" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_NPC) and "NPC" or
-				hasFlag(flags, COMBATLOG_OBJECT_TYPE_PLAYER) and "PLAYER" or "UNKNOWN"
+			return COMBATLOG_OBJECTS[band(args.destFlags or 0, COMBATLOG_OBJECT_TYPE_MASK)]
 		end
-	end
-
-	-- GetSourceController and GetDestinationController
-	do
-		local COMBATLOG_OBJECT_CONTROL_NPC, COMBATLOG_OBJECT_CONTROL_PLAYER =
-			COMBATLOG_OBJECT_CONTROL_NPC, COMBATLOG_OBJECT_CONTROL_PLAYER
 
 		function private.GetSourceController (args)
-			flags = args.sourceFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_CONTROL_NPC) and "NPC" or
-				hasFlag(flags, COMBATLOG_OBJECT_CONTROL_PLAYER) and "PLAYER" or
-				args.prefix == "ENVIRONMENTAL" and "ENVIRONMENT" or "UNKNOWN"
+			if args.prefix == 'ENVIRONMENTAL' then return 'ENVIRONMENT' end
+			return COMBATLOG_OBJECTS[band(args.sourceFlags or 0, COMBATLOG_OBJECT_CONTROL_MASK)]
 		end
 
 		function private.GetDestinationController (args)
-			flags = args.destFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_CONTROL_NPC) and "NPC" or
-				hasFlag(flags, COMBATLOG_OBJECT_CONTROL_PLAYER) and "PLAYER" or "UNKNOWN"
+			return COMBATLOG_OBJECTS[band(args.destFlags or 0, COMBATLOG_OBJECT_CONTROL_MASK)]
 		end
-	end
-
-	-- GetSourceReaction and GetDestinationReaction
-	do
-		local COMBATLOG_OBJECT_REACTION_HOSTILE, COMBATLOG_OBJECT_REACTION_NEUTRAL,
-			COMBATLOG_OBJECT_REACTION_FRIENDLY = COMBATLOG_OBJECT_REACTION_HOSTILE,
-			COMBATLOG_OBJECT_REACTION_NEUTRAL, COMBATLOG_OBJECT_REACTION_FRIENDLY
 
 		function private.GetSourceReaction (args)
-			flags = args.sourceFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_REACTION_HOSTILE) and "HOSTILE" or
-				hasFlag(flags, COMBATLOG_OBJECT_REACTION_NEUTRAL) and "NEUTRAL" or
-				hasFlag(flags, COMBATLOG_OBJECT_REACTION_FRIENDLY) and "FRIENDLY" or "UNKNOWN"
+			if args.prefix == 'ENVIRONMENTAL' then return 'NEUTRAL' end
+			return COMBATLOG_OBJECTS[band(args.sourceFlags or 0, COMBATLOG_OBJECT_REACTION_MASK)]
 		end
 
 		function private.GetDestinationReaction (args)
-			flags = args.destFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_REACTION_HOSTILE) and "HOSTILE" or
-				hasFlag(flags, COMBATLOG_OBJECT_REACTION_NEUTRAL) and "NEUTRAL" or
-				hasFlag(flags, COMBATLOG_OBJECT_REACTION_FRIENDLY) and "FRIENDLY" or "UNKNOWN"
+			return COMBATLOG_OBJECTS[band(args.destFlags or 0, COMBATLOG_OBJECT_REACTION_MASK)]
 		end
-	end
-
-	-- GetSourceAffiliation and GetDestinationAffiliation
-	do
-		local COMBATLOG_OBJECT_AFFILIATION_OUTSIDER, COMBATLOG_OBJECT_AFFILIATION_RAID,
-			COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_AFFILIATION_MINE =
-			COMBATLOG_OBJECT_AFFILIATION_OUTSIDER, COMBATLOG_OBJECT_AFFILIATION_RAID,
-			COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_AFFILIATION_MINE
 
 		function private.GetSourceAffiliation (args)
-			flags = args.sourceFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_AFFILIATION_OUTSIDER) and "OUTSIDER" or
-				hasFlag(flags, COMBATLOG_OBJECT_AFFILIATION_RAID) and "RAID" or
-				hasFlag(flags, COMBATLOG_OBJECT_AFFILIATION_PARTY) and "PARTY" or
-				hasFlag(flags, COMBATLOG_OBJECT_AFFILIATION_MINE) and "MINE" or "UNKNOWN"
+			if args.prefix == 'ENVIRONMENTAL' then return 'OUTSIDER' end
+			return COMBATLOG_OBJECTS[band(args.sourceFlags or 0, COMBATLOG_OBJECT_AFFILIATION_MASK)]
 		end
 
 		function private.GetDestinationAffiliation (flags)
-			flags = args.destFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_AFFILIATION_OUTSIDER) and "OUTSIDER" or
-				hasFlag(flags, COMBATLOG_OBJECT_AFFILIATION_RAID) and "RAID" or
-				hasFlag(flags, COMBATLOG_OBJECT_AFFILIATION_PARTY) and "PARTY" or
-				hasFlag(flags, COMBATLOG_OBJECT_AFFILIATION_MINE) and "MINE" or "UNKNOWN"
+			return COMBATLOG_OBJECTS[band(args.destFlags or 0, COMBATLOG_OBJECT_AFFILIATION_MASK)]
 		end
 	end
 
