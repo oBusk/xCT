@@ -454,7 +454,7 @@ do
 			return COMBATLOG_OBJECTS[band(args.sourceFlags or 0, COMBATLOG_OBJECT_AFFILIATION_MASK)]
 		end
 
-		function private.GetDestinationAffiliation (flags)
+		function private.GetDestinationAffiliation (args)
 			return COMBATLOG_OBJECTS[band(args.destFlags or 0, COMBATLOG_OBJECT_AFFILIATION_MASK)]
 		end
 	end
