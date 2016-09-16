@@ -1377,9 +1377,13 @@ do
     [126] = "126", [127] = "127"
   }
 
-  function x.GetSpellSchoolColor(spellSchool)
+  function x.GetSpellSchoolColor(spellSchool, critical)
     local index = cache[spellSchool or 1] or "1"
-    return x.db.profile.SpellColors[index].color or x.db.profile.SpellColors[index].default
+    if critical and x.db.profile.frames.critical.colors.genericDamageCritical.enabled then
+      return x.db.profile.frames.critical.colors.genericDamageCritical.color or x.db.profile.frames.critical.colors.genericDamageCritical.default
+    else
+      return x.db.profile.SpellColors[index].color or x.db.profile.SpellColors[index].default
+    end
   end
 end
 

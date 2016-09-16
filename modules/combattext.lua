@@ -386,7 +386,7 @@ function xCTFormat:SPELL_PERIODIC_HEAL( outputFrame, spellID, amount, critical, 
 end
 
 function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged, args )
-  local outputColor, message, settings = x.GetSpellSchoolColor(1)
+  local outputColor, message, settings = x.GetSpellSchoolColor(1, critical)
 
   if critical and ShowSwingCrit() then
     settings = x.db.profile.frames["critical"]
@@ -415,7 +415,7 @@ function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged,
 end
 
 function xCTFormat:RANGE_DAMAGE( outputFrame, spellID, amount, critical, merged, autoShot, args )
-  local outputColor, message, settings = x.GetSpellSchoolColor(1)
+  local outputColor, message, settings = x.GetSpellSchoolColor(1, critical)
 
   if critical then
     settings = x.db.profile.frames["critical"]
@@ -468,7 +468,7 @@ function xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged,
        x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
        x.db.profile.frames[outputFrame].fontJustify )
 
-  x:AddMessage(outputFrame, message, x.GetSpellSchoolColor(spellSchool))
+  x:AddMessage(outputFrame, message, x.GetSpellSchoolColor(spellSchool, critical))
 end
 
 function xCTFormat:SPELL_PERIODIC_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool, args )
@@ -494,7 +494,7 @@ function xCTFormat:SPELL_PERIODIC_DAMAGE( outputFrame, spellID, amount, critical
        x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
        x.db.profile.frames[outputFrame].fontJustify )
 
-  x:AddMessage(outputFrame, message, x.GetSpellSchoolColor(spellSchool) )
+  x:AddMessage(outputFrame, message, x.GetSpellSchoolColor(spellSchool, critical) )
 end
 
 
@@ -1282,6 +1282,9 @@ x.events = {
       -- "|cff0070dd|Hbattlepet:1343:1:3:158:10:12:BattlePet-0-000002C398CB|h[Bonkers]|h|r" - C_PetJournal.GetPetInfoBySpeciesID(1343)
       -- "|cff9d9d9d|Hbattlepet:467:1:0:140:9:9:BattlePet-0-000002C398C4|h[Dung Beetle]|h|r" - C_PetJournal.GetPetInfoBySpeciesID(467)
       -- GetItemQualityColor(3)
+
+      -- local format_getItemString = "([^|]+)|cff(%x+)|H([^|]+)|h%[([^%]]+)%]|h|r[^%d]*(%d*)"
+      -- "|cffffffff|Hitem:119299::::::::100:252::::::|h[드레노어 기계공학의 비밀]|h|r을 만들었습니다."
 
       if TrackSpells() then
         x.spellCache.items[linkID] = true
