@@ -386,20 +386,11 @@ do
 	end)
 end
 
-local hasFlag
+-- Functions that don't require hasFlag
 do
 	local band = bit.band
-	function hasFlag (flags, flag)
-		return band(flags or 0, flag) == flag
-	end
-end
-
--- Functions that require Flags
-do
-	local flags
-
-	-- GetSourceType and GetDestinationType
 	do
+		-- Up-values
 		local COMBATLOG_OBJECT_TYPE_MASK, COMBATLOG_OBJECT_CONTROL_MASK,
 			COMBATLOG_OBJECT_REACTION_MASK, COMBATLOG_OBJECT_AFFILIATION_MASK =
 			COMBATLOG_OBJECT_TYPE_MASK, COMBATLOG_OBJECT_CONTROL_MASK,
@@ -428,7 +419,7 @@ do
 			[COMBATLOG_OBJECT_AFFILIATION_OUTSIDER] = 'OUTSIDER',
 			[COMBATLOG_OBJECT_AFFILIATION_PARTY] = 'PARTY',
 			[COMBATLOG_OBJECT_AFFILIATION_RAID] = 'RAID',
-			[COMBATLOG_OBJECT_AFFILIATION_MINE] = 'MINE'
+			[COMBATLOG_OBJECT_AFFILIATION_MINE] = 'MINE',
 		}
 
 		function private.GetSourceType (args)
@@ -470,71 +461,48 @@ do
 
 	-- GetSourceRaidTargetIndex, GetDestinationRaidTargetIndex, GetSourceRaidTargetName, and GetDestinationRaidTargetName
 	do
-		local COMBATLOG_OBJECT_RAIDTARGET1, COMBATLOG_OBJECT_RAIDTARGET2,
-			COMBATLOG_OBJECT_RAIDTARGET3, COMBATLOG_OBJECT_RAIDTARGET4,
-			COMBATLOG_OBJECT_RAIDTARGET5, COMBATLOG_OBJECT_RAIDTARGET6,
-			COMBATLOG_OBJECT_RAIDTARGET7, COMBATLOG_OBJECT_RAIDTARGET8 =
-			COMBATLOG_OBJECT_RAIDTARGET1, COMBATLOG_OBJECT_RAIDTARGET2,
-			COMBATLOG_OBJECT_RAIDTARGET3, COMBATLOG_OBJECT_RAIDTARGET4,
-			COMBATLOG_OBJECT_RAIDTARGET5, COMBATLOG_OBJECT_RAIDTARGET6,
-			COMBATLOG_OBJECT_RAIDTARGET7, COMBATLOG_OBJECT_RAIDTARGET8
+		local RAIDTARGET_INDEXES, RAIDTARGET_NAMES, COMBATLOG_OBJECT_RAIDTARGET_MASK = {
+			[0] = 0,
+			[COMBATLOG_OBJECT_RAIDTARGET1] = 1,
+			[COMBATLOG_OBJECT_RAIDTARGET2] = 2,
+			[COMBATLOG_OBJECT_RAIDTARGET3] = 3,
+			[COMBATLOG_OBJECT_RAIDTARGET4] = 4,
+			[COMBATLOG_OBJECT_RAIDTARGET5] = 5,
+			[COMBATLOG_OBJECT_RAIDTARGET6] = 6,
+			[COMBATLOG_OBJECT_RAIDTARGET7] = 7,
+			[COMBATLOG_OBJECT_RAIDTARGET8] = 8
+		}, {
+			RAID_TARGET_1, RAID_TARGET_2, RAID_TARGET_3,
+			RAID_TARGET_4, RAID_TARGET_5, RAID_TARGET_6,
+			RAID_TARGET_7, RAID_TARGET_8, [0] = NONE
+		}, COMBATLOG_OBJECT_RAIDTARGET_MASK
 
 		function private.GetSourceRaidTargetIndex (args)
-			flags = args.sourceRaidFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET8) and 8 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET7) and 7 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET6) and 6 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET5) and 5 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET4) and 4 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET3) and 3 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET2) and 2 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET1) and 1 or 0
+			return RAIDTARGET_INDEXES[band(args.sourceRaidFlags or 0, COMBATLOG_OBJECT_RAIDTARGET_MASK)]
 		end
 
 		function private.GetDestinationRaidTargetIndex (args)
-			flags = args.destRaidFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET8) and 8 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET7) and 7 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET6) and 6 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET5) and 5 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET4) and 4 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET3) and 3 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET2) and 2 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET1) and 1 or 0
+			return RAIDTARGET_INDEXES[band(args.destRaidFlags or 0, COMBATLOG_OBJECT_RAIDTARGET_MASK)]
 		end
 
-		local RAID_TARGET_1, RAID_TARGET_2, RAID_TARGET_3, RAID_TARGET_4,
-			RAID_TARGET_5, RAID_TARGET_6, RAID_TARGET_7, RAID_TARGET_8 =
-			RAID_TARGET_1, RAID_TARGET_2, RAID_TARGET_3, RAID_TARGET_4,
-			RAID_TARGET_5, RAID_TARGET_6, RAID_TARGET_7, RAID_TARGET_8
-
-		function private.GetSourceRaidTargetName (flags)
-			flags = args.sourceRaidFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET8) and RAID_TARGET_8 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET7) and RAID_TARGET_7 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET6) and RAID_TARGET_6 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET5) and RAID_TARGET_5 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET4) and RAID_TARGET_4 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET3) and RAID_TARGET_3 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET2) and RAID_TARGET_2 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET1) and RAID_TARGET_1 or "NONE"
+		function private.GetSourceRaidTargetName (args)
+			return RAIDTARGET_NAMES[private.GetSourceRaidTargetIndex(args)]
 		end
 
-		function private.GetDestinationRaidTargetName (flags)
-			flags = args.destRaidFlags
-			return hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET8) and RAID_TARGET_8 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET7) and RAID_TARGET_7 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET6) and RAID_TARGET_6 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET5) and RAID_TARGET_5 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET4) and RAID_TARGET_4 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET3) and RAID_TARGET_3 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET2) and RAID_TARGET_2 or
-				hasFlag(flags, COMBATLOG_OBJECT_RAIDTARGET1) and RAID_TARGET_1 or "NONE"
+		function private.GetDestinationRaidTargetName (args)
+			return RAIDTARGET_NAMES[private.GetDestinationRaidTargetIndex(args)]
 		end
 	end
 end
 
--- Functions that do not require Flags
+local hasFlag
+do
+	local band = bit.band
+	function hasFlag (flags, flag)
+		return band(flags or 0, flag) == flag
+	end
+end
+
 -- SourceIsNotSpecial and DestinationIsNotSpecial
 do
 	local COMBATLOG_OBJECT_NONE = COMBATLOG_OBJECT_NONE
