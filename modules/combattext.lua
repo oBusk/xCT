@@ -2391,6 +2391,7 @@ local AbsorbList = {
 	[187805] = true, -- Etheralus (WoD Legendary Ring)
 	[173260] = true, -- Shield Tronic (Like a health potion from WoD)
 	[64413] = true,  -- Val'anyr, Hammer of Ancient Kings (WotLK Legendary Mace)
+	[215248] = true, -- Shroud of the Naglfar	(Trinket: Naglfar Fare)
 
 	-- Death Knight
 	[48707] = true,  -- Anti-Magic Shield
