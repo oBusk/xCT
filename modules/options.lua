@@ -5382,7 +5382,7 @@ addon.options.args["Frames"] = {
               name = "Disable |cff798BDD"..MANA,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_RAGE = {
@@ -5391,7 +5391,7 @@ addon.options.args["Frames"] = {
               name = "Disable |cff798BDD"..RAGE,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_FOCUS = {
@@ -5400,7 +5400,7 @@ addon.options.args["Frames"] = {
               name = "Disable |cff798BDD"..FOCUS,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_ENERGY = {
@@ -5409,7 +5409,7 @@ addon.options.args["Frames"] = {
               name = "Disable |cff798BDD"..ENERGY,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_RUNES = {
@@ -5418,7 +5418,7 @@ addon.options.args["Frames"] = {
               name = "Disable |cff798BDD"..RUNES,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_RUNIC_POWER = {
@@ -5427,7 +5427,7 @@ addon.options.args["Frames"] = {
               name = "Disable |cff798BDD"..RUNIC_POWER,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_SOUL_SHARDS = {
@@ -5436,7 +5436,7 @@ addon.options.args["Frames"] = {
               name = "Disable |cff798BDD"..SOUL_SHARDS,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
             
             disableResource_LUNAR_POWER = {
@@ -5445,7 +5445,7 @@ addon.options.args["Frames"] = {
               name = "Disable |cff798BDD"..LUNAR_POWER,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_HOLY_POWER = {
@@ -5454,61 +5454,61 @@ addon.options.args["Frames"] = {
               name = "Disable |cff798BDD"..HOLY_POWER,
               get = get2,
               set = set2,
-              width = "full",
-            },
-
-            disableResource_ALTERNATE_POWER = {
-              order = 109,
-              type = 'toggle',
-              name = "Disable |cff798BDD"..ALTERNATE_POWER,
-              get = get2,
-              set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_CHI = {
-              order = 110,
+              order = 109,
               type = 'toggle',
               name = "Disable |cff798BDD"..CHI,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_INSANITY = {
-              order = 111,
+              order = 110,
               type = 'toggle',
               name = "Disable |cff798BDD"..INSANITY,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_ARCANE_CHARGES = {
-              order = 112,
+              order = 111,
               type = 'toggle',
               name = "Disable |cff798BDD"..ARCANE_CHARGES,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_FURY = {
-              order = 113,
+              order = 112,
               type = 'toggle',
               name = "Disable |cff798BDD"..FURY,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
             },
 
             disableResource_PAIN = {
-              order = 114,
+              order = 113,
               type = 'toggle',
               name = "Disable |cff798BDD"..PAIN,
               get = get2,
               set = set2,
-              width = "full",
+              width = "normal",
+            },
+
+            disableResource_ALTERNATE_POWER = {
+              order = 114,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..ALTERNATE_RESOURCE_TEXT,
+              get = get2,
+              set = set2,
+              width = "double",
             },
           },
         },

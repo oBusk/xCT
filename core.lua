@@ -146,6 +146,7 @@ frameUpdate:RegisterEvent("PLAYER_ENTERING_WORLD")
 frameUpdate:SetScript("OnEvent", function(self)
   self:UnregisterEvent("PLAYER_ENTERING_WORLD")
   x:UpdateFrames()
+  x.cvar_update()
 end)
 
 -- Version Compare Helpers... Yeah!
@@ -1382,7 +1383,8 @@ do
     if critical and x.db.profile.frames.critical.colors.genericDamageCritical.enabled then
       return x.db.profile.frames.critical.colors.genericDamageCritical.color or x.db.profile.frames.critical.colors.genericDamageCritical.default
     else
-      return x.db.profile.SpellColors[index].color or x.db.profile.SpellColors[index].default
+      local entry = x.db.profile.SpellColors[index]
+      return entry.enabled and entry.color or entry.default
     end
   end
 end
