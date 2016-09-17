@@ -826,17 +826,28 @@ addon.defaults = {
         ["showPeriodicEnergyGains"] = true,
         ["showEnergyType"] = true,
 
+
+        -- Generated from "Blizzard Add-On's/Constants.lua"
         ["disableResource_MANA"]             = false,
         ["disableResource_RAGE"]             = false,
         ["disableResource_FOCUS"]            = false,
         ["disableResource_ENERGY"]           = false,
-        ["disableResource_CHI"]              = true,
+        
         ["disableResource_RUNES"]            = true,
         ["disableResource_RUNIC_POWER"]      = false,
         ["disableResource_SOUL_SHARDS"]      = false,
-        ["disableResource_ECLIPSE_negative"] = true,
-        ["disableResource_ECLIPSE_positive"] = true,
+        ["disableResource_LUNAR_POWER"]      = true,
+
         ["disableResource_HOLY_POWER"]       = false,
+        ["disableResource_ALTERNATE_POWER"]  = true,
+        ["disableResource_CHI"]              = true,
+        ["disableResource_INSANITY"]         = false,
+
+        --["disableResource_OBSOLETE"]       = true,
+        --["disableResource_OBSOLETE2"]      = true,
+        ["disableResource_ARCANE_CHARGES"]   = false,
+        ["disableResource_FURY"]             = false,
+        ["disableResource_PAIN"]             = false,
       },
 
       procs = {
