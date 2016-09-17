@@ -1965,6 +1965,11 @@ local CombatEventHandlers = {
 		-- Create the message
 		local message = x:Abbreviate(value, 'outgoing')
 
+		message = x:GetSpellTextureFormatted(args.spellId,
+			                                   message,
+			    x.db.profile.frames['healing'].iconsEnabled and x.db.profile.frames['healing'].iconsSize or -1,
+			    x.db.profile.frames['healing'].fontJustify)
+
 		-- Add names
 		message = message .. x.formatName(args, settings.names, true)
 
@@ -2199,6 +2204,11 @@ local CombatEventHandlers = {
 
 		-- Create the message
 		local message = sformat(format_gain, x:Abbreviate(value, "healing"))
+
+		message = x:GetSpellTextureFormatted(args.spellId,
+			                                   message,
+			    x.db.profile.frames['healing'].iconsEnabled and x.db.profile.frames['healing'].iconsSize or -1,
+			    x.db.profile.frames['healing'].fontJustify)
 
 		-- Add names
 		message = message .. x.formatName(args, settings.names, true)
