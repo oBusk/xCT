@@ -561,7 +561,15 @@ do
 			--stack[idIndex], settings.iconsSize, settings.fontJustify
 
 			-- Add Icons
-			if frameIndex[index] ~= "healing" and frameIndex[index] ~= "general" then
+			if type(stack[idIndex]) == 'number' then
+				message = x:GetSpellTextureFormatted( stack[idIndex],
+				                                  message,
+				                                  settings.iconsEnabled and settings.iconsSize or -1,
+				                                  settings.fontJustify,
+				                                  strColor,
+				                                  true, -- Merge Override = true
+				                                  #item.entries )
+			elseif frameIndex[index] == "outgoing" then
 				message = x:GetSpellTextureFormatted( stack[idIndex],
 				                                  message,
 				                                  settings.iconsEnabled and settings.iconsSize or -1,

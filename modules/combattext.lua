@@ -176,6 +176,7 @@ local function ShowOnlyMyPetsHeals() return x.db.profile.frames.healing.showOnly
 local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg end
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
+local function ShowVehicleDamage() return x.db.profile.frames["outgoing"].enableVehicleDmg end
 local function ShowAutoAttack() return x.db.profile.frames["outgoing"].enableAutoAttack end -- Also see ShowSwingCrit
 local function ShowDots() return x.db.profile.frames["outgoing"].enableDotDmg end
 local function ShowHots() return x.db.profile.frames["outgoing"].enableHots end
@@ -220,6 +221,7 @@ local function ClearWhenLeavingCombat() return x.db.profile.frameSettings.clearL
 local function MergeIncomingHealing() return x.db.profile.spells.mergeHealing end
 local function MergeMeleeSwings() return x.db.profile.spells.mergeSwings end
 local function MergeRangedAttacks() return x.db.profile.spells.mergeRanged end
+local function MergePetAttacks() return x.db.profile.spells.mergePet end
 local function MergeCriticalsWithOutgoing() return x.db.profile.spells.mergeCriticalsWithOutgoing end
 local function MergeCriticalsByThemselves() return x.db.profile.spells.mergeCriticalsByThemselves end
 local function MergeDontMergeCriticals() return x.db.profile.spells.mergeDontMergeCriticals end
@@ -561,6 +563,8 @@ function x:GetSpellTextureFormatted( spellID, message, iconSize, justify, strCol
   strColor = strColor or format_strcolor_white
   if spellID == 0 then
     icon = PET_ATTACK_TEXTURE
+  elseif type(spellID) == 'string' then
+    icon = spellID
   else
     icon = GetSpellTexture( spellID ) or x.BLANK_ICON
   end
@@ -2056,6 +2060,11 @@ local CombatEventHandlers = {
 		-- Check to see if my pet is doing things
 		if args:IsSourceMyPet() then
 			if not ShowPetDamage() then return end
+			if MergePetAttacks() then
+				local icon = GetPetIcon() or ""
+				x:AddSpamMessage(outputFrame, icon, amount, x.db.profile.spells.mergePetColor, 6)
+				return
+			end
 			critical = nil -- stupid spam fix for hunter pets
 			if isSwing then
 				spellID = 0 -- this will get fixed later
@@ -2063,9 +2072,10 @@ local CombatEventHandlers = {
 		end
 
 		if args:IsSourceMyVehicle() then
+			if not ShowVehicleDamage() then return end
+			critical = nil -- stupid spam fix for hunter pets
 			if isSwing then
 				spellID = 0 -- this will get fixed later
-				critical = nil -- stupid spam fix for hunter pets
 			end
 		end
 

@@ -360,6 +360,7 @@ addon.defaults = {
         ["enableOutDmg"] = true,
         ["enableOutHeal"] = true,
         ["enablePetDmg"] = true,
+        ["enableVehicleDmg"] = true,
         ["enableAutoAttack"] = true,
         ["enableDotDmg"] = true,
         ["enableHots"] = true,
@@ -959,6 +960,8 @@ addon.defaults = {
       mergeSwings = true,
       mergeRanged = true,
       mergeDispells = true,
+      mergePet = true,
+      mergePetColor = { 1, 0.5, 0 },
 
       -- Only one of these can be true
       mergeDontMergeCriticals = true,
