@@ -2042,7 +2042,7 @@ local CombatEventHandlers = {
 	["DamageOutgoing"] = function (args)
 		local critical, spellID, amount, merged = args.critical, args.spellId, args.amount
 		local isEnvironmental, isSwing, isAutoShot, isDoT = args.prefix == "ENVIRONMENTAL", args.prefix == "SWING", spellID == 75, args.prefix == "SPELL_PERIODIC"
-		local outputFrame, outputColor = "outgoing", x.GetSpellSchoolColor(args.spellSchool or 1)
+		local outputFrame, outputColor = "outgoing", x.GetSpellSchoolColor(args.spellSchool or 1, critical)
 
 		-- Keep track of spells that go by (Don't track Swings or Environmental damage)
 		if not isEnvironmental and not isSwing and TrackSpells() then x.spellCache.spells[spellID] = true end
