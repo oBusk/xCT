@@ -334,6 +334,11 @@ local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = valu
 local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames(); x.cvar_update() end
 local function get0_1(info) return x.db.profile[info[#info-2]][info[#info]] end
 local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value; x.cvar_update() end
+
+local function getColor0_1(info) return unpack(x.db.profile[info[#info-2]][info[#info]] or blankTable) end
+local function setColor0_1(info, r, g, b) x.db.profile[info[#info-2]][info[#info]] = {r,g,b} end
+
+
 local function getTextIn0(info) return string_gsub(x.db.profile[info[#info-1]][info[#info]], "|", "||") end
 local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|"); x.cvar_update() end
 local function get1(info) return x.db.profile.frames[info[#info-1]][info[#info]] end
@@ -597,6 +602,30 @@ addon.options.args["spells"] = {
         },
 
         listSpacer4 = {
+          type = "description",
+          order = 36,
+          name = "\n|cff798BDDMerge Pet Attacks|r:",
+          fontSize = 'large',
+        },
+
+        mergePet = {
+          order = 37,
+          type = 'toggle',
+          name = "Merge All Abilities",
+          desc = "Merges all pet abilities together and shows your pet's icon as the source.",
+          get = get0_1,
+          set = set0_1,
+        },
+
+        mergePetColor = {
+          order = 38,
+          type = 'color',
+          name = "Merge Color",
+          get = getColor0_1,
+          set = setColor0_1,
+        },
+
+        listSpacer5 = {
           type = "description",
           order = 40,
           name = "\n|cff798BDDMerge Critical Hits|r (Choose one):",
@@ -2105,7 +2134,7 @@ addon.options.args["Frames"] = {
               type = 'color',
               hasAlpha = true,
               name = "Font Shadow Color",
-              get = get2,
+              get = getColor2,
               set = setColor2_alpha,
               disabled = isFrameFontShadowDisabled,
             },
@@ -2512,7 +2541,7 @@ addon.options.args["Frames"] = {
               type = 'color',
               hasAlpha = true,
               name = "Font Shadow Color",
-              get = get2,
+              get = getColor2,
               set = setColor2_alpha,
               disabled = isFrameFontShadowDisabled,
             },
@@ -2851,12 +2880,20 @@ addon.options.args["Frames"] = {
               order = 3,
               type = 'toggle',
               name = "Show Pet Damage",
-              desc = "Show your pet's damage.",
+              desc = "Show your pet's damage. Beast Mastery hunters should also look at vehicle damage.",
+              get = get2,
+              set = set2,
+            },
+            enableVehicleDmg = {
+              order = 4,
+              type = 'toggle',
+              name = "Show Vehicle Damage",
+              desc = "Show damage that your vehicle does. This can be anything from a vehicle you are controlling to Hati, the beast mastery pet.",
               get = get2,
               set = set2,
             },
             enableAutoAttack = {
-              order = 4,
+              order = 5,
               type = 'toggle',
               name = "Show Auto Attack",
               desc = "Show your auto attack damage.",
@@ -2864,7 +2901,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableDotDmg = {
-              order = 5,
+              order = 6,
               type = 'toggle',
               name = "Show DoTs",
               desc = "Show your Damage-Over-Time (DOT) damage. (|cffFF0000Requires:|r Outgoing Damage)",
@@ -2872,7 +2909,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableHots = {
-              order = 6,
+              order = 7,
               type = 'toggle',
               name = "Show HoTs",
               desc = "Show your Heal-Over-Time (HOT) healing. (|cffFF0000Requires:|r Outgoing Healing)",
@@ -2880,7 +2917,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableImmunes = {
-              order = 7,
+              order = 9,
               type = 'toggle',
               name = "Show Immunes",
               desc = "Display 'Immune' when your target cannot take damage.",
@@ -2888,7 +2925,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableMisses = {
-              order = 8,
+              order = 10,
               type = 'toggle',
               name = "Show Miss Types",
               desc = "Display 'Miss', 'Dodge', 'Parry' when you miss your target.",
@@ -3145,7 +3182,7 @@ addon.options.args["Frames"] = {
               type = 'color',
               hasAlpha = true,
               name = "Font Shadow Color",
-              get = get2,
+              get = getColor2,
               set = setColor2_alpha,
               disabled = isFrameFontShadowDisabled,
             },
@@ -3755,7 +3792,7 @@ addon.options.args["Frames"] = {
               type = 'color',
               hasAlpha = true,
               name = "Font Shadow Color",
-              get = get2,
+              get = getColor2,
               set = setColor2_alpha,
               disabled = isFrameFontShadowDisabled,
             },
@@ -4492,7 +4529,7 @@ addon.options.args["Frames"] = {
               type = 'color',
               hasAlpha = true,
               name = "Font Shadow Color",
-              get = get2,
+              get = getColor2,
               set = setColor2_alpha,
               disabled = isFrameFontShadowDisabled,
             },
@@ -4997,7 +5034,7 @@ addon.options.args["Frames"] = {
               type = 'color',
               hasAlpha = true,
               name = "Font Shadow Color",
-              get = get2,
+              get = getColor2,
               set = setColor2_alpha,
               disabled = isFrameFontShadowDisabled,
             },
@@ -5285,7 +5322,7 @@ addon.options.args["Frames"] = {
               type = 'color',
               hasAlpha = true,
               name = "Font Shadow Color",
-              get = get2,
+              get = getColor2,
               set = setColor2_alpha,
               disabled = isFrameFontShadowDisabled,
             },
@@ -5750,7 +5787,7 @@ addon.options.args["Frames"] = {
               type = 'color',
               hasAlpha = true,
               name = "Font Shadow Color",
-              get = get2,
+              get = getColor2,
               set = setColor2_alpha,
               disabled = isFrameFontShadowDisabled,
             },
@@ -6063,7 +6100,7 @@ addon.options.args["Frames"] = {
               type = 'color',
               hasAlpha = true,
               name = "Font Shadow Color",
-              get = get2,
+              get = getColor2,
               set = setColor2_alpha,
               disabled = isFrameFontShadowDisabled,
             },
