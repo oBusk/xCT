@@ -214,14 +214,15 @@ addon.merges[207097]    = CreateMergeSpellEntry("HUNTER", 1.5, 253)         -- A
 addon.merge2h[171457]   = 171454                                            -- [Cleave Merger] Chimaera Shot
 
 -- Marksmanship (ID: 254)
+addon.merges[19434]     = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Aimed Shot (Talent: Trick Shot + Windburst)
 addon.merges[212621]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Marked Shot
 addon.merges[186387]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Bursting Shot
 addon.merges[212680]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Talent: Explosive Shot
 addon.merges[214581]    = CreateMergeSpellEntry("HUNTER", 1.5, 254)         -- Talent: Sidewinders
 addon.merges[198670]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Talent: Piercing Shot
-addon.merges[19434]     = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Talent: Aimed Shot (check it!)
 addon.merges[191070]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Artifact: Call of the Hunter
-addon.merges[191043]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Talent: Trick Shot (Aimed Shot)
+addon.merge2h[191043]   = 19434                                             -- Windburst
+
 
 -- Survival (ID: 255)
 addon.merges[187708]    = CreateMergeSpellEntry("HUNTER", 0.5, 255)         -- Carve
