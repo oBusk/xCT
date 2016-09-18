@@ -334,11 +334,8 @@ local function set0(info, value) x.db.profile[info[#info-1]][info[#info]] = valu
 local function set0_update(info, value) x.db.profile[info[#info-1]][info[#info]] = value; x:UpdateFrames(); x.cvar_update() end
 local function get0_1(info) return x.db.profile[info[#info-2]][info[#info]] end
 local function set0_1(info, value) x.db.profile[info[#info-2]][info[#info]] = value; x.cvar_update() end
-
 local function getColor0_1(info) return unpack(x.db.profile[info[#info-2]][info[#info]] or blankTable) end
 local function setColor0_1(info, r, g, b) x.db.profile[info[#info-2]][info[#info]] = {r,g,b} end
-
-
 local function getTextIn0(info) return string_gsub(x.db.profile[info[#info-1]][info[#info]], "|", "||") end
 local function setTextIn0(info, value) x.db.profile[info[#info-1]][info[#info]] = string_gsub(value, "||", "|"); x.cvar_update() end
 local function get1(info) return x.db.profile.frames[info[#info-1]][info[#info]] end
@@ -360,10 +357,8 @@ local function setNumber2(info, value) if tonumber(value) then x.db.profile[info
 -- Man this is soooo getting out of hand D:
 local function getNameFormat(info) return x.db.profile.frames[info[#info-3]].names[info[#info-1]][info[#info]] end
 local function setNameFormat(info, value) x.db.profile.frames[info[#info-3]].names[info[#info-1]][info[#info]] = value end
-
 local function getNameFormatColor(info) return unpack(x.db.profile.frames[info[#info-3]].names[info[#info-1]][info[#info]] or blankTable) end
 local function setNameFormatColor(info, r, g, b) x.db.profile.frames[info[#info-3]].names[info[#info-1]][info[#info]] = {r,g,b} end
-
 local function getNameFormatText(info) return string_gsub(x.db.profile.frames[info[#info-2]].names[info[#info]], "|", "||") end
 local function setNameFormatText(info, value) x.db.profile.frames[info[#info-2]].names[info[#info]] = string_gsub(value, "||", "|") end
 
