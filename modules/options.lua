@@ -598,27 +598,53 @@ addon.options.args["spells"] = {
 
         listSpacer4 = {
           type = "description",
-          order = 36,
+          order = 34,
           name = "\n|cff798BDDMerge Pet Attacks|r:",
           fontSize = 'large',
         },
 
         mergePet = {
-          order = 37,
+          order = 35,
           type = 'toggle',
-          name = "Merge All Abilities",
+          name = "Merge Pet Abilities",
           desc = "Merges all pet abilities together and shows your pet's icon as the source.",
           get = get0_1,
           set = set0_1,
         },
 
         mergePetColor = {
-          order = 38,
+          order = 36,
           type = 'color',
-          name = "Merge Color",
+          name = "Pet Color",
           get = getColor0_1,
           set = setColor0_1,
         },
+
+--[[
+        spacer1 = {
+          type = "description",
+          order = 37,
+          name = "",
+          width = 'full',
+        },
+
+        mergeVehicle = {
+          order = 38,
+          type = 'toggle',
+          name = "Merge Vehicle Abilities",
+          desc = "Merges all of your vehicle abilities together.",
+          get = get0_1,
+          set = set0_1,
+        },
+
+        mergeVehicleColor = {
+          order = 39,
+          type = 'color',
+          name = "Vehicle Color",
+          get = getColor0_1,
+          set = setColor0_1,
+        },
+]]
 
         listSpacer5 = {
           type = "description",

@@ -961,7 +961,9 @@ addon.defaults = {
       mergeRanged = true,
       mergeDispells = true,
       mergePet = true,
+      mergeVehicle = true,
       mergePetColor = { 1, 0.5, 0 },
+      mergeVehicleColor = { 0, 0.5, 1 },
 
       -- Only one of these can be true
       mergeDontMergeCriticals = true,
