@@ -620,7 +620,7 @@ addon.options.args["spells"] = {
           set = setColor0_1,
         },
 
---[[
+        --[[
         spacer1 = {
           type = "description",
           order = 37,
@@ -644,7 +644,7 @@ addon.options.args["spells"] = {
           get = getColor0_1,
           set = setColor0_1,
         },
-]]
+        ]]
 
         listSpacer5 = {
           type = "description",
@@ -1217,14 +1217,14 @@ addon.options.args["Credits"] = {
     tukuiTitleLegion = {
       type = 'description',
       order = 34,
-      name = "|cffFFFF00Beta Testers - Version 4.2.0 for Legion|r",
+      name = "|cffFFFF00Beta Testers - Version 4.3.0+ (Legion)|r",
       fontSize = "large",
     },
     userName3Legion = {
       type = 'description',
       order = 35,
       fontSize = "medium",
-      name = " |cffAAAAFF Azazu|r,|cff8080EE Merathilis|r,|cffAAAAFF Torch|r,|cff8080EE Broni|r,|cffAAAAFF Zylos|r",
+      name = " |cffAAAAFF Azazu|r,|cff8080EE Broni|r,|cffAAAAFF CursedBunny|r,|cff8080EE Daemios|r,|cffAAAAFF Dajova|r,|cff8080EE Delerionn|r,|cffAAAAFF dunger|r,|cff8080EE feetss|r,|cffAAAAFF gesuntight|r,|cff8080EE Homaxz|r,|cffAAAAFF karamei|r,|cff8080EE Merathilis|r,|cffAAAAFF re1jo|r,|cff8080EE sammael666|r,|cffAAAAFF scathee|r,|cff8080EE Tonyleila|r,|cffAAAAFF Torch|r,|cff8080EE WetU|r,|cffAAAAFF Znuff|r,|cff8080EE Zylos|r",
     },
 
     testerTitleSpace4 = {
@@ -5496,7 +5496,7 @@ addon.options.args["Frames"] = {
               set = set2,
               width = "normal",
             },
-            
+
             disableResource_LUNAR_POWER = {
               order = 107,
               type = 'toggle',
