@@ -328,6 +328,7 @@ do
 			args.atPlayer = playerGUID == args.destGUID
 
 			-- Add Our API to the Combat Event Args
+			-- TODO: Do this through a metatable
 			-- Memory Helpers
 			args.pin = private.pin
 			args.free = private.free
@@ -349,16 +350,16 @@ do
 			args.GetDestinationRaidTargetName  = private.GetDestinationRaidTargetName
 
 			-- Special Unit Flag Helpers
-			args.SourceIsNotSpecial      = private.SourceIsNotSpecial
-			args.DestinationIsNotSpecial = private.DestinationIsNotSpecial
-			args.SourceIsMainAssist      = private.SourceIsMainAssist
-			args.DestinationIsMainAssist = private.DestinationIsMainAssist
-			args.SourceIsMainTank        = private.SourceIsMainTank
-			args.DestinationIsMainTank   = private.DestinationIsMainTank
-			args.SourceIsFocus           = private.SourceIsFocus
-			args.DestinationIsFocus      = private.DestinationIsFocus
-			args.SourceIsTarget          = private.SourceIsTarget
-			args.DestinationIsTarget     = private.DestinationIsTarget
+			args.IsSourceNotSpecial      = private.IsSourceNotSpecial
+			args.IsDestinationNotSpecial = private.IsDestinationNotSpecial
+			args.IsSourceMainAssist      = private.IsSourceMainAssist
+			args.IsDestinationMainAssist = private.IsDestinationMainAssist
+			args.IsSourceMainTank        = private.IsSourceMainTank
+			args.IsDestinationMainTank   = private.IsDestinationMainTank
+			args.IsSourceFocus           = private.IsSourceFocus
+			args.IsDestinationFocus      = private.IsDestinationFocus
+			args.IsSourceTarget          = private.IsSourceTarget
+			args.IsDestinationTarget     = private.IsDestinationTarget
 
 			-- Crafted Unit Flag Helpers
 			args.IsSourceMyPet          = private.IsSourceMyPet
@@ -503,72 +504,66 @@ do
 	end
 end
 
--- SourceIsNotSpecial and DestinationIsNotSpecial
 do
 	local COMBATLOG_OBJECT_NONE = COMBATLOG_OBJECT_NONE
 
-	function private.SourceIsNotSpecial (args)
+	function private.IsSourceNotSpecial (args)
 		return hasFlag(args.sourceFlags, COMBATLOG_OBJECT_NONE)
 	end
 
-	function private.DestinationIsNotSpecial (args)
+	function private.IsDestinationNotSpecial (args)
 		return hasFlag(args.destFlags, COMBATLOG_OBJECT_NONE)
 	end
 end
 
--- SourceIsMainAssist and DestinationIsMainAssist
 do
 	local COMBATLOG_OBJECT_MAINASSIST = COMBATLOG_OBJECT_MAINASSIST
 
-	function private.SourceIsMainAssist (args)
+	function private.IsSourceMainAssist (args)
 		return hasFlag(args.sourceFlags, COMBATLOG_OBJECT_MAINASSIST)
 	end
 
-	function private.DestinationIsMainAssist (args)
+	function private.IsDestinationMainAssist (args)
 		return hasFlag(args.destFlags, COMBATLOG_OBJECT_MAINASSIST)
 	end
 end
 
--- SourceIsMainTank and DestinationIsMainTank
 do
 	local COMBATLOG_OBJECT_MAINTANK = COMBATLOG_OBJECT_MAINTANK
 
-	function private.SourceIsMainTank (args)
+	function private.IsSourceMainTank (args)
 		return hasFlag(args.sourceFlags, COMBATLOG_OBJECT_MAINTANK)
 	end
 
-	function private.DestinationIsMainTank (args)
+	function private.IsDestinationMainTank (args)
 		return hasFlag(args.destFlags, COMBATLOG_OBJECT_MAINTANK)
 	end
 end
 
--- SourceIsFocus and DestinationIsFocus
 do
 	local COMBATLOG_OBJECT_FOCUS = COMBATLOG_OBJECT_FOCUS
 
-	function private.SourceIsFocus (args)
+	function private.IsSourceFocus (args)
 		return hasFlag(args.sourceFlags, COMBATLOG_OBJECT_FOCUS)
 	end
 
-	function private.DestinationIsFocus (args)
+	function private.IsDestinationFocus (args)
 		return hasFlag(args.destFlags, COMBATLOG_OBJECT_FOCUS)
 	end
 end
 
--- SourceIsTarget and DestinationIsTarget
 do
 	local COMBATLOG_OBJECT_TARGET = COMBATLOG_OBJECT_TARGET
 
-	function private.SourceIsTarget (args)
+	function private.IsSourceTarget (args)
 		return hasFlag(args.sourceFlags, COMBATLOG_OBJECT_TARGET)
 	end
 
-	function private.DestinationIsTarget (args)
+	function private.IsDestinationTarget (args)
 		return hasFlag(args.destFlags, COMBATLOG_OBJECT_TARGET)
 	end
 end
 
--- IsSourceMyPet and IsDestinationMyPet
 do
 	local MY_PET_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE,
 	                             COMBATLOG_OBJECT_REACTION_FRIENDLY,
@@ -584,7 +579,6 @@ do
 	end
 end
 
--- IsSourceMyVehicle and IsDestinationMyVehicle
 do
 	local MY_VEHICLE_FLAGS = bit.bor(COMBATLOG_OBJECT_AFFILIATION_MINE,
 	                                 COMBATLOG_OBJECT_REACTION_FRIENDLY,
@@ -600,7 +594,6 @@ do
 	end
 end
 
--- IsSourceRaidMember IsDestinationRaidMember
 do
 	local MY_RAID_MEMBER = bit.bor(COMBATLOG_OBJECT_AFFILIATION_RAID,
 	                               COMBATLOG_OBJECT_REACTION_FRIENDLY,
@@ -616,7 +609,6 @@ do
 	end
 end
 
--- IsSourcePartyMember IsDestinationPartyMember
 do
 	local MY_PARTY_MEMBER = bit.bor(COMBATLOG_OBJECT_AFFILIATION_PARTY,
 	                                COMBATLOG_OBJECT_REACTION_FRIENDLY,
