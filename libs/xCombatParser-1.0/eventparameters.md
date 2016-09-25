@@ -29,11 +29,12 @@ Events with the following prefixes will also have some additional parameters
 | `"SPELL_BUILDING"` | `spellId` | `spellName` | [`spellSchool`](http://wow.gamepedia.com/COMBAT_LOG_EVENT#Spell_School) |
 | `"ENVIRONMENTAL"` | [`environmentalType`](http://wow.gamepedia.com/COMBAT_LOG_EVENT#Environmental_Type) | | |
 
-__NOTE:__ The use of `spellSchool` above is specific to the spell that was cast. For example, if you cast a _Holy_ spell that did Arcane + Holy (_Divine_) damage, then `spellSchool` would be _Holy_ and `school` would be _Divine_.
+> __NOTE:__ The use of `spellSchool` above is specific to the spell that was cast. For example, if you cast a _Holy_ spell that did Arcane + Holy (_Divine_) damage, then `spellSchool` would be _Holy_ and `school` would be _Divine_.
 
 
 ### Event Suffixes
 Use `args.suffix == "_????"` to view which additional parameters each suffix has.
+
 
 #### `_DAMAGE`--- Additional Parameters
 
@@ -52,6 +53,7 @@ This is arguably one of the most complicated suffixes and will have its own sect
 | `crushing` | A true/false flag that informs if the event was a crushing blow. |
 | `isOffHand` | A true/false flag that informs if the event was from the source's off-hand. |
 
+
 #### `_MISSED`--- Additional Parameters
 
 | `args.`*index* | Description |
@@ -59,6 +61,7 @@ This is arguably one of the most complicated suffixes and will have its own sect
 | `missType` | The [type of miss](http://wow.gamepedia.com/COMBAT_LOG_EVENT#Miss_type) that occured. |
 | `isOffHand` | A true/false flag that informs if the event was from the source's off-hand. |
 | `amountMissed` | The potential damage that no one will ever see or care about. |
+
 
 #### `_HEAL`--- Additional Parameters
 
@@ -68,6 +71,7 @@ This is arguably one of the most complicated suffixes and will have its own sect
 | `overhealing` | The amount of healing that was over the maximum health of the destination unit. |
 | `absorbed` | The amount of healing that was absorbed by the unit (e.g. by a debuff). |
 | `critical` | A true/false flag that informs if the event was a critical strike. |
+
 
 #### `_ENERGIZE`--- Additional Parameters
 
@@ -99,6 +103,7 @@ This is arguably one of the most complicated suffixes and will have its own sect
 > | n/a | `"FUEL"` | rgb(0, 0.55, 0.5) | 008C80 |
 > | n/a | `"STAGGER"` | [1] = rgb(0.52, 1, 0.52)<br>[2] = rgb(1, 0.98, 0.72)<br>[3] = rgb(1, 0.42, 0.42) |  85FF85 _-- Light_ <br>FFFAB8 _-- Moderate_<br>FF6B6B _-- Heavy_ |
 
+
 #### `_DRAIN` and `_LEECH`--- Additional Parameters
 
 | `args.`*index* | Description |
@@ -106,6 +111,7 @@ This is arguably one of the most complicated suffixes and will have its own sect
 | `amount` | The amount that was drained/leeched from the destination to the source. |
 | `powerType` | The [type of power](#power-type-lookup) that was drained/leeched.<br><br>__NOTE:__ I believe if this is -2, health was drained/leeched. Also, the new minor stat **Leech** does not seem to use this event. Rather you will find it with `SPELL_HEAL` and `args.spellId == 143924`. |
 | `extraAmount` | The amount that was over the power type maximum of the source unit. |
+
 
 #### `_INTERRUPT`--- Additional Parameters
 
@@ -115,13 +121,61 @@ This is arguably one of the most complicated suffixes and will have its own sect
 | `extraSpellName` | The localized name of the spell that was interrupted. |
 | `extraSchool` | The school of the spell that was interrupted. |
 
-#### `_DISPEL`--- Additional Parameters
+
+#### `_DISPEL` and `_STOLEN`--- Additional Parameters
 
 | `args.`*index* | Description |
 | ---:|:--- |
-| `extraSpellId` | The spell ID of the aura that was dispelled.<br><br>__NOTE:__ You can use `args.spellId`, `args.spellName`, and `args.spellSchool` to see relevant information about the spell that did the dispelling. |
-| `extraSpellName` | The localized name of the aura that was dispelled. |
-| `extraSchool` | The school of the aura that was dispelled. |
-| `auraType` | The type of aura that was dispelled: `"BUFF"` or `"DEBUFF"`. |
+| `extraSpellId` | The spell ID of the aura that was dispelled/stolen.<br><br>__NOTE:__ You can use `args.spellId`, `args.spellName`, and `args.spellSchool` to see relevant information about the spell that did the dispelling/stealing. |
+| `extraSpellName` | The localized name of the aura that was dispelled/stolen. |
+| `extraSchool` | The school of the aura that was dispelled/stolen. |
+| `auraType` | The type of aura that was dispelled/stolen: `"BUFF"` or `"DEBUFF"`. |
+
+
+#### `_DISPEL_FAILED`--- Additional Parameters
+
+| `args.`*index* | Description |
+| ---:|:--- |
+| `extraSpellId` | The spell ID of the aura that wasn't dispelled.<br><br>__NOTE:__ You can use `args.spellId`, `args.spellName`, and `args.spellSchool` to see relevant information about the spell that tried to dispel. |
+| `extraSpellName` | The localized name of the aura that wasn't dispelled. |
+| `extraSchool` | The school of the aura that wasn't dispelled. |
+
+#### `_EXTRA_ATTACKS`--- Additional Parameters
+
+| `args.`*index* | Description |
+| ---:|:--- |
+| `amount` | _Unknown value. More research or documentation is needed._ |
+
+
+#### `_AURA_APPLIED`, `_AURA_REMOVED`, `_AURA_APPLIED_DOSE	`,  `_AURA_REMOVED_DOSE`, and `_AURA_REFRESH`--- Additional Parameters
+
+| `args.`*index* | Description |
+| ---:|:--- |
+| `auraType` | The type of the aura being referenced in the event (`"BUFF"` or `"DEBUFF"`).  |
+| `amount` | The number of stacks of the aura. |
+
+
+#### `_AURA_BROKEN`--- Additional Parameters
+| `args.`*index* | Description |
+| ---:|:--- |
+| `auraType` | The type of the aura being broken in the event (`"BUFF"` or `"DEBUFF"`).  |
+
+
+#### `_AURA_BROKEN_SPELL`--- Additional Parameters
+
+| `args.`*index* | Description |
+| ---:|:--- |
+| `extraSpellId` | The spell ID of the aura that was broken.<br><br>__NOTE:__ You can use `args.spellId`, `args.spellName`, and `args.spellSchool` to see relevant information about the spell that did the breaking. |
+| `extraSpellName` | The localized name of the aura that was broken. |
+| `extraSchool` | The school of the aura that was broken. |
+| `auraType` | The type of aura that was broken: `"BUFF"` or `"DEBUFF"`. |
+
+
+#### `_CAST_FAILED`--- Additional Parameters
+
+| `args.`*index* | Description |
+| ---:|:--- |
+| `failedType` | A localized string that gives the reason the spell failed.<br><br>__Examples:__<br><br>`"Can only use outside"`<br>`"Item is not ready yet"`<br>`"No target"`<br>...<br>_etc._|
+
 
 > Written with [StackEdit](https://stackedit.io/).
