@@ -1927,10 +1927,18 @@ formatNameTypes = {
 	end,
 
 	function (args, settings, isSource) -- [3] = Source Name - Spell Name
+		if args.hideCaster then
+			return formatNameTypes[2](args, settings, isSource)
+		end
+
 		return formatNameTypes[1](args, settings, isSource) .. " - " .. formatNameTypes[2](args, settings, isSource)
 	end,
 
 	function (args, settings, isSource) -- [4] = Spell Name - Source Name
+		if args.hideCaster then
+			return formatNameTypes[2](args, settings, isSource)
+		end
+
 		return formatNameTypes[2](args, settings, isSource) .. " - " .. formatNameTypes[1](args, settings, isSource)
 	end
 }
