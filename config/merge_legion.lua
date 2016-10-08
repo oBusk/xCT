@@ -41,7 +41,7 @@ end
 --    Creates a string for a category heading
 -- =====================================================
 local function CreateMergeHeader(expName, catName, expColor)
-    return "|cff".. expColor .. expName .. " |cff798BDD(" ..catName.. ")|r"
+    return "|cff".. expColor .. expName .. "|r™ |cff798BDD(" ..catName.. ")|r"
 end
 
 
@@ -49,10 +49,11 @@ end
 -- ---------------------------
 -- Merge Headers            --
 -- ---------------------------
-local Leg_World = CreateMergeHeader("Legion|r™", "World Zones", "93BE3D")
-local Leg_QuestItems = CreateMergeHeader("Legion|r™", "Quest Items", "93BE3D")
-local Leg_BG = CreateMergeHeader("Legion|r™", "Bodyguards", "93BE3D")
-local Leg_Items = CreateMergeHeader("Legion|r™", "Items", "93BE3D")
+local Leg_World = CreateMergeHeader("Legion", "World Zones", "93BE3D")
+local Leg_QuestItems = CreateMergeHeader("Legion", "Quest Items", "93BE3D")
+local Leg_BG = CreateMergeHeader("Legion", "Bodyguards", "93BE3D")
+local Leg_Items = CreateMergeHeader("Legion", "Items", "93BE3D")
+local Leg_Cons = CreateMergeHeader("Legion", "Consumables", "93BE3D")
 
 
 -- ---------------------------
@@ -71,20 +72,27 @@ addon.merges[221720]      = CreateMergeSpellEntry(Leg_BG, 1.5, "Arator the Redee
 -- Monk
 addon.merges[212141]      = CreateMergeSpellEntry(Leg_BG, 1.5, "The Monkey King (Spinning Crane Kick)")
 
+-- ---------------------------
+-- Consumables              --
+-- ---------------------------
+
+addon.merges[188091]      = CreateMergeSpellEntry(Leg_Cons, 1.5, "Potion: Potion of Deadly Grace")
+addon.merges[188028]      = CreateMergeSpellEntry(Leg_Cons, 1.5, "Potion: Potion of the Old War") -- Buff ID
+addon.merge2h[233150]     = 188028 -- Hack to give the potion a icon
+addon.merges[225623]      = CreateMergeSpellEntry(Leg_Cons, 1.5, "Food: Fishbrul Special")
+addon.merge2h[201573]     = 225623 -- Pepper Breath
+addon.merge2h[225624]     = 225623 -- Pepper Breath
 
 -- ---------------------------
 -- Items                    --
 -- ---------------------------
 
--- Buffs
-addon.merges[225623]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Fishbrul Special (Food Buff)")
-addon.merge2h[201573]     = 225623 -- Pepper Breath
-addon.merge2h[225624]     = 225623 -- Pepper Breath
-
 -- Trinkets
-addon.merges[214169]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Spiked Counterweight (Trinket)")
+addon.merges[215047]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Trinket: Terrorbound Nexus")
+addon.merges[222168]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Spontaneous Appendages")
+addon.merges[214169]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Spiked Counterweight")
 addon.merge2h[228780]     = 214169 -- Brutal Haymaker (Spiked Counterweight)
-addon.merges[213786]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Corrupted Starlight (Trinket)")
+addon.merges[213786]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Corrupted Starlight")
 addon.merge2h[213782]     = 213786 -- Nightfall
 addon.merge2h[213833]     = 213786 -- Nightfall
 addon.merge2h[213784]     = 213786 -- Nightfall
@@ -106,17 +114,17 @@ addon.merges[23106]       = CreateMergeSpellEntry(Leg_World, 1.0, "World Quest: 
 addon.merges[204204]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: The Battle Rages On (Unleashed Magic)")
 
 -- Broken Shore
-addon.merges[200009]      = CreateMergeSpellEntry(Leg_World, 0.5, "Unattended Cannon (Fel Cannonball)")
+addon.merges[200009]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: The Battle for Broken Shore (Fel Cannonball)")
 
 -- Stormheim
-addon.merges[184427]      = CreateMergeSpellEntry(Leg_World, 2.5, "Skyfire Deck Gun")
-addon.merges[179021]      = CreateMergeSpellEntry(Leg_World, 0.5, "Murky - Slime")
-addon.merges[179041]      = CreateMergeSpellEntry(Leg_World, 0.5, "Murky - Pufferfish")
+addon.merges[184427]      = CreateMergeSpellEntry(Leg_World, 2.5, "Quest: Greymane's Gambit (Skyfire Deck Gun)")
+addon.merges[179021]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Murlocs: The Next Generation (Slime)")
+addon.merges[179041]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Murlocs: The Next Generation (Pufferfish")
 
 -- Karazhan (Artifact Quests)
-addon.merges[201645]      = CreateMergeSpellEntry(Leg_World, 0.5, "Revil Cost (Cudgel of Light)")
-addon.merges[201877]      = CreateMergeSpellEntry(Leg_World, 0.5, "Revil Cost (Holy Nova)")
-addon.merges[201642]      = CreateMergeSpellEntry(Leg_World, 3.5, "Revil Cost (Holy Fire)")
+addon.merges[201645]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Revil Cost (Cudgel of Light)")
+addon.merges[201877]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Revil Cost (Holy Nova)")
+addon.merges[201642]      = CreateMergeSpellEntry(Leg_World, 3.5, "Quest: Revil Cost (Holy Fire)")
 
 -- Val'sharah
 addon.merges[218594]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Softening the Target (Terrorfiend)")
@@ -124,17 +132,17 @@ addon.merges[218594]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Soften
 -- Stormheim
 addon.merges[183058]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Cry Thunder!")
 addon.merges[183042]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Cry Thunder!")
-addon.merges[190863]      = CreateMergeSpellEntry(Leg_World, 0.5, "Call of the Storm (Gates of Valor)")
-addon.merges[190919]      = CreateMergeSpellEntry(Leg_World, 0.5, "Guardian Orbs (Gates of Valor)")
-addon.merges[187780]      = CreateMergeSpellEntry(Leg_World, 3.5, "Aspirant's Conviction (Skold-Ashil)")
+addon.merges[190863]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Gates of Valor (Call of the Storm)")
+addon.merges[190919]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Gates of Valor (Guardian Orbs)")
+addon.merges[187780]      = CreateMergeSpellEntry(Leg_World, 3.5, "Quest: Skold-Ashil (Aspirant's Conviction)")
 
 -- Highmountain
-addon.merges[215729]      = CreateMergeSpellEntry(Leg_World, 2.5, "Healing Rain (Lifespring Cavern)")
-addon.merges[192997]      = CreateMergeSpellEntry(Leg_World, 1.5, "Wild Carve (Q: Huln's War - The Arrival)")
-addon.merges[193008]      = CreateMergeSpellEntry(Leg_World, 0.5, "Harpoon Stomp (Q: Huln's War - The Arrival)")
-addon.merges[193091]      = CreateMergeSpellEntry(Leg_World, 0.5, "Harpoon Stomp (Q: Huln's War - The Arrival)")
-addon.merges[213474]      = CreateMergeSpellEntry(Leg_World, 0.5, "Skyhorn Strafing Run (Q: Justice Rains from Above)")
-addon.merges[214479]      = CreateMergeSpellEntry(Leg_World, 0.5, "Flaming Bolas (Q: Bolas Bastion)")
+addon.merges[215729]      = CreateMergeSpellEntry(Leg_World, 2.5, "Quest: Lifespring Cavern (Healing Rain)")
+addon.merges[192997]      = CreateMergeSpellEntry(Leg_World, 1.5, "Quest: Huln's War - The Arrival (Wild Carve)")
+addon.merges[193008]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Huln's War - The Arrival (Harpoon Stomp)")
+addon.merges[193091]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Huln's War - The Arrival (Harpoon Stomp)")
+addon.merges[213474]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Justice Rains from Above (Skyhorn Strafing Run)")
+addon.merges[214479]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Bolas Bastion (Flaming Bolas)")
 
 -- Azsuna
 addon.merges[179217]      = CreateMergeSpellEntry(Leg_World, 1.5, "Quest: The Walk of Shame (Prince Farondis)")
