@@ -191,7 +191,7 @@ addon.merges[184689]    = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- S
 addon.merges[20271]     = CreateMergeSpellEntry("PALADIN", 1.5, 70)         -- Talent: Greater Judgment
 addon.merges[198137]    = CreateMergeSpellEntry("PALADIN", 2.5, 70)         -- Talent: Divine Hammer
 addon.merges[210220]    = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Talent: Holy Wrath
-addon.merges[205273]    = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Artifact: Wake of Ashes
+addon.merges[205273]    = CreateMergeSpellEntry("PALADIN", 2.0, 70)         -- Artifact: Wake of Ashes
 addon.merges[224239]    = CreateMergeSpellEntry("PALADIN", 1.5, 70)         -- Artifact: Divine Tempest (Divine Storm)
 addon.merges[20271]     = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Judgment
 addon.merge2h[228288]   = 20271                                             -- [Bounce Merger] Judgment
@@ -426,6 +426,7 @@ addon.merges[227681]    = CreateMergeSpellEntry("MONK", 1.5, 268)           -- A
 addon.merge2h[178173]   = 124507                                            -- [Greater Merger] Artifact: Overflow (double check)
 
 -- Windwalker (ID: 269)
+addon.merges[124280]    = CreateMergeSpellEntry("MONK", 2.0, 269)           -- Touch of Karma
 addon.merges[123586]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Flying Serpent Kick
 addon.merges[117418]    = CreateMergeSpellEntry("MONK", 2.0, 269)           -- Fists of Fury
 addon.merges[100780]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Tiger Palm (SEF)

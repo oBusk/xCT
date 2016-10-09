@@ -54,6 +54,7 @@ local Leg_QuestItems = CreateMergeHeader("Legion", "Quest Items", "93BE3D")
 local Leg_BG = CreateMergeHeader("Legion", "Bodyguards", "93BE3D")
 local Leg_Items = CreateMergeHeader("Legion", "Items", "93BE3D")
 local Leg_Cons = CreateMergeHeader("Legion", "Consumables", "93BE3D")
+local Leg_Raid = CreateMergeHeader("Legion", "Raids", "93BE3D")
 
 
 -- ---------------------------
@@ -148,8 +149,6 @@ addon.merges[214479]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Bolas 
 addon.merges[179217]      = CreateMergeSpellEntry(Leg_World, 1.5, "Quest: The Walk of Shame (Prince Farondis)")
 addon.merges[215555]      = CreateMergeSpellEntry(Leg_World, 1.5, "Quest: The Walk of Shame (Prince Farondis)")
 
-
-
 -- ---------------------------
 -- Quest Items              --
 -- ---------------------------
@@ -157,3 +156,9 @@ addon.merges[215555]      = CreateMergeSpellEntry(Leg_World, 1.5, "Quest: The Wa
 -- Val'sharah
 addon.merges[202917]      = CreateMergeSpellEntry(Leg_QuestItems, 2.5, "Trinket: Temple Priestess' Charm")
 addon.merges[202891]      = CreateMergeSpellEntry(Leg_QuestItems, 2.5, "Trinket: Lodestone of the Stormbreaker")
+
+-- ---------------------------
+-- Raids                    --
+-- ---------------------------
+addon.merges[215300]      = CreateMergeSpellEntry(Leg_Raid, 2.0, "Elerethe Renferal: Web of Pain [Tanks]") -- Should maybe be ignored by default
+addon.merges[215307]      = CreateMergeSpellEntry(Leg_Raid, 2.0, "Elerethe Renferal: Web of Pain [Other]") -- Should maybe be ignored by default
