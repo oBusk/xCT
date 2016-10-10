@@ -41,7 +41,7 @@ end
 --    Creates a string for a category heading
 -- =====================================================
 local function CreateMergeHeader(expName, catName, expColor)
-    return "|cff".. expColor .. expName .. " |cff798BDD(" ..catName.. ")|r"
+    return "|cff".. expColor .. expName .. "|r™ |cff798BDD(" ..catName.. ")|r"
 end
 
 
@@ -49,10 +49,10 @@ end
 -- ---------------------------
 -- Merge Headers            --
 -- ---------------------------
-local Item_WOD  =  CreateMergeHeader("Warlords of Draenor|r™", "Items", "A32C12")
-local Bodyg_WOD =  CreateMergeHeader("Warlords of Draenor|r™", "Bodyguards", "A32C12")
-local Raid_WOD  =  CreateMergeHeader("Warlords of Draenor|r™", "Raids", "A32C12")
-local World_WOD =  CreateMergeHeader("Warlords of Draenor|r™", "World Zone", "A32C12")
+local Item_WOD  =  CreateMergeHeader("Warlords of Draenor", "Items", "A32C12")
+local Bodyg_WOD =  CreateMergeHeader("Warlords of Draenor", "Bodyguards", "A32C12")
+local Raid_WOD  =  CreateMergeHeader("Warlords of Draenor", "Raids", "A32C12")
+local World_WOD =  CreateMergeHeader("Warlords of Draenor", "World Zone", "A32C12")
 
 
 

@@ -41,7 +41,7 @@ end
 --    Creates a string for a category heading
 -- =====================================================
 local function CreateMergeHeader(expName, catName, expColor)
-    return "|cff".. expColor .. expName .. " |cff798BDD(" ..catName.. ")|r"
+    return "|cff".. expColor .. expName .. "|r™ |cff798BDD(" ..catName.. ")|r"
 end
 
 
@@ -49,8 +49,8 @@ end
 -- ---------------------------
 -- Merge Headers            --
 -- ---------------------------
-local MOP_Items   = CreateMergeHeader("Mists of Pandaria|r™", "Trinkets", "F1A864")
-local MOP_Cloak   = CreateMergeHeader("Mists of Pandaria|r™", "Legendary Cloaks", "F1A864")
+local MOP_Items   = CreateMergeHeader("Mists of Pandaria", "Trinkets", "F1A864")
+local MOP_Cloak   = CreateMergeHeader("Mists of Pandaria", "Legendary Cloaks", "F1A864")
 
 
 

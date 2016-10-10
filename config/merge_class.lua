@@ -55,7 +55,9 @@ addon.merges[22482]     = CreateMergeSpellEntry("ROGUE", 1.5, 260)          -- B
 addon.merges[57841]     = CreateMergeSpellEntry("ROGUE", 3.5, 260)          -- Killing Spree
 addon.merges[185779]    = CreateMergeSpellEntry("ROGUE", 2.0, 260)          -- Talent: Cannonball Barrage
 addon.merges[202822]    = CreateMergeSpellEntry("ROGUE", 0.5, 260)          -- Artifact: Greed
+addon.merges[193315]    = CreateMergeSpellEntry("ROGUE", 0.5, 260)          -- Saber Slash
 addon.merge2h[202823]   = 202822                                            -- [MH/OH Merger] Artifact: Greed
+addon.merge2h[197834]   = 193315                                            -- [Proc Merger] Saber Slash
 
 -- Sublety (ID: 261)
 addon.merges[197835]    = CreateMergeSpellEntry("ROGUE", 0.5, 261)          -- Shuriken Storm
@@ -189,8 +191,10 @@ addon.merges[184689]    = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- S
 addon.merges[20271]     = CreateMergeSpellEntry("PALADIN", 1.5, 70)         -- Talent: Greater Judgment
 addon.merges[198137]    = CreateMergeSpellEntry("PALADIN", 2.5, 70)         -- Talent: Divine Hammer
 addon.merges[210220]    = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Talent: Holy Wrath
-addon.merges[205273]    = CreateMergeSpellEntry("PALADIN", 2.5, 70)         -- Artifact: Wake of Ashes
+addon.merges[205273]    = CreateMergeSpellEntry("PALADIN", 2.0, 70)         -- Artifact: Wake of Ashes
 addon.merges[224239]    = CreateMergeSpellEntry("PALADIN", 1.5, 70)         -- Artifact: Divine Tempest (Divine Storm)
+addon.merges[20271]     = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Judgment
+addon.merge2h[228288]   = 20271                                             -- [Bounce Merger] Judgment
 
 
 
@@ -383,6 +387,7 @@ addon.merges[211717]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- A
 addon.merges[157736]    = CreateMergeSpellEntry("WARLOCK", 3.5, 267)        -- Immolate
 addon.merges[29722]     = CreateMergeSpellEntry("WARLOCK", 0.5, 267)        -- Incinerate (Havoc / F&B Talent)
 addon.merges[116858]    = CreateMergeSpellEntry("WARLOCK", 0.5, 267)        -- Choas Bolt (Havoc)
+addon.merges[17962]     = CreateMergeSpellEntry("WARLOCK", 0.5, 267)        -- Conflagrate (Havoc)
 addon.merges[42223]     = CreateMergeSpellEntry("WARLOCK", 2.5, 267)        -- Rain of Fire
 addon.merges[152108]    = CreateMergeSpellEntry("WARLOCK", 0.5, 267)        -- Talent: Cataclysm
 addon.merges[196448]    = CreateMergeSpellEntry("WARLOCK", 1.5, 267)        -- Talent: Channel Demonfire
@@ -421,6 +426,7 @@ addon.merges[227681]    = CreateMergeSpellEntry("MONK", 1.5, 268)           -- A
 addon.merge2h[178173]   = 124507                                            -- [Greater Merger] Artifact: Overflow (double check)
 
 -- Windwalker (ID: 269)
+addon.merges[124280]    = CreateMergeSpellEntry("MONK", 2.0, 269)           -- Touch of Karma
 addon.merges[123586]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Flying Serpent Kick
 addon.merges[117418]    = CreateMergeSpellEntry("MONK", 2.0, 269)           -- Fists of Fury
 addon.merges[100780]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Tiger Palm (SEF)
