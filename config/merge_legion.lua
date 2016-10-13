@@ -44,8 +44,6 @@ local function CreateMergeHeader(expName, catName, expColor)
     return "|cff".. expColor .. expName .. "|r™ |cff798BDD(" ..catName.. ")|r"
 end
 
-
-
 -- ---------------------------
 -- Merge Headers            --
 -- ---------------------------
@@ -56,11 +54,9 @@ local Leg_Items = CreateMergeHeader("Legion", "Items", "93BE3D")
 local Leg_Cons = CreateMergeHeader("Legion", "Consumables", "93BE3D")
 local Leg_Raid = CreateMergeHeader("Legion", "Raids", "93BE3D")
 
-
 -- ---------------------------
 -- Bodyguards               --
 -- ---------------------------
-
 -- Druid
 addon.merges[218797]      = CreateMergeSpellEntry(Leg_BG, 3.5, "Broll Bearmantle (Moonfire)")
 
@@ -76,7 +72,6 @@ addon.merges[212141]      = CreateMergeSpellEntry(Leg_BG, 1.5, "The Monkey King 
 -- ---------------------------
 -- Consumables              --
 -- ---------------------------
-
 addon.merges[188091]      = CreateMergeSpellEntry(Leg_Cons, 1.5, "Potion: Potion of Deadly Grace")
 addon.merges[188028]      = CreateMergeSpellEntry(Leg_Cons, 1.5, "Potion: Potion of the Old War") -- Buff ID
 addon.merge2h[233150]     = 188028 -- Hack to give the potion a icon
@@ -87,7 +82,6 @@ addon.merge2h[225624]     = 225623 -- Pepper Breath
 -- ---------------------------
 -- Items                    --
 -- ---------------------------
-
 -- Trinkets
 addon.merges[215047]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Trinket: Terrorbound Nexus")
 addon.merges[222168]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Spontaneous Appendages")
@@ -103,7 +97,6 @@ addon.merge2h[213785]     = 213786 -- Nightfall
 -- ---------------------------
 -- World Zone               --
 -- ---------------------------
-
 -- All
 addon.merges[205238]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: PvP Warden Tower's (Powder Keg)")
 
@@ -152,7 +145,6 @@ addon.merges[215555]      = CreateMergeSpellEntry(Leg_World, 1.5, "Quest: The Wa
 -- ---------------------------
 -- Quest Items              --
 -- ---------------------------
-
 -- Val'sharah
 addon.merges[202917]      = CreateMergeSpellEntry(Leg_QuestItems, 2.5, "Trinket: Temple Priestess' Charm")
 addon.merges[202891]      = CreateMergeSpellEntry(Leg_QuestItems, 2.5, "Trinket: Lodestone of the Stormbreaker")

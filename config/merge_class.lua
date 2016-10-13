@@ -184,6 +184,7 @@ addon.merges[209478]    = CreateMergeSpellEntry("PALADIN", 1.5, 66)         -- A
 addon.merges[209202]    = CreateMergeSpellEntry("PALADIN", 0.5, 66)         -- Artifact: Eye of Tyr
 
 -- Retribution (ID: 70)
+addon.merges[224266]    = CreateMergeSpellEntry("PALADIN", 1.0, 70)         -- Templar's Verdict (Echo of the Highlord) *Delay on second hit
 addon.merges[205729]    = CreateMergeSpellEntry("PALADIN", 1.0, 70)         -- Greater Blessing of Might
 addon.merges[217020]    = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Zeal
 addon.merges[203539]    = CreateMergeSpellEntry("PALADIN", 5.5, 70)         -- Greater Blessings of Wisdom
@@ -195,6 +196,7 @@ addon.merges[205273]    = CreateMergeSpellEntry("PALADIN", 2.0, 70)         -- A
 addon.merges[224239]    = CreateMergeSpellEntry("PALADIN", 1.5, 70)         -- Artifact: Divine Tempest (Divine Storm)
 addon.merges[20271]     = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Judgment
 addon.merge2h[228288]   = 20271                                             -- [Bounce Merger] Judgment
+addon.merge2h[216527]   = 20271                                             -- [PvP Talent] Lawbringer
 
 
 
@@ -426,6 +428,7 @@ addon.merges[227681]    = CreateMergeSpellEntry("MONK", 1.5, 268)           -- A
 addon.merge2h[178173]   = 124507                                            -- [Greater Merger] Artifact: Overflow (double check)
 
 -- Windwalker (ID: 269)
+addon.merges[117952]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Crackling Jade Lightning (SEF)
 addon.merges[124280]    = CreateMergeSpellEntry("MONK", 2.0, 269)           -- Touch of Karma
 addon.merges[123586]    = CreateMergeSpellEntry("MONK", 0.5, 269)           -- Flying Serpent Kick
 addon.merges[117418]    = CreateMergeSpellEntry("MONK", 2.0, 269)           -- Fists of Fury
