@@ -904,10 +904,9 @@ function x:UpdateAuraSpellFilter(specific)
     end
   end
 
-  i = 10
-
   -- Update debuffs
   if not specific or specific == "debuffs" then
+    i = 10
     addon.options.args.spellFilter.args.listDebuffs.args.list = {
       name = "Filtered Debuffs |cff798BDD(Uncheck to Disable)|r",
       type = 'group',
@@ -939,10 +938,10 @@ function x:UpdateAuraSpellFilter(specific)
     end
   end
 
-  i = 10
 
   -- Update procs
   if not specific or specific == "procs" then
+    i = 10
     addon.options.args.spellFilter.args.listProcs.args.list = {
       name = "Filtered Procs |cff798BDD(Uncheck to Disable)|r",
       type = 'group',
@@ -974,10 +973,9 @@ function x:UpdateAuraSpellFilter(specific)
     end
   end
 
-  i = 10
-
   -- Update spells
   if not specific or specific == "spells" then
+    i = 10
     addon.options.args.spellFilter.args.listSpells.args.list = {
       name = "Filtered Spells |cff798BDD(Uncheck to Disable)|r",
       type = 'group',
@@ -1002,8 +1000,8 @@ function x:UpdateAuraSpellFilter(specific)
           get = getSF,
           set = setSF,
         }
-	  else
-	    x.db.profile.spellFilter[id] = nil
+      else
+        x.db.profile.spellFilter.listSpells[id] = nil
       end
     end
 
@@ -1016,10 +1014,9 @@ function x:UpdateAuraSpellFilter(specific)
     end
   end
 
-  i = 10
-
   -- Update spells
   if not specific or specific == "items" then
+    i = 10
     addon.options.args.spellFilter.args.listItems.args.list = {
       name = "Filtered Items |cff798BDD(Uncheck to Disable)|r",
       type = 'group',
@@ -1044,6 +1041,89 @@ function x:UpdateAuraSpellFilter(specific)
         get = getSF,
         set = setSF,
       }
+    end
+
+    if not updated then
+      spells["noSpells"] = {
+        order = 1,
+        name = "No items have been added to this list yet.",
+        type = 'description',
+      }
+    end
+  end
+
+  -- return early because not read for the next stuff
+  if 1 then return end
+
+  if not specific or specific == "damage" then
+    i = 10
+    addon.options.args.damageFilter.args.listItems.args.list = {
+      name = "Filtered Incoming Damage |cff798BDD(Uncheck to Disable)|r",
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = { },
+    }
+
+    local spells = addon.options.args.damageFilter.args.listItems.args.list.args
+    local updated = false
+
+    for id in pairs(x.db.profile.spellFilter.listDamage) do
+      local spellID = tonumber(string_match(id, "%d+"))
+      local spellName = GetSpellInfo(spellID or id)
+      if spellName then
+        updated = true
+        spells[id] = {
+          order = i,
+          name = spellName,
+          desc = "|cffFF0000ID|r |cff798BDD" .. id .. "|r\n",
+          type = 'toggle',
+          get = getSF,
+          set = setSF,
+        }
+      else
+        x.db.profile.spellFilter.listDamage[id] = nil
+      end
+    end
+
+    if not updated then
+      spells["noSpells"] = {
+        order = 1,
+        name = "No items have been added to this list yet.",
+        type = 'description',
+      }
+    end
+  end
+
+  if not specific or specific == "healing" then
+    i = 10
+    addon.options.args.healingFilter.args.listItems.args.list = {
+      name = "Filtered Incoming Damage |cff798BDD(Uncheck to Disable)|r",
+      type = 'group',
+      guiInline = true,
+      order = 11,
+      args = { },
+    }
+
+    local spells = addon.options.args.healingFilter.args.listItems.args.list.args
+    local updated = false
+
+    for id in pairs(x.db.profile.spellFilter.listHealing) do
+      local spellID = tonumber(string_match(id, "%d+"))
+      local spellName = GetSpellInfo(spellID or id)
+      if spellName then
+        updated = true
+        spells[id] = {
+          order = i,
+          name = spellName,
+          desc = "|cffFF0000ID|r |cff798BDD" .. id .. "|r\n",
+          type = 'toggle',
+          get = getSF,
+          set = setSF,
+        }
+      else
+        x.db.profile.spellFilter.listHealing[id] = nil
+      end
     end
 
     if not updated then
