@@ -1064,6 +1064,8 @@ addon.defaults = {
       ["whitelistSpells"]   = false,
       ["whitelistProcs"]    = false,
       ["whitelistItems"]    = false,
+      ["whitelistDamage"]   = false,
+      ["whitelistHealing"]  = false,
       ["trackSpells"]       = true,
 
       listBuffs    = { },  -- Used to filter gains/fades of buffs    (Spell Name)
@@ -1072,7 +1074,7 @@ addon.defaults = {
       listProcs    = { },  -- Used to filter spell procs             (Proc Name)
       listItems    = { },  -- Used to filter Items                   (Item ID)
       listDamage   = { },  -- Used to filter incoming damage         (Spell ID)
-      listHeals    = { },  -- Used to filter incoming healing        (Spell ID)
+      listHealing    = { },  -- Used to filter incoming healing        (Spell ID)
 
       -- Minimal Spell Amount
       filterPowerValue = 0,
