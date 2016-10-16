@@ -440,7 +440,7 @@ end
 local function IsTrackSpellsDisabled() return not x.db.profile.spellFilter.trackSpells end
 
 -- Lists that will be used to show tracked spells
-local buffHistory, debuffHistory, spellHistory, procHistory, itemHistory = { }, { }, { }, { }, { }
+local buffHistory, debuffHistory, spellHistory, procHistory, itemHistory, damageHistory, healingHistory = { }, { }, { }, { }, { }, { }, { }
 
 
 -- GetSpellTextureFormatted( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride, forceOff )
@@ -505,6 +505,10 @@ local function GetItemHistory()
   end
 
   return itemHistory
+end
+
+local function GetDamageIncomingHistory()
+
 end
 
 
@@ -1128,6 +1132,57 @@ addon.options.args["spellFilter"] = {
       },
     },
 
+
+    listDamage = {
+      name = "|cffFFFFFFFilter:|r |cff798BDDIncoming Damage|r",
+      type = 'group',
+      order = 50,
+      guiInline = false,
+      args = {
+        title = {
+          order = 0,
+          type = "description",
+          name = "Temp Description",
+        },
+        whitelistDamage = {
+          order = 1,
+          type = 'toggle',
+          name = "Whitelist",
+          desc = "Temp Description",
+          set = set0_1,
+          get = get0_1,
+          width = "full",
+        },
+        spellName = {
+          order = 2,
+          type = 'input',
+          name = "Spell ID",
+          desc = "The Spell ID of the |cff798BDDSpell|r you want to filter.",
+          set = setSpell,
+          get = noop,
+        },
+        checkAdd = {
+          order = 3,
+          type = 'toggle',
+          name = "Remove",
+          desc = "Check to remove the spell from the filtered list.",
+          get = getCheckAdd,
+          set = setCheckAdd,
+        },
+
+        -- This is a feature option that I will enable when I get more time D:
+        selectTracked = {
+          order = 4,
+          type = 'select',
+          name = "Item History:",
+          desc = "A list of |cff798BDDItem|r IDs that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
+          disabled = IsTrackSpellsDisabled,
+          values = GetDamageIncomingHistory,
+          get = noop,
+          set = setSpell,
+        },
+      },
+    },
 
   },
 }

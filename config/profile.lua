@@ -1071,6 +1071,8 @@ addon.defaults = {
       listSpells   = { },  -- Used to filter outgoing spells         (Spell ID)
       listProcs    = { },  -- Used to filter spell procs             (Proc Name)
       listItems    = { },  -- Used to filter Items                   (Item ID)
+      listDamage   = { },  -- Used to filter incoming damage         (Spell ID)
+      listHeals    = { },  -- Used to filter incoming healing        (Spell ID)
 
       -- Minimal Spell Amount
       filterPowerValue = 0,

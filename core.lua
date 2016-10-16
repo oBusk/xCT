@@ -1135,6 +1135,12 @@ function x:UpdateAuraSpellFilter(specific)
     end
   end
 
+  i = 10
+
+  if not specific or specific == "damage" then
+
+  end
+
 end
 
 -- Add and remove Buffs, debuffs, and spells from the filter
