@@ -863,7 +863,9 @@ function x:UpdateComboTracker()
 end
 
 -- Get and set methods for the spell filter
-local function getSF(info) return x.db.profile.spellFilter[info[#info-2]][info[#info]] end
+local function getSF(info)
+  return x.db.profile.spellFilter[info[#info-2]][info[#info]]
+end
 local function setSF(info, value) x.db.profile.spellFilter[info[#info-2]][info[#info]] = value end
 
 -- Update the Buff, Debuff and Spell filter list
@@ -1052,12 +1054,9 @@ function x:UpdateAuraSpellFilter(specific)
     end
   end
 
-  -- return early because not read for the next stuff
-  if 1 then return end
-
   if not specific or specific == "damage" then
     i = 10
-    addon.options.args.damageFilter.args.listItems.args.list = {
+    addon.options.args.spellFilter.args.listDamage.args.list = {
       name = "Filtered Incoming Damage |cff798BDD(Uncheck to Disable)|r",
       type = 'group',
       guiInline = true,
@@ -1065,7 +1064,7 @@ function x:UpdateAuraSpellFilter(specific)
       args = { },
     }
 
-    local spells = addon.options.args.damageFilter.args.listItems.args.list.args
+    local spells = addon.options.args.spellFilter.args.listDamage.args.list.args
     local updated = false
 
     for id in pairs(x.db.profile.spellFilter.listDamage) do
@@ -1097,15 +1096,15 @@ function x:UpdateAuraSpellFilter(specific)
 
   if not specific or specific == "healing" then
     i = 10
-    addon.options.args.healingFilter.args.listItems.args.list = {
-      name = "Filtered Incoming Damage |cff798BDD(Uncheck to Disable)|r",
+    addon.options.args.spellFilter.args.listHealing.args.list = {
+      name = "Filtered Incoming Healing |cff798BDD(Uncheck to Disable)|r",
       type = 'group',
       guiInline = true,
       order = 11,
       args = { },
     }
 
-    local spells = addon.options.args.healingFilter.args.listItems.args.list.args
+    local spells = addon.options.args.spellFilter.args.listHealing.args.list.args
     local updated = false
 
     for id in pairs(x.db.profile.spellFilter.listHealing) do
@@ -1159,6 +1158,12 @@ function x.AddFilteredSpell(name, category)
   elseif category == "listItems" then
     x.db.profile.spellFilter.listItems[name] = true
     x:UpdateAuraSpellFilter("items")
+  elseif category == "listDamage" then
+    x.db.profile.spellFilter.listDamage[name] = true
+    x:UpdateAuraSpellFilter("damage")
+  elseif category == "listHealing" then
+    x.db.profile.spellFilter.listHealing[name] = true
+    x:UpdateAuraSpellFilter("healing")
   else
     print("|cffFF0000x|r|cffFFFF00CT+|r  |cffFF0000Error:|r Unknown filter type '" .. category .. "'!")
   end
@@ -1186,6 +1191,12 @@ function x.RemoveFilteredSpell(name, category)
   elseif category == "listItems" then
     x.db.profile.spellFilter.listItems[name] = nil
     x:UpdateAuraSpellFilter("items")
+  elseif category == "listDamage" then
+    x.db.profile.spellFilter.listDamage[name] = nil
+    x:UpdateAuraSpellFilter("damage")
+  elseif category == "listHealing" then
+    x.db.profile.spellFilter.listHealing[name] = nil
+    x:UpdateAuraSpellFilter("healing")
   else
     print("|cffFF0000x|r|cffFFFF00CT+|r  |cffFF0000Error:|r Unknown filter type '" .. category .. "'!")
   end

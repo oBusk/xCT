@@ -440,7 +440,7 @@ end
 local function IsTrackSpellsDisabled() return not x.db.profile.spellFilter.trackSpells end
 
 -- Lists that will be used to show tracked spells
-local buffHistory, debuffHistory, spellHistory, procHistory, itemHistory = { }, { }, { }, { }, { }
+local buffHistory, debuffHistory, spellHistory, procHistory, itemHistory, damageHistory, healingHistory = { }, { }, { }, { }, { }, { }, { }
 
 
 -- GetSpellTextureFormatted( spellID, message, multistrike, iconSize, justify, strColor, mergeOverride, forceOff )
@@ -451,7 +451,7 @@ local function GetBuffHistory()
   end
 
   for i in pairs(x.spellCache.buffs) do
-    buffHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
+    buffHistory[i] = x:GetSpellTextureFormatted("", "", 0, 16, nil, nil, nil, true).." "..i
   end
 
   return buffHistory
@@ -463,7 +463,7 @@ local function GetDebuffHistory()
   end
 
   for i in pairs(x.spellCache.debuffs) do
-    debuffHistory[i] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..i
+    debuffHistory[i] = x:GetSpellTextureFormatted("", "", 0, 16, nil, nil, nil, true).." "..i
   end
 
   return debuffHistory
@@ -475,8 +475,8 @@ local function GetSpellHistory()
   end
 
   for i in pairs(x.spellCache.spells) do
-    local name = GetSpellInfo(i) or "Unknown Spell ID"
-    spellHistory[tostring(i)] = x:GetSpellTextureFormatted(i, "", 0, 16, nil, nil, nil, true).." "..name.." (|cff798BDD"..i.."|r)"
+    local name, _, icon = GetSpellInfo(i)
+    spellHistory[tostring(i)] = sformat("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s (|cff798BDD%d)", icon or 0, 16, 16, name or UNKNOWN, i)
   end
 
   return spellHistory
@@ -505,6 +505,28 @@ local function GetItemHistory()
   end
 
   return itemHistory
+end
+
+local function GetDamageIncomingHistory()
+  for i in pairs(damageHistory) do damageHistory[i] = nil end
+
+  for i in pairs(x.spellCache.damage) do
+    local name, _, icon = GetSpellInfo(i)
+    damageHistory[tostring(i)] = sformat("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s (|cff798BDD%d)", icon or 0, 16, 16, name or UNKNOWN, i)
+  end
+
+  return damageHistory
+end
+
+local function GetHealingIncomingHistory()
+  for i in pairs(healingHistory) do healingHistory[i] = nil end
+
+  for i in pairs(x.spellCache.healing) do
+    local name, _, icon = GetSpellInfo(i)
+    healingHistory[tostring(i)] = sformat("|T%s:%d:%d:0:0:64:64:5:59:5:59|t %s (|cff798BDD%d)", icon or 0, 16, 16, name or UNKNOWN, i)
+  end
+
+  return healingHistory
 end
 
 
@@ -1080,7 +1102,7 @@ addon.options.args["spellFilter"] = {
     listItems = {
       name = "|cffFFFFFFFilter:|r |cff798BDDItems (Plus)|r",
       type = 'group',
-      order = 50,
+      order = 60,
       guiInline = false,
       args = {
         title = {
@@ -1128,6 +1150,108 @@ addon.options.args["spellFilter"] = {
       },
     },
 
+
+    listDamage = {
+      name = "|cffFFFFFFFilter:|r |cff798BDDIncoming Damage|r",
+      type = 'group',
+      order = 70,
+      guiInline = false,
+      args = {
+        title = {
+          order = 0,
+          type = "description",
+          name = "Temp Description",
+        },
+        whitelistDamage = {
+          order = 1,
+          type = 'toggle',
+          name = "Whitelist",
+          desc = "Temp Description",
+          set = set0_1,
+          get = get0_1,
+          width = "full",
+        },
+        spellName = {
+          order = 2,
+          type = 'input',
+          name = "Spell ID",
+          desc = "The Spell ID of the |cff798BDDSpell|r you want to filter.",
+          set = setSpell,
+          get = noop,
+        },
+        checkAdd = {
+          order = 3,
+          type = 'toggle',
+          name = "Remove",
+          desc = "Check to remove the spell from the filtered list.",
+          get = getCheckAdd,
+          set = setCheckAdd,
+        },
+
+        -- This is a feature option that I will enable when I get more time D:
+        selectTracked = {
+          order = 4,
+          type = 'select',
+          name = "Spell History:",
+          desc = "A list of |cff798BDDSpell|r IDs that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
+          disabled = IsTrackSpellsDisabled,
+          values = GetDamageIncomingHistory,
+          get = noop,
+          set = setSpell,
+        },
+      },
+    },
+
+    listHealing = {
+      name = "|cffFFFFFFFilter:|r |cff798BDDIncoming Healing|r",
+      type = 'group',
+      order = 80,
+      guiInline = false,
+      args = {
+        title = {
+          order = 0,
+          type = "description",
+          name = "Temp Description",
+        },
+        whitelistHealing = {
+          order = 1,
+          type = 'toggle',
+          name = "Whitelist",
+          desc = "Temp Description",
+          set = set0_1,
+          get = get0_1,
+          width = "full",
+        },
+        spellName = {
+          order = 2,
+          type = 'input',
+          name = "Spell ID",
+          desc = "The Spell ID of the |cff798BDDSpell|r you want to filter.",
+          set = setSpell,
+          get = noop,
+        },
+        checkAdd = {
+          order = 3,
+          type = 'toggle',
+          name = "Remove",
+          desc = "Check to remove the spell from the filtered list.",
+          get = getCheckAdd,
+          set = setCheckAdd,
+        },
+
+        -- This is a feature option that I will enable when I get more time D:
+        selectTracked = {
+          order = 4,
+          type = 'select',
+          name = "Spell History:",
+          desc = "A list of |cff798BDDSpell|r IDs that have been seen. |cffFF0000Requires:|r |cff798BDDTrack Spell History|r",
+          disabled = IsTrackSpellsDisabled,
+          values = GetHealingIncomingHistory,
+          get = noop,
+          set = setSpell,
+        },
+      },
+    },
 
   },
 }

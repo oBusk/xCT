@@ -47,6 +47,8 @@ x.spellCache = {
   spells = { },
   procs = { },
   items = { },
+  damage = { },
+  healing = { },
 }
 
 --[=====================================================[
@@ -279,8 +281,24 @@ local function IsProcFiltered(name)
   return spell
 end
 local function IsItemFiltered(name)
-  local spell = x.db.profile.spellFilter.listItems[name]
+  local spell = x.db.profile.spellFilter.listItems[tostring(name)]
   if x.db.profile.spellFilter.whitelistItems then
+    return not spell
+  end
+  return spell
+end
+
+local function IsDamageFiltered(name)
+  local spell = x.db.profile.spellFilter.listDamage[tostring(name)]
+  if x.db.profile.spellFilter.whitelistDamage then
+    return not spell
+  end
+  return spell
+end
+
+local function IsHealingFiltered(name)
+  local spell = x.db.profile.spellFilter.listHealing[tostring(name)]
+  if x.db.profile.spellFilter.whitelistHealing then
     return not spell
   end
   return spell
@@ -2153,6 +2171,11 @@ local CombatEventHandlers = {
 		local message
 		local settings = x.db.profile.frames["damage"]
 
+		-- Keep track of spells that go by
+		if args.spellId and TrackSpells() then x.spellCache.damage[args.spellId] = true end
+
+		if IsDamageFiltered(args.spellId or false) then return end
+
 		-- Check for resists
 		if ShowResistances() then
 			local resistedAmount, resistType, color
@@ -2220,6 +2243,10 @@ local CombatEventHandlers = {
 		local settings, value = x.db.profile.frames['healing'], select(17, UnitBuff("player", args.spellName))
 		if not value or value <= 0 then return end
 
+		if TrackSpells() then x.spellCache.healing[args.spellId] = true end
+
+		if IsHealingFiltered(args.spellId) then return end
+
 		-- Create the message
 		local message = sformat(format_gain, x:Abbreviate(value, "healing"))
 
@@ -2238,6 +2265,10 @@ local CombatEventHandlers = {
 		local amount, isHoT, spellID = args.amount, args.prefix == "SPELL_PERIODIC", args.spellId
 		local color = isHoT and "healingTakenPeriodic" or args.critical and "healingTakenCritical" or "healingTaken"
 		local settings = x.db.profile.frames["healing"]
+
+		if TrackSpells() then x.spellCache.healing[args.spellId] = true end
+
+		if IsHealingFiltered(args.spellId) then return end
 
 		-- Adjust the amount if the user doesnt want over healing
 		if not ShowOverHealing() then
