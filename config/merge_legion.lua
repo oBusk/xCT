@@ -83,6 +83,7 @@ addon.merge2h[225624]     = 225623 -- Pepper Breath
 -- Items                    --
 -- ---------------------------
 -- Trinkets
+addon.merges[214052]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Eye of Skovald")
 addon.merges[215047]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Trinket: Terrorbound Nexus")
 addon.merges[222168]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Spontaneous Appendages")
 addon.merges[214169]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Spiked Counterweight")
