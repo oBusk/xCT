@@ -1160,7 +1160,7 @@ addon.options.args["spellFilter"] = {
         title = {
           order = 0,
           type = "description",
-          name = "Temp Description",
+          name = "These options allow you to filter out certain |cffFFFF00Spell ID|rs from |cff798BDDIncoming Damage|r to your character.  In order to add a new item, you need to type the |cffFFFF00Spell ID|r. Checking |cffFFFF00Remove|r and typing in a |cffFFFF00Spell ID|r will remove it from the list.\n",
         },
         whitelistDamage = {
           order = 1,
@@ -1211,7 +1211,7 @@ addon.options.args["spellFilter"] = {
         title = {
           order = 0,
           type = "description",
-          name = "Temp Description",
+          name = "These options allow you to filter out certain |cffFFFF00Spell ID|rs from |cff798BDDIncoming Healing|r to your character.  In order to add a new item, you need to type the |cffFFFF00Spell ID|r. Checking |cffFFFF00Remove|r and typing in a |cffFFFF00Spell ID|r will remove it from the list.\n",
         },
         whitelistHealing = {
           order = 1,
