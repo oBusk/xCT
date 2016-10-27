@@ -364,7 +364,7 @@ addon.merges[689]       = CreateMergeSpellEntry("WARLOCK", 1.5, 0)          -- D
 -- Affliction (ID: 265)
 addon.merges[980]       = CreateMergeSpellEntry("WARLOCK", 2.5, 265)        -- Agony
 addon.merges[146739]    = CreateMergeSpellEntry("WARLOCK", 2.5, 265)        -- Corruption
-addon.merges[30108]     = CreateMergeSpellEntry("WARLOCK", 2.5, 265)        -- Unstable Affliction
+addon.merges[233490]    = CreateMergeSpellEntry("WARLOCK", 1.5, 265)        -- Unstable Affliction
 addon.merges[27285]     = CreateMergeSpellEntry("WARLOCK", 0.5, 265)        -- Seed of Corruption
 addon.merges[22703]     = CreateMergeSpellEntry("WARLOCK", 0.5, 265)        -- Infernal: Awakening
 addon.merges[20153]     = CreateMergeSpellEntry("WARLOCK", 1.5, 265)        -- Infernal: Immolation
@@ -373,6 +373,11 @@ addon.merges[205246]    = CreateMergeSpellEntry("WARLOCK", 1.5, 265)        -- T
 addon.merges[196100]    = CreateMergeSpellEntry("WARLOCK", 0.5, 265)        -- Talent: Grimoire of Sacrifice
 addon.merges[218615]    = CreateMergeSpellEntry("WARLOCK", 0.5, 265)        -- Artifact: Harvester of Souls
 addon.merges[199581]    = CreateMergeSpellEntry("WARLOCK", 0.5, 265)        -- Artifact: Soul Flame
+addon.merge2h[233496]   = 233490                                            -- Unstable Affliction (Multiple Applications)
+addon.merge2h[233499]   = 233490                                            -- Unstable Affliction (Multiple Applications)
+addon.merge2h[233497]   = 233490                                            -- Unstable Affliction (Multiple Applications)
+addon.merge2h[233498]   = 233490                                            -- Unstable Affliction (Multiple Applications)
+addon.merge2h[231489]   = 233490                                            -- Unstable Affliction (Artifact: Compounding Horror)
 
 -- Demonlogy (ID: 266)
 addon.merges[603]       = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Doom
@@ -383,7 +388,7 @@ addon.merges[86040]     = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- H
 addon.merges[196278]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Talent: Implosion
 addon.merges[205231]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Talent: Summon Darkglare
 addon.merges[211727]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Artifact: Thal'kiel's Discord
-addon.merges[211717]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Artifact: Thal'kiel's Consumption
+addon.merges[211714]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Artifact: Thal'kiel's Consumption (Demon Life Tap)
 
 -- Destruction (ID: 267)
 addon.merges[157736]    = CreateMergeSpellEntry("WARLOCK", 3.5, 267)        -- Immolate
