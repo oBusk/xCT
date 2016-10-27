@@ -177,7 +177,7 @@ function x:UpdateFrames(specificFrame)
 
 			-- Insert Direction
 			if settings.insertText then
-				f:SetInsertMode(settings.insertText)
+				f:SetInsertMode(settings.insertText == 'top' and SCROLLING_MESSAGE_FRAME_INSERT_MODE_TOP or SCROLLING_MESSAGE_FRAME_INSERT_MODE_BOTTOM)
 			end
 
 			-- Font Template
