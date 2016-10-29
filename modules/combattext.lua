@@ -31,11 +31,7 @@ local utf8 = {
 }
 
 local xCP = LibStub and LibStub("xCombatParser-1.0", true)
-local LPS = LibStub and LibStub("LibPlayerSpells-1.0", true)
-
-if not xCP or not LPS then print("Something went wrong when xCT+ tried to load. Please resintall and inform the author.") end
-
-
+if not xCP then print("Something went wrong when xCT+ tried to load. Please resintall and inform the author.") end
 
 
 --[=====================================================[
