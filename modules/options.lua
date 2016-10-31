@@ -195,18 +195,6 @@ x.cvar_update = function( force )
     SetCVar("floatingCombatTextCombatDamageAllAutos", 0)
   end
 
-  if x.db.profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalOffset then
-    SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 1)
-  else
-    SetCVar("floatingCombatTextCombatDamageDirectionalOffset", 0)
-  end
-
-  if x.db.profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalScale then
-    SetCVar("floatingCombatTextCombatDamageDirectionalScale", 1)
-  else
-    SetCVar("floatingCombatTextCombatDamageDirectionalScale", 0)
-  end
-
   if x.db.profile.blizzardFCT.floatingCombatTextCombatHealing then
     SetCVar("floatingCombatTextCombatHealing", 1)
   else
@@ -326,6 +314,9 @@ x.cvar_update = function( force )
   else
     SetCVar("floatingCombatTextSpellMechanicsOther", 0)
   end
+
+  SetCVar("floatingCombatTextCombatDamageDirectionalOffset", x.db.profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalOffset)
+  SetCVar("floatingCombatTextCombatDamageDirectionalScale", x.db.profile.blizzardFCT.floatingCombatTextCombatDamageDirectionalScale)
 end
 
 -- Generic Get/Set methods
@@ -1467,6 +1458,34 @@ addon.options.args["FloatingCombatText"] = {
           width = 'normal'
         },
 
+        headerAppearance = {
+          type = "description",
+          order = 4,
+          name = "|cffFFFF00Floating Combat Text Appearance:|r",
+          fontSize = 'medium',
+        },
+
+        floatingCombatTextCombatDamageDirectionalOffset = {
+          order = 5,
+          name = "Direction Offset",
+          desc = "The amount to offset directional damage numbers when they appear.\n(0 = Disabled)",
+          type = 'range',
+          min = 0, max = 5, step = 0.1,
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextCombatDamageDirectionalScale = {
+          order = 6,
+          name = "Direction Scale",
+          desc = "The amount to scale the distance that directional damage numbers will move they appear. Damage numbers will just scroll up if this is disabled.\n(0 = Disabled)",
+          type = 'range',
+          min = 0, max = 5, step = 0.1,
+          get = get0,
+          set = set0_update,
+        },
+
+
         -- Damage
         headerDamage = {
           type = "description",
@@ -1479,7 +1498,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 11,
           name = "Show Damage",
           type = 'toggle',
-          desc = "Enable this option if you want to see your damage.",
+          desc = OPTION_TOOLTIP_SHOW_DAMAGE,
           get = get0,
           set = set0_update,
         },
@@ -1488,7 +1507,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 12,
           name = "Show DoTs",
           type = 'toggle',
-          desc = "Enable this option if you want to see your damage over time.",
+          desc = OPTION_TOOLTIP_LOG_PERIODIC_EFFECTS,
           get = get0,
           set = set0_update,
         },
@@ -1497,7 +1516,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 13,
           name = "Show Auto Attacks",
           type = 'toggle',
-          desc = "Enable this option if you want to see all auto-attack numbers, rather than hiding non-event numbers.",
+          desc = "Enable this option if you want to see all auto-attacks.",
           get = get0,
           set = set0_update,
         },
@@ -1506,7 +1525,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 14,
           name = "Show Pet Melee",
           type = 'toggle',
-          desc = "Enable this option if you want to see pet's melee damage.",
+          desc = OPTION_TOOLTIP_SHOW_PET_MELEE_DAMAGE,
           get = get0,
           set = set0_update,
         },
@@ -1515,7 +1534,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 15,
           name = "Show Pet Spells",
           type = 'toggle',
-          desc = "Enable this option if you want to see pet's spell damage.",
+          desc = OPTION_TOOLTIP_SHOW_PET_MELEE_DAMAGE,
           get = get0,
           set = set0_update,
         },
@@ -1524,7 +1543,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 16,
           name = "Show Damage Reduction",
           type = 'toggle',
-          desc = "New option in Legion. Updating description soon.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_RESISTANCES,
           get = get0,
           set = set0_update,
         },
@@ -1541,7 +1560,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 21,
           name = "Show Healing",
           type = 'toggle',
-          desc = "Enable this option if you want to see your healing.",
+          desc = OPTION_TOOLTIP_SHOW_COMBAT_HEALING,
           get = get0,
           set = set0_update,
         },
@@ -1550,7 +1569,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 22,
           name = "Show Friendly Healers",
           type = 'toggle',
-          desc = "New option in Legion. Updating description soon.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_FRIENDLY_NAMES,
           get = get0,
           set = set0_update,
         },
@@ -1559,7 +1578,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 23,
           name = "Show Absorbs (Self)",
           type = 'toggle',
-          desc = "Enable this option if you want to see shields that are put on you.",
+          desc = OPTION_TOOLTIP_SHOW_COMBAT_HEALING_ABSORB_SELF,
           get = get0,
           set = set0_update,
         },
@@ -1568,7 +1587,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 24,
           name = "Show Absorbs (Target)",
           type = 'toggle',
-          desc = "Enable this option if you want to see shields that are put on your target.",
+          desc = OPTION_TOOLTIP_SHOW_COMBAT_HEALING_ABSORB_TARGET,
           get = get0,
           set = set0_update,
         },
@@ -1585,7 +1604,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 31,
           name = "Show Energy",
           type = 'toggle',
-          desc = "Enable this option if you want to see class engery gains.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_ENERGIZE,
           get = get0,
           set = set0_update,
         },
@@ -1594,7 +1613,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 31,
           name = "Show Energy (Periodic)",
           type = 'toggle',
-          desc = "Enable this option if you want to see class engery gains that happen over time.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE,
           get = get0,
           set = set0_update,
         },
@@ -1603,7 +1622,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 32,
           name = "Show Combo Points",
           type = 'toggle',
-          desc = "Enable this option if you want to see combo point gains.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_COMBO_POINTS,
           get = get0,
           set = set0_update,
         },
@@ -1612,7 +1631,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 33,
           name = "Show Honor",
           type = 'toggle',
-          desc = "Enable this option if you want to see your honor point gains.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_HONOR_GAINED,
           get = get0,
           set = set0_update,
         },
@@ -1621,7 +1640,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 34,
           name = "Show Rep Changes",
           type = 'toggle',
-          desc = "Enable this option if you want to see your reputation gains or losses.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_REPUTATION,
           get = get0,
           set = set0_update,
         },
@@ -1638,7 +1657,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 41,
           name = "Show Miss Types",
           type = 'toggle',
-          desc = "Enable this option if you want to see misses (dodges, parries, etc).",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_DODGE_PARRY_MISS,
           get = get0,
           set = set0_update,
         },
@@ -1647,7 +1666,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 42,
           name = "Show Auras",
           type = 'toggle',
-          desc = "New option in Legion. Updating description soon.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_AURAS,
           get = get0,
           set = set0_update,
         },
@@ -1656,7 +1675,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 43,
           name = "Show Effects (Mine)",
           type = 'toggle',
-          desc = "Enable if you want to see your effects (snare, root, etc).",
+          desc = OPTION_TOOLTIP_SHOW_TARGET_EFFECTS,
           get = get0,
           set = set0_update,
         },
@@ -1665,7 +1684,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 44,
           name = "Show Effects (Group)",
           type = 'toggle',
-          desc = "Enable if you want to see other effects (snare, root, etc) from your group.",
+          desc = OPTION_TOOLTIP_SHOW_OTHER_TARGET_EFFECTS,
           get = get0,
           set = set0_update,
         },
@@ -1674,7 +1693,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 45,
           name = "Show Effects (All)",
           type = 'toggle',
-          desc = "Enable if you want to see all effects (snare, root, etc) from anyone.",
+          desc = OPTION_TOOLTIP_SHOW_OTHER_TARGET_EFFECTS,
           get = get0,
           set = set0_update,
         },
@@ -1700,7 +1719,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 52,
           name = "Show Combat State",
           type = 'toggle',
-          desc = "Enable this option if you want to see when you are leaving and entering combat.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_COMBAT_STATE,
           get = get0,
           set = set0_update,
         },
@@ -1709,7 +1728,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 53,
           name = "Show Low HP/Mana",
           type = 'toggle',
-          desc = "Enable this option if you want to see when you are low mana and health.",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_LOW_HEALTH_MANA,
           get = get0,
           set = set0_update,
         },
@@ -1718,7 +1737,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 54,
           name = "Show Reactives",
           type = 'toggle',
-          desc = "Enable this option if you want to see your spell reactives (Kill Shot, Shadow Word: Death, etc).",
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_REACTIVES,
           get = get0,
           set = set0_update,
         },
