@@ -58,6 +58,7 @@ In the callback that you passed to `RegisterCombat`,  you will be given a single
 ### Raid Target Methods
 
 > Raid Target Lookup Table
+>
 > | Index | Description | Lua Name (`_G[name]`)
 > |:---:| --- | --- |
 > | 0 | Nothing | `NONE` |
