@@ -2076,8 +2076,8 @@ local CombatEventHandlers = {
 		if not ShowDamage() then return end
 		if isSwing and not args:IsSourceMyPet() and not args:IsSourceMyVehicle() and not ShowAutoAttack() then return end
 
-		-- Filter Outgoing Damage
-		if FilterOutgoingDamage(amount) then return end
+		-- Filter Ougoing Damage Spell or Amount
+		if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
 
 		-- Check to see if my pet is doing things
 		if args:IsSourceMyPet() then
