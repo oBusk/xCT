@@ -40,6 +40,7 @@ end
 
 -- All Specs
 addon.merges[152150]    = CreateMergeSpellEntry("ROGUE", 0.5, 0)            -- Death from Above
+addon.merges[209043]    = CreateMergeSpellEntry("ROGUE", 0.5, 0)            -- Insignia of Ravenholdt (Legendary Ring - All Specs)
 
 -- Assassination (ID: 259)
 addon.merges[5374]      = CreateMergeSpellEntry("ROGUE", 0.5, 259)          -- Mutilate (MH)
