@@ -97,6 +97,7 @@ addon.merge2h[213784]     = 213786 -- Nightfall
 addon.merge2h[213785]     = 213786 -- Nightfall
 
 addon.merges[221845]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Twisting Wind")
+addon.merge2h[221865]     = 221845
 
 addon.merges[221804]      = CreateMergeSpellEntry(Leg_Items,   5, "Trinket: Ravaged Seed Pod")
 
