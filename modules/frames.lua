@@ -205,7 +205,7 @@ function x:UpdateFrames(specificFrame)
 						x:EnableFrameScrolling( framename )
 					end
 				else
-					f:SetMaxLines(settings.Height / settings.fontSize)
+					f:SetMaxLines(mfloor(settings.Height / settings.fontSize) - 1)
 					x:DisableFrameScrolling( framename )
 				end
 			end
@@ -600,8 +600,12 @@ do
 end
 
 local function Frame_Sizing_OnUpdate(self, e)
-	self.parent.width:SetText(mfloor(self.parent:GetWidth()+.5))
-	self.parent.height:SetText(mfloor(self.parent:GetHeight()+.5))
+	local settings = self.parent.settings
+	local width, height = mfloor(self.parent:GetWidth()+.5), mfloor(self.parent:GetHeight()+.5)
+	self.parent.width:SetText(width)
+	self.parent.height:SetText(height)
+
+	self.parent:SetMaxLines(mfloor(height / settings.fontSize) - 1)
 end
 
 local function Frame_Moving_OnUpdate(self, e)
