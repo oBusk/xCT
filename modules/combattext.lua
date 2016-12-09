@@ -518,11 +518,23 @@ end
 
 
 --[=====================================================[
- Capitalize Locals
+ Capitalize Locales
 --]=====================================================]
-local XCT_STOLE = utf8.upper(utf8.sub(ACTION_SPELL_STOLEN, 1, 1))..utf8.sub(ACTION_SPELL_STOLEN, 2)
-local XCT_KILLED = utf8.upper(utf8.sub(ACTION_PARTY_KILL, 1, 1))..utf8.sub(ACTION_PARTY_KILL, 2)
-local XCT_DISPELLED = utf8.upper(utf8.sub(ACTION_SPELL_DISPEL, 1, 1))..utf8.sub(ACTION_SPELL_DISPEL, 2)
+local unsupportedLocales = { zhCN = true, koKR = true, zhTW = true }
+
+local XCT_STOLE
+local XCT_KILLED
+local XCT_DISPELLED
+
+if unsupportedLocales[GetLocale()] then
+  XCT_STOLE = ACTION_SPELL_STOLEN
+  XCT_KILLED = ACTION_PARTY_KILL
+  XCT_DISPELLED = ACTION_SPELL_DISPEL
+else
+  XCT_STOLE = utf8.upper(utf8.sub(ACTION_SPELL_STOLEN, 1, 1))..utf8.sub(ACTION_SPELL_STOLEN, 2)
+  XCT_KILLED = utf8.upper(utf8.sub(ACTION_PARTY_KILL, 1, 1))..utf8.sub(ACTION_PARTY_KILL, 2)
+  XCT_DISPELLED = utf8.upper(utf8.sub(ACTION_SPELL_DISPEL, 1, 1))..utf8.sub(ACTION_SPELL_DISPEL, 2)
+end
 
 --[=====================================================[
  Flag value for special pets and vehicles
