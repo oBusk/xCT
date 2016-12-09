@@ -150,9 +150,12 @@ function x:UpdateCombatTextEvents(enable)
 
     x.combatEvents = f
     f:SetScript("OnEvent", x.OnCombatTextEvent)
+    
+    xCP:RegisterCombat(x.CombatLogEvent)
   else
     -- Disabled Combat Text
     f:SetScript("OnEvent", nil)
+    xCP:UnregisterCombat(x.CombatLogEvent)
   end
 end
 
@@ -2545,4 +2548,4 @@ function x.CombatLogEvent (args)
 
 	end
 end
-xCP:RegisterCombat(x.CombatLogEvent)
+
