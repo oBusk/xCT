@@ -2468,8 +2468,37 @@ local AbsorbList = {
 	-- All
 	[187805] = true, -- Etheralus (WoD Legendary Ring)
 	[173260] = true, -- Shield Tronic (Like a health potion from WoD)
-	[64413] = true,  -- Val'anyr, Hammer of Ancient Kings (WotLK Legendary Mace)
+	[64413]  = true, -- Val'anyr, Hammer of Ancient Kings (WotLK Legendary Mace)
 	[215248] = true, -- Shroud of the Naglfar	(Trinket: Naglfar Fare)
+	[82626]  = true, -- Grounded Plasma Shield (Engineer's Belt Enchant)
+	[207472] = true, -- Prydaz, Xavaric's Magnum Opus (Legendary Neck)
+
+	-- Coming Soon (Delicious Cake!) Trinket
+	[231290] = true, -- TODO: Figure out which one is correct
+	[225723] = true, -- Both are Delicious Cake! from item:140793
+
+	-- Coming Soon (Royal Dagger Haft, item:140791)
+	[225720] = true, -- TODO: Figure out which is the real one
+	[229457] = true, -- Sands of Time (From the Royal Dagger Haft tinket)
+	[229333] = true, -- Sands of Time (From the Royal Dagger Haft tinket)
+	[225124] = true, -- Sands of Time (From the Royal Dagger Haft tinket)
+
+	-- Vial of Nightmare Fog (Trinket, Item: 138222)
+	[221878] = true, -- Spirit Fragment (Verified)
+
+	-- Naglfar Fare (Trinket, Item: 133645)
+	[215248] = true, -- Shroud of the Naglfar (Needs to be verified)
+
+	-- Shard of Rokmora (Trinket, Item: 137338)
+	[214366] = true, -- Crystalline Body (Needs to be verified)
+
+	-- Talisman of the Cragshaper (Trinket, Item: 137344)
+	[214423] = true, -- Stance of the Mountain (Needs to be verified)
+
+	-- Giant Ornamental Pearl (Trinket, Item: 137369)
+	[214971] = true, -- Gaseous Bubble (Needs to be verified)
+
+	-- Bookmarking: http://www.wowhead.com/trinkets?filter=166;7;0#200-2
 
 	-- Death Knight
 	[48707] = true,  -- Anti-Magic Shield
