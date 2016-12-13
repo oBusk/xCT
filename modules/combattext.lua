@@ -2469,36 +2469,35 @@ local AbsorbList = {
 	[187805] = true, -- Etheralus (WoD Legendary Ring)
 	[173260] = true, -- Shield Tronic (Like a health potion from WoD)
 	[64413]  = true, -- Val'anyr, Hammer of Ancient Kings (WotLK Legendary Mace)
-	[215248] = true, -- Shroud of the Naglfar	(Trinket: Naglfar Fare)
 	[82626]  = true, -- Grounded Plasma Shield (Engineer's Belt Enchant)
 	[207472] = true, -- Prydaz, Xavaric's Magnum Opus (Legendary Neck)
 
 	-- Coming Soon (Delicious Cake!) Trinket
-	[231290] = true, -- TODO: Figure out which one is correct
+	--[231290] = true, -- TODO: Figure out which one is correct
 	[225723] = true, -- Both are Delicious Cake! from item:140793
 
 	-- Coming Soon (Royal Dagger Haft, item:140791)
-	[225720] = true, -- TODO: Figure out which is the real one
-	[229457] = true, -- Sands of Time (From the Royal Dagger Haft tinket)
-	[229333] = true, -- Sands of Time (From the Royal Dagger Haft tinket)
-	[225124] = true, -- Sands of Time (From the Royal Dagger Haft tinket)
+	-- Sooooo I dont think this one is going to be trackable... we will see when i can get some logs!
+	--[225720] = true, -- TODO: Figure out which is the real one
+	--[229457] = true, -- Sands of Time (From the Royal Dagger Haft tinket) (Its probably this one)
+	--[229333] = true, -- Sands of Time (From the Royal Dagger Haft tinket)
+	--[225124] = true, -- Sands of Time (From the Royal Dagger Haft tinket)
 
-	-- Vial of Nightmare Fog (Trinket, Item: 138222)
-	[221878] = true, -- Spirit Fragment (Verified)
+	-- Coming Soon -- Animated Exoskeleton (Trinket, Item: 140789)
+	[225033] = true, -- Living Carapace (Needs to be verified)
 
-	-- Naglfar Fare (Trinket, Item: 133645)
-	[215248] = true, -- Shroud of the Naglfar (Needs to be verified)
+	-- Coming Soon -- Infernal Contract (Trinket, Item: 140807)
+	[225140] = true, -- Infernal Contract (Needs to be verified)
 
-	-- Shard of Rokmora (Trinket, Item: 137338)
-	[214366] = true, -- Crystalline Body (Needs to be verified)
 
-	-- Talisman of the Cragshaper (Trinket, Item: 137344)
-	[214423] = true, -- Stance of the Mountain (Needs to be verified)
 
-	-- Giant Ornamental Pearl (Trinket, Item: 137369)
-	[214971] = true, -- Gaseous Bubble (Needs to be verified)
-
-	-- Bookmarking: http://www.wowhead.com/trinkets?filter=166;7;0#200-2
+	-- Legion Trinkets
+	[221878] = true, -- Buff: Spirit Fragment        - Trinket[138222]: Vial of Nightmare Fog
+	[215248] = true, -- Buff: Shroud of the Naglfar  - Trinket[133645]: Naglfar Fare
+	[214366] = true, -- Buff: Crystalline Body       - Trinket[137338]: Shard of Rokmora
+	[214423] = true, -- Buff: Stance of the Mountain - Trinket[137344]: Talisman of the Cragshaper
+	[214971] = true, -- Buff: Gaseous Bubble         - Trinket[137369]: Giant Ornamental Pearl
+	[222479] = true, -- Buff: Shadowy Reflection     - Trinket[138225]: Phantasmal Echo
 
 	-- Death Knight
 	[48707] = true,  -- Anti-Magic Shield
