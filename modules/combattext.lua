@@ -185,6 +185,7 @@ local function ShowImmunes() return x.db.profile.frames["outgoing"].enableImmune
 local function ShowMisses() return x.db.profile.frames["outgoing"].enableMisses end -- outgoing misses
 local function ShowSwingCrit() return x.db.profile.frames["critical"].showSwing end
 local function ShowSwingCritPrefix() return x.db.profile.frames["critical"].prefixSwing end
+local function ShowPetCrits() return x.db.profile.frames["critical"].petCrits end
 local function ShowLootItems() return x.db.profile.frames["loot"].showItems end
 local function ShowLootItemTypes() return x.db.profile.frames["loot"].showItemTypes end
 local function ShowLootMoney() return x.db.profile.frames["loot"].showMoney end
@@ -2102,7 +2103,9 @@ local CombatEventHandlers = {
 				x:AddSpamMessage(outputFrame, icon, amount, x.db.profile.spells.mergePetColor, 6)
 				return
 			end
-			critical = nil -- stupid spam fix for hunter pets
+			if not ShowPetCrits() then
+				critical = nil -- stupid spam fix for hunter pets
+			end
 			if isSwing then
 				spellID = 0 -- this will get fixed later
 			end
@@ -2110,7 +2113,9 @@ local CombatEventHandlers = {
 
 		if args:IsSourceMyVehicle() then
 			if not ShowVehicleDamage() then return end
-			critical = nil -- stupid spam fix for hunter pets
+			if not ShowPetCrits() then
+				critical = nil -- stupid spam fix for hunter pets
+			end
 			if isSwing then
 				spellID = 0 -- this will get fixed later
 			end

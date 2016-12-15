@@ -3681,6 +3681,14 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
+            petCrits = {
+              order = 3,
+              type = 'toggle',
+              name = "Allow Pet Crits",
+              desc = "Enable this to see when your pet's abilities critical strike, otherwise disable for less combat text spam.",
+              get = get2,
+              set = set2,
+            },
 
             criticalAppearance = {
               type = 'description',
