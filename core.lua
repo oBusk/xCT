@@ -94,6 +94,9 @@ function x:OnInitialize()
   -- Generate Dynamic Merge Entries
   addon.GenerateDefaultSpamSpells()
 
+  -- Clean Up Colors in the DB
+  addon.LoadDefaultColors()
+
   -- Load the Data Base
   self.db = LibStub('AceDB-3.0'):New('xCTSavedDB', addon.defaults)
 
@@ -301,6 +304,24 @@ function x:CompatibilityLogic( existing )
           end
         end
       end
+
+
+      if CompareVersions( VersionToTable("4.3.3"), previousVersion) > 0 then
+        if currentVersion.devBuild then --currentVersion.devBuild then
+          x.MigratePrint("|cff798BDDCustom Colors|r (|cffFFFF00From: Config Tool->Frames-> *.* ->Colors|r) Lots of clean up!")
+        end
+        for name, settings in pairs(x.db.profile.frames) do
+          if settings.colors then
+            for exists in pairs(settings.colors) do
+              if not addon.defaults.profile.frames[name].colors[exists] then
+                settings.colors[exists] = nil
+              end
+            end
+          end
+        end
+      end
+
+
     else
       -- Created New: Dont need to do anything right now
     end
@@ -444,6 +465,26 @@ local CLASS_NAMES = {
 function x.GenerateDefaultSpamSpells()
   local defaults = addon.defaults.spells.merge
 
+end
+
+
+local function cleanColors(colorTable)
+  for index, color in pairs(colorTable) do
+    if color.colors then
+      cleanColors(color.colors)
+    else
+      color.color = color.default
+    end
+  end
+end
+
+function addon.LoadDefaultColors()
+  for name, settings in pairs(addon.defaults.profile.frames) do
+    if settings.colors then
+      cleanColors(settings.colors)
+    end
+  end
+  cleanColors(addon.defaults.profile.SpellColors)
 end
 
 -- Gets spammy spells from the database and creates options

@@ -2021,7 +2021,7 @@ local CombatEventHandlers = {
 		-- Add names
 		message = message .. x.formatName(args, settings.names, true)
 
-		x:AddMessage('outgoing', message, 'shieldTaken')
+		x:AddMessage('outgoing', message, 'shieldOut')
 	end,
 
 	["HealingOutgoing"] = function (args)
