@@ -5071,10 +5071,11 @@ addon.options.args["Frames"] = {
     },
 
     class = {
-      name = "|cffFFFFFFClass Combo Points|r",
+      name = "|cff808080Class Combo Points (Disabled)|r",
       type = 'group',
       order = 16,
       childGroups = 'tab',
+      disabled = true,
       args = {
         frameSettings = {
           order = 10,
