@@ -2004,6 +2004,12 @@ local CombatEventHandlers = {
 		local settings, value = x.db.profile.frames['outgoing'], select(17, UnitBuff(args.destName, args.spellName))
 		if not value or value <= 0 then return end
 
+		-- Keep track of spells that go by
+		if TrackSpells() then x.spellCache.spells[args.spellId] = true end
+
+		-- Filter Ougoing Healing Spell or Amount
+		if IsSpellFiltered(args.spellId) or FilterOutgoingHealing(args.amount) then return end
+
 		-- Create the message
 		local message = x:Abbreviate(value, 'outgoing')
 
