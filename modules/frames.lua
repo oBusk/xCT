@@ -205,7 +205,7 @@ function x:UpdateFrames(specificFrame)
 						x:EnableFrameScrolling( framename )
 					end
 				else
-					f:SetMaxLines(mfloor(settings.Height / settings.fontSize) - 1)
+					f:SetMaxLines(math.max(1, mfloor(settings.Height / settings.fontSize) - 1)) --- shhhhhhhhhhhhhhhhhhhh
 					x:DisableFrameScrolling( framename )
 				end
 			end
