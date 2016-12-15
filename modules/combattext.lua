@@ -2008,8 +2008,8 @@ local CombatEventHandlers = {
 
 		message = x:GetSpellTextureFormatted(args.spellId,
 			                                   message,
-			    x.db.profile.frames['healing'].iconsEnabled and x.db.profile.frames['healing'].iconsSize or -1,
-			    x.db.profile.frames['healing'].fontJustify)
+			    x.db.profile.frames['outgoing'].iconsEnabled and x.db.profile.frames['outgoing'].iconsSize or -1,
+			    x.db.profile.frames['outgoing'].fontJustify)
 
 		-- Add names
 		message = message .. x.formatName(args, settings.names, true)
