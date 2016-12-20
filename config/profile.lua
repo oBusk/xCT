@@ -281,6 +281,15 @@ addon.defaults = {
           ['melee']         = { enabled = false, desc = "Auto Attack Damage", default = { 1.00, 1.00, 1.00 } },
           ['misstypesOut']  = { enabled = false, desc = "Missed Attacks",     default = { 0.50, 0.50, 0.50 } },
           ['shieldOut']     = { enabled = false, desc = "Absorbs",            default = { 0.60, 0.65, 1.00 } },
+
+          ['healing'] = {
+            enabled = false, desc = "Healing Color Overrides",
+            colors = {
+              ['healingOut']         = { enabled = false, desc = "Healing",            default = { 0.60, 0.65, 1.00 } },
+              ['healingOutCritical'] = { enabled = false, desc = "Healing (Critical)", default = { 0.60, 0.65, 1.00 } },
+              ['healingOutPeriodic'] = { enabled = false, desc = "Healing (Periodic)", default = { 0.60, 0.65, 1.00 } },
+            }
+          },
         },
 
         -- name formatting

@@ -473,7 +473,12 @@ local function cleanColors(colorTable)
     if color.colors then
       cleanColors(color.colors)
     else
-      color.color = color.default
+
+      print("index", index)
+      if tonumber(index) then
+        print("color", unpack(color.default))
+      end
+      color.color = { color.default[1], color.default[2], color.default[3] }
     end
   end
 end
@@ -1513,10 +1518,17 @@ do
     [126] = "126", [127] = "127"
   }
 
-  function x.GetSpellSchoolColor(spellSchool, critical)
+  function x.GetSpellSchoolColor(spellSchool, autoAttack, critical)
     local index = cache[spellSchool or 1] or "1"
-    if critical and x.db.profile.frames.critical.colors.genericDamageCritical.enabled then
-      return x.db.profile.frames.critical.colors.genericDamageCritical.color or x.db.profile.frames.critical.colors.genericDamageCritical.default
+    if autoAttack then
+      if critical and x.db.profile.frames.critical.colors.meleeCrit.enabled then
+        return x.db.profile.frames.critical.colors.meleeCrit.color or x.db.profile.frames.critical.colors.meleeCrit.default
+      elseif x.db.profile.frames.outgoing.colors.melee.enabled then
+        return x.db.profile.frames.outgoing.colors.melee.color or x.db.profile.frames.outgoing.colors.melee.default
+      else
+        local entry = x.db.profile.SpellColors[index]
+        return entry.enabled and entry.color or entry.default
+      end
     else
       local entry = x.db.profile.SpellColors[index]
       return entry.enabled and entry.color or entry.default

@@ -406,7 +406,7 @@ function xCTFormat:SPELL_PERIODIC_HEAL( outputFrame, spellID, amount, critical, 
 end
 
 function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged, args )
-  local outputColor, message, settings = x.GetSpellSchoolColor(1, critical)
+  local outputColor, message, settings = x.GetSpellSchoolColor(1, true, critical)
 
   if critical and ShowSwingCrit() then
     settings = x.db.profile.frames["critical"]
@@ -435,7 +435,7 @@ function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged,
 end
 
 function xCTFormat:RANGE_DAMAGE( outputFrame, spellID, amount, critical, merged, autoShot, args )
-  local outputColor, message, settings = x.GetSpellSchoolColor(1, critical)
+  local outputColor, message, settings = x.GetSpellSchoolColor(1, true, critical)
 
   if critical then
     settings = x.db.profile.frames["critical"]
@@ -2090,7 +2090,7 @@ local CombatEventHandlers = {
 	["DamageOutgoing"] = function (args)
 		local critical, spellID, amount, merged = args.critical, args.spellId, args.amount
 		local isEnvironmental, isSwing, isAutoShot, isDoT = args.prefix == "ENVIRONMENTAL", args.prefix == "SWING", spellID == 75, args.prefix == "SPELL_PERIODIC"
-		local outputFrame, outputColor = "outgoing", x.GetSpellSchoolColor(args.spellSchool or 1, critical)
+		local outputFrame, outputColor = "outgoing", x.GetSpellSchoolColor(args.spellSchool or 1, isAutoShot or isSwing, critical)
 
 		-- Keep track of spells that go by (Don't track Swings or Environmental damage)
 		if not isEnvironmental and not isSwing and TrackSpells() then x.spellCache.spells[spellID] = true end
@@ -2587,6 +2587,16 @@ function x.CombatLogEvent (args)
 
 		elseif args.suffix == "_MISSED" then
 			CombatEventHandlers.IncomingMiss(args)
+
+		elseif args.event == 'SPELL_DISPEL' then
+			local message = args.sourceName .. " dispelled:"
+			message = x:GetSpellTextureFormatted(args.extraSpellId,
+		                                          message,
+		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+		           x.db.profile.frames['general'].fontJustify)
+
+			x:AddMessage('general', message, "dispellDebuffs")
+
 
 		elseif (args.suffix == "_AURA_APPLIED" or args.suffix == "_AURA_REFRESH") and AbsorbList[args.spellId] then
 			CombatEventHandlers.ShieldIncoming(args)
