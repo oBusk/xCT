@@ -278,15 +278,17 @@ addon.defaults = {
 
         -- font colors
         colors = {
-          ['genericDamage']         = { enabled = false, desc = "Generic Damage",   default = { 1.00, 0.82, 0.00 } },
-          ['misstypesOut']          = { enabled = false, desc = "Missed",           default = { 0.50, 0.50, 0.50 } },
-          ['healingSpells'] = {
-            enabled = false, desc = "Healing Colors",
+          ['melee']         = { enabled = false, desc = "Auto Attack Damage", default = { 1.00, 1.00, 1.00 } },
+          ['misstypesOut']  = { enabled = false, desc = "Missed Attacks",     default = { 0.50, 0.50, 0.50 } },
+          ['shieldOut']     = { enabled = false, desc = "Absorbs",            default = { 0.60, 0.65, 1.00 } },
+
+          ['healing'] = {
+            enabled = false, desc = "Healing Color Overrides",
             colors = {
-              ['shieldOut']             = { enabled = false, desc = "Shields",          default = { 0.60, 0.65, 1.00 } },
-              ['healingOut']            = { enabled = false, desc = "Healing",          default = { 0.10, 0.75, 0.10 } },
-              ['healingOutPeriodic']    = { enabled = false, desc = "Healing Periodic", default = { 0.10, 0.50, 0.10 } },
-            },
+              ['healingOut']         = { enabled = false, desc = "Healing",            default = { 0.60, 0.65, 1.00 } },
+              ['healingOutCritical'] = { enabled = false, desc = "Healing (Critical)", default = { 0.60, 0.65, 1.00 } },
+              ['healingOutPeriodic'] = { enabled = false, desc = "Healing (Periodic)", default = { 0.60, 0.65, 1.00 } },
+            }
           },
         },
 
@@ -396,14 +398,7 @@ addon.defaults = {
 
         -- font colors
         colors = {
-          ['genericDamageCritical']  = { enabled = false, desc = "Critical Generic Damage", default = { 1.00, 1.00, 0.00 } },
-
-          ['healingSpells'] = {
-            enabled = false, desc = "Healing Colors",
-            colors = {
-              ['healingOutCritical'] = { enabled = false, desc = "Critical Healing", default = { 0.10, 1.00, 0.10 } },
-            },
-          },
+          ['meleeCrit']  = { enabled = false, desc = "Auto Attack Damage (Critical)", default = { 1.00, 1.00, 0.00 } },
         },
 
         -- name formatting
@@ -481,6 +476,8 @@ addon.defaults = {
         -- special tweaks
         ["showSwing"] = true,
         ["prefixSwing"] = true,
+        ["petCrits"] = false,
+
       },
 
       damage = {

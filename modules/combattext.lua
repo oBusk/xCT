@@ -150,9 +150,12 @@ function x:UpdateCombatTextEvents(enable)
 
     x.combatEvents = f
     f:SetScript("OnEvent", x.OnCombatTextEvent)
+    
+    xCP:RegisterCombat(x.CombatLogEvent)
   else
     -- Disabled Combat Text
     f:SetScript("OnEvent", nil)
+    xCP:UnregisterCombat(x.CombatLogEvent)
   end
 end
 
@@ -182,6 +185,7 @@ local function ShowImmunes() return x.db.profile.frames["outgoing"].enableImmune
 local function ShowMisses() return x.db.profile.frames["outgoing"].enableMisses end -- outgoing misses
 local function ShowSwingCrit() return x.db.profile.frames["critical"].showSwing end
 local function ShowSwingCritPrefix() return x.db.profile.frames["critical"].prefixSwing end
+local function ShowPetCrits() return x.db.profile.frames["critical"].petCrits end
 local function ShowLootItems() return x.db.profile.frames["loot"].showItems end
 local function ShowLootItemTypes() return x.db.profile.frames["loot"].showItemTypes end
 local function ShowLootMoney() return x.db.profile.frames["loot"].showMoney end
@@ -402,7 +406,7 @@ function xCTFormat:SPELL_PERIODIC_HEAL( outputFrame, spellID, amount, critical, 
 end
 
 function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged, args )
-  local outputColor, message, settings = x.GetSpellSchoolColor(1, critical)
+  local outputColor, message, settings = x.GetSpellSchoolColor(1, true, critical)
 
   if critical and ShowSwingCrit() then
     settings = x.db.profile.frames["critical"]
@@ -431,7 +435,7 @@ function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged,
 end
 
 function xCTFormat:RANGE_DAMAGE( outputFrame, spellID, amount, critical, merged, autoShot, args )
-  local outputColor, message, settings = x.GetSpellSchoolColor(1, critical)
+  local outputColor, message, settings = x.GetSpellSchoolColor(1, true, critical)
 
   if critical then
     settings = x.db.profile.frames["critical"]
@@ -515,11 +519,23 @@ end
 
 
 --[=====================================================[
- Capitalize Locals
+ Capitalize Locales
 --]=====================================================]
-local XCT_STOLE = utf8.upper(utf8.sub(ACTION_SPELL_STOLEN, 1, 1))..utf8.sub(ACTION_SPELL_STOLEN, 2)
-local XCT_KILLED = utf8.upper(utf8.sub(ACTION_PARTY_KILL, 1, 1))..utf8.sub(ACTION_PARTY_KILL, 2)
-local XCT_DISPELLED = utf8.upper(utf8.sub(ACTION_SPELL_DISPEL, 1, 1))..utf8.sub(ACTION_SPELL_DISPEL, 2)
+local unsupportedLocales = { zhCN = true, koKR = true, zhTW = true }
+
+local XCT_STOLE
+local XCT_KILLED
+local XCT_DISPELLED
+
+if unsupportedLocales[GetLocale()] then
+  XCT_STOLE = ACTION_SPELL_STOLEN
+  XCT_KILLED = ACTION_PARTY_KILL
+  XCT_DISPELLED = ACTION_SPELL_DISPEL
+else
+  XCT_STOLE = utf8.upper(utf8.sub(ACTION_SPELL_STOLEN, 1, 1))..utf8.sub(ACTION_SPELL_STOLEN, 2)
+  XCT_KILLED = utf8.upper(utf8.sub(ACTION_PARTY_KILL, 1, 1))..utf8.sub(ACTION_PARTY_KILL, 2)
+  XCT_DISPELLED = utf8.upper(utf8.sub(ACTION_SPELL_DISPEL, 1, 1))..utf8.sub(ACTION_SPELL_DISPEL, 2)
+end
 
 --[=====================================================[
  Flag value for special pets and vehicles
@@ -1988,18 +2004,24 @@ local CombatEventHandlers = {
 		local settings, value = x.db.profile.frames['outgoing'], select(17, UnitBuff(args.destName, args.spellName))
 		if not value or value <= 0 then return end
 
+		-- Keep track of spells that go by
+		if TrackSpells() then x.spellCache.spells[args.spellId] = true end
+
+		-- Filter Ougoing Healing Spell or Amount
+		if IsSpellFiltered(args.spellId) or FilterOutgoingHealing(args.amount) then return end
+
 		-- Create the message
 		local message = x:Abbreviate(value, 'outgoing')
 
 		message = x:GetSpellTextureFormatted(args.spellId,
 			                                   message,
-			    x.db.profile.frames['healing'].iconsEnabled and x.db.profile.frames['healing'].iconsSize or -1,
-			    x.db.profile.frames['healing'].fontJustify)
+			    x.db.profile.frames['outgoing'].iconsEnabled and x.db.profile.frames['outgoing'].iconsSize or -1,
+			    x.db.profile.frames['outgoing'].fontJustify)
 
 		-- Add names
 		message = message .. x.formatName(args, settings.names, true)
 
-		x:AddMessage('outgoing', message, 'shieldTaken')
+		x:AddMessage('outgoing', message, 'shieldOut')
 	end,
 
 	["HealingOutgoing"] = function (args)
@@ -2068,7 +2090,7 @@ local CombatEventHandlers = {
 	["DamageOutgoing"] = function (args)
 		local critical, spellID, amount, merged = args.critical, args.spellId, args.amount
 		local isEnvironmental, isSwing, isAutoShot, isDoT = args.prefix == "ENVIRONMENTAL", args.prefix == "SWING", spellID == 75, args.prefix == "SPELL_PERIODIC"
-		local outputFrame, outputColor = "outgoing", x.GetSpellSchoolColor(args.spellSchool or 1, critical)
+		local outputFrame, outputColor = "outgoing", x.GetSpellSchoolColor(args.spellSchool or 1, isAutoShot or isSwing, critical)
 
 		-- Keep track of spells that go by (Don't track Swings or Environmental damage)
 		if not isEnvironmental and not isSwing and TrackSpells() then x.spellCache.spells[spellID] = true end
@@ -2087,7 +2109,9 @@ local CombatEventHandlers = {
 				x:AddSpamMessage(outputFrame, icon, amount, x.db.profile.spells.mergePetColor, 6)
 				return
 			end
-			critical = nil -- stupid spam fix for hunter pets
+			if not ShowPetCrits() then
+				critical = nil -- stupid spam fix for hunter pets
+			end
 			if isSwing then
 				spellID = 0 -- this will get fixed later
 			end
@@ -2095,7 +2119,9 @@ local CombatEventHandlers = {
 
 		if args:IsSourceMyVehicle() then
 			if not ShowVehicleDamage() then return end
-			critical = nil -- stupid spam fix for hunter pets
+			if not ShowPetCrits() then
+				critical = nil -- stupid spam fix for hunter pets
+			end
 			if isSwing then
 				spellID = 0 -- this will get fixed later
 			end
@@ -2453,8 +2479,36 @@ local AbsorbList = {
 	-- All
 	[187805] = true, -- Etheralus (WoD Legendary Ring)
 	[173260] = true, -- Shield Tronic (Like a health potion from WoD)
-	[64413] = true,  -- Val'anyr, Hammer of Ancient Kings (WotLK Legendary Mace)
-	[215248] = true, -- Shroud of the Naglfar	(Trinket: Naglfar Fare)
+	[64413]  = true, -- Val'anyr, Hammer of Ancient Kings (WotLK Legendary Mace)
+	[82626]  = true, -- Grounded Plasma Shield (Engineer's Belt Enchant)
+	[207472] = true, -- Prydaz, Xavaric's Magnum Opus (Legendary Neck)
+
+	-- Coming Soon (Delicious Cake!) Trinket
+	--[231290] = true, -- TODO: Figure out which one is correct
+	[225723] = true, -- Both are Delicious Cake! from item:140793
+
+	-- Coming Soon (Royal Dagger Haft, item:140791)
+	-- Sooooo I dont think this one is going to be trackable... we will see when i can get some logs!
+	--[225720] = true, -- TODO: Figure out which is the real one
+	--[229457] = true, -- Sands of Time (From the Royal Dagger Haft tinket) (Its probably this one)
+	--[229333] = true, -- Sands of Time (From the Royal Dagger Haft tinket)
+	--[225124] = true, -- Sands of Time (From the Royal Dagger Haft tinket)
+
+	-- Coming Soon -- Animated Exoskeleton (Trinket, Item: 140789)
+	[225033] = true, -- Living Carapace (Needs to be verified)
+
+	-- Coming Soon -- Infernal Contract (Trinket, Item: 140807)
+	[225140] = true, -- Infernal Contract (Needs to be verified)
+
+
+
+	-- Legion Trinkets
+	[221878] = true, -- Buff: Spirit Fragment        - Trinket[138222]: Vial of Nightmare Fog
+	[215248] = true, -- Buff: Shroud of the Naglfar  - Trinket[133645]: Naglfar Fare
+	[214366] = true, -- Buff: Crystalline Body       - Trinket[137338]: Shard of Rokmora
+	[214423] = true, -- Buff: Stance of the Mountain - Trinket[137344]: Talisman of the Cragshaper
+	[214971] = true, -- Buff: Gaseous Bubble         - Trinket[137369]: Giant Ornamental Pearl
+	[222479] = true, -- Buff: Shadowy Reflection     - Trinket[138225]: Phantasmal Echo
 
 	-- Death Knight
 	[48707] = true,  -- Anti-Magic Shield
@@ -2534,6 +2588,16 @@ function x.CombatLogEvent (args)
 		elseif args.suffix == "_MISSED" then
 			CombatEventHandlers.IncomingMiss(args)
 
+		elseif args.event == 'SPELL_DISPEL' then
+			local message = args.sourceName .. " dispelled:"
+			message = x:GetSpellTextureFormatted(args.extraSpellId,
+		                                          message,
+		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+		           x.db.profile.frames['general'].fontJustify)
+
+			x:AddMessage('general', message, "dispellDebuffs")
+
+
 		elseif (args.suffix == "_AURA_APPLIED" or args.suffix == "_AURA_REFRESH") and AbsorbList[args.spellId] then
 			CombatEventHandlers.ShieldIncoming(args)
 		end
@@ -2545,4 +2609,4 @@ function x.CombatLogEvent (args)
 
 	end
 end
-xCP:RegisterCombat(x.CombatLogEvent)
+

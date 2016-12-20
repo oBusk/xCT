@@ -94,6 +94,9 @@ function x:OnInitialize()
   -- Generate Dynamic Merge Entries
   addon.GenerateDefaultSpamSpells()
 
+  -- Clean Up Colors in the DB
+  addon.LoadDefaultColors()
+
   -- Load the Data Base
   self.db = LibStub('AceDB-3.0'):New('xCTSavedDB', addon.defaults)
 
@@ -301,6 +304,24 @@ function x:CompatibilityLogic( existing )
           end
         end
       end
+
+
+      if CompareVersions( VersionToTable("4.3.3"), previousVersion) > 0 then
+        if currentVersion.devBuild then --currentVersion.devBuild then
+          x.MigratePrint("|cff798BDDCustom Colors|r (|cffFFFF00From: Config Tool->Frames-> *.* ->Colors|r) Lots of clean up!")
+        end
+        for name, settings in pairs(x.db.profile.frames) do
+          if settings.colors then
+            for exists in pairs(settings.colors) do
+              if not addon.defaults.profile.frames[name].colors[exists] then
+                settings.colors[exists] = nil
+              end
+            end
+          end
+        end
+      end
+
+
     else
       -- Created New: Dont need to do anything right now
     end
@@ -444,6 +465,31 @@ local CLASS_NAMES = {
 function x.GenerateDefaultSpamSpells()
   local defaults = addon.defaults.spells.merge
 
+end
+
+
+local function cleanColors(colorTable)
+  for index, color in pairs(colorTable) do
+    if color.colors then
+      cleanColors(color.colors)
+    else
+
+      print("index", index)
+      if tonumber(index) then
+        print("color", unpack(color.default))
+      end
+      color.color = { color.default[1], color.default[2], color.default[3] }
+    end
+  end
+end
+
+function addon.LoadDefaultColors()
+  for name, settings in pairs(addon.defaults.profile.frames) do
+    if settings.colors then
+      cleanColors(settings.colors)
+    end
+  end
+  cleanColors(addon.defaults.profile.SpellColors)
 end
 
 -- Gets spammy spells from the database and creates options
@@ -1205,7 +1251,10 @@ end
 local colorNameDB = { }
 function x.LookupColorByName(name)
   if colorNameDB[name] then
-    return colorNameDB[name].color or colorNameDB[name].default
+    if colorNameDB[name].enabled then
+      return colorNameDB[name].color or colorNameDB[name].default
+    end
+    return colorNameDB[name].default
   else
     return
   end
@@ -1469,10 +1518,17 @@ do
     [126] = "126", [127] = "127"
   }
 
-  function x.GetSpellSchoolColor(spellSchool, critical)
+  function x.GetSpellSchoolColor(spellSchool, autoAttack, critical)
     local index = cache[spellSchool or 1] or "1"
-    if critical and x.db.profile.frames.critical.colors.genericDamageCritical.enabled then
-      return x.db.profile.frames.critical.colors.genericDamageCritical.color or x.db.profile.frames.critical.colors.genericDamageCritical.default
+    if autoAttack then
+      if critical and x.db.profile.frames.critical.colors.meleeCrit.enabled then
+        return x.db.profile.frames.critical.colors.meleeCrit.color or x.db.profile.frames.critical.colors.meleeCrit.default
+      elseif x.db.profile.frames.outgoing.colors.melee.enabled then
+        return x.db.profile.frames.outgoing.colors.melee.color or x.db.profile.frames.outgoing.colors.melee.default
+      else
+        local entry = x.db.profile.SpellColors[index]
+        return entry.enabled and entry.color or entry.default
+      end
     else
       local entry = x.db.profile.SpellColors[index]
       return entry.enabled and entry.color or entry.default
@@ -1498,9 +1554,9 @@ do
       local settings = x.db.profile.frames[location or "general"]
       if settings.iconsEnabled and icon then
         if settings.fontJustify == "LEFT" then
-          text = sformat("%s %s", sformat(" |T%s:%d:%d:0:0:64:64:5:59:5:59|t", icon, settings.iconSize, settings.iconSize), text)
+          text = string_format("%s %s", string_format(" |T%s:%d:%d:0:0:64:64:5:59:5:59|t", icon, settings.iconSize, settings.iconSize), text)
         else
-          text = sformat("%s%s", text, sformat(" |T%s:%d:%d:0:0:64:64:5:59:5:59|t", icon, settings.iconSize, settings.iconSize))
+          text = string_format("%s%s", text, string_format(" |T%s:%d:%d:0:0:64:64:5:59:5:59|t", icon, settings.iconSize, settings.iconSize))
         end
       end
       color[1] = r; color[2] = g; color[3] = b
@@ -1792,4 +1848,3 @@ function x:TrackxCTCommand(input)
   x:UpdatePlayer()
   print("|cffFF0000x|r|cffFFFF00CT+|r Tracking Unit:", name or "default")
 end
-

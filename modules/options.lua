@@ -1386,43 +1386,18 @@ addon.options.args["FloatingCombatText"] = {
   name = "Floating Combat Text",
   type = 'group',
   order = 1,
+  childGroups = 'tab',
   args = {
     title2 = {
       order = 0,
       type = "description",
-      name = "|cffA0A0A0Some changes might require a full|r |cffD0D000Client Restart|r |cffA0A0A0(completely exit out of WoW). Do not|r |cffD00000Alt+F4|r |cffA0A0A0or|r |cffD00000Command+Q|r |cffA0A0A0or your settings might not save. Use '|r|cff798BDD/exit|r|cffA0A0A0' to close the client.|r\n\n",
-      fontSize = "small",
-    },
-
-    listSpacer1 = {
-      type = "description",
-      order = 3,
-      name = "\n\n|cff798BDDFloating Combat Text|r |cffFF0000Advanced Settings|r:",
-      fontSize = 'large',
-    },
-
-    bypassCVARUpdates = {
-      order = 4,
-      type = 'toggle',
-      name = "Bypass CVar Updates (requires |cffFF0000/reload|r)",
-      desc = "Allows you to bypass xCT+'s CVar engine. This option might help if you have FCT enabled, but it disappears after awhile. Once you set your FCT options, enable this. Requires a UI reload after changing.",
-      width = 'full',
-      get = function( info ) return x.db.profile.bypassCVars end,
-      set = function( info, value ) x.db.profile.bypassCVars = value end,
-    },
-
-    listSpacer2 = {
-      type = "description",
-      order = 5,
-      name = "\n\n",
-      fontSize = 'large',
+      name = "The following settings allow you to tweak Blizzard's Floating Combat Text.",
     },
 
     blizzardFCT = {
-      name = "", --Blizzard's Floating Combat Text |cffFFFFFF(Head Numbers)|r",
+      name = "General",
       type = 'group',
       order = 1,
-      guiInline = true,
       disabled = isCVarsDisabled,
       args = {
         listSpacer0 = {
@@ -1436,7 +1411,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 1,
           name = "Enable Scrolling Combat Text (Self)",
           type = 'toggle',
-          desc = "Required for a lot of the other events to work.\n\n|cffFF0000Requires a UI Reload!|r",
+          desc = "Shows incoming damage and healing done to you. It is also required for a lot of the other events to work (as noted in their descriptions).\n\n|cffFF0000Changing this requires a UI Reload!|r",
           width = 'double',
           get = get0,
           set = set0_update,
@@ -1468,9 +1443,9 @@ addon.options.args["FloatingCombatText"] = {
         floatingCombatTextCombatDamageDirectionalOffset = {
           order = 5,
           name = "Direction Offset",
-          desc = "The amount to offset directional damage numbers when they appear.\n(0 = Disabled)",
+          desc = "The amount to offset the vertical origin of the directional damage numbers when they appear. (e.g. move them up and down)\n\n0 = Default",
           type = 'range',
-          min = 0, max = 5, step = 0.1,
+          min = -20, max = 20, step = 0.1,
           get = get0,
           set = set0_update,
         },
@@ -1478,9 +1453,9 @@ addon.options.args["FloatingCombatText"] = {
         floatingCombatTextCombatDamageDirectionalScale = {
           order = 6,
           name = "Direction Scale",
-          desc = "The amount to scale the distance that directional damage numbers will move they appear. Damage numbers will just scroll up if this is disabled.\n(0 = Disabled)",
+          desc = "The amount to scale the distance that directional damage numbers will move as they appear. Damage numbers will just scroll up if this is disabled.\n\n0 = Disabled\n1 = Default\n3.6 = Recommended",
           type = 'range',
-          min = 0, max = 5, step = 0.1,
+          min = -5, max = 5, step = 0.1,
           get = get0,
           set = set0_update,
         },
@@ -1539,15 +1514,6 @@ addon.options.args["FloatingCombatText"] = {
           set = set0_update,
         },
 
-        floatingCombatTextDamageReduction = {
-          order = 16,
-          name = "Show Damage Reduction",
-          type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_RESISTANCES,
-          get = get0,
-          set = set0_update,
-        },
-
         -- Healing and Absorbs
         headerHealingAbsorbs = {
           type = "description",
@@ -1569,7 +1535,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 22,
           name = "Show Friendly Healers",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_FRIENDLY_NAMES,
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_FRIENDLY_NAMES .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1578,7 +1544,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 23,
           name = "Show Absorbs (Self)",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_SHOW_COMBAT_HEALING_ABSORB_SELF,
+          desc = OPTION_TOOLTIP_SHOW_COMBAT_HEALING_ABSORB_SELF .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1588,6 +1554,15 @@ addon.options.args["FloatingCombatText"] = {
           name = "Show Absorbs (Target)",
           type = 'toggle',
           desc = OPTION_TOOLTIP_SHOW_COMBAT_HEALING_ABSORB_TARGET,
+          get = get0,
+          set = set0_update,
+        },
+
+        floatingCombatTextDamageReduction = {
+          order = 25,
+          name = "Show Damage Reduction",
+          type = 'toggle',
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_RESISTANCES .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1604,7 +1579,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 31,
           name = "Show Energy",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_ENERGIZE,
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_ENERGIZE .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1613,7 +1588,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 31,
           name = "Show Energy (Periodic)",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE,
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_PERIODIC_ENERGIZE .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1622,7 +1597,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 32,
           name = "Show Combo Points",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_COMBO_POINTS,
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_COMBO_POINTS .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1631,7 +1606,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 33,
           name = "Show Honor",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_HONOR_GAINED,
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_HONOR_GAINED .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1640,7 +1615,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 34,
           name = "Show Rep Changes",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_REPUTATION,
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_REPUTATION .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1666,7 +1641,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 42,
           name = "Show Auras",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_AURAS,
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_AURAS .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1719,7 +1694,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 52,
           name = "Show Combat State",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_COMBAT_STATE,
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_COMBAT_STATE .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1728,7 +1703,7 @@ addon.options.args["FloatingCombatText"] = {
           order = 53,
           name = "Show Low HP/Mana",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_LOW_HEALTH_MANA,
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_LOW_HEALTH_MANA .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
@@ -1737,13 +1712,50 @@ addon.options.args["FloatingCombatText"] = {
           order = 54,
           name = "Show Reactives",
           type = 'toggle',
-          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_REACTIVES,
+          desc = OPTION_TOOLTIP_COMBAT_TEXT_SHOW_REACTIVES .. "\n\n|cffFF0000Requires Self Scrolling Combat Text|r",
           get = get0,
           set = set0_update,
         },
 
       },
     },
+
+
+    advancedSettings = {
+      name = "Advanced",
+      type = 'group',
+      order = 2,
+      args = {
+
+        listSpacer1 = {
+          type = "description",
+          order = 3,
+          name = "|cff798BDDFloating Combat Text|r |cffFF0000Advanced Settings|r:\n",
+          fontSize = 'large',
+        },
+
+        bypassCVARUpdates = {
+          order = 4,
+          type = 'toggle',
+          name = "Bypass CVar Updates (requires |cffFF0000/reload|r)",
+          desc = "Allows you to bypass xCT+'s CVar engine. This option might help if you have FCT enabled, but it disappears after awhile. Once you set your FCT options, enable this.\n\n|cffFF0000Changing this requires a UI Reload!|r",
+          width = 'double',
+          get = function( info ) return x.db.profile.bypassCVars end,
+          set = function( info, value ) x.db.profile.bypassCVars = value end,
+        },
+
+        enableFCT_Header = {
+          type = "description",
+          order = 5,
+          name = "|CffFF0000Requires:|r |cff00FF33/reload|r after change",
+          fontSize = 'small',
+          width = 'normal'
+        },
+
+      },
+    },
+
+
   },
 }
 
@@ -3681,6 +3693,14 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
+            petCrits = {
+              order = 3,
+              type = 'toggle',
+              name = "Allow Pet Crits",
+              desc = "Enable this to see when your pet's abilities critical strike, otherwise disable for less combat text spam.",
+              get = get2,
+              set = set2,
+            },
 
             criticalAppearance = {
               type = 'description',
@@ -5051,10 +5071,11 @@ addon.options.args["Frames"] = {
     },
 
     class = {
-      name = "|cffFFFFFFClass Combo Points|r",
+      name = "|cff808080Class Combo Points (Disabled)|r",
       type = 'group',
       order = 16,
       childGroups = 'tab',
+      disabled = true,
       args = {
         frameSettings = {
           order = 10,
