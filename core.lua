@@ -256,6 +256,10 @@ function x:CompatibilityLogic( existing )
     local currentVersion = VersionToTable(addonVersionString)
     local previousVersion = VersionToTable(self.db.profile.dbVersion or "4.3.0 Beta 2")
 
+    if not currentVersion.devBuild and UnitName("player") == "Dandraffbal" then
+      currentVersion.devBuild = 1
+    end
+
     if existing then
       -- Pre-Legion Requires Complete Reset
       if CompareVersions( VersionToTable("4.2.9"), previousVersion) > 0 then
@@ -305,10 +309,10 @@ function x:CompatibilityLogic( existing )
         end
       end
 
-
-      if CompareVersions( VersionToTable("4.3.3"), previousVersion) > 0 then
+      -- Clean up colors names in the database
+      if CompareVersions( VersionToTable("4.3.3 Beta 1"), previousVersion) > 0 then
         if currentVersion.devBuild then --currentVersion.devBuild then
-          x.MigratePrint("|cff798BDDCustom Colors|r (|cffFFFF00From: Config Tool->Frames-> *.* ->Colors|r) Lots of clean up!")
+          x.MigratePrint("|cff798BDDCustom Colors|r (|cffFFFF00From: Config Tool->Frames-> All Frames ->Colors|r) Removing old options.")
         end
         for name, settings in pairs(x.db.profile.frames) do
           if settings.colors then
@@ -473,11 +477,6 @@ local function cleanColors(colorTable)
     if color.colors then
       cleanColors(color.colors)
     else
-
-      print("index", index)
-      if tonumber(index) then
-        print("color", unpack(color.default))
-      end
       color.color = { color.default[1], color.default[2], color.default[3] }
     end
   end
@@ -1249,12 +1248,14 @@ function x.RemoveFilteredSpell(name, category)
 end
 
 local colorNameDB = { }
+
+-- Returns the color and if it was enabled
 function x.LookupColorByName(name)
   if colorNameDB[name] then
     if colorNameDB[name].enabled then
-      return colorNameDB[name].color or colorNameDB[name].default
+      return colorNameDB[name].color or colorNameDB[name].default, true
     end
-    return colorNameDB[name].default
+    return colorNameDB[name].default, false
   else
     return
   end
@@ -1518,21 +1519,17 @@ do
     [126] = "126", [127] = "127"
   }
 
-  function x.GetSpellSchoolColor(spellSchool, autoAttack, critical)
-    local index = cache[spellSchool or 1] or "1"
-    if autoAttack then
-      if critical and x.db.profile.frames.critical.colors.meleeCrit.enabled then
-        return x.db.profile.frames.critical.colors.meleeCrit.color or x.db.profile.frames.critical.colors.meleeCrit.default
-      elseif x.db.profile.frames.outgoing.colors.melee.enabled then
-        return x.db.profile.frames.outgoing.colors.melee.color or x.db.profile.frames.outgoing.colors.melee.default
-      else
-        local entry = x.db.profile.SpellColors[index]
-        return entry.enabled and entry.color or entry.default
-      end
-    else
-      local entry = x.db.profile.SpellColors[index]
-      return entry.enabled and entry.color or entry.default
+  function x.GetSpellSchoolColor(spellSchool, override)
+    -- See if the override name is enabled
+    if override then
+      local newColor, enabled = x.LookupColorByName(override)
+      if enabled then return newColor end
     end
+
+    -- Fast String lookup (faster than tostring)
+    local stringIndex = cache[spellSchool or 1] or "1"
+    local entry = x.db.profile.SpellColors[stringIndex]
+    return entry.enabled and entry.color or entry.default
   end
 end
 

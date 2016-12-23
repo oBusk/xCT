@@ -348,8 +348,9 @@ function x:AddMessage(framename, message, colorname)
 		if type(colorname) == "table" then
 			r, g, b = unpack(colorname)
 		else
-			if x.LookupColorByName(colorname) then
-				r, g, b = unpack( x.LookupColorByName(colorname) )
+			local color = x.LookupColorByName(colorname)
+			if color then
+				r, g, b = unpack(color)
 			else
 				print("FRAME:", framename,"  xct+ says there is no color named:", colorname)
 				error("missing color")

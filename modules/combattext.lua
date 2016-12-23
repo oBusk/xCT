@@ -405,117 +405,6 @@ function xCTFormat:SPELL_PERIODIC_HEAL( outputFrame, spellID, amount, critical, 
   x:AddMessage(outputFrame, message, outputColor)
 end
 
-function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged, args )
-  local outputColor, message, settings = x.GetSpellSchoolColor(1, true, critical)
-
-  if critical and ShowSwingCrit() then
-    settings = x.db.profile.frames["critical"]
-    if ShowSwingCritPrefix() then
-      message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
-                                      x:Abbreviate(amount, "critical"),
-                                      x.db.profile.frames["critical"].critPostfix )
-    else
-      message = x:Abbreviate(amount, "critical")
-    end
-  else
-    settings = x.db.profile.frames["outgoing"]
-    message = x:Abbreviate(amount, "outgoing")
-  end
-
-  -- Add names
-  message = message .. x.formatName(args, settings.names)
-
-  -- Add Icons
-  message = x:GetSpellTextureFormatted( spellID,
-                                        message,
-       x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-       x.db.profile.frames[outputFrame].fontJustify )
-
-  x:AddMessage(outputFrame, message, outputColor)
-end
-
-function xCTFormat:RANGE_DAMAGE( outputFrame, spellID, amount, critical, merged, autoShot, args )
-  local outputColor, message, settings = x.GetSpellSchoolColor(1, true, critical)
-
-  if critical then
-    settings = x.db.profile.frames["critical"]
-
-    -- Check to see if we should format the Auto Shot critical hit
-    if not autoShot or autoShot and ShowSwingCritPrefix() then
-      message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
-                                      x:Abbreviate(amount, "critical"),
-                                      x.db.profile.frames["critical"].critPostfix )
-    else
-      message = x:Abbreviate(amount, "critical")
-    end
-  else
-    settings = x.db.profile.frames["outgoing"]
-    message = x:Abbreviate(amount, "outgoing")
-  end
-
-  -- Add names
-  message = message .. x.formatName(args, settings.names)
-
-  -- Add Icons
-  message = x:GetSpellTextureFormatted( spellID,
-                                        message,
-       x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-       x.db.profile.frames[outputFrame].fontJustify )
-
-  x:AddMessage(outputFrame, message, outputColor)
-end
-
-function xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool, args )
-  local message, settings
-
-  -- Format Criticals and also abbreviate values
-  if critical then
-    settings = x.db.profile.frames["critical"]
-    message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
-                                    x:Abbreviate( amount, "critical" ),
-                                    x.db.profile.frames["critical"].critPostfix )
-  else
-    settings = x.db.profile.frames["outgoing"]
-    message = x:Abbreviate( amount, outputFrame )
-  end
-
-  -- Add names
-  message = message .. x.formatName(args, settings.names)
-
-  -- Add Icons
-  message = x:GetSpellTextureFormatted( spellID,
-                                        message,
-       x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-       x.db.profile.frames[outputFrame].fontJustify )
-
-  x:AddMessage(outputFrame, message, x.GetSpellSchoolColor(spellSchool, critical))
-end
-
-function xCTFormat:SPELL_PERIODIC_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool, args )
-  local message, settigns
-
-  -- Format Criticals and also abbreviate values
-  if critical then
-    settings = x.db.profile.frames["critical"]
-    message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
-                                    x:Abbreviate( amount, "critical" ),
-                                    x.db.profile.frames["critical"].critPostfix )
-  else
-    settings = x.db.profile.frames["outgoing"]
-    message = x:Abbreviate( amount, outputFrame )
-  end
-
-  -- Add names
-  message = message .. x.formatName(args, settings.names)
-
-  -- Add Icons
-  message = x:GetSpellTextureFormatted( spellID,
-                                        message,
-       x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-       x.db.profile.frames[outputFrame].fontJustify )
-
-  x:AddMessage(outputFrame, message, x.GetSpellSchoolColor(spellSchool, critical) )
-end
 
 
 --[=====================================================[
@@ -2090,7 +1979,7 @@ local CombatEventHandlers = {
 	["DamageOutgoing"] = function (args)
 		local critical, spellID, amount, merged = args.critical, args.spellId, args.amount
 		local isEnvironmental, isSwing, isAutoShot, isDoT = args.prefix == "ENVIRONMENTAL", args.prefix == "SWING", spellID == 75, args.prefix == "SPELL_PERIODIC"
-		local outputFrame, outputColor = "outgoing", x.GetSpellSchoolColor(args.spellSchool or 1, isAutoShot or isSwing, critical)
+		local outputFrame, outputColorType = "outgoing"
 
 		-- Keep track of spells that go by (Don't track Swings or Environmental damage)
 		if not isEnvironmental and not isSwing and TrackSpells() then x.spellCache.spells[spellID] = true end
@@ -2130,11 +2019,19 @@ local CombatEventHandlers = {
 		-- Check for Critical Swings
 		if critical then
 			if (isSwing or isAutoShot) and ShowSwingCrit() then
-				outputFrame = "critical"
+				outputFrame = 'critical'
 			elseif not isSwing and not isAutoShot then
-				outputFrame = "critical"
+				outputFrame = 'critical'
 			end
 		end
+
+
+		-- Lookup the color
+		if isSwing or isAutoShot then
+			outputColorType = critical and 'meleeCrit' or 'melee'
+		end
+
+		local outputColor = x.GetSpellSchoolColor(args.spellSchool, outputColorType)
 
 		if (isSwing or isAutoShot) and MergeMeleeSwings() then
 			merged = true
@@ -2170,23 +2067,33 @@ local CombatEventHandlers = {
 			end
 		end
 
-		if args.event == "SWING_DAMAGE" then
-			xCTFormat:SWING_DAMAGE(outputFrame, spellID, amount, critical, merged, args)
 
-		elseif args.event == "RANGE_DAMAGE" then
-			xCTFormat:RANGE_DAMAGE(outputFrame, spellID, amount, critical, merged, isAutoShot, args)
 
-		elseif args.event == "SPELL_DAMAGE" or args.event == "DAMAGE_SHIELD" then
-			xCTFormat:SPELL_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool, args)
-
-		elseif args.event == "SPELL_PERIODIC_DAMAGE" then
-			xCTFormat:SPELL_PERIODIC_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool, args)
-
-		else
-			if UnitName('player') == "Dandraffbal" then
-				print("xCT Needs Some Help: unhandled _DAMAGE event", args.event)
+		if critical and ShowSwingCrit() then
+			settings = x.db.profile.frames['critical']
+			if ShowSwingCritPrefix() then
+				message = sformat(format_crit, x.db.profile.frames['critical'].critPrefix,
+				                               x:Abbreviate(amount,'critical'),
+				                               x.db.profile.frames['critical'].critPostfix)
+			else
+				message = x:Abbreviate(amount, 'critical')
 			end
+		else
+			settings = x.db.profile.frames['outgoing']
+			message = x:Abbreviate(amount, 'outgoing')
 		end
+
+		-- Add names
+		message = message .. x.formatName(args, settings.names)
+
+		-- Add Icons
+		message = x:GetSpellTextureFormatted( spellID,
+		                                      message,
+		     x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+		     x.db.profile.frames[outputFrame].fontJustify )
+
+		x:AddMessage(outputFrame, message, outputColor)
+
 	end,
 
 	["DamageIncoming"] = function (args)
@@ -2213,7 +2120,7 @@ local CombatEventHandlers = {
 				resistType, resistedAmount = BLOCK, args.amount > 0 and args.blocked
 				color = resistedAmount and 'missTypeBlock' or 'missTypeBlockPartial'
 			elseif (args.absorbed or 0) > 0 then
-				resistType, resistedAmount = BLOCK, args.amount > 0 and args.absorbed
+				resistType, resistedAmount = ABSORB, args.amount > 0 and args.absorbed
 				color = resistedAmount and 'missTypeAbsorb' or 'missTypeAbsorbPartial'
 			end
 
@@ -2236,9 +2143,9 @@ local CombatEventHandlers = {
 		if not message then
 			-- Format Criticals and also abbreviate values
 			if args.critical then
-				message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix,
+				message = sformat(format_crit, x.db.profile.frames['critical'].critPrefix,
 				                               x:Abbreviate(-args.amount, 'damage'),
-				                               x.db.profile.frames["critical"].critPostfix)
+				                               x.db.profile.frames['critical'].critPostfix)
 			else
 				message = x:Abbreviate(-args.amount, 'damage')
 			end
@@ -2262,8 +2169,15 @@ local CombatEventHandlers = {
 			       x.db.profile.frames['damage'].fontJustify)
 		end
 
+		local colorOverride
+		if args.spellSchool == 1 then
+			colorOverride = args.critical and 'damageTakenCritical' or 'damageTaken'
+		else
+			colorOverride = args.critical and 'spellDamageTakenCritical' or 'spellDamageTaken'
+		end
+
 		-- Output message
-		x:AddMessage('damage', message, x.GetSpellSchoolColor(args.spellSchool))
+		x:AddMessage('damage', message, x.GetSpellSchoolColor(args.spellSchool, colorOverride))
 	end,
 
 	["ShieldIncoming"] = function (args)
