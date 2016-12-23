@@ -103,6 +103,8 @@ addon.merges[221804]      = CreateMergeSpellEntry(Leg_Items,   5, "Trinket: Rava
 
 addon.merges[222197]      = CreateMergeSpellEntry(Leg_Items,  .5, "Trinket: Unstable Horrorslime")
 
+addon.merges[207694]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Legendary: Cinidaria, the Symbiote")
+
 -- ---------------------------
 -- World Zone               --
 -- ---------------------------
