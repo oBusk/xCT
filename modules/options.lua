@@ -3092,8 +3092,18 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
+            
+
+
+            missTypeSettings = {
+              type = 'description',
+              order = 10,
+              name = "\n|cff798BDDMiss Type Settings|r:",
+              fontSize = 'large',
+            },
+
             enableImmunes = {
-              order = 9,
+              order = 11,
               type = 'toggle',
               name = "Show Immunes",
               desc = "Display 'Immune' when your target cannot take damage.",
@@ -3101,10 +3111,26 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableMisses = {
-              order = 10,
+              order = 12,
               type = 'toggle',
               name = "Show Miss Types",
               desc = "Display 'Miss', 'Dodge', 'Parry' when you miss your target.",
+              get = get2,
+              set = set2,
+            },
+            enablePartialMisses = {
+              order = 12,
+              type = 'toggle',
+              name = "Show Miss Types (Partials)",
+              desc = "Show when your target takes only a percentage of your damage because it was partially absorbed, resisted, or blocked.\n\n|cffFF0000PLEASE NOTE:|r Only works if the spell is not merged. Turn off the Spell Merger to see all spells.",
+              get = get2,
+              set = set2,
+            },
+            showHighestPartialMiss = {
+              order = 13,
+              type = 'toggle',
+              name = "Show the Highest Partial Miss",
+              desc = "Only show the highest partial miss, instead of all the misses. (Rare, but less spammy)\n\n|cffFF0000PLEASE NOTE:|r Only works if the spell is not merged. Turn off the Spell Merger to see all spells.",
               get = get2,
               set = set2,
             },

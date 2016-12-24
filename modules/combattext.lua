@@ -183,6 +183,7 @@ local function ShowDots() return x.db.profile.frames["outgoing"].enableDotDmg en
 local function ShowHots() return x.db.profile.frames["outgoing"].enableHots end
 local function ShowImmunes() return x.db.profile.frames["outgoing"].enableImmunes end -- outgoing immunes
 local function ShowMisses() return x.db.profile.frames["outgoing"].enableMisses end -- outgoing misses
+local function ShowPartialMisses() return x.db.profile.frames["outgoing"].enablePartialMisses end
 local function ShowSwingCrit() return x.db.profile.frames["critical"].showSwing end
 local function ShowSwingCritPrefix() return x.db.profile.frames["critical"].prefixSwing end
 local function ShowPetCrits() return x.db.profile.frames["critical"].petCrits end
@@ -1752,7 +1753,28 @@ x.outgoing_events = {
       x:AddMessage(outputFrame, message, outputColor)
     end,
 }
+
+
+
+
+
+
+
+
+
+if (args.resisted or 0) > 0 then
+	resistType, resistedAmount = RESIST, args.amount > 0 and args.resisted
+	color = resistedAmount and 'missTypeResist' or 'missTypeResistPartial'
+elseif (args.blocked or 0) > 0 then
+	resistType, resistedAmount = BLOCK, args.amount > 0 and args.blocked
+	color = resistedAmount and 'missTypeBlock' or 'missTypeBlockPartial'
+elseif (args.absorbed or 0) > 0 then
+	resistType, resistedAmount = ABSORB, args.amount > 0 and args.absorbed
+	color = resistedAmount and 'missTypeAbsorb' or 'missTypeAbsorbPartial'
+end
+
 ]==]
+
 
 -- =====================================================
 --                  Format Name Things
@@ -1874,6 +1896,12 @@ function x.formatName(args, settings, isSource)
 	return "" -- Names not supported
 end
 
+
+
+-- =====================================================
+--           Quick Partial Name Formatter
+-- =====================================================
+
 local missTypeColorLookup = {
 	['MISS'] = 'missTypeMiss',
 	['DODGE'] = 'missTypeDodge',
@@ -1883,6 +1911,66 @@ local missTypeColorLookup = {
 	['DEFLECT'] = 'missTypeDeflect',
 	['REFLECT'] = 'missTypeReflect'
 }
+
+local PARTIAL_MISS_FORMATTERS = {
+	['absorbed'] = " |c%s"..(TEXT_MODE_A_STRING_RESULT_ABSORB:gsub("%%d","%%s")).."|r", -- |c%s(%s Absorbed)|r
+	['blocked']  = " |c%s"..( TEXT_MODE_A_STRING_RESULT_BLOCK:gsub("%%d","%%s")).."|r", -- |c%s(%s Blocked)|r
+	['resisted'] = " |c%s"..(TEXT_MODE_A_STRING_RESULT_RESIST:gsub("%%d","%%s")).."|r", -- |c%s(%s Resisted)|r
+}
+
+local PARTIAL_MISS_COLORS = {
+	['absorbed'] = 'missTypeAbsorbPartial',
+	['blocked']  = 'missTypeBlockPartial',
+	['resisted'] = 'missTypeResistPartial',
+}
+
+local FULL_MISS_COLORS = {
+	['absorbed'] = 'missTypeAbsorb',
+	['blocked']  = 'missTypeBlock',
+	['resisted'] = 'missTypeResist',
+}
+
+
+local function GetPartialMiss(args, settings, outgoingFrame)
+	local blocked, absorbed, resisted = args.blocked or 0, args.absorbed or 0, args.resisted or 0
+	if blocked > 0 or absorbed > 0 or resisted > 0 then
+
+		-- Show only the highest partial miss
+		if settings.showHighestPartialMiss then
+			local maxType, color
+			if blocked > absorbed then
+				if blocked > resisted then maxType = 'blocked' else maxType = 'resisted' end
+			else
+				if absorbed > resisted then maxType = 'absorbed' else maxType = 'resisted' end
+			end
+
+			color = hexNameColor(x.LookupColorByName(args.amount > 0 and PARTIAL_MISS_COLORS[maxType] or FULL_MISS_COLORS[maxType]))
+			return true, sformat(PARTIAL_MISS_FORMATTERS[maxType], color, x:Abbreviate(args[maxType], outgoingFrame))
+		end
+
+		-- Show All the partial misses that exsist
+		local message, color = ""
+		if absorbed > 0 then
+			color = hexNameColor(x.LookupColorByName(args.amount > 0 and PARTIAL_MISS_COLORS.absorbed or FULL_MISS_COLORS.absorbed))
+			message = message .. sformat(PARTIAL_MISS_FORMATTERS.absorbed, color, x:Abbreviate(absorbed, outgoingFrame))
+		end
+
+		if blocked > 0 then
+			color = hexNameColor(x.LookupColorByName(args.amount > 0 and PARTIAL_MISS_COLORS.blocked or FULL_MISS_COLORS.blocked))
+			message = message .. sformat(PARTIAL_MISS_FORMATTERS.blocked, color, x:Abbreviate(blocked, outgoingFrame))
+		end
+
+		if resisted > 0 then
+			color = hexNameColor(x.LookupColorByName(args.amount > 0 and PARTIAL_MISS_COLORS.resisted or FULL_MISS_COLORS.resisted))
+			message = message .. sformat(PARTIAL_MISS_FORMATTERS.resisted, color, x:Abbreviate(resisted, outgoingFrame))
+		end
+
+		return true, message
+	else
+		return false, ""
+	end
+end
+
 
 
 -- =====================================================
@@ -2081,6 +2169,14 @@ local CombatEventHandlers = {
 		else
 			settings = x.db.profile.frames['outgoing']
 			message = x:Abbreviate(amount, 'outgoing')
+		end
+
+		-- Add the Partial Miss Types
+		if ShowPartialMisses() then
+			local hasPartialMiss, formattedMessage = GetPartialMiss(args, settings, critical and 'critical' or 'outgoing')
+			if hasPartialMiss then
+				message = message .. formattedMessage
+			end
 		end
 
 		-- Add names
