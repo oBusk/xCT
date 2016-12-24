@@ -87,22 +87,20 @@ addon.merges[214052]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Eye 
 addon.merges[215047]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Trinket: Terrorbound Nexus")
 addon.merges[222168]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Spontaneous Appendages")
 addon.merges[214169]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Spiked Counterweight")
-addon.merges[215047]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Trinket: Terrorbound Nexus")
 addon.merge2h[228780]     = 214169 -- Brutal Haymaker (Spiked Counterweight)
-
+addon.merges[215047]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Trinket: Terrorbound Nexus")
 addon.merges[213786]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Corrupted Starlight")
-addon.merge2h[213782]     = 213786 -- Nightfall
-addon.merge2h[213833]     = 213786 -- Nightfall
-addon.merge2h[213784]     = 213786 -- Nightfall
-addon.merge2h[213785]     = 213786 -- Nightfall
-
+addon.merge2h[213782]     = 213786 -- Trinket: Corrupted Starlight
+addon.merge2h[213833]     = 213786 -- Trinket: Corrupted Starlight
+addon.merge2h[213784]     = 213786 -- Trinket: Corrupted Starlight
+addon.merge2h[213785]     = 213786 -- Trinket: Corrupted Starlight
 addon.merges[221845]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Twisting Wind")
-addon.merge2h[221865]     = 221845
+addon.merge2h[221865]     = 221845 -- Trinket: Twisting Wind
+addon.merges[221804]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Ravaged Seed Pod")
+addon.merges[222197]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Unstable Horrorslime")
+addon.merges[214350]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Oakheart's Gnarled Root")
 
-addon.merges[221804]      = CreateMergeSpellEntry(Leg_Items,   5, "Trinket: Ravaged Seed Pod")
-
-addon.merges[222197]      = CreateMergeSpellEntry(Leg_Items,  .5, "Trinket: Unstable Horrorslime")
-
+-- Legendaries
 addon.merges[207694]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Legendary: Cinidaria, the Symbiote")
 
 -- ---------------------------
