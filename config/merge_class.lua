@@ -151,7 +151,6 @@ addon.merges[34914]     = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- V
 addon.merges[148859]    = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- Shadowy Apparition
 addon.merges[15407]     = CreateMergeSpellEntry("PRIEST", 2.0, 258)         -- Mind Flay
 addon.merges[205386]    = CreateMergeSpellEntry("PRIEST", 0.5, 258)         -- Talent: Shadow Crash
-addon.merges[217676]    = CreateMergeSpellEntry("PRIEST", 0.5, 258)         -- Talent: Mind Spike
 addon.merges[193473]    = CreateMergeSpellEntry("PRIEST", 2.0, 258)         -- Artifact: Void Tendril (Mind Flay)
 addon.merges[205065]    = CreateMergeSpellEntry("PRIEST", 2.0, 258)         -- Artifact: Void Torrent
 addon.merges[194238]    = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- Artifact: Sphere of Insanity
@@ -185,6 +184,7 @@ addon.merges[209478]    = CreateMergeSpellEntry("PALADIN", 1.5, 66)         -- A
 addon.merges[209202]    = CreateMergeSpellEntry("PALADIN", 0.5, 66)         -- Artifact: Eye of Tyr
 
 -- Retribution (ID: 70)
+addon.merges[20271]     = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Judgment
 addon.merges[224266]    = CreateMergeSpellEntry("PALADIN", 1.0, 70)         -- Templar's Verdict (Echo of the Highlord) *Delay on second hit
 addon.merges[205729]    = CreateMergeSpellEntry("PALADIN", 1.0, 70)         -- Greater Blessing of Might
 addon.merges[217020]    = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Zeal
@@ -195,9 +195,10 @@ addon.merges[198137]    = CreateMergeSpellEntry("PALADIN", 2.5, 70)         -- T
 addon.merges[210220]    = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Talent: Holy Wrath
 addon.merges[205273]    = CreateMergeSpellEntry("PALADIN", 2.0, 70)         -- Artifact: Wake of Ashes
 addon.merges[224239]    = CreateMergeSpellEntry("PALADIN", 1.5, 70)         -- Artifact: Divine Tempest (Divine Storm)
-addon.merges[20271]     = CreateMergeSpellEntry("PALADIN", 0.5, 70)         -- Judgment
+addon.merges[215257]    = CreateMergeSpellEntry("PALADIN", 1.75, 70)        -- Artifact: Healing Storm
 addon.merge2h[228288]   = 20271                                             -- [Bounce Merger] Judgment
-addon.merge2h[216527]   = 20271                                             -- [PvP Talent] Lawbringer
+addon.merge2h[216527]   = 20271                                             -- [Pvp Talent - Bounce Merger]: Lawbringer
+
 
 
 -- ---------------------------
