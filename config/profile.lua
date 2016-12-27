@@ -370,6 +370,8 @@ addon.defaults = {
         ["enableHots"] = true,
         ["enableImmunes"] = true,
         ["enableMisses"] = true,
+        ["enablePartialMisses"] = false,
+        ["showHighestPartialMiss"] = false,
       },
 
       critical = {

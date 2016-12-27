@@ -184,6 +184,7 @@ local function ShowDots() return x.db.profile.frames["outgoing"].enableDotDmg en
 local function ShowHots() return x.db.profile.frames["outgoing"].enableHots end
 local function ShowImmunes() return x.db.profile.frames["outgoing"].enableImmunes end -- outgoing immunes
 local function ShowMisses() return x.db.profile.frames["outgoing"].enableMisses end -- outgoing misses
+local function ShowPartialMisses() return x.db.profile.frames["outgoing"].enablePartialMisses end
 local function ShowSwingCrit() return x.db.profile.frames["critical"].showSwing end
 local function ShowSwingCritPrefix() return x.db.profile.frames["critical"].prefixSwing end
 local function ShowPetCrits() return x.db.profile.frames["critical"].petCrits end
@@ -409,117 +410,6 @@ function xCTFormat:SPELL_PERIODIC_HEAL( outputFrame, spellID, amount, critical, 
   x:AddMessage(outputFrame, message, outputColor)
 end
 
-function xCTFormat:SWING_DAMAGE( outputFrame, spellID, amount, critical, merged, args )
-  local outputColor, message, settings = x.GetSpellSchoolColor(1, true, critical)
-
-  if critical and ShowSwingCrit() then
-    settings = x.db.profile.frames["critical"]
-    if ShowSwingCritPrefix() then
-      message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
-                                      x:Abbreviate(amount, "critical"),
-                                      x.db.profile.frames["critical"].critPostfix )
-    else
-      message = x:Abbreviate(amount, "critical")
-    end
-  else
-    settings = x.db.profile.frames["outgoing"]
-    message = x:Abbreviate(amount, "outgoing")
-  end
-
-  -- Add names
-  message = message .. x.formatName(args, settings.names)
-
-  -- Add Icons
-  message = x:GetSpellTextureFormatted( spellID,
-                                        message,
-       x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-       x.db.profile.frames[outputFrame].fontJustify )
-
-  x:AddMessage(outputFrame, message, outputColor)
-end
-
-function xCTFormat:RANGE_DAMAGE( outputFrame, spellID, amount, critical, merged, autoShot, args )
-  local outputColor, message, settings = x.GetSpellSchoolColor(1, true, critical)
-
-  if critical then
-    settings = x.db.profile.frames["critical"]
-
-    -- Check to see if we should format the Auto Shot critical hit
-    if not autoShot or autoShot and ShowSwingCritPrefix() then
-      message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
-                                      x:Abbreviate(amount, "critical"),
-                                      x.db.profile.frames["critical"].critPostfix )
-    else
-      message = x:Abbreviate(amount, "critical")
-    end
-  else
-    settings = x.db.profile.frames["outgoing"]
-    message = x:Abbreviate(amount, "outgoing")
-  end
-
-  -- Add names
-  message = message .. x.formatName(args, settings.names)
-
-  -- Add Icons
-  message = x:GetSpellTextureFormatted( spellID,
-                                        message,
-       x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-       x.db.profile.frames[outputFrame].fontJustify )
-
-  x:AddMessage(outputFrame, message, outputColor)
-end
-
-function xCTFormat:SPELL_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool, args )
-  local message, settings
-
-  -- Format Criticals and also abbreviate values
-  if critical then
-    settings = x.db.profile.frames["critical"]
-    message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
-                                    x:Abbreviate( amount, "critical" ),
-                                    x.db.profile.frames["critical"].critPostfix )
-  else
-    settings = x.db.profile.frames["outgoing"]
-    message = x:Abbreviate( amount, outputFrame )
-  end
-
-  -- Add names
-  message = message .. x.formatName(args, settings.names)
-
-  -- Add Icons
-  message = x:GetSpellTextureFormatted( spellID,
-                                        message,
-       x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-       x.db.profile.frames[outputFrame].fontJustify )
-
-  x:AddMessage(outputFrame, message, x.GetSpellSchoolColor(spellSchool, critical))
-end
-
-function xCTFormat:SPELL_PERIODIC_DAMAGE( outputFrame, spellID, amount, critical, merged, spellSchool, args )
-  local message, settigns
-
-  -- Format Criticals and also abbreviate values
-  if critical then
-    settings = x.db.profile.frames["critical"]
-    message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
-                                    x:Abbreviate( amount, "critical" ),
-                                    x.db.profile.frames["critical"].critPostfix )
-  else
-    settings = x.db.profile.frames["outgoing"]
-    message = x:Abbreviate( amount, outputFrame )
-  end
-
-  -- Add names
-  message = message .. x.formatName(args, settings.names)
-
-  -- Add Icons
-  message = x:GetSpellTextureFormatted( spellID,
-                                        message,
-       x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-       x.db.profile.frames[outputFrame].fontJustify )
-
-  x:AddMessage(outputFrame, message, x.GetSpellSchoolColor(spellSchool, critical) )
-end
 
 
 --[=====================================================[
@@ -1867,7 +1757,28 @@ x.outgoing_events = {
       x:AddMessage(outputFrame, message, outputColor)
     end,
 }
+
+
+
+
+
+
+
+
+
+if (args.resisted or 0) > 0 then
+	resistType, resistedAmount = RESIST, args.amount > 0 and args.resisted
+	color = resistedAmount and 'missTypeResist' or 'missTypeResistPartial'
+elseif (args.blocked or 0) > 0 then
+	resistType, resistedAmount = BLOCK, args.amount > 0 and args.blocked
+	color = resistedAmount and 'missTypeBlock' or 'missTypeBlockPartial'
+elseif (args.absorbed or 0) > 0 then
+	resistType, resistedAmount = ABSORB, args.amount > 0 and args.absorbed
+	color = resistedAmount and 'missTypeAbsorb' or 'missTypeAbsorbPartial'
+end
+
 ]==]
+
 
 -- =====================================================
 --                  Format Name Things
@@ -1989,6 +1900,12 @@ function x.formatName(args, settings, isSource)
 	return "" -- Names not supported
 end
 
+
+
+-- =====================================================
+--           Quick Partial Name Formatter
+-- =====================================================
+
 local missTypeColorLookup = {
 	['MISS'] = 'missTypeMiss',
 	['DODGE'] = 'missTypeDodge',
@@ -1998,6 +1915,66 @@ local missTypeColorLookup = {
 	['DEFLECT'] = 'missTypeDeflect',
 	['REFLECT'] = 'missTypeReflect'
 }
+
+local PARTIAL_MISS_FORMATTERS = {
+	['absorbed'] = " |c%s"..(TEXT_MODE_A_STRING_RESULT_ABSORB:gsub("%%d","%%s")).."|r", -- |c%s(%s Absorbed)|r
+	['blocked']  = " |c%s"..( TEXT_MODE_A_STRING_RESULT_BLOCK:gsub("%%d","%%s")).."|r", -- |c%s(%s Blocked)|r
+	['resisted'] = " |c%s"..(TEXT_MODE_A_STRING_RESULT_RESIST:gsub("%%d","%%s")).."|r", -- |c%s(%s Resisted)|r
+}
+
+local PARTIAL_MISS_COLORS = {
+	['absorbed'] = 'missTypeAbsorbPartial',
+	['blocked']  = 'missTypeBlockPartial',
+	['resisted'] = 'missTypeResistPartial',
+}
+
+local FULL_MISS_COLORS = {
+	['absorbed'] = 'missTypeAbsorb',
+	['blocked']  = 'missTypeBlock',
+	['resisted'] = 'missTypeResist',
+}
+
+
+local function GetPartialMiss(args, settings, outgoingFrame)
+	local blocked, absorbed, resisted = args.blocked or 0, args.absorbed or 0, args.resisted or 0
+	if blocked > 0 or absorbed > 0 or resisted > 0 then
+
+		-- Show only the highest partial miss
+		if settings.showHighestPartialMiss then
+			local maxType, color
+			if blocked > absorbed then
+				if blocked > resisted then maxType = 'blocked' else maxType = 'resisted' end
+			else
+				if absorbed > resisted then maxType = 'absorbed' else maxType = 'resisted' end
+			end
+
+			color = hexNameColor(x.LookupColorByName(args.amount > 0 and PARTIAL_MISS_COLORS[maxType] or FULL_MISS_COLORS[maxType]))
+			return true, sformat(PARTIAL_MISS_FORMATTERS[maxType], color, x:Abbreviate(args[maxType], outgoingFrame))
+		end
+
+		-- Show All the partial misses that exsist
+		local message, color = ""
+		if absorbed > 0 then
+			color = hexNameColor(x.LookupColorByName(args.amount > 0 and PARTIAL_MISS_COLORS.absorbed or FULL_MISS_COLORS.absorbed))
+			message = message .. sformat(PARTIAL_MISS_FORMATTERS.absorbed, color, x:Abbreviate(absorbed, outgoingFrame))
+		end
+
+		if blocked > 0 then
+			color = hexNameColor(x.LookupColorByName(args.amount > 0 and PARTIAL_MISS_COLORS.blocked or FULL_MISS_COLORS.blocked))
+			message = message .. sformat(PARTIAL_MISS_FORMATTERS.blocked, color, x:Abbreviate(blocked, outgoingFrame))
+		end
+
+		if resisted > 0 then
+			color = hexNameColor(x.LookupColorByName(args.amount > 0 and PARTIAL_MISS_COLORS.resisted or FULL_MISS_COLORS.resisted))
+			message = message .. sformat(PARTIAL_MISS_FORMATTERS.resisted, color, x:Abbreviate(resisted, outgoingFrame))
+		end
+
+		return true, message
+	else
+		return false, ""
+	end
+end
+
 
 
 -- =====================================================
@@ -2096,7 +2073,7 @@ local CombatEventHandlers = {
 	["DamageOutgoing"] = function (args)
 		local critical, spellID, amount, merged = args.critical, args.spellId, args.amount
 		local isEnvironmental, isSwing, isAutoShot, isDoT = args.prefix == "ENVIRONMENTAL", args.prefix == "SWING", spellID == 75, args.prefix == "SPELL_PERIODIC"
-		local outputFrame, outputColor = "outgoing", x.GetSpellSchoolColor(args.spellSchool or 1, isAutoShot or isSwing, critical)
+		local outputFrame, outputColorType = "outgoing"
 
 		-- Keep track of spells that go by (Don't track Swings or Environmental damage)
 		if not isEnvironmental and not isSwing and TrackSpells() then x.spellCache.spells[spellID] = true end
@@ -2136,11 +2113,19 @@ local CombatEventHandlers = {
 		-- Check for Critical Swings
 		if critical then
 			if (isSwing or isAutoShot) and ShowSwingCrit() then
-				outputFrame = "critical"
+				outputFrame = 'critical'
 			elseif not isSwing and not isAutoShot then
-				outputFrame = "critical"
+				outputFrame = 'critical'
 			end
 		end
+
+
+		-- Lookup the color
+		if isSwing or isAutoShot then
+			outputColorType = critical and 'meleeCrit' or 'melee'
+		end
+
+		local outputColor = x.GetSpellSchoolColor(args.spellSchool, outputColorType)
 
 		if (isSwing or isAutoShot) and MergeMeleeSwings() then
 			merged = true
@@ -2176,23 +2161,41 @@ local CombatEventHandlers = {
 			end
 		end
 
-		if args.event == "SWING_DAMAGE" then
-			xCTFormat:SWING_DAMAGE(outputFrame, spellID, amount, critical, merged, args)
 
-		elseif args.event == "RANGE_DAMAGE" then
-			xCTFormat:RANGE_DAMAGE(outputFrame, spellID, amount, critical, merged, isAutoShot, args)
 
-		elseif args.event == "SPELL_DAMAGE" or args.event == "DAMAGE_SHIELD" then
-			xCTFormat:SPELL_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool, args)
-
-		elseif args.event == "SPELL_PERIODIC_DAMAGE" then
-			xCTFormat:SPELL_PERIODIC_DAMAGE(outputFrame, spellID, amount, critical, merged, args.spellSchool, args)
-
+		if critical and ShowSwingCrit() then
+			settings = x.db.profile.frames['critical']
+			if ShowSwingCritPrefix() then
+				message = sformat(format_crit, x.db.profile.frames['critical'].critPrefix,
+				                               x:Abbreviate(amount,'critical'),
+				                               x.db.profile.frames['critical'].critPostfix)
+			else
+				message = x:Abbreviate(amount, 'critical')
+			end
 		else
-			if UnitName('player') == "Dandraffbal" then
-				print("xCT Needs Some Help: unhandled _DAMAGE event", args.event)
+			settings = x.db.profile.frames['outgoing']
+			message = x:Abbreviate(amount, 'outgoing')
+		end
+
+		-- Add the Partial Miss Types
+		if ShowPartialMisses() then
+			local hasPartialMiss, formattedMessage = GetPartialMiss(args, settings, critical and 'critical' or 'outgoing')
+			if hasPartialMiss then
+				message = message .. formattedMessage
 			end
 		end
+
+		-- Add names
+		message = message .. x.formatName(args, settings.names)
+
+		-- Add Icons
+		message = x:GetSpellTextureFormatted( spellID,
+		                                      message,
+		     x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+		     x.db.profile.frames[outputFrame].fontJustify )
+
+		x:AddMessage(outputFrame, message, outputColor)
+
 	end,
 
 	["DamageIncoming"] = function (args)
@@ -2242,9 +2245,9 @@ local CombatEventHandlers = {
 		if not message then
 			-- Format Criticals and also abbreviate values
 			if args.critical then
-				message = sformat(format_crit, x.db.profile.frames["critical"].critPrefix,
+				message = sformat(format_crit, x.db.profile.frames['critical'].critPrefix,
 				                               x:Abbreviate(-args.amount, 'damage'),
-				                               x.db.profile.frames["critical"].critPostfix)
+				                               x.db.profile.frames['critical'].critPostfix)
 			else
 				message = x:Abbreviate(-args.amount, 'damage')
 			end
@@ -2268,8 +2271,15 @@ local CombatEventHandlers = {
 			       x.db.profile.frames['damage'].fontJustify)
 		end
 
+		local colorOverride
+		if args.spellSchool == 1 then
+			colorOverride = args.critical and 'damageTakenCritical' or 'damageTaken'
+		else
+			colorOverride = args.critical and 'spellDamageTakenCritical' or 'spellDamageTaken'
+		end
+
 		-- Output message
-		x:AddMessage('damage', message, x.GetSpellSchoolColor(args.spellSchool))
+		x:AddMessage('damage', message, x.GetSpellSchoolColor(args.spellSchool, colorOverride))
 	end,
 
 	["ShieldIncoming"] = function (args)
