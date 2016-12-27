@@ -362,6 +362,7 @@ addon.defaults = {
         -- special tweaks
         ["enableOutDmg"] = true,
         ["enableOutHeal"] = true,
+        ["enableOutAbsorbs"] = true,
         ["enablePetDmg"] = true,
         ["enableVehicleDmg"] = true,
         ["enableAutoAttack"] = true,

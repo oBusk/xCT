@@ -282,12 +282,12 @@ do
 			]]
 
 			elseif suffix == "_MISSED" then
-				args.missType, args.isOffHand, args.multistrike,
+				args.missType, args.isOffHand,
 				args.amountMissed = select(i, ...)
 
 			elseif suffix == "_HEAL" then
 				args.amount, args.overhealing, args.absorbed,
-				args.critical, args.multistrike = select(i, ...)
+				args.critical = select(i, ...)
 
 			elseif suffix == "_ENERGIZE" then
 				args.amount, args.powerType = select(i, ...)

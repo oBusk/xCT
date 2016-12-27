@@ -150,7 +150,7 @@ function x:UpdateCombatTextEvents(enable)
 
     x.combatEvents = f
     f:SetScript("OnEvent", x.OnCombatTextEvent)
-    
+
     xCP:RegisterCombat(x.CombatLogEvent)
   else
     -- Disabled Combat Text
@@ -176,6 +176,7 @@ local function ShowOnlyMyHeals() return x.db.profile.frames.healing.showOnlyMyHe
 local function ShowOnlyMyPetsHeals() return x.db.profile.frames.healing.showOnlyPetHeals end
 local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg end
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
+local function ShowAbsorbs() return x.db.profile.frames["outgoing"].enableOutAbsorbs end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
 local function ShowVehicleDamage() return x.db.profile.frames["outgoing"].enableVehicleDmg end
 local function ShowAutoAttack() return x.db.profile.frames["outgoing"].enableAutoAttack end -- Also see ShowSwingCrit
@@ -207,6 +208,9 @@ local function ShowEnergyGains() return x.db.profile.frames["power"].showEnergyG
 local function ShowPeriodicEnergyGains() return x.db.profile.frames["power"].showPeriodicEnergyGains end
 local function ShowEnergyTypes() return x.db.profile.frames["power"].showEnergyType end
 local function ShowIncomingAutoAttackIcons() return x.db.profile.frames["damage"].iconsEnabledAutoAttack end
+
+local function DisplayIncomingOverhealing() return x.db.profile.frames["healing"].displayOverheals end
+local function DisplayIncomingAbsorbedHealing() return x.db.profile.frames["healing"].displayHealingAbsorbed end
 
 -- TODO: Add Combo Point Support
 local function ShowRogueComboPoints() return false end -- x.db.profile.spells.combo["ROGUE"][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "ROGUE" end
@@ -2007,6 +2011,8 @@ local CombatEventHandlers = {
 		-- Keep track of spells that go by
 		if TrackSpells() then x.spellCache.spells[args.spellId] = true end
 
+		if not ShowAbsorbs() then return end
+
 		-- Filter Ougoing Healing Spell or Amount
 		if IsSpellFiltered(args.spellId) or FilterOutgoingHealing(args.amount) then return end
 
@@ -2213,7 +2219,7 @@ local CombatEventHandlers = {
 				resistType, resistedAmount = BLOCK, args.amount > 0 and args.blocked
 				color = resistedAmount and 'missTypeBlock' or 'missTypeBlockPartial'
 			elseif (args.absorbed or 0) > 0 then
-				resistType, resistedAmount = BLOCK, args.amount > 0 and args.absorbed
+				resistType, resistedAmount = ABSORB, args.amount > 0 and args.absorbed
 				color = resistedAmount and 'missTypeAbsorb' or 'missTypeAbsorbPartial'
 			end
 
@@ -2298,9 +2304,15 @@ local CombatEventHandlers = {
 		if IsHealingFiltered(args.spellId) then return end
 
 		-- Adjust the amount if the user doesnt want over healing
-		if not ShowOverHealing() then
+		if not ShowOverHealing() or DisplayIncomingOverhealing() then
 			amount = amount - args.overhealing
 		end
+
+		if DisplayIncomingAbsorbedHealing() then
+			amount = amount - args.absorbed
+		end
+
+
 
 		-- Filter out small amounts
 		if amount <= 0 or FilterIncomingHealing(amount) then return end

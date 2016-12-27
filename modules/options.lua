@@ -3037,7 +3037,7 @@ addon.options.args["Frames"] = {
               fontSize = 'large',
             },
             enableOutDmg = {
-              order = 1,
+              order = 10,
               type = 'toggle',
               name = "Show Outgoing Damage",
               desc = "Show damage you do.",
@@ -3045,15 +3045,23 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableOutHeal = {
-              order = 2,
+              order = 11,
               type = 'toggle',
               name = "Show Outgoing Healing",
               desc = "Show healing you do.",
               get = get2,
               set = set2,
             },
+            enableOutAbsorbs = {
+              order = 12,
+              type = 'toggle',
+              name = "Show Outgoing Absorbs",
+              desc = "Show absorbs that you apply.",
+              get = get2,
+              set = set2,
+            },
             enablePetDmg = {
-              order = 3,
+              order = 20,
               type = 'toggle',
               name = "Show Pet Damage",
               desc = "Show your pet's damage. Beast Mastery hunters should also look at vehicle damage.",
@@ -3061,7 +3069,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableVehicleDmg = {
-              order = 4,
+              order = 21,
               type = 'toggle',
               name = "Show Vehicle Damage",
               desc = "Show damage that your vehicle does. This can be anything from a vehicle you are controlling to Hati, the beast mastery pet.",
@@ -3069,7 +3077,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableAutoAttack = {
-              order = 5,
+              order = 30,
               type = 'toggle',
               name = "Show Auto Attack",
               desc = "Show your auto attack damage.",
@@ -3077,7 +3085,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableDotDmg = {
-              order = 6,
+              order = 40,
               type = 'toggle',
               name = "Show DoTs",
               desc = "Show your Damage-Over-Time (DOT) damage. (|cffFF0000Requires:|r Outgoing Damage)",
@@ -3085,7 +3093,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableHots = {
-              order = 7,
+              order = 41,
               type = 'toggle',
               name = "Show HoTs",
               desc = "Show your Heal-Over-Time (HOT) healing. (|cffFF0000Requires:|r Outgoing Healing)",
@@ -3093,7 +3101,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableImmunes = {
-              order = 9,
+              order = 50,
               type = 'toggle',
               name = "Show Immunes",
               desc = "Display 'Immune' when your target cannot take damage.",
@@ -3101,7 +3109,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableMisses = {
-              order = 10,
+              order = 51,
               type = 'toggle',
               name = "Show Miss Types",
               desc = "Display 'Miss', 'Dodge', 'Parry' when you miss your target.",
