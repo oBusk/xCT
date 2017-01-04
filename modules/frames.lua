@@ -570,7 +570,7 @@ do
 				                                  strColor,
 				                                  true, -- Merge Override = true
 				                                  #item.entries )
-			elseif frameIndex[index] == "outgoing" or frameIndex[index] == "healing" then
+			elseif frameIndex[index] == "outgoing" then
 				message = x:GetSpellTextureFormatted( stack[idIndex],
 				                                  message,
 				                                  settings.iconsEnabled and settings.iconsSize or -1,
@@ -581,7 +581,7 @@ do
 			else
 				-- This is not needed anymore (was used for healing)
 				if #item.entries > 1 then
-					message = sformat("%s |cff%sx%s|r", message, strColor, #item.entries)
+					message = sformat(" |T"..x.BLANK_ICON..":-1:-1:0:0:64:64:5:59:5:59|t %s |cff%sx%s|r", message, strColor, #item.entries)
 				end
 			end
 
