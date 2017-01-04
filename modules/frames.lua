@@ -581,7 +581,7 @@ do
 			else
 				-- This is not needed anymore (was used for healing)
 				if #item.entries > 1 then
-					message = sformat(" |T"..x.BLANK_ICON..":-1:-1:0:0:64:64:5:59:5:59|t %s |cff%sx%s|r", message, strColor, #item.entries)
+					message = sformat(" |T"..x.BLANK_ICON..":%d:%d:0:0:64:64:5:59:5:59|t %s |cff%sx%s|r", settings.iconsSize, settings.iconsSize, message, strColor, #item.entries)
 				end
 			end
 
