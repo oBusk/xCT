@@ -103,6 +103,9 @@ addon.merges[214350]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Oakh
 -- Legendaries
 addon.merges[207694]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Legendary: Cinidaria, the Symbiote")
 
+-- Class Hall Items
+addon.merges[223667]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Druid: Thornstalk Barbs")
+
 -- ---------------------------
 -- World Zone               --
 -- ---------------------------
