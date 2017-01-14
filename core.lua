@@ -56,6 +56,10 @@ local function RefreshConfig()
   x:UpdateSpamSpells()
   x:UpdateItemTypes()
 
+  -- Will this fix the profile issue?
+  x.GenerateSpellSchoolColors()
+  x.GenerateColorOptions()
+
   -- Update combat text engine CVars
   x.cvar_update( true )
 
