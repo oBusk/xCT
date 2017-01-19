@@ -152,6 +152,7 @@ addon.merges[32546]     = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- T
 addon.merges[204883]    = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Talent: Circle of Healing
 
 -- Shadow (ID: 258)
+addon.merges[228360]    = CreateMergeSpellEntry("PRIEST", 1.0, 258)         -- Void Eruption
 addon.merges[34914]     = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- Vampiric Touch
 addon.merges[148859]    = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- Shadowy Apparition
 addon.merges[15407]     = CreateMergeSpellEntry("PRIEST", 2.0, 258)         -- Mind Flay
@@ -161,6 +162,7 @@ addon.merges[205065]    = CreateMergeSpellEntry("PRIEST", 2.0, 258)         -- A
 addon.merges[194238]    = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- Artifact: Sphere of Insanity
 addon.merges[204778]    = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- Honor Talent: Void Shield
 addon.merge2h[237388]   = 15407                                             -- [Cleave Merger] Mind Flay AoE Component (7.1.5)
+addon.merge2h[228361]   = 228360                                            -- Void Eruption Merger
 
 -- ---------------------------
 -- Paladin                  --
