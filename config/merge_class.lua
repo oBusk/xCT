@@ -39,6 +39,7 @@ end
 -- ---------------------------
 
 -- All Specs
+addon.merges[185311]    = CreateMergeSpellEntry("ROGUE", 2.5, 0)            -- Crimson Vial
 addon.merges[152150]    = CreateMergeSpellEntry("ROGUE", 0.5, 0)            -- Death from Above
 addon.merges[209043]    = CreateMergeSpellEntry("ROGUE", 0.5, 0)            -- Insignia of Ravenholdt (Legendary Ring - All Specs)
 
@@ -52,11 +53,14 @@ addon.merge2h[192380]   = 113780                                            -- A
 addon.merge2h[27576]    = 5374                                              -- Mutilate (OH)
 
 -- Outlaw (ID: 260)
+addon.merges[202895]    = CreateMergeSpellEntry("ROGUE", 0.5, 260)          -- Blunderbuss
+addon.merges[199804]    = CreateMergeSpellEntry("ROGUE", 2.0, 260)          -- Between the Eyes
+addon.merges[193315]    = CreateMergeSpellEntry("ROGUE", 0.5, 260)          -- Saber Slash
+addon.merges[86392]     = CreateMergeSpellEntry("ROGUE", 1.0, 260)          -- Main Gauche
 addon.merges[22482]     = CreateMergeSpellEntry("ROGUE", 1.5, 260)          -- Blade Flurry
 addon.merges[57841]     = CreateMergeSpellEntry("ROGUE", 3.5, 260)          -- Killing Spree
 addon.merges[185779]    = CreateMergeSpellEntry("ROGUE", 2.0, 260)          -- Talent: Cannonball Barrage
-addon.merges[202822]    = CreateMergeSpellEntry("ROGUE", 0.5, 260)          -- Artifact: Greed
-addon.merges[193315]    = CreateMergeSpellEntry("ROGUE", 0.5, 260)          -- Saber Slash
+addon.merges[202822]    = CreateMergeSpellEntry("ROGUE", 1.0, 260)          -- Artifact: Greed
 addon.merge2h[202823]   = 202822                                            -- [MH/OH Merger] Artifact: Greed
 addon.merge2h[197834]   = 193315                                            -- [Proc Merger] Saber Slash
 
@@ -87,18 +91,20 @@ addon.merges[199658]    = CreateMergeSpellEntry("WARRIOR", 1.5, 71)         -- W
 addon.merge2h[199850]   = 199658                                            -- [Spell Merger] Whirlwind
 
 -- Fury (ID: 72)
+addon.merges[5308]      = CreateMergeSpellEntry("WARRIOR", 1.0, 72)         -- Execute
 addon.merges[184367]    = CreateMergeSpellEntry("WARRIOR", 2.5, 72)         -- Rampage (Red Face Icon)
-addon.merges[96103]     = CreateMergeSpellEntry("WARRIOR", 0.5, 72)         -- Raging Blow
+addon.merges[96103]     = CreateMergeSpellEntry("WARRIOR", 1.0, 72)         -- Raging Blow
 addon.merges[199667]    = CreateMergeSpellEntry("WARRIOR", 1.5, 72)         -- Whirlwind
 addon.merges[23881]     = CreateMergeSpellEntry("WARRIOR", 0.5, 72)         -- Bloodthirst (Whirlwind: Meat Cleaver)
 addon.merges[113344]    = CreateMergeSpellEntry("WARRIOR", 2.5, 72)         -- Talent: Bloodbath
 addon.merges[118000]    = CreateMergeSpellEntry("WARRIOR", 0.5, 72)         -- Talent: Dragon Roar
 addon.merges[50622]     = CreateMergeSpellEntry("WARRIOR", 2.5, 72)         -- Talent: Bladestorm
 addon.merges[205546]    = CreateMergeSpellEntry("WARRIOR", 3.0, 72)         -- Artifact: Odyn's Fury (DoT)
-addon.merge2h[205547]   = 205546                                            -- Artifact: Odyn's Fury (Hit)
+addon.merge2h[163558]   = 5308                                              -- [MH/OH] Execute OH
 addon.merge2h[85384]    = 96103                                             -- [MH/OH] Raging Blow
 addon.merge2h[44949]    = 199667                                            -- [MH/OH] Whirlwind
 addon.merge2h[95738]    = 50622                                             -- [MH/OH] Bladestorm
+addon.merge2h[205547]   = 205546                                            -- Artifact: Odyn's Fury (Hit)
 addon.merge2h[218617]   = 184367                                            -- Rampage (1st Hit)
 addon.merge2h[184707]   = 184367                                            -- Rampage (2nd Hit)
 addon.merge2h[184709]   = 184367                                            -- Rampage (3rd Hit)
@@ -154,7 +160,7 @@ addon.merges[193473]    = CreateMergeSpellEntry("PRIEST", 2.0, 258)         -- A
 addon.merges[205065]    = CreateMergeSpellEntry("PRIEST", 2.0, 258)         -- Artifact: Void Torrent
 addon.merges[194238]    = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- Artifact: Sphere of Insanity
 addon.merges[204778]    = CreateMergeSpellEntry("PRIEST", 2.5, 258)         -- Honor Talent: Void Shield
-addon.merge2h[49821]   = 15407                                              -- [Cleave Merger] Mind Flay AoE Component (7.1.5)
+addon.merge2h[237388]   = 15407                                             -- [Cleave Merger] Mind Flay AoE Component (7.1.5)
 
 -- ---------------------------
 -- Paladin                  --
@@ -206,6 +212,7 @@ addon.merge2h[216527]   = 20271                                             -- [
 -- ---------------------------
 
 -- All Specs
+addon.merges[136]       = CreateMergeSpellEntry("HUNTER", 2.5, 0)           -- Mend Pet
 addon.merges[2643]      = CreateMergeSpellEntry("HUNTER", 0.5, 0)           -- Multi-Shot
 addon.merges[131900]    = CreateMergeSpellEntry("HUNTER", 2.5, 0)           -- Talent: A Murder of Crows
 addon.merges[194392]    = CreateMergeSpellEntry("HUNTER", 0.5, 0)           -- Talent: Volley
