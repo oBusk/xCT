@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2015. All Rights Reserved.        ]
+ [  ⓒ2015. All Rights Reserved.        ]
  [====================================]]
 
 local ADDON_NAME, addon = ...
@@ -325,6 +325,10 @@ local function UseStandardSpellColors() return not x.db.profile.frames["outgoing
  String Formatters
 --]=====================================================]
 local format_getItemString = "([^|]+)|cff(%x+)|H([^|]+)|h%[([^%]]+)%]|h|r[^%d]*(%d*)"
+local format_getCraftedItemString
+if GetLocale() == "koKR" then
+  format_getCraftedItemString = "|cff(%x+)|H([^|]+)|h%[([^%]]+)%]|h|r.+ (.+)"
+end
 local format_pet  = sformat("|cff798BDD[%s]:|r %%s (%%s)", sgsub(BATTLE_PET_CAGE_ITEM_NAME,"%s?%%s","")) -- [Caged]: Pet Name (Pet Family)
 
 -- TODO: Remove old loot pattern
@@ -355,6 +359,9 @@ local format_lewtz_amount       = " |cff798BDDx%s|r"
 local format_lewtz_total        = " |cffFFFF00(%s)|r"
 local format_lewtz_blind        = "(%s)"
 local format_crafted            = (LOOT_ITEM_CREATED_SELF:gsub("%%.*", ""))       -- "You create: "
+if GetLocale() == "koKR" then
+  format_crafted = (LOOT_ITEM_CREATED_SELF:gsub("%%.+ ", ""))
+end
 local format_looted             = (LOOT_ITEM_SELF:gsub("%%.*", ""))               -- "You receive loot: "
 local format_pushed             = (LOOT_ITEM_PUSHED_SELF:gsub("%%.*", ""))        -- "You receive item: "
 local format_strcolor_white     = "ffffff"
@@ -1201,6 +1208,9 @@ x.events = {
   ["CHAT_MSG_LOOT"] = function(msg)
       -- Fixing Loot for Legion
       local preMessage, linkColor, itemString, itemName, amount = string.match(msg, format_getItemString)
+      if not preMessage or preMessage == "" then
+        linkColor, itemString, itemName, preMessage = string.match(msg, format_getCraftedItemString)
+      end
 
       -- Decode item string: (linkQuality for pets only)
       local linkType, linkID, _, linkQuality = strsplit(':', itemString)
@@ -2631,4 +2641,3 @@ function x.CombatLogEvent (args)
 
 	end
 end
-
