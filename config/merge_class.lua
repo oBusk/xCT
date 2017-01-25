@@ -239,16 +239,20 @@ addon.merges[198670]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- T
 addon.merges[191070]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Artifact: Call of the Hunter
 addon.merge2h[191043]   = 19434                                             -- Windburst
 
--- Survival (ID: 255)
+-- Survival (ID: 255) 204081
 addon.merges[185855]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Lacerate
 addon.merges[187708]    = CreateMergeSpellEntry("HUNTER", 0.5, 255)         -- Carve
 addon.merges[13812]     = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Explosive Trap
+addon.merges[164857]    = CreateMergeSpellEntry("HUNTER", 4.5, 255)         -- Survivalist (HoT)
 addon.merges[194279]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Talent: Caltrops
 addon.merges[212436]    = CreateMergeSpellEntry("HUNTER", 0.5, 255)         -- Talent: Butchery
-addon.merges[203413]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Artifact: Fury of the Eagle
-addon.merges[194859]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Artifact: Dragonsfire Conflagration
-addon.merges[194858]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Artifact: Dragonsfire Grenade
-addon.merges[164857]    = CreateMergeSpellEntry("HUNTER", 5.0, 255)         -- Passive: Survivalist
+addon.merges[194859]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Talent: Dragonsfire Grenade
+addon.merges[203563]    = CreateMergeSpellEntry("HUNTER", 0.5, 255)         -- Artifact: Talen Strike (Bugged Icon Fix)
+addon.merges[203415]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Artifact: Fury of the Eagle (Bugged Icon Fix)
+addon.merges[204081]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Artifact: On the Trail
+addon.merge2h[203525]   = 203563                                            -- Talen Strike (2x Hits)
+addon.merge2h[194858]   = 194859                                            -- Talent: Dragonsfire Grenade (DoT)
+addon.merge2h[203413]   = 203415                                            -- Artifact: Fury of the Eagle (Bugged Icon Fix)
 
 
 -- ---------------------------
@@ -394,6 +398,7 @@ addon.merges[89753]     = CreateMergeSpellEntry("WARLOCK", 2.5, 266)        -- F
 addon.merges[104318]    = CreateMergeSpellEntry("WARLOCK", 1.5, 266)        -- Wild Imp: Fel Firebolt
 addon.merges[193439]    = CreateMergeSpellEntry("WARLOCK", 1.5, 266)        -- Demonwrath
 addon.merges[86040]     = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Hand of Gul'dan
+addon.merges[205196]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Dreadstalkers (Dreadbite)
 addon.merges[196278]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Talent: Implosion
 addon.merges[205231]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Talent: Summon Darkglare
 addon.merges[211727]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Artifact: Thal'kiel's Discord
