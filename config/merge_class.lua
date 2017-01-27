@@ -146,6 +146,7 @@ addon.merges[14914]     = CreateMergeSpellEntry("PRIEST", 2.5, 257)         -- H
 addon.merges[132157]    = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Holy Nova
 addon.merges[34861]     = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Holy Word: Sanctify
 addon.merges[596]       = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Prayer of Healing
+addon.merges[64844]     = CreateMergeSpellEntry("PRIEST", 2.5, 257)         -- Divine Hymn
 addon.merges[77489]     = CreateMergeSpellEntry("PRIEST", 3.5, 257)         -- Mastery: Echo of Light
 addon.merges[2061]      = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Talent: Trail of Light (Flash Heal)
 addon.merges[32546]     = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Talent: Binding Heal
@@ -220,6 +221,7 @@ addon.merges[2643]      = CreateMergeSpellEntry("HUNTER", 0.5, 0)           -- M
 addon.merges[131900]    = CreateMergeSpellEntry("HUNTER", 2.5, 0)           -- Talent: A Murder of Crows
 addon.merges[194392]    = CreateMergeSpellEntry("HUNTER", 0.5, 0)           -- Talent: Volley
 addon.merges[120361]    = CreateMergeSpellEntry("HUNTER", 1.5, 0)           -- Talent: Barrage
+addon.merge2h[214303]   = 136                                               -- Mend Pet
 
 -- Beast Mastery (ID: 253)
 addon.merges[118459]    = CreateMergeSpellEntry("HUNTER", 2.5, 253)         -- Pet: Beast Cleave
@@ -228,6 +230,7 @@ addon.merges[217207]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- T
 addon.merges[171454]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- Talent: Chimaera Shot
 addon.merges[197465]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- Artifact: Surge of the Stormgod
 addon.merges[207097]    = CreateMergeSpellEntry("HUNTER", 1.5, 253)         -- Artifact: Titan's Thunder
+addon.merges[197205]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- Artifact: Spirit Bond
 addon.merge2h[171457]   = 171454                                            -- [Cleave Merger] Chimaera Shot
 
 -- Marksmanship (ID: 254)
