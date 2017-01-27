@@ -100,6 +100,9 @@ addon.merges[221804]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Rava
 addon.merges[222197]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Unstable Horrorslime")
 addon.merges[214350]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Oakheart's Gnarled Root")
 
+-- Trinkets: Nighthold
+addon.merges[229700]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Pharamere's Forbidden Grimoire")
+
 -- Legendaries
 addon.merges[207694]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Legendary: Cinidaria, the Symbiote")
 
