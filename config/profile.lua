@@ -372,6 +372,11 @@ addon.defaults = {
         ["enableMisses"] = true,
         ["enablePartialMisses"] = false,
         ["showHighestPartialMiss"] = false,
+
+        ["enableOverhealing"] = true,
+        ["enableOverhealingFormat"] = true,
+        ["overhealingPrefix"] = "(O: |cffFFFFFF",
+        ["overhealingPostfix"] = ")",
       },
 
       critical = {

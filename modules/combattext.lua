@@ -210,6 +210,10 @@ local function ShowPeriodicEnergyGains() return x.db.profile.frames["power"].sho
 local function ShowEnergyTypes() return x.db.profile.frames["power"].showEnergyType end
 local function ShowIncomingAutoAttackIcons() return x.db.profile.frames["damage"].iconsEnabledAutoAttack end
 
+local function ShowOutgoingOverHealing() return x.db.profile.frames["healing"].enableOverhealing end
+local function IsOutgoingOverHealingFormatted() return x.db.profile.frames["healing"].enableOverhealingFormat end
+local function FormatOutgoingOverhealing(amount) return x.db.profile.frames["healing"].overhealingPrefix .. amount .. x.db.profile.frames["healing"].overhealingPostfix end
+
 local function DisplayIncomingOverhealing() return x.db.profile.frames["healing"].displayOverheals end
 local function DisplayIncomingAbsorbedHealing() return x.db.profile.frames["healing"].displayHealingAbsorbed end
 
@@ -2018,7 +2022,7 @@ local CombatEventHandlers = {
 	end,
 
 	["HealingOutgoing"] = function (args)
-		local spellID, isHoT, merged = args.spellId, args.prefix == "SPELL_PERIODIC"
+		local spellID, isHoT, amount, merged = args.spellId, args.prefix == "SPELL_PERIODIC", args.amount
 
 		-- Keep track of spells that go by
 		if TrackSpells() then x.spellCache.spells[spellID] = true end
@@ -2028,11 +2032,20 @@ local CombatEventHandlers = {
 		-- Check to see if this is a HoT
 		if isHoT and not ShowHots() then return end
 
+		--if  ShowOverhealing() then
+
+		--ShowOverhealingFormat FormatOverhealing(amount)
+
+--local function ShowOutgoingOverHealing() return x.db.profile.frames["healing"].enableOverhealing end
+--local function IsOutgoingOverHealingFormatted() return x.db.profile.frames["healing"].enableOverhealingFormat end
+--local function FormatOutgoingOverhealing(amount) return x.db.profile.frames["healing"].overhealingPrefix .. amount .. x.db.profile.frames["healing"].overhealingPostfix end
+
+		
+
 		-- Filter Ougoing Healing Spell or Amount
-		if IsSpellFiltered(spellID) or FilterOutgoingHealing(args.amount) then return end
+		if IsSpellFiltered(spellID) or FilterOutgoingHealing(amount) then return end
 
 		-- Filter Overhealing
-		local amount = args.amount
 		if not ShowOverHealing() then
 			amount = amount - args.overhealing
 			if amount < 1 then

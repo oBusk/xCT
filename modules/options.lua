@@ -3142,6 +3142,74 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
+
+
+            healingSettings = {
+              type = 'description',
+              order = 60,
+              name = "\n|cff798BDDHealing Settings|r:",
+              fontSize = 'large',
+            },
+
+            enableOverhealing = {
+              order = 61,
+              type = 'toggle',
+              name = "Show Overhealing",
+              desc = "Displays overhealing.",
+              get = get2,
+              set = set2,
+              disabled = isFrameItemDisabled,
+            },
+
+            enableOverhealingFormat = {
+              order = 62,
+              type = 'toggle',
+              name = "Format Overhealing",
+              desc = "Splits overhealing into its own section. Example: +43,000 (O: 12,000)",
+              get = get2,
+              set = set2,
+              disabled = function(info)
+                return not x.db.profile.frames.outgoing.enabledFrame or
+                  not x.db.profile.frames.outgoing.enableOverhealing
+              end,
+            },
+
+            healingSettings_Spacer = {
+              type = 'description',
+              order = 63,
+              name = "",
+              fontSize = 'small',
+              width = 'full',
+            },
+
+            overhealingPrefix = {
+              order = 65,
+              type = 'input',
+              name = "Overhealing Prefix",
+              desc = "Prefix this value to the beginning when displaying an overheal amount.\n\n|cffFF0000Requires:|r |cff798BDDFormat Overhealing|r",
+              get = getTextIn2,
+              set = setTextIn2,
+              disabled = function(info)
+                return not x.db.profile.frames.outgoing.enabledFrame or
+                  not x.db.profile.frames.outgoing.enableOverhealing or
+                  not x.db.profile.frames.outgoing.enableOverhealingFormat
+              end,
+            },
+
+            overhealingPostfix = {
+              order = 66,
+              type = 'input',
+              name = "Overhealing Postfix",
+              desc = "Prefix this value to the endind when displaying an overheal amount.\n\n|cffFF0000Requires:|r |cff798BDDFormat Overhealing|r",
+              get = getTextIn2,
+              set = setTextIn2,
+              disabled = function(info)
+                return not x.db.profile.frames.outgoing.enabledFrame or
+                  not x.db.profile.frames.outgoing.enableOverhealing or
+                  not x.db.profile.frames.outgoing.enableOverhealingFormat
+              end,
+            },
+
           },
         },
 
