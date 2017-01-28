@@ -141,9 +141,10 @@ addon.merges[204213]    = CreateMergeSpellEntry("PRIEST", 2.5, 256)         -- T
 addon.merge2h[204197]   = 204213                                            -- Talent: Purge the Wicked (Instant)
 
 -- Holy (ID: 257)
-addon.merges[139]       = CreateMergeSpellEntry("PRIEST", 3.5, 257)         -- Renew
+addon.merges[585]       = CreateMergeSpellEntry("PRIEST", 1.0, 257)         -- Smite + Artifact: Invoke the Naaru
+addon.merges[139]       = CreateMergeSpellEntry("PRIEST", 3.0, 257)         -- Renew
 addon.merges[14914]     = CreateMergeSpellEntry("PRIEST", 2.5, 257)         -- Holy Fire
-addon.merges[132157]    = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Holy Nova
+addon.merges[132157]    = CreateMergeSpellEntry("PRIEST", 1.0, 257)         -- Holy Nova
 addon.merges[34861]     = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Holy Word: Sanctify
 addon.merges[596]       = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Prayer of Healing
 addon.merges[64844]     = CreateMergeSpellEntry("PRIEST", 2.5, 257)         -- Divine Hymn
@@ -151,6 +152,12 @@ addon.merges[77489]     = CreateMergeSpellEntry("PRIEST", 3.5, 257)         -- M
 addon.merges[2061]      = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Talent: Trail of Light (Flash Heal)
 addon.merges[32546]     = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Talent: Binding Heal
 addon.merges[204883]    = CreateMergeSpellEntry("PRIEST", 0.5, 257)         -- Talent: Circle of Healing
+addon.merges[196810]    = CreateMergeSpellEntry("PRIEST", 1.0, 257)         -- Artifact: Invoke the Naaru (Prayer of Healing & Sanctify)
+addon.merges[196809]    = CreateMergeSpellEntry("PRIEST", 1.0, 257)         -- Artifact: Invoke the Naaru (Heal, Flash Heal & Serenity)
+addon.merges[196813]    = CreateMergeSpellEntry("PRIEST", 1.0, 257)         -- Artifact: Invoke the Naaru (Divine Hymn & Prayer of Mending)
+addon.merge2h[196816]   = 139                                               -- Artifact: Invoke the Naaru (Renew)
+addon.merge2h[196811]   = 585                                               -- Artifact: Invoke the Naaru (Smite, Holy Fire & Chastise)
+addon.merge2h[196812]   = 132157                                            -- Artifact: Invoke the Naaru (Holy Nova)
 
 -- Shadow (ID: 258)
 addon.merges[228360]    = CreateMergeSpellEntry("PRIEST", 1.0, 258)         -- Void Eruption
