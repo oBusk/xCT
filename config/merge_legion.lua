@@ -100,8 +100,12 @@ addon.merges[221804]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Rava
 addon.merges[222197]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Unstable Horrorslime")
 addon.merges[214350]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Oakheart's Gnarled Root")
 
+-- Trinkets: Nighthold
+addon.merges[229700]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Pharamere's Forbidden Grimoire")
+
 -- Legendaries
 addon.merges[207694]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Legendary: Cinidaria, the Symbiote")
+addon.merges[210999]      = CreateMergeSpellEntry(Leg_Items, 2.5, "Legendary: Obsidian Stone Spaulders")
 
 -- Class Hall Items
 addon.merges[223667]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Druid: Thornstalk Barbs")
@@ -164,5 +168,6 @@ addon.merges[202891]      = CreateMergeSpellEntry(Leg_QuestItems, 2.5, "Trinket:
 -- ---------------------------
 -- Raids                    --
 -- ---------------------------
-addon.merges[215300]      = CreateMergeSpellEntry(Leg_Raid, 2.0, "Elerethe Renferal: Web of Pain [Tanks]") -- Should maybe be ignored by default
-addon.merges[215307]      = CreateMergeSpellEntry(Leg_Raid, 2.0, "Elerethe Renferal: Web of Pain [Other]") -- Should maybe be ignored by default
+addon.merges[215300]      = CreateMergeSpellEntry(Leg_Raid, 2.0, "Elerethe Renferal: Web of Pain [Tanks]")
+addon.merges[215307]      = CreateMergeSpellEntry(Leg_Raid, 2.0, "Elerethe Renferal: Web of Pain [Other]")
+addon.merges[223699]      = CreateMergeSpellEntry(Leg_Raid, 1.0, "Dragons of Nightmare: Volatile Infection")
