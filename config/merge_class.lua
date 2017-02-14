@@ -65,8 +65,14 @@ addon.merge2h[202823]   = 202822                                            -- [
 addon.merge2h[197834]   = 193315                                            -- [Proc Merger] Saber Slash
 
 -- Sublety (ID: 261)
+addon.merges[121473]    = CreateMergeSpellEntry("ROGUE", 1.5, 261)          -- Shadowblades
+addon.merges[185438]    = CreateMergeSpellEntry("ROGUE", 1.5, 261)          -- Shadowstrike
 addon.merges[197835]    = CreateMergeSpellEntry("ROGUE", 0.5, 261)          -- Shuriken Storm
 addon.merges[197800]    = CreateMergeSpellEntry("ROGUE", 0.5, 261)          -- Shadow Nova
+addon.merges[195452]    = CreateMergeSpellEntry("ROGUE", 2.5, 261)          -- Nightblade (DoT)
+addon.merges[158188]    = CreateMergeSpellEntry("ROGUE", 2.5, 261)          -- Talent: Soothing Darkness
+addon.merges[220893]    = CreateMergeSpellEntry("ROGUE", 2.5, 261)          -- Artifact: Akaari's Soul
+addon.merge2h[121474]   = 121473                                            -- [MH/OH Merger] Artifact: Greed
 
 
 
@@ -384,6 +390,10 @@ addon.merges[153596]    = CreateMergeSpellEntry("MAGE", 2.5, 64)            -- C
 -- ---------------------------
 -- Warlock                  --
 -- ---------------------------
+
+-- All Specs
+addon.merges[217979]    = CreateMergeSpellEntry("WARLOCK", 2.0, 0)          -- Heath Funnel (You)
+addon.merges[85692]     = CreateMergeSpellEntry("WARLOCK", 2.0, 0)          -- Doomguard (Doom Bolt)
 
 -- Affliction (ID: 265)
 addon.merges[198590]    = CreateMergeSpellEntry("WARLOCK", 1.5, 265)        -- Drain Soul

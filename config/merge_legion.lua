@@ -102,6 +102,7 @@ addon.merges[214350]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Oakh
 
 -- Trinkets: Nighthold
 addon.merges[229700]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Pharamere's Forbidden Grimoire")
+addon.merges[225777]      = CreateMergeSpellEntry(Leg_Items, 3.5, "Trinket: Draught of Souls")
 
 -- Legendaries
 addon.merges[207694]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Legendary: Cinidaria, the Symbiote")
