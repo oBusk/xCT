@@ -210,9 +210,9 @@ local function ShowPeriodicEnergyGains() return x.db.profile.frames["power"].sho
 local function ShowEnergyTypes() return x.db.profile.frames["power"].showEnergyType end
 local function ShowIncomingAutoAttackIcons() return x.db.profile.frames["damage"].iconsEnabledAutoAttack end
 
-local function ShowOutgoingOverHealing() return x.db.profile.frames["healing"].enableOverhealing end
-local function IsOutgoingOverHealingFormatted() return x.db.profile.frames["healing"].enableOverhealingFormat end
-local function FormatOutgoingOverhealing(amount) return x.db.profile.frames["healing"].overhealingPrefix .. amount .. x.db.profile.frames["healing"].overhealingPostfix end
+local function ShowOutgoingOverHealing() return x.db.profile.frames["outgoing"].enableOverhealing end
+local function IsOutgoingOverHealingFormatted() return x.db.profile.frames["outgoing"].enableOverhealingFormat end
+local function FormatOutgoingOverhealing(amount) return x.db.profile.frames["outgoing"].overhealingPrefix .. amount .. x.db.profile.frames["outgoing"].overhealingPostfix end
 
 local function DisplayIncomingOverhealing() return x.db.profile.frames["healing"].displayOverheals end
 local function DisplayIncomingAbsorbedHealing() return x.db.profile.frames["healing"].displayHealingAbsorbed end
@@ -239,11 +239,11 @@ local function MergeDontMergeCriticals() return x.db.profile.spells.mergeDontMer
 local function MergeHideMergedCriticals() return x.db.profile.spells.mergeHideMergedCriticals end
 local function MergeDispells() return x.db.profile.spells.mergeDispells end
 
-local function FilterPlayerPower(value) return x.db.profile.spellFilter.filterPowerValue > value end
-local function FilterOutgoingDamage(value) return x.db.profile.spellFilter.filterOutgoingDamageValue > value end
-local function FilterOutgoingHealing(value) return x.db.profile.spellFilter.filterOutgoingHealingValue > value end
-local function FilterIncomingDamage(value) return x.db.profile.spellFilter.filterIncomingDamageValue > value end
-local function FilterIncomingHealing(value) return x.db.profile.spellFilter.filterIncomingHealingValue > value end
+local function FilterPlayerPower(value) return x.db.profile.spellFilter.filterPowerValue >= value end
+local function FilterOutgoingDamage(value) return x.db.profile.spellFilter.filterOutgoingDamageValue >= value end
+local function FilterOutgoingHealing(value) return x.db.profile.spellFilter.filterOutgoingHealingValue >= value end
+local function FilterIncomingDamage(value) return x.db.profile.spellFilter.filterIncomingDamageValue >= value end
+local function FilterIncomingHealing(value) return x.db.profile.spellFilter.filterIncomingHealingValue >= value end
 local function TrackSpells() return x.db.profile.spellFilter.trackSpells end
 
 local function IsResourceDisabled( resource, amount )
@@ -2022,8 +2022,7 @@ local CombatEventHandlers = {
 	end,
 
 	["HealingOutgoing"] = function (args)
-		local spellID, isHoT, amount, merged = args.spellId, args.prefix == "SPELL_PERIODIC", args.amount
-
+		local spellID, isHoT, amount, merged, message = args.spellId, args.prefix == "SPELL_PERIODIC", args.amount
 		-- Keep track of spells that go by
 		if TrackSpells() then x.spellCache.spells[spellID] = true end
 
@@ -2032,30 +2031,16 @@ local CombatEventHandlers = {
 		-- Check to see if this is a HoT
 		if isHoT and not ShowHots() then return end
 
-		--if  ShowOverhealing() then
-
-		--ShowOverhealingFormat FormatOverhealing(amount)
-
---local function ShowOutgoingOverHealing() return x.db.profile.frames["healing"].enableOverhealing end
---local function IsOutgoingOverHealingFormatted() return x.db.profile.frames["healing"].enableOverhealingFormat end
---local function FormatOutgoingOverhealing(amount) return x.db.profile.frames["healing"].overhealingPrefix .. amount .. x.db.profile.frames["healing"].overhealingPostfix end
-
-		
+		if not ShowOutgoingOverHealing() then
+			amount = amount - args.overhealing
+		end
 
 		-- Filter Ougoing Healing Spell or Amount
 		if IsSpellFiltered(spellID) or FilterOutgoingHealing(amount) then return end
 
-		-- Filter Overhealing
-		if not ShowOverHealing() then
-			amount = amount - args.overhealing
-			if amount < 1 then
-				return
-			end
-		end
-
 		-- Figure out which frame and color to output
-		local outputFrame, outputColor, critical = "outgoing", "healingOut", args.critical
-		if critical then
+		local outputFrame, outputColor = "outgoing", "healingOut"
+		if args.critical then
 			outputFrame = "critical"
 			outputColor = "healingOutCritical"
 		end
@@ -2066,7 +2051,7 @@ local CombatEventHandlers = {
 		-- Condensed Critical Merge
 		if IsMerged(spellID) then
 			merged = true
-			if critical then
+			if args.critical then
 				if MergeCriticalsByThemselves() then
 					x:AddSpamMessage(outputFrame, spellID, amount, outputColor)
 					return
@@ -2082,15 +2067,27 @@ local CombatEventHandlers = {
 			end
 		end
 
-		if args.event == "SPELL_PERIODIC_HEAL" then
-			xCTFormat:SPELL_PERIODIC_HEAL(outputFrame, spellID, amount, critical, merged)
-		elseif args.event == "SPELL_HEAL" then
-			xCTFormat:SPELL_HEAL(outputFrame, spellID, amount, critical, merged)
+		-- Format Criticals and also abbreviate values
+		if args.critical then
+			message = sformat( format_crit, x.db.profile.frames["critical"].critPrefix,
+			                                x:Abbreviate( amount, "critical" ),
+			                                x.db.profile.frames["critical"].critPostfix )
 		else
-			if UnitName('player') == "Dandraffbal" then
-				print("xCT Needs Some Help: unhandled _HEAL event", args.event)
-			end
+			message = x:Abbreviate( amount, outputFrame )
 		end
+
+		if ShowOutgoingOverHealing() and IsOutgoingOverHealingFormatted() then
+			message = message .. FormatOutgoingOverhealing(args.overhealing)
+		end
+
+		-- Add Icons
+		message = x:GetSpellTextureFormatted( spellID,
+		                                    message,
+		   x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+		   x.db.profile.frames[outputFrame].fontJustify )
+
+		x:AddMessage(outputFrame, message, outputColor)
+
 	end,
 
 	["DamageOutgoing"] = function (args)
