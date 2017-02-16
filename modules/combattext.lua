@@ -239,11 +239,11 @@ local function MergeDontMergeCriticals() return x.db.profile.spells.mergeDontMer
 local function MergeHideMergedCriticals() return x.db.profile.spells.mergeHideMergedCriticals end
 local function MergeDispells() return x.db.profile.spells.mergeDispells end
 
-local function FilterPlayerPower(value) return x.db.profile.spellFilter.filterPowerValue >= value end
-local function FilterOutgoingDamage(value) return x.db.profile.spellFilter.filterOutgoingDamageValue >= value end
-local function FilterOutgoingHealing(value) return x.db.profile.spellFilter.filterOutgoingHealingValue >= value end
-local function FilterIncomingDamage(value) return x.db.profile.spellFilter.filterIncomingDamageValue >= value end
-local function FilterIncomingHealing(value) return x.db.profile.spellFilter.filterIncomingHealingValue >= value end
+local function FilterPlayerPower(value) return x.db.profile.spellFilter.filterPowerValue > value end
+local function FilterOutgoingDamage(value) return x.db.profile.spellFilter.filterOutgoingDamageValue > value end
+local function FilterOutgoingHealing(value) return x.db.profile.spellFilter.filterOutgoingHealingValue > value end
+local function FilterIncomingDamage(value) return x.db.profile.spellFilter.filterIncomingDamageValue > value end
+local function FilterIncomingHealing(value) return x.db.profile.spellFilter.filterIncomingHealingValue > value end
 local function TrackSpells() return x.db.profile.spellFilter.trackSpells end
 
 local function IsResourceDisabled( resource, amount )
@@ -2076,15 +2076,15 @@ local CombatEventHandlers = {
 			message = x:Abbreviate( amount, outputFrame )
 		end
 
-		if ShowOutgoingOverHealing() and IsOutgoingOverHealingFormatted() then
-			message = message .. FormatOutgoingOverhealing(args.overhealing)
+		if ShowOutgoingOverHealing() and IsOutgoingOverHealingFormatted() and args.overhealing > 0 then
+			message = message .. FormatOutgoingOverhealing(x:Abbreviate( args.overhealing, outputFrame ))
 		end
 
 		-- Add Icons
 		message = x:GetSpellTextureFormatted( spellID,
-		                                    message,
-		   x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
-		   x.db.profile.frames[outputFrame].fontJustify )
+		                                      message,
+		     x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+		     x.db.profile.frames[outputFrame].fontJustify )
 
 		x:AddMessage(outputFrame, message, outputColor)
 

@@ -285,9 +285,9 @@ addon.defaults = {
           ['healing'] = {
             enabled = false, desc = "Healing Color Overrides",
             colors = {
-              ['healingOut']         = { enabled = false, desc = "Healing",            default = { 0.60, 0.65, 1.00 } },
-              ['healingOutCritical'] = { enabled = false, desc = "Healing (Critical)", default = { 0.60, 0.65, 1.00 } },
-              ['healingOutPeriodic'] = { enabled = false, desc = "Healing (Periodic)", default = { 0.60, 0.65, 1.00 } },
+              ['healingOut']         = { enabled = false, desc = "Healing",            default = { 0.10, 0.75, 0.10 } },
+              ['healingOutCritical'] = { enabled = false, desc = "Healing (Critical)", default = { 0.10, 1.00, 0.10 } },
+              ['healingOutPeriodic'] = { enabled = false, desc = "Healing (Periodic)", default = { 0.10, 0.50, 0.10 } },
             }
           },
         },
@@ -375,8 +375,8 @@ addon.defaults = {
 
         ["enableOverhealing"] = true,
         ["enableOverhealingFormat"] = true,
-        ["overhealingPrefix"] = "(O: |cffFFFFFF",
-        ["overhealingPostfix"] = ")",
+        ["overhealingPrefix"] = " |cffFFFFFF(O: ",
+        ["overhealingPostfix"] = ")|r",
       },
 
       critical = {
