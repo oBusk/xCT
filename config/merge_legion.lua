@@ -69,6 +69,10 @@ addon.merges[221720]      = CreateMergeSpellEntry(Leg_BG, 1.5, "Arator the Redee
 -- Monk
 addon.merges[212141]      = CreateMergeSpellEntry(Leg_BG, 1.5, "The Monkey King (Spinning Crane Kick)")
 
+-- Mage
+addon.merges[228672]      = CreateMergeSpellEntry(Leg_BG, 1.0, "Archmage Modera (Flurry)")
+addon.merges[220128]      = CreateMergeSpellEntry(Leg_BG, 0.5, "Archmage Modera (Frost Nova)")
+
 -- ---------------------------
 -- Consumables              --
 -- ---------------------------
@@ -103,6 +107,10 @@ addon.merges[214350]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Oakh
 -- Trinkets: Nighthold
 addon.merges[229700]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Pharamere's Forbidden Grimoire")
 addon.merges[225777]      = CreateMergeSpellEntry(Leg_Items, 3.5, "Trinket: Draught of Souls")
+addon.merges[225731]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Trinket: Icon of Rot")
+addon.merges[225764]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Star Gate")
+addon.merges[225716]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Claw of the Crystalline Scorpid")
+addon.merges[225721]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Arcanogolem Digit")
 
 -- Legendaries
 addon.merges[207694]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Legendary: Cinidaria, the Symbiote")
