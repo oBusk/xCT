@@ -377,14 +377,15 @@ addon.merge2h[205472]   = 2120                                              -- [
 
 -- Frost (ID: 64)
 addon.merges[84721]     = CreateMergeSpellEntry("MAGE", 1.5, 64)            -- Frozen Orb
+addon.merges[228354]    = CreateMergeSpellEntry("MAGE", 1.0, 64)            -- Flurry
+addon.merges[148022]    = CreateMergeSpellEntry("MAGE", 1.5, 64)            -- Icicle
+addon.merges[190357]    = CreateMergeSpellEntry("MAGE", 2.5, 64)            -- Blizzard
+addon.merges[153596]    = CreateMergeSpellEntry("MAGE", 2.5, 64)            -- Talent: Comet Storm
 addon.merges[59638]     = CreateMergeSpellEntry("MAGE", 2.0, 64)            -- Talent: Mirror Images
 addon.merges[157997]    = CreateMergeSpellEntry("MAGE", 0.5, 64)            -- Talent: Ice Nova
-addon.merges[30455]     = CreateMergeSpellEntry("MAGE", 1.0, 64)            -- Talent: Spliting Ice
+addon.merges[228598]    = CreateMergeSpellEntry("MAGE", 1.0, 64)            -- Talent: Spliting Ice
 addon.merges[113092]    = CreateMergeSpellEntry("MAGE", 1.0, 64)            -- Talent: Frost Bomb
 addon.merges[157978]    = CreateMergeSpellEntry("MAGE", 0.5, 64)            -- Talent: Unstable Magic
-addon.merges[148022]    = CreateMergeSpellEntry("MAGE", 2.5, 64)            -- Icicles
-addon.merges[190357]    = CreateMergeSpellEntry("MAGE", 2.5, 64)            -- Blizzard
-addon.merges[153596]    = CreateMergeSpellEntry("MAGE", 2.5, 64)            -- Comet Storm
 
 
 -- ---------------------------
@@ -424,8 +425,9 @@ addon.merges[86040]     = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- H
 addon.merges[205196]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Dreadstalkers (Dreadbite)
 addon.merges[196278]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Talent: Implosion
 addon.merges[205231]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Talent: Summon Darkglare
-addon.merges[211727]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Artifact: Thal'kiel's Discord
+addon.merges[211720]    = CreateMergeSpellEntry("WARLOCK", 2.5, 266)        -- Artifact: Thal'kiel's Discord
 addon.merges[211714]    = CreateMergeSpellEntry("WARLOCK", 0.5, 266)        -- Artifact: Thal'kiel's Consumption (Demon Life Tap)
+addon.merge2h[211727]   = 211720                                            -- Artifact: Thal'kiel's Discord
 
 -- Destruction (ID: 267)
 addon.merges[157736]    = CreateMergeSpellEntry("WARLOCK", 3.5, 267)        -- Immolate
