@@ -2632,6 +2632,7 @@ function x.CombatLogEvent (args)
 
 		elseif args.event == 'SPELL_DISPEL' then
 			local message = args.sourceName .. " dispelled:"
+			if GetLocale() == "koKR" then message = args.sourceName .. " 무효화:" end
 			message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
