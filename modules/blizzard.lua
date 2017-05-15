@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2015. All Rights Reserved.        ]
+ [  ©2017. All Rights Reserved.        ]
  [====================================]]
 
 -- Dont do anything for Legion

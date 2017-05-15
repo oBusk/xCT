@@ -1,17 +1,17 @@
---[[   ____    ______      
+--[[   ____    ______
       /\  _`\ /\__  _\   __
- __  _\ \ \/\_\/_/\ \/ /_\ \___ 
+ __  _\ \ \/\_\/_/\ \/ /_\ \___
 /\ \/'\\ \ \/_/_ \ \ \/\___  __\
 \/>  </ \ \ \L\ \ \ \ \/__/\_\_/
  /\_/\_\ \ \____/  \ \_\  \/_/
  \//\/_/  \/___/    \/_/
- 
+
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2015. All Rights Reserved.        ]
+ [  ©2017. All Rights Reserved.        ]
  [====================================]]
- 
+
 local ADDON_NAME, addon = ...
 
 local mfloor = math.floor
@@ -24,13 +24,13 @@ function x:LoadAlignmentGrid()
   AlignGrid = CreateFrame('Frame', nil, UIParent)
   AlignGrid:SetAllPoints(UIParent)
   local boxSize = 32
-  
+
   -- Get the current screen resolution, Mid-points, and the total number of lines
   local ResX, ResY = mfloor(UIParent:GetWidth() + 0.5), mfloor(UIParent:GetHeight() + 0.5)
-  
+
   local midX, midY = ResX / 2, ResY / 2
   local iLinesLeftRight, iLinesTopBottom = midX / boxSize , midY / boxSize
-  
+
   -- Vertical Bars
   for i = 1, iLinesLeftRight do
     -- Vertical Bars to the Left of the Center
@@ -54,7 +54,7 @@ function x:LoadAlignmentGrid()
     tt1:SetPoint('TOP', AlignGrid, 'TOP', -i * boxSize + 1, 0)
     tt1:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', -i * boxSize + 1, 0)
     tt1:SetWidth(1)
-    
+
     -- Vertical Bars to the Right of the Center
     local tt2 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
     tt2:SetTexture("Interface\\BUTTONS\\WHITE8X8.blp")
@@ -77,7 +77,7 @@ function x:LoadAlignmentGrid()
     tt2:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', i * boxSize + 1, 0)
     tt2:SetWidth(1)
   end
-  
+
   -- Horizontal Bars
   for i = 1, iLinesTopBottom do
     -- Horizontal Bars to the Below of the Center
@@ -99,7 +99,7 @@ function x:LoadAlignmentGrid()
     tt3:SetPoint('LEFT', AlignGrid, 'LEFT', 0, -i * boxSize - 1)
     tt3:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, -i * boxSize - 1)
     tt3:SetHeight(1)
-    
+
     -- Horizontal Bars to the Above of the Center
     local tt4 = AlignGrid:CreateTexture(nil, 'BACKGROUND')
     tt4:SetTexture("Interface\\BUTTONS\\WHITE8X8.blp")
@@ -120,7 +120,7 @@ function x:LoadAlignmentGrid()
     tt4:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, i * boxSize - 1)
     tt4:SetHeight(1)
   end
-  
+
   --Create the Vertical Middle Bar
   local tta = AlignGrid:CreateTexture(nil, 'BACKGROUND')
   tta:SetTexture("Interface\\BUTTONS\\WHITE8X8.blp")
@@ -130,7 +130,7 @@ function x:LoadAlignmentGrid()
   tta:SetPoint('TOP', AlignGrid, 'TOP', 0, 0)
   tta:SetPoint('BOTTOM', AlignGrid, 'BOTTOM', 0, 0)
   tta:SetWidth(2)
-  
+
   --Create the Horizontal Middle Bar
   local ttb = AlignGrid:CreateTexture(nil, 'BACKGROUND')
   ttb:SetTexture("Interface\\BUTTONS\\WHITE8X8.blp")
@@ -140,8 +140,8 @@ function x:LoadAlignmentGrid()
   ttb:SetPoint('LEFT', AlignGrid, 'LEFT', 0, 0)
   ttb:SetPoint('RIGHT', AlignGrid, 'RIGHT', 0, 0)
   ttb:SetHeight(2)
-  
+
   AlignGrid:Hide()
-  
+
   x.AlignGrid = AlignGrid
 end
