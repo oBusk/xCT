@@ -1,4 +1,4 @@
--- Reuben DeLeon: All Rights Reserved. 2017.
+-- Reuben DeLeon: All Rights Reserved. 2018.
 
 -- This example is supposed to help you use xCombatParser-1.0.
 -- You need to already have LibStub loaded before xCombatParser.
