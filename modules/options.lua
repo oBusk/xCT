@@ -5825,6 +5825,15 @@ addon.options.args["Frames"] = {
               set = set2,
               width = "normal",
             },
+			
+			disableResource_MAELSTROM = { -- Add in Maelstrom to resources
+              order = 113,
+              type = 'toggle',
+              name = "Disable |cff798BDD"..MAELSTROM,
+              get = get2,
+              set = set2,
+              width = "normal",
+            },
 
             disableResource_ALTERNATE_POWER = {
               order = 114,

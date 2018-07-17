@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2017. All Rights Reserved.        ]
+ [  ©2018. All Rights Reserved.        ]
  [====================================]]
 
 local build = select(4, GetBuildInfo())
@@ -262,7 +262,9 @@ function x:Clear(specificFrame)
 	if not specificFrame then
 		for framename, settings in pairs(x.db.profile.frames) do
 			local frame = x.frames[framename]
-			frame:Clear()
+			if frame then -- attempt to fix login 'attempt to index nil value frame' error
+				frame:Clear()
+			end
 		end
 	else
 		local frame = x.frames[specificFrame]
@@ -284,50 +286,29 @@ end
 --	frame is specified.
 -- =====================================================
 function x:Abbreviate(amount, frameName)
+	local message = tostring(amount)
 	local isNegative = amount < 0
+
 	if isNegative then amount = -amount end
-  	local message = tostring(amount)
 	if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
 		if self.db.profile.spells.formatAbbreviate then
-      			if GetLocale() == "koKR" then
-			  	if (amount >= 100000000) then
-			  		if self.db.profile.megaDamage.decimalPoint then
-			  			message = tostring(mfloor((amount + 5000000) / 10000000) / 10) .. self.db.profile.megaDamage.millionSymbol
-		  			else
-	  					message = tostring(mfloor((amount + 50000000) / 100000000)) .. self.db.profile.megaDamage.millionSymbol
-  					end
-				elseif (amount >= 10000) then
-					if self.db.profile.megaDamage.decimalPoint then
-						message = tostring(mfloor((amount + 500) / 1000) / 10) .. self.db.profile.megaDamage.millionSymbol
-					else
-						message = tostring(mfloor((amount + 5000) / 10000)) .. self.db.profile.megaDamage.millionSymbol
-					end
-				elseif (amount >= 1000) then
-					if self.db.profile.megaDamage.decimalPoint then
-						message = tostring(mfloor((amount + 50) / 100) / 10) .. self.db.profile.megaDamage.thousandSymbol
-					else
-						message = tostring(mfloor((amount + 500) / 1000)) .. self.db.profile.megaDamage.thousandSymbol
-					end
+			if (amount >= 1000000000) then
+				if self.db.profile.megaDamage.decimalPoint then
+					message = tostring(mfloor((amount + 50000000) / 100000000) / 10) .. self.db.profile.megaDamage.millionSymbol
+				else
+					message = tostring(mfloor((amount + 500000000) / 1000000000)) .. self.db.profile.megaDamage.millionSymbol
 				end
-	      		else
-				if (amount >= 1000000000) then
-					if self.db.profile.megaDamage.decimalPoint then
-						message = tostring(mfloor((amount + 50000000) / 100000000) / 10) .. self.db.profile.megaDamage.millionSymbol
-					else
-						message = tostring(mfloor((amount + 500000000) / 1000000000)) .. self.db.profile.megaDamage.millionSymbol
-					end
-				elseif (amount >= 1000000) then
-					if self.db.profile.megaDamage.decimalPoint then
-						message = tostring(mfloor((amount + 50000) / 100000) / 10) .. self.db.profile.megaDamage.millionSymbol
-					else
-						message = tostring(mfloor((amount + 500000) / 1000000)) .. self.db.profile.megaDamage.millionSymbol
-					end
-				elseif (amount >= 1000) then
-					if self.db.profile.megaDamage.decimalPoint then
-						message = tostring(mfloor((amount + 50) / 100) / 10) .. self.db.profile.megaDamage.thousandSymbol
-					else
-						message = tostring(mfloor((amount + 500) / 1000)) .. self.db.profile.megaDamage.thousandSymbol
-					end
+			elseif (amount >= 1000000) then
+				if self.db.profile.megaDamage.decimalPoint then
+					message = tostring(mfloor((amount + 50000) / 100000) / 10) .. self.db.profile.megaDamage.millionSymbol
+				else
+					message = tostring(mfloor((amount + 500000) / 1000000)) .. self.db.profile.megaDamage.millionSymbol
+				end
+			elseif (amount >= 1000) then
+				if self.db.profile.megaDamage.decimalPoint then
+					message = tostring(mfloor((amount + 50) / 100) / 10) .. self.db.profile.megaDamage.thousandSymbol
+				else
+					message = tostring(mfloor((amount + 500) / 1000)) .. self.db.profile.megaDamage.thousandSymbol
 				end
 			end
 			if isNegative then message = "-"..message end
