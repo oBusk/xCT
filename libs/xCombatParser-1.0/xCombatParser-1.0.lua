@@ -138,6 +138,20 @@ do
 		t.__pinned=t.__pinned-1
 		if t.__pinned==0 then private.destroy(t)end
 	end
+
+	-- ------------------------------------------------------------------------------
+	-- function private.populate ( ... )
+	--   Parameters:
+	--       ... [dynamic]:
+	--           A list of parameters to populate the table with
+	-- ------------------------------------------------------------------------------
+	private.populate=function(...)
+		local t,n=private.create(),select('#',...)
+		for i=1,n do
+			t[i]=select(i,...)
+		end
+		return t
+	end
 end
 
 -- Handle the Events
@@ -182,52 +196,30 @@ do
 	}
 
 	-- Handle all the combat events. This needs to be extremely efficient
-	private.frame:SetScript("OnEvent", function(self,
-	                                            frameEvent,
-	                                            timestamp,
-	                                            event,
-	                                            hideCaster,
-	                                            sourceGUID,
-	                                            sourceName,
-	                                            sourceFlags,
-	                                            sourceRaidFlags,
-	                                            destGUID,
-	                                            destName,
-	                                            destFlags,
-	                                            destRaidFlags,
-												...)
+	private.frame:SetScript("OnEvent", function(self, frameEvent)
 		if frameEvent == "COMBAT_LOG_EVENT_UNFILTERED" then
 			local startIndex = 12
 			local i, args = 0, private.create()
-			
-			local tempTable = {CombatLogGetCurrentEventInfo()}
-			
-			timestamp = tempTable[1]
-			event  = tempTable[2]
-			hideCaster = tempTable[3]
-			sourceGUID = tempTable[4]
-			sourceName = tempTable[5] or UNKNOWN
-			sourceFlags = tempTable[6]
-			sourceRaidFlags = tempTable[7]
-			destGUID = tempTable[8] 
-			destName = tempTable[9] or UNKNOWN
-			destFlags = tempTable[10]
-			destRaidFlags = tempTable[11]
+
+			-- Create the table so that we can resuse it later
+			local tempTable = private.populate( CombatLogGetCurrentEventInfo() )
+
+			-- fast event
+			local event = tempTable[2]
 
 			-- 11 Parameters of the COMBAT_LOG_EVENT   ---   Index
-			args.timestamp = timestamp                       -- 1
-			args.event = event                               -- 2
-			args.hideCaster = hideCaster                     -- 3
-			args.sourceGUID = sourceGUID                     -- 4
-			args.sourceName = sourceName                     -- 5
-			args.sourceFlags = sourceFlags                   -- 6
-			args.sourceRaidFlags = sourceRaidFlags           -- 7
-			args.destGUID = destGUID                         -- 8
-			args.destName = destName                         -- 9
-			args.destFlags = destFlags                       -- 10
-			args.destRaidFlags = destRaidFlags               -- 11
-			
-			
+			args.timestamp       = tempTable[1]
+			args.event           = tempTable[2]
+			args.hideCaster      = tempTable[3]
+			args.sourceGUID      = tempTable[4]
+			args.sourceName      = tempTable[5]
+			args.sourceFlags     = tempTable[6]
+			args.sourceRaidFlags = tempTable[7]
+			args.destGUID        = tempTable[8]
+			args.destName        = tempTable[9]
+			args.destFlags       = tempTable[10]
+			args.destRaidFlags   = tempTable[11]
+
 			local prefix, suffix
 			if event == "DAMAGE_SHIELD" or event == "DAMAGE_SPLIT" then
 				prefix = "SPELL"
@@ -284,8 +276,6 @@ do
 			elseif prefix == "SWING" then
 				-- SpellId for Auto Attack, "Auto Attack" (Localized), Physical Damage (Spell School)
 				args.spellId, args.spellName, args.spellSchool = 6603, AUTO_ATTACK, 1
-				
-				--tempTable[startIndex], tempTable[startIndex+1], tempTable[startIndex+2] = 6603, AUTO_ATTACK, 1
 			end
 
 			if suffix == "_DAMAGE" then
@@ -349,7 +339,9 @@ do
 				args.failedType = tempTable[startIndex+i]
 			end
 
-			
+			-- Destroy the old
+			private.destroy(tempTable)
+
 			-- IsPlayer helpers
 			args.isPlayer = playerGUID == args.sourceGUID
 			args.atPlayer = playerGUID == args.destGUID
