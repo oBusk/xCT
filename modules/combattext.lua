@@ -742,7 +742,7 @@ x.combat_events = {
 
       x:AddMessage("procs", message, "spellProc")
     end,
-	
+
   ["SPELL_CAST"] = function(spellName) if ShowReactives() then x:AddMessage("procs", spellName, "spellReactive") end end,
 
   -- REMOVING PERIODIC_ENERGIZE, AS IT'S NOW COVERED BY SPELLENERGIZE Event
@@ -755,7 +755,7 @@ x.combat_events = {
 			x:AddMessage('general', sformat(format_honor, HONOR, x:Abbreviate(amount,"general")), 'honorGains')
 		end
 	end,
-	
+
 	["FACTION"] = function() -- TESTED
 		local faction, amount = GetCurrentCombatTextEventInfo()
 		local num = mfloor(tonumber(amount) or 0)
@@ -1577,7 +1577,7 @@ local CombatEventHandlers = {
 	end,
 
 	["AuraIncoming"] = function (args)
-		
+
 		-- Some useful information about the event
 		local isBuff, isGaining = args.auraType == "BUFF", args.suffix == "_AURA_APPLIED" or args.suffix == "_AURA_APPLIED_DOSE"
 
@@ -1709,7 +1709,7 @@ local CombatEventHandlers = {
 
 		x:AddMessage('general', message, 'dispellStolen')
 	end,
-	
+
 	["SpellEnergize"] = function (args)
 		local amount, energy_type = args.amount, x.POWER_LOOKUP[args.powerType]
 		if not ShowEnergyGains() then return end
@@ -1842,10 +1842,10 @@ function x.CombatLogEvent (args)
 
 		elseif (args.suffix == "_AURA_APPLIED" or args.suffix == "_AURA_REFRESH") and AbsorbList[args.spellId] then
 			CombatEventHandlers.ShieldOutgoing(args)
-		
+
 		elseif args.suffix == "_ENERGIZE" then
 			CombatEventHandlers.SpellEnergize(args)
-		
+
 		end
 	end
 
@@ -1862,13 +1862,15 @@ function x.CombatLogEvent (args)
 
 		elseif args.event == 'SPELL_DISPEL' then
 			local message = args.sourceName .. " dispelled:"
+
+			if GetLocale() == "koKR" then message = args.sourceName .. " 무효화:" end
+
 			message = x:GetSpellTextureFormatted(args.extraSpellId,
-		                                          message,
-		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
-		           x.db.profile.frames['general'].fontJustify)
+			                                     message,
+			      x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+			      x.db.profile.frames['general'].fontJustify)
 
 			x:AddMessage('general', message, "dispellDebuffs")
-
 
 		elseif (args.suffix == "_AURA_APPLIED" or args.suffix == "_AURA_REFRESH") and AbsorbList[args.spellId] then
 			CombatEventHandlers.ShieldIncoming(args)
