@@ -37,7 +37,7 @@ do
 	end
 
 	-- ------------------------------------------------------------------------------
-	-- function Lib:RegisterCombat ( func )
+	-- function Lib:UnregisterCombat ( func )
 	--   Parameters:
 	--       func [callback - function ( args )]:
 	--           The callback that you want to unregister from getting combat
@@ -195,23 +195,39 @@ do
 	                                            destName,
 	                                            destFlags,
 	                                            destRaidFlags,
-	                                            ...)
+												...)
 		if frameEvent == "COMBAT_LOG_EVENT_UNFILTERED" then
-			local i, args = 1, private.create()
+			local startIndex = 12
+			local i, args = 0, private.create()
+			
+			local tempTable = {CombatLogGetCurrentEventInfo()}
+			
+			timestamp = tempTable[1]
+			event  = tempTable[2]
+			hideCaster = tempTable[3]
+			sourceGUID = tempTable[4]
+			sourceName = tempTable[5] or UNKNOWN
+			sourceFlags = tempTable[6]
+			sourceRaidFlags = tempTable[7]
+			destGUID = tempTable[8] 
+			destName = tempTable[9] or UNKNOWN
+			destFlags = tempTable[10]
+			destRaidFlags = tempTable[11]
 
 			-- 11 Parameters of the COMBAT_LOG_EVENT   ---   Index
-			args.timestamp = timestamp                      -- 1
-			args.event = event                              -- 2
-			args.hideCaster = hideCaster                    -- 3
-			args.sourceGUID = sourceGUID                    -- 4
-			args.sourceName = sourceName or UNKNOWN         -- 5
-			args.sourceFlags = sourceFlags                  -- 6
-			args.sourceRaidFlags = sourceRaidFlags          -- 7
-			args.destGUID = destGUID                        -- 8
-			args.destName = destName or UNKNOWN             -- 9
-			args.destFlags = destFlags                      -- 10
-			args.destRaidFlags = destRaidFlags              -- 11
-
+			args.timestamp = timestamp                       -- 1
+			args.event = event                               -- 2
+			args.hideCaster = hideCaster                     -- 3
+			args.sourceGUID = sourceGUID                     -- 4
+			args.sourceName = sourceName                     -- 5
+			args.sourceFlags = sourceFlags                   -- 6
+			args.sourceRaidFlags = sourceRaidFlags           -- 7
+			args.destGUID = destGUID                         -- 8
+			args.destName = destName                         -- 9
+			args.destFlags = destFlags                       -- 10
+			args.destRaidFlags = destRaidFlags               -- 11
+			
+			
 			local prefix, suffix
 			if event == "DAMAGE_SHIELD" or event == "DAMAGE_SPLIT" then
 				prefix = "SPELL"
@@ -220,10 +236,11 @@ do
 				prefix = "SPELL"
 				suffix = "_MISSED"
 			elseif event == "ENCHANT_APPLIED" or event == "ENCHANT_REMOVED" then
-				args.spellName, args.itemId, args.itemName = select(1, ...)
+				args.spellName, args.itemId, args.itemName = tempTable[startIndex], tempTable[startIndex+1], tempTable[startIndex+2]
+				--args.spellName, args.itemId, args.itemName = select(1, ...)
 
 			elseif event == "UNIT_DIED" or event == "UNIT_DESTROYED" or unit == "UNIT_DISSIPATES" then
-				args.recapID, args.unconsciousOnDeath = select(1, ...)
+				args.recapID, args.unconsciousOnDeath = tempTable[startIndex], tempTable[startIndex+1]
 
 			elseif event == "PARTY_KILL" then -- do nothing
 			else
@@ -249,10 +266,12 @@ do
 			args.suffix = suffix
 
 			if prefix == "SPELL" or prefix == "SPELL_PERIODIC" or prefix == "RANGE" or prefix == "SPELL_BUILDING" then
-				args.spellId, args.spellName, args.spellSchool = select(1, ...)
-				i = 4
+				args.spellId, args.spellName, args.spellSchool = tempTable[startIndex], tempTable[startIndex+1], tempTable[startIndex+2]
+				--args.spellId, args.spellName, args.spellSchool = select(1, ...)
+				i = 3
 			elseif prefix == "ENVIRONMENTAL" then
-				local environmentalType = select(1, ...)
+				local environmentalType = tempTable[startIndex]
+				--local environmentalType = select(1, ...)
 
 				args.environmentalType = environmentalType
 				args.sourceName = ENVIRONMENT_SUBHEADER
@@ -261,17 +280,23 @@ do
 				args.spellId, args.spellName, args.spellSchool = ENVIRONMENTAL_FAKE_IDS[environmentalType],
 				ENVIRONMENTAL_TYPES[environmentalType], ENVIRONMENTAL_FAKE_SPELLSCHOOL[environmentalType]
 
-				i = 2
+				i = 1
 			elseif prefix == "SWING" then
 				-- SpellId for Auto Attack, "Auto Attack" (Localized), Physical Damage (Spell School)
 				args.spellId, args.spellName, args.spellSchool = 6603, AUTO_ATTACK, 1
+				
+				--tempTable[startIndex], tempTable[startIndex+1], tempTable[startIndex+2] = 6603, AUTO_ATTACK, 1
 			end
 
 			if suffix == "_DAMAGE" then
 				args.amount, args.overkill, args.school,
 				args.resisted, args.blocked, args.absorbed,
 				args.critical, args.glancing, args.crushing,
-				args.isOffHand = select(i, ...)
+				args.isOffHand = tempTable[startIndex+i], tempTable[startIndex+i+1], tempTable[startIndex+i+2],
+				tempTable[startIndex+i+3], tempTable[startIndex+i+4], tempTable[startIndex+i+5], tempTable[startIndex+i+6],
+				tempTable[startIndex+i+7], tempTable[startIndex+i+8], tempTable[startIndex+i+9]
+				
+				
 
 			--[[ This is for the combat log only
 			elseif suffix == "_DAMAGE_LANDED" then
@@ -283,46 +308,48 @@ do
 
 			elseif suffix == "_MISSED" then
 				args.missType, args.isOffHand,
-				args.amountMissed = select(i, ...)
+				args.amountMissed = tempTable[startIndex+i], tempTable[startIndex+i+1], tempTable[startIndex+i+2] or 0
 
 			elseif suffix == "_HEAL" then
 				args.amount, args.overhealing, args.absorbed,
-				args.critical = select(i, ...)
+				args.critical = tempTable[startIndex+i], tempTable[startIndex+i+1], tempTable[startIndex+i+2], tempTable[startIndex+i+3]
 
 			elseif suffix == "_ENERGIZE" then
-				args.amount, args.powerType = select(i, ...)
+				args.amount, args.overEnergize, args.powerType,
+				args.alternatePowerType = tempTable[startIndex+i], tempTable[startIndex+i+1], tempTable[startIndex+i+2], tempTable[startIndex+i+3]
 
 			elseif suffix == "_DRAIN" or suffix == "_LEECH" then
 				args.amount, args.powerType,
-				args.extraAmount = select(i, ...)
+				args.extraAmount = tempTable[startIndex+i], tempTable[startIndex+i+1], tempTable[startIndex+i+2]
 
 			elseif suffix == "_INTERRUPT" or suffix == "_DISPEL_FAILED" then
 				args.extraSpellId, args.extraSpellName,
-				args.extraSchool = select(i, ...)
+				args.extraSchool = tempTable[startIndex+i], tempTable[startIndex+i+1], tempTable[startIndex+i+2]
 
 			elseif suffix == "_DISPEL" or suffix == "_STOLEN" then
 				args.extraSpellId, args.extraSpellName,
-				args.extraSchool, args.auraType = select(i, ...)
+				args.extraSchool, args.auraType = tempTable[startIndex+i], tempTable[startIndex+i+1], tempTable[startIndex+i+2], tempTable[startIndex+i+3]
 
 			elseif suffix == "_EXTRA_ATTACKS" then
-				args.amount = select(i, ...)
+				args.amount = tempTable[startIndex+i]
 
 			elseif suffix == "_AURA_APPLIED" or suffix == "_AURA_REMOVED"
 				or suffix == "_AURA_APPLIED_DOSE" or suffix == "_AURA_REMOVED_DOSE"
 				or suffix == "_AURA_REFRESH" then
-				args.auraType, args.amount = select(i, ...) -- auraType: BUFF, DEBUFF
+				args.auraType, args.amount = tempTable[startIndex+i], tempTable[startIndex+i+1] -- auraType: BUFF, DEBUFF
 
 			elseif suffix == "_AURA_BROKEN" then
-				args.auraType = select(i, ...)
+				args.auraType = tempTable[startIndex+i]
 
 			elseif suffix == "_AURA_BROKEN_SPELL" then
 				args.extraSpellId, args.extraSpellName,
-				args.extraSchool, args.auraType = select(i, ...)
+				args.extraSchool, args.auraType = tempTable[startIndex+i], tempTable[startIndex+i+1], tempTable[startIndex+i+2]
 
 			elseif suffix == "_CAST_FAILED" then
-				args.failedType = select(i, ...)
+				args.failedType = tempTable[startIndex+i]
 			end
 
+			
 			-- IsPlayer helpers
 			args.isPlayer = playerGUID == args.sourceGUID
 			args.atPlayer = playerGUID == args.destGUID
@@ -372,18 +399,20 @@ do
 			args.IsDestinationRaidMember  = private.IsDestinationRaidMember
 			args.IsSourcePartyMember      = private.IsSourcePartyMember
 			args.IsDestinationPartyMember = private.IsDestinationPartyMember
-
+			
 			-- Call all the registered handlers
 			args:pin()
 			for func in pairs(private.handles) do
 				func(args)
 			end
 			args:free() -- If no one else pinned this table, it should be cleaned up now
+			
 
 		else
 			self:UnregisterEvent"PLAYER_ENTERING_WORLD"
 			playerGUID=UnitGUID"player"
 		end
+		
 	end)
 end
 

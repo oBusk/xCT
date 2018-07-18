@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2017. All Rights Reserved.        ]
+ [  ©2018. All Rights Reserved.        ]
  [====================================]]
 
 -- This file is a static default profile.  After your first profile is created, editing this file will do nothing.
