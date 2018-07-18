@@ -1345,7 +1345,7 @@ addon.options.args["Credits"] = {
     tukuiTitleBfA = {
       type = 'description',
       order = 36,
-      name = "|cffFFFF00Beta Testers - Version 4.5.0+ (Battle for Azeroth)|r",
+      name = "|cffFFFF00Beta Testers - Version 4.4.0+ (Battle for Azeroth)|r",
       fontSize = "large",
     },
 
