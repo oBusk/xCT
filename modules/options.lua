@@ -1267,7 +1267,7 @@ addon.options.args["Credits"] = {
       type = 'description',
       order = 2,
       fontSize = "medium",
-      name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, Nidra, gnangnan, NitZo, Naughtia, Derap, sortokk, ckaotik, Cecile.",
+      name = "  |cffAA0000Tukz|r, |cffAA0000Elv|r, |cffFFFF00Affli|r, |cffFF8000BuG|r, |cff8080FFShestak|r, |cffAAAAFFToludin|r, Nidra, gnangnan, NitZo, Naughtia, Derap, sortokk, ckaotik, Cecile.",
     },
     testerTitleSpace1 = {
       type = 'description',
@@ -1339,7 +1339,21 @@ addon.options.args["Credits"] = {
       type = 'description',
       order = 35,
       fontSize = "medium",
-      name = " |cffAAAAFF Azazu|r,|cff8080EE Broni|r,|cffAAAAFF CursedBunny|r,|cff8080EE Daemios|r,|cffAAAAFF Dajova|r,|cff8080EE Delerionn|r,|cffAAAAFF dunger|r,|cff8080EE feetss|r,|cffAAAAFF gesuntight|r,|cff8080EE Homaxz|r,|cffAAAAFF karamei|r,|cff8080EE Merathilis|r,|cffAAAAFF re1jo|r,|cff8080EE sammael666|r,|cffAAAAFF scathee|r,|cff8080EE Tonyleila|r,|cffAAAAFF Torch|r,|cff8080EE WetU|r,|cffAAAAFF Znuff|r,|cff8080EE Zylos|r",
+      name = " |cffAAAAFF Azazu|r,|cff8080EE Broni|r,|cffAAAAFF CursedBunny|r,|cff8080EE Daemios|r,|cffAAAAFF Dajova|r,|cff8080EE Delerionn|r,|cffAAAAFF dunger|r,|cff8080EE feetss|r,|cffAAAAFF gesuntight|r,|cff8080EE Homaxz|r,|cffAAAAFF karamei|r,|cff8080EE Merathilis|r,|cffAAAAFF re1jo|r,|cff8080EE sammael666|r,|cffAAAAFF scathee|r,|cff8080EE Tonyleila|r,|cffAAAAFF Torch|r,|cff8080EE WetU|r,|cffAAAAFF Znuff|r,|cff8080EE Zylos|r\n",
+    },
+
+    tukuiTitleBfA = {
+      type = 'description',
+      order = 36,
+      name = "|cffFFFF00Beta Testers - Version 4.5.0+ (Battle for Azeroth)|r",
+      fontSize = "large",
+    },
+
+    userName3BfA = {
+      type = 'description',
+      order = 37,
+      fontSize = "medium",
+      name = " |cffAAAAFF Toludin|r",
     },
 
     testerTitleSpace4 = {
@@ -1358,7 +1372,7 @@ addon.options.args["Credits"] = {
       type = 'description',
       order = 42,
       fontSize = "medium",
-      name = " |cff22FF80 Tonyleila|r,|cff1AAD59 ckaotik|r,|cff22FF80 Stanzilla|r,|cff1AAD59 Torch (behub)|r,|cff22FF80 vforge|r",
+      name = " |cff22FF80 Tonyleila|r,|cff1AAD59 ckaotik|r,|cff22FF80 Stanzilla|r,|cff1AAD59 Torch (behub)|r,|cff22FF80 vforge|r,|cff1AAD59 Toludin (BfA Update!)|r",
     },
 
     testerTitleSpace5 = {
