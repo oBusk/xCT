@@ -1883,10 +1883,12 @@ function x.CombatLogEvent (args)
 end
 
 function x.findBuffIndex(unitName, spellName)
-	local buffName, _, spellId
 	for i = 1, 40 do
-		buffName, _, _, _, _, _, _, _, _ , spellId = UnitBuff(unitId, i)
-		if buffName == spellName then
+
+		-- TODO: Keep if we want to change this to find SpellID index
+		-- buffName, _, _, _, _, _, _, _, _ , spellId = UnitBuff(unitName, i)
+
+		if UnitBuff(unitName, i) == spellName then
 			return i
 		end
 	end
