@@ -1201,8 +1201,8 @@ end
 local CombatEventHandlers = {
 	["ShieldOutgoing"] = function (args)
 		local buffIndex = x.findBuffIndex(args.destName, args.spellName)
-		local settings, value = x.db.profile.frames['outgoing'], select(17, UnitBuff(args.destName, buffIndex))
-		--local settings, value = x.db.profile.frames['outgoing'], select(17, UnitBuff(args.destName, args.spellName))
+		if not buffindex then return end
+		local settings, value = x.db.profile.frames['outgoing'], select(16, UnitBuff(args.destName, buffIndex))
 		if not value or value <= 0 then return end
 
 		-- Keep track of spells that go by
@@ -1503,8 +1503,8 @@ local CombatEventHandlers = {
 
 	["ShieldIncoming"] = function (args)
 		local buffIndex = x.findBuffIndex("player", args.spellName)
-		local settings, value = x.db.profile.frames['healing'], select(17, UnitBuff("player", buffIndex))
-		--local settings, value = x.db.profile.frames['healing'], select(17, UnitBuff("player", args.spellName))
+		if not buffIndex then return end
+		local settings, value = x.db.profile.frames['healing'], select(16, UnitBuff("player", buffIndex))
 		if not value or value <= 0 then return end
 
 		if TrackSpells() then x.spellCache.healing[args.spellId] = true end
@@ -1882,7 +1882,7 @@ function x.CombatLogEvent (args)
 	end
 end
 
-function x.findBuffIndex(unitId, spellName)
+function x.findBuffIndex(unitName, spellName)
 	local buffName, _, spellId
 	for i = 1, 40 do
 		buffName, _, _, _, _, _, _, _, _ , spellId = UnitBuff(unitId, i)
