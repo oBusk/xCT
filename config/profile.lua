@@ -743,6 +743,7 @@ addon.defaults = {
 
         -- special tweaks
         ["enableOverHeal"] = true,
+        ["hideAbsorbedHeals"] = false,
         ["enableSelfAbsorbs"] = true,
         ["showOnlyMyHeals"] = false,
         ["showOnlyPetHeals"] = false,

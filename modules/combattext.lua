@@ -231,17 +231,16 @@ local function ShowPartyKill() return x.db.profile.frames["general"].showPartyKi
 local function ShowBuffs() return x.db.profile.frames["general"].showBuffs end
 local function ShowDebuffs() return x.db.profile.frames["general"].showDebuffs end
 local function ShowOverHealing() return x.db.profile.frames["healing"].enableOverHeal end
+local function HideAbsorbedHealing() return x.db.profile.frames["healing"].hideAbsorbedHeals end
 local function ShowEnergyGains() return x.db.profile.frames["power"].showEnergyGains end
 local function ShowPeriodicEnergyGains() return x.db.profile.frames["power"].showPeriodicEnergyGains end
 local function ShowEnergyTypes() return x.db.profile.frames["power"].showEnergyType end
 local function ShowIncomingAutoAttackIcons() return x.db.profile.frames["damage"].iconsEnabledAutoAttack end
 
-local function ShowOutgoingOverHealing() return x.db.profile.frames["healing"].enableOverhealing end
-local function IsOutgoingOverHealingFormatted() return x.db.profile.frames["healing"].enableOverhealingFormat end
-local function FormatOutgoingOverhealing(amount) return x.db.profile.frames["healing"].overhealingPrefix .. amount .. x.db.profile.frames["healing"].overhealingPostfix end
-
-local function DisplayIncomingOverhealing() return x.db.profile.frames["healing"].displayOverheals end
-local function DisplayIncomingAbsorbedHealing() return x.db.profile.frames["healing"].displayHealingAbsorbed end
+-- These settings are for the overhealing that the player does
+local function ShowOutgoingOverHealing() return x.db.profile.frames["outgoing"].enableOverhealing end
+local function IsOutgoingOverHealingFormatted() return x.db.profile.frames["outgoing"].enableOverhealingFormat end
+local function FormatOutgoingOverhealing(amount) return x.db.profile.frames["outgoing"].overhealingPrefix .. amount .. x.db.profile.frames["healing"].overhealingPostfix end
 
 -- TODO: Add Combo Point Support
 local function ShowRogueComboPoints() return false end -- x.db.profile.spells.combo["ROGUE"][COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT] and x.player.class == "ROGUE" end
@@ -1536,15 +1535,14 @@ local CombatEventHandlers = {
 		if IsHealingFiltered(args.spellId) then return end
 
 		-- Adjust the amount if the user doesnt want over healing
-		if not ShowOverHealing() or DisplayIncomingOverhealing() then
+		if not ShowOverHealing() then
 			amount = amount - args.overhealing
 		end
 
-		if DisplayIncomingAbsorbedHealing() then
+		-- Don't show healing that gets absorbed by a debuff or mechanic
+		if HideAbsorbedHealing() then
 			amount = amount - args.absorbed
 		end
-
-
 
 		-- Filter out small amounts
 		if amount <= 0 or FilterIncomingHealing(amount) then return end
