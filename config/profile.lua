@@ -485,7 +485,6 @@ addon.defaults = {
         ["showSwing"] = true,
         ["prefixSwing"] = true,
         ["petCrits"] = false,
-
       },
 
       damage = {
@@ -547,8 +546,8 @@ addon.defaults = {
         },
 
         -- critical appearance
-        ["critPrefix"] = "",
-        ["critPostfix"] = "",
+        ["critPrefix"] = "|cffFF0000*|r",
+        ["critPostfix"] = "|cffFF0000*|r",
 
         -- name formatting
         names = {

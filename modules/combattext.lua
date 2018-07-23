@@ -1464,9 +1464,9 @@ local CombatEventHandlers = {
 		if not message then
 			-- Format Criticals and also abbreviate values
 			if args.critical then
-				message = sformat(format_crit, x.db.profile.frames['critical'].critPrefix,
+				message = sformat(format_crit, x.db.profile.frames['damage'].critPrefix,
 				                               x:Abbreviate(-args.amount, 'damage'),
-				                               x.db.profile.frames['critical'].critPostfix)
+				                               x.db.profile.frames['damage'].critPostfix)
 			else
 				message = x:Abbreviate(-args.amount, 'damage')
 			end
