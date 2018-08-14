@@ -232,6 +232,11 @@ function x:UpdateFrames(specificFrame)
 				f:SetScript("OnUpdate", Frame_SendTestMessage_OnUpdate)
 			end
 
+			if settings.enabledFrame then
+				f:Show()
+			else
+				f:Hide()
+			end
 		end
 	end
 end

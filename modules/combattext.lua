@@ -1586,7 +1586,7 @@ local CombatEventHandlers = {
 		if IsBuffFiltered(args.spellName) then return end
 
 		-- See if we are showing that type of aura
-		if isBuff and not ShowBuffs() or not ShowDebuffs() then return end
+		if (isBuff and not ShowBuffs()) or (not isBuff and not ShowDebuffs()) then return end
 
 		-- Begin constructing the event message and color
 		local color, message

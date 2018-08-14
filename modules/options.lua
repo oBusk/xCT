@@ -2104,7 +2104,7 @@ addon.options.args["Frames"] = {
               name = "Enable",
               width = 'half',
               get = get2,
-              set = set2,
+              set = set2_update,
             },
             secondaryFrame = {
               type = 'select',
@@ -2511,7 +2511,7 @@ addon.options.args["Frames"] = {
               name = "Enable",
               width = 'half',
               get = get2,
-              set = set2,
+              set = set2_update,
             },
             secondaryFrame = {
               type = 'select',
@@ -3255,7 +3255,7 @@ addon.options.args["Frames"] = {
               name = "Enable",
               width = 'half',
               get = get2,
-              set = set2,
+              set = set2_update,
             },
             secondaryFrame = {
               type = 'select',
@@ -3872,7 +3872,7 @@ addon.options.args["Frames"] = {
               name = "Enable",
               width = 'half',
               get = get2,
-              set = set2,
+              set = set2_update,
             },
             secondaryFrame = {
               type = 'select',
@@ -4609,7 +4609,7 @@ addon.options.args["Frames"] = {
               name = "Enable",
               width = 'half',
               get = get2,
-              set = set2,
+              set = set2_update,
             },
             secondaryFrame = {
               type = 'select',
@@ -5218,7 +5218,7 @@ addon.options.args["Frames"] = {
               name = "Enable",
               width = 'half',
               get = get2,
-              set = set2,
+              set = set2_update,
             },
             secondaryFrame = {
               type = 'description',
@@ -5411,7 +5411,7 @@ addon.options.args["Frames"] = {
               name = "Enable",
               width = 'half',
               get = get2,
-              set = set2,
+              set = set2_update,
             },
             secondaryFrame = {
               type = 'select',
@@ -6206,7 +6206,7 @@ addon.options.args["Frames"] = {
               name = "Enable",
               width = 'half',
               get = get2,
-              set = set2,
+              set = set2_update,
             },
             secondaryFrame = {
               type = 'select',
