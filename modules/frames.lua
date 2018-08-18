@@ -291,11 +291,10 @@ end
 --	frame is specified.
 -- =====================================================
 function x:Abbreviate(amount, frameName)
+	local message = tostring(amount)
 	local isNegative = amount < 0
 
 	if isNegative then amount = -amount end
-
-	local message = tostring(amount)
 
 	if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
 		if self.db.profile.spells.formatAbbreviate then
@@ -340,6 +339,8 @@ function x:Abbreviate(amount, frameName)
 					end
 				end
 			end
+
+			if isNegative then message = '-' .. message end
 		else
 			local k
 			while true do
