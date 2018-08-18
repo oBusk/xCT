@@ -85,6 +85,7 @@ addon.merges[52174]     = CreateMergeSpellEntry("WARRIOR", 0.5, 0)          -- H
 addon.merges[46968]     = CreateMergeSpellEntry("WARRIOR", 0.5, 0)          -- Shockwave
 addon.merges[156287]    = CreateMergeSpellEntry("WARRIOR", 2.5, 0)          -- Ravager
 
+
 -- Arms (ID: 71)
 addon.merges[845]       = CreateMergeSpellEntry("WARRIOR", 0.5, 71)         -- Cleave
 addon.merges[12294]     = CreateMergeSpellEntry("WARRIOR", 0.5, 71)         -- Talent: Sweeping Strikes (Mortal Strike)
@@ -94,6 +95,8 @@ addon.merges[209569]    = CreateMergeSpellEntry("WARRIOR", 2.5, 71)         -- A
 addon.merges[209700]    = CreateMergeSpellEntry("WARRIOR", 0.5, 71)         -- Artifact: Void Cleave
 addon.merges[209577]    = CreateMergeSpellEntry("WARRIOR", 2.5, 71)         -- Artifact: Warbreaker
 addon.merges[199658]    = CreateMergeSpellEntry("WARRIOR", 1.5, 71)         -- Whirlwind
+addon.merges[278497]    = CreateMergeSpellEntry("WARRIOR", 0.5, 71)         -- Seismic Wave
+addon.merges[262111]    = CreateMergeSpellEntry("WARRIOR", 3.0, 71)         -- Mastery: Deep Wounds (DoT over 6s)
 addon.merge2h[199850]   = 199658                                            -- [Spell Merger] Whirlwind
 
 -- Fury (ID: 72)
