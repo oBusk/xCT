@@ -41,7 +41,7 @@ end
 --    Creates a string for a category heading
 -- =====================================================
 local function CreateMergeHeader(expName, catName, expColor)
-    return "|cff".. expColor .. expName .. "|r™ |cff325A93(" ..catName.. ")|r"
+    return "|cff".. expColor .. expName .. "|r™ |cff798BDD(" ..catName.. ")|r"
 end
 
 
@@ -50,12 +50,12 @@ end
 -- ---------------------------
 -- Merge Headers            --
 -- ---------------------------
-local BfA_Misc = CreateMergeHeader("Battle for Azeroth", "Miscellaneous", "93BE3D")
+local BfA_Items = CreateMergeHeader("Battle for Azeroth", "Items", "325A93")
 
 
 
 -- ---------------------------
 -- Items                   --
 -- ---------------------------
-
+--addon.merges[276196]  = CreateMergeSpellEntry(BfA_Items, 0.5, "Darkmoon Deck: Fathoms")
 addon.merge2h[276199] = 276196 -- Fathom Fall from item "Darkmoon Deck: Fathoms - ItemID: 159125"

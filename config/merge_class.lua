@@ -96,7 +96,7 @@ addon.merges[209700]    = CreateMergeSpellEntry("WARRIOR", 0.5, 71)         -- A
 addon.merges[209577]    = CreateMergeSpellEntry("WARRIOR", 2.5, 71)         -- Artifact: Warbreaker
 addon.merges[199658]    = CreateMergeSpellEntry("WARRIOR", 1.5, 71)         -- Whirlwind
 addon.merges[278497]    = CreateMergeSpellEntry("WARRIOR", 0.5, 71)         -- Seismic Wave
-addon.merges[262111]    = CreateMergeSpellEntry("WARRIOR", 3.0, 71)         -- Mastery: Deep Wounds (DoT over 6s)
+addon.merges[262115]    = CreateMergeSpellEntry("WARRIOR", 3.0, 71)         -- Mastery: Deep Wounds (DoT over 6s)
 addon.merge2h[199850]   = 199658                                            -- [Spell Merger] Whirlwind
 
 -- Fury (ID: 72)
