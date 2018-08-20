@@ -247,6 +247,7 @@ addon.merges[171454]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- T
 addon.merges[197465]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- Artifact: Surge of the Stormgod
 addon.merges[207097]    = CreateMergeSpellEntry("HUNTER", 1.5, 253)         -- Artifact: Titan's Thunder
 addon.merges[197205]    = CreateMergeSpellEntry("HUNTER", 0.5, 253)         -- Artifact: Spirit Bond
+addon.merges[217200]    = CreateMergeSpellEntry("HUNTER", 4.5, 253)         -- Barbed Shot (Seems every 2s over 8s)
 addon.merge2h[171457]   = 171454                                            -- [Cleave Merger] Chimaera Shot
 
 -- Marksmanship (ID: 254)
