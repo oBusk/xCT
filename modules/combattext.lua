@@ -1307,7 +1307,7 @@ local CombatEventHandlers = {
 		if args:IsSourceMyPet() then
 			if not ShowPetDamage() then return end
 			if MergePetAttacks() then
-				local icon = GetPetIcon() or ""
+				local icon = x.GetPetTexture() or ""
 				x:AddSpamMessage(outputFrame, icon, amount, x.db.profile.spells.mergePetColor, 6)
 				return
 			end
