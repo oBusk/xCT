@@ -1290,6 +1290,7 @@ local CombatEventHandlers = {
 	end,
 
 	["DamageOutgoing"] = function (args)
+		local message
 		local critical, spellID, amount, merged = args.critical, args.spellId, args.amount
 		local isEnvironmental, isSwing, isAutoShot, isDoT = args.prefix == "ENVIRONMENTAL", args.prefix == "SWING", spellID == 75, args.prefix == "SPELL_PERIODIC"
 		local outputFrame, outputColorType = "outgoing"
