@@ -1084,10 +1084,22 @@ addon.defaults = {
 
       -- Minimal Spell Amount
       filterPowerValue = 0,
+
       filterOutgoingDamageValue = 0,
+      filterOutgoingDamageCritEnabled = false,
+      filterOutgoingDamageCritValue = 0,
+
       filterOutgoingHealingValue = 0,
+      filterOutgoingHealingCritEnabled = false,
+      filterOutgoingHealingCritValue = 0,
+
       filterIncomingDamageValue = 0,
+      filterIncomingDamageCritEnabled = false,
+      filterIncomingDamageCritValue = 0,
+
       filterIncomingHealingValue = 0,
+      filterIncomingHealingCritEnabled = false,
+      filterIncomingHealingCritValue = 0,
 
     },
   },

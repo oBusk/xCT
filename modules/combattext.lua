@@ -265,10 +265,34 @@ local function MergeHideMergedCriticals() return x.db.profile.spells.mergeHideMe
 local function MergeDispells() return x.db.profile.spells.mergeDispells end
 
 local function FilterPlayerPower(value) return x.db.profile.spellFilter.filterPowerValue > value end
-local function FilterOutgoingDamage(value) return x.db.profile.spellFilter.filterOutgoingDamageValue > value end
-local function FilterOutgoingHealing(value) return x.db.profile.spellFilter.filterOutgoingHealingValue > value end
-local function FilterIncomingDamage(value) return x.db.profile.spellFilter.filterIncomingDamageValue > value end
-local function FilterIncomingHealing(value) return x.db.profile.spellFilter.filterIncomingHealingValue > value end
+local function FilterOutgoingDamage(value, critical)
+	if critical and x.db.profile.spellFilter.filterOutgoingDamageCritEnabled then
+		return x.db.profile.spellFilter.filterOutgoingDamageCritValue > value
+	else
+		return x.db.profile.spellFilter.filterOutgoingDamageValue > value
+	end
+end
+local function FilterOutgoingHealing(value, critical)
+	if critical and x.db.profile.spellFilter.filterOutgoingHealingCritEnabled then
+		return x.db.profile.spellFilter.filterOutgoingHealingCritValue > value
+	else
+		return x.db.profile.spellFilter.filterOutgoingHealingValue > value
+	end
+end
+local function FilterIncomingDamage(value, critical)
+	if critical and x.db.profile.spellFilter.filterIncomingDamageCritEnabled then
+		return x.db.profile.spellFilter.filterIncomingDamageCritValue > value
+	else
+		return x.db.profile.spellFilter.filterIncomingDamageValue > value
+	end
+end
+local function FilterIncomingHealing(value, critical)
+	if critical and x.db.profile.spellFilter.filterIncomingHealingCritEnabled then
+		return x.db.profile.spellFilter.filterIncomingHealingCritValue > value
+	else
+		return x.db.profile.spellFilter.filterIncomingHealingValue > value
+	end
+end
 local function TrackSpells() return x.db.profile.spellFilter.trackSpells end
 
 local function IsResourceDisabled( resource, amount )

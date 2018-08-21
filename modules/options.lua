@@ -833,13 +833,62 @@ addon.options.args["spellFilter"] = {
           get = getNumber2,
         },
 
-        filterOutgoingHealingValue = {
+        filterOutgoingDamageCritEnabled = {
+          order = 13,
+          type = 'toggle',
+          name = "Use Custom Criticals",
+          desc = "Enable a different threshold for outgoing damage criticals.",
+          set = set0_1,
+          get = get0_1,
+        },
+
+        filterOutgoingDamageCritValue = {
           order = 12,
+          type = 'input',
+          name = "Outgoing Damage (Critical)",
+          desc = "The minimal amount of damage required for a critical inorder for it to be displayed.",
+          set = setNumber2,
+          get = getNumber2,
+          disabled = function(info)
+              return not x.db.profile.spellFilter.filterOutgoingDamageCritEnabled
+            end,
+        },
+
+        --[[listSpacer_DamageHealing = {
+          type = "description",
+          order = 14,
+          name = "",
+          fontSize = "small",
+        },]]
+
+        filterOutgoingHealingValue = {
+          order = 15,
           type = 'input',
           name = "Outgoing Healing",
           desc = "The minimal amount of healing required inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
+        },
+
+        filterOutgoingHealingCritEnabled = {
+          order = 17,
+          type = 'toggle',
+          name = "Use Custom Criticals",
+          desc = "Enable a different threshold for outgoing healing criticals.",
+          set = set0_1,
+          get = get0_1,
+        },
+
+        filterOutgoingHealingCritValue = {
+          order = 16,
+          type = 'input',
+          name = "Outgoing Healing (Critical)",
+          desc = "The minimal amount of healing required for a critical inorder for it to be displayed.",
+          set = setNumber2,
+          get = getNumber2,
+          disabled = function(info)
+              return not x.db.profile.spellFilter.filterOutgoingHealingCritEnabled
+            end,
         },
 
         listSpacer2 = {
@@ -858,13 +907,57 @@ addon.options.args["spellFilter"] = {
           get = getNumber2,
         },
 
-        filterIncomingHealingValue = {
+        filterIncomingDamageCritEnabled = {
+          order = 23,
+          type = 'toggle',
+          name = "Use Custom Criticals",
+          desc = "Enable a different threshold for incoming damage criticals.",
+          set = set0_1,
+          get = get0_1,
+        },
+
+        filterIncomingDamageCritValue = {
           order = 22,
           type = 'input',
+          name = "Incoming Damage (Critical)",
+          desc = "The minimal amount of damage required for a critical inorder for it to be displayed.",
+          set = setNumber2,
+          get = getNumber2,
+          disabled = function(info)
+              return not x.db.profile.spellFilter.filterIncomingDamageCritEnabled
+            end,
+        },
+
+        filterIncomingHealingValue = {
+          order = 25,
+          type = 'input',
           name = "Incoming Healing",
+          desc = "The minimal amount of healing required inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
         },
+
+        filterIncomingHealingCritEnabled = {
+          order = 27,
+          type = 'toggle',
+          name = "Use Custom Criticals",
+          desc = "Enable a different threshold for incoming healing criticals.",
+          set = set0_1,
+          get = get0_1,
+        },
+
+        filterIncomingHealingCritValue = {
+          order = 26,
+          type = 'input',
+          name = "Incoming Healing (Critical)",
+          desc = "The minimal amount of healing required for a critical inorder for it to be displayed.",
+          set = setNumber2,
+          get = getNumber2,
+          disabled = function(info)
+              return not x.db.profile.spellFilter.filterIncomingHealingCritEnabled
+            end,
+        },
+
       },
     },
 
