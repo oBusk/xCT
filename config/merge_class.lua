@@ -260,7 +260,7 @@ addon.merges[198670]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- T
 addon.merges[191070]    = CreateMergeSpellEntry("HUNTER", 0.5, 254)         -- Artifact: Call of the Hunter
 addon.merge2h[191043]   = 19434                                             -- Windburst
 
--- Survival (ID: 255) 204081
+-- Survival (ID: 255)
 addon.merges[185855]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Lacerate
 addon.merges[187708]    = CreateMergeSpellEntry("HUNTER", 0.5, 255)         -- Carve
 addon.merges[13812]     = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Explosive Trap
@@ -271,6 +271,9 @@ addon.merges[194859]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- T
 addon.merges[203563]    = CreateMergeSpellEntry("HUNTER", 0.5, 255)         -- Artifact: Talen Strike (Bugged Icon Fix)
 addon.merges[203415]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Artifact: Fury of the Eagle (Bugged Icon Fix)
 addon.merges[204081]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Artifact: On the Trail
+addon.merges[265157]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Wildfire Bomb
+addon.merges[259491]    = CreateMergeSpellEntry("HUNTER", 2.5, 255)         -- Serpent Sting
+addon.merge2h[269747]   = 265157                                            -- Wildfire Bomb (DOT)
 addon.merge2h[203525]   = 203563                                            -- Talen Strike (2x Hits)
 addon.merge2h[194858]   = 194859                                            -- Talent: Dragonsfire Grenade (DoT)
 addon.merge2h[203413]   = 203415                                            -- Artifact: Fury of the Eagle (Bugged Icon Fix)
