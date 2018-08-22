@@ -849,17 +849,17 @@ addon.options.args["spellFilter"] = {
           desc = "The minimal amount of damage required for a critical inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
-          disabled = function(info)
+          hidden = function(info)
               return not x.db.profile.spellFilter.filterOutgoingDamageCritEnabled
             end,
         },
 
-        --[[listSpacer_DamageHealing = {
+        listSpacer_DamageHealingOutgoing = {
           type = "description",
           order = 14,
           name = "",
           fontSize = "small",
-        },]]
+        },
 
         filterOutgoingHealingValue = {
           order = 15,
@@ -886,7 +886,7 @@ addon.options.args["spellFilter"] = {
           desc = "The minimal amount of healing required for a critical inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
-          disabled = function(info)
+          hidden = function(info)
               return not x.db.profile.spellFilter.filterOutgoingHealingCritEnabled
             end,
         },
@@ -923,9 +923,16 @@ addon.options.args["spellFilter"] = {
           desc = "The minimal amount of damage required for a critical inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
-          disabled = function(info)
+          hidden = function(info)
               return not x.db.profile.spellFilter.filterIncomingDamageCritEnabled
             end,
+        },
+
+        listSpacer_DamageHealingIncoming = {
+          type = "description",
+          order = 24,
+          name = "",
+          fontSize = "small",
         },
 
         filterIncomingHealingValue = {
@@ -953,7 +960,7 @@ addon.options.args["spellFilter"] = {
           desc = "The minimal amount of healing required for a critical inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
-          disabled = function(info)
+          hidden = function(info)
               return not x.db.profile.spellFilter.filterIncomingHealingCritEnabled
             end,
         },
