@@ -849,17 +849,17 @@ addon.options.args["spellFilter"] = {
           desc = "The minimal amount of damage required for a critical inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
-          disabled = function(info)
+          hidden = function(info)
               return not x.db.profile.spellFilter.filterOutgoingDamageCritEnabled
             end,
         },
 
-        --[[listSpacer_DamageHealing = {
+        listSpacer_DamageHealingOutgoing = {
           type = "description",
           order = 14,
           name = "",
           fontSize = "small",
-        },]]
+        },
 
         filterOutgoingHealingValue = {
           order = 15,
@@ -886,7 +886,7 @@ addon.options.args["spellFilter"] = {
           desc = "The minimal amount of healing required for a critical inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
-          disabled = function(info)
+          hidden = function(info)
               return not x.db.profile.spellFilter.filterOutgoingHealingCritEnabled
             end,
         },
@@ -923,9 +923,16 @@ addon.options.args["spellFilter"] = {
           desc = "The minimal amount of damage required for a critical inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
-          disabled = function(info)
+          hidden = function(info)
               return not x.db.profile.spellFilter.filterIncomingDamageCritEnabled
             end,
+        },
+
+        listSpacer_DamageHealingIncoming = {
+          type = "description",
+          order = 24,
+          name = "",
+          fontSize = "small",
         },
 
         filterIncomingHealingValue = {
@@ -953,7 +960,7 @@ addon.options.args["spellFilter"] = {
           desc = "The minimal amount of healing required for a critical inorder for it to be displayed.",
           set = setNumber2,
           get = getNumber2,
-          disabled = function(info)
+          hidden = function(info)
               return not x.db.profile.spellFilter.filterIncomingHealingCritEnabled
             end,
         },
@@ -3204,7 +3211,7 @@ addon.options.args["Frames"] = {
             specialTweaks = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDMiscellaneous Settings|r:",
+              name = "|cff798BDDDamage Settings|r:",
               fontSize = 'large',
             },
             enableOutDmg = {
@@ -3215,40 +3222,8 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            enableOutHeal = {
-              order = 11,
-              type = 'toggle',
-              name = "Show Outgoing Healing",
-              desc = "Show healing you do.",
-              get = get2,
-              set = set2,
-            },
-            enableOutAbsorbs = {
-              order = 12,
-              type = 'toggle',
-              name = "Show Outgoing Absorbs",
-              desc = "Show absorbs that you apply.",
-              get = get2,
-              set = set2,
-            },
-            enablePetDmg = {
-              order = 20,
-              type = 'toggle',
-              name = "Show Pet Damage",
-              desc = "Show your pet's damage. Beast Mastery hunters should also look at vehicle damage.",
-              get = get2,
-              set = set2,
-            },
-            enableVehicleDmg = {
-              order = 21,
-              type = 'toggle',
-              name = "Show Vehicle Damage",
-              desc = "Show damage that your vehicle does. This can be anything from a vehicle you are controlling to Hati, the beast mastery pet.",
-              get = get2,
-              set = set2,
-            },
             enableAutoAttack = {
-              order = 30,
+              order = 11,
               type = 'toggle',
               name = "Show Auto Attack",
               desc = "Show your auto attack damage.",
@@ -3256,23 +3231,126 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             enableDotDmg = {
-              order = 40,
+              order = 12,
               type = 'toggle',
               name = "Show DoTs",
               desc = "Show your Damage-Over-Time (DOT) damage. (|cffFF0000Requires:|r Outgoing Damage)",
               get = get2,
               set = set2,
             },
+            spacer_Damage1 = {
+              type = 'description',
+              order = 20,
+              name = '',
+              fontSize = 'small',
+            },
+            enablePetDmg = {
+              order = 21,
+              type = 'toggle',
+              name = "Show Pet Damage",
+              desc = "Show your pet's damage. Beast Mastery hunters should also look at vehicle damage.",
+              get = get2,
+              set = set2,
+            },
+            enablePetAutoAttack = {
+              order = 22,
+              type = 'toggle',
+              name = "Pet Auto Attacks",
+              desc = "Show your pet's auto attacks.",
+              get = get2,
+              set = set2,
+            },
+            enableVehicleDmg = {
+              order = 23,
+              type = 'toggle',
+              name = "Show Vehicle Damage",
+              desc = "Show damage that your vehicle does. This can be anything from a vehicle you are controlling to Hati, the beast mastery pet.",
+              get = get2,
+              set = set2,
+            },
+            healingSettings = {
+              type = 'description',
+              order = 30,
+              name = "\n|cff798BDDHealing Settings|r:",
+              fontSize = 'large',
+            },
+            enableOutHeal = {
+              order = 31,
+              type = 'toggle',
+              name = "Show Outgoing Healing",
+              desc = "Show healing you do.",
+              get = get2,
+              set = set2,
+            },
             enableHots = {
-              order = 41,
+              order = 32,
               type = 'toggle',
               name = "Show HoTs",
               desc = "Show your Heal-Over-Time (HOT) healing. (|cffFF0000Requires:|r Outgoing Healing)",
               get = get2,
               set = set2,
             },
-
-
+            enableOutAbsorbs = {
+              order = 33,
+              type = 'toggle',
+              name = "Show Outgoing Absorbs",
+              desc = "Show absorbs that you apply.",
+              get = get2,
+              set = set2,
+            },
+            enableOverhealing = {
+              order = 34,
+              type = 'toggle',
+              name = "Show Overhealing",
+              desc = "Displays overhealing.",
+              get = get2,
+              set = set2,
+              disabled = isFrameItemDisabled,
+            },
+            spacer_Healing1 = {
+              type = 'description',
+              order = 40,
+              name = '',
+              fontSize = 'small',
+            },
+            enableOverhealingFormat = {
+              order = 41,
+              type = 'toggle',
+              name = "Format Overhealing",
+              desc = "Splits overhealing into its own section. Example: +43,000 (O: 12,000)",
+              get = get2,
+              set = set2,
+              disabled = function(info)
+                return not x.db.profile.frames.outgoing.enabledFrame or
+                  not x.db.profile.frames.outgoing.enableOverhealing
+              end,
+            },
+            overhealingPrefix = {
+              order = 42,
+              type = 'input',
+              name = "Overhealing Prefix",
+              desc = "Prefix this value to the beginning when displaying an overheal amount.\n\n|cffFF0000Requires:|r |cff798BDDFormat Overhealing|r",
+              get = getTextIn2,
+              set = setTextIn2,
+              disabled = function(info)
+                return not x.db.profile.frames.outgoing.enabledFrame or
+                  not x.db.profile.frames.outgoing.enableOverhealing or
+                  not x.db.profile.frames.outgoing.enableOverhealingFormat
+              end,
+            },
+            overhealingPostfix = {
+              order = 43,
+              type = 'input',
+              name = "Overhealing Postfix",
+              desc = "Prefix this value to the endind when displaying an overheal amount.\n\n|cffFF0000Requires:|r |cff798BDDFormat Overhealing|r",
+              get = getTextIn2,
+              set = setTextIn2,
+              disabled = function(info)
+                return not x.db.profile.frames.outgoing.enabledFrame or
+                  not x.db.profile.frames.outgoing.enableOverhealing or
+                  not x.db.profile.frames.outgoing.enableOverhealingFormat
+              end,
+            },
 
             missTypeSettings = {
               type = 'description',
@@ -3280,7 +3358,6 @@ addon.options.args["Frames"] = {
               name = "\n|cff798BDDMiss Type Settings|r:",
               fontSize = 'large',
             },
-
             enableImmunes = {
               order = 51,
               type = 'toggle',
@@ -3312,73 +3389,6 @@ addon.options.args["Frames"] = {
               desc = "Only show the highest partial miss, instead of all the misses. (Rare, but less spammy)\n\n|cffFF0000PLEASE NOTE:|r Only works if the spell is not merged. Turn off the Spell Merger to see all spells.",
               get = get2,
               set = set2,
-            },
-
-
-            healingSettings = {
-              type = 'description',
-              order = 60,
-              name = "\n|cff798BDDHealing Settings|r:",
-              fontSize = 'large',
-            },
-
-            enableOverhealing = {
-              order = 61,
-              type = 'toggle',
-              name = "Show Overhealing",
-              desc = "Displays overhealing.",
-              get = get2,
-              set = set2,
-              disabled = isFrameItemDisabled,
-            },
-
-            enableOverhealingFormat = {
-              order = 62,
-              type = 'toggle',
-              name = "Format Overhealing",
-              desc = "Splits overhealing into its own section. Example: +43,000 (O: 12,000)",
-              get = get2,
-              set = set2,
-              disabled = function(info)
-                return not x.db.profile.frames.outgoing.enabledFrame or
-                  not x.db.profile.frames.outgoing.enableOverhealing
-              end,
-            },
-
-            healingSettings_Spacer = {
-              type = 'description',
-              order = 63,
-              name = "",
-              fontSize = 'small',
-              width = 'full',
-            },
-
-            overhealingPrefix = {
-              order = 65,
-              type = 'input',
-              name = "Overhealing Prefix",
-              desc = "Prefix this value to the beginning when displaying an overheal amount.\n\n|cffFF0000Requires:|r |cff798BDDFormat Overhealing|r",
-              get = getTextIn2,
-              set = setTextIn2,
-              disabled = function(info)
-                return not x.db.profile.frames.outgoing.enabledFrame or
-                  not x.db.profile.frames.outgoing.enableOverhealing or
-                  not x.db.profile.frames.outgoing.enableOverhealingFormat
-              end,
-            },
-
-            overhealingPostfix = {
-              order = 66,
-              type = 'input',
-              name = "Overhealing Postfix",
-              desc = "Prefix this value to the endind when displaying an overheal amount.\n\n|cffFF0000Requires:|r |cff798BDDFormat Overhealing|r",
-              get = getTextIn2,
-              set = setTextIn2,
-              disabled = function(info)
-                return not x.db.profile.frames.outgoing.enabledFrame or
-                  not x.db.profile.frames.outgoing.enableOverhealing or
-                  not x.db.profile.frames.outgoing.enableOverhealingFormat
-              end,
             },
 
           },

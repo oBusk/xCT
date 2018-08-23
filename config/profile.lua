@@ -368,6 +368,7 @@ addon.defaults = {
         ["enableOutHeal"] = true,
         ["enableOutAbsorbs"] = true,
         ["enablePetDmg"] = true,
+        ["enablePetAutoAttack"] = true,
         ["enableVehicleDmg"] = true,
         ["enableAutoAttack"] = true,
         ["enableDotDmg"] = true,

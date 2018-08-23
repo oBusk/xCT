@@ -204,6 +204,7 @@ local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg 
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
 local function ShowAbsorbs() return x.db.profile.frames["outgoing"].enableOutAbsorbs end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
+local function ShowPetAutoAttack() return x.db.profile.frames["outgoing"].enablePetAutoAttack end
 local function ShowVehicleDamage() return x.db.profile.frames["outgoing"].enableVehicleDmg end
 local function ShowAutoAttack() return x.db.profile.frames["outgoing"].enableAutoAttack end -- Also see ShowSwingCrit
 local function ShowDots() return x.db.profile.frames["outgoing"].enableDotDmg end
@@ -1331,6 +1332,7 @@ local CombatEventHandlers = {
 		-- Check to see if my pet is doing things
 		if args:IsSourceMyPet() then
 			if not ShowPetDamage() then return end
+			if isSwing and not ShowPetAutoAttack() then return end
 			if MergePetAttacks() then
 				local icon = x.GetPetTexture() or ""
 				x:AddSpamMessage(outputFrame, icon, amount, x.db.profile.spells.mergePetColor, 6)
@@ -1346,6 +1348,7 @@ local CombatEventHandlers = {
 
 		if args:IsSourceMyVehicle() then
 			if not ShowVehicleDamage() then return end
+			if isSwing and not ShowPetAutoAttack() then return end
 			if not ShowPetCrits() then
 				critical = nil -- stupid spam fix for hunter pets
 			end
@@ -1362,7 +1365,6 @@ local CombatEventHandlers = {
 				outputFrame = 'critical'
 			end
 		end
-
 
 		-- Lookup the color
 		if isSwing or isAutoShot then
@@ -1404,8 +1406,6 @@ local CombatEventHandlers = {
 				return
 			end
 		end
-
-
 
 		if critical and ShowSwingCrit() then
 			settings = x.db.profile.frames['critical']
