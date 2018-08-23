@@ -13,8 +13,8 @@
  [====================================]]
 
 -- Dont do anything for Legion
-local build = select(4, GetBuildInfo())
-if build >= 70000 then return end
+--local build = select(4, GetBuildInfo())
+--if build >= 70000 then return end
 
 
 -- TODO: Fix this up
@@ -31,44 +31,41 @@ hooksecurefunc('CombatText_AddMessage', function(message, scrollFunction, r, g, 
   x:AddMessage("general", message, {r, g, b})
 end)
 
-hooksecurefunc(InterfaceOptionsCombatTextPanel, 'refresh', function(...)
-  -- @see InterfaceOptionsPanel_Refresh
-  local self = InterfaceOptionsCombatTextPanel
-  for _, control in pairs(self.controls) do
-    if control.type == CONTROLTYPE_DROPDOWN then
-      UIDropDownMenu_DisableDropDown(control)
-    else
-      control:Disable()
-    end
-  end
-end)
-
 local fsTitle, configButton
-InterfaceOptionsCombatTextPanel:HookScript('OnShow', function(self)
+x.UpdateBlizzardOptions = function() --[[ Nothing to see here, for now... ]] end
+
+InterfaceOptionsCombatPanel:HookScript('OnShow', function(self)
   if not fsTitle then
     -- Show Combat Options Title
     fsTitle = self:CreateFontString(nil, "OVERLAY")
     fsTitle:SetTextColor(1.00, 1.00, 1.00, 1.00)
     fsTitle:SetFontObject(GameFontHighlightLeft)
-    fsTitle:SetText("|cff60A0FFPowered By |cffFF0000x|r|cff80F000CT|r+|r")
-    --fsTitle:SetPoint("TOPLEFT", 16, -90)
-    fsTitle:SetPoint("TOPLEFT", 480, -16)
+    fsTitle:SetText("|cff60A0FF(Now Controlled by |cffFFFF00xCT+|cff60A0FF)")
+    fsTitle:SetPoint("LEFT", InterfaceOptionsCombatPanelEnableFloatingCombatText, "RIGHT", 0, -16)
   end
 
   if not configButton then
     -- Create a button to delete profiles
     configButton = CreateFrame("Button", nil, self, "UIPanelButtonTemplate")
     configButton:ClearAllPoints()
-    configButton:SetPoint("TOPRIGHT", -36, -80)
-    configButton:SetSize(200, 30)
-    configButton:SetText("|cffFFFFFFOpen |r|cffFF0000x|r|cff80F000CT|r|cff60A0FF+|r |cffFFFFFFOptions...|r")
+    configButton:SetPoint("TOPLEFT", InterfaceOptionsCombatPanelEnableFloatingCombatText, "BOTTOMLEFT", 24, -16)
+    configButton:SetSize(160, 28)
+    configButton:SetText("Configure in xCT+")
     configButton:Show()
     configButton:SetScript("OnClick", function(self)
       InterfaceOptionsFrame_OnHide()
       HideUIPanel(GameMenuFrame)
-      --LibStub("AceConfigDialog-3.0"):Open(ADDON_NAME)
-      x:ShowConfigTool()
+      x:ShowConfigTool("FloatingCombatText")
     end)
+  end
+
+  if not InterfaceOptionsCombatPanel.xCTEnabled then
+    local oldText = InterfaceOptionsCombatPanelEnableFloatingCombatTextText:GetText()
+    InterfaceOptionsCombatPanelEnableFloatingCombatText:Disable()
+    InterfaceOptionsCombatPanel.xCTEnabled = true
+
+    InterfaceOptionsCombatPanelSpellAlertOpacitySlider:ClearAllPoints()
+    InterfaceOptionsCombatPanelSpellAlertOpacitySlider:SetPoint("TOPLEFT", configButton, "BOTTOMLEFT", 24, -32)
   end
 end)
 

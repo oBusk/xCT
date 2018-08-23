@@ -154,6 +154,7 @@ frameUpdate:SetScript("OnEvent", function(self)
   self:UnregisterEvent("PLAYER_ENTERING_WORLD")
   x:UpdateFrames()
   x.cvar_update()
+  x.UpdateBlizzardOptions()
 end)
 
 -- Version Compare Helpers... Yeah!
@@ -1622,10 +1623,8 @@ ACD:SetDefaultSize(AddonName, 803, 560)
 AC:RegisterOptionsTable(AddonName, addon.options)
 
 
-if build < 70000 then
-  AC:RegisterOptionsTable(AddonName.."Blizzard", x.blizzardOptions)
-  ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
-end
+AC:RegisterOptionsTable(AddonName.."Blizzard", x.blizzardOptions)
+ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
 
 -- Close Config when entering combat
 local lastConfigState, shownWarning = false, false
@@ -1760,7 +1759,7 @@ function x:ToggleConfigTool()
   end
 end
 
-function x:ShowConfigTool()
+function x:ShowConfigTool(...)
   if x.isConfigToolOpen then return end
   if x.inCombat and x.db.profile.hideConfig then
     if not shownWarning then
@@ -1790,16 +1789,23 @@ function x:ShowConfigTool()
 
   -- Last minute settings and SHOW
   x.myContainer.content:GetParent():SetMinResize(803, 300)
-  ACD:Open(AddonName, x.myContainer)
 
   -- Go through and select all the groups that are relevant to the player
   if not x.selectDefaultGroups then
     x.selectDefaultGroups = true
 
+    -- Select the player's class, then go back to home
     ACD:SelectGroup(AddonName, "spells", "classList", x.player.class)
     ACD:SelectGroup(AddonName, "spells", "mergeOptions")
     ACD:SelectGroup(AddonName, "Frames")
   end
+
+  -- If we get a specific path we need to be at
+  if select('#', ...) > 0 then
+    ACD:SelectGroup(AddonName, ...)
+  end
+
+  ACD:Open(AddonName, x.myContainer)
 end
 
 local function HideConfigTool_OnUpdate( self, e )
