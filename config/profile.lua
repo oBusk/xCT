@@ -179,6 +179,8 @@ addon.defaults = {
         ["fontShadowOffsetY"] = -2,
 
         -- font colors
+        ["customColor"] = false,
+        ["fontColor"] = { 1.00, 1.00, 1.00 },
         colors = {
           ["interrupts"]   = { enabled = false, desc = "Interrupts",     default = { 1.00, 0.50, 0.00 } },
           ["killingBlow"]  = { enabled = false, desc = "Killing Blows",  default = { 0.20, 1.00, 0.20 } },
@@ -277,6 +279,8 @@ addon.defaults = {
         ["fontShadowOffsetY"] = -2,
 
         -- font colors
+        ["customColor"] = false,
+        ["fontColor"] = { 1.00, 1.00, 1.00 },
         colors = {
           ['melee']         = { enabled = false, desc = "Auto Attack Damage", default = { 1.00, 1.00, 1.00 } },
           ['misstypesOut']  = { enabled = false, desc = "Missed Attacks",     default = { 0.50, 0.50, 0.50 } },
@@ -405,6 +409,8 @@ addon.defaults = {
         ["fontShadowOffsetY"] = -2,
 
         -- font colors
+        ["customColor"] = false,
+        ["fontColor"] = { 1.00, 1.00, 1.00 },
         colors = {
           ['meleeCrit']  = { enabled = false, desc = "Auto Attack Damage (Critical)", default = { 1.00, 1.00, 0.00 } },
         },
@@ -513,6 +519,8 @@ addon.defaults = {
         ["fontShadowOffsetY"] = -2,
 
         -- font colors
+        ["customColor"] = false,
+        ["fontColor"] = { 1.00, 1.00, 1.00 },
         colors = {
           ['damageTaken']               = { enabled = false, desc = "Physical Damage",          default = { 0.75, 0.10, 0.10 } },
           ['damageTakenCritical']       = { enabled = false, desc = "Critical Physical Damage", default = { 1.00, 0.10, 0.10 } },
@@ -664,6 +672,8 @@ addon.defaults = {
         ["fontShadowOffsetY"] = -2,
 
         -- font colors
+        ["customColor"] = false,
+        ["fontColor"] = { 1.00, 1.00, 1.00 },
         colors = {
           ['shieldTaken']          = { enabled = false, desc = "Shields",          default = { 0.60, 0.65, 1.00 } },
           ['healingTaken']         = { enabled = false, desc = "Healing",          default = { 0.10, 0.75, 0.10 } },
@@ -770,6 +780,8 @@ addon.defaults = {
         ["fontShadowOffsetY"] = -2,
 
         -- font colors
+        ["customColor"] = false,
+        ["fontColor"] = { 1.00, 1.00, 1.00 },
         colors = {
           ['comboPoints']     = { enabled = false, desc = "Combo Points",     default = { 1.00, 0.82, 0.00 } },
           ['comboPointsMax']  = { enabled = false, desc = "Max Combo Points", default = { 0.00, 0.82, 1.00 } },
@@ -802,6 +814,9 @@ addon.defaults = {
         ["fontShadowOffsetY"] = -2,
 
         -- font colors
+        ["customColor"] = false,
+        ["fontColor"] = { 1.00, 1.00, 1.00 },
+
         -- TODO: Update these ( See http://www.wowinterface.com/forums/showthread.php?t=53140 )
         colors = {
           ['color_MANA']            = { enabled = false, desc = MANA,           default = { 0.00, 0.00, 1.00 } },
@@ -887,6 +902,8 @@ addon.defaults = {
         ["fontShadowOffsetY"] = -2,
 
         -- font colors
+        ["customColor"] = false,
+        ["fontColor"] = { 1.00, 1.00, 1.00 },
         colors = {
           ['spellProc']     = { enabled = false, desc = "Spell Procs",    default = { 1.00, 0.82, 0.00 } },
           ['spellReactive'] = { enabled = false, desc = "Spell Reactive", default = { 1.00, 0.82, 0.00 } },
@@ -931,6 +948,10 @@ addon.defaults = {
         ["fontShadowColor"] = { 0, 0, 0, 0.6 },
         ["fontShadowOffsetX"] = 2,
         ["fontShadowOffsetY"] = -2,
+
+        -- font colors
+        ["customColor"] = false,
+        ["fontColor"] = { 1.00, 1.00, 1.00 },
 
         -- icons
         ["iconsEnabled"] = true,

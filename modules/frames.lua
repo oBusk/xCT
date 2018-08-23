@@ -963,14 +963,17 @@ function x.TestMoreUpdate(self, elapsed)
 			self.lastUpdate = 0
 
 			if self == x.frames["general"] and random(3) % 3 == 0 then
-				local output = "general"
+				local output, color = "general", {random(255) / 255, random(255) / 255, random(255) / 255}
 				if not x.db.profile.frames[output].enabledFrame then
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
 				end
-				x:AddMessage(output, COMBAT_TEXT_LABEL, {random(255) / 255, random(255) / 255, random(255) / 255})
+				if x.db.profile.frames[output].customColor then
+					color = x.db.profile.frames[output].fontColor
+				end
+				x:AddMessage(output, COMBAT_TEXT_LABEL, color)
 			elseif self == x.frames["outgoing"] then
-				local output = "outgoing"
+				local output, color = "outgoing", GetRandomSpellColor()
 				if not x.db.profile.frames[output].enabledFrame then
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
@@ -981,10 +984,13 @@ function x.TestMoreUpdate(self, elapsed)
 					multistriked = random(17)+1
 					merged = true
 				end
+				if x.db.profile.frames[output].customColor then
+					color = x.db.profile.frames[output].fontColor
+				end
 				message = x:GetSpellTextureFormatted( x.db.profile.frames["outgoing"].iconsEnabled and GetRandomSpellID() or -1, message, x.db.profile.frames["outgoing"].iconsSize, x.db.profile.frames["outgoing"].fontJustify, nil, merged, multistriked )
-				x:AddMessage(output, message, GetRandomSpellColor())
+				x:AddMessage(output, message, color)
 			elseif self == x.frames["critical"] and random(2) % 2 == 0 then
-				local output = "critical"
+				local output, color = "critical", GetRandomSpellColor()
 				if not x.db.profile.frames[output].enabledFrame then
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
@@ -995,20 +1001,29 @@ function x.TestMoreUpdate(self, elapsed)
 					multistriked = random(17)+1
 					merged = true
 				end
+				if x.db.profile.frames[output].customColor then
+					color = x.db.profile.frames[output].fontColor
+				end
 				message = x:GetSpellTextureFormatted( x.db.profile.frames["critical"].iconsEnabled and GetRandomSpellID() or -1, message, x.db.profile.frames["critical"].iconsSize, x.db.profile.frames["critical"].fontJustify, nil, merged, multistriked )
-				x:AddMessage(output, message, GetRandomSpellColor())
+				x:AddMessage(output, message, color)
 			elseif self == x.frames["damage"] and random(2) % 2 == 0 then
-				local output = "damage"
+				local output, color = "damage", {1, random(100) / 255, random(100) / 255}
 				if not x.db.profile.frames[output].enabledFrame then
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
 				end
-				x:AddMessage(output, "-"..x:Abbreviate(random(100000), "damage"), {1, random(100) / 255, random(100) / 255})
+				if x.db.profile.frames[output].customColor then
+					color = x.db.profile.frames[output].fontColor
+				end
+				x:AddMessage(output, "-"..x:Abbreviate(random(100000), "damage"), color)
 			elseif self == x.frames["healing"] and random(2) % 2 == 0 then
-				local output = "healing"
+				local output, color = "healing", {.1, ((random(3) + 1) * 63) / 255, .1}
 				if not x.db.profile.frames[output].enabledFrame then
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
+				end
+				if x.db.profile.frames[output].customColor then
+					color = x.db.profile.frames[output].fontColor
 				end
 				if COMBAT_TEXT_SHOW_FRIENDLY_NAMES == "1" then
 					local message = UnitName("player")
@@ -1020,9 +1035,9 @@ function x.TestMoreUpdate(self, elapsed)
 					if x.db.profile.spells.mergeHealing and random(2) % 2 == 0 then
 						message = sformat("%s |cffFFFF00x%s|r", message, random(17)+1)
 					end
-					x:AddMessage(output, "+"..x:Abbreviate(random(90000),"healing") .. " "..message, {.1, ((random(3) + 1) * 63) / 255, .1})
+					x:AddMessage(output, "+"..x:Abbreviate(random(90000),"healing") .. " "..message, color)
 				else
-					x:AddMessage(output, "+"..x:Abbreviate(random(90000),"healing"), {.1, ((random(3) + 1) * 63) / 255, .1})
+					x:AddMessage(output, "+"..x:Abbreviate(random(90000),"healing"), color)
 				end
 			elseif self == x.frames["power"] and random(4) % 4 == 0 then
 				local output = "power"
@@ -1031,7 +1046,11 @@ function x.TestMoreUpdate(self, elapsed)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
 				end
 				local _, powerToken = UnitPowerType("player")
-				x:AddMessage(output, "+"..x:Abbreviate(random(5000),"power").." ".._G[powerToken], { PowerBarColor[powerToken].r, PowerBarColor[powerToken].g, PowerBarColor[powerToken].b })
+				local color = { PowerBarColor[powerToken].r, PowerBarColor[powerToken].g, PowerBarColor[powerToken].b }
+				if x.db.profile.frames[output].customColor then
+					color = x.db.profile.frames[output].fontColor
+				end
+				x:AddMessage(output, "+"..x:Abbreviate(random(5000),"power").." ".._G[powerToken], color)
 			elseif self == x.frames["class"] and random(4) % 4 == 0 then
 				if not x.db.profile.frames["class"].enabledFrame then x:Clear("class") return end
 				if not self.testCombo then
@@ -1041,19 +1060,31 @@ function x.TestMoreUpdate(self, elapsed)
 				if self.testCombo > 8 then
 					self.testCombo = 1
 				end
-				x:AddMessage("class", tostring(self.testCombo), {1, .82, 0})
+				local color = {1, .82, 0}
+				if x.db.profile.frames["class"].customColor then
+					color = x.db.profile.frames["class"].fontColor
+				end
+				x:AddMessage("class", tostring(self.testCombo), color)
 			elseif self == x.frames["procs"] and random(8) % 8 == 0 then
 				local output = "procs"
 				if not x.db.profile.frames[output].enabledFrame then
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
 				end
-				x:AddMessage(output, ERR_SPELL_COOLDOWN, {1, 1, 0})
+				local color = {1, 1, 0}
+				if x.db.profile.frames[output].customColor then
+					color = x.db.profile.frames[output].fontColor
+				end
+				x:AddMessage(output, ERR_SPELL_COOLDOWN, color)
 			elseif self == x.frames["loot"] and random(8) % 8 == 0 then
 				local output = "loot"
 				if not x.db.profile.frames[output].enabledFrame then
 					x:Clear(output)
 					if x.db.profile.frames[output].secondaryFrame ~= 0 then output = frameIndex[x.db.profile.frames[output].secondaryFrame] else return end
+				end
+				local color = {1, 1, 0}
+				if x.db.profile.frames[output].customColor then
+					color = x.db.profile.frames[output].fontColor
 				end
 				if x.db.profile.frames[output].colorBlindMoney then
 					local g, s, c, message = random(100) % 10 ~= 0 and random(100) or nil, random(100) % 10 ~= 0 and random(100) or nil, random(100) % 10 ~= 0 and random(100) or nil, ""
@@ -1061,9 +1092,9 @@ function x.TestMoreUpdate(self, elapsed)
 					if s then if g then message = message .. " " .. tostring(s).."|cffC0C0C0s|r" else message = message .. tostring(s).."|cffC0C0C0s|r" end end
 					if c then if s or g then message = message .. " " .. tostring(c).."|cffB87333c|r" else message = message .. tostring(c).."|cffB87333c|r" end end
 					if not g and not s and not c then return end
-					x:AddMessage(output, MONEY .. ": " .. message, {1, 1, 0})
+					x:AddMessage(output, MONEY .. ": " .. message, color)
 				else
-					x:AddMessage(output, MONEY .. ": " .. GetCoinTextureString(random(1000000)), {1, 1, 0})
+					x:AddMessage(output, MONEY .. ": " .. GetCoinTextureString(random(1000000)), color)
 				end
 			end
 		end

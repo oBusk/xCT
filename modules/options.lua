@@ -363,7 +363,7 @@ local function isFrameUseCustomFade(info) return not x.db.profile.frames[info[#i
 local function isFrameFadingDisabled(info) return isFrameUseCustomFade(info) or not x.db.profile.frames[info[#info-2]].enableFade end
 local function isFrameIconDisabled(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].iconsEnabled end
 local function isFrameFontShadowDisabled(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].enableFontShadow end
-
+local function isFrameCustomColorDisabled(info) return not x.db.profile.frames[info[#info-2]].customColor end
 -- This is TEMP
 local function isFrameItemEnabled(info) return x.db.profile.frames[info[#info-2]].enabledFrame end
 
@@ -2482,11 +2482,43 @@ addon.options.args["Frames"] = {
           type = 'group',
           name = "Colors",
           args = {
-            customColors = {
+            customColors_label = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDCustom Colors|r:\n",
+              name = "|cff798BDDCustom Colors|r:",
               fontSize = 'large',
+            },
+
+            customColors_OverrideDesc = {
+              type = 'description',
+              order = 1,
+              name = "\n|cffFFFF00Override All Frame Color Settings|r:",
+              fontSize = 'small',
+            },
+
+            customColor = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Override",
+              desc = "Change all the text in this frame to a specific color.",
+              get = get2,
+              set = set2,
+            },
+
+            fontColor = {
+              order = 3,
+              type = 'color',
+              name = "Color",
+              get = getColor2,
+              set = setColor2,
+              hidden = isFrameCustomColorDisabled,
+            },
+
+            customColors_Desc = {
+              type = 'description',
+              order = 4,
+              name = "\n|cffFFFF00Other Color Settings|r:",
+              fontSize = 'small',
             },
           },
         },
@@ -2889,11 +2921,43 @@ addon.options.args["Frames"] = {
           type = 'group',
           name = "Colors",
           args = {
-            customColors = {
+            customColors_label = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDCustom Colors|r:\n",
+              name = "|cff798BDDCustom Colors|r:",
               fontSize = 'large',
+            },
+
+            customColors_OverrideDesc = {
+              type = 'description',
+              order = 1,
+              name = "\n|cffFFFF00Override All Frame Color Settings|r:",
+              fontSize = 'small',
+            },
+
+            customColor = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Override",
+              desc = "Change all the text in this frame to a specific color.",
+              get = get2,
+              set = set2,
+            },
+
+            fontColor = {
+              order = 3,
+              type = 'color',
+              name = "Color",
+              get = getColor2,
+              set = setColor2,
+              hidden = isFrameCustomColorDisabled,
+            },
+
+            customColors_Desc = {
+              type = 'description',
+              order = 4,
+              name = "\n|cffFFFF00Other Color Settings|r:",
+              fontSize = 'small',
             },
           },
         },
@@ -3632,11 +3696,43 @@ addon.options.args["Frames"] = {
           type = 'group',
           name = "Colors",
           args = {
-            customColors = {
+            customColors_label = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDCustom Colors|r:\n",
+              name = "|cff798BDDCustom Colors|r:",
               fontSize = 'large',
+            },
+
+            customColors_OverrideDesc = {
+              type = 'description',
+              order = 1,
+              name = "\n|cffFFFF00Override All Frame Color Settings|r:",
+              fontSize = 'small',
+            },
+
+            customColor = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Override",
+              desc = "Change all the text in this frame to a specific color.",
+              get = get2,
+              set = set2,
+            },
+
+            fontColor = {
+              order = 3,
+              type = 'color',
+              name = "Color",
+              get = getColor2,
+              set = setColor2,
+              hidden = isFrameCustomColorDisabled,
+            },
+
+            customColors_Desc = {
+              type = 'description',
+              order = 4,
+              name = "\n|cffFFFF00Other Color Settings|r:",
+              fontSize = 'small',
             },
           },
         },
@@ -4266,11 +4362,43 @@ addon.options.args["Frames"] = {
           type = 'group',
           name = "Colors",
           args = {
-            customColors = {
+            customColors_label = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDCustom Colors|r:\n",
+              name = "|cff798BDDCustom Colors|r:",
               fontSize = 'large',
+            },
+
+            customColors_OverrideDesc = {
+              type = 'description',
+              order = 1,
+              name = "\n|cffFFFF00Override All Frame Color Settings|r:",
+              fontSize = 'small',
+            },
+
+            customColor = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Override",
+              desc = "Change all the text in this frame to a specific color.",
+              get = get2,
+              set = set2,
+            },
+
+            fontColor = {
+              order = 3,
+              type = 'color',
+              name = "Color",
+              get = getColor2,
+              set = setColor2,
+              hidden = isFrameCustomColorDisabled,
+            },
+
+            customColors_Desc = {
+              type = 'description',
+              order = 4,
+              name = "\n|cffFFFF00Other Color Settings|r:",
+              fontSize = 'small',
             },
           },
         },
@@ -4987,11 +5115,43 @@ addon.options.args["Frames"] = {
           type = 'group',
           name = "Colors",
           args = {
-            customColors = {
+            customColors_label = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDCustom Colors|r:\n",
+              name = "|cff798BDDCustom Colors|r:",
               fontSize = 'large',
+            },
+
+            customColors_OverrideDesc = {
+              type = 'description',
+              order = 1,
+              name = "\n|cffFFFF00Override All Frame Color Settings|r:",
+              fontSize = 'small',
+            },
+
+            customColor = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Override",
+              desc = "Change all the text in this frame to a specific color.",
+              get = get2,
+              set = set2,
+            },
+
+            fontColor = {
+              order = 3,
+              type = 'color',
+              name = "Color",
+              get = getColor2,
+              set = setColor2,
+              hidden = isFrameCustomColorDisabled,
+            },
+
+            customColors_Desc = {
+              type = 'description',
+              order = 4,
+              name = "\n|cffFFFF00Other Color Settings|r:",
+              fontSize = 'small',
             },
           },
         },
@@ -5464,15 +5624,47 @@ addon.options.args["Frames"] = {
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
           name = "Colors",
           args = {
-            customColors = {
+            customColors_label = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDCustom Colors|r:\n",
+              name = "|cff798BDDCustom Colors|r:",
               fontSize = 'large',
+            },
+
+            customColors_OverrideDesc = {
+              type = 'description',
+              order = 1,
+              name = "\n|cffFFFF00Override All Frame Color Settings|r:",
+              fontSize = 'small',
+            },
+
+            customColor = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Override",
+              desc = "Change all the text in this frame to a specific color.",
+              get = get2,
+              set = set2,
+            },
+
+            fontColor = {
+              order = 3,
+              type = 'color',
+              name = "Color",
+              get = getColor2,
+              set = setColor2,
+              hidden = isFrameCustomColorDisabled,
+            },
+
+            customColors_Desc = {
+              type = 'description',
+              order = 4,
+              name = "\n|cffFFFF00Other Color Settings|r:",
+              fontSize = 'small',
             },
           },
         },
@@ -5753,21 +5945,53 @@ addon.options.args["Frames"] = {
         },
 
         fontColors = {
-          order = 30,
+          order = 40,
           type = 'group',
           name = "Colors",
           args = {
-            customColors = {
+            customColors_label = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDCustom Colors|r:\n",
+              name = "|cff798BDDCustom Colors|r:",
               fontSize = 'large',
+            },
+
+            customColors_OverrideDesc = {
+              type = 'description',
+              order = 1,
+              name = "\n|cffFFFF00Override All Frame Color Settings|r:",
+              fontSize = 'small',
+            },
+
+            customColor = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Override",
+              desc = "Change all the text in this frame to a specific color.",
+              get = get2,
+              set = set2,
+            },
+
+            fontColor = {
+              order = 3,
+              type = 'color',
+              name = "Color",
+              get = getColor2,
+              set = setColor2,
+              hidden = isFrameCustomColorDisabled,
+            },
+
+            customColors_Desc = {
+              type = 'description',
+              order = 4,
+              name = "\n|cffFFFF00Other Color Settings|r:",
+              fontSize = 'small',
             },
           },
         },
 
         specialTweaks = {
-          order = 40,
+          order = 50,
           name = "Misc",
           type = 'group',
           args = {
@@ -6263,11 +6487,43 @@ addon.options.args["Frames"] = {
           type = 'group',
           name = "Colors",
           args = {
-            customColors = {
+            customColors_label = {
               type = 'description',
               order = 0,
-              name = "|cff798BDDCustom Colors|r:\n",
+              name = "|cff798BDDCustom Colors|r:",
               fontSize = 'large',
+            },
+
+            customColors_OverrideDesc = {
+              type = 'description',
+              order = 1,
+              name = "\n|cffFFFF00Override All Frame Color Settings|r:",
+              fontSize = 'small',
+            },
+
+            customColor = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Override",
+              desc = "Change all the text in this frame to a specific color.",
+              get = get2,
+              set = set2,
+            },
+
+            fontColor = {
+              order = 3,
+              type = 'color',
+              name = "Color",
+              get = getColor2,
+              set = setColor2,
+              hidden = isFrameCustomColorDisabled,
+            },
+
+            customColors_Desc = {
+              type = 'description',
+              order = 4,
+              name = "\n|cffFFFF00Other Color Settings|r:",
+              fontSize = 'small',
             },
           },
         },
@@ -6571,8 +6827,54 @@ addon.options.args["Frames"] = {
           }
         },
 
-        specialTweaks = {
+        fontColors = {
           order = 40,
+          type = 'group',
+          name = "Colors",
+          args = {
+            customColors_label = {
+              type = 'description',
+              order = 0,
+              name = "|cff798BDDCustom Colors|r:",
+              fontSize = 'large',
+            },
+
+            customColors_OverrideDesc = {
+              type = 'description',
+              order = 1,
+              name = "\n|cffFFFF00Override All Frame Color Settings|r:",
+              fontSize = 'small',
+            },
+
+            customColor = {
+              order = 2,
+              type = 'toggle',
+              name = "Enable Override",
+              desc = "Change all the text in this frame to a specific color.",
+              get = get2,
+              set = set2,
+            },
+
+            fontColor = {
+              order = 3,
+              type = 'color',
+              name = "Color",
+              get = getColor2,
+              set = setColor2,
+              hidden = isFrameCustomColorDisabled,
+            },
+
+            --[[customColors_Desc = {
+              type = 'description',
+              order = 4,
+              name = "\n|cffFFFF00Other Color Settings|r:",
+              fontSize = 'small',
+            },]]
+          },
+        },
+
+        specialTweaks = {
+          order = 50,
           type = 'group',
           name = "Misc",
           args = {

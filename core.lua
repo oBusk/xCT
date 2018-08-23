@@ -1461,7 +1461,7 @@ function x.GenerateColorOptions()
   for name, settings in pairs(x.db.profile.frames) do
     local options = addon.options.args.Frames.args[name]
     if settings.colors then
-      local index = 1
+      local index = 10
 
       -- Sort the Colors Alphabetical
       local sortedList = { }
