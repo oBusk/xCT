@@ -168,12 +168,18 @@ function x:UpdateFrames(specificFrame)
 			-- Set the position
 			f:SetWidth(settings.Width)
 			f:SetHeight(settings.Height)
-
 			f:SetPoint("CENTER", settings.X, settings.Y)
+
+			-- For keeping the frame on the screen
 			--f:SetClampRectInsets(0, 0, settings.fontSize, 0)
 
 			-- Frame Alpha
-			f:SetAlpha(settings.alpha / 100)
+			--f:SetAlpha(settings.alpha / 100)
+
+			-- NOTE: Setting the frame alpha this way still works... but it
+			-- doesn't apply to string texture children. FontString:SetAlpha
+			-- still works normally. Added bonus of not fading the frame
+			-- when we are configuring.
 
 			-- Insert Direction
 			if settings.insertText then
@@ -403,6 +409,38 @@ function x:AddMessage(framename, message, colorname)
 		end
 	end
 end
+
+-- WoW - Battle for Azeroth doesn't support fading textures with SetAlpha?
+-- We have to do it on a font string level
+local ScrollingMessageFrame_OverrideAlpha_Worker = CreateFrame("FRAME")
+ScrollingMessageFrame_OverrideAlpha_Worker:SetScript("OnUpdate", function ()
+	local now, alpha, scale = GetTime()
+	for name, frame in pairs(x.frames) do
+		alpha = frame.settings.alpha / 100
+
+		-- Only run on frames that have a custom alpha
+		if alpha ~= 1 then
+			-- Loop through each fontstring
+			for lineIndex, visibleLine in ipairs(frame.visibleLines) do
+				if visibleLine.messageInfo then -- Check for valid font strings (not released)
+					-- Keep the default fading, we will use their value to scale the custom alpha
+					scale = frame:CalculateLineAlphaValueFromTimestamp(now, math.max(visibleLine.messageInfo.timestamp, frame.overrideFadeTimestamp))
+
+					-- If we are fading the message away and fading is enabled
+					if scale ~= 1 and frame:CanEffectivelyFade() then
+						visibleLine:SetAlpha(alpha * scale)	-- Fade the font string, scaled for the custom amount
+
+					-- Only change the font string's alpha if it didn't already change
+					elseif visibleLine:GetAlpha() ~= alpha then
+						visibleLine:SetAlpha(alpha)
+					end
+				end
+			end
+		end
+
+	end
+end)
+
 
 local spamHeap, spamStack, now = {}, {}, 0
 local spam_format = "%s%s x%s"
