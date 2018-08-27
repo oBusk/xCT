@@ -26,9 +26,11 @@ local LSM = LibStub("LibSharedMedia-3.0");
 
 -- Intercept Messages Sent by other Add-Ons that use CombatText_AddMessage
 hooksecurefunc('CombatText_AddMessage', function(message, scrollFunction, r, g, b, displayType, isStaggered)
-  local lastEntry = COMBAT_TEXT_TO_ANIMATE[ #COMBAT_TEXT_TO_ANIMATE ]
-  CombatText_RemoveMessage(lastEntry)
-  x:AddMessage("general", message, {r, g, b})
+  if not x.db.profile.blizzardFCT.enableFloatingCombatText then
+    local lastEntry = COMBAT_TEXT_TO_ANIMATE[ #COMBAT_TEXT_TO_ANIMATE ]
+    CombatText_RemoveMessage(lastEntry)
+    x:AddMessage("general", message, {r, g, b})
+  end
 end)
 
 local fsTitle, configButton
@@ -78,13 +80,15 @@ function x:UpdateBlizzardFCT()
     --COMBAT_TEXT_HEIGHT = self.db.profile.blizzardFCT.fontSize
     --CombatTextFont:SetFont(self.db.profile.blizzardFCT.font, self.db.profile.blizzardFCT.fontSize, self.db.profile.blizzardFCT.fontOutline)
   end
-end
 
--- Turn off Blizzard's Combat Text
-CombatText:UnregisterAllEvents()
-CombatText:SetScript("OnLoad", nil)
-CombatText:SetScript("OnEvent", nil)
-CombatText:SetScript("OnUpdate", nil)
+  -- Turn off Blizzard's Combat Text
+  if not x.db.profile.blizzardFCT.enableFloatingCombatText then
+    CombatText:UnregisterAllEvents()
+    CombatText:SetScript("OnLoad", nil)
+    CombatText:SetScript("OnEvent", nil)
+    CombatText:SetScript("OnUpdate", nil)
+  end
+end
 
 -- Interface - Addons (Ace3 Blizzard Options)
 x.blizzardOptions = {
