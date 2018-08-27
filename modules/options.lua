@@ -5463,6 +5463,10 @@ addon.options.args["Frames"] = {
       order = 16,
       childGroups = 'tab',
       disabled = true,
+
+      -- TODO: Still need to implement this
+      hidden = true,
+
       args = {
         frameSettings = {
           order = 10,
