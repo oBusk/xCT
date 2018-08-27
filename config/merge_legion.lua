@@ -14,169 +14,135 @@
 
 local ADDON_NAME, addon = ...
 
--- =====================================================
--- CreateMergeSpellEntry(
---    class,       [string] - class name that spell belongs to
---    interval,       [int] - How often to update merged data (in seconds)
---    desc,        [string] - A short, helpful qualifier (1-2 words)
---    prep,           [int] - The minimum time to wait to update merged data (NOT USED YET)
---  )
---    Creates a merge settings entry for a spell.
--- =====================================================
-local function CreateMergeSpellEntry(class, interval, desc, prep)
-  return {
-         class = class      or "ITEM",
-      interval = interval   or 3,
-          prep = prep       or interval or 3,
-          desc = desc,
-    }
+-- New way of doing merge items
+-- 'alias' takes the original spell id and a replacement spell id
+-- item takes a item id, the merge interval in seconds, and a helpful description of the item
+-- header switches the header for the next set of items
+local _, _, _, alias, item, header = unpack(addon.merge_helpers)
+
+header "|cff93BE3DLegion|r™ |cff798BDDBodyguards|r"
+do
+	-- Druid
+	item '218797' '3.5' "Broll Bearmantle (Moonfire)"
+
+	-- Paladin
+	item '221647' '0.5' "Vindicator Boros (Hammer of the Righteous)"
+	item '222175' '1.5' "Blood Vanguard (Trample)"
+	item '222175' '1.5' "Arator the Redeemer (Divine Storm)"
+	item '221720' '1.5' "Arator the Redeemer (Divine Storm Heal)"
+
+	-- Monk
+	item '212141' '1.5' "The Monkey King (Spinning Crane Kick)"
+
+	-- Mage
+	item '228672' '1.0' "Archmage Modera (Flurry)"
+	item '220128' '0.5' "Archmage Modera (Frost Nova)"
 end
 
--- =====================================================
--- CreateMergeHeader(
---    expName,        [string] - name of the expansion
---    catName,        [string] - name of the category
---    expColor,       [int] - hex color without the #
---  )
---    Creates a string for a category heading
--- =====================================================
-local function CreateMergeHeader(expName, catName, expColor)
-    return "|cff".. expColor .. expName .. "|r™ |cff798BDD(" ..catName.. ")|r"
+header "|cff93BE3DLegion|r™ |cff798BDDConsumables|r"
+do
+	item '188091' '1.5' "Potion: Potion of Deadly Grace"
+	item '188028' '1.5' "Potion: Potion of the Old War"
+	item '225623' '1.5' "Food: Fishbrul Special"
+	alias '225624' '225623' --  Pepper Breath
+	alias '201573' '225623' --  Pepper Breath
+	alias '233150' '188028' --  Hack to give the Old War potion an icon
 end
 
--- ---------------------------
--- Merge Headers            --
--- ---------------------------
-local Leg_World = CreateMergeHeader("Legion", "World Zones", "93BE3D")
-local Leg_QuestItems = CreateMergeHeader("Legion", "Quest Items", "93BE3D")
-local Leg_BG = CreateMergeHeader("Legion", "Bodyguards", "93BE3D")
-local Leg_Items = CreateMergeHeader("Legion", "Items", "93BE3D")
-local Leg_Cons = CreateMergeHeader("Legion", "Consumables", "93BE3D")
-local Leg_Raid = CreateMergeHeader("Legion", "Raids", "93BE3D")
+header "|cff93BE3DLegion|r™ |cff798BDDItems|r"
+do
+	-- Trinkets
+	item '214052' '0.5' "Trinket: Eye of Skovald"
+	item '215047' '3.0' "Trinket: Terrorbound Nexus"
+	item '222168' '1.5' "Trinket: Spontaneous Appendages"
+	item '214169' '1.5' "Trinket: Spiked Counterweight"
+	item '215047' '3.0' "Trinket: Terrorbound Nexus"
+	item '213786' '1.5' "Trinket: Corrupted Starlight"
+	item '221845' '1.5' "Trinket: Twisting Wind"
+	item '221804' '0.5' "Trinket: Ravaged Seed Pod"
+	item '222197' '0.5' "Trinket: Unstable Horrorslime"
+	item '214350' '1.5' "Trinket: Oakheart's Gnarled Root"
+	alias '228780' '214169' --  Brutal Haymaker (Spiked Counterweight)
+	alias '213782' '213786' --  Trinket: Corrupted Starlight
+	alias '213833' '213786' --  Trinket: Corrupted Starlight
+	alias '213784' '213786' --  Trinket: Corrupted Starlight
+	alias '213785' '213786' --  Trinket: Corrupted Starlight
+	alias '221865' '221845' --  Trinket: Twisting Wind
 
--- ---------------------------
--- Bodyguards               --
--- ---------------------------
--- Druid
-addon.merges[218797]      = CreateMergeSpellEntry(Leg_BG, 3.5, "Broll Bearmantle (Moonfire)")
+	-- Trinkets: Nighthold
+	item '229700' '0.5' "Trinket: Pharamere's Forbidden Grimoire"
+	item '225777' '3.5' "Trinket: Draught of Souls"
+	item '225731' '3.0' "Trinket: Icon of Rot"
+	item '225764' '1.5' "Trinket: Star Gate"
+	item '225716' '0.5' "Trinket: Claw of the Crystalline Scorpid"
+	item '225721' '0.5' "Trinket: Arcanogolem Digit"
 
--- Paladin
-addon.merges[221647]      = CreateMergeSpellEntry(Leg_BG, 0.5, "Vindicator Boros (Hammer of the Righteous)")
-addon.merges[222175]      = CreateMergeSpellEntry(Leg_BG, 1.5, "Blood Vanguard (Trample)")
-addon.merges[222175]      = CreateMergeSpellEntry(Leg_BG, 1.5, "Arator the Redeemer (Divine Storm)")
-addon.merges[221720]      = CreateMergeSpellEntry(Leg_BG, 1.5, "Arator the Redeemer (Divine Storm Heal)")
+	-- Legendaries
+	item '207694' '3.0' "Legendary: Cinidaria, the Symbiote"
+	item '210999' '2.5' "Legendary: Obsidian Stone Spaulders"
 
--- Monk
-addon.merges[212141]      = CreateMergeSpellEntry(Leg_BG, 1.5, "The Monkey King (Spinning Crane Kick)")
+	-- Class Hall Items
+	item '223667' '1.5' "Druid: Thornstalk Barbs"
+end
 
--- Mage
-addon.merges[228672]      = CreateMergeSpellEntry(Leg_BG, 1.0, "Archmage Modera (Flurry)")
-addon.merges[220128]      = CreateMergeSpellEntry(Leg_BG, 0.5, "Archmage Modera (Frost Nova)")
+header "|cff93BE3DLegion|r™ |cff798BDDWorld Zones|r"
+do
+	-- All
+	item '205238' '0.5' "World Quest: PvP Warden Tower's (Powder Keg)"
 
--- ---------------------------
--- Consumables              --
--- ---------------------------
-addon.merges[188091]      = CreateMergeSpellEntry(Leg_Cons, 1.5, "Potion: Potion of Deadly Grace")
-addon.merges[188028]      = CreateMergeSpellEntry(Leg_Cons, 1.5, "Potion: Potion of the Old War") -- Buff ID
-addon.merge2h[233150]     = 188028 -- Hack to give the potion a icon
-addon.merges[225623]      = CreateMergeSpellEntry(Leg_Cons, 1.5, "Food: Fishbrul Special")
-addon.merge2h[201573]     = 225623 -- Pepper Breath
-addon.merge2h[225624]     = 225623 -- Pepper Breath
+	-- Suramar
+	item '203148' '0.5' "World Quest: Air Superiority (Unstable Mana)"
+	item '221254' '0.5' "World Quest: Life Finds a Way (Devour Demon)"
+	item '218895' '1.0' "World Quest: Withered Army Training (Throw Rock)"
+	item '23106' '1.0' "World Quest: Withered Army Training (Chain Lightning)"
+	item '204204' '0.5' "World Quest: The Battle Rages On (Unleashed Magic)"
 
--- ---------------------------
--- Items                    --
--- ---------------------------
--- Trinkets
-addon.merges[214052]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Eye of Skovald")
-addon.merges[215047]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Trinket: Terrorbound Nexus")
-addon.merges[222168]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Spontaneous Appendages")
-addon.merges[214169]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Spiked Counterweight")
-addon.merge2h[228780]     = 214169 -- Brutal Haymaker (Spiked Counterweight)
-addon.merges[215047]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Trinket: Terrorbound Nexus")
-addon.merges[213786]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Corrupted Starlight")
-addon.merge2h[213782]     = 213786 -- Trinket: Corrupted Starlight
-addon.merge2h[213833]     = 213786 -- Trinket: Corrupted Starlight
-addon.merge2h[213784]     = 213786 -- Trinket: Corrupted Starlight
-addon.merge2h[213785]     = 213786 -- Trinket: Corrupted Starlight
-addon.merges[221845]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Twisting Wind")
-addon.merge2h[221865]     = 221845 -- Trinket: Twisting Wind
-addon.merges[221804]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Ravaged Seed Pod")
-addon.merges[222197]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Unstable Horrorslime")
-addon.merges[214350]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Oakheart's Gnarled Root")
+	-- Broken Shore
+	item '200009' '0.5' "Quest: The Battle for Broken Shore (Fel Cannonball)"
 
--- Trinkets: Nighthold
-addon.merges[229700]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Pharamere's Forbidden Grimoire")
-addon.merges[225777]      = CreateMergeSpellEntry(Leg_Items, 3.5, "Trinket: Draught of Souls")
-addon.merges[225731]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Trinket: Icon of Rot")
-addon.merges[225764]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Trinket: Star Gate")
-addon.merges[225716]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Claw of the Crystalline Scorpid")
-addon.merges[225721]      = CreateMergeSpellEntry(Leg_Items, 0.5, "Trinket: Arcanogolem Digit")
+	-- Stormheim
+	item '184427' '2.5' "Quest: Greymane's Gambit (Skyfire Deck Gun)"
+	item '179021' '0.5' "Quest: Murlocs: The Next Generation (Slime)"
+	item '179041' '0.5' "Quest: Murlocs: The Next Generation (Pufferfish"
 
--- Legendaries
-addon.merges[207694]      = CreateMergeSpellEntry(Leg_Items, 3.0, "Legendary: Cinidaria, the Symbiote")
-addon.merges[210999]      = CreateMergeSpellEntry(Leg_Items, 2.5, "Legendary: Obsidian Stone Spaulders")
+	-- Karazhan (Artifact Quests)
+	item '201645' '0.5' "Quest: Revil Cost (Cudgel of Light)"
+	item '201877' '0.5' "Quest: Revil Cost (Holy Nova)"
+	item '201642' '3.5' "Quest: Revil Cost (Holy Fire)"
 
--- Class Hall Items
-addon.merges[223667]      = CreateMergeSpellEntry(Leg_Items, 1.5, "Druid: Thornstalk Barbs")
+	-- Val'sharah
+	item '218594' '0.5' "Quest: Softening the Target (Terrorfiend)"
 
--- ---------------------------
--- World Zone               --
--- ---------------------------
--- All
-addon.merges[205238]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: PvP Warden Tower's (Powder Keg)")
+	-- Stormheim
+	item '183058' '0.5' "Quest: Cry Thunder!"
+	item '183042' '0.5' "Quest: Cry Thunder!"
+	item '190863' '0.5' "Quest: Gates of Valor (Call of the Storm)"
+	item '190919' '0.5' "Quest: Gates of Valor (Guardian Orbs)"
+	item '187780' '3.5' "Quest: Skold-Ashil (Aspirant's Conviction)"
 
--- Suramar
-addon.merges[203148]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: Air Superiority (Unstable Mana)")
-addon.merges[221254]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: Life Finds a Way (Devour Demon)")
-addon.merges[218895]      = CreateMergeSpellEntry(Leg_World, 1.0, "World Quest: Withered Army Training (Throw Rock)")
-addon.merges[23106]       = CreateMergeSpellEntry(Leg_World, 1.0, "World Quest: Withered Army Training (Chain Lightning)")
-addon.merges[204204]      = CreateMergeSpellEntry(Leg_World, 0.5, "World Quest: The Battle Rages On (Unleashed Magic)")
+	-- Highmountain
+	item '215729' '2.5' "Quest: Lifespring Cavern (Healing Rain)"
+	item '192997' '1.5' "Quest: Huln's War - The Arrival (Wild Carve)"
+	item '193008' '0.5' "Quest: Huln's War - The Arrival (Harpoon Stomp)"
+	item '193091' '0.5' "Quest: Huln's War - The Arrival (Harpoon Stomp)"
+	item '213474' '0.5' "Quest: Justice Rains from Above (Skyhorn Strafing Run)"
+	item '214479' '0.5' "Quest: Bolas Bastion (Flaming Bolas)"
 
--- Broken Shore
-addon.merges[200009]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: The Battle for Broken Shore (Fel Cannonball)")
+	-- Azsuna
+	item '179217' '1.5' "Quest: The Walk of Shame (Prince Farondis)"
+	item '215555' '1.5' "Quest: The Walk of Shame (Prince Farondis)"
+end
 
--- Stormheim
-addon.merges[184427]      = CreateMergeSpellEntry(Leg_World, 2.5, "Quest: Greymane's Gambit (Skyfire Deck Gun)")
-addon.merges[179021]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Murlocs: The Next Generation (Slime)")
-addon.merges[179041]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Murlocs: The Next Generation (Pufferfish")
+header "|cff93BE3DLegion|r™ |cff798BDDQuest Items|r"
+do
+	-- Val'sharah
+	item '202917' '2.5' "Trinket: Temple Priestess' Charm"
+	item '202891' '2.5' "Trinket: Lodestone of the Stormbreaker"
+end
 
--- Karazhan (Artifact Quests)
-addon.merges[201645]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Revil Cost (Cudgel of Light)")
-addon.merges[201877]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Revil Cost (Holy Nova)")
-addon.merges[201642]      = CreateMergeSpellEntry(Leg_World, 3.5, "Quest: Revil Cost (Holy Fire)")
-
--- Val'sharah
-addon.merges[218594]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Softening the Target (Terrorfiend)")
-
--- Stormheim
-addon.merges[183058]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Cry Thunder!")
-addon.merges[183042]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Cry Thunder!")
-addon.merges[190863]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Gates of Valor (Call of the Storm)")
-addon.merges[190919]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Gates of Valor (Guardian Orbs)")
-addon.merges[187780]      = CreateMergeSpellEntry(Leg_World, 3.5, "Quest: Skold-Ashil (Aspirant's Conviction)")
-
--- Highmountain
-addon.merges[215729]      = CreateMergeSpellEntry(Leg_World, 2.5, "Quest: Lifespring Cavern (Healing Rain)")
-addon.merges[192997]      = CreateMergeSpellEntry(Leg_World, 1.5, "Quest: Huln's War - The Arrival (Wild Carve)")
-addon.merges[193008]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Huln's War - The Arrival (Harpoon Stomp)")
-addon.merges[193091]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Huln's War - The Arrival (Harpoon Stomp)")
-addon.merges[213474]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Justice Rains from Above (Skyhorn Strafing Run)")
-addon.merges[214479]      = CreateMergeSpellEntry(Leg_World, 0.5, "Quest: Bolas Bastion (Flaming Bolas)")
-
--- Azsuna
-addon.merges[179217]      = CreateMergeSpellEntry(Leg_World, 1.5, "Quest: The Walk of Shame (Prince Farondis)")
-addon.merges[215555]      = CreateMergeSpellEntry(Leg_World, 1.5, "Quest: The Walk of Shame (Prince Farondis)")
-
--- ---------------------------
--- Quest Items              --
--- ---------------------------
--- Val'sharah
-addon.merges[202917]      = CreateMergeSpellEntry(Leg_QuestItems, 2.5, "Trinket: Temple Priestess' Charm")
-addon.merges[202891]      = CreateMergeSpellEntry(Leg_QuestItems, 2.5, "Trinket: Lodestone of the Stormbreaker")
-
--- ---------------------------
--- Raids                    --
--- ---------------------------
-addon.merges[215300]      = CreateMergeSpellEntry(Leg_Raid, 2.0, "Elerethe Renferal: Web of Pain [Tanks]")
-addon.merges[215307]      = CreateMergeSpellEntry(Leg_Raid, 2.0, "Elerethe Renferal: Web of Pain [Other]")
-addon.merges[223699]      = CreateMergeSpellEntry(Leg_Raid, 1.0, "Dragons of Nightmare: Volatile Infection")
+header "|cff93BE3DLegion|r™ |cff798BDDRaids|r"
+do
+	item '215300' '2.0' "Elerethe Renferal: Web of Pain [Tanks]"
+	item '215307' '2.0' "Elerethe Renferal: Web of Pain [Other]"
+	item '223699' '1.0' "Dragons of Nightmare: Volatile Infection"
+end
