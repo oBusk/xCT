@@ -206,6 +206,7 @@ local function ShowAbsorbs() return x.db.profile.frames["outgoing"].enableOutAbs
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
 local function ShowPetAutoAttack() return x.db.profile.frames["outgoing"].enablePetAutoAttack end
 local function ShowVehicleDamage() return x.db.profile.frames["outgoing"].enableVehicleDmg end
+local function ShowKillCommand() return x.db.profile.frames["outgoing"].enableKillCommand end
 local function ShowAutoAttack() return x.db.profile.frames["outgoing"].enableAutoAttack end -- Also see ShowSwingCrit
 local function ShowDots() return x.db.profile.frames["outgoing"].enableDotDmg end
 local function ShowHots() return x.db.profile.frames["outgoing"].enableHots end
@@ -1330,7 +1331,7 @@ local CombatEventHandlers = {
 		if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
 
 		-- Check to see if my pet is doing things
-		if args:IsSourceMyPet() then
+		if args:IsSourceMyPet() and (not ShowKillCommand() or spellID ~= 34026) then
 			if not ShowPetDamage() then return end
 			if isSwing and not ShowPetAutoAttack() then return end
 			if MergePetAttacks() then

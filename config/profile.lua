@@ -377,6 +377,7 @@ addon.defaults = {
         ["enableMisses"] = true,
         ["enablePartialMisses"] = false,
         ["showHighestPartialMiss"] = false,
+        ["enableKillCommand"] = false,
 
         ["enableOverhealing"] = true,
         ["enableOverhealingFormat"] = true,

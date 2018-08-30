@@ -3268,6 +3268,15 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
+            enableKillCommand = {
+              order = 24,
+              type = 'toggle',
+              name = "Show Kill Command",
+              desc = "Show the player, not the player's pet, as the source of Kill Command. Will allow you to turn off pet damage.",
+              get = get2,
+              set = set2,
+              hidden = function()return x.player.class~='HUNTER'end
+            },
             healingSettings = {
               type = 'description',
               order = 30,
