@@ -1018,7 +1018,7 @@ function x.TestMoreUpdate(self, elapsed)
 				end
 				local message = x:Abbreviate(random(60000), "outgoing")
 				local merged, multistriked = false, 0
-				if random(5) % 5 == 0 and (x.db.profile.spells.mergeDontMergeCriticals or x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
+				if x.db.profile.spells.enableMerger and random(3) % 3 == 0 then
 					multistriked = random(17)+1
 					merged = true
 				end
@@ -1035,7 +1035,7 @@ function x.TestMoreUpdate(self, elapsed)
 				end
 				local message = x.db.profile.frames.critical.critPrefix .. x:Abbreviate(random(60000), "critical") .. x.db.profile.frames.critical.critPostfix
 				local merged, multistriked = false, 0
-				if (random(5) % 5 == 0) and (x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
+				if x.db.profile.spells.enableMerger and (random(3) % 3 == 0) and (x.db.profile.spells.mergeCriticalsWithOutgoing or x.db.profile.spells.mergeCriticalsByThemselves) then
 					multistriked = random(17)+1
 					merged = true
 				end
