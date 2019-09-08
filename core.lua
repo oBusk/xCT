@@ -512,8 +512,6 @@ function x:UpdateSpamSpells()
     end
   end]]
 
-  local raceSpell = 0
-
   local spells = addon.options.args.spells.args.classList.args
   local global = addon.options.args.spells.args.globalList.args
   local racetab = addon.options.args.spells.args.raceList.args
@@ -544,14 +542,8 @@ function x:UpdateSpamSpells()
   for _, entry in pairs(addon.merges) do
 
     --TODO better code when i understand more the code
-    if entry.desc == "999999" then 
-      raceSpell = 1 
-    else
-      raceSpell = 0
-    end
 
-
-    if not CLASS_NAMES[entry.class] and raceSpell == 0 then
+    if not CLASS_NAMES[entry.class] and entry.desc ~= "Racial Spell" then
       table.insert(categories, entry.class)
     end
   end
@@ -585,13 +577,7 @@ function x:UpdateSpamSpells()
   local rcategories = {}
   for _, entry in pairs(addon.merges) do
     --TODO better code when i understand more the code
-    if entry.desc == "999999" then 
-      raceSpell = 1 
-    else
-      raceSpell = 0
-    end
-  
-    if not CLASS_NAMES[entry.class] and raceSpell == 1 then
+    if not CLASS_NAMES[entry.class] and entry.desc == "Racial Spell" then
       table.insert(rcategories, entry.class)
     end
   end
@@ -624,16 +610,8 @@ function x:UpdateSpamSpells()
     if name then
     
     --TODO better code when i understand more the code
-    local raceSpell = 0 
-    if entry.desc == "999999" then 
-        raceSpell = 1 
-    else
-      raceSpell = 0
-    end
       -- Create a useful description for the spell
-      local spellDesc = getSpellDescription(spellID) or "No Description"
-    if raceSpell == 1 then entry.desc = "Racial Spell" end
-    
+      local spellDesc = getSpellDescription(spellID) or "No Description"    
       local desc = ""
       if entry.desc and not CLASS_NAMES[entry.class] then
         desc = "|cff9F3ED5" .. entry.desc .. "|r\n\n"
@@ -656,8 +634,7 @@ function x:UpdateSpamSpells()
           get = SpamSpellGet,
           set = SpamSpellSet,
         }
-    elseif raceSpell == 1 then
-    print("entre racetab")
+    elseif entry.desc == "Racial Spell" then
       racetab[tostring(spellID)] = {
           order = rcategoryOffsets[entry.class],
           type = 'toggle',

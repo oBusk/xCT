@@ -67,14 +67,12 @@ do
 	-- for spell, but the second arg
 	local function rspell_2(interval)
 		_debug_working_race = false
-		print ("rspell2")
 		interval = tonumber(interval)
 		-- Create the spell here
-		print ("rspell2")
 		addon.merges[_working_race.spellId] = {
 			class = _working_race.race or "ITEM",
 			interval = interval or 3,
-			desc = "999999",
+			desc = "Racial Spell",
 			prep = _working_race.prep or interval or 3,
 		}
 	end
