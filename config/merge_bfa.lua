@@ -22,5 +22,27 @@ local _, _, _, alias, item, header = unpack(addon.merge_helpers)
 
 header "|cff325A93Battle for Azeroth|r™ |cff798BDDItems|r"
 do
-	alias '276199' '276196' -- Fathom Fall from item "Darkmoon Deck: Fathoms - ItemID: 159125"
+	alias '276199' '276196' 								-- Fathom Fall from item "Darkmoon Deck: Fathoms - ItemID: 159125"
+end
+
+header "|cff325A93Battle for Azeroth|r™ |cff798BDDHeart Of Azeroth|r"
+do
+	item '295367' '2.5' "Heart of Azeroth (Crucible of flames)"  
+end
+
+header "|cff325A93Battle for Azeroth|r™ |cff798BDDAzerite Traits|r"
+do
+	-- Warlock
+
+	item '280206' '2.5' "Ruinous Bolt (Azerite Traits)"   	--  Warlock: Ruinous bolt
+	
+	-- Death Knight
+	
+	alias '275931' '47541'  								-- Harrowing Decay links to Death Coil
+end
+
+header "|cff325A93Battle for Azeroth|r™ |cff798BDDWorldQuest|r"
+do
+	-- worldquest
+	item '269238' '1.5' "World Quest: Drustvar "			-- Vehicules world quest Drustvar
 end
