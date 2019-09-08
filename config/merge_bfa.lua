@@ -22,7 +22,11 @@ local _, _, _, alias, item, header = unpack(addon.merge_helpers)
 
 header "|cff325A93Battle for Azeroth|r™ |cff798BDDItems|r"
 do
-	alias '276199' '276196' 								-- Fathom Fall from item "Darkmoon Deck: Fathoms - ItemID: 159125"
+	-- Trinkets
+	item '276199' '1.0' "Trinket: Darkmoon Deck: Fathoms"
+	item '276132' '2.0' "Trinket: Darkmoon Deck: Squalls"
+	item '278057' '0.5' "Trinket: Vigilant's Bloodshaper"
+	item '270827' '0.5' "Trinket: Vessel of Skittering Shadows"
 end
 
 header "|cff325A93Battle for Azeroth|r™ |cff798BDDHeart Of Azeroth|r"
@@ -32,6 +36,14 @@ end
 
 header "|cff325A93Battle for Azeroth|r™ |cff798BDDAzerite Traits|r"
 do
+	item '280705' '0.5' "Laser Matrix"
+	item '280286' '0.5' "Dagger in the Back"
+	item '269031' '0.5' "Gutripper"
+	item '279958' '0.5' "Azerite Globules"
+	item '271685' '0.5' "Heed My Call"
+
+	alias '271685' '271686' -- Azerite Trait: "Heed My Call"
+
 	-- Warlock
 
 	item '280206' '2.5' "Ruinous Bolt (Azerite Traits)"   	--  Warlock: Ruinous bolt
