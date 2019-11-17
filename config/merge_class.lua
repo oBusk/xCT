@@ -88,8 +88,11 @@ do
 	spell '192611' '1.5' --  Fel Rush
 	spell '185123' '1.5' --  Throw Glaive
 	spell '199552' '2.0' --  Blade Dance
+	spell '210153' '2.0' --  Death Sweep
 	spell '200166' '0.5' --  Metamorphosis (Landing)
 	spell '198813' '0.5' --  Vengeful Retreat
+	spell '258921' '1.5' --  Immolation Aura
+	spell '258922' '1.5' --  Immolation Aura
 	spell '179057' '0.5' --  Chaos Nova
 	spell '203796' '2.5' --  Talent: Demon Blades
 	spell '211052' '1.5' --  Talent: Fel Barrage
@@ -99,24 +102,28 @@ do
 	spell '202446' '0.5' --  Artifact: Anguish
 	alias '199547' '222031' --  [MH/OH Merger] Chaos Strike
 	alias '200685' '199552' --  [MH/OH Merger] Blade Dance
+	alias '258883' '199552' --  [MH/OH Merger] Blade Dance
+	alias '210155' '210153' --  [MH/OH Merger] Death Sweep
 	alias '201789' '201628' --  [MH/OH Merger] Fury of the Illidari
+	-- spell '258922' '258921' --  [DD/DOT Merger]Immolation Aura
 
 	spec  '581' -- Vengeance
 	spell '204157' '1.5' --  Throw Glaive (Vengeance)
 	spell '187727' '2.5' --  Immolation Aura
 	spell '204598' '2.5' --  Sigil of Flame
 	spell '189112' '0.5' --  Infernal Strike
-	spell '222030' '0.5' --  Soul Cleave
+	spell '228478' '0.5' --  Soul Cleave
 	spell '203794' '1.5' --  Consume Soul
 	spell '207771' '2.5' --  Talent: Burning Alive
 	spell '227255' '1.5' --  Talent: Fel Devastation
-	spell '218677' '0.5' --  Talent: Spirit Bomb
+	spell '247455' '0.5' --  Talent: Spirit Bomb
 	spell '218677' '1.5' --  Talent: Spirit Bomb (Frailty Heal)
 	spell '213011' '2.5' --  Artifact: Charred Warblades
 	spell '207407' '1.5' --  Artifact: Soul Carver (DoT)
 	alias '178741' '187727' --  [DD/DoT Merger] Immolation Aura
-	alias '208038' '222030' --  [DD/DoT Merger] Soul Cleave
-	alias '214743' '207407' --  [DD/DoT Merger] Soul Cleave
+	-- alias '208038' '222030' --  [DD/DoT Merger] Soul Cleave
+	-- alias '214743' '207407' --  [DD/DoT Merger] Soul Cleave
+	-- alias '228478' '228477' --  [DD/DoT Merger] Soul Cleave
 	alias '212106' '227255' --  [MH/OH Merger] Fel Devastation
 	alias '212084' '227255' --  Reported From Curse: Should be Fel Devastation
 end

@@ -31,7 +31,8 @@ end
 
 header "|cff325A93Battle for Azeroth|r™ |cff798BDDHeart Of Azeroth|r"
 do
-	item '295367' '2.5' "Heart of Azeroth (Crucible of flames)"  
+	item '295367' '1.0' "Heart of Azeroth (Crucible of flames)"  
+	item '295261' '1.5' "Heart of Azeroth (Focusing iris)"  
 end
 
 header "|cff325A93Battle for Azeroth|r™ |cff798BDDAzerite Traits|r"

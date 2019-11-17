@@ -15,8 +15,7 @@
 local ADDON_NAME, addon = ...
 
 -- New way of doing merge spells
--- 'spell' takes a spell id and a merge interval in seconds
--- 'alias' takes the original spell id and a replacement spell id
+-- 'rspell' takes a spell id and a merge interval in seconds
 local _, _, _, _, _, _, race, rspell = unpack(addon.merge_helpers)
 
 race "|cfff2ff00Races|r™ |cff8a8dedVoid Elfs|r"
