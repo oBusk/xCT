@@ -27,6 +27,7 @@ do
 	item '276132' '2.0' "Trinket: Darkmoon Deck: Squalls"
 	item '278057' '0.5' "Trinket: Vigilant's Bloodshaper"
 	item '270827' '0.5' "Trinket: Vessel of Skittering Shadows"
+	item '302311' '0.5' "Trinket: Remote Guidance Device"
 end
 
 header "|cff325A93Battle for Azeroth|r™ |cff798BDDHeart Of Azeroth|r"
@@ -58,4 +59,10 @@ header "|cff325A93Battle for Azeroth|r™ |cff798BDDWorldQuest|r"
 do
 	-- worldquest
 	item '269238' '1.5' "World Quest: Drustvar "			-- Vehicules world quest Drustvar
+end
+
+header "|cff325A93Battle for Azeroth|r™ |cff6D1192Corruption|r"
+do
+	item '316661' '0.5' "Obsidian Destruction"
+	item '318187' '1.0' "Gushing Wound"
 end
