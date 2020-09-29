@@ -64,12 +64,15 @@ do
 	spell '91778'  '0.5' --  Pet: Sweeping Claws
 	spell '199373' '2.5' --  Army: Claw
 	spell '191587' '2.5' --  Virulent Plague (DoT)
+	spell '286836' '2.5' --	 Dark Transformation
+	spell '47541'  '1.5' --	 Death Coil
 	spell '218321' '1.5' --  Artifact: Dragged to Helheim
 	spell '191758' '0.5' --  Artifact: Corpse Explosion
 	spell '207267' '0.5' --  Talent: Dragged to Helheim
 	spell '212338' '0.5' --  Talent: Sludge Belcher
 	spell '212739' '0.5' --  Talent: Epidemic
 	spell '156000' '2.5' --  Talent: Defile
+	spell '207267' '2.5' --  Talent Bursting Sores
 	alias '55090'  '70890'  --  [Cleave Merger] Scourge Strike
 	alias '191685' '215969' --  [DD/DoT Merger] Virulent Plague Eruption
 	alias '212969' '212739' --  [DD/DoT Merger] Talent: Epidemic
@@ -85,8 +88,11 @@ do
 	spell '192611' '1.5' --  Fel Rush
 	spell '185123' '1.5' --  Throw Glaive
 	spell '199552' '2.0' --  Blade Dance
+	spell '210153' '2.0' --  Death Sweep
 	spell '200166' '0.5' --  Metamorphosis (Landing)
 	spell '198813' '0.5' --  Vengeful Retreat
+	spell '258921' '1.5' --  Immolation Aura
+	spell '258922' '1.5' --  Immolation Aura
 	spell '179057' '0.5' --  Chaos Nova
 	spell '203796' '2.5' --  Talent: Demon Blades
 	spell '211052' '1.5' --  Talent: Fel Barrage
@@ -96,24 +102,28 @@ do
 	spell '202446' '0.5' --  Artifact: Anguish
 	alias '199547' '222031' --  [MH/OH Merger] Chaos Strike
 	alias '200685' '199552' --  [MH/OH Merger] Blade Dance
+	alias '258883' '199552' --  [MH/OH Merger] Blade Dance
+	alias '210155' '210153' --  [MH/OH Merger] Death Sweep
 	alias '201789' '201628' --  [MH/OH Merger] Fury of the Illidari
+	-- spell '258922' '258921' --  [DD/DOT Merger]Immolation Aura
 
 	spec  '581' -- Vengeance
 	spell '204157' '1.5' --  Throw Glaive (Vengeance)
 	spell '187727' '2.5' --  Immolation Aura
 	spell '204598' '2.5' --  Sigil of Flame
 	spell '189112' '0.5' --  Infernal Strike
-	spell '222030' '0.5' --  Soul Cleave
+	spell '228478' '0.5' --  Soul Cleave
 	spell '203794' '1.5' --  Consume Soul
 	spell '207771' '2.5' --  Talent: Burning Alive
 	spell '227255' '1.5' --  Talent: Fel Devastation
-	spell '218677' '0.5' --  Talent: Spirit Bomb
+	spell '247455' '0.5' --  Talent: Spirit Bomb
 	spell '218677' '1.5' --  Talent: Spirit Bomb (Frailty Heal)
 	spell '213011' '2.5' --  Artifact: Charred Warblades
 	spell '207407' '1.5' --  Artifact: Soul Carver (DoT)
 	alias '178741' '187727' --  [DD/DoT Merger] Immolation Aura
-	alias '208038' '222030' --  [DD/DoT Merger] Soul Cleave
-	alias '214743' '207407' --  [DD/DoT Merger] Soul Cleave
+	-- alias '208038' '222030' --  [DD/DoT Merger] Soul Cleave
+	-- alias '214743' '207407' --  [DD/DoT Merger] Soul Cleave
+	-- alias '228478' '228477' --  [DD/DoT Merger] Soul Cleave
 	alias '212106' '227255' --  [MH/OH Merger] Fel Devastation
 	alias '212084' '227255' --  Reported From Curse: Should be Fel Devastation
 end
@@ -202,6 +212,8 @@ do
 	spell '214581' '1.5' --  Talent: Sidewinders
 	spell '198670' '0.5' --  Talent: Piercing Shot
 	spell '191070' '0.5' --  Artifact: Call of the Hunter
+	spell '257045' '2.0' --  Rapid Fire
+	spell '257620' '2.0' --  Multi shot
 	alias '191043' '19434' --  Windburst
 
 	spec  '255' -- Survival
@@ -249,6 +261,7 @@ do
 	spell '31661'  '0.5' --  Dragon's Breath
 	spell '2120'   '1.5' --  Flamestrike (Longer for talent)
 	spell '12654'  '2.5' --  Ignite (DoT)
+	spell '11366' '2.5'   -- Pyroblast
 	spell '205345' '2.5' --  Talent: Conflagration
 	spell '88082'  '2.0' --  Talent: Mirror Images
 	spell '157981' '0.5' --  Talent: Blast Wave
@@ -264,6 +277,8 @@ do
 	alias '224637' '194466' --  [DD/Splash Merger] Phoenix's Flames
 	alias '226757' '205345' --  [DD/Splash Merger] Conflagration
 	alias '205472' '2120'   --  [DD/DoT Merger] Talent: Flame Patch
+	alias '244813' '217694' --  [DD/DoT Merger] multi target living bomb
+	alias '277703' '11366'   -- [DD/Splash Merger] Pyroblast
 
 	spec  '64' -- Frost
 	spell '84721'  '1.5' --  Frozen Orb
@@ -423,13 +438,16 @@ do
 	spell '34914'  '2.5' --  Vampiric Touch
 	spell '148859' '2.5' --  Shadowy Apparition
 	spell '15407'  '2.0' --  Mind Flay
+	spell '49821'  '0.5' --  Mind Sear
 	spell '205386' '0.5' --  Talent: Shadow Crash
+	spell '263346' '0.5' --  Talent: Dark Void
+	spell '263165' '2.0' --  Talent: Void Torrent
 	spell '193473' '2.0' --  Artifact: Void Tendril (Mind Flay)
 	spell '205065' '2.0' --  Artifact: Void Torrent
 	spell '194238' '2.5' --  Artifact: Sphere of Insanity
 	spell '204778' '2.5' --  Honor Talent: Void Shield
-	alias '237388' '15407'  --  [Cleave Merger] Mind Flay AoE Component (7.1.5)
 	alias '228361' '228360' --  Void Eruption Merger
+	alias '263446' '228360' --  Void Eruption Merger	
 end
 
 
@@ -562,12 +580,15 @@ do
 	spell '603'    '0.5' --  Doom
 	spell '89753'  '2.5' --  Felguard: Felstorm
 	spell '104318' '1.5' --  Wild Imp: Fel Firebolt
+	spell '271971' '1.5' --  Call Dreadstalker
 	spell '193439' '1.5' --  Demonwrath
 	spell '86040'  '0.5' --  Hand of Gul'dan
 	spell '205196' '0.5' --  Dreadstalkers (Dreadbite)
 	spell '196278' '0.5' --  Talent: Implosion
 	spell '205231' '0.5' --  Talent: Summon Darkglare
 	spell '211720' '2.5' --  Artifact: Thal'kiel's Discord
+	spell '108447' '2.5' --  Soul Link Heal
+	spell '108446' '2.5' --  Soul Link dmgs
 	spell '211714' '0.5' --  Artifact: Thal'kiel's Consumption (Demon Life Tap)
 	alias '211727' '211720' --  Artifact: Thal'kiel's Discord
 

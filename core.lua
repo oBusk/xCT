@@ -78,11 +78,11 @@ local function ProfileReset()
 end
 
 local function CheckExistingProfile()
-	local key = UnitName("player").." - "..GetRealmName()
-	return xCTSavedDB
-	   and xCTSavedDB.profileKeys
-	   and xCTSavedDB.profileKeys[key]
-	   and xCTSavedDB.profiles[xCTSavedDB.profileKeys[key]]
+  local key = UnitName("player").." - "..GetRealmName()
+  return xCTSavedDB
+     and xCTSavedDB.profileKeys
+     and xCTSavedDB.profileKeys[key]
+     and xCTSavedDB.profiles[xCTSavedDB.profileKeys[key]]
 end
 
 -- Handle Addon Initialized
@@ -348,39 +348,39 @@ end
 
 local getSpellDescription
 do
-	local Descriptions, description = { }, nil
-	local tooltip = CreateFrame('GameTooltip')
-	tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
+  local Descriptions, description = { }, nil
+  local tooltip = CreateFrame('GameTooltip')
+  tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 
-	-- Add FontStrings to the tooltip
-	local LeftStrings, temporaryRight = {}, nil
-	for i = 1, 5 do
-		LeftStrings[i] = tooltip:CreateFontString()
-		temporaryRight = tooltip:CreateFontString()
-		LeftStrings[i]:SetFontObject(GameFontNormal)
-		temporaryRight:SetFontObject(GameFontNormal)
-		tooltip:AddFontStrings(LeftStrings[i], temporaryRight)
-	end
+  -- Add FontStrings to the tooltip
+  local LeftStrings, temporaryRight = {}, nil
+  for i = 1, 5 do
+    LeftStrings[i] = tooltip:CreateFontString()
+    temporaryRight = tooltip:CreateFontString()
+    LeftStrings[i]:SetFontObject(GameFontNormal)
+    temporaryRight:SetFontObject(GameFontNormal)
+    tooltip:AddFontStrings(LeftStrings[i], temporaryRight)
+  end
 
-	function getSpellDescription(spellID)
-		if Descriptions[spellID] then
-			return Descriptions[spellID]
-		end
+  function getSpellDescription(spellID)
+    if Descriptions[spellID] then
+      return Descriptions[spellID]
+    end
 
-		tooltip:SetSpellByID(spellID)
+    tooltip:SetSpellByID(spellID)
 
-		description = ""
-		if LeftStrings[tooltip:NumLines()] then
-			description = LeftStrings[ tooltip:NumLines() ]:GetText()
-		end
+    description = ""
+    if LeftStrings[tooltip:NumLines()] then
+      description = LeftStrings[ tooltip:NumLines() ]:GetText()
+    end
 
-		if description == "" then
-			description = "No Description"
-		end
+    if description == "" then
+      description = "No Description"
+    end
 
-		Descriptions[spellID] = description
-		return description
-	end
+    Descriptions[spellID] = description
+    return description
+  end
 end
 
 -- Spammy Spell Get/Set Functions
@@ -514,7 +514,8 @@ function x:UpdateSpamSpells()
 
   local spells = addon.options.args.spells.args.classList.args
   local global = addon.options.args.spells.args.globalList.args
-
+  local racetab = addon.options.args.spells.args.raceList.args
+  
   -- Clear out the old spells
   for class, specs in pairs(CLASS_NAMES) do
     spells[class].args = {}
@@ -539,7 +540,10 @@ function x:UpdateSpamSpells()
   -- Create a list of the categories (to be sorted)
   local categories = {}
   for _, entry in pairs(addon.merges) do
-    if not CLASS_NAMES[entry.class] then
+
+    --TODO better code when i understand more the code
+
+    if not CLASS_NAMES[entry.class] and entry.desc ~= "Racial Spell" then
       table.insert(categories, entry.class)
     end
   end
@@ -562,13 +566,52 @@ function x:UpdateSpamSpells()
     categoryOffsets[category] = currentIndex + 1
   end
 
+------------------------------------------------------
+-- Clear out the old spells (racetab)
+-- Dirty add have to reform when better understanding the code
+  for index in pairs(racetab) do
+    racetab[index] = nil
+  end
+
+  -- Create a list of the categories (to be sorted)
+  local rcategories = {}
+  for _, entry in pairs(addon.merges) do
+    --TODO better code when i understand more the code
+    if not CLASS_NAMES[entry.class] and entry.desc == "Racial Spell" then
+      table.insert(rcategories, entry.class)
+    end
+  end
+
+  -- Show Categories in alphabetical order
+  table.sort(rcategories)
+
+  -- Assume less than 1000 entries per category ;)
+  local rcategoryOffsets = {}
+  for i, rcategory in pairs(rcategories) do
+    local rcurrentIndex = i * 1000
+
+    -- Create the Category Header
+    racetab[rcategory] = {
+      type = 'description',
+      order = rcurrentIndex,
+      name = "\n"..rcategory,
+      fontSize = 'large',
+    }
+    rcategoryOffsets[rcategory] = rcurrentIndex + 1
+  end
+------------------------------------------------------
+
+
+
+
   -- Update the UI
   for spellID, entry in pairs(addon.merges) do
     local name = GetSpellInfo(spellID)
     if name then
-
+    
+    --TODO better code when i understand more the code
       -- Create a useful description for the spell
-      local spellDesc = getSpellDescription(spellID) or "No Description"
+      local spellDesc = getSpellDescription(spellID) or "No Description"    
       local desc = ""
       if entry.desc and not CLASS_NAMES[entry.class] then
         desc = "|cff9F3ED5" .. entry.desc .. "|r\n\n"
@@ -579,7 +622,7 @@ function x:UpdateSpamSpells()
       else
         desc = desc .. "\n|cffFF0000Interval|r Merge every |cffFFFF00" .. tostring(entry.interval) .. "|r seconds"
       end
-
+    
       -- Add the spell to the UI
       if CLASS_NAMES[entry.class] then
         local index = CLASS_NAMES[entry.class][tonumber(entry.desc) or 0]
@@ -591,6 +634,16 @@ function x:UpdateSpamSpells()
           get = SpamSpellGet,
           set = SpamSpellSet,
         }
+    elseif entry.desc == "Racial Spell" then
+      racetab[tostring(spellID)] = {
+          order = rcategoryOffsets[entry.class],
+          type = 'toggle',
+          name = name,
+          desc = desc,
+          get = SpamSpellGet,
+          set = SpamSpellSet,
+        }
+        rcategoryOffsets[entry.class] = rcategoryOffsets[entry.class] + 1
       else
         global[tostring(spellID)] = {
           order = categoryOffsets[entry.class],
