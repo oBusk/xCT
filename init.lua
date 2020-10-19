@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2018. All Rights Reserved.        ]
+ [  ©2020. All Rights Reserved.        ]
  [====================================]]
 
 -- No locals for NOOP
