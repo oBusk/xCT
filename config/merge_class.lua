@@ -570,12 +570,15 @@ do
 	spell '196100' '0.5' --  Talent: Grimoire of Sacrifice
 	spell '205260' '2.5' --  Talent: Soul Effigy
 	spell '218615' '0.5' --  Artifact: Harvester of Souls
-	spell '199581' '0.5' --  Artifact: Soul Flame
-	alias '233496' '233490' --  Unstable Affliction (Multiple Applications)
+	spell '199581' '0.5' --  Artifact: Soul Flame	
+	spell '324540' '0.5' --  Malefic Rapture
+	spell '278350' '1.0' --  Talent Vile Taint
+--[[	alias '233496' '233490' --  Unstable Affliction (Multiple Applications)
 	alias '233499' '233490' --  Unstable Affliction (Multiple Applications)
 	alias '233497' '233490' --  Unstable Affliction (Multiple Applications)
-	alias '233498' '233490' --  Unstable Affliction (Multiple Applications)
+	alias '233498' '233490' --  Unstable Affliction (Multiple Applications)--]]
 	alias '231489' '233490' --  Unstable Affliction (Artifact: Compounding Horror)
+
 
 	spec  '266' -- Demonlogy
 	spell '603'    '0.5' --  Doom
@@ -591,7 +594,10 @@ do
 	spell '108447' '2.5' --  Soul Link Heal
 	spell '108446' '2.5' --  Soul Link dmgs
 	spell '211714' '0.5' --  Artifact: Thal'kiel's Consumption (Demon Life Tap)
+	spell '267215' '0.5' --  Talent Demonic Consump
+	alias '267971' '267215' --  Talent Demonic Consump
 	alias '211727' '211720' --  Artifact: Thal'kiel's Discord
+
 
 	spec  '267' -- Destruction
 	spell '157736' '3.5' --  Immolate

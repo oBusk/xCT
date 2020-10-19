@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2020. All Rights Reserved.        ]
+ [  Â©2020. All Rights Reserved.        ]
  [====================================]]
 
 local ADDON_NAME, addon = ...
@@ -21,7 +21,7 @@ local x = addon.engine
 local AlignGrid
 
 function x:LoadAlignmentGrid()
-  AlignGrid = CreateFrame('Frame', nil, UIParent)
+  AlignGrid = CreateFrame('Frame', nil, UIParent, 'BackDropTemplate')
   AlignGrid:SetAllPoints(UIParent)
   local boxSize = 32
 
