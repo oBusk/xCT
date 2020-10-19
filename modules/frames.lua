@@ -128,7 +128,7 @@ function x:UpdateFrames(specificFrame)
 			if x.frames[framename] then
 				f = x.frames[framename]
 			else
-				f = CreateFrame("ScrollingMessageFrame", "xCT_Plus"..framename.."Frame", UIParent)
+				f = CreateFrame("ScrollingMessageFrame", "xCT_Plus"..framename.."Frame", UIParent, "BackdropTemplate")
 				f:SetSpacing(2)
 				f:ClearAllPoints()
 				f:SetMovable(true)
