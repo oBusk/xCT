@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ⓒ2018. All Rights Reserved.        ]
+ [  ©2020. All Rights Reserved.        ]
  [====================================]]
 
 local ADDON_NAME, addon = ...
@@ -854,7 +854,7 @@ x.events = {
   ["UNIT_EXITING_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["PLAYER_ENTERING_WORLD"] = function()
       x:UpdatePlayer()
-      x:UpdateComboPointOptions()
+      --x:UpdateComboPointOptions()
       x:Clear()
 
       -- Lazy Coding (Clear up messy libraries... yuck!)

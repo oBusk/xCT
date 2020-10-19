@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2018. All Rights Reserved.        ]
+ [  ©2020. All Rights Reserved.        ]
  [====================================]]
 
 local build = select(4, GetBuildInfo())
@@ -53,7 +53,7 @@ x.FrameTitles = {
 	["damage"]		= "Damage (Incoming)",			-- DAMAGE,
 	["healing"]		= "Healing (Incoming)",			-- SHOW_COMBAT_HEALING,
 	["power"]		= "Class Power",				-- COMBAT_TEXT_SHOW_ENERGIZE_TEXT,
-	["class"]		= "Combo",						-- COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT,
+	--["class"]		= "Combo",						-- COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT,
 	["procs"]		= "Special Effects (Procs)",	-- COMBAT_TEXT_SHOW_REACTIVES_TEXT,
 	["loot"]		= "Loot & Money",				-- LOOT,
 }
@@ -128,7 +128,7 @@ function x:UpdateFrames(specificFrame)
 			if x.frames[framename] then
 				f = x.frames[framename]
 			else
-				f = CreateFrame("ScrollingMessageFrame", "xCT_Plus"..framename.."Frame", UIParent, 'BackDropTemplate')
+				f = CreateFrame("ScrollingMessageFrame", "xCT_Plus"..framename.."Frame", UIParent, "BackdropTemplate")
 				f:SetSpacing(2)
 				f:ClearAllPoints()
 				f:SetMovable(true)

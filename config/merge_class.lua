@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2018. All Rights Reserved.        ]
+ [  ©2020. All Rights Reserved.        ]
  [====================================]]
 
 local ADDON_NAME, addon = ...
@@ -168,6 +168,7 @@ do
 	alias '203958' '213709' --  [Barkskin Merger] Brambles
 
 	spec  '105' -- Restoration
+	spell '290754' '1.5' --  Lifebloom (Honor Talent)
 	spell '81269'  '1.5' --  Efflorescence
 	spell '33763'  '1.5' --  Lifebloom
 	spell '774'    '3.5' --  Rejuvenation
