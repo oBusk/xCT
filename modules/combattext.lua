@@ -854,7 +854,7 @@ x.events = {
   ["UNIT_EXITING_VEHICLE"] = function(unit) if unit == "player" then x:UpdatePlayer() end end,
   ["PLAYER_ENTERING_WORLD"] = function()
       x:UpdatePlayer()
-      x:UpdateComboPointOptions()
+      --x:UpdateComboPointOptions()
       x:Clear()
 
       -- Lazy Coding (Clear up messy libraries... yuck!)

@@ -53,7 +53,7 @@ x.FrameTitles = {
 	["damage"]		= "Damage (Incoming)",			-- DAMAGE,
 	["healing"]		= "Healing (Incoming)",			-- SHOW_COMBAT_HEALING,
 	["power"]		= "Class Power",				-- COMBAT_TEXT_SHOW_ENERGIZE_TEXT,
-	["class"]		= "Combo",						-- COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT,
+	--["class"]		= "Combo",						-- COMBAT_TEXT_SHOW_COMBO_POINTS_TEXT,
 	["procs"]		= "Special Effects (Procs)",	-- COMBAT_TEXT_SHOW_REACTIVES_TEXT,
 	["loot"]		= "Loot & Money",				-- LOOT,
 }
