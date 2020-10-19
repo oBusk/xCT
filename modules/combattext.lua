@@ -865,7 +865,7 @@ x.events = {
       x:UpdatePlayer()
     end,
 
-  ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer(); x:UpdateComboTracker() end,    -- x:UpdateComboPointOptions(true) end,
+  ["ACTIVE_TALENT_GROUP_CHANGED"] = function() x:UpdatePlayer() end, -- x:UpdateComboTracker(); x:UpdateComboPointOptions(true),
 
   ["CHAT_MSG_LOOT"] = function(msg)
       -- Fixing Loot for Legion
