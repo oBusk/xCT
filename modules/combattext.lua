@@ -223,6 +223,7 @@ local function ShowLootCurrency() return x.db.profile.frames["loot"].showCurrenc
 local function ShowTotalItems() return x.db.profile.frames["loot"].showItemTotal end
 local function ShowLootCrafted() return x.db.profile.frames["loot"].showCrafted end
 local function ShowLootQuest() return x.db.profile.frames["loot"].showQuest end
+local function ShowLootPurchased() return x.db.profile.frames["loot"].showPurchased end
 local function ShowColorBlindMoney() return x.db.profile.frames["loot"].colorBlindMoney end
 local function GetLootQuality() return x.db.profile.frames["loot"].filterItemQuality end
 local function ShowLootIcons() return x.db.profile.frames["loot"].iconsEnabled end
@@ -870,6 +871,7 @@ x.events = {
   ["CHAT_MSG_LOOT"] = function(msg)
       -- Fixing Loot for Legion
       local preMessage, linkColor, itemString, itemName, amount = string.match(msg, format_getItemString)
+
       if not preMessage or preMessage == "" then
         linkColor, itemString, itemName, preMessage = string.match(msg, format_getCraftedItemString)
       end
@@ -920,7 +922,12 @@ x.events = {
         amount = tonumber(amount) or 1
 
         -- Only let self looted items go through the "Always Show" filter
-        if (listed and looted) or (ShowLootItems() and looted and itemQuality >= GetLootQuality()) or (itemType == "Quest" and ShowLootQuest() and looted) or (crafted and ShowLootCrafted()) then
+        if (listed and looted) or
+           (ShowLootItems() and looted and itemQuality >= GetLootQuality()) or
+           (itemType == "Quest" and ShowLootQuest() and looted) or
+           (crafted and ShowLootCrafted()) or
+           (pushed and ShowLootPurchased()) then
+
           local r, g, b = GetItemQualityColor(itemQuality)
           -- "%s%s: %s [%s]%s %%s"
           local message = sformat(format_lewtz,

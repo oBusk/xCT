@@ -6984,8 +6984,16 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
             },
-            colorBlindMoney = {
+            showPurchased = {
               order = 8,
+              type = 'toggle',
+              name = "Purchased Items",
+              desc = "Displays items that were purchased from a vendor.",
+              get = get2,
+              set = set2,
+            },
+            colorBlindMoney = {
+              order = 9,
               type = 'toggle',
               name = "Color Blind Mode",
               desc = "Displays money using letters G, S, and C instead of icons.",
@@ -6993,7 +7001,7 @@ addon.options.args["Frames"] = {
               set = set2,
             },
             filterItemQuality = {
-              order = 9,
+              order = 10,
               type = 'select',
               name = "Filter Item Quality",
               desc = "Will not display any items that are below this quality (does not filter Quest or Crafted items).",

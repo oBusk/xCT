@@ -788,7 +788,7 @@ addon.defaults = {
           ['comboPoints']     = { enabled = false, desc = "Combo Points",     default = { 1.00, 0.82, 0.00 } },
           ['comboPointsMax']  = { enabled = false, desc = "Max Combo Points", default = { 0.00, 0.82, 1.00 } },
         },
-      },
+      },]]
 
       power = {
         ["enabledFrame"] = true,
@@ -977,6 +977,7 @@ addon.defaults = {
         ["showItemTotal"] = true,
         ["showCrafted"] = true,
         ["showQuest"] = true,
+        ["showPurchased"] = false,
         ["colorBlindMoney"] = false,
         ["filterItemQuality"] = 3,
       },
