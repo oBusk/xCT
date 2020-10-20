@@ -760,7 +760,7 @@ addon.defaults = {
         ["showOnlyPetHeals"] = false,
       },
 
-      class = {
+      --[[class = {
         ["enabledFrame"] = true,
         ["alpha"] = 100,
 
