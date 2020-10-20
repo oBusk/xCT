@@ -231,7 +231,7 @@ do
 				args.spellName, args.itemId, args.itemName = tempTable[startIndex], tempTable[startIndex+1], tempTable[startIndex+2]
 				--args.spellName, args.itemId, args.itemName = select(1, ...)
 
-			elseif event == "UNIT_DIED" or event == "UNIT_DESTROYED" or unit == "UNIT_DISSIPATES" then
+			elseif event == "UNIT_DIED" or event == "UNIT_DESTROYED" or event == "UNIT_DISSIPATES" then
 				args.recapID, args.unconsciousOnDeath = tempTable[startIndex], tempTable[startIndex+1]
 
 			elseif event == "PARTY_KILL" then -- do nothing

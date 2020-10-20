@@ -9,7 +9,7 @@
  [=====================================]
  [  Author: Dandraffbal-Stormreaver US ]
  [  xCT+ Version 4.x.x                 ]
- [  ©2018. All Rights Reserved.        ]
+ [  ©2020. All Rights Reserved.        ]
  [====================================]]
 
 local ADDON_NAME, addon = ...
@@ -52,5 +52,5 @@ end
 header "|cffd2d3d8ShadowLands|r™ |cff798BDDQuest Spells|r"
 do
 	-- Ardenweald
-	item '343048' '1.0' "Nature's Blessing" 
+	item '343048' '1.0' "Nature's Blessing"
 end

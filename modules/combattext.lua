@@ -972,14 +972,28 @@ x.events = {
       local currencyLink, amountGained = msg:match(format_currency_multiple)
       if not currencyLink then
         amountGained, currencyLink = 1, msg:match(format_currency_single)
-
         if not currencyLink then
           return
         end
       end
 
-      -- get currency info
-      local name, amountOwned, texturePath = _G.GetCurrencyInfo(tonumber(currencyLink:match("currency:(%d+)")))
+      -- TODO: Test two different ways of doing it
+      local name, amountOwned, texturePath
+
+      -- TEST 1 - Using the Currency Index
+      local currencyIndex = tonumber(currencyLink:match("currency:(%d+)"))
+      local currencyInfo = C_CurrencyInfo.GetCurrencyInfo(currencyIndex)
+      name, amountOwned, texturePath = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID
+
+      -- TODO: REMOVE DEBUG
+      print("Test 1: name = '"..name.."', amount-owned = " .. amountOwned .. ", textureID = " .. texturePath)
+
+      -- TEST 2 - Using this "from link" thing... but I don't know if I am grabbingg the corrent link
+      local currencyInfo = C_CurrencyInfo.GetCurrencyInfoFromLink(currencyLink)
+      name, amountOwned, texturePath = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID
+
+      -- TODO: REMOVE DEBUG
+      print("Test 2: name = '"..name.."', amount-owned = " .. amountOwned .. ", textureID = " .. texturePath)
 
       -- format curency
       -- "%s: %s [%s] |cff798BDDx%s|r |cffFFFF00(%s)|r"
