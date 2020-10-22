@@ -984,7 +984,6 @@ x.events = {
         end
       end
 
-      -- TEST 2 - Using this "from link" thing... but I don't know if I am grabbingg the corrent link
       local currencyInfo = C_CurrencyInfo.GetCurrencyInfoFromLink(currencyLink)
       local name, amountOwned, texturePath = currencyInfo.name, currencyInfo.quantity, currencyInfo.iconFileID
 
