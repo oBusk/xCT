@@ -176,7 +176,18 @@ local function VersionToTable( version )
   return t
 end
 
-local function CompareVersions( a, b )
+local function CompareVersions( a, b, debug )
+
+  if debug then
+  	print('First Build:')
+    for i,v in pairs(a) do
+      print('    '..i..' = '..tostring(v))
+    end
+    print('Second Build:')
+    for i,v in pairs(b) do
+      print('    '..i..' = '..tostring(v))
+    end
+  end
 
   -- Compare Major numbers
   if a.major > b.major then
@@ -330,6 +341,13 @@ function x:CompatibilityLogic( existing )
         end
       end
 
+      -- Clean up class frame from database
+      if CompareVersions( VersionToTable("4.5.1-beta5"), previousVersion ) > 0 then
+        if currentVersion.devBuild then --currentVersion.devBuild then
+          x.MigratePrint("|cffFFFF00Cleaning Frame DB (Removing Class)|r")
+        end
+        self.db.profile.frames.class = nil
+      end
 
     else
       -- Created New: Dont need to do anything right now
