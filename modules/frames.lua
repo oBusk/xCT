@@ -297,19 +297,18 @@ end
 --	frame is specified.
 -- =====================================================
 function x:Abbreviate(amount, frameName)
-	local message = tostring(amount)
 	local isNegative = amount < 0
-
 	if isNegative then amount = -amount end
+	local message = tostring(amount)
 
 	if frameName and self.db.profile.frames[frameName] and self.db.profile.frames[frameName].megaDamage then
 		if self.db.profile.spells.formatAbbreviate then
 			if GetLocale() == "koKR" then
 				if (amount >= 100000000) then
 					if self.db.profile.megaDamage.decimalPoint then
-						message = tostring(mfloor((amount + 5000000) / 10000000) / 10) .. self.db.profile.megaDamage.millionSymbol
+						message = tostring(mfloor((amount + 5000000) / 10000000) / 10) .. self.db.profile.megaDamage.billionSymbol
 					else
-						message = tostring(mfloor((amount + 50000000) / 100000000)) .. self.db.profile.megaDamage.millionSymbol
+						message = tostring(mfloor((amount + 50000000) / 100000000)) .. self.db.profile.megaDamage.billionSymbol
 					end
 				elseif (amount >= 10000) then
 					if self.db.profile.megaDamage.decimalPoint then
@@ -327,9 +326,9 @@ function x:Abbreviate(amount, frameName)
 			else
 				if (amount >= 1000000000) then
 					if self.db.profile.megaDamage.decimalPoint then
-						message = tostring(mfloor((amount + 50000000) / 100000000) / 10) .. self.db.profile.megaDamage.millionSymbol
+						message = tostring(mfloor((amount + 50000000) / 100000000) / 10) .. self.db.profile.megaDamage.billionSymbol
 					else
-						message = tostring(mfloor((amount + 500000000) / 1000000000)) .. self.db.profile.megaDamage.millionSymbol
+						message = tostring(mfloor((amount + 500000000) / 1000000000)) .. self.db.profile.megaDamage.billionSymbol
 					end
 				elseif (amount >= 1000000) then
 					if self.db.profile.megaDamage.decimalPoint then
