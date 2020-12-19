@@ -362,6 +362,7 @@ local function isFrameNotScrollable(info) return isFrameItemDisabled(info) or no
 local function isFrameUseCustomFade(info) return not x.db.profile.frames[info[#info-2]].enableCustomFade or isFrameItemDisabled(info) end
 local function isFrameFadingDisabled(info) return isFrameUseCustomFade(info) or not x.db.profile.frames[info[#info-2]].enableFade end
 local function isFrameIconDisabled(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].iconsEnabled end
+local function isFrameIconSpacerDisabled(info) return x.db.profile.frames[info[#info-2]].iconsEnabled end
 local function isFrameFontShadowDisabled(info) return isFrameItemDisabled(info) or not x.db.profile.frames[info[#info-2]].enableFontShadow end
 local function isFrameCustomColorDisabled(info) return not x.db.profile.frames[info[#info-2]].customColor end
 -- This is TEMP
@@ -2502,6 +2503,15 @@ addon.options.args["Frames"] = {
               set = set2,
               disabled = isFrameIconDisabled,
             },
+            spacerIconsEnabled = {
+              order = 4,
+              type = 'toggle',
+              name = "Show Invisible Icons",
+              desc = "When icons are disabled, you can still enable invisible icons to line up text.",
+              get = get2,
+              set = set2,
+              disabled = isFrameIconSpacerDisabled,
+            },
           }
         },
 
@@ -2940,6 +2950,15 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
+            },
+            spacerIconsEnabled = {
+              order = 4,
+              type = 'toggle',
+              name = "Show Invisible Icons",
+              desc = "When icons are disabled, you can still enable invisible icons to line up text.",
+              get = get2,
+              set = set2,
+              disabled = isFrameIconSpacerDisabled,
             },
           }
         },
@@ -3728,6 +3747,15 @@ addon.options.args["Frames"] = {
               set = set2,
               disabled = isFrameIconDisabled,
             },
+            spacerIconsEnabled = {
+              order = 4,
+              type = 'toggle',
+              name = "Show Invisible Icons",
+              desc = "When icons are disabled, you can still enable invisible icons to line up text.",
+              get = get2,
+              set = set2,
+              disabled = isFrameIconSpacerDisabled,
+            },
           }
         },
 
@@ -4377,6 +4405,15 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
+            },
+            spacerIconsEnabled = {
+              order = 4,
+              type = 'toggle',
+              name = "Show Invisible Icons",
+              desc = "When icons are disabled, you can still enable invisible icons to line up text.",
+              get = get2,
+              set = set2,
+              disabled = isFrameIconSpacerDisabled,
             },
 
             iconAdditionalSettings = {
@@ -5146,6 +5183,15 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
+            },
+            spacerIconsEnabled = {
+              order = 4,
+              type = 'toggle',
+              name = "Show Invisible Icons",
+              desc = "When icons are disabled, you can still enable invisible icons to line up text.",
+              get = get2,
+              set = set2,
+              disabled = isFrameIconSpacerDisabled,
             },
           }
         },
@@ -6523,6 +6569,15 @@ addon.options.args["Frames"] = {
               set = set2,
               disabled = isFrameIconDisabled,
             },
+            spacerIconsEnabled = {
+              order = 4,
+              type = 'toggle',
+              name = "Show Invisible Icons",
+              desc = "When icons are disabled, you can still enable invisible icons to line up text.",
+              get = get2,
+              set = set2,
+              disabled = isFrameIconSpacerDisabled,
+            },
           }
         },
 
@@ -6867,6 +6922,15 @@ addon.options.args["Frames"] = {
               get = get2,
               set = set2,
               disabled = isFrameIconDisabled,
+            },
+            spacerIconsEnabled = {
+              order = 4,
+              type = 'toggle',
+              name = "Show Invisible Icons",
+              desc = "When icons are disabled, you can still enable invisible icons to line up text.",
+              get = get2,
+              set = set2,
+              disabled = isFrameIconSpacerDisabled,
             },
           }
         },

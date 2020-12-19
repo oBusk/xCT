@@ -409,6 +409,7 @@ local format_remove_realm       = "(.*)-.*"
 local format_spell_icon         = " |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_msspell_icon_right = "%s |cff%sx%d|r |T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_msspell_icon_left  = " |T%s:%d:%d:0:0:64:64:5:59:5:59|t %s |cff%sx%d|r"
+local format_msspell_no_icon    = "%s |cff%sx%d|r"
 local format_loot_icon          = "|T%s:%d:%d:0:0:64:64:5:59:5:59|t"
 local format_lewtz              = "%s%s: %s [%s]%s%%s"
 local format_lewtz_amount       = " |cff798BDDx%s|r"
@@ -447,6 +448,7 @@ function xCTFormat:SPELL_HEAL( outputFrame, spellID, amount, critical, merged )
   message = x:GetSpellTextureFormatted( spellID,
                                         message,
        x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+       x.db.profile.frames[outputFrame].spacerIconsEnabled,
        x.db.profile.frames[outputFrame].fontJustify )
 
   x:AddMessage(outputFrame, message, outputColor)
@@ -468,6 +470,7 @@ function xCTFormat:SPELL_PERIODIC_HEAL( outputFrame, spellID, amount, critical, 
   message = x:GetSpellTextureFormatted( spellID,
                                         message,
        x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+       x.db.profile.frames[outputFrame].spacerIconsEnabled,
        x.db.profile.frames[outputFrame].fontJustify )
 
   x:AddMessage(outputFrame, message, outputColor)
@@ -533,20 +536,21 @@ end
 
 --[=====================================================[
  AddOn:GetSpellTextureFormatted(
-    spellID,     [number] - The spell ID you want the icon for
-    message,     [string] - The message that will be used (usually the amount)
-    iconSize,    [number] - The format size of the icon
-    justify,     [string] - Can be 'LEFT' or 'RIGHT'
-    strColor,    [string] - the color to be used or defaults white
-    mergeOverride, [bool] - If enable, will format like: "Messsage x12" where 12 is entries
-    entries      [number] - The number of entries to use
+    spellID,        [number] - The spell ID you want the icon for
+    message,        [string] - The message that will be used (usually the amount)
+    iconSize,       [number] - The format size of the icon
+    showInvisibleIcon,[bool] - Whether or not to include a blank icon (also req iconSize to be -1 if disabled)
+    justify,        [string] - Can be 'LEFT' or 'RIGHT'
+    strColor,       [string] - the color to be used or defaults white
+    mergeOverride,    [bool] - If enable, will format like: "Messsage x12" where 12 is entries
+    entries         [number] - The number of entries to use
   )
   Returns:
     message,     [string] - the message contains the formatted icon
 
     Formats an icon quickly for use when outputing to a combat text frame.
 --]=====================================================]
-function x:GetSpellTextureFormatted( spellID, message, iconSize, justify, strColor, mergeOverride, entries )
+function x:GetSpellTextureFormatted( spellID, message, iconSize, showInvisibleIcon, justify, strColor, mergeOverride, entries )
   local icon = x.BLANK_ICON
   strColor = strColor or format_strcolor_white
   if spellID == 0 then
@@ -559,28 +563,38 @@ function x:GetSpellTextureFormatted( spellID, message, iconSize, justify, strCol
 
   if iconSize < 1 then
     icon = x.BLANK_ICON
+  else
+    -- always show unless we specify enableIcons to be off (overriding iconSize to be -1)
+    showInvisibleIcon = true
   end
 
   if mergeOverride then
     if entries > 1 then
-      if justify == "LEFT" then
-        message = sformat( format_msspell_icon_left, icon, iconSize, iconSize, message, strColor, entries )
+      if not showInvisibleIcon then
+        message = sformat( format_msspell_no_icon, message, strColor, entries )
       else
-        message = sformat( format_msspell_icon_right, message, strColor, entries, icon, iconSize, iconSize )
+        if justify == "LEFT" then
+          message = sformat( format_msspell_icon_left, icon, iconSize, iconSize, message, strColor, entries )
+        else
+          message = sformat( format_msspell_icon_right, message, strColor, entries, icon, iconSize, iconSize )
+        end
       end
     else
+      if showInvisibleIcon then
+        if justify == "LEFT" then
+          message = sformat( "%s %s", sformat( format_spell_icon, icon, iconSize, iconSize ), message )
+        else
+          message = sformat( "%s%s", message, sformat( format_spell_icon, icon, iconSize, iconSize ) )
+        end
+      end
+    end
+  else
+    if showInvisibleIcon then
       if justify == "LEFT" then
         message = sformat( "%s %s", sformat( format_spell_icon, icon, iconSize, iconSize ), message )
       else
         message = sformat( "%s%s", message, sformat( format_spell_icon, icon, iconSize, iconSize ) )
       end
-    end
-  else
-
-    if justify == "LEFT" then
-      message = sformat( "%s %s", sformat( format_spell_icon, icon, iconSize, iconSize ), message )
-    else
-      message = sformat( "%s%s", message, sformat( format_spell_icon, icon, iconSize, iconSize ) )
     end
   end
 
@@ -1251,6 +1265,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(args.spellId,
 			                                   message,
 			    x.db.profile.frames['outgoing'].iconsEnabled and x.db.profile.frames['outgoing'].iconsSize or -1,
+          x.db.profile.frames['outgoing'].spacerIconsEnabled,
 			    x.db.profile.frames['outgoing'].fontJustify)
 
 		-- Add names
@@ -1443,6 +1458,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted( spellID,
 		                                      message,
 		     x.db.profile.frames[outputFrame].iconsEnabled and x.db.profile.frames[outputFrame].iconsSize or -1,
+         x.db.profile.frames[outputFrame].spacerIconsEnabled,
 		     x.db.profile.frames[outputFrame].fontJustify )
 
 		x:AddMessage(outputFrame, message, outputColor)
@@ -1514,11 +1530,13 @@ local CombatEventHandlers = {
 			message = x:GetSpellTextureFormatted(args.spellId,
 			                                     message,
 			       x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
+             x.db.profile.frames['damage'].spacerIconsEnabled,
 			       x.db.profile.frames['damage'].fontJustify)
 		else
 			message = x:GetSpellTextureFormatted(nil,
 			                                     message,
 			       x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
+             x.db.profile.frames['damage'].spacerIconsEnabled,
 			       x.db.profile.frames['damage'].fontJustify)
 		end
 
@@ -1549,6 +1567,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(args.spellId,
 			                                   message,
 			    x.db.profile.frames['healing'].iconsEnabled and x.db.profile.frames['healing'].iconsSize or -1,
+          x.db.profile.frames['healing'].spacerIconsEnabled,
 			    x.db.profile.frames['healing'].fontJustify)
 
 		-- Add names
@@ -1600,6 +1619,7 @@ local CombatEventHandlers = {
 			message = x:GetSpellTextureFormatted(args.spellId,
 			                                          message,
 			           x.db.profile.frames['healing'].iconsEnabled and x.db.profile.frames['healing'].iconsSize or -1,
+                 x.db.profile.frames['healing'].spacerIconsEnabled,
 			           x.db.profile.frames['healing'].fontJustify)
 
 			x:AddMessage("healing", message, color)
@@ -1634,6 +1654,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(args.spellId,
 		                                          message,
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+               x.db.profile.frames['general'].spacerIconsEnabled,
 		           x.db.profile.frames['general'].fontJustify)
 
 		x:AddMessage('general', message, color)
@@ -1663,6 +1684,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+               x.db.profile.frames['general'].spacerIconsEnabled,
 		           x.db.profile.frames['general'].fontJustify)
 
 		x:AddMessage('general', message, 'interrupts')
@@ -1689,6 +1711,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(spellId,
 		                                     message,
 		     x.db.profile.frames['outgoing'].iconsEnabled and x.db.profile.frames['outgoing'].iconsSize or -1,
+         x.db.profile.frames['outgoing'].spacerIconsEnabled,
 		     x.db.profile.frames['outgoing'].fontJustify)
 
 		x:AddMessage('outgoing', message, 'misstypesOut')
@@ -1703,6 +1726,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		          x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
+              x.db.profile.frames['damage'].spacerIconsEnabled,
 		          x.db.profile.frames['damage'].fontJustify)
 
 		x:AddMessage('damage', message, missTypeColorLookup[args.missType] or 'misstypesOut')
@@ -1718,6 +1742,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+               x.db.profile.frames['general'].spacerIconsEnabled,
 		           x.db.profile.frames['general'].fontJustify)
 
 		if MergeDispells() then
@@ -1735,6 +1760,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+               x.db.profile.frames['general'].spacerIconsEnabled,
 		           x.db.profile.frames['general'].fontJustify)
 
 		x:AddMessage('general', message, 'dispellStolen')
@@ -1898,6 +1924,7 @@ function x.CombatLogEvent (args)
 			message = x:GetSpellTextureFormatted(args.extraSpellId,
 			                                     message,
 			      x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+            x.db.profile.frames['general'].spacerIconsEnabled,
 			      x.db.profile.frames['general'].fontJustify)
 
 			x:AddMessage('general', message, "dispellDebuffs")

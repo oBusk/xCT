@@ -229,6 +229,7 @@ addon.defaults = {
         -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
+        ["spacerIconsEnabled"] = true,
 
         -- scrollable
         ["enableScrollable"] = false,
@@ -351,6 +352,7 @@ addon.defaults = {
         -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
+        ["spacerIconsEnabled"] = true,
 
         -- scrollable
         ["enableScrollable"] = false,
@@ -477,6 +479,7 @@ addon.defaults = {
         -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
+        ["spacerIconsEnabled"] = true,
 
         -- scrollable
         ["enableScrollable"] = false,
@@ -631,6 +634,7 @@ addon.defaults = {
         ["iconsEnabled"] = true,
         ["iconsSize"] = 14,
         ["iconsEnabledAutoAttack"] = true,
+        ["spacerIconsEnabled"] = true,
 
         -- scrollable
         ["enableScrollable"] = false,
@@ -740,6 +744,7 @@ addon.defaults = {
         -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
+        ["spacerIconsEnabled"] = true,
 
         -- scrollable
         ["enableScrollable"] = false,
@@ -914,6 +919,7 @@ addon.defaults = {
         -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
+        ["spacerIconsEnabled"] = true,
 
         -- scrollable
         ["enableScrollable"] = false,
@@ -958,6 +964,7 @@ addon.defaults = {
         -- icons
         ["iconsEnabled"] = true,
         ["iconsSize"] = 16,
+        ["spacerIconsEnabled"] = true,
 
         -- scrollable
         ["enableScrollable"] = false,

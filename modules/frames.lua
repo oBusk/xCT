@@ -636,6 +636,7 @@ do
 				                                  message,
 				                                  settings.iconsEnabled and settings.iconsSize or -1,
 				                                  settings.fontJustify,
+				                                  settings.spacerIconsEnabled,
 				                                  strColor,
 				                                  true, -- Merge Override = true
 				                                  #item.entries )
@@ -644,6 +645,7 @@ do
 				                                  message,
 				                                  settings.iconsEnabled and settings.iconsSize or -1,
 				                                  settings.fontJustify,
+				                                  settings.spacerIconsEnabled,
 				                                  strColor,
 				                                  true, -- Merge Override = true
 				                                  #item.entries )
@@ -1025,7 +1027,7 @@ function x.TestMoreUpdate(self, elapsed)
 				if x.db.profile.frames[output].customColor then
 					color = x.db.profile.frames[output].fontColor
 				end
-				message = x:GetSpellTextureFormatted( x.db.profile.frames["outgoing"].iconsEnabled and GetRandomSpellID() or -1, message, x.db.profile.frames["outgoing"].iconsSize, x.db.profile.frames["outgoing"].fontJustify, nil, merged, multistriked )
+				message = x:GetSpellTextureFormatted( x.db.profile.frames["outgoing"].iconsEnabled and GetRandomSpellID() or -1, message, x.db.profile.frames["outgoing"].iconsSize, x.db.profile.frames["outgoing"].spacerIconsEnabled, x.db.profile.frames["outgoing"].fontJustify, nil, merged, multistriked )
 				x:AddMessage(output, message, color)
 			elseif self == x.frames["critical"] and random(2) % 2 == 0 then
 				local output, color = "critical", GetRandomSpellColor()
@@ -1042,7 +1044,7 @@ function x.TestMoreUpdate(self, elapsed)
 				if x.db.profile.frames[output].customColor then
 					color = x.db.profile.frames[output].fontColor
 				end
-				message = x:GetSpellTextureFormatted( x.db.profile.frames["critical"].iconsEnabled and GetRandomSpellID() or -1, message, x.db.profile.frames["critical"].iconsSize, x.db.profile.frames["critical"].fontJustify, nil, merged, multistriked )
+				message = x:GetSpellTextureFormatted( x.db.profile.frames["critical"].iconsEnabled and GetRandomSpellID() or -1, message, x.db.profile.frames["critical"].iconsSize, x.db.profile.frames["critical"].fontJustify, x.db.profile.frames["critical"].spacerIconsEnabled, nil, merged, multistriked )
 				x:AddMessage(output, message, color)
 			elseif self == x.frames["damage"] and random(2) % 2 == 0 then
 				local output, color = "damage", {1, random(100) / 255, random(100) / 255}
