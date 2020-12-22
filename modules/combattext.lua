@@ -1917,17 +1917,19 @@ function x.CombatLogEvent (args)
 			CombatEventHandlers.IncomingMiss(args)
 
 		elseif args.event == 'SPELL_DISPEL' then
-			local message = args.sourceName .. " dispelled:"
+			if ShowDispells() then
+				local message = args.sourceName .. " dispelled:"
 
-			if GetLocale() == "koKR" then message = args.sourceName .. " 무효화:" end
+				if GetLocale() == "koKR" then message = args.sourceName .. " 무효화:" end
 
-			message = x:GetSpellTextureFormatted(args.extraSpellId,
-			                                     message,
-			      x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
-            x.db.profile.frames['general'].spacerIconsEnabled,
-			      x.db.profile.frames['general'].fontJustify)
+				message = x:GetSpellTextureFormatted(args.extraSpellId,
+				                                     message,
+				      x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
+				      x.db.profile.frames['general'].spacerIconsEnabled,
+				      x.db.profile.frames['general'].fontJustify)
 
-			x:AddMessage('general', message, "dispellDebuffs")
+				x:AddMessage('general', message, "dispellDebuffs")
+			end
 
 		elseif (args.suffix == "_AURA_APPLIED" or args.suffix == "_AURA_REFRESH") and AbsorbList[args.spellId] then
 			CombatEventHandlers.ShieldIncoming(args)
@@ -1937,7 +1939,6 @@ function x.CombatLogEvent (args)
 	-- Player Auras
 	if args.atPlayer and BuffsOrDebuffs[args.suffix] then
 		CombatEventHandlers.AuraIncoming(args)
-
 	end
 end
 
