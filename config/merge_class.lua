@@ -441,6 +441,9 @@ do
 	spell '15407'  '2.0' --  Mind Flay
 	spell '49821'  '0.5' --  Mind Sear
 	spell '205386' '0.5' --  Talent: Shadow Crash
+	spell '263165' '3.9' --  Talent: Void Torrent
+	spell '341385' '0.5' --  Talent: Searing Nightmare
+	spell '199486' '0.5' --  Talent: Psychic Link
 	spell '204778' '2.5' --  Honor Talent: Void Shield
 	alias '228361' '228360' --  Void Eruption Merger
 	alias '263446' '228360' --  Void Eruption Merger	
