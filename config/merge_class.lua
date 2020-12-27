@@ -445,8 +445,9 @@ do
 	spell '341385' '0.5' --  Talent: Searing Nightmare
 	spell '199486' '0.5' --  Talent: Psychic Link
 	spell '204778' '2.5' --  Honor Talent: Void Shield
+	spell '346111' '2.0' --  Mastery: Shadow Weaving (Shadowfiend/Mindbender extra mastery damage)
 	alias '228361' '228360' --  Void Eruption Merger
-	alias '263446' '228360' --  Void Eruption Merger	
+	alias '263446' '228360' --  Void Eruption Merger
 end
 
 
