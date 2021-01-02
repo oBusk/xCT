@@ -1346,6 +1346,10 @@ local CombatEventHandlers = {
 		if not isEnvironmental and not isSwing and TrackSpells() then x.spellCache.spells[spellID] = true end
 
 		if not ShowDamage() then return end
+
+		-- Check to see if this is a HoT
+		if isDoT and not ShowDots() then return end
+
 		if isSwing and not args:IsSourceMyPet() and not args:IsSourceMyVehicle() and not ShowAutoAttack() then return end
 
 		-- Filter Ougoing Damage Spell or Amount
@@ -1472,7 +1476,6 @@ local CombatEventHandlers = {
 		-- Keep track of spells that go by
 		if args.spellId and TrackSpells() then x.spellCache.damage[args.spellId] = true end
 
-
 		if IsDamageFiltered(args.spellId or false) then return end
 
 		-- Check for resists
@@ -1530,13 +1533,13 @@ local CombatEventHandlers = {
 			message = x:GetSpellTextureFormatted(args.spellId,
 			                                     message,
 			       x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
-             x.db.profile.frames['damage'].spacerIconsEnabled,
+			       x.db.profile.frames['damage'].spacerIconsEnabled,
 			       x.db.profile.frames['damage'].fontJustify)
 		else
 			message = x:GetSpellTextureFormatted(nil,
 			                                     message,
 			       x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
-             x.db.profile.frames['damage'].spacerIconsEnabled,
+			       x.db.profile.frames['damage'].spacerIconsEnabled,
 			       x.db.profile.frames['damage'].fontJustify)
 		end
 
@@ -1619,7 +1622,7 @@ local CombatEventHandlers = {
 			message = x:GetSpellTextureFormatted(args.spellId,
 			                                          message,
 			           x.db.profile.frames['healing'].iconsEnabled and x.db.profile.frames['healing'].iconsSize or -1,
-                 x.db.profile.frames['healing'].spacerIconsEnabled,
+			           x.db.profile.frames['healing'].spacerIconsEnabled,
 			           x.db.profile.frames['healing'].fontJustify)
 
 			x:AddMessage("healing", message, color)
@@ -1654,7 +1657,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(args.spellId,
 		                                          message,
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
-               x.db.profile.frames['general'].spacerIconsEnabled,
+		           x.db.profile.frames['general'].spacerIconsEnabled,
 		           x.db.profile.frames['general'].fontJustify)
 
 		x:AddMessage('general', message, color)
@@ -1684,7 +1687,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		           x.db.profile.frames['general'].iconsEnabled and x.db.profile.frames['general'].iconsSize or -1,
-               x.db.profile.frames['general'].spacerIconsEnabled,
+		           x.db.profile.frames['general'].spacerIconsEnabled,
 		           x.db.profile.frames['general'].fontJustify)
 
 		x:AddMessage('general', message, 'interrupts')
@@ -1711,7 +1714,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(spellId,
 		                                     message,
 		     x.db.profile.frames['outgoing'].iconsEnabled and x.db.profile.frames['outgoing'].iconsSize or -1,
-         x.db.profile.frames['outgoing'].spacerIconsEnabled,
+		     x.db.profile.frames['outgoing'].spacerIconsEnabled,
 		     x.db.profile.frames['outgoing'].fontJustify)
 
 		x:AddMessage('outgoing', message, 'misstypesOut')
@@ -1726,7 +1729,7 @@ local CombatEventHandlers = {
 		message = x:GetSpellTextureFormatted(args.extraSpellId,
 		                                          message,
 		          x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
-              x.db.profile.frames['damage'].spacerIconsEnabled,
+		          x.db.profile.frames['damage'].spacerIconsEnabled,
 		          x.db.profile.frames['damage'].fontJustify)
 
 		x:AddMessage('damage', message, missTypeColorLookup[args.missType] or 'misstypesOut')
