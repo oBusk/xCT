@@ -82,6 +82,7 @@ end
 class 'DEMONHUNTER'
 do
 	spec  '577' -- Havoc
+	spell '342857' '3.5' --  Glaive Tempest (damage over 3 sec to 5 nearby enemies)
 	spell '222031' '3.0' --  Chaos Strike (server side delay?)
 	spell '185123' '1.5' --  Throw Glaive (Havoc)
 	spell '198030' '1.5' --  Eye Beam
