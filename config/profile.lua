@@ -366,13 +366,14 @@ addon.defaults = {
         ["visibilityTime"] = 5,
 
         -- special tweaks
+        ["enableAutoAttack_Outgoing"] = true, -- OLD: enableAutoAttack
+        ["enablePetAutoAttack_Outgoing"] = true,
+
         ["enableOutDmg"] = true,
         ["enableOutHeal"] = true,
         ["enableOutAbsorbs"] = true,
         ["enablePetDmg"] = true,
-        ["enablePetAutoAttack"] = true,
         ["enableVehicleDmg"] = true,
-        ["enableAutoAttack"] = true,
         ["enableDotDmg"] = true,
         ["enableHots"] = true,
         ["enableImmunes"] = true,
@@ -493,8 +494,8 @@ addon.defaults = {
         ["visibilityTime"] = 5,
 
         -- special tweaks
-        ["showSwing"] = true,
-        ["prefixSwing"] = true,
+        ["enableAutoAttack_Critical"] = true, -- OLD: showSwing
+        ["prefixAutoAttack_Critical"] = true, -- OLD: prefixSwing
         ["petCrits"] = false,
       },
 
