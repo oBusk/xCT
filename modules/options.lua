@@ -4097,7 +4097,7 @@ addon.options.args["Frames"] = {
               desc = "Prefix this value to the beginning when displaying a critical amount.",
               get = getTextIn2,
               set = setTextIn2,
-              disabled = isFrameItemDisabled,
+              --disabled = isFrameItemDisabled,
             },
             critPostfix = {
               order = 12,
@@ -4106,7 +4106,23 @@ addon.options.args["Frames"] = {
               desc = "Postfix this value to the end when displaying a critical amount.",
               get = getTextIn2,
               set = setTextIn2,
-              disabled = isFrameItemDisabled,
+              --disabled = isFrameItemDisabled,
+            },
+            critPostPreReset = {
+              order = 13,
+              type = 'execute',
+              name = "Reset",
+              desc = "Reset Prefix and Postfix to their default setting.",
+              func = function()
+                  local critical = x.db.profile.frames.critical
+                  critical.critPrefix = "|cffFF0000*|r"
+                  critical.critPostfix = "|cffFF0000*|r"
+                end,
+              width = 'half',
+              disabled = function()
+                  local critical = x.db.profile.frames.critical
+                  return critical.critPrefix == "|cffFF0000*|r" and critical.critPostfix == "|cffFF0000*|r"
+                end,
             },
           },
 
