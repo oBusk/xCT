@@ -204,17 +204,20 @@ local function ShowDamage() return x.db.profile.frames["outgoing"].enableOutDmg 
 local function ShowHealing() return x.db.profile.frames["outgoing"].enableOutHeal end
 local function ShowAbsorbs() return x.db.profile.frames["outgoing"].enableOutAbsorbs end
 local function ShowPetDamage() return x.db.profile.frames["outgoing"].enablePetDmg end
-local function ShowPetAutoAttack() return x.db.profile.frames["outgoing"].enablePetAutoAttack end
 local function ShowVehicleDamage() return x.db.profile.frames["outgoing"].enableVehicleDmg end
 local function ShowKillCommand() return x.db.profile.frames["outgoing"].enableKillCommand end
-local function ShowAutoAttack() return x.db.profile.frames["outgoing"].enableAutoAttack end -- Also see ShowSwingCrit
+
+-- Better auto-attack terminology
+local function ShowAutoAttack_Outgoing() return x.db.profile.frames["outgoing"].enableAutoAttack_Outgoing end
+local function ShowAutoAttack_Critical() return x.db.profile.frames["critical"].enableAutoAttack_Critical end
+local function PrefixAutoAttack_Critical() return x.db.profile.frames["critical"].prefixAutoAttack_Critical end
+local function ShowPetAutoAttack_Outgoing() return x.db.profile.frames["outgoing"].enablePetAutoAttack_Outgoing end
+
 local function ShowDots() return x.db.profile.frames["outgoing"].enableDotDmg end
 local function ShowHots() return x.db.profile.frames["outgoing"].enableHots end
 local function ShowImmunes() return x.db.profile.frames["outgoing"].enableImmunes end -- outgoing immunes
 local function ShowMisses() return x.db.profile.frames["outgoing"].enableMisses end -- outgoing misses
 local function ShowPartialMisses() return x.db.profile.frames["outgoing"].enablePartialMisses end
-local function ShowSwingCrit() return x.db.profile.frames["critical"].showSwing end
-local function ShowSwingCritPrefix() return x.db.profile.frames["critical"].prefixSwing end
 local function ShowPetCrits() return x.db.profile.frames["critical"].petCrits end
 local function ShowLootItems() return x.db.profile.frames["loot"].showItems end
 local function ShowLootItemTypes() return x.db.profile.frames["loot"].showItemTypes end
@@ -1358,7 +1361,7 @@ local CombatEventHandlers = {
 		-- Check to see if my pet is doing things
 		if args:IsSourceMyPet() and (not ShowKillCommand() or spellID ~= 34026) then
 			if not ShowPetDamage() then return end
-			if isSwing and not ShowPetAutoAttack() then return end
+			if isSwing and not ShowPetAutoAttack_Outgoing() then return end
 			if MergePetAttacks() then
 				local icon = x.GetPetTexture() or ""
 				x:AddSpamMessage(outputFrame, icon, amount, x.db.profile.spells.mergePetColor, 6)
@@ -1374,7 +1377,7 @@ local CombatEventHandlers = {
 
 		if args:IsSourceMyVehicle() then
 			if not ShowVehicleDamage() then return end
-			if isSwing and not ShowPetAutoAttack() then return end
+			if isSwing and not ShowPetAutoAttack_Outgoing() then return end -- for BM's second pet, Hati
 			if not ShowPetCrits() then
 				critical = nil -- stupid spam fix for hunter pets
 			end
@@ -1385,7 +1388,7 @@ local CombatEventHandlers = {
 
 		-- Check for Critical Swings
 		if critical then
-			if (isSwing or isAutoShot) and ShowSwingCrit() then
+			if (isSwing or isAutoShot) and ShowAutoAttack_Critical() then
 				outputFrame = 'critical'
 			elseif not isSwing and not isAutoShot then
 				outputFrame = 'critical'
@@ -1433,9 +1436,9 @@ local CombatEventHandlers = {
 			end
 		end
 
-		if critical and ShowSwingCrit() then
+		if critical and ShowAutoAttack_Critical() then
 			settings = x.db.profile.frames['critical']
-			if ShowSwingCritPrefix() then
+			if PrefixAutoAttack_Critical() then
 				message = sformat(format_crit, x.db.profile.frames['critical'].critPrefix,
 				                               x:Abbreviate(amount,'critical'),
 				                               x.db.profile.frames['critical'].critPostfix)
