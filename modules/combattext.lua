@@ -1353,7 +1353,10 @@ local CombatEventHandlers = {
 		-- Check to see if this is a HoT
 		if isDoT and not ShowDots() then return end
 
-		if isSwing and not args:IsSourceMyPet() and not args:IsSourceMyVehicle() and not ShowAutoAttack() then return end
+		if isSwing and not args:IsSourceMyPet() and not args:IsSourceMyVehicle() then
+			if critical and not ShowAutoAttack_Outgoing() then return end
+			if not critical and not ShowAutoAttack_Critical() then return end
+		end
 
 		-- Filter Ougoing Damage Spell or Amount
 		if IsSpellFiltered(spellID) or FilterOutgoingDamage(amount) then return end
@@ -1701,7 +1704,7 @@ local CombatEventHandlers = {
 
 		-- If this is a melee swing, it could also be our pets
 		if args.prefix == 'SWING' then
-			if not ShowAutoAttack() then return end
+			if not ShowAutoAttack_Outgoing() then return end
 			if args:IsSourceMyPet() then
 				spellId = PET_ATTACK_TEXTURE
 			else
