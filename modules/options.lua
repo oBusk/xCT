@@ -3367,6 +3367,19 @@ addon.options.args["Frames"] = {
               set = set2,
               disabled = isFrameItemDisabled,
             },
+            enableOverhealingSubtraction  = {
+              order = 35,
+              type = 'toggle',
+              name = "Subtract Overhealing",
+              desc = "Subtract the overhealed amount from the Total Amount",
+              get = get2,
+              set = set2,
+              disabled = function(info)
+                return not x.db.profile.frames.outgoing.enabledFrame or
+                  not x.db.profile.frames.outgoing.enableOverhealing
+              end,
+            },
+
             spacer_Healing1 = {
               type = 'description',
               order = 40,
@@ -3386,7 +3399,7 @@ addon.options.args["Frames"] = {
               end,
             },
             overhealingPrefix = {
-              order = 42,
+              order = 45,
               type = 'input',
               name = "Overhealing Prefix",
               desc = "Prefix this value to the beginning when displaying an overheal amount.\n\n|cffFF0000Requires:|r |cff798BDDFormat Overhealing|r",
@@ -3399,7 +3412,7 @@ addon.options.args["Frames"] = {
               end,
             },
             overhealingPostfix = {
-              order = 43,
+              order = 46,
               type = 'input',
               name = "Overhealing Postfix",
               desc = "Prefix this value to the endind when displaying an overheal amount.\n\n|cffFF0000Requires:|r |cff798BDDFormat Overhealing|r",

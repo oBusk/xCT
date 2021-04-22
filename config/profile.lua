@@ -396,6 +396,7 @@ addon.defaults = {
 
         ["enableOverhealing"] = true,
         ["enableOverhealingFormat"] = true,
+        ["enableOverhealingSubtraction"] = true,
         ["overhealingPrefix"] = " |cffFFFFFF(O: ",
         ["overhealingPostfix"] = ")|r",
       },
@@ -856,6 +857,7 @@ addon.defaults = {
           ['color_LUNAR_POWER']          = { enabled = false, desc = LUNAR_POWER,          default = { 0.30, 0.52, 0.90 } },
           ['color_INSANITY_POWER']       = { enabled = false, desc = INSANITY_POWER,       default = { 0.40, 0.00, 0.80 } },
           ['color_MAELSTROM_POWER']      = { enabled = false, desc = MAELSTROM_POWER,      default = { 0.00, 0.50, 1.00 } },
+          ['color_ALTERNATE_POWER'] = { enabled = false, desc = ALTERNATE_POWER_TEXT, default = { 0.10, 0.10, 0.98 } },
           ['color_ARCANE_CHARGES_POWER'] = { enabled = false, desc = ARCANE_CHARGES_POWER, default = { 0.10, 0.10, 0.98 } },
         },
 
@@ -887,13 +889,11 @@ addon.defaults = {
         ["disableResource_SOUL_SHARDS"]      = false,
         ["disableResource_LUNAR_POWER"]      = true,
 
+        ["disableResource_CHI_POWER"]        = true,
         ["disableResource_HOLY_POWER"]       = false,
-        ["disableResource_ALTERNATE_POWER"]  = true,
-        ["disableResource_CHI"]              = true,
-        ["disableResource_INSANITY"]         = false,
+        ["disableResource_INSANITY_POWER"]   = false,
+        ["disableResource_MAELSTROM_POWER"]  = true,
 
-        --["disableResource_OBSOLETE"]       = true,
-        --["disableResource_OBSOLETE2"]      = true,
         ["disableResource_ARCANE_CHARGES"]   = false,
         ["disableResource_FURY"]             = false,
         ["disableResource_PAIN"]             = false,
