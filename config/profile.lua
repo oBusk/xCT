@@ -395,8 +395,8 @@ addon.defaults = {
         ["enableKillCommand"] = false,
 
         ["enableOverhealing"] = true,
-        ["enableOverhealingFormat"] = true,
-        ["enableOverhealingSubtraction"] = true,
+        ["enableOverhealingFormat"] = false,
+        ["enableOverhealingSubtraction"] = false,
         ["overhealingPrefix"] = " |cffFFFFFF(O: ",
         ["overhealingPostfix"] = ")|r",
       },

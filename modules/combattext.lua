@@ -449,7 +449,7 @@ function xCTFormat:SPELL_HEAL( outputFrame, spellID, amount, overhealing, critic
   end
 
   -- Show and Format Overhealing values
-  if overhealing > 0 and ShowOutgoingOverHealing() then
+  if overhealing > 0 and IsOutgoingOverHealingFormatted() then
     overhealing = x:Abbreviate( overhealing, outputFrame )
     message = message .. FormatOutgoingOverhealing(overhealing)
   end
@@ -480,7 +480,7 @@ function xCTFormat:SPELL_PERIODIC_HEAL( outputFrame, spellID, amount, overhealin
   end
 
   -- Show and Format Overhealing values
-  if overhealing > 0 and ShowOutgoingOverHealing() then
+  if overhealing > 0 and IsOutgoingOverHealingFormatted() then
     overhealing = x:Abbreviate( overhealing, outputFrame )
     message = message .. FormatOutgoingOverhealing(overhealing)
   end
