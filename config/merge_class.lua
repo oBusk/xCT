@@ -315,8 +315,6 @@ do
 	spell '115181' '0.5' --  Breath of Fire
 	spell '123725' '2.5' --  Breath of Fire (DoT)
 	spell '121253' '0.5' --  Keg Smash
-	spell '130654' '1.5' --  Chi Burst (Healing)
-	spell '130654' '1.5' --  Chi Burst (Damage)
 	spell '227291' '0.5' --  Talent: Niuzao, The Black Ox (Stomp)
 	spell '196733' '0.5' --  Talent: Special Delivery
 	spell '214326' '0.5' --  Artifact: Exploding Keg
