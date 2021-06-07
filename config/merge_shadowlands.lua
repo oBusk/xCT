@@ -47,6 +47,11 @@ do
 	item '321792' '1.0' "Impending Catastrophe"
 	alias '322167' '321792' -- Impending Catastrophe dot
 	alias '322170' '321792' -- Impending Catastrophe dot
+
+	-- Night Fae
+	-- Monk
+	spell '327264' '0.5' -- Faeline Stomp (Damage)
+	spell '345727' '0.5' -- Faeline Stomp Heal / Windwalker Bonnus Damage
 end
 
 header "|cffd2d3d8ShadowLands|r™ |cff798BDDQuest Spells|r"
