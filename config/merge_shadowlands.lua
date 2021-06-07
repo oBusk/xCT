@@ -81,3 +81,7 @@ do
 	alias '344752' '336214' -- Eternal Call to the Void: Mind Sear
 end
 
+header "|cffd2d3d8ShadowLands|r™ |cff798BDDEnchants|r"
+do
+	item '324184' '1.5' "Lightless Force"
+end
