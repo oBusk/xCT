@@ -338,6 +338,7 @@ do
 	spell '115175' '1.5' --  Soothing Mist
 	spell '124682' '1.5' --  Eneloping Mist
 	spell '191840' '1.5' --  Essence Font
+	alias '344006' '191840' -- Essence Font (Faeline Stomp)
 	spell '119611' '2.0' --  Renewing Mists
 	spell '115310' '0.5' --  Revival
 	spell '116670' '0.5' --  Vivify
