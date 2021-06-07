@@ -458,6 +458,10 @@ local spam_format = "%s%s x%s"
 --		colorname,		[string or table]     - the name of the color OR a table
 --												containing the color (e.g.
 --												colorname={1,2,3} -- r=1, b=2, g=3)
+--		interval,		[string or integer]	  - How often to update merged data
+--												(in seconds)
+--		prep,			[string or integer]	  - The minimum time to wait to update
+-- 												merged data
 --	)
 --		Sends a message to the framename specified.
 -- =====================================================
