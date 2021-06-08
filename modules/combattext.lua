@@ -1676,11 +1676,13 @@ local CombatEventHandlers = {
 		-- Track the aura
 		if TrackSpells() then x.spellCache[isBuff and 'buffs' or 'debuffs'][args.spellName]=true end
 
-		-- Check to see if we are filtering this spell's name
-		if IsBuffFiltered(args.spellName) then return end
-
-		-- See if we are showing that type of aura
-		if (isBuff and not ShowBuffs()) or (not isBuff and not ShowDebuffs()) then return end
+		if isBuff then
+			-- Stop if we're not showing buffs _or_ the spell's name is filtered
+			if not ShowBuffs() or IsBuffFiltered(args.spellName) then return end
+		else -- Aura is debuff
+			-- Stop if we're not showing debuffs _or_ the spell's name is filtered
+			if not ShowDebuffs() or IsDebuffFiltered(args.spellName) then return end
+		end
 
 		-- Begin constructing the event message and color
 		local color, message
