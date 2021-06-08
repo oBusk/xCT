@@ -1777,25 +1777,6 @@ local CombatEventHandlers = {
 		x:AddMessage('damage', message, missTypeColorLookup[args.missType] or 'misstypesOut')
 	end,
 
-	["IncomingAbsorb"] = function (args)
-		if not ShowMissTypes() then return end
-
-		-- Check if spell is filtered
-		-- (This doesn't work since we don't have any spellId)
-		if IsDamageFiltered(args.extraSpellId) then return end
-
-		local message = _G["COMBAT_TEXT_ABSORB"]
-
-		-- Add Icons
-		message = x:GetSpellTextureFormatted(nil,
-		                                          message,
-		          x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
-		          x.db.profile.frames['damage'].spacerIconsEnabled,
-		          x.db.profile.frames['damage'].fontJustify)
-
-		x:AddMessage('damage', message, FULL_MISS_COLORS.absorbed or 'misstypesOut')
-	end,
-
 	["SpellDispel"] = function (args)
 		if not ShowDispells() then return end
 
@@ -1979,9 +1960,6 @@ function x.CombatLogEvent (args)
 
 		elseif args.suffix == "_MISSED" then
 			CombatEventHandlers.IncomingMiss(args)
-
-		elseif args.suffix == "_ABSORBED" then
-			CombatEventHandlers.IncomingAbsorb(args)
 
 		elseif args.event == 'SPELL_DISPEL' then
 			if ShowDispells() then
