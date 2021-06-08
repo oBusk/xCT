@@ -217,6 +217,7 @@ local function ShowDots() return x.db.profile.frames["outgoing"].enableDotDmg en
 local function ShowHots() return x.db.profile.frames["outgoing"].enableHots end
 local function ShowImmunes() return x.db.profile.frames["outgoing"].enableImmunes end -- outgoing immunes
 local function ShowMisses() return x.db.profile.frames["outgoing"].enableMisses end -- outgoing misses
+local function ShowAbsorbs() return x.db.profile.frames["outgoing"].enableAbsorbs end -- outgoing absorbs
 local function ShowPartialMisses() return x.db.profile.frames["outgoing"].enablePartialMisses end
 local function ShowPetCrits() return x.db.profile.frames["critical"].petCrits end
 local function ShowLootItems() return x.db.profile.frames["loot"].showItems end
@@ -535,7 +536,7 @@ local COMBATLOG_FILTER_MY_VEHICLE = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE,
   to go.
 --]=====================================================]
 function x.OnCombatTextEvent(self, event, ...)
-	
+
 	--[====[
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, srcFlags2, destGUID, destName, destFlags, destFlags2 = CombatLogGetCurrentEventInfo()
@@ -1746,6 +1747,7 @@ local CombatEventHandlers = {
 		end
 
 		-- Check for filtered immunes
+		if args.missType == "ABSORB" and not ShowAbsorbs() then return end
 		if args.missType == "IMMUNE" and not ShowImmunes() then return end
 		if args.missType ~= "IMMUNE" and not ShowMisses() then return end
 

@@ -390,6 +390,7 @@ addon.defaults = {
         ["enableHots"] = true,
         ["enableImmunes"] = true,
         ["enableMisses"] = true,
+        ["enableAbsorbs"] = true,
         ["enablePartialMisses"] = false,
         ["showHighestPartialMiss"] = false,
         ["enableKillCommand"] = false,
