@@ -462,13 +462,18 @@ local spam_format = "%s%s x%s"
 --												(in seconds)
 --		prep,			[string or integer]	  - The minimum time to wait to update
 -- 												merged data
+--		category		[string]			  - 'healing' or 'damage'
 --	)
 --		Sends a message to the framename specified.
 -- =====================================================
-function x:AddSpamMessage(framename, mergeID, message, colorname, interval, prep)
+function x:AddSpamMessage(framename, mergeID, message, colorname, interval, prep, category)
 
 	-- Check for a Secondary Spell ID
-	mergeID = addon.merge2h[mergeID] or mergeID
+	if category then
+		mergeID = addon.merge2h[mergeID .. category] or mergeID .. category
+	else
+		mergeID = addon.merge2h[mergeID] or mergeID
+	end
 
 	local heap, stack = spamHeap[framename], spamStack[framename]
 	if heap[mergeID] then

@@ -535,7 +535,7 @@ local COMBATLOG_FILTER_MY_VEHICLE = bit.bor( COMBATLOG_OBJECT_AFFILIATION_MINE,
   to go.
 --]=====================================================]
 function x.OnCombatTextEvent(self, event, ...)
-	
+
 	--[====[
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
     local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, srcFlags2, destGUID, destName, destFlags, destFlags2 = CombatLogGetCurrentEventInfo()
@@ -1350,9 +1350,9 @@ local CombatEventHandlers = {
 					x:AddSpamMessage(outputFrame, spellID, amount, outputColor)
 					return
 				elseif MergeCriticalsWithOutgoing() then
-					x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor, nil, nil, "healing")
 				elseif MergeHideMergedCriticals() then
-					x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor, nil, nil, "healing")
 					return
 				end
 			else
@@ -1442,28 +1442,28 @@ local CombatEventHandlers = {
 			merged = true
 			if outputFrame == "critical" then
 				if MergeCriticalsByThemselves() then
-					x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
+					x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6, nil, "damage")
 					return
 				elseif MergeCriticalsWithOutgoing() then
-					x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6)
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6, nil, "damage")
 				elseif MergeHideMergedCriticals() then
-					x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6)
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor, 6, nil, "damage")
 					return
 				end
 			else
-				x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6)
+				x:AddSpamMessage(outputFrame, spellID, amount, outputColor, 6, nil, "damage")
 				return
 			end
 		elseif not isSwing and not isAutoShot and IsMerged(spellID) then
 			merged = true
 			if critical then
 				if MergeCriticalsByThemselves() then
-					x:AddSpamMessage(outputFrame, spellID, amount, outputColor)
+					x:AddSpamMessage(outputFrame, spellID, amount, outputColor, nil, "damage")
 					return
 				elseif MergeCriticalsWithOutgoing() then
-					x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor, nil, "damage")
 				elseif MergeHideMergedCriticals() then
-					x:AddSpamMessage("outgoing", spellID, amount, outputColor)
+					x:AddSpamMessage("outgoing", spellID, amount, outputColor, nil, "damage")
 					return
 				end
 			else
