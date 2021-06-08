@@ -1749,6 +1749,9 @@ local CombatEventHandlers = {
 		if args.missType == "IMMUNE" and not ShowImmunes() then return end
 		if args.missType ~= "IMMUNE" and not ShowMisses() then return end
 
+		-- Check if spell is filtered
+		if IsSpellFiltered(spellId) then return end
+
 		-- Add Icons
 		message = x:GetSpellTextureFormatted(spellId,
 		                                     message,
