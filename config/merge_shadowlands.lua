@@ -18,7 +18,7 @@ local ADDON_NAME, addon = ...
 -- 'alias' takes the original spell id and a replacement spell id
 -- item takes a item id, the merge interval in seconds, and a helpful description of the item
 -- header switches the header for the next set of items
-local _, _, _, alias, item, header = unpack(addon.merge_helpers)
+local spell, _, _, alias, item, header = unpack(addon.merge_helpers)
 
 --[[header "|cffd2d3d8SL|r™ |cff798BDDTemplates|r"
 do
@@ -47,6 +47,11 @@ do
 	item '321792' '1.0' "Impending Catastrophe"
 	alias '322167' '321792' -- Impending Catastrophe dot
 	alias '322170' '321792' -- Impending Catastrophe dot
+
+	-- Night Fae
+	-- Monk
+	spell '327264' '0.5' -- Faeline Stomp (Damage)
+	spell '345727' '0.5' -- Faeline Stomp Heal / Windwalker Bonnus Damage
 end
 
 header "|cffd2d3d8ShadowLands|r™ |cff798BDDQuest Spells|r"
@@ -81,3 +86,7 @@ do
 	alias '344752' '336214' -- Eternal Call to the Void: Mind Sear
 end
 
+header "|cffd2d3d8ShadowLands|r™ |cff798BDDEnchants|r"
+do
+	item '324184' '1.5' "Lightless Force"
+end
