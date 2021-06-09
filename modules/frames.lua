@@ -636,8 +636,8 @@ do
 				message = x:GetSpellTextureFormatted( stack[idIndex],
 				                                  message,
 				                                  settings.iconsEnabled and settings.iconsSize or -1,
-				                                  settings.fontJustify,
 				                                  settings.spacerIconsEnabled,
+				                                  settings.fontJustify,
 				                                  strColor,
 				                                  true, -- Merge Override = true
 				                                  #item.entries )
@@ -645,8 +645,8 @@ do
 				message = x:GetSpellTextureFormatted( stack[idIndex],
 				                                  message,
 				                                  settings.iconsEnabled and settings.iconsSize or -1,
-				                                  settings.fontJustify,
 				                                  settings.spacerIconsEnabled,
+				                                  settings.fontJustify,
 				                                  strColor,
 				                                  true, -- Merge Override = true
 				                                  #item.entries )
