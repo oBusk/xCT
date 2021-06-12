@@ -1563,7 +1563,17 @@ local CombatEventHandlers = {
 			end
 		end
 
-		-- TODO: Add merge settings
+		local colorOverride
+		if args.spellSchool == 1 then
+			colorOverride = args.critical and 'damageTakenCritical' or 'damageTaken'
+		else
+			colorOverride = args.critical and 'spellDamageTakenCritical' or 'spellDamageTaken'
+		end
+
+		if IsMerged(args.spellId) then
+			x:AddSpamMessage('damage', args.spellId, args.amount, colorOverride)
+			return
+		end
 
 		-- Add names
 		message = message .. x.formatName(args, settings.names, true)
@@ -1581,13 +1591,6 @@ local CombatEventHandlers = {
 			       x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
 			       x.db.profile.frames['damage'].spacerIconsEnabled,
 			       x.db.profile.frames['damage'].fontJustify)
-		end
-
-		local colorOverride
-		if args.spellSchool == 1 then
-			colorOverride = args.critical and 'damageTakenCritical' or 'damageTaken'
-		else
-			colorOverride = args.critical and 'spellDamageTakenCritical' or 'spellDamageTaken'
 		end
 
 		-- Output message
