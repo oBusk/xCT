@@ -226,14 +226,12 @@ do
 				prefix = "SPELL"
 				suffix = "_DAMAGE"
 			elseif event == "SPELL_ABSORBED" then
-				if tempTable.n == 21 then
+				if tempTable.n <= 21 then
 					prefix = "SWING"
 					suffix = "_ABSORBED"
-				elseif tempTable.n == 24 then
+				else
 					prefix = "SPELL"
 					suffix = "_ABSORBED"
-				else
-					error("Unhandled SPELL_ABSORBED Event: #args='"..tempTable.n.."' (expected 21 or 24)")
 				end
 			elseif event == "DAMAGE_SHIELD_MISSED" then
 				prefix = "SPELL"
