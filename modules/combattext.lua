@@ -1772,6 +1772,9 @@ local CombatEventHandlers = {
 	["IncomingMiss"] = function (args)
 		if not ShowMissTypes() then return end
 
+		-- Check if incoming spell is filtered
+		if IsDamageFiltered(args.spellId) then return end
+
 		local message = _G["COMBAT_TEXT_"..args.missType]
 
 		-- Add Icons
