@@ -1775,7 +1775,7 @@ local CombatEventHandlers = {
 		local message = _G["COMBAT_TEXT_"..args.missType]
 
 		-- Add Icons
-		message = x:GetSpellTextureFormatted(args.extraSpellId,
+		message = x:GetSpellTextureFormatted(args.spellId,
 		                                          message,
 		          x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
 		          x.db.profile.frames['damage'].spacerIconsEnabled,
