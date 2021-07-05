@@ -50,4 +50,6 @@ body:
     attributes:
       label: Related Errors
       description: Please paste any errors you're seeing from xCT+ related to this issue
+      placeholder: |
+        Message: Interface\AddOns\xCT+\...
       render: lua
