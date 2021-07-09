@@ -25,6 +25,7 @@ class 'DEATHKNIGHT'
 do
 	spec  '0' -- All Specs
 	spell '52212' '2.5' --  Death and Decay
+	spell '268194' '1.0' -- chocking brine
 
 	spec  '250' -- Blood
 	spell '55078'  '3.5' --  Blood Plague
@@ -73,6 +74,11 @@ do
 	spell '212739' '0.5' --  Talent: Epidemic
 	spell '156000' '2.5' --  Talent: Defile
 	spell '207267' '2.5' --  Talent Bursting Sores
+	spell '115994' '1.5' --  Talent Unholy Blight
+	spell '212423' '1.0' --  Talent: All will serve
+	spell '319230' '1.0' --  Talent: Unholy Pact
+	alias '319238''319230' --  [Cleave Merger] Unholy Pact
+	alias '319236' '319230' --  [Cleave Merger] Unholy Pact
 	alias '55090'  '70890'  --  [Cleave Merger] Scourge Strike
 	alias '191685' '215969' --  [DD/DoT Merger] Virulent Plague Eruption
 	alias '212969' '212739' --  [DD/DoT Merger] Talent: Epidemic
@@ -116,16 +122,18 @@ do
 	spell '228478' '0.5' --  Soul Cleave
 	spell '203794' '1.5' --  Consume Soul
 	spell '207771' '2.5' --  Talent: Burning Alive
-	spell '227255' '1.5' --  Talent: Fel Devastation
+	--spell '227255' '1.5' --  Talent: Fel Devastation
 	spell '247455' '0.5' --  Talent: Spirit Bomb
 	spell '218677' '1.5' --  Talent: Spirit Bomb (Frailty Heal)
 	spell '213011' '2.5' --  Artifact: Charred Warblades
 	spell '207407' '1.5' --  Artifact: Soul Carver (DoT)
+	spell '212105' '1.5' --  spell fel devastation
 	alias '178741' '187727' --  [DD/DoT Merger] Immolation Aura
 	-- alias '208038' '222030' --  [DD/DoT Merger] Soul Cleave
 	-- alias '214743' '207407' --  [DD/DoT Merger] Soul Cleave
 	-- alias '228478' '228477' --  [DD/DoT Merger] Soul Cleave
 	alias '212106' '227255' --  [MH/OH Merger] Fel Devastation
+	alias '212105' '227255' --  [MH/OH Merger] Fel Devastation
 	alias '212084' '227255' --  Reported From Curse: Should be Fel Devastation
 end
 
@@ -263,7 +271,8 @@ do
 	spell '31661'  '0.5' --  Dragon's Breath
 	spell '2120'   '1.5' --  Flamestrike (Longer for talent)
 	spell '12654'  '2.5' --  Ignite (DoT)
-	spell '11366' '2.5'   -- Pyroblast
+	spell '11366' '2.5'  --  Pyroblast
+	spell '257541' '0.5' --  Phoenix's Flames (No longer Talent)
 	spell '205345' '2.5' --  Talent: Conflagration
 	spell '88082'  '2.0' --  Talent: Mirror Images
 	spell '157981' '0.5' --  Talent: Blast Wave
@@ -273,10 +282,9 @@ do
 	spell '44461'  '0.5' --  Talent: Living Bomb (Explosion)
 	spell '153564' '0.5' --  Talent: Meteor (Explosion)
 	spell '155158' '2.5' --  Talent: Meteor (DoT)
-	spell '194466' '0.5' --  Artifact: Phoenix's Flames
 	spell '194522' '2.5' --  Artifact: Blast Furnace
 	spell '215775' '1.5' --  Artifact: Phoenix Reborn
-	alias '224637' '194466' --  [DD/Splash Merger] Phoenix's Flames
+	alias '257542' '257541' --  [DD/Splash Merger] Phoenix's Flames
 	alias '226757' '205345' --  [DD/Splash Merger] Conflagration
 	alias '205472' '2120'   --  [DD/DoT Merger] Talent: Flame Patch
 	alias '244813' '217694' --  [DD/DoT Merger] multi target living bomb
@@ -372,6 +380,7 @@ do
 	spec  '66' -- Protection
 	spell '31935'  '1.5'  --  Avenger's Shield
 	spell '88263'  '0.5'  --  Hammer of the Righteous
+	spell '53600'  '0.5'  --  Shield of the Righteous
 	spell '204301' '2.5'  --  Blessed Hammer
 	spell '204241' '2.0'  --  Talent: Consecrated Ground
 	spell '209478' '1.5'  --  Artifact: Tyr's Enforcer
@@ -387,6 +396,7 @@ do
 	spell '210220' '0.5'  --  Talent: Holy Wrath
 	spell '202202' '0.5'  --  Talent: Eye for an Eye
 	spell '199435' '1.0'  --  Talent (PvP): Luminescence
+	spell '157122' '1.5'  --  Talent: Holy Shield
 	spell '224239' '1.5'  --  Artifact: Echo of the Highlord (Divine Storm)
 	spell '224266' '1.25' --  Artifact: Echo of the Highlord (Templar's Verdict)
 	spell '205273' '2.0'  --  Artifact: Wake of Ashes
@@ -494,7 +504,7 @@ end
 class 'SHAMAN'
 do
 	spec  '262' -- Elemental
-	spell '117014' '1.0' --  Elemental Blast
+	spell '285452' '1.0' --  Elemental Blast
 	spell '51505'  '1.0' --  Lavaburst (Elemental)
 	spell '188196' '1.0' --  Lightning Bolt (Elemental)
 	spell '188443' '1.5' --  Chain Lightning (Elemental)
@@ -508,7 +518,7 @@ do
 	spell '117588' '0.5' --  Talent: Primal Elementalist [Fire]
 	spell '191732' '1.5' --  Artifact: Lightning Elemental (Chain Lightning)
 	spell '205533' '1.5' --  Artifact: Volcanic Inferno
-	alias '120588' '117014' --  [Mastery Merger] Elemental Blast Overload
+	alias '285466' '285452' --  [Mastery Merger] Elemental Blast Overload
 	alias '219271' '210714' --  [Mastery Merger] Ice Fury Overload
 	alias '77451'  '51505' --  [Mastery Merger] Lavaburst Overload
 	alias '45297'  '188443' --  [Mastery Merger] Chain Lightning Overload
@@ -555,6 +565,8 @@ do
 	spec  '0' -- All Specs
 	spell '217979' '2.0' --  Heath Funnel (You)
 	spell '85692'  '2.0' --  Doomguard (Doom Bolt)
+	spell '234153' '0.5' --  Drain Life
+
 
 	spec  '265' -- Affliction
 	spell '198590' '1.5' --  Drain Soul
@@ -572,12 +584,7 @@ do
 	spell '199581' '0.5' --  Artifact: Soul Flame	
 	spell '324540' '0.5' --  Malefic Rapture
 	spell '278350' '1.0' --  Talent Vile Taint
---[[	alias '233496' '233490' --  Unstable Affliction (Multiple Applications)
-	alias '233499' '233490' --  Unstable Affliction (Multiple Applications)
-	alias '233497' '233490' --  Unstable Affliction (Multiple Applications)
-	alias '233498' '233490' --  Unstable Affliction (Multiple Applications)--]]
 	alias '231489' '233490' --  Unstable Affliction (Artifact: Compounding Horror)
-
 
 	spec  '266' -- Demonlogy
 	spell '603'    '0.5' --  Doom
@@ -596,6 +603,7 @@ do
 	spell '267215' '0.5' --  Talent Demonic Consump
 	alias '267971' '267215' --  Talent Demonic Consump
 	alias '211727' '211720' --  Artifact: Thal'kiel's Discord
+
 
 
 	spec  '267' -- Destruction
