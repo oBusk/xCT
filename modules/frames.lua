@@ -954,6 +954,11 @@ function x:SaveAllFrames()
 	for framename, settings in pairs(x.db.profile.frames) do
 		local frame = x.frames[framename]
 
+		-- If frame is disabled, trying to calculate position will fail
+		if not frame.enabledFrame then
+			return
+		end
+
 		local width = frame:GetWidth()
 		local height = frame:GetHeight()
 
