@@ -1756,6 +1756,9 @@ local CombatEventHandlers = {
 		if args.missType == "IMMUNE" and not ShowImmunes() then return end
 		if args.missType ~= "IMMUNE" and not ShowMisses() then return end
 
+		-- Check if spell is filtered
+		if IsSpellFiltered(spellId) then return end
+
 		-- Add Icons
 		message = x:GetSpellTextureFormatted(spellId,
 		                                     message,
@@ -1769,10 +1772,13 @@ local CombatEventHandlers = {
 	["IncomingMiss"] = function (args)
 		if not ShowMissTypes() then return end
 
+		-- Check if incoming spell is filtered
+		if IsDamageFiltered(args.spellId) then return end
+
 		local message = _G["COMBAT_TEXT_"..args.missType]
 
 		-- Add Icons
-		message = x:GetSpellTextureFormatted(args.extraSpellId,
+		message = x:GetSpellTextureFormatted(args.spellId,
 		                                          message,
 		          x.db.profile.frames['damage'].iconsEnabled and x.db.profile.frames['damage'].iconsSize or -1,
 		          x.db.profile.frames['damage'].spacerIconsEnabled,
