@@ -418,7 +418,6 @@ do
 	spell '113780' '0.5' --  Deadly Poison (Instant)
 	spell '51723'  '0.5' --  Fan of Knives
 	spell '192660' '2.5' --  Poison Bomb
-	alias '192380' '113780' --  Artifact: Poison Knives
 	alias '27576'  '5374'    --  Mutilate (OH)
 
 	spec  '260' -- Outlaw
@@ -429,8 +428,6 @@ do
 	spell '22482'  '1.5' --  Blade Flurry
 	spell '57841'  '3.5' --  Killing Spree
 	spell '185779' '2.0' --  Talent: Cannonball Barrage
-	spell '202822' '1.0' --  Artifact: Greed
-	alias '202823' '202822' --  [MH/OH Merger] Artifact: Greed
 	alias '197834' '193315' --  [Proc Merger] Saber Slash
 
 	spec  '261' -- Sublety
@@ -440,9 +437,8 @@ do
 	spell '197800' '0.5' --  Shadow Nova
 	spell '195452' '2.5' --  Nightblade (DoT)
 	spell '158188' '2.5' --  Talent: Soothing Darkness
-	spell '220893' '2.5' --  Artifact: Akaari's Soul
-	alias '121474' '121473' --  [MH/OH Merger] Artifact: Greed
-end
+
+	alias '121474' '121473' --  [MH/OH Merger] Shadowblades
 
 
 class 'SHAMAN'
