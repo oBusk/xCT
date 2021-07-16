@@ -510,11 +510,8 @@ do
 	spell '205246' '1.5' --  Talent: Phantom Singularity
 	spell '196100' '0.5' --  Talent: Grimoire of Sacrifice
 	spell '205260' '2.5' --  Talent: Soul Effigy
-	spell '218615' '0.5' --  Artifact: Harvester of Souls
-	spell '199581' '0.5' --  Artifact: Soul Flame
 	spell '324540' '0.5' --  Malefic Rapture
 	spell '278350' '1.0' --  Talent Vile Taint
-	alias '231489' '233490' --  Unstable Affliction (Artifact: Compounding Horror)
 
 	spec  '266' -- Demonlogy
 	spell '603'    '0.5' --  Doom
@@ -526,13 +523,10 @@ do
 	spell '205196' '0.5' --  Dreadstalkers (Dreadbite)
 	spell '196278' '0.5' --  Talent: Implosion
 	spell '205231' '0.5' --  Talent: Summon Darkglare
-	spell '211720' '2.5' --  Artifact: Thal'kiel's Discord
 	spell '108447' '2.5' --  Soul Link Heal
 	spell '108446' '2.5' --  Soul Link dmgs
-	spell '211714' '0.5' --  Artifact: Thal'kiel's Consumption (Demon Life Tap)
 	spell '267215' '0.5' --  Talent Demonic Consump
 	alias '267971' '267215' --  Talent Demonic Consump
-	alias '211727' '211720' --  Artifact: Thal'kiel's Discord
 
 
 
@@ -544,7 +538,6 @@ do
 	spell '42223'  '2.5' --  Rain of Fire
 	spell '152108' '0.5' --  Talent: Cataclysm
 	spell '196448' '1.5' --  Talent: Channel Demonfire
-	spell '187394' '1.5' --  Artifact: Dimensional Rift
 	alias '348'    '157736' --  [DD/DoT Merger] Immolate
 end
 
