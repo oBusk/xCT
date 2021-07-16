@@ -554,9 +554,6 @@ do
 	spell '12294'  '0.5' --  Talent: Sweeping Strikes (Mortal Strike)
 	spell '772'    '3.5' --  Talent: Rend
 	spell '215537' '2.5' --  Talent: Trauma
-	spell '209569' '2.5' --  Artifact: Corrupted Blood of Zakajz
-	spell '209700' '0.5' --  Artifact: Void Cleave
-	spell '209577' '2.5' --  Artifact: Warbreaker
 	spell '199658' '1.5' --  Whirlwind
 	spell '278497' '0.5' --  Seismic Wave
 	spell '262115' '3.0' --  Mastery: Deep Wounds (DoT over 6s)
@@ -571,12 +568,10 @@ do
 	spell '113344' '2.5' --  Talent: Bloodbath
 	spell '118000' '0.5' --  Talent: Dragon Roar
 	spell '50622'  '2.5' --  Talent: Bladestorm
-	spell '205546' '3.0' --  Artifact: Odyn's Fury (DoT)
 	alias '163558' '5308'   --  [MH/OH] Execute OH
 	alias '85384'  '96103'  --  [MH/OH] Raging Blow
 	alias '44949'  '199667' --  [MH/OH] Whirlwind
 	alias '95738'  '50622'  --  [MH/OH] Bladestorm
-	alias '205547' '205546' --  Artifact: Odyn's Fury (Hit)
 	alias '218617' '184367' --  Rampage (1st Hit)
 	alias '184707' '184367' --  Rampage (2nd Hit)
 	alias '184709' '184367' --  Rampage (3rd Hit)
@@ -589,5 +584,4 @@ do
 	spell '6343'   '0.5' --  Thunder Clap
 	spell '7922'   '0.5' --  Talent: Warbringer
 	spell '222944' '3.0' --  Talent: Inspiring Presence
-	spell '203526' '3.5' --  Artifact: Neltharion's Fury
 end
