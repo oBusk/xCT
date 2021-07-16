@@ -333,7 +333,6 @@ do
 	spell '114852' '0.5'  --  Talent: Holy Prism (Heal)
 	spell '114871' '0.5'  --  Talent: Holy Prism (Damage)
 	spell '210291' '2.5'  --  Talent: Aura of Mercy
-	spell '200654' '2.5'  --  Artifact: Tyr's Deliverance
 
 	spec  '66' -- Protection
 	spell '31935'  '1.5'  --  Avenger's Shield
@@ -341,8 +340,6 @@ do
 	spell '53600'  '0.5'  --  Shield of the Righteous
 	spell '204301' '2.5'  --  Blessed Hammer
 	spell '204241' '2.0'  --  Talent: Consecrated Ground
-	spell '209478' '1.5'  --  Artifact: Tyr's Enforcer
-	spell '209202' '0.5'  --  Artifact: Eye of Tyr
 
 	spec  '70' -- Retribution
 	spell '20271' ' 0.5'  --  Judgment
@@ -355,11 +352,6 @@ do
 	spell '202202' '0.5'  --  Talent: Eye for an Eye
 	spell '199435' '1.0'  --  Talent (PvP): Luminescence
 	spell '157122' '1.5'  --  Talent: Holy Shield
-	spell '224239' '1.5'  --  Artifact: Echo of the Highlord (Divine Storm)
-	spell '224266' '1.25' --  Artifact: Echo of the Highlord (Templar's Verdict)
-	spell '205273' '2.0'  --  Artifact: Wake of Ashes
-	spell '224239' '1.5'  --  Artifact: Divine Tempest (Divine Storm)
-	spell '215257' '1.75' --  Artifact: Healing Storm
 	alias '228288' '20271' --  [Bounce Merger] Judgment
 	alias '216527' '20271' --  [Pvp Talent - Bounce Merger]: Lawbringer
 end
