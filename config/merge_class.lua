@@ -456,8 +456,6 @@ do
 	spell '170379' '2.0' --  Talent: Earthn Rage
 	spell '197568' '0.5' --  Talent: Lightning Rod
 	spell '117588' '0.5' --  Talent: Primal Elementalist [Fire]
-	spell '191732' '1.5' --  Artifact: Lightning Elemental (Chain Lightning)
-	spell '205533' '1.5' --  Artifact: Volcanic Inferno
 	alias '285466' '285452' --  [Mastery Merger] Elemental Blast Overload
 	alias '219271' '210714' --  [Mastery Merger] Ice Fury Overload
 	alias '77451'  '51505' --  [Mastery Merger] Lavaburst Overload
@@ -471,16 +469,11 @@ do
 	spell '25504'  '0.5' --  Windfury Attacks
 	spell '32175'  '0.5' --  Stormstrike MH/OH Merger
 	spell '10444'  '1.5' --  Flametongue
-	spell '199054' '0.5' --  Artifact: Unleash Doom
-	spell '198485' '0.5' --  Artifact: Alpha Wolf
-	spell '198483' '1.5' --  Artifact: Doom Wolves
-	spell '199116' '2.0' --  Artifact: Doom Vortex
 	spell '210854' '0.5' --  Talent: Hailstorm
 	spell '210801' '2.5' --  Talent: Crashing Storm
 	spell '197385' '2.5' --  Talent: Fury of Air
 	spell '197214' '2.5' --  Talent: Sundering
 	alias '32176'  '32175'   --  [MH/OH Merger] Stormstrike
-	alias '199053' '199054' --  [MH/OH Merger] Artifact: Unleash Weapons
 
 	spec  '264' -- Restoration
 	spell '421'    '0.5' --  Chain Lightning (Resto)
@@ -494,9 +487,6 @@ do
 	spell '157503' '0.5' --  Talent: Cloudburst
 	spell '114083' '1.5' --  Talent: Ascendance
 	spell '201633' '2.5' --  Talent: Earthen Shield
-	spell '209069' '2.5' --  Artifact: Tidal Pools
-	spell '208899' '3.0' --  Artifact: Queen's Decree
-	spell '207778' '0.5' --  Artifact: Gift of the Queen
 end
 
 
