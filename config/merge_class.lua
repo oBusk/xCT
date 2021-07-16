@@ -290,9 +290,6 @@ do
 	spell '121253' '0.5' --  Keg Smash
 	spell '227291' '0.5' --  Talent: Niuzao, The Black Ox (Stomp)
 	spell '196733' '0.5' --  Talent: Special Delivery
-	spell '214326' '0.5' --  Artifact: Exploding Keg
-	spell '227681' '1.5' --  Artifact: Dragonfire Brew
-	alias '178173' '124507' --  [Greater Merger] Artifact: Overflow (double check)
 
 	spec  '269' -- Windwalker
 	spell '117952' '0.5' --  Crackling Jade Lightning (SEF)
@@ -303,8 +300,6 @@ do
 	spell '185099' '0.5' --  Rising Sun Kick (SEF)
 	spell '196748' '0.5' --  Talent: Chi Orbit
 	spell '158221' '0.5' --  Talent: Whirling Dragon Punch
-	spell '222029' '0.5' --  Artifact: Strike of the Windlord
-	alias '205414' '222029' --  [MH/OH Merger] Artifact: Strike of the Windlord
 	alias '196061' '117418' --  [DMG Merger] Artifact: Crosswinds
 
 	spec  '270' -- Mistweaver
@@ -318,8 +313,6 @@ do
 	spell '124081' '1.5' --  Talent: Zen Pulse
 	spell '162530' '1.5' --  Talent: Refreshing Jade Wind
 	spell '198756' '2.5' --  Talent: Invoke Chi'Ji
-	spell '199668' '2.0' --  Artifact: Blessing of Yu'lon
-	spell '199656' '2.0' --  Artifact: Celestial Breath
 	alias '198533' '115175' --  [Statue Merger] Talent: Jade Serpent Statue
 	alias '228649' '100784' --  [Passive Merger] Teachings of the Monastery
 end
