@@ -319,7 +319,7 @@ do
 	spell '132463' '2.5' --  Talent: Chi Wave (Healing)
 	spell '148187' '1.5' --  Talent: Rushing Jade Wind
 	spell '107270' '1.5' --  Spinning Crane Kick
-	spell '100784' '1.0' --  Blackout Kick
+	spell '100784' '0.5' --  Blackout Kick
 
 	spec  '268' -- Brewmaster
 	spell '124255' '1.5' --  DmgTkn: Stagger
