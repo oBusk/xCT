@@ -78,7 +78,6 @@ end
 class 'DEMONHUNTER'
 do
 	spec  '577' -- Havoc
-	spell '342857' '3.5' --  Glaive Tempest (damage over 3 sec to 5 nearby enemies)
 	spell '222031' '3.0' --  Chaos Strike (server side delay?)
 	spell '185123' '1.5' --  Throw Glaive (Havoc)
 	spell '198030' '1.5' --  Eye Beam
@@ -91,17 +90,13 @@ do
 	spell '258921' '1.5' --  Immolation Aura
 	spell '258922' '1.5' --  Immolation Aura
 	spell '179057' '0.5' --  Chaos Nova
+	spell '342857' '3.5' --  Talent: Glaive Tempest (damage over 3 sec to 5 nearby enemies)
 	spell '203796' '2.5' --  Talent: Demon Blades
 	spell '211052' '1.5' --  Talent: Fel Barrage
-	spell '202388' '0.5' --  Artifact: Inner Demons
-	spell '201628' '1.5' --  Artifact: Fury of the Illidari
-	spell '217070' '0.5' --  Artifact: Rage of the Illidari
-	spell '202446' '0.5' --  Artifact: Anguish
 	alias '199547' '222031' --  [MH/OH Merger] Chaos Strike
 	alias '200685' '199552' --  [MH/OH Merger] Blade Dance
 	alias '258883' '199552' --  [MH/OH Merger] Blade Dance
 	alias '210155' '210153' --  [MH/OH Merger] Death Sweep
-	alias '201789' '201628' --  [MH/OH Merger] Fury of the Illidari
 	-- spell '258922' '258921' --  [DD/DOT Merger]Immolation Aura
 
 	spec  '581' -- Vengeance
@@ -115,8 +110,6 @@ do
 	--spell '227255' '1.5' --  Talent: Fel Devastation
 	spell '247455' '0.5' --  Talent: Spirit Bomb
 	spell '218677' '1.5' --  Talent: Spirit Bomb (Frailty Heal)
-	spell '213011' '2.5' --  Artifact: Charred Warblades
-	spell '207407' '1.5' --  Artifact: Soul Carver (DoT)
 	spell '212105' '1.5' --  spell fel devastation
 	alias '178741' '187727' --  [DD/DoT Merger] Immolation Aura
 	-- alias '208038' '222030' --  [DD/DoT Merger] Soul Cleave
