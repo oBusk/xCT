@@ -229,8 +229,6 @@ do
 	spell '114923' '2.5' --  Talent: Nether Tempest
 	spell '153640' '2.5' --  Talent: Arcane Orb
 	spell '157979' '0.5' --  Talent: Unstable Magic
-	spell '210833' '0.5' --  Artifact: Touch of the Magi
-	spell '211088' '2.5' --  Artifact: Mark of Aluneth (DoT)
 	alias '210817' '44425'  --  [DD/Splash Merger] Arcane Rebound
 	alias '114954' '114923' --  [DD/DoT Merger] Arcane Rebound
 	alias '211076' '211088' --  [DD/Splash Merger] Arcane Rebound
@@ -251,8 +249,6 @@ do
 	spell '44461'  '0.5' --  Talent: Living Bomb (Explosion)
 	spell '153564' '0.5' --  Talent: Meteor (Explosion)
 	spell '155158' '2.5' --  Talent: Meteor (DoT)
-	spell '194522' '2.5' --  Artifact: Blast Furnace
-	spell '215775' '1.5' --  Artifact: Phoenix Reborn
 	alias '257542' '257541' --  [DD/Splash Merger] Phoenix's Flames
 	alias '226757' '205345' --  [DD/Splash Merger] Conflagration
 	alias '205472' '2120'   --  [DD/DoT Merger] Talent: Flame Patch
