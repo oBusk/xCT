@@ -387,12 +387,6 @@ do
 	spell '2061'   '0.5' --  Talent: Trail of Light (Flash Heal)
 	spell '32546'  '0.5' --  Talent: Binding Heal
 	spell '204883' '0.5' --  Talent: Circle of Healing
-	spell '196810' '1.0' --  Artifact: Invoke the Naaru (Prayer of Healing & Sanctify)
-	spell '196809' '1.0' --  Artifact: Invoke the Naaru (Heal, Flash Heal & Serenity)
-	spell '196813' '1.0' --  Artifact: Invoke the Naaru (Divine Hymn & Prayer of Mending)
-	alias '196816' '139' --  Artifact: Invoke the Naaru (Renew)
-	alias '196811' '585' --  Artifact: Invoke the Naaru (Smite, Holy Fire & Chastise)
-	alias '196812' '132157' --  Artifact: Invoke the Naaru (Holy Nova)
 
 	spec  '258' -- Shadow
 	spell '228360' '1.0' --  Void Eruption
