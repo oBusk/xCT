@@ -133,8 +133,6 @@ do
 	spell '202347' '2.5' --  Talent: Stellar Flare
 	spell '202497' '2.5' --  Talent: Shooting Stars
 	spell '211545' '2.5' --  Talent: Fury of Elune
-	spell '202771' '0.5' --  Artifact: Full Moon
-	alias '226104' '191037' --  Artifact: Echoing Stars
 
 	spec  '103' -- Feral
 	spell '106785' '0.5' --  Swipe (Cat)
@@ -143,8 +141,6 @@ do
 	spell '1079'   '2.5' --  Rip
 	spell '155625' '2.5' --  Talent: Lunar Inspiration
 	spell '202028' '0.5' --  Talent: Brutal Slash
-	spell '210723' '1.5' --  Artifact: Ashamane's Frenzy
-	spell '210687' '0.5' --  Artifact: Shadow Thrash
 	alias '1822'   '155722' --  [DD/DoT Merger] Rake
 
 	spec  '104' -- Guardian
@@ -155,7 +151,6 @@ do
 	spell '77758'  '2.5' --  Thrash (Bear)
 	spell '213709' '2.5' --  Talent: Brambles
 	spell '204069' '2.5' --  Talent: Lunbar Beam
-	spell '219432' '2.5' --  Artifact: Rage of the Sleeper
 	alias '192090' '77758'  --  [DD/DoT Merger] Thrash
 	alias '203958' '213709' --  [Barkskin Merger] Brambles
 
@@ -169,7 +164,6 @@ do
 	spell '48438'  '2.5' --  Wild Growth (Instant)
 	spell '42231'  '2.5' --  Hurricane
 	spell '200389' '3.5' --  Talent: Cultivation
-	spell '189853' '0.5' --  Artifact: Dreamwalker
 	alias '189800' '48438' --  [HoT/Artifact Merger] Nature's Essence
 	alias '155777' '774'   --  [HoT/HoT Merger] Talent: Germination
 	alias '207386' '81269' --  [Heal/HoT Merger] Talent: Spring Blossom
