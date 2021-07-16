@@ -33,11 +33,9 @@ do
 	spell '195292' '0.5' --  Death's Caress (DRW)
 	spell '49998'  '0.5' --  Death Strike (DRW)
 	spell '206930' '0.5' --  Heart Strike
-	spell '212744' '0.5' --  Talent: Soulgorge
 	spell '196528' '1.5' --  Talent: Bonestorm (DMG)
 	spell '196545' '1.5' --  Talent: Bonestorm (Heal)
-	spell '205223' '0.5' --  Artifact: Consumption (DMG)
-	spell '205224' '0.5' --  Artifact: Consumption (Heal)
+	spell '274156' '0.5' --  Talent: Consumption (DMG | Heal)
 	spell '203166' '2.5' --  PVP Talent: Blight (ID: 203172)
 	spell '203174' '0.5' --  PVP Talent: Death Chain (ID: 203173)
 
@@ -47,19 +45,15 @@ do
 	spell '49184'  '0.5' --  Howling Blast
 	spell '222024' '3.0' --  Obliterate (For Merge)
 	spell '222026' '3.0' --  Frost Strike (For Merge)
-	spell '207194' '0.5' --  Talent: Volatile Shielding
 	spell '195750' '0.5' --  Talent: Frozen Pulse
 	spell '207150' '0.5' --  Talent: Avalanche
 	spell '207230' '0.5' --  Talent: Frostscythe
 	spell '195975' '0.5' --  Talent: Glacial Advance
 	spell '155166' '2.5' --  Talent: Breath of Sindragosa
-	spell '190780' '1.5' --  Artifact: Sindragosa's Fury
-	spell '204959' '0.5' --  Artifact: Frozen Soul
 	alias '66198'  '222024' --  [MH/OH Merger] Obliterate
 	alias '66196'  '222026' --  [MH/OH Merger] Frost Strike
 
 	spec  '252' -- Unholy
-	spell '215969' '0.5' --  Virulent Plague (DoT)
 	spell '70890'  '3.0' --  Scourge Strike
 	spell '194311' '0.5' --  Festering Wound
 	spell '91778'  '0.5' --  Pet: Sweeping Claws
@@ -67,10 +61,7 @@ do
 	spell '191587' '2.5' --  Virulent Plague (DoT)
 	spell '286836' '2.5' --	 Dark Transformation
 	spell '47541'  '1.5' --	 Death Coil
-	spell '218321' '1.5' --  Artifact: Dragged to Helheim
-	spell '191758' '0.5' --  Artifact: Corpse Explosion
-	spell '207267' '0.5' --  Talent: Dragged to Helheim
-	spell '212338' '0.5' --  Talent: Sludge Belcher
+	spell '207267' '0.5' --  Talent: Bursting Sores
 	spell '212739' '0.5' --  Talent: Epidemic
 	spell '156000' '2.5' --  Talent: Defile
 	spell '207267' '2.5' --  Talent Bursting Sores
@@ -80,7 +71,6 @@ do
 	alias '319238' '319230' --  [Cleave Merger] Unholy Pact
 	alias '319236' '319230' --  [Cleave Merger] Unholy Pact
 	alias '55090'  '70890'  --  [Cleave Merger] Scourge Strike
-	alias '191685' '215969' --  [DD/DoT Merger] Virulent Plague Eruption
 	alias '212969' '212739' --  [DD/DoT Merger] Talent: Epidemic
 end
 
@@ -581,7 +571,7 @@ do
 	spell '196100' '0.5' --  Talent: Grimoire of Sacrifice
 	spell '205260' '2.5' --  Talent: Soul Effigy
 	spell '218615' '0.5' --  Artifact: Harvester of Souls
-	spell '199581' '0.5' --  Artifact: Soul Flame	
+	spell '199581' '0.5' --  Artifact: Soul Flame
 	spell '324540' '0.5' --  Malefic Rapture
 	spell '278350' '1.0' --  Talent Vile Taint
 	alias '231489' '233490' --  Unstable Affliction (Artifact: Compounding Horror)
