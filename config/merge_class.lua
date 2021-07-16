@@ -185,9 +185,6 @@ do
 	spell '201754' '0.5' --  Talent: Stomp
 	spell '217207' '0.5' --  Talent: Dire Frenzy
 	spell '171454' '0.5' --  Talent: Chimaera Shot
-	spell '197465' '0.5' --  Artifact: Surge of the Stormgod
-	spell '207097' '1.5' --  Artifact: Titan's Thunder
-	spell '197205' '0.5' --  Artifact: Spirit Bond
 	spell '217200' '4.5' --  Barbed Shot (Seems every 2s over 8s)
 	alias '171457' '171454' --  [Cleave Merger] Chimaera Shot
 
@@ -198,7 +195,6 @@ do
 	spell '212680' '0.5' --  Talent: Explosive Shot
 	spell '214581' '1.5' --  Talent: Sidewinders
 	spell '198670' '0.5' --  Talent: Piercing Shot
-	spell '191070' '0.5' --  Artifact: Call of the Hunter
 	spell '257045' '2.0' --  Rapid Fire
 	spell '257620' '2.0' --  Multi shot
 	alias '191043' '19434' --  Windburst
@@ -211,15 +207,11 @@ do
 	spell '194279' '2.5' --  Talent: Caltrops
 	spell '212436' '0.5' --  Talent: Butchery
 	spell '194859' '2.5' --  Talent: Dragonsfire Grenade
-	spell '203563' '0.5' --  Artifact: Talen Strike (Bugged Icon Fix)
-	spell '203415' '2.5' --  Artifact: Fury of the Eagle (Bugged Icon Fix)
-	spell '204081' '2.5' --  Artifact: On the Trail
 	spell '265157' '2.5' --  Wildfire Bomb
 	spell '259491' '2.5' --  Serpent Sting
 	alias '269747' '265157' --  Wildfire Bomb (DOT)
 	alias '203525' '203563' --  Talen Strike (2x Hits)
 	alias '194858' '194859' --  Talent: Dragonsfire Grenade (DoT)
-	alias '203413' '203415' --  Artifact: Fury of the Eagle (Bugged Icon Fix)
 end
 
 
