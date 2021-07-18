@@ -439,7 +439,7 @@ do
 	spell '158188' '2.5' --  Talent: Soothing Darkness
 
 	alias '121474' '121473' --  [MH/OH Merger] Shadowblades
-
+end
 
 class 'SHAMAN'
 do
