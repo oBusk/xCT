@@ -104,6 +104,11 @@ local function Frame_SendTestMessage_OnUpdate(self, e)
 	end
 end
 
+function x:GetFrame(framename)
+	x:UpdateFrames(specificFrame)
+	return x.frames[framename]
+end
+
 -- =====================================================
 -- AddOn:UpdateFrames(
 --		specificFrame,	[string] - (Optional) the framename
@@ -274,13 +279,13 @@ end
 function x:Clear(specificFrame)
 	if not specificFrame then
 		for framename, settings in pairs(x.db.profile.frames) do
-			local frame = x.frames[framename]
+			local frame = x:GetFrame(framename)
 			if frame then -- attempt to fix login 'attempt to index nil value frame' error
 				frame:Clear()
 			end
 		end
 	else
-		local frame = x.frames[specificFrame]
+		local frame = x:GetFrame(specificFrame)
 		frame:Clear()
 	end
 end
@@ -370,7 +375,7 @@ end
 --		Sends a message to the framename specified.
 -- =====================================================
 function x:AddMessage(framename, message, colorname)
-	local frame = x.frames[framename]
+	local frame = x:GetFrame(framename)
 	local frameOptions = x.db.profile.frames[framename]
 
 	-- Make sure we have a valid frame
@@ -755,7 +760,7 @@ function x.StartConfigMode()
 
 	for framename, settings in pairs(x.db.profile.frames) do
 		if settings.enabledFrame then
-			local f = x.frames[framename]
+			local f = x:GetFrame(framename)
 
 			f:SetBackdrop( {
 					bgFile	 	= "Interface/Tooltips/UI-Tooltip-Background",
@@ -862,7 +867,7 @@ function x.EndConfigMode()
 
 	for framename, settings in pairs(x.db.profile.frames) do
 		if settings.enabledFrame then
-			local f = x.frames[framename]
+			local f = x:GetFrame(framename)
 
 			f:SetBackdrop(nil)
 
@@ -955,7 +960,7 @@ end
 
 function x:SaveAllFrames()
 	for framename, settings in pairs(x.db.profile.frames) do
-		local frame = x.frames[framename]
+		local frame = x:GetFrame(framename)
 		-- If frame is disabled, trying to calculate position will fail
 		if settings.enabledFrame then
 			local x_old, y_old, width_old, height_old = settings.X, settings.Y, settings.Width, settings.Height
@@ -1161,7 +1166,7 @@ function x.ToggleTestMode(hidePopup)
 
 			-- Start the Test more
 			for framename, settings in pairs(x.db.profile.frames) do
-				local frame = x.frames[framename]
+				local frame = x:GetFrame(framename)
 				frame.nextUpdate = nil
 				frame.lastUpdate = 0
 				frame:SetScript("OnUpdate", x.TestMoreUpdate)
@@ -1185,7 +1190,7 @@ function x.EndTestMode()
 
 	-- Stop the Test more
 	for framename, settings in pairs(x.db.profile.frames) do
-		local frame = x.frames[framename]
+		local frame = x:GetFrame(framename)
 		frame:SetScript("OnUpdate", nil)
 		frame:Clear()
 	end
