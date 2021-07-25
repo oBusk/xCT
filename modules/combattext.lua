@@ -1473,7 +1473,7 @@ local CombatEventHandlers = {
 			end
 		end
 
-		if critical and not (isSwing or isAutoShot) or ShowAutoAttack_Critical() then
+		if critical and (not (isSwing or isAutoShot) or ShowAutoAttack_Critical()) then
 			settings = x.db.profile.frames['critical']
 			if not (isSwing or isAutoShot) or PrefixAutoAttack_Critical() then
 				message = sformat(format_crit, x.db.profile.frames['critical'].critPrefix,
