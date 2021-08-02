@@ -180,12 +180,6 @@ function x:UpdateFrames(specificFrame)
 
 				-- If the point is not center, then something dirty happened... clean it up
 				if point and point ~= "CENTER" then
-					local width = f:GetWidth()
-					local height = f:GetHeight()
-
-					settings.Width = mfloor(width + .5)
-					settings.Height = mfloor(height + .5)
-
 					-- Calculate the center of the screen
 					local ResX, ResY = GetScreenWidth(), GetScreenHeight()
 					local midX, midY = ResX / 2, ResY / 2
@@ -194,8 +188,8 @@ function x:UpdateFrames(specificFrame)
 					local left, top = mfloor(f:GetLeft() - midX + .5), mfloor(f:GetTop() - midY + .5)
 
 					-- Calculate get the center of the screen from the left/top
-					local x = mfloor(left + (width / 2) + .5)
-					local y = mfloor(top - (height / 2) + .5)
+					local x = mfloor(left + (f:GetWidth() / 2) + .5)
+					local y = mfloor(top - (f:GetHeight() / 2) + .5)
 
 					f:ClearAllPoints()
 					f:SetPoint("CENTER", x, y)
