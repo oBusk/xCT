@@ -174,7 +174,34 @@ function x:UpdateFrames(specificFrame)
 			if settings.enabledFrame then
 				f:SetWidth(settings.Width)
 				f:SetHeight(settings.Height)
-				f:SetPoint("CENTER", settings.X, settings.Y)
+
+				-- WoW's default movement from changing the anchor
+				local point, relativeTo, relativePoint, xOfs, yOfs = unpack(f:GetNumPoints() > 0 and {f:GetPoint(0)} or {})
+
+				-- If the point is not center, then something dirty happened... clean it up
+				if point and point ~= "CENTER" then
+					local width = f:GetWidth()
+					local height = f:GetHeight()
+
+					settings.Width = mfloor(width + .5)
+					settings.Height = mfloor(height + .5)
+
+					-- Calculate the center of the screen
+					local ResX, ResY = GetScreenWidth(), GetScreenHeight()
+					local midX, midY = ResX / 2, ResY / 2
+
+					-- Calculate the Top/Left of a frame relative to the center
+					local left, top = mfloor(f:GetLeft() - midX + .5), mfloor(f:GetTop() - midY + .5)
+
+					-- Calculate get the center of the screen from the left/top
+					local x = mfloor(left + (width / 2) + .5)
+					local y = mfloor(top - (height / 2) + .5)
+
+					f:ClearAllPoints()
+					f:SetPoint("CENTER", x, y)
+				else
+					f:SetPoint("CENTER", settings.X, settings.Y)
+				end
 			end
 
 			-- For keeping the frame on the screen
@@ -960,7 +987,7 @@ end
 
 function x:SaveAllFrames()
 	for framename, settings in pairs(x.db.profile.frames) do
-		local frame = x:GetFrame(framename)
+		local frame = x.frames[framename]
 		-- If frame is disabled, trying to calculate position will fail
 		if settings.enabledFrame then
 			local x_old, y_old, width_old, height_old = settings.X, settings.Y, settings.Width, settings.Height
