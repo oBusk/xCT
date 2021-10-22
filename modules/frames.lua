@@ -690,12 +690,6 @@ do
 				end
 			end
 
-			-- Add merge count
-			--if #item.entries > 1 then
-			--	message = sformat(format_mergeCount, message, #item.entries)
-			--end
-			--stack[idIndex], settings.iconsSize, settings.fontJustify
-
 			-- Add Icons
 			if frameName == "outgoing" or frameName == "critical" then
 				message = x:GetSpellTextureFormatted( stack[idIndex],
