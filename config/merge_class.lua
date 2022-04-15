@@ -187,6 +187,7 @@ do
 	spell '42231'  '2.5' --  Hurricane
 	spell '200389' '3.5' --  Talent: Cultivation
 	spell '189853' '0.5' --  Artifact: Dreamwalker
+	spell '364686' '5.0' --  Tier[id=188849]: Renewing Bloom (every 1s)
 	alias '189800' '48438' --  [HoT/Artifact Merger] Nature's Essence
 	alias '155777' '774'   --  [HoT/HoT Merger] Talent: Germination
 	alias '207386' '81269' --  [Heal/HoT Merger] Talent: Spring Blossom
@@ -585,7 +586,7 @@ do
 	spell '196100' '0.5' --  Talent: Grimoire of Sacrifice
 	spell '205260' '2.5' --  Talent: Soul Effigy
 	spell '218615' '0.5' --  Artifact: Harvester of Souls
-	spell '199581' '0.5' --  Artifact: Soul Flame	
+	spell '199581' '0.5' --  Artifact: Soul Flame
 	spell '324540' '0.5' --  Malefic Rapture
 	spell '278350' '1.0' --  Talent Vile Taint
 	alias '231489' '233490' --  Unstable Affliction (Artifact: Compounding Horror)
