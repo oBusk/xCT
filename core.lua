@@ -154,7 +154,7 @@ frameUpdate:SetScript("OnEvent", function(self)
   self:UnregisterEvent("PLAYER_ENTERING_WORLD")
   x:UpdateFrames()
   x.cvar_update()
-  x.UpdateBlizzardOptions()
+  --x.UpdateBlizzardOptions()
 end)
 
 -- Version Compare Helpers... Yeah!
@@ -1706,8 +1706,8 @@ ACD:SetDefaultSize(AddonName, 803, 560)
 AC:RegisterOptionsTable(AddonName, addon.options)
 
 
-AC:RegisterOptionsTable(AddonName.."Blizzard", x.blizzardOptions)
-ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
+--AC:RegisterOptionsTable(AddonName.."Blizzard", x.blizzardOptions)
+--ACD:AddToBlizOptions(AddonName.."Blizzard", "|cffFF0000x|rCT+")
 
 -- Close Config when entering combat
 local lastConfigState, shownWarning = false, false
@@ -1871,7 +1871,7 @@ function x:ShowConfigTool(...)
   x.myContainer:SetCallback("OnClose", myContainer_OnRelease)
 
   -- Last minute settings and SHOW
-  x.myContainer.content:GetParent():SetMinResize(803, 300)
+  --x.myContainer.content:GetParent():SetMinResize(803, 300)
 
   -- Go through and select all the groups that are relevant to the player
   if not x.selectDefaultGroups then
