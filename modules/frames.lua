@@ -196,6 +196,7 @@ function x:UpdateFrames(specificFrame)
 					f:ClearAllPoints()
 					f:SetPoint("CENTER", x, y)
 				else
+					f:ClearAllPoints()
 					f:SetPoint("CENTER", settings.X, settings.Y)
 				end
 			end
