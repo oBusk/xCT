@@ -218,7 +218,13 @@ function x:UpdateFrames(specificFrame)
 			end
 
 			-- Font Template
-			f:SetFont(LSM:Fetch("font", settings.font), settings.fontSize, ssub(settings.fontOutline, 2))
+			local outline = ssub(settings.fontOutline, 2)
+			
+			if outline == "NONE" then
+				f:SetFont(LSM:Fetch("font", settings.font), settings.fontSize, "")
+			else
+				f:SetFont(LSM:Fetch("font", settings.font), settings.fontSize, outline)
+			end
 
 			if settings.fontJustify then
 				f:SetJustifyH(settings.fontJustify)
